@@ -324,6 +324,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         public final RelativeLayout layout_normal;
         public final MyTextView layout_load_error;
         public final MyTextView layout_no_more;
+        public final RelativeLayout rlayout_root;
         public final MyTextView mtv_loading;
         public final ProgressView spinKitView;
 
@@ -331,6 +332,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             super(itemView);
             spinKitView = (ProgressView) itemView.findViewById(R.id.progressBar);
             layout_normal = (RelativeLayout) itemView.findViewById(R.id.layout_normal);
+            rlayout_root = (RelativeLayout) itemView.findViewById(R.id.rlayout_root);
             layout_load_error = (MyTextView) itemView.findViewById(R.id.layout_load_error);
             layout_load_error.setVisibility(View.GONE);
             layout_no_more = (MyTextView) itemView.findViewById(R.id.layout_no_more);

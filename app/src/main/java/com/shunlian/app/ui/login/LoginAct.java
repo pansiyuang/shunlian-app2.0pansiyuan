@@ -7,14 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.register.RegisterAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -119,7 +117,8 @@ public class LoginAct extends BaseActivity {
         if (isCanBack) {
             backPage();
         }else {
-            Common.goGoGo(this,"mainPage");
+            //Common.goGoGo(this,"mainPage");
+            finish();
         }
     }
     /**
@@ -165,7 +164,8 @@ public class LoginAct extends BaseActivity {
                 backPage();
                 return true;
             }else {
-                Common.goGoGo(this,"mainPage");
+                //Common.goGoGo(this,"mainPage");
+                finish();
                 return true;
             }
         }

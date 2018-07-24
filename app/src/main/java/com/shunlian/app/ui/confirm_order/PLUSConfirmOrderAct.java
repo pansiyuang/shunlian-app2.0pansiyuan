@@ -157,7 +157,7 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
                     return;
                 }
 
-                PayListActivity.startAct(this,product_id,sku_id,addressId,mTotalPrice,"");
+                PayListActivity.startActPlus(this,product_id,sku_id,addressId,mTotalPrice,"");
                 break;
             case R.id.miv_close:
                 backSelect();

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
@@ -590,7 +591,7 @@ public class GlideUtils {
      * @param imageView
      * @param imgUrl
      */
-    public void communityTopPic(Context context, ImageView imageView, String imgUrl, int radius) {
+    public void communityTopPic(Context context, ImageView imageView, String imgUrl, int radius,boolean isCorp) {
         if (imageView == null) return;
         Glide.with(context)
                 .load(imgUrl)
@@ -600,8 +601,10 @@ public class GlideUtils {
                 .placeholder(R.mipmap.img_guige_moren)
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
-                .bitmapTransform(new CenterCrop(context),
+                .bitmapTransform(isCorp?new CenterCrop(context):new FitCenter(context),
                         new GlideRoundTransform(context, radius))
+//                .bitmapTransform(new CenterCrop(context),
+//                        new GlideRoundTransform(context, radius))
                 .into(imageView);
     }
 

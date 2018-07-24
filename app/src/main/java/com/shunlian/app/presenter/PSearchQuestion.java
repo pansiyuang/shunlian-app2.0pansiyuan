@@ -54,7 +54,22 @@ public class PSearchQuestion extends BasePresenter<ISearchQView> {
             }
         });
     }
-
+    public void getHelpPhone(){
+        Map<String, String> map = new HashMap<>();
+        map.put("field", "telephone");
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getAdminInfo(map);
+        getNetData(false,baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null) {
+                    iView.setPhoneNum(data.telephone);
+                }
+            }
+        });
+    }
     public void getUserId() {
         Map<String, String> map = new HashMap<>();
         map.put("shop_id", "-1");

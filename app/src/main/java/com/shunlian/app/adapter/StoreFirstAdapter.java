@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StoreIndexEntity;
@@ -41,10 +42,35 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     private Context context;
     private List<StoreIndexEntity.Body> datas;
 
-    public StoreFirstAdapter(Context context, boolean isShowFooter,List<StoreIndexEntity.Body> datas) {
+    public StoreFirstAdapter(Context context, boolean isShowFooter, List<StoreIndexEntity.Body> datas) {
         super(context, isShowFooter, datas);
         this.context = context;
         this.datas = datas;
+    }
+
+    /**
+     * 设置baseFooterHolder  layoutparams
+     *
+     * @param baseFooterHolder
+     */
+    @Override
+    public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
+        super.setFooterHolderParams(baseFooterHolder);
+//        自定义分页尾布局
+        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white));
+        baseFooterHolder.layout_no_more.setText(getString(R.string.rv_chakansuoyou));
+        baseFooterHolder.layout_no_more.setTextSize(12);
+        baseFooterHolder.layout_no_more.setTextColor(getColor(R.color.new_text));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, TransformUtil.dip2px(context, 40));
+        int margin = TransformUtil.dip2px(context, 10);
+        params.setMargins(margin, margin, margin, margin);
+        baseFooterHolder.rlayout_root.setLayoutParams(params);
+        baseFooterHolder.rlayout_root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((StoreAct) context).allBaby();
+            }
+        });
     }
 
     @Override
@@ -75,6 +101,8 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
 
     @Override
     public int getItemViewType(int position) {
+        if (position > lists.size() - 1)
+            return super.getItemViewType(position);
         switch (datas.get(position).block_module_type) {
             case "1":
                 return TYPE9;
@@ -110,16 +138,16 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             case TYPE9:
                 if (holder instanceof OneHolder) {
                     OneHolder oneHolder = (OneHolder) holder;
-                    StoreIndexEntity.Body data=datas.get(position);
-                    if (TextUtils.isEmpty(data.title)){
+                    StoreIndexEntity.Body data = datas.get(position);
+                    if (TextUtils.isEmpty(data.title)) {
                         oneHolder.view_lineOne.setVisibility(View.GONE);
                         oneHolder.view_lineTwo.setVisibility(View.GONE);
                         oneHolder.mtv_one.setVisibility(View.GONE);
-                    }else {
-                        if (0==position){
+                    } else {
+                        if (0 == position) {
                             oneHolder.view_lineOne.setVisibility(View.VISIBLE);
                             oneHolder.view_lineTwo.setVisibility(View.GONE);
-                        }else {
+                        } else {
                             oneHolder.view_lineOne.setVisibility(View.GONE);
                             oneHolder.view_lineTwo.setVisibility(View.VISIBLE);
                         }
@@ -128,26 +156,26 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                     }
 
 //                    oneHolder.goodsId_left=data.ldata.id;
-                    oneHolder.goodsId_left=data.ldata.item_id;
-                    oneHolder.type_left=data.ldata.type;
+                    oneHolder.goodsId_left = data.ldata.item_id;
+                    oneHolder.type_left = data.ldata.type;
 
                     oneHolder.mtv_descl.setText(data.ldata.title);
-                    oneHolder.mtv_numberl.setText("已售"+data.ldata.sales);
+                    oneHolder.mtv_numberl.setText("已售" + data.ldata.sales);
                     oneHolder.mtv_pricel.setText(data.ldata.price);
-                    GlideUtils.getInstance().loadImage(context,oneHolder.miv_onel,data.ldata.whole_thumb);
+                    GlideUtils.getInstance().loadImage(context, oneHolder.miv_onel, data.ldata.whole_thumb);
 
-                    if (TextUtils.isEmpty(data.rdata.title)&&TextUtils.isEmpty(data.rdata.whole_thumb)){
+                    if (TextUtils.isEmpty(data.rdata.title) && TextUtils.isEmpty(data.rdata.whole_thumb)) {
                         oneHolder.mllayout_oner.setVisibility(View.INVISIBLE);
-                    }else {
+                    } else {
                         //                    oneHolder.goodsId_right=data.rdata.id;
-                        oneHolder.goodsId_right=data.rdata.item_id;
-                        oneHolder.type_right=data.rdata.type;
+                        oneHolder.goodsId_right = data.rdata.item_id;
+                        oneHolder.type_right = data.rdata.type;
 
                         oneHolder.mllayout_oner.setVisibility(View.VISIBLE);
                         oneHolder.mtv_descr.setText(data.rdata.title);
-                        oneHolder.mtv_numberr.setText("已售"+data.rdata.sales);
+                        oneHolder.mtv_numberr.setText("已售" + data.rdata.sales);
                         oneHolder.mtv_pricer.setText(data.rdata.price);
-                        GlideUtils.getInstance().loadImage(context,oneHolder.miv_oner,data.rdata.whole_thumb);
+                        GlideUtils.getInstance().loadImage(context, oneHolder.miv_oner, data.rdata.whole_thumb);
                     }
 
                 }
@@ -155,19 +183,19 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             case TYPE2:
                 if (holder instanceof TwoHolder) {
                     TwoHolder twoHolder = (TwoHolder) holder;
-                    StoreIndexEntity.Body data=datas.get(position);
+                    StoreIndexEntity.Body data = datas.get(position);
 //                    twoHolder.goods_id=data.ldata.id;
-                    twoHolder.goods_id=data.ldata.item_id;
-                    twoHolder.type=data.ldata.type;
-                    if (TextUtils.isEmpty(data.title)){
+                    twoHolder.goods_id = data.ldata.item_id;
+                    twoHolder.type = data.ldata.type;
+                    if (TextUtils.isEmpty(data.title)) {
                         twoHolder.view_lineOne.setVisibility(View.GONE);
                         twoHolder.view_lineTwo.setVisibility(View.GONE);
                         twoHolder.mtv_two.setVisibility(View.GONE);
-                    }else {
-                        if (0==position){
+                    } else {
+                        if (0 == position) {
                             twoHolder.view_lineOne.setVisibility(View.VISIBLE);
                             twoHolder.view_lineTwo.setVisibility(View.GONE);
-                        }else {
+                        } else {
                             twoHolder.view_lineOne.setVisibility(View.GONE);
                             twoHolder.view_lineTwo.setVisibility(View.VISIBLE);
                         }
@@ -175,23 +203,23 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         twoHolder.mtv_two.setText(data.title);
                     }
                     twoHolder.mtv_desc.setText(data.ldata.title);
-                    twoHolder.mtv_number.setText("已售"+data.ldata.sales);
+                    twoHolder.mtv_number.setText("已售" + data.ldata.sales);
                     twoHolder.mtv_price.setText(data.ldata.price);
                     LinearLayoutManager firstManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
                     twoHolder.rv_type.setLayoutManager(firstManager);
                     twoHolder.rv_type.setNestedScrollingEnabled(false);
                     twoHolder.rv_type.setAdapter(new StoreTypeAdapter(context, false, data.ldata.label));
-                    GlideUtils.getInstance().loadImage(context,twoHolder.miv_two,data.ldata.whole_thumb);
+                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_two, data.ldata.whole_thumb);
                 }
                 break;
             case TYPE3:
                 if (holder instanceof ThreeHolder) {
                     ThreeHolder threeHolder = (ThreeHolder) holder;
-                    StoreIndexEntity.Body data=datas.get(position);
-                    if (0==position){
+                    StoreIndexEntity.Body data = datas.get(position);
+                    if (0 == position) {
                         threeHolder.view_lineOne.setVisibility(View.VISIBLE);
                         threeHolder.view_lineTwo.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         threeHolder.view_lineOne.setVisibility(View.GONE);
                         threeHolder.view_lineTwo.setVisibility(View.VISIBLE);
                     }
@@ -201,11 +229,11 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             case TYPE4:
                 if (holder instanceof FourHolder) {
                     FourHolder fourHolder = (FourHolder) holder;
-                    StoreIndexEntity.Body data=datas.get(position);
-                    if (0==position){
+                    StoreIndexEntity.Body data = datas.get(position);
+                    if (0 == position) {
                         fourHolder.view_lineOne.setVisibility(View.VISIBLE);
                         fourHolder.view_lineTwo.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         fourHolder.view_lineOne.setVisibility(View.GONE);
                         fourHolder.view_lineTwo.setVisibility(View.VISIBLE);
                     }
@@ -215,78 +243,78 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             case TYPE5:
                 if (holder instanceof FiveHolder) {
                     FiveHolder fiveHolder = (FiveHolder) holder;
-                    StoreIndexEntity.Body data=datas.get(position);
-                    if (0==position){
+                    StoreIndexEntity.Body data = datas.get(position);
+                    if (0 == position) {
                         fiveHolder.view_lineOne.setVisibility(View.VISIBLE);
                         fiveHolder.view_lineTwo.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         fiveHolder.view_lineOne.setVisibility(View.GONE);
                         fiveHolder.view_lineTwo.setVisibility(View.VISIBLE);
                     }
-                    if (data.data!=null&&data.data.size()>0){
-                        fiveHolder.goods_id=data.data.get(0).item_id;
-                        fiveHolder.type=data.data.get(0).type;
+                    if (data.data != null && data.data.size() > 0) {
+                        fiveHolder.goods_id = data.data.get(0).item_id;
+                        fiveHolder.type = data.data.get(0).type;
                         fiveHolder.mtv_five.setText(data.data.get(0).description);
-                        GlideUtils.getInstance().loadImage(context,fiveHolder.miv_five,data.data.get(0).whole_thumb);
+                        GlideUtils.getInstance().loadImage(context, fiveHolder.miv_five, data.data.get(0).whole_thumb);
                     }
                 }
                 break;
             case TYPE6:
                 if (holder instanceof SixHolder) {
                     SixHolder sixHolder = (SixHolder) holder;
-                    StoreIndexEntity.Body data=datas.get(position);
-                    if (0==position){
+                    StoreIndexEntity.Body data = datas.get(position);
+                    if (0 == position) {
                         sixHolder.view_lineOnel.setVisibility(View.VISIBLE);
                         sixHolder.view_lineTwol.setVisibility(View.GONE);
                         sixHolder.view_lineOner.setVisibility(View.VISIBLE);
                         sixHolder.view_lineTwor.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         sixHolder.view_lineOnel.setVisibility(View.GONE);
                         sixHolder.view_lineTwol.setVisibility(View.VISIBLE);
                         sixHolder.view_lineOner.setVisibility(View.GONE);
                         sixHolder.view_lineTwor.setVisibility(View.VISIBLE);
                     }
-                    if (data.data!=null&&data.data.size()>1){
-                        sixHolder.goodsId_left=data.data.get(0).item_id;
-                        sixHolder.type_left=data.data.get(0).type;
-                        sixHolder.goodsId_right=data.data.get(1).item_id;
-                        sixHolder.type_right=data.data.get(1).type;
+                    if (data.data != null && data.data.size() > 1) {
+                        sixHolder.goodsId_left = data.data.get(0).item_id;
+                        sixHolder.type_left = data.data.get(0).type;
+                        sixHolder.goodsId_right = data.data.get(1).item_id;
+                        sixHolder.type_right = data.data.get(1).type;
                         sixHolder.mtv_sixl.setText(data.data.get(0).description);
-                        GlideUtils.getInstance().loadImage(context,sixHolder.miv_sixl,data.data.get(0).whole_thumb);
+                        GlideUtils.getInstance().loadImage(context, sixHolder.miv_sixl, data.data.get(0).whole_thumb);
                         sixHolder.mtv_sixr.setText(data.data.get(1).description);
-                        GlideUtils.getInstance().loadImage(context,sixHolder.miv_sixr,data.data.get(1).whole_thumb);
+                        GlideUtils.getInstance().loadImage(context, sixHolder.miv_sixr, data.data.get(1).whole_thumb);
                     }
                 }
                 break;
             case TYPE7:
                 if (holder instanceof SevenHolder) {
                     SevenHolder sevenHolder = (SevenHolder) holder;
-                    sevenHolder.mdatas=datas.get(position).data;
-                    if (0==position){
+                    sevenHolder.mdatas = datas.get(position).data;
+                    if (0 == position) {
                         sevenHolder.view_lineOne.setVisibility(View.VISIBLE);
                         sevenHolder.view_lineTwo.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         sevenHolder.view_lineOne.setVisibility(View.GONE);
                         sevenHolder.view_lineTwo.setVisibility(View.VISIBLE);
                     }
-                   if (sevenHolder.mdatas!=null&&sevenHolder.mdatas.size()>0){
-                       sevenHolder.storeKanner.layoutRes=R.layout.layout_kanner_rectangle_indicator;
-                       sevenHolder.storeKanner.setBanners(sevenHolder.mdatas,sevenHolder.mtv_number,sevenHolder.mtv_seven);
-                   }
+                    if (sevenHolder.mdatas != null && sevenHolder.mdatas.size() > 0) {
+                        sevenHolder.storeKanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
+                        sevenHolder.storeKanner.setBanners(sevenHolder.mdatas, sevenHolder.mtv_number, sevenHolder.mtv_seven);
+                    }
                 }
                 break;
             case TYPE8:
                 if (holder instanceof EightHolder) {
                     EightHolder eightHolder = (EightHolder) holder;
-                    StoreIndexEntity.Body data=datas.get(position);
-                    if (0==position){
+                    StoreIndexEntity.Body data = datas.get(position);
+                    if (0 == position) {
                         eightHolder.view_lineOnel.setVisibility(View.VISIBLE);
                         eightHolder.view_lineTwol.setVisibility(View.GONE);
                         eightHolder.view_lineOner.setVisibility(View.VISIBLE);
                         eightHolder.view_lineTwor.setVisibility(View.GONE);
                         eightHolder.view_lineOnem.setVisibility(View.VISIBLE);
                         eightHolder.view_lineTwom.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         eightHolder.view_lineOnel.setVisibility(View.GONE);
                         eightHolder.view_lineTwol.setVisibility(View.VISIBLE);
                         eightHolder.view_lineOner.setVisibility(View.GONE);
@@ -294,58 +322,59 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         eightHolder.view_lineOnem.setVisibility(View.GONE);
                         eightHolder.view_lineTwom.setVisibility(View.VISIBLE);
                     }
-                    if (data.data!=null&&data.data.size()>2){
-                        eightHolder.goodsId_left=data.data.get(0).item_id;
-                        eightHolder.type_left=data.data.get(0).type;
-                        eightHolder.goodsId_mid=data.data.get(1).item_id;
-                        eightHolder.type_mid=data.data.get(1).type;
-                        eightHolder.goodsId_right=data.data.get(2).item_id;
-                        eightHolder.type_right=data.data.get(2).type;
+                    if (data.data != null && data.data.size() > 2) {
+                        eightHolder.goodsId_left = data.data.get(0).item_id;
+                        eightHolder.type_left = data.data.get(0).type;
+                        eightHolder.goodsId_mid = data.data.get(1).item_id;
+                        eightHolder.type_mid = data.data.get(1).type;
+                        eightHolder.goodsId_right = data.data.get(2).item_id;
+                        eightHolder.type_right = data.data.get(2).type;
                         eightHolder.mtv_eightl.setText(data.data.get(0).description);
-                        GlideUtils.getInstance().loadImage(context,eightHolder.miv_eightl,data.data.get(0).whole_thumb);
+                        GlideUtils.getInstance().loadImage(context, eightHolder.miv_eightl, data.data.get(0).whole_thumb);
                         eightHolder.mtv_eightm.setText(data.data.get(1).description);
-                        GlideUtils.getInstance().loadImage(context,eightHolder.miv_eightm,data.data.get(1).whole_thumb);
+                        GlideUtils.getInstance().loadImage(context, eightHolder.miv_eightm, data.data.get(1).whole_thumb);
                         eightHolder.mtv_eightr.setText(data.data.get(2).description);
-                        GlideUtils.getInstance().loadImage(context,eightHolder.miv_eightr,data.data.get(2).whole_thumb);
+                        GlideUtils.getInstance().loadImage(context, eightHolder.miv_eightr, data.data.get(2).whole_thumb);
                     }
                 }
                 break;
         }
     }
 
-    public void jump(String type,String itemId){
+    public void jump(String type, String itemId) {
         if (isEmpty(type))
             return;
-        switch (type){
+        switch (type) {
             case "other":
                 if (isEmpty(itemId))
                     return;
-                switch (itemId){
+                switch (itemId) {
                     case "1":
                         break;
                     case "2":
-                        ((StoreAct)context).discountClick();
+                        ((StoreAct) context).discountClick();
                         break;
                     case "3":
-                        ((StoreAct)context).newBaby();
+                        ((StoreAct) context).newBaby();
                         break;
                 }
                 break;
             case "goods":
                 if (!isEmpty(itemId))
-                GoodsDetailAct.startAct(context,itemId);
+                    GoodsDetailAct.startAct(context, itemId);
                 break;
             case "category":
-                ((StoreAct)context).goSortAct();
+                ((StoreAct) context).goSortAct();
                 break;
         }
     }
+
     class OneHolder extends RecyclerView.ViewHolder {
-        private MyTextView mtv_one,mtv_descl,mtv_pricel,mtv_numberl,mtv_descr,mtv_pricer,mtv_numberr;
-        private View view_lineOne,view_lineTwo;
-        private MyImageView miv_onel,miv_oner;
-        private MyLinearLayout mllayout_oner,mllayout_onel;
-        private String goodsId_left,goodsId_right,type_left,type_right;
+        private MyTextView mtv_one, mtv_descl, mtv_pricel, mtv_numberl, mtv_descr, mtv_pricer, mtv_numberr;
+        private View view_lineOne, view_lineTwo;
+        private MyImageView miv_onel, miv_oner;
+        private MyLinearLayout mllayout_oner, mllayout_onel;
+        private String goodsId_left, goodsId_right, type_left, type_right;
 
         OneHolder(View itemView) {
             super(itemView);
@@ -354,8 +383,8 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             view_lineTwo = itemView.findViewById(R.id.view_lineTwo);
             miv_onel = (MyImageView) itemView.findViewById(R.id.miv_onel);
             miv_oner = (MyImageView) itemView.findViewById(R.id.miv_oner);
-            int picWidth = Common.getScreenWidth((Activity) context)- TransformUtil.dip2px(context,5);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth /2, picWidth /2);
+            int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 5);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth / 2, picWidth / 2);
             miv_onel.setLayoutParams(params);
             miv_oner.setLayoutParams(params);
             mtv_descl = (MyTextView) itemView.findViewById(R.id.mtv_descl);
@@ -369,25 +398,25 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             mllayout_onel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    jump(type_left,goodsId_left);
+                    jump(type_left, goodsId_left);
                 }
             });
             mllayout_oner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    jump(type_right,goodsId_right);
+                    jump(type_right, goodsId_right);
                 }
             });
         }
     }
 
     class TwoHolder extends RecyclerView.ViewHolder {
-        private MyTextView mtv_two,mtv_desc,mtv_price,mtv_number;
-        private View view_lineOne,view_lineTwo;
+        private MyTextView mtv_two, mtv_desc, mtv_price, mtv_number;
+        private View view_lineOne, view_lineTwo;
         private MyImageView miv_two;
         private MyLinearLayout mllayout_two;
         private RecyclerView rv_type;
-        private String goods_id,type;
+        private String goods_id, type;
 
 
         TwoHolder(View itemView) {
@@ -404,7 +433,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             mllayout_two.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    jump(type,goods_id);
+                    jump(type, goods_id);
                 }
             });
         }
@@ -412,7 +441,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
 
     class ThreeHolder extends RecyclerView.ViewHolder {
         private MyTextView mtv_three;
-        private View view_lineOne,view_lineTwo;
+        private View view_lineOne, view_lineTwo;
 
         ThreeHolder(View itemView) {
             super(itemView);
@@ -424,7 +453,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
 
     class FourHolder extends RecyclerView.ViewHolder {
         private MyTextView mtv_four;
-        private View view_lineOne,view_lineTwo;
+        private View view_lineOne, view_lineTwo;
 
         FourHolder(View itemView) {
             super(itemView);
@@ -437,8 +466,8 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     class FiveHolder extends RecyclerView.ViewHolder {
         private MyTextView mtv_five;
         private MyImageView miv_five;
-        private View view_lineOne,view_lineTwo;
-        private String goods_id,type;
+        private View view_lineOne, view_lineTwo;
+        private String goods_id, type;
 
         FiveHolder(View itemView) {
             super(itemView);
@@ -449,7 +478,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    jump(type,goods_id);
+                    jump(type, goods_id);
                 }
             });
         }
@@ -457,19 +486,20 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
 
     class SixHolder extends RecyclerView.ViewHolder {
         private MyTextView mtv_sixl, mtv_sixr;
-        private MyImageView miv_sixl,miv_sixr;
-        private View view_lineOnel,view_lineTwol,view_lineOner,view_lineTwor;
-        private MyLinearLayout mllayout_right,mllayout_left;
-        private String goodsId_left,goodsId_right,type_left,type_right;
+        private MyImageView miv_sixl, miv_sixr;
+        private View view_lineOnel, view_lineTwol, view_lineOner, view_lineTwor;
+        private MyLinearLayout mllayout_right, mllayout_left;
+        private String goodsId_left, goodsId_right, type_left, type_right;
+
         SixHolder(View itemView) {
             super(itemView);
             mtv_sixl = (MyTextView) itemView.findViewById(R.id.mtv_sixl);
             mtv_sixr = (MyTextView) itemView.findViewById(R.id.mtv_sixr);
             miv_sixl = (MyImageView) itemView.findViewById(R.id.miv_sixl);
             miv_sixr = (MyImageView) itemView.findViewById(R.id.miv_sixr);
-            int picWidth = Common.getScreenWidth((Activity) context)- TransformUtil.dip2px(context,5);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth /2, picWidth /2);
-            params.setMargins(0,TransformUtil.dip2px(context,5),0,0);
+            int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 5);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth / 2, picWidth / 2);
+            params.setMargins(0, TransformUtil.dip2px(context, 5), 0, 0);
             miv_sixl.setLayoutParams(params);
             miv_sixr.setLayoutParams(params);
             view_lineOnel = itemView.findViewById(R.id.view_lineOnel);
@@ -481,13 +511,13 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             mllayout_left.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    jump(type_left,goodsId_left);
+                    jump(type_left, goodsId_left);
                 }
             });
             mllayout_right.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    jump(type_right,goodsId_right);
+                    jump(type_right, goodsId_right);
                 }
             });
         }
@@ -495,8 +525,8 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
 
     class SevenHolder extends RecyclerView.ViewHolder {
         private StoreKanner storeKanner;
-        private MyTextView mtv_seven,mtv_number;
-        private View view_lineOne,view_lineTwo;
+        private MyTextView mtv_seven, mtv_number;
+        private View view_lineOne, view_lineTwo;
         private List<StoreIndexEntity.Body.Datas> mdatas;
 
         SevenHolder(View itemView) {
@@ -509,7 +539,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             storeKanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                 @Override
                 public void onItemClick(int position) {
-                    jump(mdatas.get(position).type,mdatas.get(position).item_id);
+                    jump(mdatas.get(position).type, mdatas.get(position).item_id);
                 }
             });
         }
@@ -518,9 +548,10 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     class EightHolder extends RecyclerView.ViewHolder {
         private MyTextView mtv_eightl, mtv_eightm, mtv_eightr;
         private MyImageView miv_eightl, miv_eightm, miv_eightr;
-        private View view_lineOnel,view_lineTwol,view_lineOner,view_lineTwor,view_lineOnem,view_lineTwom;
-        private MyLinearLayout mllayout_right,mllayout_left,mllayout_mid;
-        private String goodsId_left,goodsId_mid,goodsId_right,type_left,type_mid,type_right;
+        private View view_lineOnel, view_lineTwol, view_lineOner, view_lineTwor, view_lineOnem, view_lineTwom;
+        private MyLinearLayout mllayout_right, mllayout_left, mllayout_mid;
+        private String goodsId_left, goodsId_mid, goodsId_right, type_left, type_mid, type_right;
+
         EightHolder(View itemView) {
             super(itemView);
             mtv_eightl = (MyTextView) itemView.findViewById(R.id.mtv_eightl);
@@ -541,19 +572,19 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             mllayout_left.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    jump(type_left,goodsId_left);
+                    jump(type_left, goodsId_left);
                 }
             });
             mllayout_mid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    jump(type_mid,goodsId_mid);
+                    jump(type_mid, goodsId_mid);
                 }
             });
             mllayout_right.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    jump(type_right,goodsId_right);
+                    jump(type_right, goodsId_right);
                 }
             });
         }

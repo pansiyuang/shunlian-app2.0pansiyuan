@@ -64,7 +64,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
     private HelpClasAdapter helpClasAdapter;
     private LinearLayoutManager linearLayoutManager;
     private String cate_id="";
-    private PromptDialog promptDialog;
+//    private PromptDialog promptDialog;
 
 
     @Override
@@ -126,7 +126,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         if (!TextUtils.isEmpty(getIntent().getStringExtra("cate_id")))
             cate_id=getIntent().getStringExtra("cate_id");
         pHelpTwo = new PHelpTwo(this, this);
-        pHelpTwo.getHelpPhone();
+//        pHelpTwo.getHelpPhone();
 //        pHelpTwo.resetBabys("3");
         pHelpTwo.resetBabys(cate_id);
 
@@ -182,14 +182,14 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         });*/
     }
 
-    public void initDialog() {
-        promptDialog = new PromptDialog(this);
-        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
-            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
-            startActivity(intentServePhoneOne);
-            promptDialog.dismiss();
-        }, "取消", view -> promptDialog.dismiss()).show();
-    }
+//    public void initDialog() {
+//        promptDialog = new PromptDialog(this);
+//        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
+//            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+//            startActivity(intentServePhoneOne);
+//            promptDialog.dismiss();
+//        }, "取消", view -> promptDialog.dismiss()).show();
+//    }
 
     @Override
     public void showFailureView(int rquest_code) {
@@ -235,7 +235,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setPhoneNum(String phoneNum) {
-        Constant.HELP_PHONE = phoneNum;
+//        Constant.HELP_PHONE = phoneNum;
     }
 
     @Override

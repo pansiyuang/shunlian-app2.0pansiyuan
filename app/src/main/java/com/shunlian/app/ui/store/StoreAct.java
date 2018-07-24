@@ -375,6 +375,28 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
     }
 
+    public void allBaby() {
+        miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
+        mtv_store.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_baby.setTextColor(getResources().getColor(R.color.pink_color));
+        mtv_babyNum.setTextColor(getResources().getColor(R.color.pink_color));
+        mtv_discount.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_discountNum.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_new.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_newNum.setTextColor(getResources().getColor(R.color.my_gray_three));
+        line_first.setVisibility(View.GONE);
+        line_baby.setVisibility(View.VISIBLE);
+        line_discount.setVisibility(View.GONE);
+        line_new.setVisibility(View.GONE);
+        mllayout_first.setVisibility(View.GONE);
+        mllayout_baby.setVisibility(View.VISIBLE);
+        mllayout_discount.setVisibility(View.GONE);
+        rv_new.setVisibility(View.GONE);
+        if (!initBaby) {
+            storePresenter.resetBaby("default");
+            initBaby = true;
+        }
+    }
     public void discountClick() {
         miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
         mtv_store.setTextColor(getResources().getColor(R.color.my_gray_three));
@@ -404,26 +426,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 firstClick();
                 break;
             case R.id.mrlayout_baby:
-                miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
-                mtv_store.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_baby.setTextColor(getResources().getColor(R.color.pink_color));
-                mtv_babyNum.setTextColor(getResources().getColor(R.color.pink_color));
-                mtv_discount.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_discountNum.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_new.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_newNum.setTextColor(getResources().getColor(R.color.my_gray_three));
-                line_first.setVisibility(View.GONE);
-                line_baby.setVisibility(View.VISIBLE);
-                line_discount.setVisibility(View.GONE);
-                line_new.setVisibility(View.GONE);
-                mllayout_first.setVisibility(View.GONE);
-                mllayout_baby.setVisibility(View.VISIBLE);
-                mllayout_discount.setVisibility(View.GONE);
-                rv_new.setVisibility(View.GONE);
-                if (!initBaby) {
-                    storePresenter.resetBaby("default");
-                    initBaby = true;
-                }
+                allBaby();
                 break;
             case R.id.mrlayout_discount:
                 discountClick();
@@ -525,7 +528,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     public void storeFirst(List<StoreIndexEntity.Body> bodies) {
         if (storeFirstAdapter == null) {
-            storeFirstAdapter = new StoreFirstAdapter(this, false, bodies);
+            storeFirstAdapter = new StoreFirstAdapter(this, true, bodies);
             LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             rv_first.setLayoutManager(firstManager);
             rv_first.setAdapter(storeFirstAdapter);

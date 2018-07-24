@@ -156,6 +156,7 @@ public class SaleDetailAct extends BaseActivity implements ISaleDetailView{
             tv_type2 = "销售类型";
             tv_type3 = "销售时间";
             visible(mtv_type4);
+            gone(llayout_classify3);
         }else if (type == REWARD_DETAIL){
             mtv_toolbar_title.setText("奖励明细");
             classify1="总奖励";

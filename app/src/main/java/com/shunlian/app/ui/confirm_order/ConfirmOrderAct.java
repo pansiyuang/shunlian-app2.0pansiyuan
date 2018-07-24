@@ -22,7 +22,9 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IConfirmOrderView;
+import com.shunlian.app.widget.DiscountListDialog;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyNestedScrollView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -57,6 +59,16 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @BindView(R.id.nsv_view)
     MyNestedScrollView nsv_view;
 
+    @BindView(R.id.view_line1)
+    View view_line1;
+
+    //平台优惠券
+    @BindView(R.id.mllayout_discount)
+    MyLinearLayout mllayout_discount;
+
+    @BindView(R.id.mtv_discount)
+    MyTextView mtv_discount;
+
     private String mTotalPrice;
     private boolean isOrderBuy = false;//是否直接购买
     private String detail_address;
@@ -70,10 +82,13 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     public static final String TYPE_COMBO = "combo";//套餐
     private String type;
     private List<ConfirmOrderEntity.Enabled> enabled;
+    private DiscountListDialog mStageVoucherDialog;
+    private ConfirmOrderEntity.Enabled mStageVoucherEntity;
+    private String mStageVoucherId="";//平台优化券id
 
     public static void startAct(Context context,String cart_ids,String type){
         if (!Common.isAlreadyLogin()){
-            Common.staticToast(context.getResources().getString(R.string.plase_login));
+            Common.goGoGo(context,"login");
             return;
         }
         Intent intent = new Intent(context, ConfirmOrderAct.class);
@@ -84,7 +99,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
 
     public static void startAct(Context context,String goods_id,String qty,String sku_id){
         if (!Common.isAlreadyLogin()){
-            Common.staticToast(context.getResources().getString(R.string.plase_login));
+            Common.goGoGo(context,"login");
             return;
         }
         Intent intent = new Intent(context, ConfirmOrderAct.class);
@@ -103,6 +118,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         super.initListener();
         mtv_go_pay.setOnClickListener(this);
         miv_close.setOnClickListener(this);
+        mllayout_discount.setOnClickListener(this);
 
         nsv_view.setOnScrollChangeListener((MyNestedScrollView.OnScrollChangeListener)
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
@@ -172,28 +188,39 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         }else {
             mtv_address.setText(getResources().getString(R.string.add_address));
         }
-        if (enabled != null && enabled.size() > 0) {
+        if (!isEmpty(enabled)) {
             this.enabled = enabled;
             ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
                     false, enabled, disabled,address,isOrderBuy);
             recy_view.setAdapter(df);
 
-            df.setSelectVoucherListener(position -> {
-                float currentPrice = 0;
-                for (int i = 0; i < enabled.size(); i++) {
-                    String store_discount_price = enabled.get(i).store_discount_price;
-                    currentPrice += Float.parseFloat(isEmpty(store_discount_price)
-                            ? enabled.get(i).sub_total : store_discount_price);
-                }
-                String totalPrice = null;
-                if (currentPrice <= 0){
-                    totalPrice = "0.00";
-                }else {
-                    totalPrice = Common.formatFloat(currentPrice);
-                }
-                mtv_total_price.setText(Common.dotAfterSmall(getStringResouce(R.string.rmb)+totalPrice,11));
-            });
+            df.setSelectVoucherListener(position ->calculateAmount(enabled));
         }
+    }
+
+    /**
+     * 计算总额
+     * @param enabled
+     */
+    private void calculateAmount(List<ConfirmOrderEntity.Enabled> enabled) {
+        float currentPrice = 0;
+        for (int i = 0; i < enabled.size(); i++) {
+            String store_discount_price = enabled.get(i).store_discount_price;
+            currentPrice += Float.parseFloat(isEmpty(store_discount_price)
+                    ? enabled.get(i).sub_total : store_discount_price);
+        }
+        String totalPrice = null;
+        if (mStageVoucherEntity != null){
+            ConfirmOrderEntity.Voucher voucher = mStageVoucherEntity
+                    .voucher.get(mStageVoucherEntity.selectVoucherId);
+            currentPrice -= Float.parseFloat(voucher.denomination);
+        }
+        if (currentPrice <= 0){
+            totalPrice = "0.00";
+        }else {
+            totalPrice = Common.formatFloat(currentPrice);
+        }
+        mtv_total_price.setText(Common.dotAfterSmall(getStringResouce(R.string.rmb)+totalPrice,11));
     }
 
     /**
@@ -210,6 +237,31 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             mTotalPrice = "0.00";
         }
         mtv_total_price.setText(Common.dotAfterSmall(getStringResouce(R.string.rmb)+mTotalPrice,11));
+    }
+
+    /**
+     * 平台优惠券
+     *
+     * @param user_stage_voucher 1 表示使用平台优惠券时最优
+     * @param stage_voucher
+     */
+    @Override
+    public void stageVoucher(String user_stage_voucher, List<ConfirmOrderEntity.Voucher> stage_voucher) {
+        if (!isEmpty(stage_voucher)){
+            visible(view_line1,mllayout_discount);
+            mStageVoucherEntity = new ConfirmOrderEntity.Enabled();
+            mStageVoucherEntity.voucher = stage_voucher;
+            if (!"1".equals(user_stage_voucher)){
+                mStageVoucherEntity.selectVoucherId = stage_voucher.size();
+            }else {
+                mtv_discount.setText(stage_voucher.get(0).voucher_hint);
+                mStageVoucherEntity.selectVoucherId = 0;
+                mStageVoucherId = stage_voucher.get(0).voucher_id;
+                calculateAmount(enabled);
+            }
+        }else {
+            gone(view_line1,mllayout_discount);
+        }
     }
 
     @Override
@@ -254,10 +306,31 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 //LogUtil.zhLogW("go_pay=============="+shop_goods);
                 String price = mtv_total_price.getText().toString();
                 PayListActivity.startAct(this,shop_goods,addressId,null,
-                        price.substring(1,price.length()));
+                        price.substring(1,price.length()),mStageVoucherId);
                 break;
             case R.id.miv_close:
                 backSelect();
+                break;
+            case R.id.mllayout_discount://选择平台优惠券
+                mStageVoucherDialog = new DiscountListDialog(this);
+                mStageVoucherDialog.setGoodsDiscount(mStageVoucherEntity,"平台优惠券");
+                mStageVoucherDialog.setSelectListener(position -> {
+                    if (position < 0)return;
+                    if (ConfirmOrderPresenter.isSelectStoreVoucher){
+                        return;
+                    }
+                    if (position + 1== mStageVoucherEntity.voucher.size()){
+                        ConfirmOrderPresenter.isSelectStageVoucher = false;
+                    }else {
+                        ConfirmOrderPresenter.isSelectStageVoucher = true;
+                    }
+                    ConfirmOrderEntity.Voucher voucher = mStageVoucherEntity.voucher.get(position);
+                    mtv_discount.setText(voucher.voucher_hint);
+                    mStageVoucherEntity.selectVoucherId = position;
+                    mStageVoucherId = voucher.voucher_id;
+                    calculateAmount(enabled);
+                });
+                mStageVoucherDialog.show();
                 break;
         }
     }
@@ -322,5 +395,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             }
         }
         return goodsEntityList;
+    }
+
+    public static void selectVoucherTip(boolean isStore){
+        String tip = "";
+        if (isStore){
+            tip = "平台优惠券和店铺优惠券\n不能叠加使用，请先取消\n平台优惠券再进行选择";
+        }else {
+            tip = "平台优惠券和店铺优惠券\n不能叠加使用，请先取消\n店铺优惠券再进行选择";
+        }
+        Common.staticToasts(Common.getApplicationContext(), tip,R.mipmap.icon_common_tanhao);
     }
 }

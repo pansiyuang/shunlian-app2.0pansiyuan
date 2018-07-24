@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.MoreCreditEntity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -53,27 +52,39 @@ public class MoreCreditAdapter extends BaseRecyclerAdapter<MoreCreditEntity.List
         if (holder instanceof MoreCreditHolder){
             MoreCreditHolder mHolder = (MoreCreditHolder) holder;
             MoreCreditEntity.ListBean listBean = lists.get(position);
-            mHolder.mtv_price.setText(Common.changeTextSize(listBean.face_price+"元","元",15));
+
+            mHolder.mtv_price.setText(Common.changeTextSize(getString(R.string.rmb)
+                    +listBean.face_price,getString(R.string.rmb),15));
+
             if (isEmpty(listBean.sale_price)){
-                mHolder.mtv_rel_price.setVisibility(View.INVISIBLE);
+                gone(mHolder.mtv_rel_price);
             }else {
                 visible(mHolder.mtv_rel_price);
-                mHolder.mtv_rel_price.setText("售价："+listBean.sale_price);
+                String format = "售价%s元";
+                mHolder.mtv_rel_price.setText(String.format(format,listBean.sale_price));
             }
 
             GradientDrawable rootGB = (GradientDrawable) mHolder.rlayout_root.getBackground();
-            int w = TransformUtil.dip2px(context, 1);
-            if (position == currentPos){
-                rootGB.setColor(getColor(R.color.pink_color));
-                rootGB.setStroke(w,getColor(R.color.pink_color));
-                mHolder.mtv_price.setTextColor(Color.WHITE);
-                mHolder.mtv_rel_price.setTextColor(Color.WHITE);
+            if ("1".equals(listBean.isBuy)) {
+                gone(mHolder.mtv_mask);
+                mHolder.rlayout_root.setEnabled(true);
+                if (position == currentPos) {
+                    rootGB.setColor(getColor(R.color.pink_color));
+                    mHolder.mtv_price.setTextColor(Color.WHITE);
+                    mHolder.mtv_rel_price.setTextColor(Color.WHITE);
+                } else {
+                    rootGB.setColor(Color.WHITE);
+                    mHolder.mtv_price.setTextColor(getColor(R.color.value_484848));
+                    mHolder.mtv_rel_price.setTextColor(getColor(R.color.pink_color));
+                }
             }else {
+                visible(mHolder.mtv_mask);
                 rootGB.setColor(Color.WHITE);
-                rootGB.setStroke(w,getColor(R.color.color_value_6c));
                 mHolder.mtv_price.setTextColor(getColor(R.color.value_484848));
-                mHolder.mtv_rel_price.setTextColor(Color.parseColor("#FF767676"));
+                mHolder.mtv_rel_price.setTextColor(getColor(R.color.pink_color));
+                mHolder.rlayout_root.setEnabled(false);
             }
+
         }
     }
 
@@ -87,6 +98,9 @@ public class MoreCreditAdapter extends BaseRecyclerAdapter<MoreCreditEntity.List
 
         @BindView(R.id.mtv_rel_price)
         MyTextView mtv_rel_price;
+
+        @BindView(R.id.mtv_mask)
+        MyTextView mtv_mask;
 
         public MoreCreditHolder(View itemView) {
             super(itemView);

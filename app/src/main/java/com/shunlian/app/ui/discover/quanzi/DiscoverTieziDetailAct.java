@@ -4,21 +4,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.SinglePicAdapter;
 import com.shunlian.app.adapter.TieziAvarAdapter;
 import com.shunlian.app.adapter.TieziCommentAdapter;
-import com.shunlian.app.bean.CircleAddCommentEntity;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.presenter.PDiscoverTieziDetail;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.my_comment.LookBigImgAct;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.HorizonItemDecoration;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
@@ -29,24 +36,27 @@ import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.banner.BaseBanner;
-import com.shunlian.app.widget.banner.TieziKanner;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClickListener, IDiscoverTieziDetail , IFindCommentListView {
-    @BindView(R.id.kanner_tiezi)
-    TieziKanner kanner_tiezi;
+public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClickListener, IDiscoverTieziDetail, IFindCommentListView {
+//    @BindView(R.id.kanner_tiezi)
+//    TieziKanner kanner_tiezi;
 
     @BindView(R.id.miv_avar)
     MyImageView miv_avar;
 
     @BindView(R.id.miv_like)
     MyImageView miv_like;
+
+    @BindView(R.id.miv_pic)
+    MyImageView miv_pic;
 
     @BindView(R.id.mtv_name)
     MyTextView mtv_name;
@@ -60,23 +70,14 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     @BindView(R.id.mtv_desc)
     MyTextView mtv_desc;
 
-    @BindView(R.id.miv_more)
-    MyImageView miv_more;
-
-    @BindView(R.id.miv_close)
-    MyImageView miv_close;
-
-    @BindView(R.id.mtv_titles)
-    MyTextView mtv_titles;
-
-    @BindView(R.id.view_bg)
-    View view_bg;
-
     @BindView(R.id.msv_out)
     MyScrollView msv_out;
 
     @BindView(R.id.rv_avar)
     RecyclerView rv_avar;
+
+    @BindView(R.id.rv_pics)
+    RecyclerView rv_pics;
 
     @BindView(R.id.rv_remark)
     RecyclerView rv_remark;
@@ -93,21 +94,24 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private PDiscoverTieziDetail pDiscoverTieziDetail;
-    private LinearLayoutManager linearLayoutManager;
     private boolean isLike;
     private String circle_id, inv_id;
     private TieziAvarAdapter avarAdapter;
     private List<String> avars;
-    private int num=0;
+    private int num = 0;
     private TieziCommentAdapter commentAdapter;
+    private List<String> imgs;
 
     //    private DiscoverHotAdapter newAdapter;
-    public static void startAct(Context context, String circle_id, String inv_id) {
+    public static void startAct(Context context, String circle_id, String inv_id, List<String> imgs) {
         Intent intent = new Intent(context, DiscoverTieziDetailAct.class);
         intent.putExtra("circle_id", circle_id);
         intent.putExtra("inv_id", inv_id);
+        intent.putExtra("imgs", (Serializable) imgs);
         context.startActivity(intent);
     }
 
@@ -118,18 +122,18 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     }
 
     @OnClick(R.id.mtv_send)
-    public void send(){
+    public void send() {
         String s = met_text.getText().toString();
-        pDiscoverTieziDetail.faBu(circle_id,inv_id,s);
+        pDiscoverTieziDetail.faBu(circle_id, inv_id, s);
         met_text.setText("");
         met_text.setHint(getStringResouce(R.string.add_comments));
-        setEdittextFocusable(false,met_text);
+        setEdittextFocusable(false, met_text);
         Common.hideKeyboard(met_text);
     }
 
     @OnClick(R.id.met_text)
-    public void onClick(){
-        setEdittextFocusable(true,met_text);
+    public void onClick() {
+        setEdittextFocusable(true, met_text);
         if (!isSoftShowing()) {
             Common.showKeyboard(met_text);
         }
@@ -148,6 +152,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
                 break;
         }
     }
+
     private boolean isSoftShowing() {
         //获取当前屏幕内容的高度
         int screenHeight = getWindow().getDecorView().getHeight();
@@ -161,7 +166,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     public void setCommentAllCount(String count) {
         GradientDrawable background = (GradientDrawable) mtv_msg_count.getBackground();
         int w = TransformUtil.dip2px(this, 0.5f);
-        background.setStroke(w,getColorResouce(R.color.white));
+        background.setStroke(w, getColorResouce(R.color.white));
         mtv_msg_count.setText(count);
     }
 
@@ -213,37 +218,22 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
                 if (isScrollBottom && pDiscoverTieziDetail != null) {
                     pDiscoverTieziDetail.refreshBaby();
                 }
-                float alpha = ((float) y) / 250;
-                if (y > 250) {
-                    mtv_titles.setAlpha(1);
-                    view_bg.setAlpha(1);
-                } else if (y > 150) {
-                    view_bg.setAlpha(alpha);
-                    mtv_titles.setAlpha(alpha);
-                    miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
-                    miv_more.setImageResource(R.mipmap.icon_more_n);
-                    miv_close.setAlpha(alpha);
-                    miv_more.setAlpha(alpha);
-                } else if (y > 0) {
-                    view_bg.setAlpha(0);
-                    mtv_titles.setAlpha(0);
-                    miv_close.setAlpha(1 - alpha);
-                    miv_more.setAlpha(1 - alpha);
-                    miv_close.setImageResource(R.mipmap.icon_more_fanhui);
-                    miv_more.setImageResource(R.mipmap.icon_more_gengduo);
-                }
             }
         });
     }
 
     @Override
     protected void initData() {
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
         circle_id = getIntent().getStringExtra("circle_id");
         inv_id = getIntent().getStringExtra("inv_id");
+        imgs = (List<String>) getIntent().getSerializableExtra("imgs");
+        BitmapUtil.discoverImg(miv_pic,rv_pics,null,imgs
+                ,this,0,0,20,28,20,20);
         pDiscoverTieziDetail = new PDiscoverTieziDetail(this, this, circle_id, inv_id);
-        view_bg.setAlpha(0);
-        mtv_titles.setAlpha(0);
-        mtv_titles.setText(getStringResouce(R.string.detail));
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.discover_wolaishuo));
+        nei_empty.setButtonText(null);
     }
 
     @Override
@@ -259,25 +249,32 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     @Override
     public void setApiData(DiscoveryCommentListEntity.Mdata data, List<DiscoveryCommentListEntity.Mdata.Commentlist> mdatas) {
+        if (isEmpty(mdatas)) {
+            visible(nei_empty);
+            gone(rv_remark);
+        } else {
+            gone(nei_empty);
+            visible(rv_remark);
+        }
         if (commentAdapter == null) {
             avars = new ArrayList<>();
-            num=Integer.parseInt(data.commentcounts);
+            num = Integer.parseInt(data.commentcounts);
             avars.addAll(data.inv_info.five_member_likes);
             avarAdapter = new TieziAvarAdapter(getBaseContext(), false, avars);
             rv_avar.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
             rv_avar.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(getBaseContext(), -12)));
             rv_avar.setAdapter(avarAdapter);
-            if (data.inv_info != null && data.inv_info.img != null) {
-                kanner_tiezi.layoutRes=R.layout.layout_kanner_rectangle_indicator;
-                kanner_tiezi.setBanner(data.inv_info.img);
-                kanner_tiezi.setOnItemClickL(new BaseBanner.OnItemClickL() {
-                    @Override
-                    public void onItemClick(int position) {
-
-                    }
-                });
-
-            }
+//            if (data.inv_info != null && data.inv_info.img != null) {
+//                kanner_tiezi.layoutRes=R.layout.layout_kanner_rectangle_indicator;
+//                kanner_tiezi.setBanner(data.inv_info.img);
+//                kanner_tiezi.setOnItemClickL(new BaseBanner.OnItemClickL() {
+//                    @Override
+//                    public void onItemClick(int position) {
+//
+//                    }
+//                });
+//
+//            }
             GlideUtils.getInstance().loadCircleImage(getBaseContext(), miv_avar, data.inv_info.author_info.avatar);
             mtv_name.setText(data.inv_info.author_info.nickname);
             mtv_time.setText(data.inv_info.create_time);
@@ -293,11 +290,12 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
             }
             mtv_desc.setText(data.inv_info.content);
             commentAdapter = new TieziCommentAdapter(this, circle_id, inv_id, true, mdatas);
-            linearLayoutManager = new LinearLayoutManager(getBaseContext());
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
             rv_remark.setLayoutManager(linearLayoutManager);
             rv_remark.setNestedScrollingEnabled(false);
             rv_remark.addItemDecoration(new VerticalItemDecoration(28, 0, 0));
             rv_remark.setAdapter(commentAdapter);
+
         } else {
             commentAdapter.notifyDataSetChanged();
         }
@@ -324,7 +322,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     @Override
     public void faBu(DiscoveryCommentListEntity.Mdata.Commentlist data) {
-        pDiscoverTieziDetail.mDatas.add(0,data);
+        pDiscoverTieziDetail.mDatas.add(0, data);
         commentAdapter.notifyDataSetChanged();
         num++;
         mtv_msg_count.setText(String.valueOf(num));

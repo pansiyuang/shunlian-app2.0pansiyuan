@@ -45,7 +45,6 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -163,6 +162,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
+
+    @BindView(R.id.mtv_want)
+    MyTextView mtv_want;
 
 
     private MyImageView myImageView;
@@ -284,6 +286,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected void onStart() {
         super.onStart();
+        resetStatusBar();
+    }
+
+    private void resetStatusBar() {
         if (immersionBar == null)
             immersionBar = ImmersionBar.with(this);
         immersionBar.statusBarAlpha(mStatusBarAlpha)
@@ -561,7 +567,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void goodsOffShelf(String status) {
         if ("0".equals(status)){//下架
-            mtv_off_shelf.setVisibility(View.VISIBLE);
+            visible(mtv_off_shelf/*,mtv_want*/);
+            //gone(mtv_add_car,mtv_buy_immediately);
             mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
             mtv_add_car.setTextColor(getColorResouce(R.color.value_CDA101));
             mtv_add_car.setEnabled(false);
@@ -569,7 +576,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mtv_buy_immediately.setTextColor(getColorResouce(R.color.value_A0A0A0));
             mtv_buy_immediately.setEnabled(false);
         }else {
-            mtv_off_shelf.setVisibility(View.GONE);
+            gone(mtv_off_shelf);
+            //visible(mtv_add_car,mtv_buy_immediately);
             mtv_add_car.setBackgroundColor(getColorResouce(R.color.my_black_one));
             mtv_add_car.setTextColor(getColorResouce(R.color.white));
             mtv_add_car.setEnabled(true);
@@ -800,7 +808,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     public void moreHideAnim() {
         immersionBar.getTag(GoodsDetailAct.class.getName()).init();
-        mll_share.setVisibility(View.GONE);
+        gone(mll_share);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,-1);
@@ -818,7 +826,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 quickAction();
                 if (goodsDetailPresenter != null)
                     goodsDetailPresenter.mayBeBuyGoods();
-
             }
 
             @Override
@@ -835,12 +842,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         float alpha = mll_item.getAlpha();
         if (alpha < 1 && alpha > 0)return;//导航栏没有全部显示的情况下，显示分享框会有透明条
         immersionBar.statusBarColor(R.color.white).init();
-        mll_share.setVisibility(View.VISIBLE);
+        visible(mll_share);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,
                 -1,Animation.RELATIVE_TO_SELF,0);
         animation.setDuration(250);
         mll_share.setAnimation(animation);
+        mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
     }
 
     private void addCartAnim() {
@@ -1109,7 +1117,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     public void sharePrompt(){
-        final PromptDialog promptDialog = new PromptDialog(this);
+        Common.goGoGo(this,"login");
+        moreHideAnim();
+        /*final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureColor(R.color.white);
         promptDialog.setTvSureBg(R.color.pink_color);
         promptDialog.setSureAndCancleListener("请先登录顺联APP，参与分享呦~", "确定",
@@ -1117,7 +1127,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     Common.goGoGo(this,"login");
                     moreHideAnim();
                     promptDialog.dismiss();
-                }, "取消", (view) -> promptDialog.dismiss()).show();
+                }, "取消", (view) -> promptDialog.dismiss()).show();*/
     }
 
     private void quickAction(){
@@ -1158,6 +1168,20 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
         if (mtv_add_car != null)
             mtv_add_car.setBackgroundColor(Color.parseColor("#111111"));
+    }
+
+    /**
+     * 库存不足
+     */
+    @Override
+    public void stockDeficiency(String stock) {
+        if (!isEmpty(stock) && Integer.parseInt(stock) <= 0){
+            visible(mtv_want);
+            gone(mtv_add_car,mtv_buy_immediately);
+        }else {
+            gone(mtv_want);
+            visible(mtv_add_car,mtv_buy_immediately);
+        }
     }
 
     @Override

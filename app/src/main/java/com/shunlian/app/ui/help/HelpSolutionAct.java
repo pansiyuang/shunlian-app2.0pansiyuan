@@ -25,7 +25,6 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PHelpSolution;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
@@ -75,7 +74,6 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     private ShareInfoParam shareInfoParam;
     private MessageCountManager messageCountManager;
 
-    private PromptDialog promptDialog;
 
     public static void startAct(Context context, String id) {
         Intent intent = new Intent(context, HelpSolutionAct.class);
@@ -103,7 +101,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     @OnClick(R.id.rl_more)
     public void more() {
         quick_actions.setVisibility(View.VISIBLE);
-        shareInfoParam.isCopyTitle=true;
+        shareInfoParam.isCopyTitle = true;
         quick_actions.shareInfo(shareInfoParam);
         quick_actions.shareHelp();
     }
@@ -154,11 +152,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mllayout_dianhua:
-                if (promptDialog == null) {
-                    initDialogs();
-                } else {
-                    promptDialog.show();
-                }
+                pHelpSolution.getHelpPhone();
                 break;
             case R.id.mllayout_kefu:
                 pHelpSolution.getUserId();
@@ -222,10 +216,11 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         shareInfoParam.title = solution.question;
         shareInfoParam.desc = solution.answer;
     }
-    public void initDialogs() {
-        promptDialog = new PromptDialog(this);
-        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
-            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+
+    public void initDialogs(String phone) {
+        PromptDialog promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(phone, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
             startActivity(intentServePhoneOne);
             promptDialog.dismiss();
         }, "取消", view -> promptDialog.dismiss()).show();
@@ -316,6 +311,11 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         chatMember.m_user_id = userId;
         chatMember.type = "1";
         ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
+    }
+
+    @Override
+    public void setPhoneNum(String phoneNum) {
+        initDialogs(phoneNum);
     }
 
 }

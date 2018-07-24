@@ -15,10 +15,13 @@ import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProbablyLikeEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IGoodsDetailView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +94,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 if (data != null) {
                     iView.goodsDetailData(data);
                     iView.isFavorite(data.is_fav);
-                    iView.goodsOffShelf(data.status);
+                    iView.goodsOffShelf(data.status);//是否下架
+                    //iView.stockDeficiency(data.status);//是否有库存
                     if (!"0".equals(data.status)){//非下架商品
                         GoodsDeatilEntity.TTAct tt_act = data.tt_act;
                         if (tt_act != null){
@@ -113,6 +117,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     shareInfoParam.goodsPrice = data.price;
                     shareInfoParam.desc = data.introduction;
                     shareInfoParam.downloadPic = data.pics;
+                    shareInfoParam.goods_id = goods_id;
                     if (data.user_info != null){
                         shareLink = data.user_info.share_url;
                         shareInfoParam.userAvatar = data.user_info.avatar;
@@ -159,7 +164,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param storeId
      */
     public void followStore(String storeId){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -171,6 +177,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
+                DefMessageEvent event = new DefMessageEvent();
+                event.followStoreState = 1;
+                EventBus.getDefault().post(event);
                 Common.staticToast(entity.message);
             }
 
@@ -187,7 +196,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param storeId
      */
     public void delFollowStore(String storeId){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -199,6 +209,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
+                DefMessageEvent event = new DefMessageEvent();
+                event.followStoreState = 0;
+                EventBus.getDefault().post(event);
                 Common.staticToast(entity.message);
             }
 
@@ -217,7 +230,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param qty
      */
     public void addCart(String goods_id,String sku_id,String qty){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -260,7 +274,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param goods_id
      */
     public void goodsFavAdd(String goods_id){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -283,7 +298,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param ids
      */
     public void goodsFavRemove(String ids){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -484,7 +500,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param voucherId
      */
     public void getVoucher(String voucherId) {
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String, String> map = new HashMap<>();

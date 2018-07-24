@@ -18,12 +18,13 @@
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_photo"
             android:layout_width="168dp"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY" />
+            android:layout_height="100dp"
+            android:scaleType="fitXY"/>
 
         <View
             android:layout_width="168dp"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:background="@drawable/bg_discover_flash" />
 
         <com.shunlian.app.widget.MyTextView
@@ -36,6 +37,7 @@
             android:layout_marginRight="5dp"
             android:ellipsize="end"
             android:gravity="left"
+            android:visibility="gone"
             android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="10sp" />
@@ -50,6 +52,7 @@
             android:layout_marginRight="5dp"
             android:ellipsize="end"
             android:gravity="left"
+            android:visibility="gone"
             android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="13sp" />

@@ -187,6 +187,7 @@
         <attr name="bb_delay" format="integer" />
         <attr name="bb_period" format="integer" />
         <attr name="bb_isAutoScrollEnable" format="boolean" />
+        <attr name="bb_isCorp" format="boolean" />
         <attr name="bb_barColor" format="color" />
         <attr name="bb_isBarShowWhenLast" format="boolean" />
         <attr name="bb_barPaddingLeft" format="dimension" />

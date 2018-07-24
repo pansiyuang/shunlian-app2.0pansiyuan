@@ -1,11 +1,13 @@
 package com.shunlian.app.ui.sale_data;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -17,11 +19,10 @@ import com.shunlian.app.bean.SaleDataEntity;
 import com.shunlian.app.bean.SalesChartEntity;
 import com.shunlian.app.presenter.SaleDataPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.more_credit.MoreCreditAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.SLHeadDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISaleDataView;
@@ -172,9 +173,6 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.llayout_mark3)
     LinearLayout llayout_mark3;
 
-    @BindView(R.id.mtv_this_month)
-    MyTextView mtv_this_month;
-
     @BindView(R.id.mtv_sale_Explain)
     MyTextView mtv_sale_Explain;
 
@@ -205,8 +203,17 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
-    @BindView(R.id.mtv_tip)
-    MyTextView mtv_tip;
+    /*@BindView(R.id.mtv_tip)
+    MyTextView mtv_tip;*/
+
+    @BindView(R.id.llayout_suspension)
+    LinearLayout llayout_suspension;
+
+    @BindView(R.id.view_perch)
+    View view_perch;
+
+    @BindView(R.id.mtv_detail)
+    MyTextView mtv_detail;
 
     private SaleDataPresenter presenter;
     private int currentPos;//当前所在位置，销售 订单 会员
@@ -220,7 +227,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     private String mFendian;
     private String mXiaofei;
     private List<String> mTip;
-    private SLHeadDialog slHeadDialog;
+    //private SLHeadDialog slHeadDialog;
 
 
     public static void startAct(Context context) {
@@ -252,6 +259,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
             int[] ints = TransformUtil.countRealWH(this, 720, 320);
             layoutParams.width = ints[0];
             layoutParams.height = ints[1];
+            layoutParams.height = ints[1];
             chart_view.setLayoutParams(layoutParams);
         }
         presenter = new SaleDataPresenter(this, this);
@@ -260,8 +268,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         int dp = TransformUtil.dip2px(this, 30);
         TransformUtil.expandViewTouchDelegate(miv_isShow_data,dp,dp,dp,dp);
 
-        GradientDrawable mtv_tipBG = (GradientDrawable) mtv_tip.getBackground();
-        mtv_tipBG.setColor(Color.parseColor("#FFCF012D"));
+        /*GradientDrawable mtv_tipBG = (GradientDrawable) mtv_tip.getBackground();
+        mtv_tipBG.setColor(Color.parseColor("#FFCF012D"));*/
     }
 
     @Override
@@ -270,14 +278,15 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         llayout_7day.setOnClickListener(this);
         llayout_30day.setOnClickListener(this);
         llayout_60day.setOnClickListener(this);
+        mtv_request_code.setOnClickListener(this);
 
         llayout_sale.setOnClickListener(this);
         llayout_order.setOnClickListener(this);
         llayout_vip.setOnClickListener(this);
 
+        mtv_detail.setOnClickListener(this);
         mtv_sale_sum.setOnClickListener(this);
-        mtv_this_month.setOnClickListener(this);
-        mtv_tip.setOnClickListener(this);
+        //mtv_tip.setOnClickListener(this);
 
         chart_view.setOnSaleChartListener((data, date) -> {
             if (isEmpty(data)){
@@ -285,6 +294,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
                 return;
             }
             visible(llayout_appoint_sale);
+            gone(mtv_appoint_child_sale,mtv_appoint_grand_child_sale,mtv_appoint_consume_sale);
             mtv_date.setText(date);
             for (int i = 0; i < data.size(); i++) {
                 switch (i){
@@ -345,7 +355,12 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      */
     @Override
     public void setGrowthValue_RequestCode(String growth_value, String request_code) {
-        mtv_growth_value.setText(String.format(getStringResouce(R.string.growth_value),growth_value));
+        if (isEmpty(growth_value)){
+            mtv_growth_value.setVisibility(View.INVISIBLE);
+        }else {
+            visible(mtv_growth_value);
+            mtv_growth_value.setText(String.format(getStringResouce(R.string.growth_value),growth_value));
+        }
         mtv_request_code.setText(String.format(getStringResouce(R.string.invitation_code),request_code));
     }
 
@@ -462,10 +477,13 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         }
 
         if (!isEmpty(master_info_new)) {
+            visible(recy_view);
             LinearLayoutManager manager = new LinearLayoutManager(this);
             recy_view.setLayoutManager(manager);
             recy_view.setNestedScrollingEnabled(false);
             recy_view.setAdapter(new MemberAdapter(this, master_info_new));
+        }else {
+            gone(recy_view);
         }
     }
 
@@ -483,10 +501,27 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @Override
     public void setSaleTip(List<String> tip) {
         if (!isEmpty(tip)){
-            visible(mtv_tip);
+            //visible(mtv_tip);
             mTip = tip;
+
+            llayout_suspension.removeAllViews();
+            visible(llayout_suspension);
+
+            LayoutInflater from = LayoutInflater.from(this);
+            for (int i = 0; i < tip.size(); i++) {
+                View view = from.inflate(R.layout.item_suspension, null);
+                ((MyTextView)view.findViewById(R.id.mtv_tip)).setText(tip.get(i));
+                llayout_suspension.addView(view);
+            }
+
+            llayout_suspension.postDelayed(()->{
+                int measuredHeight = llayout_suspension.getMeasuredHeight();
+                ViewGroup.LayoutParams layoutParams = view_perch.getLayoutParams();
+                layoutParams.height = measuredHeight+TransformUtil.dip2px(this,18);
+                view_perch.setLayoutParams(layoutParams);
+            },200);
         }else {
-            gone(mtv_tip);
+            gone(/*mtv_tip,*/llayout_suspension);
         }
     }
 
@@ -538,15 +573,22 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
                 }
                 break;
 
+            case R.id.mtv_detail:
             case R.id.mtv_sale_sum:
-            case R.id.mtv_this_month:
-                //SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
-                MoreCreditAct.startAct(this);
+                SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
+                //MoreCreditAct.startAct(this);
                 break;
-            case R.id.mtv_tip:
+            /*case R.id.mtv_tip:
                 if (slHeadDialog == null)
                     slHeadDialog = new SLHeadDialog(this,mTip);
                 slHeadDialog.show();
+                break;*/
+            case R.id.mtv_request_code:
+                String content = mtv_request_code.getText().toString();
+                String sub = content.substring(content.indexOf("：") + 1, content.length());
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                cm.setText(sub);
+                Common.staticToast("复制成功");
                 break;
         }
     }
@@ -589,18 +631,18 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
             case 1:
                 mtv_mark1.setText(chart_view.key_line1 = "小店销售额");
                 mtv_mark2.setText(chart_view.key_line2 = "分店销售额");
-                gone(rlayout_vip);
                 visible(llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
+                gone(rlayout_vip,llayout_mark2);
                 break;
             case 2:
                 mtv_mark1.setText(chart_view.key_line1 = "小店销售订单");
                 mtv_mark2.setText(chart_view.key_line2 = "分店销售订单");
-                gone(rlayout_vip,llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
+                gone(rlayout_vip,llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale,llayout_mark2);
                 break;
             case 3:
                 mtv_mark1.setText(chart_view.key_line1 = "小店会员");
                 mtv_mark2.setText(chart_view.key_line2 = "PLUS会员");
-                visible(rlayout_vip);
+                visible(rlayout_vip,llayout_mark2);
                 gone(llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
                 break;
         }
@@ -630,8 +672,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         super.onDestroy();
         if (presenter != null)
             presenter.detachView();
-        if (slHeadDialog != null){
+        /*if (slHeadDialog != null){
             slHeadDialog.detachView();
-        }
+        }*/
     }
 }

@@ -1,65 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_ash"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
+
 
     <RelativeLayout
         android:id="@+id/rlayout_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_below="@+id/mrlayout_toolbar"
+        android:background="@drawable/rounded_rectangle_gray_6px"
+        android:backgroundTint="@color/white"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:paddingTop="12.5dp">
 
-        <com.shunlian.app.widget.MyEditText
-            android:id="@+id/met_phone"
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/miv_select_phone"
             android:hint="请输入电话号码"
             android:inputType="number"
-            android:gravity="bottom"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@color/value_484848"
             android:textColorHint="@color/color_value_6c"
             android:textSize="30sp" />
 
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mtv_phone"
+            android:layout_toLeftOf="@+id/miv_select_phone"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="20dp"
+            android:textColor="#FFFB0036"
+            android:textSize="12sp"
+            android:visibility="invisible" />
 
         <View
+            android:id="@+id/view_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/met_phone"
-            android:layout_marginTop="10dp"
+            android:layout_below="@+id/mtv_tip"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="24dp"
             android:background="@color/color_value_6c" />
 
-
+<!--icon_huafei_phonebook-->
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_select_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_huafei"
-            android:layout_alignBottom="@+id/met_phone"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignBottom="@+id/mtv_phone"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/icon_huafei_phonebook" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_clear1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_alignBottom="@+id/mtv_phone"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/credit_error" />
 
     </RelativeLayout>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/rlayout_input"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="16sp"
         android:overScrollMode="never" />
 
-
     <com.shunlian.app.widget.MyButton
         android:id="@+id/mbtn_credit"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_below="@+id/recy_view"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="36dp"
@@ -69,4 +97,67 @@
         android:textColor="@color/pink_color"
         android:textSize="15sp" />
 
-</LinearLayout>
+    <FrameLayout
+        android:id="@+id/frame_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#70484848"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/llayout_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingTop="30dp"
+            android:visibility="gone">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyEditText
+                    android:id="@+id/met_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/value_484848"
+                    android:textSize="30sp" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_clear"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/icon_common_tanchuang_close" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_value_6c" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recy_view_history"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="20dp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>

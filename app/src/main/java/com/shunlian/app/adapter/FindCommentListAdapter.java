@@ -153,19 +153,33 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         List<FindCommentListEntity.ReplyList> reply_list = itemComment.reply_list;
 
         if (isEmpty(reply_list)){
-            mHolder.ll_sub_bg.setVisibility(View.GONE);
-            mHolder.miv_sanjiao.setVisibility(View.GONE);
+            gone(mHolder.ll_sub_bg,mHolder.miv_sanjiao);
         }else {
-            mHolder.ll_sub_bg.setVisibility(View.VISIBLE);
-            mHolder.miv_sanjiao.setVisibility(View.VISIBLE);
+            visible(mHolder.ll_sub_bg,mHolder.miv_sanjiao);
             //回复
             reply(mHolder, itemComment, reply_list);
         }
 
         if (position==1 || position == mHotCommentCount + (mHotCommentCount == 0 ? 1 : 2)){
-            mHolder.view_line.setVisibility(View.GONE);
+            gone(mHolder.view_line);
         }else {
-            mHolder.view_line.setVisibility(View.VISIBLE);
+            visible(mHolder.view_line);
+        }
+
+        if (!isEmpty(itemComment.plus_role)){//大于0为plus以上等级，1PLUS店主，2主管，>=3经理
+            visible(mHolder.miv_medal);
+            int plusRole = Integer.parseInt(itemComment.plus_role);
+            if (plusRole == 1){
+                mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+            }else if (plusRole == 2){
+                mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+            }else if (plusRole >= 3){
+                mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_jingli);
+            }else {
+                gone(mHolder.miv_medal);
+            }
+        }else {
+            gone(mHolder.miv_medal);
         }
     }
 
@@ -243,6 +257,9 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
 
         @BindView(R.id.miv_sanjiao)
         MyImageView miv_sanjiao;
+
+        @BindView(R.id.miv_medal)
+        MyImageView miv_medal;
 
         public FindCommentListHolder(View itemView) {
             super(itemView);

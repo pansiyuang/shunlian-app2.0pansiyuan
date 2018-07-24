@@ -16,7 +16,9 @@ public class PhoneOrderDetailEntity{
     public String card_addr;
     public String face_price;
     public String payment_money;
+    public String count;
     public String status_name;
+    public String market_price;
     public String desc_name;
     public String store_name;
     public String image;

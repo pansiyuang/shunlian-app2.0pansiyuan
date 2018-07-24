@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -20,15 +19,10 @@ import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.PSearchQuestion;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.ISearchQView;
 import com.shunlian.app.widget.MyLinearLayout;
-import com.shunlian.app.widget.MyRelativeLayout;
-import com.shunlian.app.widget.MyTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +52,6 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
 
-    private PromptDialog promptDialog;
     private PSearchQuestion presenter;
     private SearchQAdapter searchQAdapter;
     private String keyWord = "";
@@ -109,11 +102,7 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
                 finish();
                 break;
             case R.id.mllayout_dianhua:
-                if (promptDialog == null) {
-                    initDialog();
-                } else {
-                    promptDialog.show();
-                }
+                presenter.getHelpPhone();
                 break;
             case R.id.mllayout_kefu:
                 presenter.getUserId();
@@ -121,10 +110,10 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
         }
     }
 
-    public void initDialog() {
-        promptDialog = new PromptDialog(this);
-        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
-            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+    public void initDialog(String phone) {
+        PromptDialog promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(phone, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
             startActivity(intentServePhoneOne);
             promptDialog.dismiss();
         }, "取消", view -> promptDialog.dismiss()).show();
@@ -181,5 +170,10 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
         chatMember.m_user_id = userId;
         chatMember.type = "1";
         ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
+    }
+
+    @Override
+    public void setPhoneNum(String phoneNum) {
+        initDialog(phoneNum);
     }
 }

@@ -100,9 +100,9 @@
         android:id="@+id/llayout_column"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
         android:background="@color/value_f9f9f9"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="14dp">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_type1"
@@ -143,7 +143,8 @@
             android:paddingBottom="15dp"
             android:text="预估收益"
             android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="invisible" />
 
 
     </LinearLayout>
@@ -156,6 +157,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"

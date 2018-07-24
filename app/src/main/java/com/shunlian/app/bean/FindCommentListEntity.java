@@ -31,6 +31,7 @@ public class FindCommentListEntity {
         public String has_more_reply;
         public String reply_count;
         public String at;
+        public String plus_role;
         public String item_id;
         public String delete_enable;//是否能删除，1是，0否
         public List<ReplyList> reply_list;

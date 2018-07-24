@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -26,16 +25,15 @@ import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
+import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.h5.H5Frag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -93,6 +91,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private MainPageFrag mainPageFrag;
     private FirstPageFrag mainPageFrag;
 //    private MyPlusFrag myPlusFrag;
+    private SortFrag sortFrag;
     private H5PlusFrag h5PlusFrag;
     private DiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
@@ -101,7 +100,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private FragmentManager fragmentManager;
     private int pageIndex;
     private String flag;
-    private Dialog dialog_ad, dialog_commond;
+    private Dialog dialog_ad;
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
@@ -153,9 +152,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         Common.parseClipboard(this);
         if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))){
-            ll_tab_sort.setVisibility(View.VISIBLE);
+            visible(ll_tab_sort);
         }else {
-            ll_tab_sort.setVisibility(View.GONE);
+            gone(ll_tab_sort);
         }
     }
 
@@ -173,11 +172,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     protected void onResume() {
-        if (Common.isPlus()) {
-            tv_tab_sort.setText(getStringResouce(R.string.main_wodedian));
-        } else {
-            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
-        }
+//        if (Common.isPlus()) {
+//            tv_tab_sort.setText(getStringResouce(R.string.main_wodedian));
+//        } else {
+//            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
+//        }
         if (Common.isAlreadyLogin()) {
             if (isPerson) {
                 personCenterClick();
@@ -195,10 +194,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         super.onNewIntent(intent);
         setIntent(intent);
         flag = getIntent().getStringExtra("flag");
-        if (TextUtils.isEmpty(flag)) {
+        /*if (TextUtils.isEmpty(flag)) {
             mainPageClick();
         } else {
             switch2jump(flag);
+        }*/
+        switch2jump(flag);
+        if ("route_login".equals(flag)){
+            Common.goGoGo(this,"login");
         }
     }
 
@@ -260,7 +263,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         }
                         break;
                     case R.id.ll_tab_sort:
-                        myPlusClick();
+                        //myPlusClick();
+                        sortClick();
                         break;
                     case R.id.ll_tab_discover:
                         discoverClick();
@@ -319,6 +323,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         pageIndex = 1;
         chageTabItem(pageIndex);
     }
+
 //    public void myPlusClick() {
 //        isFirst = false;
 //        if (!Common.isAlreadyLogin() || !Common.isPlus()) {
@@ -341,6 +346,23 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        pageIndex = 1;
 //        chageTabItem(pageIndex);
 //    }
+
+    public void sortClick(){
+        isFirst = false;
+        //先判断此碎片是否第一次点击，是的话初始化碎片
+        if (sortFrag== null) {
+            sortFrag = (SortFrag) fragmentMap.get(flags[1]);
+            if (sortFrag == null) {
+                sortFrag = new SortFrag();
+                fragmentMap.put(flags[1], sortFrag);
+            }
+        }
+
+        //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
+        switchContent(sortFrag);
+        pageIndex = 1;
+        chageTabItem(pageIndex);
+    }
 
     public void discoverClick() {
         isFirst = false;
@@ -485,7 +507,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 mainPageClick();
                 break;
             case "myplus":
-                myPlusClick();
+                //myPlusClick();
+                sortClick();
                 break;
             case "focus":
             case "discover":
@@ -496,6 +519,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 break;
             case "personCenter":
                 personCenterClick();
+                break;
+            default:
+                mainPageClick();
                 break;
         }
     }

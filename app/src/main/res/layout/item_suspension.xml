@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="3dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="#FFFFDD58" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="恭喜您已获得本月成长值1.5倍的增长机会，若本月小店销售(本月自我消费+小店销售额已达:2345)大于3000即可转获本月成长值2倍的增长机会"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+
+</LinearLayout>

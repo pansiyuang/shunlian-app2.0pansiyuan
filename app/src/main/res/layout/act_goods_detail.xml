@@ -109,7 +109,7 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp" />
         </com.shunlian.app.widget.MyRelativeLayout>
-
+        <!--加入购物车-->
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_add_car"
             android:layout_width="0dp"
@@ -122,7 +122,7 @@
             android:text="@string/add_shopping_cart"
             android:textColor="@color/white"
             android:textSize="14sp" />
-
+        <!--立即购买-->
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_buy_immediately"
             android:layout_width="0dp"
@@ -135,6 +135,20 @@
             android:text="@string/now_buy"
             android:textColor="@color/white"
             android:textSize="14sp" />
+        <!--我还想要-->
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_want"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:background="@color/pink_color"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:text="@string/i_also_want_to"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:visibility="gone" />
     </com.shunlian.app.widget.MyLinearLayout>
     <!--内容区-->
     <com.shunlian.app.widget.MyFrameLayout

@@ -11,4 +11,6 @@ public class DefMessageEvent {
     public boolean loginSuccess;//登录成功
 
     public int praisePosition = -1;//点赞的条目位置
+
+    public int followStoreState;//商品详情页关注店铺状态
 }

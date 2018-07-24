@@ -11,4 +11,5 @@ public interface IHelpSolutionView extends IView {
     void initFeedback(boolean isSolved);
     void callFeedback();
     void getUserId(String userId);
+    void setPhoneNum(String phoneNum);
 }

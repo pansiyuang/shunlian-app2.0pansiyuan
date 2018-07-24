@@ -81,6 +81,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String mPhoneNumber;
     /**充值金额**/
     private String mTopUpPrice;
+    /********平台优惠券id***********/
+    private String stageVoucherId;
 
 
     @SuppressLint("HandlerLeak")
@@ -126,13 +128,15 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      * @param order_id
      * @param price
      */
-    public static void startAct(Activity activity, String shop_goods, String addressId, String order_id, String price) {
+    public static void startAct(Activity activity, String shop_goods, String addressId,
+                                String order_id, String price,String stage_voucher_id) {
         PayListActivity.activity = activity;
         Intent intent = new Intent(activity, PayListActivity.class);
         intent.putExtra("shop_goods", shop_goods);
         intent.putExtra("addressId", addressId);
         intent.putExtra("order_id", order_id);
         intent.putExtra("price", price);
+        intent.putExtra("stage_voucher_id", stage_voucher_id);
         activity.startActivity(intent);
     }
 
@@ -145,8 +149,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      * @param price
      * @param plus
      */
-    public static void startAct(Activity activity, String product_id, String sku_id, String addressId,
-                                String price, String plus) {
+    public static void startActPlus(Activity activity, String product_id, String sku_id,
+                                String addressId,String price, String plus) {
         PayListActivity.activity = activity;
         Intent intent = new Intent(activity, PayListActivity.class);
         intent.putExtra("product_id", product_id);
@@ -233,6 +237,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         addressId = getIntent().getStringExtra("addressId");
         orderId = getIntent().getStringExtra("order_id");
         price = getIntent().getStringExtra("price");
+        stageVoucherId = getIntent().getStringExtra("stage_voucher_id");
 
         //plus支付
         mProductId = getIntent().getStringExtra("product_id");
@@ -464,11 +469,11 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         currentPayType = pay_types.code;
         switch (pay_types.code) {
             case "pay_url":
-                payListPresenter.submitPLUSOrder(mProductId, mSkuId, addressId, pay_types.code);
+                payListPresenter.submitPLUSOrder(mProductId, mSkuId, addressId,pay_types.code);
                 break;
             case "alipay":
                 if (!isEmpty(shop_goods)) {
-                    payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
+                    payListPresenter.orderCheckout(shop_goods,addressId,stageVoucherId,pay_types.code);
                 } else if (!isEmpty(orderId)) {
                     payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
                 }else if (!isEmpty(mPhoneNumber)){//手机充值
@@ -482,7 +487,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 break;
             case "unionpay":
                 if (!isEmpty(shop_goods)) {
-                    payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
+                    payListPresenter.orderCheckout(shop_goods, addressId,stageVoucherId,pay_types.code);
                 } else if (!isEmpty(orderId)) {
                     payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
                 }else if (!isEmpty(mPhoneNumber)){//手机充值
@@ -496,7 +501,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                                 getString(R.string.SelectRecommendAct_sure), (v) -> {
                                     if (!isEmpty(shop_goods)) {
                                         payListPresenter.orderCheckout(shop_goods,
-                                                addressId, pay_types.code);
+                                                addressId,stageVoucherId,pay_types.code);
                                     }else if (!isEmpty(orderId)) {
                                         payListPresenter.fromOrderListGoPay(orderId,
                                                 pay_types.code);

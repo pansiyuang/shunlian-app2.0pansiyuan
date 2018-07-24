@@ -53,6 +53,13 @@
                 app:iv_control_width="26"
                 app:iv_margin_left="10"/>
 
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_medal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:iv_control_adapter="true"
+                app:iv_margin_left="8" />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"

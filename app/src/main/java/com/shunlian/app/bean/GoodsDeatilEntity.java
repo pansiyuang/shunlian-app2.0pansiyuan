@@ -460,6 +460,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String vip_level;
         public String nickname;
         public String avatar;
+        public String plus_role;
         public ArrayList<String> pics;
 
         @Override

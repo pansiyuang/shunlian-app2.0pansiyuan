@@ -2395,4 +2395,20 @@ public interface ApiService {
      */
     @GET("voucher/getassignvoucher")
     Call<BaseEntity<VoucherEntity>> getAssignVoucher(@QueryMap Map<String, String> map);
+
+    /**
+     * 充值手机号列表
+     * @param body
+     * @return
+     */
+    @POST("virtual/listCard")
+    Call<BaseEntity<CreditPhoneListEntity>> listCard(@Body RequestBody body);
+
+    /**
+     * 删除手机号
+     * @param body
+     * @return
+     */
+    @POST("virtual/deleteCard")
+    Call<BaseEntity<EmptyEntity>> deleteCard(@Body RequestBody body);
 }

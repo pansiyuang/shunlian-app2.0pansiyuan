@@ -2,12 +2,14 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CoreHotEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -41,11 +43,13 @@ public class KoubeiAdapter extends BaseRecyclerAdapter<CoreHotEntity.Hot.Goods> 
             GlideUtils.getInstance().loadImage(context, mHolder.miv_photo, data.thumb);
             if (mHolder.mtv_title != null)
                 mHolder.mtv_title.setText(data.title);
-            if (mHolder.mtv_desc != null)
-                mHolder.mtv_desc.setText(data.content);
+            if (mHolder.mtv_desc != null&&!isEmpty(data.userName)&&!isEmpty(data.content)){
+                SpannableStringBuilder titleBuilder = Common.changeColor(data.userName+"："+data.content, data.content, getColor(R.color.share_text));
+                mHolder.mtv_desc.setText(titleBuilder);
+            }
             if (!isEmpty(data.sales) && Float.parseFloat(data.sales) > 0) {
                 mHolder.mtv_fu.setVisibility(View.VISIBLE);
-                mHolder.mtv_fu.setText(String.format(getString(R.string.first_yifukuan), data.sales));
+                mHolder.mtv_fu.setText(String.format(getString(R.string.first_yixiadan), data.sales));
             } else {
                 mHolder.mtv_fu.setVisibility(View.GONE);
             }

@@ -43,6 +43,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
     protected Context context;
     protected DisplayMetrics dm;
     protected int dimColor;
+    protected boolean isCorp;
     public int  layoutRes=R.layout.layout_kanner_round_indicator;
     /**
      * ViewPager
@@ -160,6 +161,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         period = ta.getInt(R.styleable.BaseBanner_bb_period, 5);
         isAutoScrollEnable = ta.getBoolean(R.styleable.BaseBanner_bb_isAutoScrollEnable, true);
         dimColor = ta.getColor(R.styleable.BaseBanner_bb_dimColor, -1);
+        isCorp = ta.getBoolean(R.styleable.BaseBanner_bb_isCorp, false);
 
         int barColor = ta.getColor(R.styleable.BaseBanner_bb_barColor, Color.TRANSPARENT);
         isBarShowWhenLast = ta.getBoolean(R.styleable.BaseBanner_bb_isBarShowWhenLast, true);

@@ -349,6 +349,16 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     /**
+     * @param isFullScreen 设置全屏显示,true全屏
+     */
+    public void setFullScreen(boolean isFullScreen){
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
+        immersionBar.fullScreen(isFullScreen).init();
+    }
+
+    /**
      * 隐藏状态栏
      */
     public void setHideStatus() {

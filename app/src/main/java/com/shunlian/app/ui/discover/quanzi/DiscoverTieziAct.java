@@ -208,6 +208,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
+        setStatusBarFontDark();
         circle_id = getIntent().getStringExtra("circle_id");
         pDiscoverTiezi = new PDiscoverTiezi(this, this, circle_id);
         view_bg.setAlpha(0);
@@ -265,13 +266,13 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             newAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, mdatas.get(position).id);
+                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, mdatas.get(position).id,mdatas.get(position).imgs);
                 }
             });
             hotAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, data.hot_inv.get(position).id);
+                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, data.hot_inv.get(position).id,mdatas.get(position).imgs);
                 }
             });
 

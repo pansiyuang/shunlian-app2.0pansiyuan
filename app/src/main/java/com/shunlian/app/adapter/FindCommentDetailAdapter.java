@@ -104,6 +104,22 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                     mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
                 }
             }
+
+            if (!isEmpty(lastLikesBean.plus_role)){//大于0为plus以上等级，1PLUS店主，2主管，>=3经理
+                visible(mHolder.miv_medal);
+                int plusRole = Integer.parseInt(lastLikesBean.plus_role);
+                if (plusRole == 1){
+                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+                }else if (plusRole == 2){
+                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+                }else if (plusRole >= 3){
+                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_jingli);
+                }else {
+                    gone(mHolder.miv_medal);
+                }
+            }else {
+                gone(mHolder.miv_medal);
+            }
         }
     }
 
@@ -170,6 +186,9 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
 
         @BindView(R.id.miv_zan1)
         MyImageView miv_zan1;
+
+        @BindView(R.id.miv_medal)
+        MyImageView miv_medal;
 
         @BindView(R.id.recy_view)
         RecyclerView recy_view;

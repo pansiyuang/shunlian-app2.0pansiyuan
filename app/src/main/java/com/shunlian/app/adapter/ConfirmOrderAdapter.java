@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.receive_adress.AddressListActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -206,8 +207,12 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
 
             List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
             if (!isEmpty(voucher)) {//有可用优惠券，默认使用第一张
-                ConfirmOrderEntity.Voucher voucher1 = voucher.get(0);
-                mHolder.mtv_discount.setText(voucher1.voucher_hint );
+                ConfirmOrderEntity.Voucher voucher1 = voucher.get(enabled.selectVoucherId);
+                if (enabled.selectVoucherId == voucher.size()){
+                    mHolder.mtv_discount.setText("请选择");
+                }else {
+                    mHolder.mtv_discount.setText(voucher1.voucher_hint);
+                }
                 String temp = Common.formatFloat(enabled.sub_total, voucher1.denomination);
                 if (Float.parseFloat(temp) <= 0) temp = "0.00";
                 enabled.store_discount_price = temp;
@@ -216,6 +221,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 if (mListener != null){
                     mListener.onSelectVoucher(0);
                 }
+
             }else {
                 enabled.selectVoucherId = -1;
                 enabled.store_discount_price = enabled.sub_total;
@@ -229,10 +235,11 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             if (!isEmpty(promotion_info)){//促销让用户选择
                 if (mIsOrderBuy){
                     String prom_lock = enabled.prom_lock;
-                    if (!isEmpty(prom_lock) && "1".equals(prom_lock)){
+                    if (!isEmpty(prom_lock) && "1".equals(prom_lock)){//prom_lock 1是默认勾选促销产品，否则默认不选
                         ConfirmOrderEntity.PromotionInfo promotionInfo = promotion_info.get(0);
                         enabled.selectPromotionId = 0;
                         mHolder.mtv_promotion.setText(promotionInfo.prom_title);
+                        mHolder.calculatePromotion(0);
                     }else {
                         mHolder.mtv_promotion.setText("");
                     }
@@ -338,13 +345,22 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             switch (v.getId()){
                 case R.id.mllayout_discount://选择优惠券
                     DiscountListDialog discountDialog = new DiscountListDialog(context);
-                    discountDialog.setGoodsDiscount(lists.get(getAdapterPosition()-1));
+                    discountDialog.setGoodsDiscount(lists.get(getAdapterPosition()-1),getString(R.string.goods_voucher));
                     discountDialog.setSelectListener(position -> {
                         if (position < 0){
                             return;
                         }
+                        if (ConfirmOrderPresenter.isSelectStageVoucher){
+                            return;
+                        }
+
                         ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
                         ConfirmOrderEntity.Voucher voucher = enabled.voucher.get(position);
+                        if (position + 1== enabled.voucher.size()){
+                            ConfirmOrderPresenter.isSelectStoreVoucher = false;
+                        }else {
+                            ConfirmOrderPresenter.isSelectStoreVoucher = true;
+                        }
                         mtv_discount.setText(voucher.voucher_hint);
 
                         String sub_total = enabled.sub_total;
@@ -389,37 +405,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                             if (position < 0){
                                 return;
                             }
-                            ConfirmOrderEntity.Enabled enabled = lists.
-                                    get(getAdapterPosition() - 1);
-                            ConfirmOrderEntity.PromotionInfo promotionInfo = enabled.
-                                    promotion_info.get(position);
-                            mtv_promotion.setText(promotionInfo.prom_title);
-                            enabled.selectPromotionId = position;
-
-                            /*********优惠券额度*************/
-                            if (!isEmpty(enabled.voucher)){
-                                String denomination = enabled.voucher.get(enabled.
-                                        selectVoucherId).denomination;
-                                String s1 = Common.formatFloat(enabled.sub_total, denomination);
-                                enabled.store_discount_price = Common.formatFloat(s1,
-                                        isEmpty(promotionInfo.prom_reduce) ?
-                                                "0" : promotionInfo.prom_reduce);
-                            }else {
-                                enabled.store_discount_price = Common.formatFloat(enabled.sub_total,
-                                        isEmpty(promotionInfo.prom_reduce) ?
-                                                "0" : promotionInfo.prom_reduce);
-                            }
-                            /*********优惠券额度*************/
-
-                            //显示店铺小计
-                            if (Float.parseFloat(enabled.store_discount_price) <= 0){
-                                enabled.store_discount_price = "0.00";
-                            }
-                            mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)
-                                    .concat(enabled.store_discount_price),11));
-                            if (mListener != null){
-                                mListener.onSelectVoucher(position);
-                            }
+                            calculatePromotion(position);
                         });
                         promotionDialog.show();
                     }else {
@@ -429,6 +415,40 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                         recyclerDialog.show();
                     }
                     break;
+            }
+        }
+
+        private void calculatePromotion(int position) {
+            ConfirmOrderEntity.Enabled enabled = lists.
+                    get(getAdapterPosition() - 1);
+            ConfirmOrderEntity.PromotionInfo promotionInfo = enabled.
+                    promotion_info.get(position);
+            mtv_promotion.setText(promotionInfo.prom_title);
+            enabled.selectPromotionId = position;
+
+            /*********优惠券额度*************/
+            if (!isEmpty(enabled.voucher)){
+                String denomination = enabled.voucher.get(enabled.
+                        selectVoucherId).denomination;
+                String s1 = Common.formatFloat(enabled.sub_total, denomination);
+                enabled.store_discount_price = Common.formatFloat(s1,
+                        isEmpty(promotionInfo.prom_reduce) ?
+                                "0" : promotionInfo.prom_reduce);
+            }else {
+                enabled.store_discount_price = Common.formatFloat(enabled.sub_total,
+                        isEmpty(promotionInfo.prom_reduce) ?
+                                "0" : promotionInfo.prom_reduce);
+            }
+            /*********优惠券额度*************/
+
+            //显示店铺小计
+            if (Float.parseFloat(enabled.store_discount_price) <= 0){
+                enabled.store_discount_price = "0.00";
+            }
+            mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)
+                    .concat(enabled.store_discount_price),11));
+            if (mListener != null){
+                mListener.onSelectVoucher(position);
             }
         }
 

@@ -23,7 +23,6 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PHelpTwo;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
@@ -60,24 +59,26 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
 
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
-
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
     private PHelpTwo pHelpTwo;
     private LinearLayoutManager linearLayoutManager;
     private String twoId = "", oneId = "", title = "";
     private boolean twoFlag = false;
-    private PromptDialog promptDialog;
     private HelpQCateAdapter helpQCateAdapter;
-
-    @BindView(R.id.rl_more)
-    RelativeLayout rl_more;
-
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
-
-    @BindView(R.id.tv_msg_count)
-    MyTextView tv_msg_count;
-
     private MessageCountManager messageCountManager;
+
+    public static void startAct(Context context, String id, String title) {
+        Intent intent = new Intent(context, HelpTwoAct.class);
+        intent.putExtra("id", id);
+        intent.putExtra("title", title);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     @Override
     public void onResume() {
@@ -143,14 +144,6 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
         pHelpTwo.getCateOne(oneId);
     }
 
-    public static void startAct(Context context, String id, String title) {
-        Intent intent = new Intent(context, HelpTwoAct.class);
-        intent.putExtra("id", id);
-        intent.putExtra("title", title);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-        context.startActivity(intent);
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.act_help_two;
@@ -169,11 +162,7 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
                 }
                 break;
             case R.id.mllayout_dianhua:
-                if (promptDialog == null) {
-                    initDialog();
-                } else {
-                    promptDialog.show();
-                }
+                pHelpTwo.getHelpPhone();
                 break;
             case R.id.mllayout_kefu:
                 pHelpTwo.getUserId();
@@ -202,10 +191,10 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
         });
     }
 
-    public void initDialog() {
-        promptDialog = new PromptDialog(this);
-        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
-            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+    public void initDialog(String phone) {
+        PromptDialog promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(phone, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
             startActivity(intentServePhoneOne);
             promptDialog.dismiss();
         }, "取消", view -> promptDialog.dismiss()).show();
@@ -260,7 +249,7 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
             helpQCateAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    HelpSolutionAct.startAct(getBaseContext(),questions.get(position).id);
+                    HelpSolutionAct.startAct(getBaseContext(), questions.get(position).id);
                 }
             });
         } else {
@@ -288,7 +277,7 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
 
     @Override
     public void setPhoneNum(String phoneNum) {
-
+        initDialog(phoneNum);
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISortFragView;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -55,6 +56,9 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
 
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
 
     private SortFragPresenter presenter;
     private MessageCountManager messageCountManager;
@@ -90,6 +94,7 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
+        visible(miv_close);
         presenter = new SortFragPresenter(this, this);
 
         manager = new GridLayoutManager(this, 3);

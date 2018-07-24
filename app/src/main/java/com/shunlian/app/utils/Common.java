@@ -412,6 +412,7 @@ public class Common {
         return parameterValue;
     }
 
+
     public static long getMemoryFreeSize(Context context) {
         final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo info = new ActivityManager.MemoryInfo();
@@ -958,6 +959,12 @@ public class Common {
                 break;
         }
         return resid;
+    }
+
+    public static void copyText(Context context, String content){
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setText(content); //将内容放入粘贴管理器,在别的地方长按选择"粘贴"即可
+        Common.staticToast("复制成功");
     }
 
     public static void copyText(Context context, String shareLink, String shareDesc,boolean isToast) {

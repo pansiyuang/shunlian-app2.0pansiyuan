@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.sale_data.SaleDetailAct;
 import com.shunlian.app.ui.sale_data.SplineChart06View;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -198,6 +200,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         llayout_week_reward.setOnClickListener(this);
         llayout_order_profit.setOnClickListener(this);
         llayout_month_reward.setOnClickListener(this);
+        mtv_request_code.setOnClickListener(this);
         llayout_assertionProfit.setOnClickListener(this);
 
         llayout_7day.setOnClickListener(this);
@@ -316,8 +319,13 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
      */
     @Override
     public void setUserInfo(MyProfitEntity.UserInfo userInfo) {
-        mtv_growth_value.setText(String.format
-                (getStringResouce(R.string.growth_value),userInfo.grow_num));
+        if (isEmpty(userInfo.grow_num)){
+            mtv_growth_value.setVisibility(View.INVISIBLE);
+        }else {
+            visible(mtv_growth_value);
+            mtv_growth_value.setText(String.format
+                    (getStringResouce(R.string.growth_value), userInfo.grow_num));
+        }
         mtv_request_code.setText(String.format
                 (getStringResouce(R.string.invitation_code),userInfo.invite_code));
         int plus_role_code = Integer.parseInt(userInfo.plus_role_code);
@@ -510,6 +518,13 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                 if (orderProfit > 0 && !isOrderAnimRuning) {
                     presenter.receiveReward("3");
                 }
+                break;
+            case R.id.mtv_request_code:
+                String content = mtv_request_code.getText().toString();
+                String sub = content.substring(content.indexOf("：") + 1, content.length());
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                cm.setText(sub);
+                Common.staticToast("复制成功");
                 break;
         }
     }
