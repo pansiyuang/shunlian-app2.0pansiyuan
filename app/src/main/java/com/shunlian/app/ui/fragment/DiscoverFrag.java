@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
@@ -389,9 +390,10 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 
     private void setParam(int length,MyTextView mtv){
         int multiple=4-length;
-        RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+//        LayoutParams取父布局类型,参数中的ViewGroup.LayoutParams.WRAP_CONTENT参数都是指向一个值如：RelativeLayout.LayoutParams.WRAP_CONTENT，LinearLayout.LayoutParams.WRAP_CONTENT
+        RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, TransformUtil.dip2px(baseContext,6),TransformUtil.dip2px(baseContext,6*multiple),0);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,RelativeLayout.TRUE);
         mtv.setLayoutParams(layoutParams);
     }
     @Override
