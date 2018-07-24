@@ -9,15 +9,19 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.shunlian.app.utils.LogUtil;
+
 import cn.jzvd.JZVideoPlayerStandard;
 
-public class CustVideoPlayer extends JZVideoPlayerStandard {
+public class CustomVideoPlayer extends JZVideoPlayerStandard {
 
-    public CustVideoPlayer(Context context) {
+    public OnVideoPlayClickListener mListener;
+
+    public CustomVideoPlayer(Context context) {
         super(context);
     }
 
-    public CustVideoPlayer(Context context, AttributeSet attrs) {
+    public CustomVideoPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -29,13 +33,14 @@ public class CustVideoPlayer extends JZVideoPlayerStandard {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        int i = v.getId();
-        if (i == cn.jzvd.R.id.fullscreen) {
-            if (currentScreen == SCREEN_WINDOW_FULLSCREEN) {
-                //click quit fullscreen
-            } else {
-                //click goto fullscreen
-            }
+        switch (v.getId()) {
+            case cn.jzvd.R.id.fullscreen:
+                if (currentScreen == SCREEN_WINDOW_FULLSCREEN) {
+                    //click quit fullscreen
+                } else {
+                    //click goto fullscreen
+                }
+                break;
         }
     }
 
@@ -52,6 +57,7 @@ public class CustVideoPlayer extends JZVideoPlayerStandard {
     @Override
     public void startVideo() {
         super.startVideo();
+        startWindowFullscreen();
     }
 
     @Override

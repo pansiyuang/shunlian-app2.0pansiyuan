@@ -2,29 +2,18 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
-import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.BitmapUtil;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
