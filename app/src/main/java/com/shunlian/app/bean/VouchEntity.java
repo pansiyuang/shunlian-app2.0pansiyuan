@@ -2,14 +2,15 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by Administrator on 2018/7/20.
- */
 
+/**
+ * Created by Administrator on 2017/12/5.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VoucherEntity {
+public class VouchEntity {
     public String id;
     public String store_name;
     public String store_label;
@@ -19,7 +20,6 @@ public class VoucherEntity {
     public String is_store;
     public String is_get;
     public String desc;
-    public String store_id;
     public List<Goods> goods_list;
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Goods {
@@ -36,7 +36,7 @@ public class VoucherEntity {
         public String is_pop;
         public String voucher;
         public String discount;
-        public String gift;
+        public String git;
 
     }
 }

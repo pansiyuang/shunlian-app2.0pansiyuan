@@ -19,6 +19,7 @@ import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
+import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -302,7 +303,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         discoverClick();
                         break;
                     case R.id.ll_tab_shopping_car:
-                        shoppingCarClick();
+                        CouponMsgAct.startAct(getBaseContext(),"");
+//                        shoppingCarClick();
                         break;
                     case R.id.ll_tab_person_center:
                         personCenterClick();
