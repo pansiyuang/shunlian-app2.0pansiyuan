@@ -80,6 +80,7 @@ import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
@@ -193,6 +194,8 @@ public class Common {
                 return "PlusGifDetailAct";
             case "chat":
                 return "ChatActivity";
+            case "virtual":
+                return "MoreCreditAct";
             default:
                 return "";
         }
@@ -206,6 +209,9 @@ public class Common {
             return;
         }
         switch (type) {
+            case "virtual":
+                MoreCreditAct.startAct(context);
+                break;
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
                 break;

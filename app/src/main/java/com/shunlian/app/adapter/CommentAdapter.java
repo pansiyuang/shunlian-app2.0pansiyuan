@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
@@ -15,6 +16,7 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -238,65 +240,68 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
 
 
             final List<String> pics = data.pics;
-            if (isEmpty(pics)){
-                gone(mHolder.recy_view,mHolder.miv_pic);
-            }else {
-                if (pics.size() == 1){
-                    gone(mHolder.recy_view);
-                    visible(mHolder.miv_pic);
-                    GlideUtils.getInstance().loadImageShu(context,mHolder.miv_pic,pics.get(0));
-                    mHolder.miv_pic.setOnClickListener(v -> {
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList) pics;
-                        bigImgEntity.index = 0;
-                        bigImgEntity.desc = data.append;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    });
-                }else {
-                    visible(mHolder.recy_view);
-                    gone(mHolder.miv_pic);
-                    PicAdapter picAdapter = new PicAdapter(context, false, pics);
-                    mHolder.recy_view.setAdapter(picAdapter);
-                    picAdapter.setOnItemClickListener((v, pos) -> {
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList) pics;
-                        bigImgEntity.index = pos;
-                        bigImgEntity.desc = data.content;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    });
-                }
-            }
-
+            BitmapUtil.discoverImg(mHolder.miv_pic,mHolder.recy_view,null,pics
+                    ,(Activity) context,0,0,0,16,0,20,10,10);
+//            if (isEmpty(pics)){
+//                gone(mHolder.recy_view,mHolder.miv_pic);
+//            }else {
+//                if (pics.size() == 1){
+//                    gone(mHolder.recy_view);
+//                    visible(mHolder.miv_pic);
+//                    GlideUtils.getInstance().loadImageShu(context,mHolder.miv_pic,pics.get(0));
+//                    mHolder.miv_pic.setOnClickListener(v -> {
+//                        BigImgEntity bigImgEntity = new BigImgEntity();
+//                        bigImgEntity.itemList = (ArrayList) pics;
+//                        bigImgEntity.index = 0;
+//                        bigImgEntity.desc = data.append;
+//                        LookBigImgAct.startAct(context, bigImgEntity);
+//                    });
+//                }else {
+//                    visible(mHolder.recy_view);
+//                    gone(mHolder.miv_pic);
+//                    PicAdapter picAdapter = new PicAdapter(context, false, pics);
+//                    mHolder.recy_view.setAdapter(picAdapter);
+//                    picAdapter.setOnItemClickListener((v, pos) -> {
+//                        BigImgEntity bigImgEntity = new BigImgEntity();
+//                        bigImgEntity.itemList = (ArrayList) pics;
+//                        bigImgEntity.index = pos;
+//                        bigImgEntity.desc = data.content;
+//                        LookBigImgAct.startAct(context, bigImgEntity);
+//                    });
+//                }
+//            }
 
             final List<String> append_pics = data.append_pics;
-            if (isEmpty(append_pics)){
-                gone(mHolder.recy_view1,mHolder.miv_pic1);
-            }else {
-                if (append_pics.size() == 1){
-                    gone(mHolder.recy_view1);
-                    visible(mHolder.miv_pic1);
-                    GlideUtils.getInstance().loadImageShu(context,mHolder.miv_pic1,append_pics.get(0));
-                    mHolder.miv_pic1.setOnClickListener(v -> {
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList) append_pics;
-                        bigImgEntity.index = 0;
-                        bigImgEntity.desc = data.append;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    });
-                }else {
-                    visible(mHolder.recy_view1);
-                    gone(mHolder.miv_pic1);
-                    PicAdapter picAdapter = new PicAdapter(context,false,append_pics);
-                    mHolder.recy_view1.setAdapter(picAdapter);
-                    picAdapter.setOnItemClickListener((v,pos)-> {
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList) append_pics;
-                        bigImgEntity.index = pos;
-                        bigImgEntity.desc = data.append;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    });
-                }
-            }
+            BitmapUtil.discoverImg(mHolder.miv_pic1,mHolder.recy_view1,null,append_pics
+                    ,(Activity) context,0,0,0,16,0,20,10,10);
+//            if (isEmpty(append_pics)){
+//                gone(mHolder.recy_view1,mHolder.miv_pic1);
+//            }else {
+//                if (append_pics.size() == 1){
+//                    gone(mHolder.recy_view1);
+//                    visible(mHolder.miv_pic1);
+//                    GlideUtils.getInstance().loadImageShu(context,mHolder.miv_pic1,append_pics.get(0));
+//                    mHolder.miv_pic1.setOnClickListener(v -> {
+//                        BigImgEntity bigImgEntity = new BigImgEntity();
+//                        bigImgEntity.itemList = (ArrayList) append_pics;
+//                        bigImgEntity.index = 0;
+//                        bigImgEntity.desc = data.append;
+//                        LookBigImgAct.startAct(context, bigImgEntity);
+//                    });
+//                }else {
+//                    visible(mHolder.recy_view1);
+//                    gone(mHolder.miv_pic1);
+//                    PicAdapter picAdapter = new PicAdapter(context,false,append_pics);
+//                    mHolder.recy_view1.setAdapter(picAdapter);
+//                    picAdapter.setOnItemClickListener((v,pos)-> {
+//                        BigImgEntity bigImgEntity = new BigImgEntity();
+//                        bigImgEntity.itemList = (ArrayList) append_pics;
+//                        bigImgEntity.index = pos;
+//                        bigImgEntity.desc = data.append;
+//                        LookBigImgAct.startAct(context, bigImgEntity);
+//                    });
+//                }
+//            }
 
             visible(mHolder.mtv_comment_state);
             if ("1".equals(data.star_level)){//1差评，3中评，5好评

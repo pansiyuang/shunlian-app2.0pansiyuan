@@ -61,10 +61,10 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
             viewHolder.mtv_zan.setTextColor(getColor(R.color.value_BDBDBD));
         }
 //此处不能复用，不能用notify，因为content.image复用导致布局混乱
-        viewHolder.picAdapter = new SinglePicAdapter(context, false, viewHolder.content.image);
-        BitmapUtil.discoverImg(viewHolder.miv_pic, viewHolder.rv_pics, viewHolder.picAdapter, viewHolder.content.image
-                , (Activity) context, 0, 0, 20, 12, 20, 0);
-        viewHolder.picAdapter.setOnItemClickListener(new OnItemClickListener() {
+        SinglePicAdapter picAdapter = new SinglePicAdapter(context, false, viewHolder.content.image,0,0);
+        BitmapUtil.discoverImg(viewHolder.miv_pic, viewHolder.rv_pics, picAdapter, viewHolder.content.image
+                , (Activity) context, 0, 0, 20, 12, 20, 0,0,0);
+        picAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 //点击查看大图
@@ -213,7 +213,6 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
         @BindView(R.id.rv_pics)
         RecyclerView rv_pics;
 
-        private SinglePicAdapter picAdapter;
         private boolean isZan = false;
         private int zan = 0;
         private DiscoveryMaterialEntity.Content content;

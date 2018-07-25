@@ -186,16 +186,16 @@ public class StartAct extends MBaseActivity implements IMain {
             SharedPrefUtil.saveSharedPrfString("localVersion", localVersion);
             SharedPrefUtil.saveCacheSharedPrfBoolean("isFirst", false);
             SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
-//            Intent intent = new Intent(baseFragActivity, GuideAct.class);
-//            startActivity(intent);
-            //暂时关闭引导页
-//            GuideAct.startAct(this);
-            if (isAD){
-                ADAct.startAct(getBaseContext(),data);
-            }else {
-//                Constant.IS_GUIDE = false;
-                MainActivity.startAct(this, "");
-            }
+            Intent intent = new Intent(getBaseContext(), GuideAct.class);
+            startActivity(intent);
+//            暂时关闭引导页
+            GuideAct.startAct(this);
+//            if (isAD){
+//                ADAct.startAct(getBaseContext(),data);
+//            }else {
+////                Constant.IS_GUIDE = false;
+//                MainActivity.startAct(this, "");
+//            }
         } else {
             if (isAD){
                 ADAct.startAct(getBaseContext(),data);

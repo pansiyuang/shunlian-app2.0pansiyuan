@@ -51,8 +51,8 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
             viewHolder.mtv_like.setTextColor(getColor(R.color.value_878B8A));
         }
         GlideUtils.getInstance().loadCircleImage(context,viewHolder.miv_avar,hot.avatar);
-        BitmapUtil.discoverImg(viewHolder.miv_pic,viewHolder.rv_pics,viewHolder.picAdapter,hot.imgs
-        ,activity,0,0,0,12,0,0);
+        BitmapUtil.discoverImg(viewHolder.miv_pic,viewHolder.rv_pics,null,hot.imgs
+        ,activity,0,0,0,12,0,0,0,0);
         //        if (isEmpty(hot.imgs)) {
 //            viewHolder.rv_pics.setVisibility(View.GONE);
 //            viewHolder.miv_pic.setVisibility(View.GONE);
@@ -143,7 +143,6 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
         RecyclerView rv_pics;
 
 
-        private SinglePicAdapter picAdapter;
         public TieziHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
