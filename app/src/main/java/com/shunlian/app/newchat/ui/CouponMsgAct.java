@@ -9,13 +9,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CouponGoodsAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.VoucherEntity;
 import com.shunlian.app.presenter.AssignVoucherPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
@@ -24,6 +22,9 @@ import com.shunlian.app.view.IAssignVoucherView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -70,9 +71,14 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
     @BindView(R.id.rl_more)
     MyRelativeLayout rl_more;
 
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
     private AssignVoucherPresenter mPresenter;
-    private String currentCouponId,couponId,storeId;
-    private boolean canGet=false,isStore=false;
+    private String currentCouponId, couponId, storeId;
+    private boolean canGet = false, isStore = false;
+    private CouponGoodsAdapter couponGoodsAdapter;
+    private GridLayoutManager gridLayoutManager;
 
     public static void startAct(Context context, String couponId) {
         Intent intent = new Intent(context, CouponMsgAct.class);
@@ -88,12 +94,12 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
     @Override
     public void mOnClick(View view) {
         super.mOnClick(view);
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.miv_pick:
-                if (canGet&&!isEmpty(couponId)){
+                if (canGet && !isEmpty(couponId)) {
                     mPresenter.getVoucher(couponId);
-                }else if (isStore){
-                    StoreAct.startAct(this,storeId);
+                } else if (isStore) {
+                    StoreAct.startAct(this, storeId);
                 }
                 break;
         }
@@ -107,54 +113,86 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
         rl_more.setVisibility(View.GONE);
         mtv_title.setText(getStringResouce(R.string.chat_lingquyouhui));
         currentCouponId = getIntent().getStringExtra("coupon_id");
-        mPresenter = new AssignVoucherPresenter(this, this);
-        mPresenter.getVoucherDetai(currentCouponId);
+        mPresenter = new AssignVoucherPresenter(this, this, currentCouponId);
+        nei_empty.setImageResource(R.mipmap.img_empty_common)
+                .setText(getString(R.string.first_shangping))
+                .setButtonText(null);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
         miv_pick.setOnClickListener(this);
+        rv_coupon.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (gridLayoutManager != null) {
+                    int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
+                        if (mPresenter != null) {
+                            mPresenter.refreshBaby();
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
     public void showFailureView(int request_code) {
-
+        visible(nei_empty);
+        gone(rv_coupon);
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
+        visible(nei_empty);
+        gone(rv_coupon);
+    }
+
+
+    @Override
+    public void getVoucherDetail(VoucherEntity voucherEntity, List<VoucherEntity.Goods> goods) {
+        if (isEmpty(goods)) {
+            visible(nei_empty);
+            gone(rv_coupon);
+        }
+        if (couponGoodsAdapter == null) {
+            visible(rv_coupon);
+            gone(nei_empty);
+            GlideUtils.getInstance().loadCircleImage(this, miv_icon, voucherEntity.store_label);
+            tv_store_name.setText(voucherEntity.store_name);
+            tv_price.setText(Common.changeTextSize("￥" + voucherEntity.denomination, "￥", 14));
+            tv_plus.setText(voucherEntity.use_condition);
+            tv_date.setText("有效期:" + voucherEntity.limit_data);
+            tv_use.setText(voucherEntity.desc);
+            couponId = voucherEntity.id;
+            isStore = "1".equals(voucherEntity.is_store);
+            storeId = voucherEntity.store_id;
+            canGet = "0".equals(voucherEntity.is_get);
+            if (!canGet)
+                miv_pick.setImageResource(R.mipmap.img_quan_hui);
+            if (isStore)
+                ll_bg.setBackgroundResource(R.mipmap.img_pingtai);
+            gridLayoutManager = new GridLayoutManager(this, 2);
+            rv_coupon.setLayoutManager(gridLayoutManager);
+            couponGoodsAdapter = new CouponGoodsAdapter(this, true, goods);
+            rv_coupon.setAdapter(couponGoodsAdapter);
+            couponGoodsAdapter.setOnItemClickListener((view, position) ->
+                    GoodsDetailAct.startAct(getBaseContext(), voucherEntity.goods_list.get(position).goods_id));
+        } else {
+            couponGoodsAdapter.notifyDataSetChanged();
+        }
+        couponGoodsAdapter.setPageLoading(Integer.parseInt(voucherEntity.pager.page), Integer.parseInt(voucherEntity.pager.total_page));
 
     }
 
     @Override
-    public void getVoucherDetail(VoucherEntity voucherEntity) {
-        GlideUtils.getInstance().loadCircleImage(this, miv_icon, voucherEntity.store_label);
-        tv_store_name.setText(voucherEntity.store_name);
-        tv_price.setText(Common.changeTextSize("￥"+voucherEntity.denomination,"￥",14));
-        tv_plus.setText(voucherEntity.use_condition);
-        tv_date.setText("有效期:" + voucherEntity.limit_data);
-        tv_use.setText(voucherEntity.desc);
-        couponId=voucherEntity.id;
-        isStore="1".equals(voucherEntity.is_store);
-        storeId=voucherEntity.store_id;
-        canGet= "0".equals(voucherEntity.is_get);
-        if (!canGet)
-            miv_pick.setImageResource(R.mipmap.img_quan_hui);
-        if (isStore)
-            ll_bg.setBackgroundResource(R.mipmap.img_pingtai);
-        rv_coupon.setLayoutManager(new GridLayoutManager(this,2));
-        CouponGoodsAdapter couponGoodsAdapter=new CouponGoodsAdapter(this,false,voucherEntity.goods_list);
-        rv_coupon.setAdapter(couponGoodsAdapter);
-        couponGoodsAdapter.setOnItemClickListener((view, position) ->
-                GoodsDetailAct.startAct(getBaseContext(), voucherEntity.goods_list.get(position).goods_id));
-}
-
-    @Override
     public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
-        if ("1".equals(voucher.is_get)){
+        if ("1".equals(voucher.is_get)) {
             miv_pick.setImageResource(R.mipmap.img_quan_hui);
-            canGet=false;
+            canGet = false;
         }
     }
 }

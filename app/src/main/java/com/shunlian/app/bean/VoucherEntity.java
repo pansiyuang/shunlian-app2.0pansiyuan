@@ -21,6 +21,15 @@ public class VoucherEntity {
     public String desc;
     public String store_id;
     public List<Goods> goods_list;
+    public Pager pager;
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Pager {
+        public String page;
+        public String page_size;
+        public String count;
+        public String total_page;
+
+    }
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Goods {
         public String goods_id;

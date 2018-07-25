@@ -258,7 +258,7 @@ public class StartAct extends MBaseActivity implements IMain {
                 updateDialogV = new UpdateDialog(this,data);
             }else {
                 pMain.getSplashAD();
-                pMain.entryInfo();
+//                pMain.entryInfo();
             }
         }
     }
@@ -268,7 +268,7 @@ public class StartAct extends MBaseActivity implements IMain {
         if (isHave){
             Constant.EMAIL=data.ducha_email;
             SharedPrefUtil.saveSharedPrfString("plus_role", data.is_plus);
-            SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
+            SharedPrefUtil.saveCacheSharedPrf("is_open",data.is_open);
             SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
             SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);
         }

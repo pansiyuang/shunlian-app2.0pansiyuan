@@ -160,6 +160,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void initData() {
         pMain = new PMain(MainActivity.this, MainActivity.this);
+        pMain.entryInfo();
         initMessage();
         if (updateDialogV == null)
             updateDialogV = new UpdateDialog(this) {
@@ -180,11 +181,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             messageCountManager.setOnGetMessageListener(this);
         }
         Common.parseClipboard(this);
-        if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))){
-            visible(ll_tab_sort);
-        }else {
-            gone(ll_tab_sort);
-        }
+//        if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))){
+//            visible(ll_tab_sort);
+//        }else {
+//            gone(ll_tab_sort);
+//        }
     }
 
 
@@ -648,7 +649,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void entryInfo(CommonEntity data) {
-
+        Constant.EMAIL=data.ducha_email;
+        SharedPrefUtil.saveSharedPrfString("plus_role", data.is_plus);
+        SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
+        SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
+        SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);
     }
 
     @Override

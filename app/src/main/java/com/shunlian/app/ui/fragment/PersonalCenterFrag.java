@@ -11,6 +11,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpArticleAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;

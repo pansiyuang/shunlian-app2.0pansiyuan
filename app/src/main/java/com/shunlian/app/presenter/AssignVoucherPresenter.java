@@ -10,9 +10,12 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.VoucherEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IAssignVoucherView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -23,8 +26,13 @@ import retrofit2.Call;
 
 public class AssignVoucherPresenter extends BasePresenter<IAssignVoucherView> {
 
-    public AssignVoucherPresenter(Context context, IAssignVoucherView iView) {
+    private List<VoucherEntity.Goods> goodsList = new ArrayList<>();
+    private String voucher_id;
+
+    public AssignVoucherPresenter(Context context, IAssignVoucherView iView,String voucher_id) {
         super(context, iView);
+        this.voucher_id=voucher_id;
+        getVoucherDetai();
     }
 
     @Override
@@ -40,6 +48,16 @@ public class AssignVoucherPresenter extends BasePresenter<IAssignVoucherView> {
     @Override
     protected void initApi() {
 
+    }
+
+    public void refreshBaby() {
+        LogUtil.augusLogW("yxftets--"+pageIsLoading);
+        LogUtil.augusLogW("yxftets111--"+currentPage);
+        LogUtil.augusLogW("yxftets222--"+allPage);
+        if (!pageIsLoading && currentPage <= allPage) {
+            pageIsLoading = true;
+            getVoucherDetai();
+        }
     }
 
     /**
@@ -66,9 +84,12 @@ public class AssignVoucherPresenter extends BasePresenter<IAssignVoucherView> {
 
     }
 
-    public void getVoucherDetai(String voucherId) {
+    public void getVoucherDetai() {
         Map<String, String> map = new HashMap<>();
         map.put("voucher_id", "gxZ");
+//        map.put("voucher_id", voucher_id);
+        map.put("page", String.valueOf(currentPage));
+        map.put("page_size", String.valueOf(page_size));
         sortAndMD5(map);
         Call<BaseEntity<VoucherEntity>> baseEntityCall = getApiService().getAssignVoucher(map);
         getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<VoucherEntity>>() {
@@ -76,7 +97,24 @@ public class AssignVoucherPresenter extends BasePresenter<IAssignVoucherView> {
             public void onSuccess(BaseEntity<VoucherEntity> entity) {
                 super.onSuccess(entity);
                 VoucherEntity voucherEntity = entity.data;
-                iView.getVoucherDetail(voucherEntity);
+                pageIsLoading = false;
+                currentPage++;
+                allPage = Integer.parseInt(voucherEntity.pager.total_page);
+                goodsList.addAll(voucherEntity.goods_list);
+                iView.getVoucherDetail(voucherEntity,goodsList);
+            }
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
+                pageIsLoading=false;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                isLoading = false;
+                pageIsLoading=false;
             }
         });
     }
