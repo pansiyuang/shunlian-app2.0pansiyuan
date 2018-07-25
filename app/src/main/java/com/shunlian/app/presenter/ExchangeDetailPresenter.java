@@ -2,6 +2,7 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
+import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
@@ -92,10 +93,7 @@ public class ExchangeDetailPresenter extends BasePresenter<ExchangeDetailView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                CommonEntity data = entity.data;
-                if (data != null){
-                    Common.staticToast(data.message);
-                }
+                Common.staticToast(getStringResouce(R.string.order_querenshouhuo));
                 iView.confirmReceive();
             }
         });

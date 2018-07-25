@@ -1968,6 +1968,14 @@ public interface ApiService {
     Call<BaseEntity<CommonEntity>> getUserId(@QueryMap Map<String, String> map);
 
     /**
+     * 获取商家客服聊天用户ID
+     *
+     * @return
+     */
+    @GET("discovery/user/getDiscoveryUnreadCount")
+    Call<BaseEntity<CommonEntity>> getDiscoveryUnreadCount(@QueryMap Map<String, String> map);
+
+    /**
      * 普通用户查看聊天记录
      *
      * @return

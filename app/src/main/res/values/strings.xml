@@ -372,6 +372,7 @@
     <string name="order_quxiaodingdan">取消订单</string>
     <string name="order_fukuan">付款</string>
     <string name="order_wuliu">查看物流</string>
+    <string name="order_querenshouhuo">确认收货成功</string>
 
     <!--我的订单-->
     <string name="my_order">我的订单</string>

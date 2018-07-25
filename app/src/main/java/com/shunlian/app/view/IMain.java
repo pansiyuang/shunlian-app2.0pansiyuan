@@ -14,4 +14,5 @@ public interface IMain extends IView {
     void setCommond(CommondEntity data);
     void setUpdateInfo(UpdateEntity data);
     void entryInfo(CommonEntity data);
+    void setDiscoveryUnreadCount(CommonEntity data);
 }
