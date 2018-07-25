@@ -94,6 +94,12 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         context.startActivityForResult(new Intent(context, SearchGoodsActivity.class), SEARCH_REQUEST_CODE);
     }
 
+    public static void startActivityForResult(Activity context, String keyWord) {
+        Intent intent = new Intent(context, SearchGoodsActivity.class);
+        intent.putExtra("keyword", keyWord);
+        context.startActivityForResult(intent, SEARCH_REQUEST_CODE);
+    }
+
     public static void startActivityForResult(Activity context, boolean isShowHotSearch, String flag) {
         Intent intent = new Intent(context, SearchGoodsActivity.class);
         intent.putExtra("isShowHotSearch", isShowHotSearch);

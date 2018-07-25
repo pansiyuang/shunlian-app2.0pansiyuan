@@ -174,10 +174,10 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
         singleAdapter.setOnItemClickListener((view, position) -> {
             int mposition;
-            if (mRefStore==null){
-                mposition=position;
-            }else {
-                mposition=position-1;
+            if (mRefStore == null) {
+                mposition = position;
+            } else {
+                mposition = position - 1;
             }
             GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
             if (!isEmpty(goods.id)) {
@@ -186,10 +186,10 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         });
         doubleAdapter.setOnItemClickListener((view, position) -> {
             int mposition;
-            if (mRefStore==null){
-                mposition=position;
-            }else {
-                mposition=position-1;
+            if (mRefStore == null) {
+                mposition = position;
+            } else {
+                mposition = position - 1;
             }
             GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
             if (!isEmpty(goods.id)) {
@@ -382,7 +382,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 }
                 break;
             case R.id.tv_keyword:
-                SearchGoodsActivity.startActivityForResult(this);
+                String word = tv_keyword.getText().toString();
+                SearchGoodsActivity.startActivityForResult(this, word);
                 break;
         }
         super.onClick(view);

@@ -9,13 +9,14 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.shunlian.app.eventbus_bean.VideoPlayEvent;
 import com.shunlian.app.utils.LogUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import cn.jzvd.JZVideoPlayerStandard;
 
 public class CustomVideoPlayer extends JZVideoPlayerStandard {
-
-    public OnVideoPlayClickListener mListener;
 
     public CustomVideoPlayer(Context context) {
         super(context);
@@ -40,6 +41,12 @@ public class CustomVideoPlayer extends JZVideoPlayerStandard {
                 } else {
                     //click goto fullscreen
                 }
+                break;
+            case cn.jzvd.R.id.back:
+                EventBus.getDefault().post(new VideoPlayEvent(VideoPlayEvent.FinishAction));
+                break;
+            case cn.jzvd.R.id.iv_more:
+                EventBus.getDefault().post(new VideoPlayEvent(VideoPlayEvent.MoreAction));
                 break;
         }
     }
@@ -88,6 +95,7 @@ public class CustomVideoPlayer extends JZVideoPlayerStandard {
     @Override
     public void onStateAutoComplete() {
         super.onStateAutoComplete();
+        EventBus.getDefault().post(new VideoPlayEvent(VideoPlayEvent.CompleteAction));
     }
 
     @Override
