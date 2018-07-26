@@ -2436,4 +2436,12 @@ public interface ApiService {
      */
     @GET("voucher/voucherRelatedGoodsList")
     Call<BaseEntity<StageVoucherGoodsListEntity>> stageVoucherGoodsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺，或者指定部分商品
+     * @param map
+     * @return
+     */
+    @GET("voucher/voucherRelatedStore")
+    Call<BaseEntity<String>> voucherRelatedStore(@QueryMap Map<String, String> map);
 }

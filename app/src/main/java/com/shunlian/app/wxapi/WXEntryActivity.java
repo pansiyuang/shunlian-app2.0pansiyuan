@@ -23,7 +23,7 @@ import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
-import com.shunlian.app.ui.new_login_register.RegisterAndBindingAct;
+import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -334,12 +334,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (entity != null && entity.data != null) {
             WXLoginEntity wxLoginEntity = entity.data;
             String unique_sign = wxLoginEntity.unique_sign;
-            String mobile = wxLoginEntity.mobile;
+            //String mobile = wxLoginEntity.mobile;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {//绑定手机号不需要推荐人
-                //RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
-                RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign);
+                RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
+                /*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign);*/
                 mYFinish();
             } else if ("1".equals(status)) {
                 Common.staticToast(entity.message);
@@ -375,15 +375,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     finish();
                 }
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
-                //RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
-                RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign);
+                RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
+                /*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign);*/
                 mYFinish();
-            }else if ("4".equals(status)){//绑定推荐人
+            }/*else if ("4".equals(status)){//绑定推荐人
                 RegisterAndBindingAct.startAct(this,
                         RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign);
                 mYFinish();
-            }
+            }*/
         } else {
             mYFinish();
         }

@@ -44,17 +44,16 @@
                 android:layout_alignTop="@+id/miv_storeLogo"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/miv_storeLogo"
-                android:text="爱茉莉的SPA美容中心"
                 android:textColor="@color/new_text"
                 android:textSize="15sp" />
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_storeLevel"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="13dp"
+                android:adjustViewBounds="true"
                 android:layout_alignBottom="@+id/miv_storeLogo"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/miv_storeLogo" />
+                android:layout_alignLeft="@+id/mtv_storeName"/>
 
 
             <com.shunlian.app.widget.MyTextView
