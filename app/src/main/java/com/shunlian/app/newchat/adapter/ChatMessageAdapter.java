@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
@@ -59,6 +61,7 @@ import com.shunlian.app.utils.CenterAlignImageSpan;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.EmojisUtils;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TimeUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -85,7 +88,6 @@ import static com.shunlian.app.utils.BitmapUtil.MIN_WIDTH;
  */
 
 public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
-
     public static final int LEFT_TXT = 1;
     public static final int RIGHT_TXT = 2;
     public static final int LEFT_IMG = 3;
@@ -1411,7 +1413,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             Spannable sp = (Spannable) textView.getText();
             URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
             SpannableStringBuilder style = new SpannableStringBuilder(text);
-            style.clearSpans();
+//            style.clearSpans();
             for (URLSpan url : urls) {
                 MyURLSpan myURLSpan = new MyURLSpan(url.getURL());
                 style.setSpan(myURLSpan, sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -1429,13 +1431,21 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
         @Override
         public void onClick(View widget) {
+            if (mUrl.contains("shunlian")) {
+                return;
+            }
             String voucherId = Common.getURLParameterValue(mUrl, "voucher_id");
+            LogUtil.httpLogW("voucherId:" + voucherId);
             if (TextUtils.isEmpty(voucherId)) {
                 return;
             }
-            Intent intent = new Intent(context, CouponMsgAct.class);
-            intent.putExtra("coupon_id", voucherId);
-            context.startActivity(intent);
+            CouponMsgAct.startAct(context, voucherId);
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            super.updateDrawState(ds);
+            ds.setColor(getColor(R.color.white));
         }
     }
 }

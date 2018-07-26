@@ -674,8 +674,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         mHolder.mrlayout_special_preBgL,
                         mHolder.mrlayout_special_preBgR);
 
-                GlideUtils.getInstance().loadImage(context,
-                        mHolder.miv_special_pic,common_activity.detail_pic);
+                if (!isEmpty(common_activity.detail_pic)) {
+                    visible(mHolder.miv_special_pic);
+                    GlideUtils.getInstance().veryLongPicLoadImage(context,
+                            mHolder.miv_special_pic, common_activity.detail_pic);
+                }else {
+                    gone(mHolder.miv_special_pic);
+                }
 
                 mHolder.mtv_special_before_original_price.setStrikethrough()
                         .setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
@@ -974,7 +979,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
         }else {
             if (recyclerDialog != null){//领取成功之后id == voucher_id
-                recyclerDialog.getVoucherSuccess(voucher,voucherPosition);
+                recyclerDialog.getVoucherSuccess(voucher.voucher_id,voucher.is_get);
             }
         }
         detailCouponPosi = -1;

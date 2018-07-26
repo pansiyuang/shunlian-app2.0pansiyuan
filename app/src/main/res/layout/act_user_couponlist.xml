@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/rlayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/pink_color">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="15dp"
+            android:src="@mipmap/icon_common_back_white" />
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/rl_more"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="9.5dp"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/icon_personalcenter_xiaoxi" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/tv_msg_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/rounded_corner_white_100"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textColor="@color/pink_color"
+                android:textSize="8.5sp"
+                android:visibility="gone" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="使用优惠券"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlayout_title" />
+
+</RelativeLayout>

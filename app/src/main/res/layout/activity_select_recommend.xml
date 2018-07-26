@@ -24,6 +24,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="14dp"
         android:text="@string/help"
+        android:visibility="gone"
         android:textColor="@color/new_text"
         android:textSize="15sp" />
 

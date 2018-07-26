@@ -140,7 +140,7 @@
                 <LinearLayout
                     android:id="@+id/llayout_item1"
                     android:layout_above="@+id/llayout_item2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginLeft="20dp"
@@ -162,8 +162,9 @@
 
                     <com.shunlian.app.widget.MyTextView
                         android:id="@+id/mtv_sale_sum"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:textColor="@color/new_text"
                         android:layout_marginLeft="11dp"
                         android:textSize="18sp" />
@@ -174,6 +175,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/pink_color"
                         android:text="点击查看"
+                        android:layout_marginRight="25dp"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="5dp"

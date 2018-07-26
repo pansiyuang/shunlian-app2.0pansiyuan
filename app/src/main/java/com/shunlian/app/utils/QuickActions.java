@@ -795,7 +795,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         MyTextView mtv_act_label = (MyTextView) inflate.findViewById(R.id.mtv_act_label);
 
         MyTextView mtv_goodsID = (MyTextView) inflate.findViewById(R.id.mtv_goodsID);
-        mtv_goodsID.setText("ID:"+mShareInfoParam.goods_id);
+        mtv_goodsID.setText("商品编号:"+mShareInfoParam.goods_id+"(搜索可直达)");
 
         LinearLayout llayout_day = (LinearLayout) inflate.findViewById(R.id.llayout_day);
 

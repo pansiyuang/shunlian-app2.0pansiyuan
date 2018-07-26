@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,6 +40,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
     protected static Timer DISMISS_CONTROL_VIEW_TIMER;
 
     public ImageView backButton;
+    public ImageView moreButton;
     public ProgressBar bottomProgressBar, loadingProgressBar;
     public TextView titleTextView;
     public ImageView thumbImageView;
@@ -97,6 +99,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         bottomProgressBar = findViewById(R.id.bottom_progress);
         titleTextView = findViewById(R.id.title);
         backButton = findViewById(R.id.back);
+        moreButton = findViewById(R.id.iv_more);
         thumbImageView = findViewById(R.id.thumb);
         loadingProgressBar = findViewById(R.id.loading);
         tinyBackImageView = findViewById(R.id.back_tiny);
@@ -109,6 +112,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
 
         thumbImageView.setOnClickListener(this);
         backButton.setOnClickListener(this);
+        moreButton.setOnClickListener(this);
         tinyBackImageView.setOnClickListener(this);
         clarity.setOnClickListener(this);
         mRetryBtn.setOnClickListener(this);
@@ -132,7 +136,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         } else if (currentScreen == SCREEN_WINDOW_NORMAL
                 || currentScreen == SCREEN_WINDOW_LIST) {
             fullscreenButton.setImageResource(R.drawable.jz_enlarge);
-            backButton.setVisibility(View.GONE);
+            backButton.setVisibility(View.VISIBLE);
             tinyBackImageView.setVisibility(View.INVISIBLE);
             changeStartButtonSize((int) getResources().getDimension(R.dimen.jz_start_button_w_h_normal));
             batteryTimeLayout.setVisibility(View.GONE);
@@ -145,7 +149,6 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
             clarity.setVisibility(View.GONE);
         }
         setSystemTimeAndBattery();
-
 
         if (tmp_test_back) {
             tmp_test_back = false;
@@ -162,6 +165,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         lp.height = size;
         lp.width = size;
     }
+
     @Override
     public int getLayoutId() {
         return R.layout.jz_layout_standard;
@@ -272,7 +276,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         } else if (i == R.id.surface_container) {
             startDismissControlViewTimer();
         } else if (i == R.id.back) {
-            backPress();
+//            backPress(); 暂时去掉该功能
         } else if (i == R.id.back_tiny) {
             if (JZVideoPlayerManager.getFirstFloor().currentScreen == JZVideoPlayer.SCREEN_WINDOW_LIST) {
                 quitFullscreenOrTinyWindow();
@@ -338,6 +342,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
             JZMediaManager.setCurrentDataSource(JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex));
             onStatePreparing();
             onEvent(JZUserAction.ON_CLICK_START_ERROR);
+        } else if (i == R.id.iv_more) {
         }
     }
 
@@ -636,7 +641,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
 
     public void setAllControlsVisiblity(int topCon, int bottomCon, int startBtn, int loadingPro,
                                         int thumbImg, int bottomPro, int retryLayout) {
-        topContainer.setVisibility(topCon);
+        topContainer.setVisibility(VISIBLE);
         bottomContainer.setVisibility(bottomCon);
         startButton.setVisibility(startBtn);
         loadingProgressBar.setVisibility(loadingPro);
@@ -655,7 +660,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
             replayTextView.setVisibility(INVISIBLE);
         } else if (currentState == CURRENT_STATE_AUTO_COMPLETE) {
             startButton.setVisibility(VISIBLE);
-            startButton.setImageResource(R.drawable.jz_click_replay_selector);
+            startButton.setImageResource(R.drawable.icon_faxian_chongbo);
             replayTextView.setVisibility(VISIBLE);
         } else {
             startButton.setImageResource(R.drawable.jz_click_play_selector);

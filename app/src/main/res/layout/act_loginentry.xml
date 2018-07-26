@@ -12,4 +12,87 @@
         android:padding="3dp"
         android:src="@mipmap/icon_login_close" />
 
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_close"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/icon_login_logo" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_sldl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/shun_lian_dong_li" />
+    <!--微信登录-->
+    <LinearLayout
+        android:id="@+id/llayout_wechat_login"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/miv_sldl"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/rounded_corner_green_48px"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/wechat" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="微信登录"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+    <!--手机登录-->
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_login"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/llayout_wechat_login"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_stroke_pink_48px"
+        android:gravity="center"
+        android:text="手机登录"
+        android:textColor="@color/pink_color"
+        android:textSize="15sp" />
+    <!--登录协议-->
+    <LinearLayout
+        android:id="@+id/llayout_login_agreement"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="登录即代表同意"
+            android:textColor="#FF767676"
+            android:textSize="12sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="《顺联动力服务条款》"
+            android:textColor="#FF007AFF"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
 </RelativeLayout>

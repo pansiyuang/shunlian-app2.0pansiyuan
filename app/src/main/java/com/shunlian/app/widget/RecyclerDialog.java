@@ -38,7 +38,7 @@ import static com.shunlian.app.utils.DeviceInfoUtil.getDeviceHeight;
  * Created by Administrator on 2017/11/10.
  */
 
-public class RecyclerDialog extends Dialog{
+public class RecyclerDialog extends Dialog {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -109,7 +109,7 @@ public class RecyclerDialog extends Dialog{
         recycler_list.setAdapter(comboAdapter);
 
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white_ash));
-        comboAdapter.setOnItemClickListener((view,position)-> {
+        comboAdapter.setOnItemClickListener((view, position) -> {
             GoodsDeatilEntity.Combo combo = mCombos.get(position);
             ComboDetailAct.startAct(mContext, combo.combo_id, goods_id);
             if (isShowing()) {
@@ -141,9 +141,12 @@ public class RecyclerDialog extends Dialog{
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white_ash));
         voucherAdapter.setOnItemClickListener((v, p) -> {
             GoodsDeatilEntity.Voucher voucher = voucheres.get(p);
+            if ("1".equals(voucher.is_get)) {
+                return;
+            }
             if (mCallBack != null) {
                 mCallBack.onVoucherSelect(voucher);
-                mCallBack.itemVoucher(voucher,p);
+                mCallBack.itemVoucher(voucher, p);
             }
         });
     }
@@ -172,7 +175,7 @@ public class RecyclerDialog extends Dialog{
         }
         dialog_title.setText(mContext.getResources().getText(R.string.shop_promotion_activity));
         recycler_list.setAdapter(moreAdapter);
-        moreAdapter.setOnItemClickListener((view,position)-> {
+        moreAdapter.setOnItemClickListener((view, position) -> {
             /*if (position < fullCut) {
                 //满减
             } else if (position < fullCut + fullDiscount) {
@@ -181,8 +184,8 @@ public class RecyclerDialog extends Dialog{
                 //买赠
             }*/
             Intent intent = new Intent(mContext, StoreAct.class);
-            intent.putExtra("storeId",store_id);
-            intent.putExtra("discount",true);
+            intent.putExtra("storeId", store_id);
+            intent.putExtra("discount", true);
             mContext.startActivity(intent);
         });
     }
@@ -205,19 +208,22 @@ public class RecyclerDialog extends Dialog{
     }
 
     public interface OnVoucherCallBack {
-        default void onVoucherSelect(GoodsDeatilEntity.Voucher voucher){}
-        default void itemVoucher(GoodsDeatilEntity.Voucher voucher,int position){}
-    }
+        default void onVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
+        }
 
-    public void getVoucherSuccess(String voucherId,String isGet) {
-        if (voucherAdapter != null) {
-            voucherAdapter.getItemSuccess(voucherId,isGet);
+        default void itemVoucher(GoodsDeatilEntity.Voucher voucher, int position) {
         }
     }
 
-    public void getVoucherSuccess(GoodsDeatilEntity.Voucher voucher,int position) {
+    public void getVoucherSuccess(String voucherId, String isGet) {
         if (voucherAdapter != null) {
-            voucherAdapter.getItemSuccess(voucher,position);
+            voucherAdapter.getItemSuccess(voucherId, isGet);
+        }
+    }
+
+    public void getVoucherSuccess(GoodsDeatilEntity.Voucher voucher, int position) {
+        if (voucherAdapter != null) {
+            voucherAdapter.getItemSuccess(voucher, position);
         }
     }
 }

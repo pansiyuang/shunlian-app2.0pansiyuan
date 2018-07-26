@@ -229,6 +229,15 @@ public interface ApiService {
     Call<BaseEntity<RegisterFinishEntity>> register(@Body RequestBody requestBody);
 
     /**
+     * 新注册
+     *
+     * @param requestBody
+     * @return
+     */
+    @POST("member/register/index")
+    Call<BaseEntity<LoginFinishEntity>> new_register(@Body RequestBody requestBody);
+
+    /**
      * 微信登录
      *
      * @param requestBody
@@ -2419,4 +2428,12 @@ public interface ApiService {
      */
     @POST("virtual/deleteCard")
     Call<BaseEntity<EmptyEntity>> deleteCard(@Body RequestBody body);
+
+    /**
+     * 平台优惠券对应的可购买商品
+     * @param map
+     * @return
+     */
+    @GET("voucher/voucherRelatedGoodsList")
+    Call<BaseEntity<StageVoucherGoodsListEntity>> stageVoucherGoodsList(@QueryMap Map<String, String> map);
 }

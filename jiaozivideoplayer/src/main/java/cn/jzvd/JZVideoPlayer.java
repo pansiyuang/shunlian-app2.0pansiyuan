@@ -101,7 +101,8 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
     public Object[] objects = null;
     public long seekToInAdvance = 0;
     public ImageView startButton;
-    public ImageView moreButton;
+    public ImageView backPlayButton;
+    public ImageView morePlayButton;
     public SeekBar progressBar;
     public ImageView fullscreenButton;
     public TextView currentTimeTextView, totalTimeTextView;
@@ -128,7 +129,6 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
     protected float mGestureDownBrightness;
     protected long mSeekTimePosition;
     boolean tmp_test_back = false;
-    public OnVideoPlayClickListener mListener;
 
     public JZVideoPlayer(Context context) {
         super(context);
@@ -363,7 +363,8 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
     public void init(Context context) {
         View.inflate(context, getLayoutId(), this);
         startButton = findViewById(R.id.start);
-        moreButton = findViewById(R.id.iv_more);
+        morePlayButton = findViewById(R.id.iv_more);
+        backPlayButton = findViewById(R.id.back);
         fullscreenButton = findViewById(R.id.fullscreen);
         progressBar = findViewById(R.id.bottom_seek_progress);
         currentTimeTextView = findViewById(R.id.current);
@@ -373,7 +374,8 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
         topContainer = findViewById(R.id.layout_top);
 
         startButton.setOnClickListener(this);
-        moreButton.setOnClickListener(this);
+        morePlayButton.setOnClickListener(this);
+        backPlayButton.setOnClickListener(this);
         fullscreenButton.setOnClickListener(this);
         progressBar.setOnSeekBarChangeListener(this);
         bottomContainer.setOnClickListener(this);
@@ -478,11 +480,7 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
                 startWindowFullscreen();
             }
         } else if (i == R.id.iv_more) {
-            Log.i("JZVideoPlayer", "点击");
-            if (mListener != null) {
-                Log.i("JZVideoPlayer", "点击22");
-                mListener.OnMoreClick();
-            }
+        } else if (i == R.id.back) {
         }
     }
 
@@ -1179,13 +1177,5 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
                 });
             }
         }
-    }
-
-    public void setVideoPlayListener(OnVideoPlayClickListener listener) {
-        this.mListener = listener;
-    }
-
-    public interface OnVideoPlayClickListener {
-        void OnMoreClick();
     }
 }
