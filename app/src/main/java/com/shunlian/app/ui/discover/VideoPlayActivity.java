@@ -29,21 +29,15 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
-import com.shunlian.app.utils.SaveAlbumDialog;
-import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.CustomVideoPlayer;
 import com.shunlian.app.widget.HttpDialog;
-import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
-import com.shunlian.app.widget.circle.RoundRectImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,6 +65,9 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
 
     @BindView(R.id.ll_rootView)
     RelativeLayout ll_rootView;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     public static void startActivity(Context context, String videoUrl) {
         Intent intent = new Intent(context, VideoPlayActivity.class);
@@ -115,7 +112,8 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
         mPresenter = new ChosenPresenter(this, this);
 
         EventBus.getDefault().register(this);
-        dirName = Environment.getExternalStorageDirectory() + "/" + getPackageName();
+        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
+        LogUtil.httpLogW("dirName:" + dirName);
         currentArticle = (ArticleEntity.Article) getIntent().getSerializableExtra("article");
         imgList = new ArrayList<>();
         if (!isEmpty(getIntent().getStringExtra("videoUrl"))) {
@@ -256,15 +254,13 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
             is.close();
         } catch (Exception e) {
             e.printStackTrace();
-            Common.staticToast("视频保存失败");
         }
     }
 
     public void saveVideoFile(String fileDir) {
         //strDir视频路径
         Uri localUri = Uri.parse("file://" + fileDir);
-        Intent localIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-        localIntent.setData(localUri);
+        Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
         sendBroadcast(localIntent);
         Common.staticToast("视频已保存,请在手机相册中查看");
         if (isShare) {
@@ -281,109 +277,13 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
             mShareInfoParam.thumb_type = currentArticle.thumb_type;
             if (!isEmpty(currentArticle.share_url)) {
                 mShareInfoParam.shareLink = currentArticle.share_url;
-                saveshareFindPic();
+                Common.copyText(this, mShareInfoParam.shareLink, mShareInfoParam.title, false);
+                quick_actions.shareInfo(mShareInfoParam);
+                quick_actions.saveshareGoodsPic();
             } else {
                 mPresenter.getShareInfo(mPresenter.nice, currentArticle.id);
             }
         }
-    }
-
-    private void saveshareFindPic() {
-        final View inflate = LayoutInflater.from(this).inflate(R.layout.share_find, null, false);
-        ViewGroup.LayoutParams layoutParams1 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        inflate.setLayoutParams(layoutParams1);
-
-        CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
-
-        MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
-        mtv_nickname.setText("来自" + mShareInfoParam.userName + "的分享");
-
-        int i = TransformUtil.countRealWidth(this, 320);
-        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
-        MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
-        miv_code.setImageBitmap(qrImage);
-
-
-        MyTextView mtv_title = (MyTextView) inflate.findViewById(R.id.mtv_title);
-        mtv_title.setText(mShareInfoParam.title);
-
-        MyTextView mtv_desc = (MyTextView) inflate.findViewById(R.id.mtv_desc);
-        if (TextUtils.isEmpty(mShareInfoParam.desc)) {
-            mtv_desc.setVisibility(View.GONE);
-        } else {
-            mtv_desc.setVisibility(View.VISIBLE);
-            mtv_desc.setText(mShareInfoParam.desc);
-        }
-
-        RoundRectImageView miv_bigpic = (RoundRectImageView) inflate.findViewById(R.id.miv_bigpic);
-        MyImageView miv_smallpic = (MyImageView) inflate.findViewById(R.id.miv_smallpic);
-
-        int[] ints = TransformUtil.countRealWH(this, 640, 300);
-        ViewGroup.LayoutParams layoutParams = miv_bigpic.getLayoutParams();
-        layoutParams.width = ints[0];
-        layoutParams.height = ints[1];
-
-        GlideUtils.getInstance().loadBitmapSync(this, mShareInfoParam.userAvatar,
-                new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        miv_user_head.setImageBitmap(resource);
-                        findPic(inflate, miv_bigpic, miv_smallpic);
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        miv_user_head.setImageResource(R.mipmap.img_set_defaulthead);
-                        findPic(inflate, miv_bigpic, miv_smallpic);
-                    }
-                });
-    }
-
-    private void findPic(View inflate, RoundRectImageView miv_bigpic, MyImageView miv_smallpic) {
-        GlideUtils.getInstance().loadBitmapSync(this, mShareInfoParam.img,
-                new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        if ("1".equals(mShareInfoParam.thumb_type)) {//显示大图
-                            miv_bigpic.setVisibility(View.VISIBLE);
-                            miv_smallpic.setVisibility(View.GONE);
-                            miv_bigpic.setImageBitmap(resource);
-                        } else {
-                            miv_bigpic.setVisibility(View.GONE);
-                            miv_smallpic.setVisibility(View.VISIBLE);
-                            miv_smallpic.setImageBitmap(resource);
-                        }
-                        savePic(inflate);
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        Common.staticToast("分享失败");
-                    }
-                });
-    }
-
-    private void savePic(View inflate) {
-        inflate.postDelayed(() -> {
-            Bitmap bitmapByView = getBitmapByView(inflate);
-            boolean isSuccess = BitmapUtil.saveImageToAlbumn(this, bitmapByView);
-            if (isSuccess) {
-                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) this, "article", currentArticle.id);
-                dialog.show();
-            } else {
-                Common.staticToast("分享失败");
-            }
-        }, 100);
-    }
-
-    public Bitmap getBitmapByView(View view) {
-        Bitmap bitmap = null;
-        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.RGB_565);
-        final Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
-        return bitmap;
     }
 
 
@@ -430,9 +330,11 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        mShareInfoParam.shareLink = baseEntity.data.shareLink;
-        mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
-        mShareInfoParam.userName = baseEntity.data.userName;
-        saveshareFindPic();
+        if (quick_actions != null) {
+            mShareInfoParam.userName = baseEntity.data.userName;
+            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            mShareInfoParam.shareLink = baseEntity.data.shareLink;
+            mShareInfoParam.desc = baseEntity.data.desc;
+        }
     }
 }

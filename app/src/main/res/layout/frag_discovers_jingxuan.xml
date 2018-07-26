@@ -32,7 +32,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true"
-                android:paddingBottom="100dp"
                 android:visibility="gone">
 
                 <com.shunlian.app.widget.empty.NetAndEmptyInterface
