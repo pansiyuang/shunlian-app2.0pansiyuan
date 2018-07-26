@@ -42,14 +42,15 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         return mData.size();
     }
 
-    public void getItemSuccess(String voucherId,String isGet) {
+    public void getItemSuccess(String voucherId, String isGet) {
         if (isEmpty(mData) || isEmpty(voucherId)) {
             return;
         }
         for (int i = 0; i < mData.size(); i++) {
-            if (voucherId.equals(mData.get(i).voucher_id)) {
-                mData.get(i).is_get = isGet;
-                notifyItemChanged(i);
+            GoodsDeatilEntity.Voucher voucher = mData.get(i);
+            if (voucherId.equals(voucher.voucher_id)) {
+                voucher.is_get = isGet;
+                notifyItemChanged(i, voucher);
                 break;
             }
         }
@@ -66,6 +67,47 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         VoucherViewHolder voucherViewHolder = new VoucherViewHolder(LayoutInflater.from(mContext)
                 .inflate(R.layout.item_voucher, parent, false));
         return voucherViewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+        if (!isEmpty(payloads) && holder instanceof VoucherViewHolder) {
+            final VoucherViewHolder voucherViewHolder = (VoucherViewHolder) holder;
+            GoodsDeatilEntity.Voucher voucher = null;
+            if (payloads.get(0) instanceof GoodsDeatilEntity.Voucher) {
+                voucher = (GoodsDeatilEntity.Voucher) payloads.get(0);
+                String price = mContext.getResources().getString(R.string.rmb) + voucher.denomination;
+                voucherViewHolder.tv_voucher_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 13));
+
+                if (!isEmpty(voucher.use_condition) && Float.parseFloat(voucher.use_condition) == 0) {
+                    voucherViewHolder.tv_voucher_title.setText(getString(R.string.no_doorsill_voucher));
+                } else {
+                    voucherViewHolder.tv_voucher_title.setText(String.format(mContext.getResources().getString(R.string.voucher_full_use),
+                            voucher.use_condition));
+                }
+        /*if ("ALL".equals(voucher.goods_scope)) { //全店通用卷
+            voucherViewHolder.tv_voucher_use.setText(mContext.getResources().getText(R.string.all_store_use));
+        } else if ("ASSIGN".equals(voucher.goods_scope)) {
+            // TODO: 2017/11/16
+        }*/
+                voucherViewHolder.tv_voucher_use.setText(voucher.goods_scope);
+
+                if ("1".equals(voucher.is_get)) {  //1为已经领取
+                    voucherViewHolder.ll_voucher.setBackgroundDrawable(getDrawable(R.mipmap.img_dianpu_youhuiquan_n));
+                    voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.hava_received));
+                    voucherViewHolder.tv_draw.setTextColor(getColor(R.color.my_gray_one));
+                    voucherViewHolder.tv_draw.setBackgroundDrawable(getDrawable(R.drawable.shape_line_gray));
+                } else {
+                    voucherViewHolder.ll_voucher.setBackgroundDrawable(getDrawable(R.mipmap.img_dianpu_youhuiquan_h));
+                    voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.receive));
+                    voucherViewHolder.tv_draw.setTextColor(getColor(R.color.pink_color));
+                    voucherViewHolder.tv_draw.setBackgroundDrawable(getDrawable(R.drawable.shape_line_pink));
+                }
+            }
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
     }
 
     @Override

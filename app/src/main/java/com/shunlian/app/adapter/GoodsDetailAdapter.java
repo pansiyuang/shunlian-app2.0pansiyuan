@@ -979,7 +979,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
         }else {
             if (recyclerDialog != null){//领取成功之后id == voucher_id
-                recyclerDialog.getVoucherSuccess(voucher,voucherPosition);
+                recyclerDialog.getVoucherSuccess(voucher.voucher_id,voucher.is_get);
             }
         }
         detailCouponPosi = -1;

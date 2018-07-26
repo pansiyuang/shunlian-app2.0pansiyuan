@@ -2,35 +2,46 @@ package com.shunlian.app.ui.discover;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.OperateAdapter;
-import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.VideoPlayEvent;
+import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.NetworkUtils;
+import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.CustomVideoPlayer;
 import com.shunlian.app.widget.HttpDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,19 +53,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import cn.jzvd.JZVideoPlayer;
 
 /**
  * Created by Administrator on 2018/7/23.
  */
 
-public class VideoPlayActivity extends BaseActivity {
+public class VideoPlayActivity extends BaseActivity implements IChosenView {
 
     @BindView(R.id.customVideoPlayer)
     CustomVideoPlayer customVideoPlayer;
 
     @BindView(R.id.ll_rootView)
-    LinearLayout ll_rootView;
+    RelativeLayout ll_rootView;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     public static void startActivity(Context context, String videoUrl) {
         Intent intent = new Intent(context, VideoPlayActivity.class);
@@ -69,12 +82,23 @@ public class VideoPlayActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
+    public static void startActivity(Context context, ArticleEntity.Article article) {
+        Intent intent = new Intent(context, VideoPlayActivity.class);
+        intent.putExtra("article", article);
+        context.startActivity(intent);
+    }
+
     public List<String> itemList;
     public String currentUrl;
     public String currentPlaceHold;
     public HttpDialog httpDialog;
     private Dialog dialog_operate;
     public String dirName;
+    private ArticleEntity.Article currentArticle;
+    private boolean isShare;
+    private ShareInfoParam mShareInfoParam;
+    private ArrayList<String> imgList;
+    private ChosenPresenter mPresenter;
 
     @Override
     protected int getLayoutId() {
@@ -83,45 +107,69 @@ public class VideoPlayActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        // 使通知栏透明化
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        setHideStatusAndNavigation();
+
+        mPresenter = new ChosenPresenter(this, this);
+
+        EventBus.getDefault().register(this);
+        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
+        LogUtil.httpLogW("dirName:" + dirName);
+        currentArticle = (ArticleEntity.Article) getIntent().getSerializableExtra("article");
+        imgList = new ArrayList<>();
+        if (!isEmpty(getIntent().getStringExtra("videoUrl"))) {
+            currentUrl = getIntent().getStringExtra("videoUrl");
+        } else if (currentArticle != null) {
+            currentUrl = currentArticle.video_url;
+            currentPlaceHold = currentArticle.thumb;
+            imgList.add(currentArticle.thumb);
+        }
+        if (!isEmpty(getIntent().getStringExtra("placehold"))) {
+            currentPlaceHold = getIntent().getStringExtra("placehold");
+            imgList.add(currentPlaceHold);
         }
 
-        dirName = Environment.getExternalStorageDirectory() + "/" + getPackageName();
-        currentUrl = getIntent().getStringExtra("videoUrl");
-        currentPlaceHold = getIntent().getStringExtra("placehold");
-        customVideoPlayer.setUp(currentUrl, CustomVideoPlayer.SCREEN_WINDOW_FULLSCREEN);
         if (!isEmpty(currentPlaceHold)) {
             GlideUtils.getInstance().loadImage(this, customVideoPlayer.thumbImageView, currentPlaceHold);
         }
-        customVideoPlayer.backButton.setOnClickListener(v -> finish());
-        customVideoPlayer.fullscreenButton.setVisibility(View.GONE);
-        customVideoPlayer.setVideoPlayListener(() -> initDialog());
+        customVideoPlayer.setUp(currentUrl, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
         customVideoPlayer.startVideo();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        setHideStatusAndNavigation();
-        JZVideoPlayer.releaseAllVideos();
+        customVideoPlayer.releaseAllVideos();
     }
 
     @Override
     public void onBackPressed() {
-        if (JZVideoPlayer.backPress()) {
-            return;
-        }
         super.onBackPressed();
+        finish();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(VideoPlayEvent event) {
+        switch (event.action) {
+            case VideoPlayEvent.FinishAction:
+                finish();
+                break;
+            case VideoPlayEvent.MoreAction:
+                initDialog();
+                break;
+            case VideoPlayEvent.CompleteAction:
+                setHideStatusAndNavigation();
+                break;
+        }
     }
 
     public void initDialog() {
         if (itemList == null) {
             itemList = new ArrayList<>();
             itemList.add("保存视频");
-            itemList.add("图文分享");
+            if (!isEmpty(imgList)) {
+                itemList.add("图文分享");
+            }
             itemList.add("取消");
         }
 
@@ -134,11 +182,18 @@ public class VideoPlayActivity extends BaseActivity {
             OperateAdapter operateAdapter = new OperateAdapter(this, itemList);
             rv_operate.setAdapter(operateAdapter);
             operateAdapter.setOnItemClickListener((view, position) -> {
+                if (!NetworkUtils.isNetworkAvailable(this)) {
+                    Common.staticToast("网络不可用");
+                    return;
+                }
                 switch (itemList.get(position)) {
                     case "保存视频":
+                        isShare = false;
                         readToDownLoad();
                         break;
                     case "图文分享":
+                        isShare = true;
+                        readToDownLoad();
                         break;
                 }
                 dialog_operate.dismiss();
@@ -159,7 +214,11 @@ public class VideoPlayActivity extends BaseActivity {
         LogUtil.httpLogW("文件名:" + fileName);
         File file1 = new File(fileName);
         if (file1.exists()) {
-            Toast.makeText(this, "已下载过该视频,请勿重复下载!", Toast.LENGTH_SHORT).show();
+            if (isShare) {
+                shareArticle();
+            } else {
+                Toast.makeText(this, "已下载过该视频,请勿重复下载!", Toast.LENGTH_SHORT).show();
+            }
         } else {
             if (httpDialog == null) {
                 httpDialog = new HttpDialog(this);
@@ -168,7 +227,6 @@ public class VideoPlayActivity extends BaseActivity {
                 httpDialog.show();
             }
             new Thread(() -> downLoadVideo(fileName)).start();
-            LogUtil.httpLogW("下载完成");
             if (httpDialog.isShowing()) {
                 httpDialog.dismiss();
             }
@@ -191,11 +249,92 @@ public class VideoPlayActivity extends BaseActivity {
                 os.write(bs, 0, len);
             }
             // 完成后关闭流
+            saveVideoFile(fileName);
             os.close();
             is.close();
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtil.httpLogW(e.getMessage());
+        }
+    }
+
+    public void saveVideoFile(String fileDir) {
+        //strDir视频路径
+        Uri localUri = Uri.parse("file://" + fileDir);
+        Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
+        sendBroadcast(localIntent);
+        Common.staticToast("视频已保存,请在手机相册中查看");
+        if (isShare) {
+            shareArticle();
+        }
+    }
+
+    public void shareArticle() {
+        if (mPresenter != null) {
+            mShareInfoParam = mPresenter.getShareInfoParam();
+            mShareInfoParam.title = currentArticle.title;
+            mShareInfoParam.desc = currentArticle.full_title;
+            mShareInfoParam.img = currentArticle.thumb;
+            mShareInfoParam.thumb_type = currentArticle.thumb_type;
+            if (!isEmpty(currentArticle.share_url)) {
+                mShareInfoParam.shareLink = currentArticle.share_url;
+                Common.copyText(this, mShareInfoParam.shareLink, mShareInfoParam.title, false);
+                quick_actions.shareInfo(mShareInfoParam);
+                quick_actions.saveshareGoodsPic();
+            } else {
+                mPresenter.getShareInfo(mPresenter.nice, currentArticle.id);
+            }
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void getNiceList(ArticleEntity articleEntity, int currentPage, int totalPage) {
+
+    }
+
+    @Override
+    public void likeArticle(String articleId) {
+
+    }
+
+    @Override
+    public void unLikeArticle(String articleId) {
+
+    }
+
+    @Override
+    public void getOtherTopics(List<ArticleEntity.Topic> topic_list) {
+
+    }
+
+    @Override
+    public void refreshFinish() {
+
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        if (quick_actions != null) {
+            mShareInfoParam.userName = baseEntity.data.userName;
+            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            mShareInfoParam.shareLink = baseEntity.data.shareLink;
+            mShareInfoParam.desc = baseEntity.data.desc;
         }
     }
 }

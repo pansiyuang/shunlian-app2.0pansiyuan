@@ -2,6 +2,7 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ArticleEntity {
+public class ArticleEntity implements Serializable {
     public List<Tag> tag_list;
     public String count;
     public String total_page;
@@ -22,7 +23,7 @@ public class ArticleEntity {
     public GoodsDeatilEntity.UserInfo user_info;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Article {
+    public static class Article implements Serializable {
         public String id;
         public String title;
         public String full_title;
@@ -47,7 +48,7 @@ public class ArticleEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Tag {
+    public static class Tag implements Serializable {
         public String id;
         public String name;
         public String description;
@@ -56,7 +57,7 @@ public class ArticleEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Topic {
+    public static class Topic implements Serializable {
         public String id;
         public String subject;
         public String thumb;

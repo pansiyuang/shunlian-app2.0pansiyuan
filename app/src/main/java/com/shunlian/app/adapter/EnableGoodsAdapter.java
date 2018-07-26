@@ -119,6 +119,12 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             }
         }
 
+        if (isEmpty(mPromotion.title_label) && isEmpty(mPromotion.prom_title)) {
+            enableViewHolder.rl_prefer.setVisibility(View.GONE);
+        } else {
+            enableViewHolder.rl_prefer.setVisibility(View.VISIBLE);
+        }
+
         if (isEmpty(goods.all_prom)) {
             enableViewHolder.tv_edit_promo.setVisibility(View.GONE);
         } else {

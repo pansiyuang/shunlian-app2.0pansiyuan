@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    android:gravity="center"
     android:orientation="vertical">
 
     <com.shunlian.app.widget.CustomVideoPlayer
         android:id="@+id/customVideoPlayer"
         android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:fitsSystemWindows="true" />
-</LinearLayout>
+        android:visibility="gone" />
+</RelativeLayout>

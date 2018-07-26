@@ -197,7 +197,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                     if (isEmpty(article.video_url)) {
                         return;
                     }
-                    VideoPlayActivity.startActivity(context, article.video_url, article.thumb);
+                    VideoPlayActivity.startActivity(context, article);
                 });
                 break;
         }
