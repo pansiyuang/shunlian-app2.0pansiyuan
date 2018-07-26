@@ -180,6 +180,8 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 gone(articleViewHolder.miv_big_icon);
                 visible(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
+                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgs, mFragment.getActivity()
+                        , 0, 0, 10, 12, 10, 12, 6, 20);
 
                 imgList.clear();
                 if (article.thumb_list != null && article.thumb_list.length != 0) {

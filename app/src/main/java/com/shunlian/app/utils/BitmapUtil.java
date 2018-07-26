@@ -254,7 +254,7 @@ public class BitmapUtil {
                 param.setMargins(TransformUtil.dip2px(activity, left), TransformUtil.dip2px(activity, top), TransformUtil.dip2px(activity, right), TransformUtil.dip2px(activity, bottom));
                 rv_pics.setLayoutParams(param);
                 rv_pics.setNestedScrollingEnabled(false);
-                if (rv_pics.getItemDecorationAt(0) == null)
+                if (rv_pics.getItemDecorationCount()==0)
                     rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(activity, 9), false));
                 rv_pics.setAdapter(picAdapter);
 //                } else {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CouponListEntity;
 import com.shunlian.app.bean.StageVoucherGoodsListEntity;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -59,7 +60,10 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
         baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
-        baseFooterHolder.layout_no_more.setText("");
+        baseFooterHolder.layout_no_more.setText("各位客官！已经到尽头啦!!");
+        baseFooterHolder.layout_no_more.setTextSize(9);
+        baseFooterHolder.layout_load_error.setTextSize(9);
+        baseFooterHolder.mtv_loading.setTextSize(9);
     }
 
     @Override
@@ -199,8 +203,26 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
                 gone(mHolder.view_line);
                 visible(mHolder.view_line1);
             }
-
             StageVoucherGoodsListEntity.GoodsList goodsList = lists.get(position - 1);
+
+            GlideUtils.getInstance().loadImage(context,mHolder.miv_storeLogo,goodsList.avatar);
+            StageVoucherGoodsListEntity.Level level = goodsList.level;
+            if (level != null){
+                if (!isEmpty(level.path)){
+                    visible(mHolder.miv_storeLevel);
+                    GlideUtils.getInstance().loadImage(context,mHolder.miv_storeLevel,level.path);
+                }else {
+                    gone(mHolder.miv_storeLevel);
+                }
+            }
+            GlideUtils.getInstance().loadImage(context,mHolder.miv_storeLogo,goodsList.avatar);
+            mHolder.mtv_storeName.setText(goodsList.name);
+            if ("1".equals(goodsList.show_more)){
+                visible(mHolder.mtv_more_goods);
+            }else {
+                gone(mHolder.mtv_more_goods);
+            }
+
             List<StageVoucherGoodsListEntity.ItemGoods> goods_list = goodsList.goods_list;
             if (!isEmpty(goods_list)){
                 visible(mHolder.llayout_goods);
@@ -211,7 +233,6 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
             }else {
                 gone(mHolder.llayout_goods);
             }
-
         }
     }
 
@@ -400,6 +421,19 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
 
         public CouponGoodsHolder(View itemView) {
             super(itemView);
+            rlayout_go_store.setOnClickListener(view -> {
+                StageVoucherGoodsListEntity.GoodsList
+                        goodsList = lists.get(getAdapterPosition() - 1);
+                String store_id = goodsList.store_id;
+                if (!isEmpty(store_id)){
+                    StoreAct.startAct(context,store_id);
+                }
+            });
+
+
+            mtv_more_goods.setOnClickListener(view -> {
+
+            });
         }
     }
 }

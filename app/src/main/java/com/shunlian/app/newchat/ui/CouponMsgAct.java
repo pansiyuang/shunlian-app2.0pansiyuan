@@ -21,6 +21,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IAssignVoucherView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
+import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
@@ -71,6 +72,9 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
     @BindView(R.id.rl_more)
     MyRelativeLayout rl_more;
 
+    @BindView(R.id.msv_out)
+    MyScrollView msv_out;
+
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
@@ -78,7 +82,6 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
     private String currentCouponId, couponId, storeId;
     private boolean canGet = false, isStore = false;
     private CouponGoodsAdapter couponGoodsAdapter;
-    private GridLayoutManager gridLayoutManager;
 
     public static void startAct(Context context, String couponId) {
         Intent intent = new Intent(context, CouponMsgAct.class);
@@ -123,19 +126,29 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
     protected void initListener() {
         super.initListener();
         miv_pick.setOnClickListener(this);
-        rv_coupon.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (gridLayoutManager != null) {
-                    int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
-                        if (mPresenter != null) {
-                            mPresenter.refreshBaby();
-                        }
+            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
+                if (isScrollBottom){
+                    if (mPresenter != null) {
+                        mPresenter.refreshBaby();
                     }
                 }
             }
         });
+//        rv_coupon.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                if (gridLayoutManager != null) {
+//                    int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
+//                    if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
+//                        if (mPresenter != null) {
+//                            mPresenter.refreshBaby();
+//                        }
+//                    }
+//                }
+//            }
+//        });
 
     }
 
@@ -175,10 +188,11 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
                 miv_pick.setImageResource(R.mipmap.img_quan_hui);
             if (isStore)
                 ll_bg.setBackgroundResource(R.mipmap.img_pingtai);
-            gridLayoutManager = new GridLayoutManager(this, 2);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
             rv_coupon.setLayoutManager(gridLayoutManager);
             couponGoodsAdapter = new CouponGoodsAdapter(this, true, goods);
             rv_coupon.setAdapter(couponGoodsAdapter);
+            rv_coupon.setNestedScrollingEnabled(false);
             couponGoodsAdapter.setOnItemClickListener((view, position) ->
                     GoodsDetailAct.startAct(getBaseContext(), voucherEntity.goods_list.get(position).goods_id));
         } else {
