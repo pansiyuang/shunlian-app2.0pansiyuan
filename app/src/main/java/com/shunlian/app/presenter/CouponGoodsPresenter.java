@@ -90,6 +90,7 @@ public class CouponGoodsPresenter extends BasePresenter<ICouponGoodsView> {
                     @Override
                     public void onSuccess(BaseEntity<StageGoodsListEntity> entity) {
                         super.onSuccess(entity);
+                        isLoading = false;
                         StageGoodsListEntity data = entity.data;
                         StageGoodsListEntity.PagerBean pager = data.pager;
                         if (pager != null) {
@@ -100,7 +101,20 @@ public class CouponGoodsPresenter extends BasePresenter<ICouponGoodsView> {
                         setData(data);
                         currentPage++;
                     }
+
+                    @Override
+                    public void onErrorCode(int code, String message) {
+                        super.onErrorCode(code, message);
+                        isLoading = false;
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        super.onFailure();
+                        isLoading = false;
+                    }
                 });
+
     }
 
     private void setData(StageGoodsListEntity data) {
