@@ -8,19 +8,19 @@ import java.util.List;
  * Created by zhanghe on 2018/7/26.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StageVoucherGoodsListEntity {
+public class StageGoodsListEntity {
 
-    public List<GoodsList> goods_list;
+    public PagerBean pager;
+    public List<ItemGoods> goods_list;
     public CouponListEntity.VoucherList voucher_info;
 
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class GoodsList {
-        public String name;
-        public String avatar;
-        public String store_id;
-        public String show_more;
-        public Level level;
-        public List<ItemGoods> goods_list;
+    public static class PagerBean {
+        public String page;
+        public String page_size;
+        public String count;
+        public String total_page;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

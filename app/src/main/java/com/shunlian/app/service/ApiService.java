@@ -2443,5 +2443,5 @@ public interface ApiService {
      * @return
      */
     @GET("voucher/voucherRelatedStore")
-    Call<BaseEntity<String>> voucherRelatedStore(@QueryMap Map<String, String> map);
+    Call<BaseEntity<StageGoodsListEntity>> voucherRelatedStore(@QueryMap Map<String, String> map);
 }

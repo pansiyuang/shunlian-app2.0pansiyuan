@@ -32,6 +32,7 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
     public static final int ITEM_HEAD = 1<<3;
     private CouponListEntity.VoucherList mVoucher_info;
     private final int margin10;
+    private IMoreGoodsListener moreGoodsListener;
 
     public UserCouponAdapter(Context context,List<StageVoucherGoodsListEntity.GoodsList> lists,
                              CouponListEntity.VoucherList voucher_info) {
@@ -93,16 +94,8 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
         if (holder instanceof HeadHolder) {
             HeadHolder mHolder = (HeadHolder) holder;
             CouponListEntity.VoucherList voucherList = mVoucher_info;
-
-            /*voucherList.voucher_type_desc = "顺联动力优惠券";
-            voucherList.stauts = "0";
-            voucherList.expired = "0";
-            voucherList.denomination = "200";
-            voucherList.use_condition = "300";
-            voucherList.voucher_type = "商城优惠券";
-            voucherList.valid_time ="2018.05.15-2018.05.17";
-            voucherList.expire_after = "6天后过期";*/
-
+            gone(mHolder.mtv_use_coupon);
+            visible(mHolder.mtv_use_has);
             //状态 0是未使用 1已经使用  -2已经过期
             String voucher_type_desc = voucherList.voucher_type_desc;
             changeState(voucherList.stauts, mHolder, voucher_type_desc, voucherList.expired);
@@ -205,7 +198,8 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
             }
             StageVoucherGoodsListEntity.GoodsList goodsList = lists.get(position - 1);
 
-            GlideUtils.getInstance().loadImage(context,mHolder.miv_storeLogo,goodsList.avatar);
+            GlideUtils.getInstance().loadOverrideImage(context,
+                    mHolder.miv_storeLogo,goodsList.avatar,80,80);
             StageVoucherGoodsListEntity.Level level = goodsList.level;
             if (level != null){
                 if (!isEmpty(level.path)){
@@ -228,7 +222,9 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
                 visible(mHolder.llayout_goods);
                 mHolder.llayout_goods.removeAllViews();
                 for (int i = 0; i < goods_list.size(); i++) {
-                    addView(goods_list.get(i),mHolder.llayout_goods);
+                    StageVoucherGoodsListEntity.ItemGoods itemGoods = goods_list.get(i);
+                    View view = addView(itemGoods, mHolder.llayout_goods);
+                    mHolder.llayout_goods.addView(view);
                 }
             }else {
                 gone(mHolder.llayout_goods);
@@ -237,7 +233,9 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
     }
 
     private View addView(StageVoucherGoodsListEntity.ItemGoods itemGoods, LinearLayout llayout_goods) {
-        View view = mInflater.inflate(R.layout.item_category_single, llayout_goods);
+        View view = mInflater.inflate(R.layout.item_category_single, llayout_goods,false);
+
+        view.setOnClickListener(view1 -> Common.goGoGo(context,"goods",itemGoods.goods_id));
 
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
         lp.leftMargin = margin10;
@@ -247,16 +245,16 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
         View view_line = view.findViewById(R.id.view_line);
         view_line.setBackgroundColor(getColor(R.color.white));
 
-        MyImageView miv_icon = (MyImageView) view.findViewById(R.id.miv_icon);
-        MyImageView miv_product = (MyImageView) view.findViewById(R.id.miv_product);
-        TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
-        TextView tv_price = (TextView) view.findViewById(R.id.tv_price);
-        TextView tv_free = (TextView) view.findViewById(R.id.tv_free);
-        TextView tv_comment = (TextView) view.findViewById(R.id.tv_comment);
-        TextView tv_address = (TextView) view.findViewById(R.id.tv_address);
-        TextView tv_earn_money = (TextView) view.findViewById(R.id.tv_earn_money);
-        LinearLayout ll_earn = (LinearLayout) view.findViewById(R.id.ll_earn);
-        LinearLayout ll_tag = (LinearLayout) view.findViewById(R.id.ll_tag);
+        MyImageView miv_icon =  view.findViewById(R.id.miv_icon);
+        MyImageView miv_product =  view.findViewById(R.id.miv_product);
+        TextView tv_title =  view.findViewById(R.id.tv_title);
+        TextView tv_price =  view.findViewById(R.id.tv_price);
+        TextView tv_free =  view.findViewById(R.id.tv_free);
+        TextView tv_comment =  view.findViewById(R.id.tv_comment);
+        TextView tv_address =  view.findViewById(R.id.tv_address);
+        TextView tv_earn_money =  view.findViewById(R.id.tv_earn_money);
+        LinearLayout ll_earn =  view.findViewById(R.id.ll_earn);
+        LinearLayout ll_tag =  view.findViewById(R.id.ll_tag);
 
         GlideUtils.getInstance().loadImage(context, miv_icon, itemGoods.thumb);
         tv_title.setText(itemGoods.title);
@@ -316,18 +314,6 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
             }
         }
         tv_address.setText(itemGoods.send_area);
-        /*if (itemGoods.type == 1) { //是优品
-            miv_product.setVisibility(View.VISIBLE);
-            if (!isEmpty(itemGoods.self_buy_earn)) { //有字段才显示布局
-                ll_earn.setVisibility(View.VISIBLE);
-                tv_earn_money.setText(getString(R.string.common_yuan) + itemGoods.self_buy_earn);
-            } else {
-                ll_earn.setVisibility(View.GONE);
-            }
-        } else {
-            ll_earn.setVisibility(View.GONE);
-            miv_product.setVisibility(View.GONE);
-        }*/
         gone(ll_earn,miv_product,tv_earn_money);
         return view;
     }
@@ -432,8 +418,18 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
 
 
             mtv_more_goods.setOnClickListener(view -> {
-
+                if (moreGoodsListener != null)
+                    moreGoodsListener.onMoreGoods(getAdapterPosition()-1);
             });
         }
+    }
+
+    public void setMoreGoodsListener(IMoreGoodsListener moreGoodsListener){
+
+        this.moreGoodsListener = moreGoodsListener;
+    }
+
+    public interface IMoreGoodsListener{
+        void onMoreGoods(int position);
     }
 }
