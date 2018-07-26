@@ -16,10 +16,12 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.VideoPlayActivity;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
 import com.shunlian.app.ui.discover.other.CommentListAct;
+import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -43,13 +45,11 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
     private ChangeTopicAdapter mAdapter;
     private List<ArticleEntity.Tag> mTags;
     private ChosenTagAdapter chosenTagAdapter;
-    private List<String> imgList;
 
     public ArticleAdapter(Context context, List<ArticleEntity.Article> lists, DiscoverJingxuanFrag frag, List<ArticleEntity.Tag> tags) {
         super(context, true, lists);
         this.mFragment = frag;
         this.mTags = tags;
-        imgList = new ArrayList<>();
     }
 
     @Override
@@ -166,7 +166,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         }
     }
 
-    public void showViewType(String type, ArticleViewHolder articleViewHolder, ArticleEntity.Article article) {
+    public void showViewType(String type, ArticleViewHolder articleViewHolder, ArticleEntity.Article a) {
         visible(articleViewHolder.ll_big);
         gone(articleViewHolder.rl_small);
         switch (type) {
@@ -174,52 +174,45 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 visible(articleViewHolder.miv_big_icon);
                 gone(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
-                GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, article.thumb);
+                GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, a.thumb);
+                if (!isEmpty(a.thumb)) {
+                    List<String> bigImgList = new ArrayList<>();
+                    bigImgList.add(a.thumb);
+                    articleViewHolder.miv_big_icon.setOnClickListener(view -> {
+                        //点击查看大图
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList<String>) bigImgList;
+                        bigImgEntity.index = 0;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    });
+                }
                 break;
             case "2"://九宫格模式
                 gone(articleViewHolder.miv_big_icon);
                 visible(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
-                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgs, mFragment.getActivity()
-                        , 0, 0, 10, 12, 10, 12, 6, 20);
-
-                imgList.clear();
-                if (article.thumb_list != null && article.thumb_list.length != 0) {
-                    for (String s : article.thumb_list) {
+                if (a.thumb_list != null && a.thumb_list.length != 0) {
+                    List<String> imgList = new ArrayList<>();
+                    for (String s : a.thumb_list) {
                         imgList.add(s);
                     }
+                    BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity()
+                            , 0, 0, 10, 12, 10, 12, 6, 20);
                 }
-                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0, 0, 0);
                 break;
             case "3"://视频模式
                 gone(articleViewHolder.miv_big_icon);
                 gone(articleViewHolder.recycler_nine);
                 visible(articleViewHolder.rl_video);
-                GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_video, article.thumb);
+                GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_video, a.thumb);
                 articleViewHolder.miv_video.setOnClickListener(v -> {
-                    if (isEmpty(article.video_url)) {
+                    if (isEmpty(a.video_url)) {
                         return;
                     }
-                    VideoPlayActivity.startActivity(context, article);
+                    VideoPlayActivity.startActivity(context, a);
                 });
                 break;
         }
-    }
-
-    /**
-     * 设置baseFooterHolder  layoutparams
-     *
-     * @param baseFooterHolder
-     */
-    @Override
-    public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
-        super.setFooterHolderParams(baseFooterHolder);
-        baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
-        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
-        baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
-        baseFooterHolder.layout_no_more.setTextSize(12);
-        baseFooterHolder.layout_load_error.setTextSize(12);
-        baseFooterHolder.mtv_loading.setTextSize(12);
     }
 
     public void notityTopicData(List<ArticleEntity.Topic> mTopics) {
@@ -373,6 +366,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             itemView.setOnClickListener(this);
             LinearLayoutManager manager = new LinearLayoutManager(context);
             recycler_change.setLayoutManager(manager);
+            recycler_change.setNestedScrollingEnabled(false);
             recycler_change.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
         }
 
