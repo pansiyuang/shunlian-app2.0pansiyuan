@@ -6,6 +6,7 @@ import com.shunlian.app.adapter.UserCouponAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.StageVoucherGoodsListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.coupon.CouponGoodsAct;
 import com.shunlian.app.view.IUserCouponListView;
 
 import java.util.HashMap;
@@ -69,5 +70,10 @@ public class UserCouponListPresenter extends BasePresenter<IUserCouponListView> 
 
         UserCouponAdapter adapter = new UserCouponAdapter(context,data.goods_list,data.voucher_info);
         iView.setAdapter(adapter);
+
+        adapter.setMoreGoodsListener(position -> {
+            StageVoucherGoodsListEntity.GoodsList goodsList = data.goods_list.get(position);
+            CouponGoodsAct.startAct(context,goodsList.store_id,mVoucherId);
+        });
     }
 }

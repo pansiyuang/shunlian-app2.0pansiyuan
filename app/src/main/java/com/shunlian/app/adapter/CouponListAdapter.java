@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CouponListEntity;
 import com.shunlian.app.ui.coupon.UserCouponListAct;
-import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -180,13 +179,8 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
                 }else {
                     StoreAct.startAct(context,voucherList.store_id);
                 }*/
-                String store_id = voucherList.store_id;
-                if (!isEmpty(store_id) && Integer.parseInt(store_id) > 1){//店铺
-                    StoreAct.startAct(context,store_id);
-                }else {//平台
-                    //Common.goGoGo(context,"");
-                    UserCouponListAct.startAct(context,"14111");
-                }
+//                Common.goGoGo(context,voucherList.jump_type,voucherList.lazy_id);
+                UserCouponListAct.startAct(context,"14111");
             });
         }
     }

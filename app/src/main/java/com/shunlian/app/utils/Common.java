@@ -40,8 +40,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -51,13 +49,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.service.InterentTools;
@@ -70,7 +66,9 @@ import com.shunlian.app.ui.core.GetCouponAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.core.KouBeiAct;
 import com.shunlian.app.ui.core.PingpaiAct;
+import com.shunlian.app.ui.coupon.CouponGoodsAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
+import com.shunlian.app.ui.coupon.UserCouponListAct;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.fragment.SortAct;
@@ -196,6 +194,10 @@ public class Common {
                 return "ChatActivity";
             case "virtual":
                 return "MoreCreditAct";
+            case "usecoupon":
+                return "UserCouponListAct";
+            case "discountgoods":
+                return "CouponGoodsAct";
             default:
                 return "";
         }
@@ -379,6 +381,12 @@ public class Common {
                 break;
             case "plus":
                 MainActivity.startAct(context, "myplus");
+                break;
+            case "usecoupon":
+                UserCouponListAct.startAct(context,params[0]);
+                break;
+            case "discountgoods":
+                CouponGoodsAct.startAct(context,params[0],params[1]);
                 break;
             case "chat"://聊天
 
