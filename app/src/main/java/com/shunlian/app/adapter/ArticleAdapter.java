@@ -166,29 +166,30 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             if ("0".equals(article.thumb_type)) { //0小图（左右布局，图在右侧），1大图（上下布局，图是通栏显示）, 2九宫格，3小视频
                 visible(articleViewHolder.rl_small);
                 gone(articleViewHolder.ll_big);
+                GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_small_icon, article.thumb);
             } else {
-                showViewType(article.thumb_type, articleViewHolder, article);
+                showViewType(article.thumb_type, articleViewHolder, article, imgList);
             }
         }
     }
 
-    public void showViewType(String type, ArticleViewHolder articleViewHolder, ArticleEntity.Article article) {
+    public void showViewType(String type, ArticleViewHolder articleViewHolder, ArticleEntity.Article article, List<String> imgs) {
         visible(articleViewHolder.ll_big);
         gone(articleViewHolder.rl_small);
         switch (type) {
-            case "1":
+            case "1": //大图模式
                 visible(articleViewHolder.miv_big_icon);
                 gone(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
-                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0,0,0);
+                GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, article.thumb);
                 break;
-            case "2":
+            case "2"://九宫格模式
                 gone(articleViewHolder.miv_big_icon);
                 visible(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
-                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0,0,0);
+                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgs, mFragment.getActivity(), 0, 0, 0, 12, 0, 0, 0, 0);
                 break;
-            case "3":
+            case "3"://视频模式
                 gone(articleViewHolder.miv_big_icon);
                 gone(articleViewHolder.recycler_nine);
                 visible(articleViewHolder.rl_video);

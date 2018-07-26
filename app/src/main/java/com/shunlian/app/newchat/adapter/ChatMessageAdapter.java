@@ -1431,9 +1431,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
         @Override
         public void onClick(View widget) {
-            if (mUrl.contains("shunlian")) {
+            LogUtil.httpLogW("点击了链接:" + mUrl);
+            if (!mUrl.contains("shunliandongli")) {
                 return;
             }
+            LogUtil.httpLogW("包含shunlian");
             String voucherId = Common.getURLParameterValue(mUrl, "voucher_id");
             LogUtil.httpLogW("voucherId:" + voucherId);
             if (TextUtils.isEmpty(voucherId)) {
