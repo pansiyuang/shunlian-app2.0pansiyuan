@@ -20,6 +20,8 @@ public class VoucherEntity {
     public String is_get;
     public String desc;
     public String store_id;
+    public String lazy_id;
+    public String jump_type;
     public List<Goods> goods_list;
     public Pager pager;
     @JsonIgnoreProperties(ignoreUnknown = true)

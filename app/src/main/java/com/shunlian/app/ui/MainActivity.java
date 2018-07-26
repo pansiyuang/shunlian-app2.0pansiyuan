@@ -304,8 +304,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         discoverClick();
                         break;
                     case R.id.ll_tab_shopping_car:
-//                        CouponMsgAct.startAct(getBaseContext(),"");
-                        shoppingCarClick();
+                        CouponMsgAct.startAct(MainActivity.this,"");
+//                        shoppingCarClick();
                         break;
                     case R.id.ll_tab_person_center:
                         personCenterClick();
