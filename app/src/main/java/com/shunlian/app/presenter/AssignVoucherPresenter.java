@@ -83,6 +83,7 @@ public class AssignVoucherPresenter extends BasePresenter<IAssignVoucherView> {
 
     public void getVoucherDetai() {
         Map<String, String> map = new HashMap<>();
+//        map.put("voucher_id", "yXME");
 //        map.put("voucher_id", "gxZ");
         map.put("voucher_id", voucher_id);
         map.put("page", String.valueOf(currentPage));

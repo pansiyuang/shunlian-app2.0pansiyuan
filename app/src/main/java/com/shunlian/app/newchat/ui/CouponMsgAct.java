@@ -79,9 +79,10 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
     NetAndEmptyInterface nei_empty;
 
     private AssignVoucherPresenter mPresenter;
-    private String currentCouponId, couponId, storeId;
-    private boolean canGet = false, isStore = false;
+    private String currentCouponId, couponId;
+    private boolean canGet = false;
     private CouponGoodsAdapter couponGoodsAdapter;
+    private VoucherEntity voucherEntity;
 
     public static void startAct(Context context, String couponId) {
         Intent intent = new Intent(context, CouponMsgAct.class);
@@ -101,8 +102,8 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
             case R.id.miv_pick:
                 if (canGet && !isEmpty(couponId)) {
                     mPresenter.getVoucher(couponId);
-                } else if (isStore) {
-                    StoreAct.startAct(this, storeId);
+                } else  if (voucherEntity!=null){
+                    Common.goGoGo(this,voucherEntity.jump_type,voucherEntity.lazy_id);
                 }
                 break;
         }
@@ -154,14 +155,12 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
 
     @Override
     public void showFailureView(int request_code) {
-        visible(nei_empty);
-        gone(rv_coupon);
+
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
-        visible(nei_empty);
-        gone(rv_coupon);
+
     }
 
 
@@ -172,6 +171,7 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
             gone(rv_coupon);
         }
         if (couponGoodsAdapter == null) {
+            this.voucherEntity=voucherEntity;
             visible(rv_coupon);
             gone(nei_empty);
             GlideUtils.getInstance().loadCircleImage(this, miv_icon, voucherEntity.store_label);
@@ -181,12 +181,10 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
             tv_date.setText("有效期:" + voucherEntity.limit_data);
             tv_use.setText(voucherEntity.desc);
             couponId = voucherEntity.id;
-            isStore = "1".equals(voucherEntity.is_store);
-            storeId = voucherEntity.store_id;
             canGet = "0".equals(voucherEntity.is_get);
             if (!canGet)
                 miv_pick.setImageResource(R.mipmap.img_quan_hui);
-            if (isStore)
+            if ("1".equals(voucherEntity.is_store))
                 ll_bg.setBackgroundResource(R.mipmap.img_pingtai);
             GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
             rv_coupon.setLayoutManager(gridLayoutManager);

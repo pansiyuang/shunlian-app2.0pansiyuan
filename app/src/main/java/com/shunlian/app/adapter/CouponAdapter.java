@@ -75,7 +75,7 @@ public class CouponAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MDa
             mHolder.mtv_get.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MainActivity.startAct(context,"mainPage");
+                    Common.goGoGo(context,data.jump_type,data.lazy_id);
                 }
             });
         }

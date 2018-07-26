@@ -140,16 +140,16 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        initMessage();
+//        initMessage();
     }
 
     public void initMessage(){
         if (Common.isAlreadyLogin()){
             pMain.getDiscoveryUnreadCount();
             view_message.setVisibility(View.GONE);
-            if (discoverFrag!=null)
-            discoverFrag.initMessage(null);
         }else {
+            if (discoverFrag!=null)
+                discoverFrag.initMessage(null);
             mtv_message_count.setVisibility(View.GONE);
             view_message.setVisibility(View.VISIBLE);
         }
@@ -161,7 +161,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     protected void initData() {
         pMain = new PMain(MainActivity.this, MainActivity.this);
         pMain.entryInfo();
-        initMessage();
+//        initMessage();
         if (updateDialogV == null)
             updateDialogV = new UpdateDialog(this) {
                 @Override
@@ -304,7 +304,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         discoverClick();
                         break;
                     case R.id.ll_tab_shopping_car:
-//                        CouponMsgAct.startAct(getBaseContext(),"");
+//                        CouponMsgAct.startAct(MainActivity.this,"");
                         shoppingCarClick();
                         break;
                     case R.id.ll_tab_person_center:
@@ -413,7 +413,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             }
         } else {
             discoverFrag.setArgument(flag);
-            discoverFrag.initMessage(data);
+//            discoverFrag.initMessage(data);
         }
         switchContent(discoverFrag);
         pageIndex = 2;

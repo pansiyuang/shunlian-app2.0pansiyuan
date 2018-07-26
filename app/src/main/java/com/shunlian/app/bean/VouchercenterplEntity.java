@@ -34,5 +34,7 @@ public class VouchercenterplEntity {
         public String if_get;
         public String valid_date;
         public String thumb;
+        public String lazy_id;
+        public String jump_type;
     }
 }

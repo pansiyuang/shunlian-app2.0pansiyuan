@@ -1977,7 +1977,7 @@ public interface ApiService {
     Call<BaseEntity<CommonEntity>> getUserId(@QueryMap Map<String, String> map);
 
     /**
-     * 获取商家客服聊天用户ID
+     * 发现小红点
      *
      * @return
      */
