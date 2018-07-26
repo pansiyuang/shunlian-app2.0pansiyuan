@@ -36,6 +36,10 @@ public class CouponListEntity {
         public String goods_scope;
         public String memo;
         public String expired;
+        public String jump_type;
+        public String lazy_id;
+        public String voucher_id;
+        public String special_id;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

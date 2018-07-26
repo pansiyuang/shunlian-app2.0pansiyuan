@@ -30,11 +30,13 @@ public class CouponGoodsAct extends BaseActivity implements ICouponGoodsView{
     @BindView(R.id.mrlayout_toolbar_more)
     MyRelativeLayout mrlayout_toolbar_more;
     private CouponGoodsPresenter mPresenter;
+    private LinearLayoutManager manager;
 
 
-    public static void startAct(Context context,String store_id){
+    public static void startAct(Context context,String store_id,String voucher_id){
         Intent intent = new Intent(context,CouponGoodsAct.class);
         intent.putExtra("store_id",store_id);
+        intent.putExtra("voucher_id",voucher_id);
         context.startActivity(intent);
     }
     /**
@@ -45,6 +47,25 @@ public class CouponGoodsAct extends BaseActivity implements ICouponGoodsView{
     @Override
     protected int getLayoutId() {
         return R.layout.act_coupon_goods;
+    }
+
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null){
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount() && mPresenter != null){
+                        mPresenter.onRefresh();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -59,11 +80,11 @@ public class CouponGoodsAct extends BaseActivity implements ICouponGoodsView{
         mtv_toolbar_title.setText("优惠商品");
 
         String store_id = getIntent().getStringExtra("store_id");
+        String voucher_id = getIntent().getStringExtra("voucher_id");
 
+        mPresenter = new CouponGoodsPresenter(this,this,store_id,voucher_id);
 
-        mPresenter = new CouponGoodsPresenter(this,this,store_id,store_id);
-
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
 
     }
@@ -91,5 +112,14 @@ public class CouponGoodsAct extends BaseActivity implements ICouponGoodsView{
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mPresenter != null){
+            mPresenter.detachView();
+            mPresenter = null;
+        }
     }
 }

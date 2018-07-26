@@ -100,7 +100,7 @@ public class SaleDetailPresenter extends BasePresenter<ISaleDetailView> {
                     if (mType == SaleDetailAct.REWARD_DETAIL){
                         iView.setTotalSale_Profit(null,data.total);
                     }else {
-                        iView.setTotalSale_Profit(data.total_sales, data.total_profit);
+                        iView.setTotalSale_Profit(data.total_sales_info, data.total_profit_info);
                     }
                 }
                 setData();

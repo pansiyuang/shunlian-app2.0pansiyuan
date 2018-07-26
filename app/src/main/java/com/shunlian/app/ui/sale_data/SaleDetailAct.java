@@ -253,8 +253,8 @@ public class SaleDetailAct extends BaseActivity implements ISaleDetailView{
     @Override
     public void setTotalSale_Profit(String sale, String profit) {
         if (type == SALE_DETAIL) {
-            mtv_total_sale.setText("累计销售:"+sale);
-            mtv_total_profit.setText("累计收益:"+profit);
+            mtv_total_sale.setText(sale);
+            mtv_total_profit.setText(profit);
         }else {
             gone(mtv_total_sale);
             mtv_total_profit.setText("累计奖励:"+profit);

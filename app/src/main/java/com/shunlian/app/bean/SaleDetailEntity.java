@@ -13,7 +13,9 @@ public class SaleDetailEntity {
 
     public Page pager;
     public String total_sales;
+    public String total_sales_info;
     public String total_profit;
+    public String total_profit_info;
     public String total;
     public List<Item> list;
 
