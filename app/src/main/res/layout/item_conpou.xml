@@ -122,7 +122,7 @@
                 android:layout_marginRight="12dp"
                 android:background="@drawable/rounded_stroke_8f8f8f_4px"
                 android:gravity="center"
-                android:text="已使用"
+                android:text="已领取"
                 android:visibility="gone"
                 android:textColor="@color/value_8F8F8F"
                 android:textSize="12sp" />
