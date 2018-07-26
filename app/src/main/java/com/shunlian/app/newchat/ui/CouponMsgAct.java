@@ -155,14 +155,12 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
 
     @Override
     public void showFailureView(int request_code) {
-        visible(nei_empty);
-        gone(rv_coupon);
+
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
-        visible(nei_empty);
-        gone(rv_coupon);
+
     }
 
 
