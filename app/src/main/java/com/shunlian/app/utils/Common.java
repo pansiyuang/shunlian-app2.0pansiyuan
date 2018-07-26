@@ -386,7 +386,11 @@ public class Common {
                 UserCouponListAct.startAct(context,params[0]);
                 break;
             case "discountgoods":
-                CouponGoodsAct.startAct(context,params[0],params[1]);
+                String id = "";
+                if (params.length >= 2){
+                    id = params[1];
+                }
+                CouponGoodsAct.startAct(context,params[0],id);
                 break;
             case "chat"://聊天
 
