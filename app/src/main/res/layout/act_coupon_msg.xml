@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/mrlayout_title"
+        android:scrollbars="none"
         android:fillViewport="true">
 
         <com.shunlian.app.widget.MyLinearLayout
