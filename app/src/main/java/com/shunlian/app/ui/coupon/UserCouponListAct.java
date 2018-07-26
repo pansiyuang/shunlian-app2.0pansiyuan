@@ -21,6 +21,7 @@ public class UserCouponListAct extends BaseActivity implements IUserCouponListVi
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
+
     private UserCouponListPresenter mPresenter;
     private String voucher_id;
 

@@ -19,6 +19,8 @@ public class StageVoucherGoodsListEntity {
     public static class GoodsList {
         public String name;
         public String avatar;
+        public String store_id;
+        public String show_more;
         public Level level;
         public List<ItemGoods> goods_list;
     }
