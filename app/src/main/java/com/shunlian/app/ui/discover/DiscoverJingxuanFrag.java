@@ -46,9 +46,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
-    @BindView(R.id.nestedScrollView)
-    NestedScrollView nestedScrollView;
-
     private ArticleAdapter mArticleAdapter;
     private ChosenPresenter mPresenter;
     private List<ArticleEntity.Tag> mTags;
@@ -169,10 +166,10 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
                 }
                 articleEntity.article_list.get(index).topic_list = topicList;
                 recycler_article.setVisibility(View.VISIBLE);
-                nestedScrollView.setVisibility(View.GONE);
+                nei_empty.setVisibility(View.GONE);
             } else {
                 recycler_article.setVisibility(View.GONE);
-                nestedScrollView.setVisibility(View.VISIBLE);
+                nei_empty.setVisibility(View.VISIBLE);
             }
         }
         if (!isEmpty(articleEntity.article_list)) {

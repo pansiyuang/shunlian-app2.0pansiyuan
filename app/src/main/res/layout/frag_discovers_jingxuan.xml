@@ -27,18 +27,11 @@
                 android:overScrollMode="never"
                 android:scrollbars="none" />
 
-            <android.support.v4.widget.NestedScrollView
-                android:id="@+id/nestedScrollView"
+            <com.shunlian.app.widget.empty.NetAndEmptyInterface
+                android:id="@+id/nei_empty"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true"
-                android:visibility="gone">
-
-                <com.shunlian.app.widget.empty.NetAndEmptyInterface
-                    android:id="@+id/nei_empty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </android.support.v4.widget.NestedScrollView>
+                android:layout_height="match_parent" />
         </LinearLayout>
     </com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>
+
 </LinearLayout>

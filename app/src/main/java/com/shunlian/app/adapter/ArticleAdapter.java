@@ -156,24 +156,17 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
 
             setTopicData(article.topic_list, articleViewHolder.ll_change, articleViewHolder.recycler_change);
 
-            imgList.clear();
-            if (article.thumb_list != null && article.thumb_list.length != 0) {
-                for (String s : article.thumb_list) {
-                    imgList.add(s);
-                }
-            }
-
             if ("0".equals(article.thumb_type)) { //0小图（左右布局，图在右侧），1大图（上下布局，图是通栏显示）, 2九宫格，3小视频
                 visible(articleViewHolder.rl_small);
                 gone(articleViewHolder.ll_big);
                 GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_small_icon, article.thumb);
             } else {
-                showViewType(article.thumb_type, articleViewHolder, article, imgList);
+                showViewType(article.thumb_type, articleViewHolder, article);
             }
         }
     }
 
-    public void showViewType(String type, ArticleViewHolder articleViewHolder, ArticleEntity.Article article, List<String> imgs) {
+    public void showViewType(String type, ArticleViewHolder articleViewHolder, ArticleEntity.Article article) {
         visible(articleViewHolder.ll_big);
         gone(articleViewHolder.rl_small);
         switch (type) {
@@ -187,7 +180,14 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 gone(articleViewHolder.miv_big_icon);
                 visible(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
-                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgs, mFragment.getActivity(), 0, 0, 0, 12, 0, 0, 0, 0);
+
+                imgList.clear();
+                if (article.thumb_list != null && article.thumb_list.length != 0) {
+                    for (String s : article.thumb_list) {
+                        imgList.add(s);
+                    }
+                }
+                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0, 0, 0);
                 break;
             case "3"://视频模式
                 gone(articleViewHolder.miv_big_icon);
