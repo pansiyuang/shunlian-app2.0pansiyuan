@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CouponListEntity;
-import com.shunlian.app.ui.coupon.UserCouponListAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -179,8 +179,7 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
                 }else {
                     StoreAct.startAct(context,voucherList.store_id);
                 }*/
-//                Common.goGoGo(context,voucherList.jump_type,voucherList.lazy_id);
-                UserCouponListAct.startAct(context,"14111");
+                Common.goGoGo(context,voucherList.jump_type,voucherList.lazy_id);
             });
         }
     }

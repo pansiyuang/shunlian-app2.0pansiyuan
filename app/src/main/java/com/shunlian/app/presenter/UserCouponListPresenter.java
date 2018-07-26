@@ -22,6 +22,7 @@ public class UserCouponListPresenter extends BasePresenter<IUserCouponListView> 
 
 
     private String mVoucherId;
+    private UserCouponAdapter adapter;
 
     public UserCouponListPresenter(Context context, IUserCouponListView iView, String voucherId) {
         super(context, iView);
@@ -42,7 +43,10 @@ public class UserCouponListPresenter extends BasePresenter<IUserCouponListView> 
      */
     @Override
     public void detachView() {
-
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
     }
 
     /**
@@ -67,8 +71,7 @@ public class UserCouponListPresenter extends BasePresenter<IUserCouponListView> 
     }
 
     private void setData(StageVoucherGoodsListEntity data) {
-
-        UserCouponAdapter adapter = new UserCouponAdapter(context,data.goods_list,data.voucher_info);
+        adapter = new UserCouponAdapter(context,data.goods_list,data.voucher_info);
         iView.setAdapter(adapter);
 
         adapter.setMoreGoodsListener(position -> {

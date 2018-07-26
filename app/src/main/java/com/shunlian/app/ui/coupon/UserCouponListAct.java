@@ -83,4 +83,13 @@ public class UserCouponListAct extends BaseActivity implements IUserCouponListVi
     public void showDataEmptyView(int request_code) {
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mPresenter != null){
+            mPresenter.detachView();
+            mPresenter = null;
+        }
+    }
 }

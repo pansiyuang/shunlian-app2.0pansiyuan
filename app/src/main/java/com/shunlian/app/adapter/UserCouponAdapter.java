@@ -198,7 +198,8 @@ public class UserCouponAdapter extends BaseRecyclerAdapter<StageVoucherGoodsList
             }
             StageVoucherGoodsListEntity.GoodsList goodsList = lists.get(position - 1);
 
-            GlideUtils.getInstance().loadImage(context,mHolder.miv_storeLogo,goodsList.avatar);
+            GlideUtils.getInstance().loadOverrideImage(context,
+                    mHolder.miv_storeLogo,goodsList.avatar,80,80);
             StageVoucherGoodsListEntity.Level level = goodsList.level;
             if (level != null){
                 if (!isEmpty(level.path)){
