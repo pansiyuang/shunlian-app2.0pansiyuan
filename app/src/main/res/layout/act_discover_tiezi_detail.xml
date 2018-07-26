@@ -174,11 +174,13 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+                android:visibility="gone"
                 android:layout_marginTop="14dp"/>
             <com.shunlian.app.widget.empty.NetAndEmptyInterface
                 android:id="@+id/nei_empty"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="290dp"
+                android:visibility="gone"/>
         </com.shunlian.app.widget.MyLinearLayout>
     </com.shunlian.app.widget.MyScrollView>
 
@@ -210,6 +212,7 @@
             android:textSize="13sp" />
 
         <RelativeLayout
+            android:id="@+id/rlayout_message"
             android:layout_width="65dp"
             android:maxHeight="60dp"
             android:minHeight="35dp"
@@ -242,6 +245,7 @@
                 android:minWidth="12dp"
                 android:minHeight="12dp"
                 android:text="1"
+                android:visibility="gone"
                 android:textColor="@color/white"
                 android:textSize="8sp" />
         </RelativeLayout>
