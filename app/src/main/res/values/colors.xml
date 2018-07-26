@@ -254,6 +254,7 @@
 
     <!--话费充值-->
     <color name="value_484848">#FF484848</color>
+    <color name="value_8F8F8F">#FF8F8F8F</color>
 </resources>
 
 

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlayout_root"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--提示-->
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="18dp"
+        android:maxLines="1"
+        android:text="验证码已发送到"
+        android:textColor="@color/value_484848"
+        android:textSize="30sp" />
+
+    <!---->
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_phone"
+        android:layout_below="@+id/mtv_tip"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="15dp" />
+
+    <!--手机号-->
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_mobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_phone"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="14dp"
+        android:text="13141367607"
+        android:textColor="@color/value_484848"
+        android:textSize="24sp" />
+
+    <!--倒计时-->
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_downTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/mtv_mobile"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="16dp"
+        android:text="重新获取"
+        android:paddingBottom="2dp"
+        android:layout_marginRight="15dp"
+        android:textColor="#FF007AFF"
+        android:textSize="15sp" />
+
+
+    <!--手机短信验证码-->
+    <com.shunlian.app.widget.VerificationCodeInput
+        android:id="@+id/input_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_mobile"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"
+        android:text="1234"
+        app:box="4"
+        app:padding="10dp" />
+
+    <!--昵称-->
+    <RelativeLayout
+        android:id="@+id/rlayout_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/input_code"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="40dp">
+
+        <EditText
+            android:id="@+id/met_nickname"
+            style="@style/editText_attribute"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iv_hidden_psw"
+            android:gravity="start|center_vertical"
+            android:hint="请填写您的昵称"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/met_pic_code"
+            android:layout_marginTop="20dp"
+            android:background="@color/color_value_6c" />
+    </RelativeLayout>
+
+    <!--登录按钮-->
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_login"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_below="@+id/rlayout_nickname"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_corner_solid_pink_50px"
+        android:gravity="center"
+        android:text="登录"
+        android:textColor="@color/white"
+        android:textSize="15dp"/>
+
+</RelativeLayout>

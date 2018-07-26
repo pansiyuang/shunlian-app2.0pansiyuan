@@ -79,41 +79,33 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"/>
 
-        <LinearLayout
-            android:id="@+id/llayout_price"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_goodsID"
+            android:textColor="@color/new_text"
+            android:textSize="12sp"
+            android:layout_above="@+id/mtv_price"
+            android:layout_marginLeft="4dp"
+            android:maxLines="1"
+            android:layout_alignLeft="@+id/mtv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pink_color"
             android:layout_alignTop="@+id/miv_code"
             android:layout_toRightOf="@+id/miv_code"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/pink_color"
-                android:textSize="21sp"/>
-
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_goodsID"
-                android:textColor="@color/new_text"
-                android:textSize="14sp"
-                android:layout_marginLeft="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
+            android:textSize="21sp"/>
 
         <LinearLayout
             android:id="@+id/llayout_day"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
-            android:layout_alignLeft="@+id/llayout_price"
-            android:layout_below="@+id/llayout_price"
+            android:layout_alignLeft="@+id/mtv_price"
+            android:layout_below="@+id/mtv_price"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -152,8 +144,8 @@
             app:iv_control_height="60"
             android:visibility="gone"
             android:src="@mipmap/img_plus_youping_xiao"
-            android:layout_alignLeft="@+id/llayout_price"
-            android:layout_below="@+id/llayout_price"
+            android:layout_alignLeft="@+id/mtv_price"
+            android:layout_below="@+id/mtv_price"
             android:layout_marginTop="10dp"/>
 
 

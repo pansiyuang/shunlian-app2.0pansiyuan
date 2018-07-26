@@ -21,8 +21,7 @@
             android:id="@+id/mrlayout_price"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:rl_control_adapter="true"
-            app:rl_control_width="190">
+            android:minWidth="95dp">
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_rmb"
@@ -111,6 +110,21 @@
                 android:gravity="center"
                 android:text="立即使用"
                 android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_use_has"
+                android:layout_width="61dp"
+                android:layout_height="24dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/rounded_stroke_8f8f8f_4px"
+                android:gravity="center"
+                android:text="已使用"
+                android:visibility="gone"
+                android:textColor="@color/value_8F8F8F"
                 android:textSize="12sp" />
 
         </com.shunlian.app.widget.MyRelativeLayout>

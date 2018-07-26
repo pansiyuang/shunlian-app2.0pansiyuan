@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/pink_color" />
+
+    <View
+        android:id="@+id/view_line1"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/view_line1"
+        android:background="@drawable/rounded_corner_white_8px"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rlayout_go_store"
+            android:layout_width="match_parent"
+            android:layout_height="64dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_storeLogo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_storeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/miv_storeLogo"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/miv_storeLogo"
+                android:text="爱茉莉的SPA美容中心"
+                android:textColor="@color/new_text"
+                android:textSize="15sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_storeLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/miv_storeLogo"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/miv_storeLogo" />
+
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/miv_storeLogo"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:text="进入店铺"
+                android:textColor="#FF007AFF"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#FFEFEFEF" />
+
+        <LinearLayout
+            android:id="@+id/llayout_goods"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_more_goods"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="#FF007AFF"
+            android:text="查看更多商品"
+            android:textSize="12sp"
+            android:paddingTop="23dp"
+            android:paddingBottom="6dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

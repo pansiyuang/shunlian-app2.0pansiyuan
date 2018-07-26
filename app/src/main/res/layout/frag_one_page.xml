@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="18dp"
+        android:maxLines="1"
+        android:text="注册"
+        android:textColor="@color/value_484848"
+        android:textSize="30sp" />
+
+    <!--选择推荐人-->
+    <RelativeLayout
+        android:id="@+id/rlayout_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_tip"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/met_id"
+            style="@style/editText_attribute"
+            android:layout_centerVertical="true"
+            android:gravity="start|center_vertical"
+            android:hint="请输入导购员ID"
+            android:inputType="number"
+            android:maxLines="1" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_select_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:text="随机导购员"
+            android:textColor="#FF007AFF"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/mtv_select_id"
+            android:layout_marginTop="15dp"
+            android:background="@color/color_value_6c" />
+
+    </RelativeLayout>
+
+    <!--手机号-->
+    <RelativeLayout
+        android:id="@+id/rlayout_mobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlayout_id"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="35dp">
+
+        <EditText
+            android:id="@+id/met_mobile"
+            style="@style/editText_attribute"
+            android:layout_centerVertical="true"
+            android:gravity="start|center_vertical"
+            android:hint="请输入手机号"
+            android:inputType="number"
+            android:maxLength="11" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/credit_error"
+            android:visibility="invisible" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/miv_tip"
+            android:layout_marginTop="15dp"
+            android:background="@color/color_value_6c" />
+    </RelativeLayout>
+
+    <!--图形验证码-->
+    <RelativeLayout
+        android:id="@+id/rlayout_pic_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlayout_mobile"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/met_pic_code"
+            style="@style/editText_attribute"
+            android:layout_centerVertical="true"
+            android:gravity="start|center_vertical"
+            android:hint="请输入验证码"
+            android:inputType="number"
+            android:maxLength="4" />
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_pic_code"
+            android:layout_width="104dp"
+            android:layout_height="43dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/miv_pic_code"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_value_6c" />
+    </RelativeLayout>
+
+    <!--登录按钮-->
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_login"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_below="@+id/rlayout_pic_code"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_corner_solid_pink_50px"
+        android:gravity="center"
+        android:text="登录"
+        android:enabled="false"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:visibility="gone" />
+
+</RelativeLayout>
