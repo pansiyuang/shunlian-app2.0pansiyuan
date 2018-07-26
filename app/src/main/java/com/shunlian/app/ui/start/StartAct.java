@@ -186,16 +186,16 @@ public class StartAct extends MBaseActivity implements IMain {
             SharedPrefUtil.saveSharedPrfString("localVersion", localVersion);
             SharedPrefUtil.saveCacheSharedPrfBoolean("isFirst", false);
             SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
-//            Intent intent = new Intent(baseFragActivity, GuideAct.class);
-//            startActivity(intent);
-            //暂时关闭引导页
-//            GuideAct.startAct(this);
-            if (isAD){
-                ADAct.startAct(getBaseContext(),data);
-            }else {
-//                Constant.IS_GUIDE = false;
-                MainActivity.startAct(this, "");
-            }
+            Intent intent = new Intent(getBaseContext(), GuideAct.class);
+            startActivity(intent);
+//            暂时关闭引导页
+            GuideAct.startAct(this);
+//            if (isAD){
+//                ADAct.startAct(getBaseContext(),data);
+//            }else {
+////                Constant.IS_GUIDE = false;
+//                MainActivity.startAct(this, "");
+//            }
         } else {
             if (isAD){
                 ADAct.startAct(getBaseContext(),data);
@@ -258,7 +258,7 @@ public class StartAct extends MBaseActivity implements IMain {
                 updateDialogV = new UpdateDialog(this,data);
             }else {
                 pMain.getSplashAD();
-                pMain.entryInfo();
+//                pMain.entryInfo();
             }
         }
     }
@@ -268,10 +268,15 @@ public class StartAct extends MBaseActivity implements IMain {
         if (isHave){
             Constant.EMAIL=data.ducha_email;
             SharedPrefUtil.saveSharedPrfString("plus_role", data.is_plus);
-            SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
+            SharedPrefUtil.saveCacheSharedPrf("is_open",data.is_open);
             SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
             SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);
         }
+    }
+
+    @Override
+    public void setDiscoveryUnreadCount(CommonEntity data) {
+
     }
 
     @Override

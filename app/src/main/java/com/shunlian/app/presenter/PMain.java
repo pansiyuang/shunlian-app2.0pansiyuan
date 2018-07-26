@@ -79,6 +79,7 @@ public class PMain extends BasePresenter<IMain> {
         });
     }
 
+
     public void getSplashAD() {
         Map<String, String> map = new HashMap<>();
 //        map.put("storeId", storeId);
@@ -92,6 +93,24 @@ public class PMain extends BasePresenter<IMain> {
                 AdEntity data = entity.data;
                 if (data != null) {
                     iView.setAD(data);
+                }
+            }
+        });
+    }
+
+    public void getDiscoveryUnreadCount() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getDiscoveryUnreadCount(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null) {
+                    iView.setDiscoveryUnreadCount(data);
                 }
             }
         });

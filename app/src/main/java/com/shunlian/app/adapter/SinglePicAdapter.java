@@ -24,10 +24,12 @@ import butterknife.BindView;
  */
 
 public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
+    private int gap,border;
 
-    public SinglePicAdapter(Context context, boolean isShowFooter, List<String> list) {
+    public SinglePicAdapter(Context context, boolean isShowFooter, List<String> list,int gap,int border) {
         super(context, isShowFooter, list);
-
+        this.gap=gap;
+        this.border=border;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
 
         public MViewHolder(View itemView) {
             super(itemView);
-            int picWidth = (Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context,18) - TransformUtil.dip2px(context,38)) / 3;
+            int picWidth = (Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context,(gap==0?10:gap)*2) - TransformUtil.dip2px(context,(border==0?20:border)*2)) / 3;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
             miv_pic.setLayoutParams(params);
         }

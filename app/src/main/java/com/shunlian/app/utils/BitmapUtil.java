@@ -185,7 +185,7 @@ public class BitmapUtil {
     }
 
     //    发现中的图片宽高换算
-    public static int[] imgParam(String width, String height,int maxWidth,int maxHeight) {
+    public static int[] imgParam(String width, String height, int maxWidth, int maxHeight) {
         try {
             if (!TextUtils.isEmpty(width) && !TextUtils.isEmpty(height)) {
                 int mWidth = Integer.parseInt(width);
@@ -205,9 +205,9 @@ public class BitmapUtil {
     }
 
     public static void discoverImg(MyImageView miv_pic, RecyclerView rv_pics, SinglePicAdapter picAdapter, List<String> imgs, Activity activity,
-                                   int maxWidth,int maxHeight, float left, float top, float right, float bottom) {
+                                   int maxWidth, int maxHeight, float left, float top, float right, float bottom,int gap,int border) {
 //        maxWidth和maxHeight传0则使用默认参数
-        boolean isReset= (picAdapter != null);
+        boolean isReset = (picAdapter != null);
         if (imgs == null || 0 == imgs.size()) {
             rv_pics.setVisibility(View.GONE);
             miv_pic.setVisibility(View.GONE);
@@ -215,15 +215,16 @@ public class BitmapUtil {
             if (imgs.size() == 1 && !TextUtils.isEmpty(imgs.get(0))) {
                 rv_pics.setVisibility(View.GONE);
                 miv_pic.setVisibility(View.VISIBLE);
-                int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(imgs.get(0), "w"), Common.getURLParameterValue(imgs.get(0), "h"),0==maxWidth?190:maxWidth,0==maxHeight?192:maxHeight);
+                int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(imgs.get(0), "w"), Common.getURLParameterValue(imgs.get(0), "h"), 0 == maxWidth ? 190 : maxWidth, 0 == maxHeight ? 192 : maxHeight);
                 LinearLayout.LayoutParams param;
                 if (params != null) {
                     miv_pic.setScaleType(ImageView.ScaleType.FIT_XY);
                     param = new LinearLayout.LayoutParams(TransformUtil.dip2px(activity, params[0]), TransformUtil.dip2px(activity, params[1]));
                     miv_pic.setAdjustViewBounds(false);
                 } else {
+                    param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    miv_pic.setMaxHeight(TransformUtil.dip2px(activity, 192));
                     miv_pic.setAdjustViewBounds(true);
-                    param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 }
                 param.setMargins(TransformUtil.dip2px(activity, left), TransformUtil.dip2px(activity, top), TransformUtil.dip2px(activity, right), TransformUtil.dip2px(activity, bottom));
                 miv_pic.setLayoutParams(param);
@@ -246,15 +247,22 @@ public class BitmapUtil {
             } else {
                 rv_pics.setVisibility(View.VISIBLE);
                 miv_pic.setVisibility(View.GONE);
-                if (picAdapter==null)
-                picAdapter = new SinglePicAdapter(activity, false, imgs);
+                if (picAdapter == null) //此处不能复用，不能用notify，因为content.image复用导致布局混乱
+                    picAdapter = new SinglePicAdapter(activity, false, imgs,gap,border);
                 rv_pics.setLayoutManager(new GridLayoutManager(activity, 3));
-                LinearLayout.LayoutParams param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 param.setMargins(TransformUtil.dip2px(activity, left), TransformUtil.dip2px(activity, top), TransformUtil.dip2px(activity, right), TransformUtil.dip2px(activity, bottom));
                 rv_pics.setLayoutParams(param);
                 rv_pics.setNestedScrollingEnabled(false);
-                rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(activity, 9), false));
+                if (rv_pics.getItemDecorationAt(0) == null)
+                    rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(activity, 9), false));
                 rv_pics.setAdapter(picAdapter);
+//                } else {
+//                    picAdapter = new SinglePicAdapter(activity, false, imgs);
+//                    rv_pics.setAdapter(picAdapter);
+////                    viewHolder.picAdapter.notifyDataSetChanged();
+//                }
+
                 if (!isReset) {
                     picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                         @Override
@@ -274,6 +282,7 @@ public class BitmapUtil {
     /**
      * 在二维码中间添加Logo图案
      */
+
     private static Bitmap addLogo(Bitmap src, Bitmap logo) {
         if (src == null) {
             return null;

@@ -32,6 +32,7 @@ import com.shunlian.app.view.IHelpSolutionView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.MyWebView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,6 +69,8 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     QuickActions quick_actions;
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+    @BindView(R.id.mwv_h5)
+    MyWebView mwv_h5;
     private PHelpSolution pHelpSolution;
     private Dialog dialog_feedback;
     private boolean isChosen = false;
@@ -197,6 +200,15 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     public void setApiData(final HelpcenterSolutionEntity solution) {
         mtv_question.setText(solution.question);
         mtv_answer.setText(solution.answer);
+
+        if (isEmpty(solution.answer)){
+            mwv_h5.setVisibility(View.GONE);
+        }else {
+            mwv_h5.setVisibility(View.VISIBLE);
+            mwv_h5.getSettings().setDefaultTextEncodingName("UTF-8");
+            //web_view.loadData(map.get("NEWS_CONTENT"), "text/html", "UTF-8") ; 有时会遇到乱码问题 具体好像与sdk有关系
+            mwv_h5.loadDataWithBaseURL(null, solution.answer, "text/html", "UTF-8", null);
+        }
         rv_about.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         HelpSolutionAdapter helpQtwoAdapter = new HelpSolutionAdapter(this, false, solution.about);
         rv_about.setAdapter(helpQtwoAdapter);

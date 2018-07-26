@@ -86,7 +86,7 @@ public class PGetCoupon extends BasePresenter<IGetCoupon> {
             public void onSuccess(BaseEntity<GoodsDeatilEntity.Voucher> entity) {
                 super.onSuccess(entity);
                 Common.staticToast(context.getResources().getString(R.string.get_success));
-                iView.getCouponCallBack(isCommon,position);
+                iView.getCouponCallBack(isCommon,position,entity.data.is_get);
             }
         });
 

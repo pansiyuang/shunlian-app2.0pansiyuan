@@ -26,6 +26,7 @@ import com.shunlian.app.bean.*;
 import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
+import com.shunlian.app.newchat.entity.ReplysetEntity;
 import com.shunlian.app.newchat.entity.ServiceEntity;
 import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
@@ -1976,6 +1977,14 @@ public interface ApiService {
     Call<BaseEntity<CommonEntity>> getUserId(@QueryMap Map<String, String> map);
 
     /**
+     * 获取商家客服聊天用户ID
+     *
+     * @return
+     */
+    @GET("discovery/user/getDiscoveryUnreadCount")
+    Call<BaseEntity<CommonEntity>> getDiscoveryUnreadCount(@QueryMap Map<String, String> map);
+
+    /**
      * 普通用户查看聊天记录
      *
      * @return
@@ -2385,6 +2394,24 @@ public interface ApiService {
      */
     @POST("Virtual/addOrder")
     Call<BaseEntity<PayOrderEntity>> phoneTopUp(@Body RequestBody body);
+
+    /**
+     * 客服快捷语列表
+     *
+     * @param map
+     * @return
+     */
+    @GET("chat/chat/quickList")
+    Call<BaseEntity<ReplysetEntity>> replysetList(@QueryMap Map<String, String> map);
+
+    /**
+     * 指定优惠券
+     *
+     * @param map
+     * @return
+     */
+    @GET("voucher/getassignvoucher")
+    Call<BaseEntity<VoucherEntity>> getAssignVoucher(@QueryMap Map<String, String> map);
 
     /**
      * 充值手机号列表

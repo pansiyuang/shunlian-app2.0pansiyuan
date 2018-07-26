@@ -210,7 +210,7 @@
         <!--ShunLianPower-->
         <meta-data
             android:name="BUGLY_APP_CHANNEL"
-            android:value="360" />
+            android:value="ShunLianPower" />
         <!-- 配置Bugly调试模式（true或者false） -->
         <meta-data
             android:name="BUGLY_ENABLE_DEBUG"
@@ -268,11 +268,11 @@
             android:name=".ui.more_credit.PhoneOrderDetailAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".ui.start.GuideAct"-->
-            <!--android:exported="false"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />-->
+        <activity
+            android:name=".ui.start.GuideAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".ui.register.TestAct"
             android:exported="false"
@@ -885,6 +885,10 @@
         <activity android:name=".ui.coupon.CouponGoodsAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.discover.VideoPlayActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
     </application>
 
 </manifest>

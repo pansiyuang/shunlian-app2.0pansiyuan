@@ -337,8 +337,18 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                                 GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, s.thumb);
                                 dia_tv_price.setText("¥" + s.price);
                                 totalStock = Integer.valueOf(s.stock);
-                                tv_count.setText(String.format(mContext.getResources()
-                                        .getString(R.string.goods_stock), s.stock));
+                                tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), s.stock));
+                                try {
+                                    int count = Integer.valueOf(s.stock);
+                                    if (count <= 0) {
+                                        currentCount = 0;
+                                    } else {
+                                        currentCount = 1;
+                                    }
+                                    tv_number.setText(String.valueOf(currentCount));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 tv_param.setText(s.name);
                             }
                         }

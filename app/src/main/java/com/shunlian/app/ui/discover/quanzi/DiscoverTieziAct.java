@@ -234,18 +234,18 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     public void setApiData(final DiscoveryTieziEntity.Mdata data, final List<DiscoveryTieziEntity.Mdata.Hot> mdatas) {
         gone(nei_empty);
         if (isEmpty(mdatas)) {
-            gone(view_zuixin, rv_new,mtv_zuixin);
+            gone(view_zuixin, rv_new, mtv_zuixin);
         } else {
-            visible(view_zuixin, rv_new,mtv_zuixin);
+            visible(view_zuixin, rv_new, mtv_zuixin);
         }
         if (isEmpty(data.hot_inv)) {
-            gone(view_remen, rv_hot,mtv_remen);
+            gone(view_remen, rv_hot, mtv_remen);
         } else {
-            visible(view_remen, rv_hot,mtv_remen);
+            visible(view_remen, rv_hot, mtv_remen);
         }
         if (isEmpty(mdatas) && isEmpty(data.hot_inv)) {
-            gone(view_remen, rv_hot,rv_new,mtv_remen);
-            visible(view_zuixin,mtv_zuixin,nei_empty);
+            gone(view_remen, rv_hot, rv_new, mtv_remen);
+            visible(view_zuixin, mtv_zuixin, nei_empty);
         }
         if (newAdapter == null) {
             mtv_title.setText(data.topicDetail.title);
@@ -266,13 +266,13 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             newAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, mdatas.get(position).id,mdatas.get(position).imgs);
+                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, mdatas.get(position).id, mdatas.get(position).imgs);
                 }
             });
             hotAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, data.hot_inv.get(position).id,mdatas.get(position).imgs);
+                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, data.hot_inv.get(position).id, mdatas.get(position).imgs);
                 }
             });
 

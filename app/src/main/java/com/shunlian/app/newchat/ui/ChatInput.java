@@ -10,9 +10,13 @@ import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
@@ -29,14 +33,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.newchat.adapter.EmojisVPAdapter;
-import com.shunlian.app.utils.CenterAlignImageSpan;
-import com.shunlian.app.utils.EmojisUtils;
+import com.shunlian.app.newchat.adapter.FastAdapter;
+import com.shunlian.app.newchat.adapter.PanelAdapter;
+import com.shunlian.app.newchat.entity.ReplysetEntity;
+import com.shunlian.app.presenter.ChatInputPresenter;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.view.IChatInputView;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,22 +55,7 @@ import butterknife.ButterKnife;
 /**
  * 聊天界面输入控件
  */
-public class ChatInput extends RelativeLayout implements TextWatcher, View.OnClickListener, EmojisVPAdapter.OnEmojiClickListenter {
-
-    @BindView(R.id.btn_image)
-    LinearLayout btnImage;
-
-    @BindView(R.id.btn_photo)
-    LinearLayout btnPhoto;
-
-    @BindView(R.id.btn_goods)
-    LinearLayout btnGoods;
-
-    @BindView(R.id.btn_comment)
-    LinearLayout btnComment;
-
-    @BindView(R.id.btn_order)
-    LinearLayout btnOrder;
+public class ChatInput extends RelativeLayout implements TextWatcher, View.OnClickListener, EmojisVPAdapter.OnEmojiClickListenter, IChatInputView {
 
     @BindView(R.id.btn_add)
     ImageButton btnAdd;
@@ -77,9 +72,6 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     @BindView(R.id.emoji_vp)
     ViewPager emoji_vp;
 
-    @BindView(R.id.morePanel)
-    LinearLayout morePanel;
-
     @BindView(R.id.rlayout_emoji)
     RelativeLayout rlayout_emoji;
 
@@ -89,6 +81,12 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     @BindView(R.id.scroll_dot)
     View scroll_dot;
 
+    @BindView(R.id.recyclerView_panel)
+    RecyclerView recyclerView_panel;
+
+    @BindView(R.id.recyclerView_fast)
+    RecyclerView recyclerView_fast;
+
     private boolean isSendVisible, isEmoticonReady;
     private InputMode inputMode = InputMode.TEXT;
     private ChatView chatView;
@@ -96,6 +94,12 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     private int startLeftPosi;//最左侧点的距离
     private int inputMethodHeight = -1;
     private final AssetManager am;
+    private PanelAdapter mAdapter;
+    private FastAdapter fastAdapter;
+    private ChatInputPresenter mPresenter;
+    private List<String> stringList;
+    private List<ReplysetEntity.Replyset> replysetList;
+    private String currentStatus, currentJoinId;
 
     public ChatInput(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -109,11 +113,6 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         btnAdd.setOnClickListener(this);
         btnSend.setOnClickListener(this);
         btnEmotion.setOnClickListener(this);
-        btnImage.setOnClickListener(this);
-        btnPhoto.setOnClickListener(this);
-        btnGoods.setOnClickListener(this);
-        btnComment.setOnClickListener(this);
-        btnOrder.setOnClickListener(this);
         setSendBtn();
         editText.addTextChangedListener(this);
         editText.setOnFocusChangeListener((v, hasFocus) -> {
@@ -128,6 +127,78 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         });
         isSendVisible = editText.getText().length() != 0;
         initVPListener();
+
+        replysetList = new ArrayList<>();
+        stringList = new ArrayList<>();
+        stringList.add("拍照");
+        stringList.add("相册");
+
+        mAdapter = new PanelAdapter(getContext(), stringList);
+        recyclerView_panel.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        recyclerView_panel.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener((view, position) -> {
+            String str = stringList.get(position);
+            Activity activity = (Activity) getContext();
+            switch (str) {
+                case "相册":
+                    if (activity != null && requestStorage(activity)) {
+                        chatView.sendImage();
+                    }
+                    break;
+                case "拍照":
+                    if (activity != null && requestStorage(activity)) {
+                        chatView.sendPhoto();
+                    }
+                    break;
+                case "商品":
+                    chatView.sendGoods();
+                    break;
+                case "邀请评价":
+                    chatView.sendComment();
+                    break;
+                case "订单":
+                    chatView.sendOrder();
+                    break;
+                case "快捷回复":
+                    updateView(InputMode.FAST, false);
+
+                    if (replysetList.size() == 0) {
+                        if (mPresenter != null) {
+                            mPresenter.getReplyList(currentJoinId, currentStatus);
+                        }
+                    }
+                    break;
+            }
+        });
+
+        mPresenter = new ChatInputPresenter(getContext(), this);
+    }
+
+    /**
+     * 设置用户的身份类型
+     *
+     * @param roleType
+     */
+    public void setRoleType(String roleType) {
+        switch (roleType) {
+            case "1":
+            case "2":
+                currentStatus = "1";
+                break;
+            case "3":
+            case "4":
+                currentStatus = "2";
+                break;
+        }
+        LogUtil.httpLogW("currentStatus:" + currentStatus);
+    }
+
+    /**
+     * 设置用户的JoinId
+     */
+
+    public void setJoinId(String joinId) {
+        currentJoinId = joinId;
     }
 
     private void getInputMethodHeight() {
@@ -138,7 +209,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
             inputMethodHeight = height - rect.bottom;
             LinearLayout.LayoutParams rlayout_emoji_Params = new LinearLayout.LayoutParams(getRootView().getWidth(), inputMethodHeight);
             rlayout_emoji.setLayoutParams(rlayout_emoji_Params);
-            morePanel.setLayoutParams(rlayout_emoji_Params);
+            recyclerView_panel.setLayoutParams(rlayout_emoji_Params);
 
             RelativeLayout.LayoutParams emoji_vp_Params = new RelativeLayout.LayoutParams(getRootView().getWidth(), (int) (inputMethodHeight * 0.8f));
             emoji_vp.setLayoutParams(emoji_vp_Params);
@@ -176,7 +247,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         leavingCurrentState(isAdd);
         switch (inputMode = mode) {
             case MORE:
-                new Handler().postDelayed(() -> morePanel.setVisibility(VISIBLE), 300);
+                new Handler().postDelayed(() -> recyclerView_panel.setVisibility(VISIBLE), 300);
                 break;
             case TEXT:
                 if (editText.requestFocus()) {
@@ -193,6 +264,9 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                     btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_h);
                     rlayout_emoji.setVisibility(VISIBLE);
                 }, 100);
+                break;
+            case FAST:
+                new Handler().postDelayed(() -> recyclerView_fast.setVisibility(VISIBLE), 300);
                 break;
         }
 
@@ -211,10 +285,14 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 break;
             case MORE:
                 btnAdd.setBackgroundResource(R.mipmap.icon_chat_sendmore_n);
-                morePanel.setVisibility(GONE);
+                recyclerView_panel.setVisibility(GONE);
                 break;
             case EMOTICON:
                 rlayout_emoji.setVisibility(GONE);
+                break;
+            case FAST:
+                recyclerView_fast.setVisibility(GONE);
+                break;
         }
     }
 
@@ -341,7 +419,6 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
      */
     @Override
     public void onClick(View v) {
-        Activity activity = (Activity) getContext();
         switch (v.getId()) {
             case R.id.btn_send:
                 chatView.sendText();
@@ -349,27 +426,8 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
             case R.id.btn_add:
                 updateView(inputMode == InputMode.MORE ? InputMode.TEXT : InputMode.MORE, true);
                 break;
-            case R.id.btn_photo:
-                if (activity != null && requestCamera(activity)) {
-                    chatView.sendPhoto();
-                }
-                break;
-            case R.id.btn_image:
-                if (activity != null && requestStorage(activity)) {
-                    chatView.sendImage();
-                }
-                break;
-            case R.id.btn_goods:
-                chatView.sendGoods();
-                break;
             case R.id.btnEmoticon:
                 updateView(inputMode == InputMode.EMOTICON ? InputMode.TEXT : InputMode.EMOTICON, false);
-                break;
-            case R.id.btn_comment:
-                chatView.sendComment();
-                break;
-            case R.id.btn_order:
-                chatView.sendOrder();
                 break;
         }
     }
@@ -436,11 +494,43 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     @Override
     public void OnEmojiDel() {
         //调用系统删除键事件
-        int  keyCode = KeyEvent.KEYCODE_DEL;
+        int keyCode = KeyEvent.KEYCODE_DEL;
         KeyEvent keyEventDown = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
         KeyEvent keyEventUp = new KeyEvent(KeyEvent.ACTION_UP, keyCode);
         editText.onKeyDown(keyCode, keyEventDown);
         editText.onKeyUp(keyCode, keyEventUp);
+    }
+
+    @Override
+    public void getReplysetList(List<ReplysetEntity.Replyset> list) {
+
+        if (list != null && list.size() != 0) {
+            replysetList.addAll(list);
+        }
+
+        if (fastAdapter == null) {
+            fastAdapter = new FastAdapter(getContext(), replysetList);
+            recyclerView_fast.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView_fast.setAdapter(fastAdapter);
+            fastAdapter.setOnItemClickListener((view, position) -> {
+                ReplysetEntity.Replyset replyset = replysetList.get(position);
+                if (!TextUtils.isEmpty(replyset.item)) {
+                    chatView.sendFast(replyset.item);
+                }
+            });
+        } else {
+            fastAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 
 
@@ -452,6 +542,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         GOODS,
         COMMENT,
         ORDER,
+        FAST,
         NONE,
     }
 
@@ -528,7 +619,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
 
 
     public boolean isBottomPanelVisible() {
-        if (morePanel.getVisibility() == VISIBLE || rlayout_emoji.getVisibility() == VISIBLE) {
+        if (recyclerView_panel.getVisibility() == VISIBLE || rlayout_emoji.getVisibility() == VISIBLE) {
             return true;
         }
 
@@ -536,8 +627,8 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     }
 
     public void setBottomPanelInVisible() {
-        if (morePanel.getVisibility() == VISIBLE) {
-            morePanel.setVisibility(GONE);
+        if (recyclerView_panel.getVisibility() == VISIBLE) {
+            recyclerView_panel.setVisibility(GONE);
         }
         if (rlayout_emoji.getVisibility() == VISIBLE) {
             rlayout_emoji.setVisibility(GONE);
@@ -548,26 +639,39 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
      * 显示商品布局
      */
     public void showGoodsBtn() {
-        if (btnGoods.getVisibility() == GONE) {
-            btnGoods.setVisibility(VISIBLE);
+        if (!stringList.contains("商品")) {
+            stringList.add("商品");
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
      * 显示订单布局
      */
     public void showOrderBtn() {
-        if (btnOrder.getVisibility() == GONE) {
-            btnOrder.setVisibility(VISIBLE);
+        if (!stringList.contains("订单")) {
+            stringList.add("订单");
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
      * 显示邀请评价布局
      */
     public void showCommentBtn() {
-        if (btnComment.getVisibility() == GONE) {
-            btnComment.setVisibility(VISIBLE);
+        if (!stringList.contains("邀请评价")) {
+            stringList.add("邀请评价");
         }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 显示快捷回复
+     */
+    public void showFastComment() {
+        if (!stringList.contains("快捷回复")) {
+            stringList.add("快捷回复");
+        }
+        mAdapter.notifyDataSetChanged();
     }
 }

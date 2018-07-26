@@ -42,12 +42,18 @@
                     android:textSize="15sp" />
             </com.shunlian.app.widget.MyLinearLayout>
 
+            <com.shunlian.app.widget.MyWebView
+                android:id="@+id/mwv_h5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
             <com.shunlian.app.widget.MyLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:padding="20dp">
+                android:padding="20dp"
+                android:visibility="gone">
 
                 <com.shunlian.app.widget.MyImageView
                     android:paddingTop="4dp"

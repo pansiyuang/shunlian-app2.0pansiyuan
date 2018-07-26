@@ -32,6 +32,7 @@ import com.shunlian.app.view.ICustomerView;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -138,6 +139,7 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
         if (mAdapter == null) {
             mAdapter = new MessageAdapter(this, null, chatMemberList);
             mAdapter.setOnItemClickListener(this);
+            mAdapter.setCustomerMode();
             recycler_list.setAdapter(mAdapter);
         }
         mAdapter.notifyDataSetChanged();
@@ -259,7 +261,11 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
                 chatMemberList.add(chatMember);
                 LogUtil.httpLogW("列表为空");
             }
-            runOnUiThread(() -> mAdapter.notifyDataSetChanged());
+            runOnUiThread(() -> {
+                if (mAdapter != null) {
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -290,11 +296,13 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
         if (!isEmpty(chatMemberList)) {
             for (int i = 0; i < chatMemberList.size(); i++) {
                 //好友发给自己的消息
-                if (baseMessage.from_user_id.equals(chatMemberList.get(i).user_id)) {
-                    unReadNum = chatMemberList.get(i).unread_count + 1;
+                ChatMemberEntity.ChatMember chatMember = chatMemberList.get(i);
+                if (baseMessage.from_user_id.equals(chatMember.user_id)) {
+                    unReadNum = chatMember.unread_count + 1;
                     baseMessage.setuReadNum(unReadNum);
-                    chatMemberList.get(i).unread_count = unReadNum;
-                    chatMemberList.get(i).update_time = TimeUtil.getNewChatTime(msgInfo.send_time);
+                    chatMember.unread_count = unReadNum;
+                    chatMember.update_time = TimeUtil.getNewChatTime(msgInfo.send_time);
+                    Collections.swap(chatMemberList, i, 0);
                     break;
                 }
             }

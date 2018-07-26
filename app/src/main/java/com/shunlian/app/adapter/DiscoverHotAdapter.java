@@ -2,29 +2,18 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
-import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.BitmapUtil;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,8 +51,8 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
             viewHolder.mtv_like.setTextColor(getColor(R.color.value_878B8A));
         }
         GlideUtils.getInstance().loadCircleImage(context,viewHolder.miv_avar,hot.avatar);
-        BitmapUtil.discoverImg(viewHolder.miv_pic,viewHolder.rv_pics,viewHolder.picAdapter,hot.imgs
-        ,activity,0,0,0,12,0,0);
+        BitmapUtil.discoverImg(viewHolder.miv_pic,viewHolder.rv_pics,null,hot.imgs
+        ,activity,0,0,0,12,0,0,0,0);
         //        if (isEmpty(hot.imgs)) {
 //            viewHolder.rv_pics.setVisibility(View.GONE);
 //            viewHolder.miv_pic.setVisibility(View.GONE);
@@ -154,7 +143,6 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
         RecyclerView rv_pics;
 
 
-        private SinglePicAdapter picAdapter;
         public TieziHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);

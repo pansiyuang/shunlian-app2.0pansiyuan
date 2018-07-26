@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover;
 
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -44,6 +45,9 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
 
     private ArticleAdapter mArticleAdapter;
     private ChosenPresenter mPresenter;
@@ -164,11 +168,11 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
                     index = articleEntity.article_list.size() - 1;
                 }
                 articleEntity.article_list.get(index).topic_list = topicList;
-                lay_refresh.setVisibility(View.VISIBLE);
-                nei_empty.setVisibility(View.GONE);
+                recycler_article.setVisibility(View.VISIBLE);
+                nestedScrollView.setVisibility(View.GONE);
             } else {
-                lay_refresh.setVisibility(View.GONE);
-                nei_empty.setVisibility(View.VISIBLE);
+                recycler_article.setVisibility(View.GONE);
+                nestedScrollView.setVisibility(View.VISIBLE);
             }
         }
         if (!isEmpty(articleEntity.article_list)) {

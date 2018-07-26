@@ -44,6 +44,7 @@ public class CustomerPresenter extends BasePresenter<ICustomerView> {
     public void getUserList(boolean isLoad, String kid) {
         Map<String, String> map = new HashMap<>();
         map.put("kid", kid);
+        map.put("status", "1");
         sortAndMD5(map);
 
         Call<BaseEntity<ChatMemberEntity>> baseEntityCall = getAddCookieApiService().getUserList(map);

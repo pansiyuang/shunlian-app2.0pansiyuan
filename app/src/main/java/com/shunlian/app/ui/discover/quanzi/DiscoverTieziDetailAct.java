@@ -230,7 +230,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
         inv_id = getIntent().getStringExtra("inv_id");
         imgs = (List<String>) getIntent().getSerializableExtra("imgs");
         BitmapUtil.discoverImg(miv_pic,rv_pics,null,imgs
-                ,this,0,0,20,28,20,20);
+                ,this,0,0,20,28,20,20,0,0);
         pDiscoverTieziDetail = new PDiscoverTieziDetail(this, this, circle_id, inv_id);
         nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.discover_wolaishuo));
         nei_empty.setButtonText(null);

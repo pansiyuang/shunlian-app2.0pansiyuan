@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingTop="20dp"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingRight="20dp"
+    android:paddingTop="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,33 +71,34 @@
         android:layout_marginTop="15dp"
         android:overScrollMode="never"
         android:scrollbars="none"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/ll_goods"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
         android:background="@color/white_ash"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="7.5dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_icon"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:scaleType="centerCrop" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="12dp">
+            android:layout_marginLeft="17dp">
 
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:singleLine="true"
                 android:textColor="@color/new_text"
                 android:textSize="14sp" />
 
@@ -106,27 +107,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_marginTop="14dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/pink_color"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/tv_add_car"
-                android:layout_width="wrap_content"
-                android:layout_height="23dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/rounded_corner_stroke_pink_8px"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="1"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
-                android:text="@string/discover_to_buy"
-                android:textColor="@color/pink_color"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -150,10 +135,10 @@
             android:id="@+id/tv_evaluate_count"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="10dp"
             android:drawableLeft="@mipmap/icon_found_pinglun_zan_n"
             android:drawablePadding="7dp"
             android:gravity="center"
+            android:paddingLeft="10dp"
             android:textColor="@color/value_878B8A"
             android:textSize="13sp" />
     </LinearLayout>
