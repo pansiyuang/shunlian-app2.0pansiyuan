@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.text.ClipboardManager;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,9 +33,9 @@ import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.balance.BalanceDetailAct;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.ui.sale_data.SaleDetailAct;
 import com.shunlian.app.ui.sale_data.SplineChart06View;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -519,12 +520,11 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                 }
                 break;
             case R.id.mtv_request_code:
-                /*String content = mtv_request_code.getText().toString();
+                String content = mtv_request_code.getText().toString();
                 String sub = content.substring(content.indexOf("：") + 1, content.length());
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 cm.setText(sub);
-                Common.staticToast("复制成功");*/
-                LoginEntryAct.startAct(this);
+                Common.staticToast("复制成功");
                 break;
         }
     }

@@ -576,8 +576,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
 
             case R.id.mtv_detail:
             case R.id.mtv_sale_sum:
-                //SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
-                MoreCreditAct.startAct(this);
+                SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
                 break;
             /*case R.id.mtv_tip:
                 if (slHeadDialog == null)
