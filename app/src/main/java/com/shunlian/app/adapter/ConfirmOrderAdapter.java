@@ -208,7 +208,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
             if (!isEmpty(voucher)) {//有可用优惠券，默认使用第一张
                 ConfirmOrderEntity.Voucher voucher1 = voucher.get(enabled.selectVoucherId);
-                if (enabled.selectVoucherId == voucher.size()){
+                if (enabled.selectVoucherId == voucher.size()-1){
                     mHolder.mtv_discount.setText("请选择");
                 }else {
                     mHolder.mtv_discount.setText(voucher1.voucher_hint);

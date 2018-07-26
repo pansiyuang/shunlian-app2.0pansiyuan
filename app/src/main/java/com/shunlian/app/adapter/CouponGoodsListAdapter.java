@@ -43,7 +43,7 @@ public class CouponGoodsListAdapter extends BaseRecyclerAdapter<StageGoodsListEn
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_HEAD){
-            View view = mInflater.inflate(R.layout.item_conpou, parent, false);
+            View view = mInflater.inflate(R.layout.item_coupon_head, parent, false);
             return new HeadHolder(view);
         }
         return super.onCreateViewHolder(parent, viewType);
