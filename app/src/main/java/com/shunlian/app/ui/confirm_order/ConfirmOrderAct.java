@@ -252,7 +252,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             mStageVoucherEntity = new ConfirmOrderEntity.Enabled();
             mStageVoucherEntity.voucher = stage_voucher;
             if (!"1".equals(user_stage_voucher)){
-                mStageVoucherEntity.selectVoucherId = stage_voucher.size();
+                mStageVoucherEntity.selectVoucherId = stage_voucher.size()-1;
             }else {
                 mtv_discount.setText(stage_voucher.get(0).voucher_hint);
                 mStageVoucherEntity.selectVoucherId = 0;
