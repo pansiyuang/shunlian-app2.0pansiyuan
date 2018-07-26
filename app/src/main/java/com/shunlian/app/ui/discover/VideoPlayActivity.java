@@ -18,6 +18,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -182,9 +183,13 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
                         readToDownLoad();
                         break;
                     case "图文分享":
-                        isShare = true;
-                        readToDownLoad();
-                        break;
+                        if (!Common.isAlreadyLogin()) {
+                            LoginAct.startAct(VideoPlayActivity.this);
+                        } else {
+                            isShare = true;
+                            readToDownLoad();
+                            break;
+                        }
                 }
                 dialog_operate.dismiss();
             });
@@ -318,7 +323,6 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
             mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
             mShareInfoParam.shareLink = baseEntity.data.shareLink;
             mShareInfoParam.desc = baseEntity.data.desc;
-            mShareInfoParam.shareLink = currentArticle.share_url;
             Common.copyText(VideoPlayActivity.this, mShareInfoParam.shareLink, mShareInfoParam.title, false);
             quick_actions.shareInfo(mShareInfoParam);
             quick_actions.saveshareFindPic();
