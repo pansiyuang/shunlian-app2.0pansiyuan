@@ -16,13 +16,12 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
-import com.shunlian.app.ui.discover.VideoPlayActivity;
-import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
+import com.shunlian.app.ui.discover.VideoPlayActivity;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
+import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.widget.MyImageView;
@@ -181,13 +180,13 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 visible(articleViewHolder.miv_big_icon);
                 gone(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
-                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0);
+                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0,0,0);
                 break;
             case "2":
                 gone(articleViewHolder.miv_big_icon);
                 visible(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
-                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0);
+                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0,0,0);
                 break;
             case "3":
                 gone(articleViewHolder.miv_big_icon);

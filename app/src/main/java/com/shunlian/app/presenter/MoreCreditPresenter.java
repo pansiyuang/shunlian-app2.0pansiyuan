@@ -180,8 +180,13 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
                 super.onSuccess(entity);
                 Common.staticToast(entity.message);
                 historyLists.remove(delPosition);
-                if (historyAdapter != null)
+                if (historyAdapter != null){
                     historyAdapter.notifyItemRemoved(delPosition);
+                    if (historyAdapter.getItemCount()<=2){
+                        iView.setTopUpHistoryAdapter(historyAdapter);
+                    }
+                }
+
                 if (isEmpty(historyLists)){
                     historyAdapter.unbind();
                     historyAdapter = null;

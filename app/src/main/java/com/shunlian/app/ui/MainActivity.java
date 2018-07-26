@@ -19,6 +19,7 @@ import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
+import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -159,6 +160,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void initData() {
         pMain = new PMain(MainActivity.this, MainActivity.this);
+        pMain.entryInfo();
         initMessage();
         if (updateDialogV == null)
             updateDialogV = new UpdateDialog(this) {
@@ -179,11 +181,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             messageCountManager.setOnGetMessageListener(this);
         }
         Common.parseClipboard(this);
-        if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))){
-            visible(ll_tab_sort);
-        }else {
-            gone(ll_tab_sort);
-        }
+//        if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))){
+//            visible(ll_tab_sort);
+//        }else {
+//            gone(ll_tab_sort);
+//        }
     }
 
 
@@ -302,7 +304,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         discoverClick();
                         break;
                     case R.id.ll_tab_shopping_car:
-                        shoppingCarClick();
+                        CouponMsgAct.startAct(getBaseContext(),"");
+//                        shoppingCarClick();
                         break;
                     case R.id.ll_tab_person_center:
                         personCenterClick();
@@ -646,7 +649,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void entryInfo(CommonEntity data) {
-
+        Constant.EMAIL=data.ducha_email;
+        SharedPrefUtil.saveSharedPrfString("plus_role", data.is_plus);
+        SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
+        SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
+        SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);
     }
 
     @Override

@@ -225,15 +225,16 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     public void OnLoadFail() {
 
     }
-
     @Override
-    public void getCouponCallBack(boolean isCommon, int position) {
-        if (isCommon) {
-            mDatas.get(position).if_get = "1";
-            couponAdapter.notifyItemChanged(position);
-        } else {
-            pGetCoupon.mDatas.get(position).if_get = "1";
-            couponsAdapter.notifyItemChanged(position);
+    public void getCouponCallBack(boolean isCommon, int position, String isGet) {
+        if ("1".equals(isGet)){
+            if (isCommon) {
+                mDatas.get(position).if_get = "1";
+                couponAdapter.notifyItemChanged(position);
+            } else {
+                pGetCoupon.mDatas.get(position).if_get = "1";
+                couponsAdapter.notifyItemChanged(position);
+            }
         }
     }
 

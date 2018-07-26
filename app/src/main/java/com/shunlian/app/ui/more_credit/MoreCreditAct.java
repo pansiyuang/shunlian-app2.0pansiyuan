@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.more_credit;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
@@ -92,6 +92,9 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     @BindView(R.id.miv_clear1)
     MyImageView miv_clear1;
 
+    @BindView(R.id.frame_mask1)
+    FrameLayout frame_mask1;
+
     public final int REQUEST_CODE = 6666;
     private MoreCreditPresenter presenter;
 
@@ -154,8 +157,6 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
                 if (s.length() > 11){
                     CharSequence charSequence = s.subSequence(0, 11);
                     met_phone.setText(charSequence);
-                }else {
-                    met_phone.setSelection(s.length());
                 }
                 if (s.length() == 11){
                     mtv_phone.setText(met_phone.getText());
@@ -168,6 +169,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             mtv_phone.setText("");
             mtv_tip.setText("");
             met_phone.setText("");
+            setEdittextFocusable(true,met_phone);
             gone(miv_clear1);
             visible(miv_select_phone);
         });
@@ -191,10 +193,11 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     @OnClick({R.id.rlayout_input,R.id.mtv_phone})
     public void showInput(){
         visible(frame_mask);
+        met_phone.setSelection(met_phone.getText().length());
         inputPhoneAnim(-1,0);
     }
 
-    @OnClick(R.id.frame_mask)
+    @OnClick({R.id.frame_mask,R.id.miv_back})
     public void hideInput(){
         Common.hideKeyboard(met_phone);
         inputPhoneAnim(0,-1);
@@ -250,10 +253,10 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CODE) {
             Uri contactData = data.getData();
             Cursor c = managedQuery(contactData, null, null, null, null);
-            if (c.moveToFirst()) {
+            if (c != null && c.moveToFirst()) {
                 //String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
                 String contactId = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
@@ -307,6 +310,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     @OnClick(R.id.miv_clear)
     public void clearPhone(){
         met_phone.setText("");
+        setEdittextFocusable(true,met_phone);
     }
 
     /**
@@ -356,7 +360,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
         visible(mtv_tip);
         switch (code){
             case 1:
-                gone(miv_clear1);
+                gone(miv_clear1,frame_mask1);
                 visible(miv_select_phone);
                 mtv_tip.setTextColor(getColorResouce(R.color.text_gray2));
                 mtv_tip.setText(tip);
@@ -364,7 +368,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             case Code.CREDIT_PHONE_ERROR:
             case Code.CREDIT_NO_SUPPORT:
             case Code.CREDIT_NO_BELONGING:
-                visible(miv_clear1);
+                visible(miv_clear1,frame_mask1);
                 gone(miv_select_phone);
                 mtv_tip.setTextColor(getColorResouce(R.color.pink_color));
                 mtv_tip.setText(tip);
@@ -372,6 +376,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             default:
                 mtv_tip.setTextColor(getColorResouce(R.color.pink_color));
                 mtv_tip.setText(tip);
+                visible(frame_mask1);
                 break;
         }
     }
@@ -390,6 +395,11 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             gone(recy_view_history);
         }else {
             visible(recy_view_history);
+            if (adapter.getItemCount() <= 2){
+                ViewGroup.LayoutParams layoutParams = recy_view_history.getLayoutParams();
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                recy_view_history.setLayoutParams(layoutParams);
+            }
             recy_view_history.setAdapter(adapter);
         }
     }

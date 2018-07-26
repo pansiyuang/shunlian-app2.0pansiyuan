@@ -9,18 +9,18 @@ android {
         abortOnError false
     }
     signingConfigs {
-//        ShunLianPower {
-//            List<String> lists = file('C:/Augus/file/signState.txt').readLines()
-//            String alias = lists.get(0)
-//            String pwd = lists.get(1)
-//            storeFile file('C:/Augus/file/ShunLianPower.jks')
-//            storePassword pwd
-//            keyAlias alias
-//            keyPassword pwd
-//        }
+        ShunLianPower {
+            List<String> lists = file('C:/Augus/file/signState.txt').readLines()
+            String alias = lists.get(0)
+            String pwd = lists.get(1)
+            storeFile file('C:/Augus/file/ShunLianPower.jks')
+            storePassword pwd
+            keyAlias alias
+            keyPassword pwd
+        }
     }
-    compileSdkVersion 25
-    buildToolsVersion '27.0.1'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.shunlian.app"
@@ -30,7 +30,7 @@ android {
         versionCode 21
         versionName "2.0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        signingConfig signingConfigs.ShunLianPower
+        signingConfig signingConfigs.ShunLianPower
 
         //bugly
         ndk {
@@ -51,10 +51,10 @@ android {
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.ShunLianPower
+            signingConfig signingConfigs.ShunLianPower
         }
         debug {
-//            signingConfig signingConfigs.ShunLianPower
+            signingConfig signingConfigs.ShunLianPower
             debuggable true
             minifyEnabled false
         }
@@ -90,16 +90,16 @@ dependencies {
     //rx
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support:recyclerview-v7:25.4.0'
-    compile 'com.android.support:cardview-v7:25.4.0'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
+    compile 'com.android.support:cardview-v7:27.1.1'
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
 //    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:support-v4:25.4.0'
+    compile 'com.android.support:support-v4:27.1.1'
     compile 'com.squareup.retrofit2:converter-jackson:2.2.0'
     compile project(':immersive')
     compile project(':chartlibrary')
     compile files('libs/nineoldandroids-2.4.0.jar')
-    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:design:27.1.1'
     implementation project(':mlibrary')
     //微信
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'

@@ -27,7 +27,6 @@ import android.os.Parcelable;
 import android.os.SystemClock;
 import android.support.v4.os.ParcelableCompat;
 import android.support.v4.os.ParcelableCompatCreatorCallbacks;
-import android.support.v4.view.KeyEventCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.VelocityTrackerCompat;
@@ -211,11 +210,11 @@ public class LazyViewPager extends ViewGroup {
         public void onPageScrollStateChanged(int state);
     }
 
-    /**
-     * Simple implementation of the {@link android.support.v4.view.LazyViewPager.OnPageChangeListener} interface with stub
-     * implementations of each method. Extend this if you do not intend to override
-     * every method of {@link android.support.v4.view.LazyViewPager.OnPageChangeListener}.
-     */
+//    /**
+//     * Simple implementation of the {@link android.support.v4.view.LazyViewPager.OnPageChangeListener} interface with stub
+//     * implementations of each method. Extend this if you do not intend to override
+//     * every method of {@link android.support.v4.view.LazyViewPager.OnPageChangeListener}.
+//     */
     public static class SimpleOnPageChangeListener implements OnPageChangeListener {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -1548,9 +1547,9 @@ public class LazyViewPager extends ViewGroup {
                     handled = arrowScroll(FOCUS_RIGHT);
                     break;
                 case KeyEvent.KEYCODE_TAB:
-                    if (KeyEventCompat.hasNoModifiers(event)) {
+                    if (event.hasNoModifiers()) {
                         handled = arrowScroll(FOCUS_FORWARD);
-                    } else if (KeyEventCompat.hasModifiers(event, KeyEvent.META_SHIFT_ON)) {
+                    } else if (event.hasModifiers(KeyEvent.META_SHIFT_ON)) {
                         handled = arrowScroll(FOCUS_BACKWARD);
                     }
                     break;

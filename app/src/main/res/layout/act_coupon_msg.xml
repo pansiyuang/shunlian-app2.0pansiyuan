@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/block_title_whitebg" />
     <LinearLayout
         android:id="@+id/ll_bg"
         android:layout_width="match_parent"
@@ -85,7 +86,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/view_dash_line"
                     android:layout_marginTop="5dp"
-                    android:text="该优惠券指定商品可用"
                     android:textColor="@color/new_gray"
                     android:textSize="9sp" />
             </RelativeLayout>
@@ -98,4 +98,13 @@
                 android:src="@mipmap/img_quan_hong" />
         </LinearLayout>
     </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_coupon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

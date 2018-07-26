@@ -632,4 +632,25 @@ public class GlideUtils {
     public void clearMemory(){
         Glide.get(Common.getApplicationContext()).clearMemory();
     }
+
+
+    /**
+     * 长图加载
+     * @param context
+     * @param imageView 图片容器
+     * @param imgUrl    图片地址
+     */
+    public void veryLongPicLoadImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null) return;
+        Glide.with(context)
+                .load(imgUrl)
+                .error(R.mipmap.img_default_productdetails_activetips)
+                .placeholder(R.mipmap.img_default_productdetails_activetips)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
+                //source:缓存源资源   result：缓存转换后的资源
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .into(imageView);
+    }
 }
