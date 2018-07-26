@@ -51,9 +51,6 @@ public class AssignVoucherPresenter extends BasePresenter<IAssignVoucherView> {
     }
 
     public void refreshBaby() {
-        LogUtil.augusLogW("yxftets--"+pageIsLoading);
-        LogUtil.augusLogW("yxftets111--"+currentPage);
-        LogUtil.augusLogW("yxftets222--"+allPage);
         if (!pageIsLoading && currentPage <= allPage) {
             pageIsLoading = true;
             getVoucherDetai();
@@ -86,8 +83,8 @@ public class AssignVoucherPresenter extends BasePresenter<IAssignVoucherView> {
 
     public void getVoucherDetai() {
         Map<String, String> map = new HashMap<>();
-        map.put("voucher_id", "gxZ");
-//        map.put("voucher_id", voucher_id);
+//        map.put("voucher_id", "gxZ");
+        map.put("voucher_id", voucher_id);
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(page_size));
         sortAndMD5(map);

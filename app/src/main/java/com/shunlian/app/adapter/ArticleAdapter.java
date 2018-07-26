@@ -187,7 +187,8 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 gone(articleViewHolder.miv_big_icon);
                 visible(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
-                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgs, mFragment.getActivity(), 0, 0, 0, 12, 0, 0, 0, 0);
+                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgs, mFragment.getActivity()
+                        , 0, 0, 10, 12, 10, 12, 6, 20);
                 break;
             case "3"://视频模式
                 gone(articleViewHolder.miv_big_icon);
