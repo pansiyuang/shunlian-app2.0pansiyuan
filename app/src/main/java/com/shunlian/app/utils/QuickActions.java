@@ -876,7 +876,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 保存发现分享图
      */
-    private void saveshareFindPic() {
+    public void saveshareFindPic() {
         removeAllViews();
         setVisibility(INVISIBLE);
         final View inflate = LayoutInflater.from(getContext())

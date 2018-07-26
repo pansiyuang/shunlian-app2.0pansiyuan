@@ -1,26 +1,15 @@
 package com.shunlian.app.ui.discover;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.OperateAdapter;
 import com.shunlian.app.bean.ArticleEntity;
@@ -134,6 +123,7 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
         customVideoPlayer.setUp(currentUrl, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
         customVideoPlayer.startVideo();
 
+        httpDialog = new HttpDialog(this);
     }
 
     @Override
@@ -220,16 +210,10 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
                 Toast.makeText(this, "已下载过该视频,请勿重复下载!", Toast.LENGTH_SHORT).show();
             }
         } else {
-            if (httpDialog == null) {
-                httpDialog = new HttpDialog(this);
-            }
             if (!httpDialog.isShowing()) {
                 httpDialog.show();
             }
             new Thread(() -> downLoadVideo(fileName)).start();
-            if (httpDialog.isShowing()) {
-                httpDialog.dismiss();
-            }
         }
     }
 
@@ -262,9 +246,15 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
         Uri localUri = Uri.parse("file://" + fileDir);
         Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
         sendBroadcast(localIntent);
-        Common.staticToast("视频已保存,请在手机相册中查看");
         if (isShare) {
             shareArticle();
+        } else {
+            runOnUiThread(() -> {
+                if (httpDialog.isShowing()) {
+                    httpDialog.dismiss();
+                }
+                Common.staticToast("视频已保存,请在手机相册中查看");
+            });
         }
     }
 
@@ -275,14 +265,7 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
             mShareInfoParam.desc = currentArticle.full_title;
             mShareInfoParam.img = currentArticle.thumb;
             mShareInfoParam.thumb_type = currentArticle.thumb_type;
-            if (!isEmpty(currentArticle.share_url)) {
-                mShareInfoParam.shareLink = currentArticle.share_url;
-                Common.copyText(this, mShareInfoParam.shareLink, mShareInfoParam.title, false);
-                quick_actions.shareInfo(mShareInfoParam);
-                quick_actions.saveshareGoodsPic();
-            } else {
-                mPresenter.getShareInfo(mPresenter.nice, currentArticle.id);
-            }
+            mPresenter.getShareInfo(mPresenter.nice, currentArticle.id);
         }
     }
 
@@ -335,6 +318,13 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
             mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
             mShareInfoParam.shareLink = baseEntity.data.shareLink;
             mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.shareLink = currentArticle.share_url;
+            Common.copyText(VideoPlayActivity.this, mShareInfoParam.shareLink, mShareInfoParam.title, false);
+            quick_actions.shareInfo(mShareInfoParam);
+            quick_actions.saveshareFindPic();
+            if (httpDialog.isShowing()) {
+                httpDialog.dismiss();
+            }
         }
     }
 }

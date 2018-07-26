@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lay_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:background="@color/white_ash"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    app:mode="follow">
 
-    <com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout
-        android:id="@+id/lay_refresh"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_ash"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        app:mode="follow">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_article"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:overScrollMode="never"
+            android:scrollbars="none" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_article"
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nsv_bootom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:paddingBottom="100dp"
+            android:visibility="gone">
+
+            <com.shunlian.app.widget.empty.NetAndEmptyInterface
+                android:id="@+id/nei_empty"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"
-                android:scrollbars="none" />
-
-            <android.support.v4.widget.NestedScrollView
-                android:id="@+id/nestedScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true"
-                android:visibility="gone">
-
-                <com.shunlian.app.widget.empty.NetAndEmptyInterface
-                    android:id="@+id/nei_empty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </android.support.v4.widget.NestedScrollView>
-        </LinearLayout>
-    </com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>
-</LinearLayout>
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
+</com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>
