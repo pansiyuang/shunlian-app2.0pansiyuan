@@ -20,6 +20,7 @@ import retrofit2.Call;
  */
 
 public class AllMessageCountPresenter extends BasePresenter<IMessageCountView> {
+    private Call<BaseEntity<AllMessageCountEntity>> baseEntityCall;
 
     public AllMessageCountPresenter(Context context, IMessageCountView iView) {
         super(context, iView);
@@ -59,5 +60,11 @@ public class AllMessageCountPresenter extends BasePresenter<IMessageCountView> {
                 super.onErrorCode(code, message);
             }
         });
+    }
+
+    public void cancelRequest() {
+        if (baseEntityCall != null && !baseEntityCall.isCanceled()) {
+            baseEntityCall.cancel();
+        }
     }
 }

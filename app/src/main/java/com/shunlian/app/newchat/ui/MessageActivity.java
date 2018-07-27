@@ -124,6 +124,12 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         super.onRestart();
     }
 
+    @Override
+    protected void onDestroy() {
+        messageCountManager.cancleRequest();
+        super.onDestroy();
+    }
+
     private void SysClick() {
         tv_sys_title.setSelected(true);
         tv_store_title.setSelected(false);
@@ -209,19 +215,22 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         sysCount = messageCountEntity.sys_msg;
         storeCount = messageCountEntity.store_msg;
+        try {
+            if (isEmpty(Common.formatBadgeNumber(sysCount))) {
+                tv_sys_count.setVisibility(View.GONE);
+            } else {
+                tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
+                tv_sys_count.setVisibility(View.VISIBLE);
+            }
 
-        if (isEmpty(Common.formatBadgeNumber(sysCount))) {
-            tv_sys_count.setVisibility(View.GONE);
-        } else {
-            tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
-            tv_sys_count.setVisibility(View.VISIBLE);
-        }
-
-        if (isEmpty(Common.formatBadgeNumber(storeCount))) {
-            tv_store_count.setVisibility(View.GONE);
-        } else {
-            tv_store_count.setText(Common.formatBadgeNumber(storeCount));
-            tv_store_count.setVisibility(View.VISIBLE);
+            if (isEmpty(Common.formatBadgeNumber(storeCount))) {
+                tv_store_count.setVisibility(View.GONE);
+            } else {
+                tv_store_count.setText(Common.formatBadgeNumber(storeCount));
+                tv_store_count.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

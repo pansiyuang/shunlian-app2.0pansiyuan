@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.SaveAlbumDialog;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.CustomVideoPlayer;
 import com.shunlian.app.widget.HttpDialog;
@@ -56,9 +58,6 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
     @BindView(R.id.ll_rootView)
     RelativeLayout ll_rootView;
 
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
-
     public static void startActivity(Context context, String videoUrl) {
         Intent intent = new Intent(context, VideoPlayActivity.class);
         intent.putExtra("videoUrl", videoUrl);
@@ -86,9 +85,9 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
     public String dirName;
     private ArticleEntity.Article currentArticle;
     private boolean isShare;
-    private ShareInfoParam mShareInfoParam;
     private ArrayList<String> imgList;
     private ChosenPresenter mPresenter;
+    private SaveAlbumDialog saveAlbumDialog;
 
     @Override
     protected int getLayoutId() {
@@ -265,11 +264,6 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
 
     public void shareArticle() {
         if (mPresenter != null) {
-            mShareInfoParam = mPresenter.getShareInfoParam();
-            mShareInfoParam.title = currentArticle.title;
-            mShareInfoParam.desc = currentArticle.full_title;
-            mShareInfoParam.img = currentArticle.thumb;
-            mShareInfoParam.thumb_type = currentArticle.thumb_type;
             mPresenter.getShareInfo(mPresenter.nice, currentArticle.id);
         }
     }
@@ -318,17 +312,13 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        if (quick_actions != null) {
-            mShareInfoParam.userName = baseEntity.data.userName;
-            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
-            mShareInfoParam.shareLink = baseEntity.data.shareLink;
-            mShareInfoParam.desc = baseEntity.data.desc;
-            Common.copyText(VideoPlayActivity.this, mShareInfoParam.shareLink, mShareInfoParam.title, false);
-            quick_actions.shareInfo(mShareInfoParam);
-            quick_actions.saveshareFindPic();
-            if (httpDialog.isShowing()) {
-                httpDialog.dismiss();
-            }
+        Common.copyText(VideoPlayActivity.this, baseEntity.data.shareLink, currentArticle.title, false);
+        if (httpDialog.isShowing()) {
+            httpDialog.dismiss();
         }
+        if (saveAlbumDialog == null) {
+            saveAlbumDialog = new SaveAlbumDialog(this, "article", currentArticle.id);
+        }
+        saveAlbumDialog.show();
     }
 }
