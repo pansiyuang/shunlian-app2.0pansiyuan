@@ -69,8 +69,10 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
     private String mMobile;
     private String picCode;
     private String unique_sign;
+    private String mMember_id;
     private String refereesId;
     private boolean isRuning = false;
+    private int mFlag;
 
     /**
      * 设置布局id
@@ -148,9 +150,10 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
         refereesId = arguments.getString("refereesId");
         picCode = arguments.getString("picCode");
         unique_sign = arguments.getString("unique_sign");
-        boolean isShowNickname = arguments.getBoolean("isShowNickname");
+        mMember_id = arguments.getString("member_id");
+        mFlag = arguments.getInt("flag");
         mtv_mobile.setText(mMobile);
-        if (isShowNickname){
+        if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
             visible(rlayout_nickname);
         }else {
             gone(rlayout_nickname);
@@ -164,16 +167,18 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
      * @param mobile 手机号
      * @param picCode 图形验证码
      * @param unique_sign 微信登录code
-     * @param isShowNickname 是否显示昵称
+     * @param flag 状态
      */
     public void resetPage(String refereesId, String mobile, String picCode,
-                          String unique_sign, boolean isShowNickname) {
+                          String unique_sign,String member_id, int flag) {
         this.refereesId = refereesId;
         this.mMobile = mobile;
         this.picCode = picCode;
+        this.mMember_id = member_id;
+        this.mFlag = flag;
         this.unique_sign = unique_sign;
         mtv_mobile.setText(mMobile);
-        if (isShowNickname){
+        if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
             visible(rlayout_nickname);
             met_nickname.setText("");
         }else {
@@ -197,13 +202,21 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
     @OnClick(R.id.mbtn_login)
     public void btnLogin(){
         if (!isEmpty(mSmsCode) && mPresenter != null){
-            if (rlayout_nickname.getVisibility() == View.VISIBLE){
-                String nickname = met_nickname.getText().toString().trim();
-                mPresenter.register(mMobile,mSmsCode,refereesId,nickname,unique_sign);
-            }else if (!isEmpty(unique_sign)){
-
-            }else {
+            if (mFlag == RegisterAndBindingAct.FLAG_LOGIN){//登录
                 mPresenter.loginMobile(mMobile,mSmsCode);
+            }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){//注册
+                String nickname = met_nickname.getText().toString().trim();
+                if (isEmpty(nickname)){
+                    Common.staticToast("请填写昵称");
+                    return;
+                }
+                mPresenter.register(mMobile,mSmsCode,refereesId,nickname,unique_sign);
+            }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE_ID){//绑定
+                mPresenter.register(mMobile,mSmsCode,refereesId,"",unique_sign);
+            }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE){//绑定手机号
+                mPresenter.register(mMobile,mSmsCode,refereesId,"",unique_sign);
+            }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_ID){//绑定id
+                mPresenter.bindShareid(mMember_id,refereesId,mMobile,mSmsCode);
             }
         }else {
             Common.staticToast("请输入短信验证码");

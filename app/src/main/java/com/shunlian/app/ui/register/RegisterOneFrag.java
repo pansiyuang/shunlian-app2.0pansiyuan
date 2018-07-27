@@ -194,7 +194,7 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
         }
         switch (v.getId()) {
             case R.id.tv_select:
-                SelectRecommendAct.startAct(baseActivity);
+                SelectRecommendAct.startAct(baseActivity,"",false);
                 break;
             case R.id.miv_code:
                 onePresenter.getCode();

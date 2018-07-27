@@ -81,6 +81,7 @@ import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
+import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.plus.PlusGifDetailAct;
@@ -321,7 +322,8 @@ public class Common {
                 PlusGifDetailAct.startAct(context, params[0]);
                 break;
             case "login":
-                LoginAct.startAct(context);
+                //LoginAct.startAct(context);
+                LoginEntryAct.startAct(context);
                 break;
             case "article":
                 ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);

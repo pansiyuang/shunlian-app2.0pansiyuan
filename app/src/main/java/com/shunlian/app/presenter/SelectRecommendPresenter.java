@@ -56,4 +56,24 @@ public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView
     public void detachView() {
 
     }
+
+
+    public void codeDetail(String id){
+        Map<String,String> map = new HashMap<>();
+        map.put("code",id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<MemberCodeListEntity.ListBean>>
+                baseEntityCall = getApiService().codeInfo(map);
+
+        getNetData(baseEntityCall,new SimpleNetDataCallback
+                <BaseEntity<MemberCodeListEntity.ListBean>>(){
+            @Override
+            public void onSuccess(BaseEntity<MemberCodeListEntity.ListBean> entity) {
+                super.onSuccess(entity);
+
+                iView.codeInfo(entity.data);
+            }
+        });
+    }
 }

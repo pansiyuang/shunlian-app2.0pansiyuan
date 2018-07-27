@@ -17,6 +17,7 @@ import com.shunlian.app.presenter.RegisterAndBindPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.SelectRecommendAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterAndBindView;
 import com.shunlian.app.widget.MyButton;
@@ -68,6 +69,9 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     @BindView(R.id.mbtn_login)
     MyButton mbtn_login;
 
+    @BindView(R.id.mtv_select_id)
+    MyTextView mtv_select_id;
+
     private RegisterAndBindPresenter mPresenter;
     private boolean isRuning1 = false;
     private boolean isRuning2 = false;
@@ -78,6 +82,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     private boolean iSMobileRight;
     private String mMobile;
     private String mUniqueSign;
+    private String mMember_id;
 
     /**
      * 设置布局id
@@ -193,12 +198,18 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
         String mobile = met_mobile.getText().toString().trim();
         //如果手机号不正确，不允许执行下一步
-        if (isEmpty(mobile) || (!isEmpty(mobile) && mobile.length() != 11) || !iSMobileRight){
-            iSMobileRight(false);
-            if (mFlag != RegisterAndBindingAct.FLAG_LOGIN)mbtn_login.setEnabled(false);
+        if (mFlag != RegisterAndBindingAct.FLAG_BIND_ID){
+            if (isEmpty(mobile) || (!isEmpty(mobile) && mobile.length() != 11) || !iSMobileRight){
+                iSMobileRight(false);
+                if (mFlag != RegisterAndBindingAct.FLAG_LOGIN)mbtn_login.setEnabled(false);
+            }
         }
+
         if (s.length()>=4 && mPresenter != null){
             String picCode = met_pic_code.getText().toString().trim();
+            if (isEmpty(mobile)){
+                mobile = mMobile;
+            }
             mPresenter.sendSmsCode(mobile, picCode);
         }
     }
@@ -213,13 +224,26 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         mFlag = arguments.getInt("flag");
         mMobile = arguments.getString("mobile");
         mUniqueSign = arguments.getString("unique_sign");
+        mMember_id = arguments.getString("member_id");
         showStatus(mFlag);
+
+
+        //如果有推荐人，直接填写推荐人
+        String member_id = SharedPrefUtil.getSharedPrfString("share_code", "");
+        if (!isEmpty(member_id)){
+            met_id.setText(member_id);
+            met_id.setEnabled(false);
+            setEdittextFocusable(true,met_mobile);
+            mtv_select_id.setText("查看导购专员");
+        }
+
         mPresenter = new RegisterAndBindPresenter(baseActivity, this);
     }
 
-    public void resetPage(int mFlag,String mobile,String unique_sign) {
+    public void resetPage(int mFlag, String mobile, String unique_sign, String member_id) {
         this.mMobile = mobile;
         this.mUniqueSign = unique_sign;
+        this.mMember_id = member_id;
         //LogUtil.zhLogW(this.mFlag+"====<>========"+mFlag);
         if (this.mFlag != mFlag){
             miv_tip.setVisibility(View.INVISIBLE);
@@ -268,12 +292,17 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     public void getRecommenderId(String id){
         this.mRecommenderId = id;
         met_id.setText(id);
+        isRefereesIdRight = true;
         setEdittextFocusable(true, met_mobile);
     }
 
     @OnClick(R.id.mtv_select_id)
     public void selectId() {
-        SelectRecommendAct.startAct(baseActivity);
+        if ("查看导购专员".equals(mtv_select_id.getText())){
+            SelectRecommendAct.startAct(baseActivity,met_id.getText().toString().trim(),true);
+        }else {
+            SelectRecommendAct.startAct(baseActivity,"",false);
+        }
     }
 
     @OnClick(R.id.miv_pic_code)
@@ -289,7 +318,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         String mobile = met_mobile.getText().toString().trim();
         String picCode = met_pic_code.getText().toString().trim();
         ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
-                null,false);
+                null,mMember_id,mFlag);
     }
 
     private void runAnimation(String text,int subject,EditText view) {
@@ -391,28 +420,37 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         if (isEmpty(message) && mPresenter != null){
             resetCode();
         }
+        String refereesId = met_id.getText().toString().trim();
+        String mobile = met_mobile.getText().toString().trim();
+        String picCode = met_pic_code.getText().toString().trim();
+
         if (!isEmpty(message)){
             Common.staticToast(message);
             Common.hideKeyboard(met_pic_code);
-            if (mFlag == RegisterAndBindingAct.FLAG_LOGIN) {//登录
+            if (mFlag == RegisterAndBindingAct.FLAG_LOGIN) {
+                //登录
                 mbtn_login.setEnabled(true);
-            }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){//注册
-                String refereesId = met_id.getText().toString().trim();
-                String mobile = met_mobile.getText().toString().trim();
-                String picCode = met_pic_code.getText().toString().trim();
+
+            }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
+                //注册
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mobile,picCode,
-                        null,true);
-            }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE_ID){//绑定
-                String refereesId = met_id.getText().toString().trim();
-                String mobile = met_mobile.getText().toString().trim();
-                String picCode = met_pic_code.getText().toString().trim();
+                        "",mMember_id,mFlag);
+
+            }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE_ID){
+                //绑定
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mobile,picCode,
-                        mUniqueSign,false);
-            }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE){//绑定手机
-                String mobile = met_mobile.getText().toString().trim();
-                String picCode = met_pic_code.getText().toString().trim();
-                ((RegisterAndBindingAct)baseActivity).twoFrag(null,mobile,picCode,
-                        mUniqueSign,false);
+                        mUniqueSign,mMember_id,mFlag);
+
+            }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE){
+                //绑定手机
+                ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
+                        mUniqueSign,mMember_id,mFlag);
+
+            }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_ID){
+                //绑定id
+                ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mMobile,picCode,
+                        mUniqueSign,mMember_id,mFlag);
+
             }
         }
     }

@@ -44,7 +44,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="5dp"
-            android:text="随机导购员"
+            android:text="随机导购专员"
             android:textColor="#FF007AFF"
             android:textSize="15sp" />
 

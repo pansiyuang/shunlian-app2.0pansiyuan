@@ -8,10 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -44,10 +42,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     TextView tv_help;
 
     @BindView(R.id.frame_detail)
-    FrameLayout frame_detail;
-
-    @BindView(R.id.sv_mask)
-    ScrollView sv_mask;
+    RelativeLayout frame_detail;
 
     @BindView(R.id.ll_detail_content)
     LinearLayout ll_detail_content;
@@ -58,8 +53,8 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     @BindView(R.id.tv_select)
     MyTextView tv_select;
 
-    @BindView(R.id.tv_notSelect)
-    MyTextView tv_notSelect;
+    @BindView(R.id.miv_cancale)
+    MyImageView miv_cancale;
 
     @BindView(R.id.mtv_label)
     MyTextView mtv_label;
@@ -91,10 +86,13 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     private SelectRecommendPresenter presenter;
     private SimpleRecyclerAdapter<MemberCodeListEntity.ListBean> simpleRecyclerAdapter;
     private String mHelpUrl;
+    private boolean isFocus;
 
 
-    public static void startAct(Activity context){
+    public static void startAct(Activity context,String id,boolean isFocus){
         Intent intent = new Intent(context,SelectRecommendAct.class);
+        intent.putExtra("id",id);
+        intent.putExtra("isFocus",isFocus);
         context.startActivityForResult(intent,201);
     }
 
@@ -107,7 +105,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     protected void initListener() {
         super.initListener();
         tv_help.setOnClickListener(this);
-        tv_notSelect.setOnClickListener(this);
+        miv_cancale.setOnClickListener(this);
         tv_select.setOnClickListener(this);
         tv_sure.setOnClickListener(this);
         frame_detail.setOnTouchListener((v, event) -> {
@@ -124,8 +122,12 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        tv_select.setWHProportion(530,75);
-        tv_notSelect.setWHProportion(530,75);
+        String id = getIntent().getStringExtra("id");
+        isFocus = getIntent().getBooleanExtra("isFocus", false);
+
+        if (isFocus){
+            tv_select.setVisibility(View.INVISIBLE);
+        }
 
         LinearLayout.LayoutParams iconParams = (LinearLayout.LayoutParams) miv_icon.getLayoutParams();
         int[] ints1 = TransformUtil.countRealWH(this, 200, 200);
@@ -134,13 +136,15 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         miv_icon.setLayoutParams(iconParams);
 
         presenter = new SelectRecommendPresenter(this,this);
+        if (!isEmpty(id)){
+            presenter.codeDetail(id);
+        }
 
         GridLayoutManager manager = new GridLayoutManager(this,3);
         recy_view.setLayoutManager(manager);
     }
 
     private void dialogDetail() {
-        sv_mask.setVisibility(View.VISIBLE);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,1,
                 Animation.RELATIVE_TO_SELF,0);
@@ -164,7 +168,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                sv_mask.setVisibility(View.GONE);
+
                 if (isSelect) {
                     EventBus.getDefault().post(recommenderId);
                     finish();
@@ -190,8 +194,14 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                    H5Act.startAct(this,mHelpUrl,H5Act.MODE_SONIC);
                }
                break;
-           case R.id.tv_notSelect:
-               dialogHidden();
+           case R.id.miv_cancale:
+               if (isFocus){
+                   dialogHidden();
+                   finish();
+               }else {
+                   dialogHidden();
+               }
+
                break;
            case R.id.tv_select:
                isSelect = true;
@@ -266,41 +276,56 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         recy_view.setAdapter(simpleRecyclerAdapter);
 
         simpleRecyclerAdapter.setOnItemClickListener((view, position) -> {
+            if (isFocus)return;
             selelctPosi = position;
 
             MemberCodeListEntity.ListBean listBean = listBeens.get(position);
-            GlideUtils.getInstance()
-                    .loadCircleHeadImage(SelectRecommendAct.this, miv_icon,listBean.avatar);
-            tv_nickname.setText(listBean.nickname);
-
-            nickname = listBean.nickname;
-            recommenderId = listBean.code;
-
-            //等级
-            int memberRole = Integer.parseInt(isEmpty(listBean.member_role)?"0":listBean.member_role);
-            if (memberRole == 1){//店主
-                miv_vip.setImageResource(R.mipmap.img_plus_phb_dianzhu);
-            }else if (memberRole == 2){//主管
-                miv_vip.setImageResource(R.mipmap.img_plus_phb_zhuguan);
-            }else if (memberRole >= 3){//经理
-                miv_vip.setImageResource(R.mipmap.img_plus_phb_jingli);
-            }
-            //推荐人id
-            mtv_id.setText(recommenderId);
-            //等级描述
-            mtv_vip.setText(listBean.member_role_msg);
-            //标签
-            mtv_label.setText(listBean.tag_val);
-            //简介
-            mtv_synopsis.setText(listBean.signature);
-
-            dialogDetail();
+            showDialog(listBean);
         });
+    }
+
+    private void showDialog(MemberCodeListEntity.ListBean listBean) {
+        GlideUtils.getInstance()
+                .loadCircleHeadImage(SelectRecommendAct.this, miv_icon,listBean.avatar);
+        tv_nickname.setText(listBean.nickname);
+
+        nickname = listBean.nickname;
+        recommenderId = listBean.code;
+
+        //等级
+        int memberRole = Integer.parseInt(isEmpty(listBean.member_role)?"0":listBean.member_role);
+        if (memberRole == 1){//店主
+            miv_vip.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+        }else if (memberRole == 2){//主管
+            miv_vip.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+        }else if (memberRole >= 3){//经理
+            miv_vip.setImageResource(R.mipmap.img_plus_phb_jingli);
+        }
+        //推荐人id
+        mtv_id.setText(recommenderId);
+        //等级描述
+        mtv_vip.setText(listBean.member_role_msg);
+        //标签
+        mtv_label.setText(listBean.tag_val);
+        //简介
+        mtv_synopsis.setText(listBean.signature);
+
+        dialogDetail();
     }
 
     @Override
     public void help(String url) {
         mHelpUrl = url;
+    }
+
+    /**
+     * 详情
+     *
+     * @param bean
+     */
+    @Override
+    public void codeInfo(MemberCodeListEntity.ListBean bean) {
+        showDialog(bean);
     }
 
     @Override

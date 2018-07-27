@@ -259,7 +259,7 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
                 onePresenter.getCode();
                 break;
             case R.id.tv_select:
-                SelectRecommendAct.startAct(baseActivity);
+                SelectRecommendAct.startAct(baseActivity,"",false);
                 break;
             case R.id.miv_close:
                 baseActivity.finish();
