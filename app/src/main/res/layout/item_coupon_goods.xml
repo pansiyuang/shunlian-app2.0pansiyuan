@@ -50,7 +50,7 @@
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_storeLevel"
-                android:layout_width="wrap_content"
+                android:layout_width="67dp"
                 android:layout_height="13dp"
                 android:adjustViewBounds="true"
                 android:layout_alignBottom="@+id/miv_storeLogo"

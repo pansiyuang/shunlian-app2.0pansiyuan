@@ -76,7 +76,7 @@ public class UserCouponListPresenter extends BasePresenter<IUserCouponListView> 
 
         adapter.setMoreGoodsListener(position -> {
             StageVoucherGoodsListEntity.GoodsList goodsList = data.goods_list.get(position);
-            CouponGoodsAct.startAct(context,goodsList.store_id,mVoucherId);
+            CouponGoodsAct.startAct(context,mVoucherId,goodsList.store_id);
         });
     }
 }

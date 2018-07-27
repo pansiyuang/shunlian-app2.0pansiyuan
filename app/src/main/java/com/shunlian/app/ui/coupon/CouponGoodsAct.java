@@ -33,7 +33,7 @@ public class CouponGoodsAct extends BaseActivity implements ICouponGoodsView{
     private LinearLayoutManager manager;
 
 
-    public static void startAct(Context context,String store_id,String voucher_id){
+    public static void startAct(Context context,String voucher_id,String store_id){
         Intent intent = new Intent(context,CouponGoodsAct.class);
         intent.putExtra("store_id",store_id);
         intent.putExtra("voucher_id",voucher_id);
