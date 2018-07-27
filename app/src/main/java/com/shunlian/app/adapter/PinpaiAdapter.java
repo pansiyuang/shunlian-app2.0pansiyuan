@@ -1,10 +1,12 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CorePingEntity;
@@ -12,9 +14,11 @@ import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DayNoBlackDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -86,6 +90,9 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
         @BindView(R.id.miv_share)
         MyImageView miv_share;
 
+        @BindView(R.id.mrlayout_root)
+        MyRelativeLayout mrlayout_root;
+
         @BindView(R.id.downTime_firsts)
         DayNoBlackDownTimerView downTime_firsts;
 
@@ -94,6 +101,10 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
         public ActivityMoreHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth*158 /340);
+            params.setMargins(TransformUtil.dip2px(context, 10),TransformUtil.dip2px(context, 15),TransformUtil.dip2px(context, 10),0);
+            mrlayout_root.setLayoutParams(params);
             downTime_firsts.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {

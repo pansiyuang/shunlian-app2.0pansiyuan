@@ -14,7 +14,6 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.CustomViewPager;
 import com.shunlian.app.widget.MyImageView;
 
@@ -73,14 +72,14 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
     private MessageCountManager messageCountManager;
     private MessageListFragment messageListFragment;
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.act_message;
-    }
-
     public static void startAct(Context context) {
         Intent intent = new Intent(context, MessageActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.act_message;
     }
 
     @Override
@@ -207,21 +206,25 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        sysCount = messageCountEntity.sys_msg;
-        storeCount = messageCountEntity.store_msg;
+        try {
+            sysCount = messageCountEntity.sys_msg;
+            storeCount = messageCountEntity.store_msg;
 
-        if (isEmpty(Common.formatBadgeNumber(sysCount))) {
-            tv_sys_count.setVisibility(View.GONE);
-        } else {
-            tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
-            tv_sys_count.setVisibility(View.VISIBLE);
-        }
+            if (isEmpty(Common.formatBadgeNumber(sysCount))) {
+                tv_sys_count.setVisibility(View.GONE);
+            } else {
+                tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
+                tv_sys_count.setVisibility(View.VISIBLE);
+            }
 
-        if (isEmpty(Common.formatBadgeNumber(storeCount))) {
-            tv_store_count.setVisibility(View.GONE);
-        } else {
-            tv_store_count.setText(Common.formatBadgeNumber(storeCount));
-            tv_store_count.setVisibility(View.VISIBLE);
+            if (isEmpty(Common.formatBadgeNumber(storeCount))) {
+                tv_store_count.setVisibility(View.GONE);
+            } else {
+                tv_store_count.setText(Common.formatBadgeNumber(storeCount));
+                tv_store_count.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

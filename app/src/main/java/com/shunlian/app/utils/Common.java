@@ -771,6 +771,8 @@ public class Common {
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
+        if (TextUtils.isEmpty(changeStr))
+            return ssb;
         int i = source.indexOf(changeStr);
         if (i == -1) {
             return ssb;

@@ -220,11 +220,9 @@ public class BitmapUtil {
                 if (params != null) {
                     miv_pic.setScaleType(ImageView.ScaleType.FIT_XY);
                     param = new LinearLayout.LayoutParams(TransformUtil.dip2px(activity, params[0]), TransformUtil.dip2px(activity, params[1]));
-                    miv_pic.setAdjustViewBounds(false);
                 } else {
-                    param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    miv_pic.setMaxHeight(TransformUtil.dip2px(activity, 192));
-                    miv_pic.setAdjustViewBounds(true);
+                    param = new LinearLayout.LayoutParams(TransformUtil.dip2px(activity, 188),TransformUtil.dip2px(activity, 188) );
+                    miv_pic.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 }
                 param.setMargins(TransformUtil.dip2px(activity, left), TransformUtil.dip2px(activity, top), TransformUtil.dip2px(activity, right), TransformUtil.dip2px(activity, bottom));
                 miv_pic.setLayoutParams(param);
