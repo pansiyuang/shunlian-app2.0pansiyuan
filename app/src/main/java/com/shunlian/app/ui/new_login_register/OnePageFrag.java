@@ -227,6 +227,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         mMember_id = arguments.getString("member_id");
         showStatus(mFlag);
 
+        mPresenter = new RegisterAndBindPresenter(baseActivity, this);
 
         //如果有推荐人，直接填写推荐人
         String member_id = SharedPrefUtil.getSharedPrfString("share_code", "");
@@ -238,8 +239,6 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             if (mPresenter != null)
                 mPresenter.checkRefereesId(member_id);
         }
-
-        mPresenter = new RegisterAndBindPresenter(baseActivity, this);
     }
 
     public void resetPage(int mFlag, String mobile, String unique_sign, String member_id) {
