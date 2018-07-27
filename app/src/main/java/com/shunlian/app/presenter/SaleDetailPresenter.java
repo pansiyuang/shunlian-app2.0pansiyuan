@@ -73,6 +73,7 @@ public class SaleDetailPresenter extends BasePresenter<ISaleDetailView> {
         allPage = 1;
         dataItems.clear();
         paging(true);
+
     }
 
     private void paging(boolean isShow) {
@@ -95,14 +96,15 @@ public class SaleDetailPresenter extends BasePresenter<ISaleDetailView> {
                 SaleDetailEntity.Page pager = data.pager;
                 currentPage = Integer.parseInt(pager.page);
                 allPage = Integer.parseInt(pager.total_page);
-                dataItems.addAll(data.list);
                 if (currentPage == 1){
+                    dataItems.clear();
                     if (mType == SaleDetailAct.REWARD_DETAIL){
                         iView.setTotalSale_Profit(null,data.total);
                     }else {
                         iView.setTotalSale_Profit(data.total_sales_info, data.total_profit_info);
                     }
                 }
+                dataItems.addAll(data.list);
                 setData();
                 currentPage++;
             }

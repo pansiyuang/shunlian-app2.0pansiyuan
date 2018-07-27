@@ -673,13 +673,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         mHolder.mtv_marketPrice,
                         mHolder.mrlayout_special_preBgL,
                         mHolder.mrlayout_special_preBgR);
-
+                //活动未开始，没有上传宣传图不显示
                 if (!isEmpty(common_activity.detail_pic)) {
-                    visible(mHolder.miv_special_pic);
+                    visible(mHolder.miv_special_pic,mHolder.mllayout_specail_act);
                     GlideUtils.getInstance().veryLongPicLoadImage(context,
                             mHolder.miv_special_pic, common_activity.detail_pic);
                 }else {
-                    gone(mHolder.miv_special_pic);
+                    gone(mHolder.miv_special_pic,mHolder.mllayout_specail_act);
                 }
 
                 mHolder.mtv_special_before_original_price.setStrikethrough()
@@ -738,7 +738,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }else {//活动开始
                 visible(
                         mHolder.mrlayout_special_preBgL,
-                        mHolder.mrlayout_special_preBgR);
+                        mHolder.mrlayout_special_preBgR,
+                        mHolder.mllayout_specail_act);
 
                 gone(
                         mHolder.miv_special_pic,
