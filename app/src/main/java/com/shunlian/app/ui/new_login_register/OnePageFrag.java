@@ -235,6 +235,8 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             met_id.setEnabled(false);
             setEdittextFocusable(true,met_mobile);
             mtv_select_id.setText("查看导购专员");
+            if (mPresenter != null)
+                mPresenter.checkRefereesId(member_id);
         }
 
         mPresenter = new RegisterAndBindPresenter(baseActivity, this);
