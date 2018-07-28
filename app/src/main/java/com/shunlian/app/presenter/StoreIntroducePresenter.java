@@ -139,7 +139,7 @@ public class StoreIntroducePresenter extends BasePresenter<StoreIntroduceView> {
         sortAndMD5(map);
 
         Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getUserId(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
