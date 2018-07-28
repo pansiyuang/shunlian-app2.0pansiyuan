@@ -12,7 +12,9 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,6 +96,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     @BindView(R.id.refreshview)
     SlRefreshView refreshview;
 
+    @BindView(R.id.ll_rootView)
+    LinearLayout ll_rootView;
+
     public static final int OPEN_ALBUM = 1;
     public static final int OPEN_CAMERA = 2;
     public static final int SELECT_GOODS = 3;
@@ -151,9 +156,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     protected void initData() {
         immersionBar.statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
-                .keyboardEnable(true).init();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);//SOFT_INPUT_ADJUST_NOTHING
-
+                .keyboardEnable(true)
+                .init();
         currentChatMember = (ChatMemberEntity.ChatMember) getIntent().getSerializableExtra("chatMember");
         mGoodsDeatilEntity = getIntent().getParcelableExtra("goods");
 
@@ -195,6 +199,13 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             @Override
             public void onLoadMore() {
 
+            }
+        });
+        ll_rootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            int heightDiff = ll_rootView.getRootView().getHeight() - ll_rootView.getHeight();
+            if (heightDiff > 100) { //高度变小100像素则认为键盘弹出
+                LogUtil.httpLogW("键盘弹出");
+                recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
             }
         });
         super.initListener();
