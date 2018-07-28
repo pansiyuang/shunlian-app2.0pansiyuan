@@ -144,7 +144,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     protected int getLayoutId() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return R.layout.activity_chat;
     }
 
@@ -153,6 +152,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         immersionBar.statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true).init();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);//SOFT_INPUT_ADJUST_NOTHING
 
         currentChatMember = (ChatMemberEntity.ChatMember) getIntent().getSerializableExtra("chatMember");
         mGoodsDeatilEntity = getIntent().getParcelableExtra("goods");
