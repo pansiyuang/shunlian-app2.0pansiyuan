@@ -103,8 +103,10 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     }
 
     public void resetData() {
-        mPresenter.getSystemMessage();
-        mPresenter.getMessageList(false, "", "");
+        if (mPresenter!=null){
+            mPresenter.getSystemMessage();
+            mPresenter.getMessageList(false, "", "");
+        }
     }
 
     public void initSystemMsg() {

@@ -239,9 +239,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             }
 
 
-            final List<String> pics = data.pics;
-            BitmapUtil.discoverImg(mHolder.miv_pic,mHolder.recy_view,null,pics
-                    ,(Activity) context,0,0,0,16,0,20,10,10);
+            BitmapUtil.discoverImg(mHolder.miv_pic,mHolder.recy_view,null,data.pics
+                    ,(Activity) context,0,0,0,8,0,0,10,10);
 //            if (isEmpty(pics)){
 //                gone(mHolder.recy_view,mHolder.miv_pic);
 //            }else {
@@ -271,9 +270,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
 //                }
 //            }
 
-            final List<String> append_pics = data.append_pics;
-            BitmapUtil.discoverImg(mHolder.miv_pic1,mHolder.recy_view1,null,append_pics
-                    ,(Activity) context,0,0,0,16,0,20,10,10);
+            BitmapUtil.discoverImg(mHolder.miv_pic1,mHolder.recy_view1,null,data.append_pics
+                    ,(Activity) context,0,0,0,8,0,0,10,10);
 //            if (isEmpty(append_pics)){
 //                gone(mHolder.recy_view1,mHolder.miv_pic1);
 //            }else {

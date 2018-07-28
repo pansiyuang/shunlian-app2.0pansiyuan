@@ -210,7 +210,7 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total) {
         if (couponsAdapter == null) {
-            couponsAdapter = new CouponsAdapter(getBaseContext(), true, mData, pGetCoupon);
+            couponsAdapter = new CouponsAdapter(this, true, mData, pGetCoupon);
             linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
             rv_dianpu.setLayoutManager(linearLayoutManager);
             rv_dianpu.setAdapter(couponsAdapter);

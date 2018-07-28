@@ -38,6 +38,7 @@ public class UserCouponListAct extends BaseActivity implements IUserCouponListVi
     public static void startAct(Context context,String id){
         Intent intent = new Intent(context,UserCouponListAct.class);
         intent.putExtra("voucher_id",id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

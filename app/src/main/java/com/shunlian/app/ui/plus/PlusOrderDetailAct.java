@@ -244,8 +244,10 @@ public class PlusOrderDetailAct extends BaseActivity implements View.OnClickList
 //            downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
 //                @Override
 //                public void onFinish() {
-//                    downTime_order.cancelDownTimer();
-//                    orderDetailPresenter.initApiData();
+//                    if (downTime_order!=null&&orderDetailPresenter!=null){
+//                        downTime_order.cancelDownTimer();
+//                        orderDetailPresenter.initApiData();
+//                    }
 //                }
 //
 //            });

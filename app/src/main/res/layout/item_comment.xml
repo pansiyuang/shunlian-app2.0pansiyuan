@@ -79,7 +79,6 @@
             android:layout_width="113dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:adjustViewBounds="true"
             android:visibility="gone"/>
 
         <android.support.v7.widget.RecyclerView
@@ -115,7 +114,6 @@
             android:layout_width="113dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:adjustViewBounds="true"
             android:visibility="gone"/>
 
         <android.support.v7.widget.RecyclerView

@@ -15,6 +15,7 @@ import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
