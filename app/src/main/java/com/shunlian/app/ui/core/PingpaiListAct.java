@@ -331,6 +331,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
             downTime_firsts.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
+                    if (downTime_firsts!=null)
                     downTime_firsts.cancelDownTimer();
                 }
 

@@ -48,16 +48,18 @@ public class CouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MD
         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.denomination +" "+data.use_condition
                 , data.denomination, 21);
         mHolder.mtv_price.setText(spannableStringBuilder);
-        switch (data.new_or_old){
-            case "1":
-                mHolder.miv_tag.setImageResource(R.mipmap.img_zuixin);
-                break;
-            case "-1":
-                mHolder.miv_tag.setImageResource(R.mipmap.img_xiajia);
-                break;
-            default:
-                mHolder.miv_tag.setImageResource(0);
-                break;
+        if (!isEmpty(data.new_or_old)){
+            switch (data.new_or_old){
+                case "1":
+                    mHolder.miv_tag.setImageResource(R.mipmap.img_zuixin);
+                    break;
+                case "-1":
+                    mHolder.miv_tag.setImageResource(R.mipmap.img_xiajia);
+                    break;
+                default:
+                    mHolder.miv_tag.setImageResource(0);
+                    break;
+            }
         }
         if ("0".equals(data.if_get)) {
             mHolder.mtv_yiqiang.setText(getString(R.string.first_yiqiang) + data.already_get + "%");
