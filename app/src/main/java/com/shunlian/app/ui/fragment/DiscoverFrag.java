@@ -225,9 +225,9 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             jingXuanFrag();
         }
         miv_empty.setFocusable(false);
-//        MainActivity mainActivity = (MainActivity) getActivity();
-//        if (mainActivity!=null)
-//        initMessage(mainActivity.data);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity!=null)
+        initMessage(mainActivity.data);
     }
 
     @Override
