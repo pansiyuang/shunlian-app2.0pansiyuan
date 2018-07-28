@@ -603,6 +603,7 @@
         <activity
             android:name=".newchat.ui.ChatActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustUnspecified"
             android:screenOrientation="portrait" />
 
         <activity

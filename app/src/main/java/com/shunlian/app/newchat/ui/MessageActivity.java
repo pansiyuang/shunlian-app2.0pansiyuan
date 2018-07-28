@@ -14,6 +14,7 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.CustomViewPager;
 import com.shunlian.app.widget.MyImageView;
 
@@ -72,14 +73,14 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
     private MessageCountManager messageCountManager;
     private MessageListFragment messageListFragment;
 
-    public static void startAct(Context context) {
-        Intent intent = new Intent(context, MessageActivity.class);
-        context.startActivity(intent);
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.act_message;
+    }
+
+    public static void startAct(Context context) {
+        Intent intent = new Intent(context, MessageActivity.class);
+        context.startActivity(intent);
     }
 
     @Override
@@ -121,6 +122,12 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         messageCountManager.upDateMessageCount();
         messageListFragment.resetData();
         super.onRestart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        messageCountManager.cancleRequest();
+        super.onDestroy();
     }
 
     private void SysClick() {
@@ -206,10 +213,9 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        sysCount = messageCountEntity.sys_msg;
+        storeCount = messageCountEntity.store_msg;
         try {
-            sysCount = messageCountEntity.sys_msg;
-            storeCount = messageCountEntity.store_msg;
-
             if (isEmpty(Common.formatBadgeNumber(sysCount))) {
                 tv_sys_count.setVisibility(View.GONE);
             } else {

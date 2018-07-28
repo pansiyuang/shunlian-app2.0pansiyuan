@@ -10,10 +10,4 @@
         android:id="@+id/customVideoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <com.shunlian.app.utils.QuickActions
-        android:id="@+id/quick_actions"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
 </RelativeLayout>
