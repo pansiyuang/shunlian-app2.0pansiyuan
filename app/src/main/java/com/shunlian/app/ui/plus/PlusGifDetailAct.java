@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -14,9 +13,7 @@ import com.shunlian.app.bean.ProductDetailEntity;
 import com.shunlian.app.presenter.GifDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.PLUSConfirmOrderAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IGifDetailView;
 import com.shunlian.app.widget.ParamDialog;
@@ -128,7 +125,7 @@ public class PlusGifDetailAct extends BaseActivity implements IGifDetailView, Pa
     @Override
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
         if (!Common.isAlreadyLogin()) {
-            LoginAct.startAct(this);
+            Common.goGoGo(this,"login");
             return;
         }
         if (promptDialog == null) {

@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.eventbus_bean.SelectMemberID;
 import com.shunlian.app.presenter.RegisterAndBindPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.SelectRecommendAct;
@@ -73,10 +74,12 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     MyTextView mtv_select_id;
 
     private RegisterAndBindPresenter mPresenter;
+    private final String visity_specialist = "查看导购专员";
     private boolean isRuning1 = false;
     private boolean isRuning2 = false;
     private boolean isRuning3 = false;
     private String mRecommenderId;//推荐人id
+    private String mSelectMember_id;//选择导购员的member_id
     private int mFlag;
     private boolean isRefereesIdRight;
     private boolean iSMobileRight;
@@ -105,6 +108,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                 isRuning1 = true;
                 runAnimation("导购员ID",R.id.rlayout_id,met_id);
             }
+            setEdittextFocusable(true,met_id);
             return false;
         });
 
@@ -235,7 +239,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             met_id.setText(member_id);
             met_id.setEnabled(false);
             setEdittextFocusable(true,met_mobile);
-            mtv_select_id.setText("查看导购专员");
+            mtv_select_id.setText(visity_specialist);
             if (mPresenter != null)
                 mPresenter.checkRefereesId(member_id);
         }
@@ -290,19 +294,20 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getRecommenderId(String id){
-        this.mRecommenderId = id;
-        met_id.setText(id);
+    public void getRecommenderId(SelectMemberID memberID){
+        this.mRecommenderId = memberID.code;
+        this.mSelectMember_id = memberID.member_id;
+        met_id.setText(mRecommenderId);
         isRefereesIdRight = true;
         setEdittextFocusable(true, met_mobile);
     }
 
     @OnClick(R.id.mtv_select_id)
     public void selectId() {
-        if ("查看导购专员".equals(mtv_select_id.getText())){
+        if (visity_specialist.equals(mtv_select_id.getText())){
             SelectRecommendAct.startAct(baseActivity,met_id.getText().toString().trim(),true);
         }else {
-            SelectRecommendAct.startAct(baseActivity,"",false);
+            SelectRecommendAct.startAct(baseActivity,mSelectMember_id,false);
         }
     }
 

@@ -20,8 +20,11 @@ import retrofit2.Call;
 public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView> {
 
 
-    public SelectRecommendPresenter(Context context, ISelectRecommendView iView) {
+    private String member_id;
+
+    public SelectRecommendPresenter(Context context, ISelectRecommendView iView, String member_id) {
         super(context, iView);
+        this.member_id = member_id;
         initApi();
     }
 
@@ -30,6 +33,8 @@ public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView
         Map<String,String> map = new HashMap<>();
         map.put("page","1");
         map.put("pageSize","9");
+        if (!isEmpty(member_id))
+        map.put("member_id",member_id);
         sortAndMD5(map);
 
         Call<BaseEntity<MemberCodeListEntity>> baseEntityCall = getApiService().memberCodeList(map);

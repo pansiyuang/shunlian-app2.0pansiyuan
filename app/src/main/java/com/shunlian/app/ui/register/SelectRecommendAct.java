@@ -16,6 +16,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.MemberCodeListEntity;
+import com.shunlian.app.eventbus_bean.SelectMemberID;
 import com.shunlian.app.presenter.SelectRecommendPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
@@ -79,6 +80,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     TextView mtv_synopsis;
 
     private String recommenderId;
+    private String member_id;
     private String nickname;
     private boolean isSelect;//是否选择
     private int selelctPosi = -1;//当前选择的条目
@@ -87,6 +89,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     private SimpleRecyclerAdapter<MemberCodeListEntity.ListBean> simpleRecyclerAdapter;
     private String mHelpUrl;
     private boolean isFocus;
+    private String id;
 
 
     public static void startAct(Activity context,String id,boolean isFocus){
@@ -122,7 +125,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        String id = getIntent().getStringExtra("id");
+        id = getIntent().getStringExtra("id");
         isFocus = getIntent().getBooleanExtra("isFocus", false);
 
         if (isFocus){
@@ -135,8 +138,8 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         iconParams.height = ints1[1];
         miv_icon.setLayoutParams(iconParams);
 
-        presenter = new SelectRecommendPresenter(this,this);
-        if (!isEmpty(id)){
+        presenter = new SelectRecommendPresenter(this,this, id);
+        if (!isEmpty(id) && isFocus){
             presenter.codeDetail(id);
         }
 
@@ -171,6 +174,10 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
 
                 if (isSelect) {
                     EventBus.getDefault().post(recommenderId);
+                    SelectMemberID memberID = new SelectMemberID();
+                    memberID.code = recommenderId;
+                    memberID.member_id = member_id;
+                    EventBus.getDefault().post(memberID);
                     finish();
                     isSelect = false;
                 }
@@ -262,6 +269,12 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                     gone(miv_select);
                 }
 
+                if (s.member_id.equals(id)){
+                    visible(miv_select);
+                }else {
+                    gone(miv_select);
+                }
+
                 MyImageView miv_large_vip = holder.getView(R.id.miv_large_vip);
                 int memberRole = Integer.parseInt(isEmpty(s.member_role)?"0":s.member_role);
                 if (memberRole == 1){//店主
@@ -291,6 +304,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
 
         nickname = listBean.nickname;
         recommenderId = listBean.code;
+        member_id = listBean.member_id;
 
         //等级
         int memberRole = Integer.parseInt(isEmpty(listBean.member_role)?"0":listBean.member_role);

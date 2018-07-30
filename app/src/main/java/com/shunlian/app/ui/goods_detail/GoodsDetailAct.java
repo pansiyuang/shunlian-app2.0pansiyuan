@@ -40,7 +40,6 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -670,7 +669,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         switch (v.getId()){
             case R.id.mtv_add_car:
                 if (!Common.isAlreadyLogin()){
-                    LoginAct.startAct(this);
+                    Common.goGoGo(this,"login");
                     return;
                 }
                 isAddcart = true;
@@ -720,7 +719,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
             case R.id.mtv_buy_immediately:
                 if (!Common.isAlreadyLogin()){
-                    LoginAct.startAct(this);
+                    Common.goGoGo(this,"login");
                     return;
                 }
                 String buyText = mtv_buy_immediately.getText().toString();

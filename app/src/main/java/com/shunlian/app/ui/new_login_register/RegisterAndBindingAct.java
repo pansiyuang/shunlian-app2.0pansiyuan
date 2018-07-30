@@ -104,7 +104,9 @@ public class RegisterAndBindingAct extends BaseActivity {
         mMember_id = getIntent().getStringExtra("member_id");
 
         mFragmentManager = getSupportFragmentManager();
-        visible(mtv_register);
+        if (mFlag == FLAG_LOGIN) {
+            visible(mtv_register);
+        }
         oneFrag();
     }
 

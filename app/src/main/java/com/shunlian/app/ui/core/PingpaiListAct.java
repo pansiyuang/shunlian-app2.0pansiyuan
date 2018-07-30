@@ -20,7 +20,6 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PPingList;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
@@ -182,7 +181,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.miv_share:
                 if (!Common.isAlreadyLogin()) {
-                    LoginAct.startAct(this);
+                    Common.goGoGo(this,"login");
                     return;
                 }
 

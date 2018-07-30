@@ -232,15 +232,16 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
         map.put("mobile_code",mobile_code);
         sortAndMD5(map);
 
-        Call<BaseEntity<String>>
+        Call<BaseEntity<LoginFinishEntity>>
                 baseEntityCall = getAddCookieApiService().bindShareid(getRequestBody(map));
 
         getNetData(true,baseEntityCall,
-                new SimpleNetDataCallback<BaseEntity<String>>(){
+                new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<String> entity) {
+            public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
                 super.onSuccess(entity);
                 Common.staticToast(entity.message);
+                iView.loginMobileSuccess(entity.data);
             }
         });
     }

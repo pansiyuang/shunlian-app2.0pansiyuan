@@ -18,7 +18,6 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -184,7 +183,7 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
                         break;
                     case "图文分享":
                         if (!Common.isAlreadyLogin()) {
-                            LoginAct.startAct(VideoPlayActivity.this);
+                            Common.goGoGo(this,"login");
                         } else {
                             isShare = true;
                             readToDownLoad();

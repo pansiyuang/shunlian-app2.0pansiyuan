@@ -2451,7 +2451,7 @@ public interface ApiService {
      * @return
      */
     @POST("member/register/bindShareid")
-    Call<BaseEntity<String>> bindShareid(@Body RequestBody body);
+    Call<BaseEntity<LoginFinishEntity>> bindShareid(@Body RequestBody body);
 
     /**
      * 模拟微信登录
