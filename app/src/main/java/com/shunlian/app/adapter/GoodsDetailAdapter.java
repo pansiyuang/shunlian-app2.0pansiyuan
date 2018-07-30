@@ -599,8 +599,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.mtv_free_shipping.setText(getString(R.string.free_shipping));
             }
             GoodsDeatilEntity.GoodsData goods_data = mGoodsEntity.goods_data;
-            if (goods_data != null)
-                mHolder.mtv_sales.setText(String.format(getString(R.string.sold),goods_data.sales));
+            if (goods_data != null) {
+                mHolder.mtv_sales.setText(String.format(getString(R.string.sold), goods_data.sales));
+                int stock = Integer.parseInt(isEmpty(mGoodsEntity.stock)?"0":mGoodsEntity.stock);
+                if ("0".equals(mGoodsEntity.status) || stock <= 0){//商品下架或者库存为0显示几个人还想要
+                    visible(mHolder.mtv_want);
+                    mHolder.mtv_want.setText(goods_data.want_num+"人还想要");
+                }else {
+                    gone(mHolder.mtv_want);
+                }
+            }
             mHolder.mtv_address.setText(mGoodsEntity.area);
 
             if ("1".equals(mGoodsEntity.is_new)){
@@ -1136,6 +1144,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mtv_plus_prefPrice)
         MyTextView mtv_plus_prefPrice;
+
+        @BindView(R.id.mtv_want)
+        MyTextView mtv_want;
 
         public TitleHolder(View itemView) {
             super(itemView);

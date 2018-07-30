@@ -67,7 +67,6 @@ public class MoreCreditAdapter extends BaseRecyclerAdapter<MoreCreditEntity.List
             GradientDrawable rootGB = (GradientDrawable) mHolder.rlayout_root.getBackground();
             if ("1".equals(listBean.isBuy)) {
                 gone(mHolder.mtv_mask);
-                mHolder.rlayout_root.setEnabled(true);
                 if (position == currentPos) {
                     rootGB.setColor(getColor(R.color.pink_color));
                     mHolder.mtv_price.setTextColor(Color.WHITE);
@@ -82,7 +81,6 @@ public class MoreCreditAdapter extends BaseRecyclerAdapter<MoreCreditEntity.List
                 rootGB.setColor(Color.WHITE);
                 mHolder.mtv_price.setTextColor(getColor(R.color.value_484848));
                 mHolder.mtv_rel_price.setTextColor(getColor(R.color.pink_color));
-                mHolder.rlayout_root.setEnabled(false);
             }
 
         }

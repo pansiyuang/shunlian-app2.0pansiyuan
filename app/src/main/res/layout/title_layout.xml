@@ -410,6 +410,15 @@
             app:tv_margin_left="12"
             android:padding="3dp"
             android:gravity="center"/>
+        <!--还想要-->
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_want"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:textColor="@color/pink_color"
+            android:gravity="right"/>
 
     </com.shunlian.app.widget.MyLinearLayout>
     <!--专题活动显示市场价和活动价-->

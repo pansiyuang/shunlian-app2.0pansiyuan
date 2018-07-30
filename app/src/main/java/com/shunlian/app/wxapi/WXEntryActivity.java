@@ -337,7 +337,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String mobile = wxLoginEntity.mobile;
             String member_id = wxLoginEntity.member_id;
             String status = wxLoginEntity.status;
-            status = "2";
             if ("2".equals(status)) {//绑定手机号不需要推荐人
                 //RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
                 RegisterAndBindingAct.startAct(this,

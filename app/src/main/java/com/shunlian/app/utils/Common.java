@@ -1055,9 +1055,9 @@ public class Common {
     public static void initToast(Context context, String content, String desc, int imgSource) {
         if (toasts == null) {
             View v = LayoutInflater.from(context).inflate(R.layout.toasts, null);
-            mtv_toasts = (MyTextView) v.findViewById(R.id.mtv_toasts);
-            mtv_desc = (MyTextView) v.findViewById(R.id.mtv_desc);
-            miv_logo = (MyImageView) v.findViewById(R.id.miv_logo);
+            mtv_toasts =  v.findViewById(R.id.mtv_toasts);
+            mtv_desc =  v.findViewById(R.id.mtv_desc);
+            miv_logo =  v.findViewById(R.id.miv_logo);
             toasts = new Toast(context);
 //            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
             toasts.setDuration(Toast.LENGTH_SHORT);
@@ -1065,7 +1065,12 @@ public class Common {
             toasts.setGravity(Gravity.CENTER, 0, 0);
         }
         mtv_toasts.setText(content);
-        miv_logo.setImageResource(imgSource);
+        if (imgSource > 0) {
+            miv_logo.setVisibility(View.VISIBLE);
+            miv_logo.setImageResource(imgSource);
+        }else {
+            miv_logo.setVisibility(View.GONE);
+        }
         if (TextUtils.isEmpty(desc)) {
             mtv_desc.setVisibility(View.GONE);
         } else {

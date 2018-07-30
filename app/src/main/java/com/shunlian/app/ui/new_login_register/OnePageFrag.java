@@ -108,7 +108,6 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                 isRuning1 = true;
                 runAnimation("导购员ID",R.id.rlayout_id,met_id);
             }
-            setEdittextFocusable(true,met_id);
             return false;
         });
 

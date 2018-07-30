@@ -111,8 +111,13 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
                 iView.setAdapter(moreCreditAdapter);
                 moreCreditAdapter.currentPos = -1;
                 moreCreditAdapter.setOnItemClickListener((view, position) -> {
-                    moreCreditAdapter.currentPos = position;
-                    moreCreditAdapter.notifyDataSetChanged();
+                    MoreCreditEntity.ListBean listBean = this.list.get(position);
+                    if ("1".equals(listBean.isBuy)) {
+                        moreCreditAdapter.currentPos = position;
+                        moreCreditAdapter.notifyDataSetChanged();
+                    }else {
+                        Common.staticToasts(context,listBean.message,0);
+                    }
                 });
             }else {
                 moreCreditAdapter.currentPos = -1;

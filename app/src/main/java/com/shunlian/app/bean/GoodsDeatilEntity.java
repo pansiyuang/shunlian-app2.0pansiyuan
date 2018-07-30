@@ -802,6 +802,10 @@ public class GoodsDeatilEntity implements Parcelable {
         public String star_rate;
         //该商品评论数
         public String comments_num;
+        public String want_num;//还想要的数量
+
+        public GoodsData() {
+        }
 
         @Override
         public int describeContents() {
@@ -814,9 +818,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.views);
             dest.writeString(this.star_rate);
             dest.writeString(this.comments_num);
-        }
-
-        public GoodsData() {
+            dest.writeString(this.want_num);
         }
 
         protected GoodsData(Parcel in) {
@@ -824,6 +826,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.views = in.readString();
             this.star_rate = in.readString();
             this.comments_num = in.readString();
+            this.want_num = in.readString();
         }
 
         public static final Creator<GoodsData> CREATOR = new Creator<GoodsData>() {

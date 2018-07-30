@@ -64,6 +64,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     private boolean isClickHead = false;//是否点击头部
     private int praisePosition;//点赞位置
     private ProbablyLikeAdapter mLikeAdapter;
+    private Call<BaseEntity<EmptyEntity>> mGoodsWantCall;
 
     public GoodsDetailPresenter(Context context, IGoodsDetailView iView, String goods_id) {
         super(context, iView);
@@ -80,7 +81,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
         mGoodsDataCall = getSaveCookieApiService().goodsDetail(requestBody);
-        getNetData(0,0,true, mGoodsDataCall,
+        getNetData(0,100,true, mGoodsDataCall,
                 new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
             @Override
             public void onSuccess(BaseEntity<GoodsDeatilEntity> entity) {
@@ -95,7 +96,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     iView.goodsDetailData(data);
                     iView.isFavorite(data.is_fav);
                     iView.goodsOffShelf(data.status);//是否下架
-                    //iView.stockDeficiency(data.status);//是否有库存
+                    iView.stockDeficiency(data.stock);//是否有库存
                     if (!"0".equals(data.status)){//非下架商品
                         GoodsDeatilEntity.TTAct tt_act = data.tt_act;
                         if (tt_act != null){
@@ -461,6 +462,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             mChatIdCall.cancel();
             mChatIdCall = null;
         }
+        if (mGoodsWantCall != null && mGoodsWantCall.isExecuted()){
+            mGoodsWantCall.cancel();
+            mGoodsWantCall = null;
+        }
 
         if (mCommentLists != null){
             mCommentLists.clear();
@@ -643,5 +648,22 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             Common.goGoGo(context, "goods", mayBeBuyGoodsId);
             mayBeBuyGoodsId = null;
         }
+    }
+
+    /**
+     * 还想要
+     */
+    public void goodsWant(){
+        Map<String,String> map = new HashMap<>();
+        map.put("id",goods_id);
+        sortAndMD5(map);
+        mGoodsWantCall = getApiService().goodsWant(map);
+        getNetData(true, mGoodsWantCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(entity.message);
+            }
+        });
     }
 }

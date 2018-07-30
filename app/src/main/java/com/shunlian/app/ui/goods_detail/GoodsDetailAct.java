@@ -220,6 +220,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         miv_is_fav.setOnClickListener(this);
         mllayout_car.setOnClickListener(this);
         mll_chat.setOnClickListener(this);
+        mtv_want.setOnClickListener(this);
     }
 
     @Override
@@ -440,7 +441,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void showFailureView(int rquest_code) {
-        if (goodsDeatilFrag != null)
+        if (goodsDeatilFrag != null && rquest_code == 100)
             goodsDeatilFrag.onFailure();
     }
 
@@ -566,17 +567,17 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void goodsOffShelf(String status) {
         if ("0".equals(status)){//下架
-            visible(mtv_off_shelf/*,mtv_want*/);
-            //gone(mtv_add_car,mtv_buy_immediately);
-            mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
+            visible(mtv_off_shelf,mtv_want);
+            gone(mtv_add_car,mtv_buy_immediately);
+            /*mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
             mtv_add_car.setTextColor(getColorResouce(R.color.value_CDA101));
             mtv_add_car.setEnabled(false);
             mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.value_CACACA));
             mtv_buy_immediately.setTextColor(getColorResouce(R.color.value_A0A0A0));
-            mtv_buy_immediately.setEnabled(false);
+            mtv_buy_immediately.setEnabled(false);*/
         }else {
-            gone(mtv_off_shelf);
-            //visible(mtv_add_car,mtv_buy_immediately);
+            gone(mtv_off_shelf,mtv_want);
+            visible(mtv_add_car,mtv_buy_immediately);
             mtv_add_car.setBackgroundColor(getColorResouce(R.color.my_black_one));
             mtv_add_car.setTextColor(getColorResouce(R.color.white));
             mtv_add_car.setEnabled(true);
@@ -751,6 +752,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
             case R.id.mllayout_car:
                 MainActivity.startAct(this,"shoppingcar");
+                break;
+            case R.id.mtv_want:
+                if (goodsDetailPresenter != null)
+                    goodsDetailPresenter.goodsWant();
                 break;
         }
     }

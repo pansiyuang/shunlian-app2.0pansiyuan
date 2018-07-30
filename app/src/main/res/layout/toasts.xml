@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:minWidth="140dp"
     android:layout_height="wrap_content"
     android:minHeight="85dp"
+    android:orientation="vertical"
+    android:gravity="center"
     android:background="@drawable/shape_toasts"
     android:paddingBottom="20dp"
     android:paddingLeft="6dp"
@@ -13,17 +15,13 @@
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_logo"
         android:layout_width="38.4dp"
-        android:layout_height="38.4dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_height="38.4dp"/>
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_toasts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/miv_logo"
         android:layout_marginTop="13dp"
-        android:text="sdfsd"
-        android:layout_centerHorizontal="true"
         android:textColor="@color/white"
         android:textSize="16sp" />
 
@@ -31,10 +29,8 @@
         android:id="@+id/mtv_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mtv_toasts"
         android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
         android:textColor="@color/bg_gray_three"
         android:textSize="10sp" />
-</RelativeLayout>
+</LinearLayout>
 

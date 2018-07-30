@@ -2468,4 +2468,12 @@ public interface ApiService {
      */
     @GET("member/register/codeInfo")
     Call<BaseEntity<MemberCodeListEntity.ListBean>> codeInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 我还想要
+     * @param map
+     * @return
+     */
+    @GET("goods/want")
+    Call<BaseEntity<EmptyEntity>> goodsWant(@QueryMap Map<String, String> map);
 }
