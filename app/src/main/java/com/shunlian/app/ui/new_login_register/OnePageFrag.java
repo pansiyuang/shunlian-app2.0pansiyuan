@@ -183,9 +183,12 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                 if (mFlag == RegisterAndBindingAct.FLAG_LOGIN){
                     //登录验证手机号
                     mPresenter.checkMobile(s.toString().trim(),"1");
-                }else {
+                }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
                     //注册验证手机号
                     mPresenter.checkMobile(s.toString().trim(),"0");
+                }else {
+                    //微信登录验证手机号
+                    mPresenter.checkMobile(s.toString().trim(),"2");
                 }
             }
         }
