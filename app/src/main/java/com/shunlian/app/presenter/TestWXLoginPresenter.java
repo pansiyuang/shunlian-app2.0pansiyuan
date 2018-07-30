@@ -20,7 +20,6 @@ import com.shunlian.app.view.IView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -98,13 +97,12 @@ public class TestWXLoginPresenter extends BasePresenter {
         Common.staticToast(entity.message);
 
         //登陆成功啦
-        SharedPrefUtil.saveSharedPrfString("token", wxLoginEntity.token);
-        SharedPrefUtil.saveSharedPrfString("avatar", wxLoginEntity.avatar);
-        SharedPrefUtil.saveSharedPrfString("plus_role", wxLoginEntity.plus_role);
-        SharedPrefUtil.saveSharedPrfString("refresh_token", wxLoginEntity.refresh_token);
-        SharedPrefUtil.saveSharedPrfString("member_id", wxLoginEntity.member_id);
-        if (wxLoginEntity.tag!=null)
-            SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(wxLoginEntity.tag));
+        SharedPrefUtil.saveSharedUserString("token", wxLoginEntity.token);
+        SharedPrefUtil.saveSharedUserString("avatar", wxLoginEntity.avatar);
+        SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
+        SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
+        SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
+
         JpushUtil.setJPushAlias();
         //通知登录成功
         DefMessageEvent event = new DefMessageEvent();
