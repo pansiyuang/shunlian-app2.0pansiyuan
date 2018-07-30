@@ -178,7 +178,7 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
         onePresenter = new RegisterOnePresenter(baseActivity, this);
 
         //如果有推荐人，直接填写推荐人
-        String member_id = SharedPrefUtil.getSharedPrfString("share_code", "");
+        String member_id = SharedPrefUtil.getSharedUserString("share_code", "");
         if (!isEmpty(member_id)){
             et_id.setText(member_id);
         }

@@ -62,7 +62,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -467,7 +466,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         });
         addCookie();
         mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
-                .getSharedPrfString("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
+                .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
     }
 
     @Override
@@ -488,16 +487,16 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             beforeUrl=h5Url;
         } else if (isSecond) {
             addCookie();
-            if (!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", "")))
+            if (!member_id.equals(SharedPrefUtil.getSharedUserString("member_id", "")))
             mwv_h5.reload();
         }
-        member_id=SharedPrefUtil.getSharedPrfString("member_id", "");
+        member_id=SharedPrefUtil.getSharedUserString("member_id", "");
     }
 
     public void addCookie() {
         //add
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
-        String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 4.0.0/1.0.0");
+        String token = SharedPrefUtil.getSharedUserString("token", "");
+        String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
 
 
         CookieSyncManager.createInstance(activity);

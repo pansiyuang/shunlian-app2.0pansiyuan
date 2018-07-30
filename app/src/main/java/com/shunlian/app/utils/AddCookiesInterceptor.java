@@ -35,8 +35,8 @@ public class AddCookiesInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         final Request.Builder builder = chain.request().newBuilder();
-        String cookie = SharedPrefUtil.getSharedPrfString("cookie", "");
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
+        String cookie = SharedPrefUtil.getSharedUserString("cookie", "");
+        String token = SharedPrefUtil.getSharedUserString("token", "");
         //添加cookie
         LogUtil.augusLogW("yxf--oo--"+ cookie);
         builder.addHeader("Cookie", cookie);

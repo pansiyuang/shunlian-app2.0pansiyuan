@@ -134,7 +134,7 @@ public class SettingAct extends BaseActivity implements ISettingView {
 
         presenter = new SettingPresenter(this, this);
 
-        String localVersion = SharedPrefUtil.getSharedPrfString("localVersion", "");
+        String localVersion = SharedPrefUtil.getCacheSharedPrf("localVersion", "");
         mtv_app_version.setText("V" + localVersion);
 
         //计算缓存大小

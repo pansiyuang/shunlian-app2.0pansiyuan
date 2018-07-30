@@ -92,7 +92,7 @@ public class SharedPrefUtil {
      * @param def
      * @return
      */
-    public static String getSharedPrfString(String key,String def){
+    public static String getSharedUserString(String key, String def){
        return getsharedPreferences().getString(key,def);
     }
 
@@ -102,7 +102,7 @@ public class SharedPrefUtil {
      * @param value
      * @return
      */
-    public static boolean saveSharedPrfString(String key,String value){
+    public static boolean saveSharedUserString(String key, String value){
          return getsharedPreferences().edit().putString(key,value).commit();
     }
 
@@ -112,7 +112,7 @@ public class SharedPrefUtil {
      * @param value
      * @return
      */
-    public static boolean saveSharedPrfBoolean(String key, boolean value){
+    public static boolean saveSharedUserBoolean(String key, boolean value){
         return getsharedPreferences().edit().putBoolean(key,value).commit();
     }
 
@@ -122,7 +122,7 @@ public class SharedPrefUtil {
      * @param def
      * @return
      */
-    public static boolean getSharedPrfBoolean(String key, boolean def){
+    public static boolean getSharedUserBoolean(String key, boolean def){
         return getsharedPreferences().getBoolean(key,def);
     }
 
@@ -132,7 +132,7 @@ public class SharedPrefUtil {
      * @param strings
      * @return
      */
-    public static boolean saveSharedPrfStringss(String key,Set<String> strings){
+    public static boolean saveSharedUserStringss(String key, Set<String> strings){
          return getsharedPreferences().edit().putStringSet(key,strings).commit();
     }
 
@@ -143,7 +143,7 @@ public class SharedPrefUtil {
      * @param strings
      * @return
      */
-    public static Set<String> getSharedPrfStringss(String key,Set<String> strings){
+    public static Set<String> getSharedUserStringss(String key, Set<String> strings){
         return getsharedPreferences().getStringSet(key,strings);
     }
     /**

@@ -46,14 +46,14 @@ public class NetworkBroadcast extends BroadcastReceiver {
                 case NetworkUtils.NETWORK_CLASS_3_G:
                 case NetworkUtils.NETWORK_CLASS_2_G:
                     String networkState = SharedPrefUtil
-                            .getSharedPrfString(networkKey, WIFI);
+                            .getCacheSharedPrf(networkKey, WIFI);
                     if (!mobileNetwork.equals(networkState)) {
                         Common.staticToast(networkTip);
-                        SharedPrefUtil.saveSharedPrfString(networkKey,mobileNetwork);
+                        SharedPrefUtil.saveCacheSharedPrf(networkKey,mobileNetwork);
                     }
                     break;
                 case NetworkUtils.NETWORK_WIFI:
-                    SharedPrefUtil.saveSharedPrfString(networkKey,WIFI);
+                    SharedPrefUtil.saveCacheSharedPrf(networkKey,WIFI);
                     break;
             }
             EasyWebsocketClient client = EasyWebsocketClient.getInstance(context);

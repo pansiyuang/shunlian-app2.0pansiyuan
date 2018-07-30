@@ -92,8 +92,8 @@ public class JpushUtil {
 
     public static void setJPushAlias() {
         String member_id;
-        member_id = SharedPrefUtil.getSharedPrfString("member_id", "null");
-        tagss = SharedPrefUtil.getSharedPrfStringss("tags", null);
+        member_id = SharedPrefUtil.getSharedUserString("member_id", "null");
+        tagss = SharedPrefUtil.getSharedUserStringss("tags", null);
         if (tagss!=null)
         LogUtil.augusLogW(tagss.toString());
         //tagss=new HashSet<>();

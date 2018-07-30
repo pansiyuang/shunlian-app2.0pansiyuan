@@ -1508,7 +1508,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
             switch (v.getId()) {
                 case R.id.mtv_collection:
-                    /*if (TextUtils.isEmpty(SharedPrefUtil.getSharedPrfString("token",""))){
+                    /*if (TextUtils.isEmpty(SharedPrefUtil.getSharedUserString("token",""))){
                         Common.staticToast("尚未登录");
                         return;
                     }*/
