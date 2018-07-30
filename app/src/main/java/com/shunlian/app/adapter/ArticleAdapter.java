@@ -117,8 +117,9 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             } else {
                 articleViewHolder.miv_evaluate.setImageResource(R.mipmap.icon_found_zan_h);
             }
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
         }
-        super.onBindViewHolder(holder, position, payloads);
     }
 
     public void handlerItem(RecyclerView.ViewHolder holder, final int position) {
