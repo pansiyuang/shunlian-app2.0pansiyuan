@@ -176,9 +176,11 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 gone(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
                 GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, a.thumb);
-                if (!isEmpty(a.id)) {
-                    ArticleH5Act.startAct(context, a.id, ArticleH5Act.MODE_SONIC);
-                }
+                articleViewHolder.miv_big_icon.setOnClickListener(view -> {
+                    if (!isEmpty(a.id)) {
+                        ArticleH5Act.startAct(context, a.id, ArticleH5Act.MODE_SONIC);
+                    }
+                });
                 break;
             case "2"://九宫格模式
                 gone(articleViewHolder.miv_big_icon);
