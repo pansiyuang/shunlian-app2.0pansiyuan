@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
@@ -27,7 +26,6 @@ import com.shunlian.app.ui.discover.DiscoversFrag;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
 import com.shunlian.app.ui.discover.other.SearchArticleActivity;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -543,7 +541,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 break;
             case R.id.miv_experience_publish:
                 if (!Common.isAlreadyLogin()) {
-                    LoginAct.startAct(getActivity());
+                    Common.goGoGo(baseActivity,"login");
                     return;
                 }
                 ExperiencePublishActivity.startAct(getActivity());

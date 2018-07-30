@@ -8,7 +8,6 @@ import android.widget.Toast;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.service.InterentTools;
-import com.shunlian.app.ui.login.LoginAct;
 
 /**
  * Created by Administrator on 2017/8/3.
@@ -50,7 +49,7 @@ public class SwitchHostUtil {
             Common.clearLoginInfo();
             JpushUtil.setJPushAlias();
             Constant.JPUSH = null;
-            LoginAct.startAct(activity);
+            Common.goGoGo(activity,"login");
             activity.finish();
         });
         builder.show();

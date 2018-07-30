@@ -17,13 +17,11 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
-import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.VideoPlayActivity;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
 import com.shunlian.app.ui.discover.other.CommentListAct;
-import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;

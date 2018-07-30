@@ -239,7 +239,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     /**
      * 详情富文本
-     *
      * @param holder
      * @param position
      */
@@ -258,7 +257,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     /**
      * 商品参数和属性
-     *
      * @param holder
      * @param position
      */
@@ -268,7 +266,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     /**
      * 详情优惠券
-     *
      * @param holder
      * @param position
      */
@@ -293,7 +290,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     /**
      * 店铺信息
-     *
      * @param holder
      * @param position
      */
@@ -363,7 +359,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     /**
      * 评价
-     *
      * @param holder
      * @param position
      */
@@ -433,7 +428,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     /**
      * 活动优惠券
-     *
      * @param holder
      * @param position
      */
@@ -519,8 +513,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     }
 
     /**
+     *
      * @param parent
-     * @param state      0 = 满减   1 = 满折   2 = 买赠
+     * @param state 0 = 满减   1 = 满折   2 = 买赠
      * @param detailList
      */
     private void setActivityInfo(ViewGroup parent, int state,
@@ -565,7 +560,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     /**
      * 商品信息
-     *
      * @param holder
      * @param position
      */
@@ -611,6 +605,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             GoodsDeatilEntity.GoodsData goods_data = mGoodsEntity.goods_data;
             if (goods_data != null)
                 mHolder.mtv_sales.setText(String.format(getString(R.string.sold), goods_data.sales));
+            if (goods_data != null) {
+                mHolder.mtv_sales.setText(String.format(getString(R.string.sold), goods_data.sales));
+                int stock = Integer.parseInt(isEmpty(mGoodsEntity.stock)?"0":mGoodsEntity.stock);
+                if ("0".equals(mGoodsEntity.status) || stock <= 0){//商品下架或者库存为0显示几个人还想要
+                    visible(mHolder.mtv_want);
+                    mHolder.mtv_want.setText(goods_data.want_num+"人还想要");
+                }else {
+                    gone(mHolder.mtv_want);
+                }
+            }
             mHolder.mtv_address.setText(mGoodsEntity.area);
 
             if ("1".equals(mGoodsEntity.is_new)) {
@@ -684,13 +688,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         mHolder.mtv_marketPrice,
                         mHolder.mrlayout_special_preBgL,
                         mHolder.mrlayout_special_preBgR);
-
+                //活动未开始，没有上传宣传图不显示
                 if (!isEmpty(common_activity.detail_pic)) {
-                    visible(mHolder.miv_special_pic);
+                    visible(mHolder.miv_special_pic,mHolder.mllayout_specail_act);
                     GlideUtils.getInstance().veryLongPicLoadImage(context,
                             mHolder.miv_special_pic, common_activity.detail_pic);
-                } else {
-                    gone(mHolder.miv_special_pic);
+                }else {
+                    gone(mHolder.miv_special_pic,mHolder.mllayout_specail_act);
                 }
 
                 mHolder.mtv_special_before_original_price.setStrikethrough()
@@ -749,7 +753,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             } else {//活动开始
                 visible(
                         mHolder.mrlayout_special_preBgL,
-                        mHolder.mrlayout_special_preBgR);
+                        mHolder.mrlayout_special_preBgR,
+                        mHolder.mllayout_specail_act);
 
                 gone(
                         mHolder.miv_special_pic,
@@ -887,7 +892,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     /**
      * 轮播和顶部商品信息
-     *
      * @param holder
      * @param position
      */
@@ -982,7 +986,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     /**
      * 刷新领取优惠券状态
-     *
      * @param voucher
      */
     public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
@@ -1151,6 +1154,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mtv_plus_prefPrice)
         MyTextView mtv_plus_prefPrice;
+
+        @BindView(R.id.mtv_want)
+        MyTextView mtv_want;
 
         public TitleHolder(View itemView) {
             super(itemView);
@@ -1508,7 +1514,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
             switch (v.getId()) {
                 case R.id.mtv_collection:
-                    /*if (TextUtils.isEmpty(SharedPrefUtil.getSharedPrfString("token",""))){
+                    /*if (TextUtils.isEmpty(SharedPrefUtil.getSharedUserString("token",""))){
                         Common.staticToast("尚未登录");
                         return;
                     }*/

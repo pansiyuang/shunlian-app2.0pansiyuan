@@ -467,7 +467,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         });
         addCookie();
         mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
-                .getSharedPrfString("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
+                .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
     }
 
     @Override
@@ -486,16 +486,16 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             beforeUrl = h5Url;
         } else {
             addCookie();
-            if (!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", "")))
+            if (!member_id.equals(SharedPrefUtil.getSharedUserString("member_id", "")))
                 mwv_h5.reload();
         }
-        member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
+        member_id = SharedPrefUtil.getSharedUserString("member_id", "");
     }
 
     public void addCookie() {
         //add
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
-        String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 4.0.0/1.0.0");
+        String token = SharedPrefUtil.getSharedUserString("token", "");
+        String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
 
         CookieSyncManager.createInstance(this);
 //        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);

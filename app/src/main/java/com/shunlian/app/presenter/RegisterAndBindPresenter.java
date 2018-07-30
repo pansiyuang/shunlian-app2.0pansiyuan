@@ -30,7 +30,6 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
 
     public RegisterAndBindPresenter(Context context, IRegisterAndBindView iView) {
         super(context, iView);
-        initApi();
     }
 
     /**
@@ -53,7 +52,7 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
      * 处理网络请求
      */
     @Override
-    protected void initApi() {
+    public void initApi() {
         getCode();
     }
 
@@ -212,6 +211,35 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
             @Override
             public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
                 super.onSuccess(entity);
+                iView.loginMobileSuccess(entity.data);
+            }
+        });
+    }
+
+    /**
+     * 绑定导购员
+     * @param member_id
+     * @param code
+     * @param mobile
+     * @param mobile_code
+     */
+    public void bindShareid(String member_id,String code,String mobile,String mobile_code){
+        Map<String,String> map = new HashMap<>();
+        map.put("member_id",member_id);
+        map.put("code",code);
+        map.put("mobile",mobile);
+        map.put("mobile_code",mobile_code);
+        sortAndMD5(map);
+
+        Call<BaseEntity<LoginFinishEntity>>
+                baseEntityCall = getAddCookieApiService().bindShareid(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,
+                new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(entity.message);
                 iView.loginMobileSuccess(entity.data);
             }
         });

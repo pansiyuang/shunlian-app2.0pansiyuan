@@ -43,7 +43,6 @@ import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.service.ApiService;
 import com.shunlian.app.service.InterentTools;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -281,7 +280,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         switch (code) {
             // TODO: 2017/10/19
             case Code.CODE_NO_LOGIN://未登录
-                String token = SharedPrefUtil.getSharedPrfString("token", "");
+                String token = SharedPrefUtil.getSharedUserString("token", "");
                 if (TextUtils.isEmpty(token)){
                     Common.staticToast(message);
                     goLogin();
@@ -304,8 +303,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     private <T> void refreshToken(Call<BaseEntity<T>> clone, INetDataCallback<BaseEntity<T>> callback,
                                   int emptyCode, int failureCode, boolean isLoading) {
-        String refresh_token = SharedPrefUtil.getSharedPrfString("refresh_token", "");
-        String member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
+        String refresh_token = SharedPrefUtil.getSharedUserString("refresh_token", "");
+        String member_id = SharedPrefUtil.getSharedUserString("member_id", "");
         Map<String,String> map = new HashMap<>();
         map.put("member_id",member_id);
         map.put("refresh_token",refresh_token);
@@ -325,9 +324,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 RefreshTokenEntity data = entity.data;
                 if (data != null) {
                     //LogUtil.zhLogW("刷新token");
-                    SharedPrefUtil.saveSharedPrfString("token", data.token);
-                    SharedPrefUtil.saveSharedPrfString("plus_role", data.plus_role);
-                    SharedPrefUtil.saveSharedPrfString("refresh_token", data.refresh_token);
+                    SharedPrefUtil.saveSharedUserString("token", data.token);
+                    SharedPrefUtil.saveSharedUserString("plus_role", data.plus_role);
+                    SharedPrefUtil.saveSharedUserString("refresh_token", data.refresh_token);
                     getNetData(emptyCode,failureCode,isLoading,clone,callback);
                 }
             }
@@ -351,7 +350,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         JpushUtil.setJPushAlias();
         Constant.JPUSH=null;
         EasyWebsocketClient.getInstance(context).logout();
-        LoginAct.startAct(context);
+        //LoginAct.startAct(context);
+        Common.goGoGo(context,"login");
     }
 
     /**

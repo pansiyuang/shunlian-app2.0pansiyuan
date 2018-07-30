@@ -18,5 +18,6 @@ public class MoreCreditEntity {
         public String face_price;//面值
         public String sale_price;//销售价
         public String isBuy;////是否能购买 1：能   0：不能（界面上需要灰掉）
+        public String message;
     }
 }

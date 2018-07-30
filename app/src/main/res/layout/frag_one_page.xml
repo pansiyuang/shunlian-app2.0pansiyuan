@@ -32,7 +32,7 @@
             style="@style/editText_attribute"
             android:layout_centerVertical="true"
             android:gravity="start|center_vertical"
-            android:hint="请输入导购员ID"
+            android:hint="请输入导购专员ID"
             android:inputType="number"
             android:maxLines="1" />
 
@@ -44,7 +44,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="5dp"
-            android:text="随机导购员"
+            android:text="随机导购专员"
             android:textColor="#FF007AFF"
             android:textSize="15sp" />
 

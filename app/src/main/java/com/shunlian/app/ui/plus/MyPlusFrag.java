@@ -437,7 +437,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         invitationsUrl = baseInfo.invite_strategy;
 
         if (baseInfo.role < 1) {
-            SharedPrefUtil.saveSharedPrfString("plus_role", String.valueOf(baseInfo.role));
+            SharedPrefUtil.saveSharedUserString("plus_role", String.valueOf(baseInfo.role));
             H5Act.startAct(baseActivity, Constant.PLUS_ADD, H5Act.MODE_SONIC);
         }
         if (baseInfo.role >= 2) {  //销售主管及以上身份才显示数据和表格

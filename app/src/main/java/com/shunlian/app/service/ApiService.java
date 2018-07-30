@@ -2444,4 +2444,36 @@ public interface ApiService {
      */
     @GET("voucher/voucherRelatedStore")
     Call<BaseEntity<StageGoodsListEntity>> voucherRelatedStore(@QueryMap Map<String, String> map);
+
+    /**
+     * 绑定导购员id
+     * @param body
+     * @return
+     */
+    @POST("member/register/bindShareid")
+    Call<BaseEntity<LoginFinishEntity>> bindShareid(@Body RequestBody body);
+
+    /**
+     * 模拟微信登录
+     * @param map
+     * @return
+     */
+    @GET("member/oauth/checkTest")
+    Call<BaseEntity<WXLoginEntity>> checkTest(@QueryMap Map<String, String> map);
+
+    /**
+     * 导购员详情
+     * @param map
+     * @return
+     */
+    @GET("member/register/codeInfo")
+    Call<BaseEntity<MemberCodeListEntity.ListBean>> codeInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 我还想要
+     * @param map
+     * @return
+     */
+    @GET("goods/want")
+    Call<BaseEntity<EmptyEntity>> goodsWant(@QueryMap Map<String, String> map);
 }

@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.ui.core.PingpaiAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -116,7 +115,7 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
                 @Override
                 public void onClick(View view) {
                     if (!Common.isAlreadyLogin()) {
-                        LoginAct.startAct(context);
+                        Common.goGoGo(context,"login");
                         return;
                     }
                     ((PingpaiAct)context).share(data.id, data.share);

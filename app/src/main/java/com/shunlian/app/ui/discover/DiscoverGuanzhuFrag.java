@@ -13,7 +13,6 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.GuanzhuPresenter;
 import com.shunlian.app.ui.discover.guanzhu.FindSelectShopAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
@@ -68,7 +67,7 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView {
                 0, 0, getColorResouce(R.color.white_ash)));
         EventBus.getDefault().register(this);//注册
         if (!Common.isAlreadyLogin()) {
-            LoginAct.startAct(baseContext);
+            Common.goGoGo(baseActivity,"login");
         }
 
         //分享
@@ -140,7 +139,7 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView {
                     .setButtonText(getStringResouce(R.string.discover_gofollow))
                     .setOnClickListener((view) -> {
                         if (!Common.isAlreadyLogin()) {
-                            LoginAct.startAct(baseContext);
+                            Common.goGoGo(baseActivity,"login");
                             return;
                         }
                         FindSelectShopAct.startAct(baseActivity);

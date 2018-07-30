@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -19,7 +18,6 @@ import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.HotSearchEntity;
-import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.SearchGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.category.CategoryAct;
@@ -144,9 +142,9 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         }
         if (!isShowHotSearch) {
             save_goods_history = SharedPrefUtil.COLLECTION_GOODS_HISTORY
-                    .concat(SharedPrefUtil.getSharedPrfString("member_id", ""));
+                    .concat(SharedPrefUtil.getSharedUserString("member_id", ""));
             save_shop_history = SharedPrefUtil.COLLECTION_STORE_HISTORY
-                    .concat(SharedPrefUtil.getSharedPrfString("member_id", ""));
+                    .concat(SharedPrefUtil.getSharedUserString("member_id", ""));
             setHistoryAdapter();
         }
 

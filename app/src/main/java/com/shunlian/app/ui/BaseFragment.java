@@ -100,15 +100,15 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
     public Map<String, String> setWebviewHeader(){
         Map<String, String> extraHeaders = new HashMap<String, String>();
-        extraHeaders.put("User-Agent", SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 5.1.1/1.0.0"));
-        extraHeaders.put("X-Device-ID", SharedPrefUtil.getSharedPrfString("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D"));
-        extraHeaders.put("resolution", SharedPrefUtil.getSharedPrfString("resolution", "720x1184"));
-        extraHeaders.put("DeviceIp", SharedPrefUtil.getSharedPrfString("DeviceIp", "192.168.1.1"));
+        extraHeaders.put("User-Agent", SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 5.1.1/1.0.0"));
+        extraHeaders.put("X-Device-ID", SharedPrefUtil.getCacheSharedPrf("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D"));
+        extraHeaders.put("resolution", SharedPrefUtil.getCacheSharedPrf("resolution", "720x1184"));
+        extraHeaders.put("DeviceIp", SharedPrefUtil.getCacheSharedPrf("DeviceIp", "192.168.1.1"));
         extraHeaders.put("Accept-Encoding", "gzip,deflate");
         extraHeaders.put("Content-Type", "application/json");
-        extraHeaders.put("Net-Type", SharedPrefUtil.getSharedPrfString("Net-Type",""));
-        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
-        extraHeaders.put("Token", SharedPrefUtil.getSharedPrfString("token", ""));
+        extraHeaders.put("Net-Type", SharedPrefUtil.getCacheSharedPrf("Net-Type",""));
+        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getCacheSharedPrf("SAFE-TYPE", "ON"));
+        extraHeaders.put("Token", SharedPrefUtil.getSharedUserString("token", ""));
         return extraHeaders;
     }
     /**

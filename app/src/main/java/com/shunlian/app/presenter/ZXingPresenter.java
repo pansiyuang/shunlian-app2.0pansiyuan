@@ -65,7 +65,7 @@ public class ZXingPresenter extends BasePresenter<IZXingView>{
             public void onSuccess(BaseEntity<ScanCodeEntity> entity) {
                 super.onSuccess(entity);
                 ScanCodeEntity data = entity.data;
-                SharedPrefUtil.saveSharedPrfString("share_code", data.share_code);
+                SharedPrefUtil.saveSharedUserString("share_code", data.share_code);
                 ScanCodeEntity.Url mUrl = data.url;
                 if (!isEmpty(mUrl.item_id_list)){
                     String[] temp = new String[mUrl.item_id_list.size()];

@@ -162,7 +162,7 @@ public class NewFeedBackAct extends BaseActivity implements View.OnClickListener
             map.put("goods_id", goodsid);
             map.put("type", type);
             map.put("image", picstr.toString());
-            map.put("app_version", SharedPrefUtil.getSharedPrfString("localVersion", ""));
+            map.put("app_version", SharedPrefUtil.getSharedUserString("localVersion", ""));
             presenter.feedback(map);
         }
     }

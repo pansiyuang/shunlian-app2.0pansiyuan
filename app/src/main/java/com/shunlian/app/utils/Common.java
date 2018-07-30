@@ -81,6 +81,7 @@ import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
+import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.plus.PlusGifDetailAct;
@@ -205,7 +206,7 @@ public class Common {
 
     public static void goGoGo(Context context, String type, String... params) {
         //params从第7个参数开始是聊天的参数
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
+        String token = SharedPrefUtil.getSharedUserString("token", "");
         LogUtil.augusLogW("where---" + type);
         if (type == null) {
             return;
@@ -321,7 +322,8 @@ public class Common {
                 PlusGifDetailAct.startAct(context, params[0]);
                 break;
             case "login":
-                LoginAct.startAct(context);
+                //LoginAct.startAct(context);
+                LoginEntryAct.startAct(context);
                 break;
             case "article":
                 ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);
@@ -867,8 +869,8 @@ public class Common {
      * @return
      */
     public static boolean isAlreadyLogin() {
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
-        String member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
+        String token = SharedPrefUtil.getSharedUserString("token", "");
+        String member_id = SharedPrefUtil.getSharedUserString("member_id", "");
         if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(member_id)) {
             return true;
         }
@@ -1055,9 +1057,9 @@ public class Common {
     public static void initToast(Context context, String content, String desc, int imgSource) {
         if (toasts == null) {
             View v = LayoutInflater.from(context).inflate(R.layout.toasts, null);
-            mtv_toasts = (MyTextView) v.findViewById(R.id.mtv_toasts);
-            mtv_desc = (MyTextView) v.findViewById(R.id.mtv_desc);
-            miv_logo = (MyImageView) v.findViewById(R.id.miv_logo);
+            mtv_toasts =  v.findViewById(R.id.mtv_toasts);
+            mtv_desc =  v.findViewById(R.id.mtv_desc);
+            miv_logo =  v.findViewById(R.id.miv_logo);
             toasts = new Toast(context);
 //            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
             toasts.setDuration(Toast.LENGTH_SHORT);
@@ -1065,7 +1067,12 @@ public class Common {
             toasts.setGravity(Gravity.CENTER, 0, 0);
         }
         mtv_toasts.setText(content);
-        miv_logo.setImageResource(imgSource);
+        if (imgSource > 0) {
+            miv_logo.setVisibility(View.VISIBLE);
+            miv_logo.setImageResource(imgSource);
+        }else {
+            miv_logo.setVisibility(View.GONE);
+        }
         if (TextUtils.isEmpty(desc)) {
             mtv_desc.setVisibility(View.GONE);
         } else {
@@ -1172,7 +1179,7 @@ public class Common {
      */
 
     public static boolean isPlus() {
-        String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
+        String plus = SharedPrefUtil.getSharedUserString("plus_role", "");
         if (!TextUtils.isEmpty(plus) && Integer.parseInt(plus) > 0)
             return true;
         return false;

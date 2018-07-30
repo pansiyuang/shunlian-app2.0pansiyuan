@@ -47,7 +47,7 @@ public class SonicRuntimeImpl extends SonicRuntime {
      */
     @Override
     public String getUserAgent() {
-        return SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 5.1.1/1.0.0");
+        return SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 5.1.1/1.0.0");
     }
 
     /**

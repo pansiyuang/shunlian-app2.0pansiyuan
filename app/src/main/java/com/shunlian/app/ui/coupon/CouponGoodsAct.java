@@ -37,6 +37,7 @@ public class CouponGoodsAct extends BaseActivity implements ICouponGoodsView{
         Intent intent = new Intent(context,CouponGoodsAct.class);
         intent.putExtra("store_id",store_id);
         intent.putExtra("voucher_id",voucher_id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
     /**

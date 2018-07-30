@@ -58,12 +58,14 @@ public class RegisterAndBindingAct extends BaseActivity {
     private boolean isCanBack = false;//是否可以返回 默认不可以
     private String mUniqueSign;
     private String mMobile;
+    private String mMember_id;
 
-    public static void startAct(Context context, int flag,String mobile,String unique_sign) {
+    public static void startAct(Context context, int flag,String mobile,String unique_sign,String member_id) {
         Intent intent = new Intent(context,RegisterAndBindingAct.class);
         intent.putExtra("flag",flag);
         intent.putExtra("mobile",mobile);
         intent.putExtra("unique_sign",unique_sign);
+        intent.putExtra("member_id",member_id);
         context.startActivity(intent);
     }
 
@@ -99,9 +101,12 @@ public class RegisterAndBindingAct extends BaseActivity {
         mFlag = getIntent().getIntExtra("flag", FLAG_LOGIN);
         mUniqueSign = getIntent().getStringExtra("unique_sign");
         mMobile = getIntent().getStringExtra("mobile");
+        mMember_id = getIntent().getStringExtra("member_id");
 
         mFragmentManager = getSupportFragmentManager();
-        visible(mtv_register);
+        if (mFlag == FLAG_LOGIN) {
+            visible(mtv_register);
+        }
         oneFrag();
     }
 
@@ -123,12 +128,13 @@ public class RegisterAndBindingAct extends BaseActivity {
                 bundle.putInt("flag",mFlag);
                 bundle.putString("mobile",mMobile);
                 bundle.putString("unique_sign",mUniqueSign);
+                bundle.putString("member_id",mMember_id);
                 onePageFrag.setArguments(bundle);
             }else {
-                onePageFrag.resetPage(mFlag,mMobile,mUniqueSign);
+                onePageFrag.resetPage(mFlag,mMobile,mUniqueSign,mMember_id);
             }
         }else {
-            onePageFrag.resetPage(mFlag,mMobile,mUniqueSign);
+            onePageFrag.resetPage(mFlag,mMobile,mUniqueSign,mMember_id);
         }
         switchContent(onePageFrag);
     }
@@ -139,10 +145,10 @@ public class RegisterAndBindingAct extends BaseActivity {
      * @param mobile 手机号
      * @param picCode 图形验证码
      * @param unique_sign 微信登录code
-     * @param isShowNickname 是否显示昵称
+     * @param flag 状态
      */
     public void twoFrag(String refereesId,String mobile,String picCode,
-                        String unique_sign,boolean isShowNickname) {
+                        String unique_sign,String member_id,int flag) {
         isCanBack = true;
         if (twoPageFrag == null){
             twoPageFrag = (TwoPageFrag) fragmentMap.get(flags[1]);
@@ -151,16 +157,17 @@ public class RegisterAndBindingAct extends BaseActivity {
                 fragmentMap.put(flags[1],twoPageFrag);
                 Bundle bundle = new Bundle();
                 bundle.putString("mobile",mobile);
-                bundle.putBoolean("isShowNickname",isShowNickname);
+                bundle.putInt("flag",flag);
                 bundle.putString("refereesId",refereesId);
                 bundle.putString("picCode",picCode);
                 bundle.putString("unique_sign",unique_sign);
+                bundle.putString("member_id",member_id);
                 twoPageFrag.setArguments(bundle);
             }else {
-                twoPageFrag.resetPage(refereesId,mobile,picCode,unique_sign,isShowNickname);
+                twoPageFrag.resetPage(refereesId,mobile,picCode,unique_sign,member_id,flag);
             }
         }else {
-            twoPageFrag.resetPage(refereesId,mobile,picCode,unique_sign,isShowNickname);
+            twoPageFrag.resetPage(refereesId,mobile,picCode,unique_sign,member_id,flag);
         }
 
         switchContent(twoPageFrag);

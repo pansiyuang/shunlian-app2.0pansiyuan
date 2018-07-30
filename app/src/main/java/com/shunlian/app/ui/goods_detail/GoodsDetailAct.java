@@ -40,7 +40,6 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -221,6 +220,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         miv_is_fav.setOnClickListener(this);
         mllayout_car.setOnClickListener(this);
         mll_chat.setOnClickListener(this);
+        mtv_want.setOnClickListener(this);
     }
 
     @Override
@@ -441,7 +441,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void showFailureView(int rquest_code) {
-        if (goodsDeatilFrag != null)
+        if (goodsDeatilFrag != null && rquest_code == 100)
             goodsDeatilFrag.onFailure();
     }
 
@@ -567,17 +567,17 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void goodsOffShelf(String status) {
         if ("0".equals(status)){//下架
-            visible(mtv_off_shelf/*,mtv_want*/);
-            //gone(mtv_add_car,mtv_buy_immediately);
-            mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
+            visible(mtv_off_shelf,mtv_want);
+            gone(mtv_add_car,mtv_buy_immediately);
+            /*mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
             mtv_add_car.setTextColor(getColorResouce(R.color.value_CDA101));
             mtv_add_car.setEnabled(false);
             mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.value_CACACA));
             mtv_buy_immediately.setTextColor(getColorResouce(R.color.value_A0A0A0));
-            mtv_buy_immediately.setEnabled(false);
+            mtv_buy_immediately.setEnabled(false);*/
         }else {
-            gone(mtv_off_shelf);
-            //visible(mtv_add_car,mtv_buy_immediately);
+            gone(mtv_off_shelf,mtv_want);
+            visible(mtv_add_car,mtv_buy_immediately);
             mtv_add_car.setBackgroundColor(getColorResouce(R.color.my_black_one));
             mtv_add_car.setTextColor(getColorResouce(R.color.white));
             mtv_add_car.setEnabled(true);
@@ -670,7 +670,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         switch (v.getId()){
             case R.id.mtv_add_car:
                 if (!Common.isAlreadyLogin()){
-                    LoginAct.startAct(this);
+                    Common.goGoGo(this,"login");
                     return;
                 }
                 isAddcart = true;
@@ -720,7 +720,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
             case R.id.mtv_buy_immediately:
                 if (!Common.isAlreadyLogin()){
-                    LoginAct.startAct(this);
+                    Common.goGoGo(this,"login");
                     return;
                 }
                 String buyText = mtv_buy_immediately.getText().toString();
@@ -752,6 +752,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
             case R.id.mllayout_car:
                 MainActivity.startAct(this,"shoppingcar");
+                break;
+            case R.id.mtv_want:
+                if (goodsDetailPresenter != null)
+                    goodsDetailPresenter.goodsWant();
                 break;
         }
     }

@@ -23,7 +23,7 @@ import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
-import com.shunlian.app.ui.register.RegisterAct;
+import com.shunlian.app.ui.new_login_register.RegisterAndBindingAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -75,7 +75,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     protected void initData() {
         setHideStatusAndNavigation();
         EventBus.getDefault().register(this);
-        deviceId = SharedPrefUtil.getSharedPrfString("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
+        deviceId = SharedPrefUtil.getCacheSharedPrf("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
         //初始注册方法必须有，即使就算第二次回调启动的时候先调用onResp，也必须有注册方法，否则会出错
         api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
         // 注册到微信列表，没什么用，笔者不知道干嘛用的，有知道的请告诉我，该文件顶部有我博客链接。或加Q1692475028,谢谢！
@@ -89,7 +89,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             }
         }else {
             api.registerApp(Constant.WX_APP_ID);
-            SharedPrefUtil.saveSharedPrfString("flag", flag);
+            SharedPrefUtil.saveCacheSharedPrf("flag", flag);
         }
 
         int wxSdkVersion = api.getWXAppSupportAPI();
@@ -280,7 +280,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         }
         switch (baseResp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
-                String flag = SharedPrefUtil.getSharedPrfString("flag", "");
+                String flag = SharedPrefUtil.getCacheSharedPrf("flag", "");
                 if ("login".equals(flag)) {
                     SendAuth.Resp sendAuthResp = (SendAuth.Resp) baseResp;// 用于分享时不要有这个，不能强转
                     String code = sendAuthResp.code;
@@ -324,7 +324,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     @Subscribe(sticky = true)
     public void eventBus(DispachJump jump) {
         if (jump != null && !isEmpty(jump.jumpType))
-            SharedPrefUtil.saveSharedPrfString("wx_jump",jump.jumpType);
+            SharedPrefUtil.saveCacheSharedPrf("wx_jump",jump.jumpType);
         EventBus.getDefault().unregister(this);
         EventBus.getDefault().postSticky(jump);
     }
@@ -334,21 +334,22 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (entity != null && entity.data != null) {
             WXLoginEntity wxLoginEntity = entity.data;
             String unique_sign = wxLoginEntity.unique_sign;
-            //String mobile = wxLoginEntity.mobile;
+            String mobile = wxLoginEntity.mobile;
+            String member_id = wxLoginEntity.member_id;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {//绑定手机号不需要推荐人
-                RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
-                /*RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign);*/
+                //RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
+                RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);
                 mYFinish();
             } else if ("1".equals(status)) {
                 Common.staticToast(entity.message);
-                SharedPrefUtil.saveSharedPrfString("token", wxLoginEntity.token);
-                SharedPrefUtil.saveSharedPrfString("refresh_token", wxLoginEntity.refresh_token);
-                SharedPrefUtil.saveSharedPrfString("member_id", wxLoginEntity.member_id);
-                SharedPrefUtil.saveSharedPrfString("plus_role", wxLoginEntity.plus_role);
+                SharedPrefUtil.saveSharedUserString("token", wxLoginEntity.token);
+                SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
+                SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
+                SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
                 if (wxLoginEntity.tag != null)
-                    SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(wxLoginEntity.tag));
+                    SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(wxLoginEntity.tag));
                 JpushUtil.setJPushAlias();
                 //通知登录成功
                 DefMessageEvent event = new DefMessageEvent();
@@ -361,7 +362,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                             ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
                             ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
                 }
-                String jumpType = SharedPrefUtil.getSharedPrfString("wx_jump", "");
+                String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
                 if (!isEmpty(jumpType)) {
                     Common.goGoGo(this, jumpType);
                 }
@@ -375,15 +376,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     finish();
                 }
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
-                RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
-                /*RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign);*/
-                mYFinish();
-            }/*else if ("4".equals(status)){//绑定推荐人
+                //RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
                 RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign);
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);
                 mYFinish();
-            }*/
+            }else if ("4".equals(status)){//绑定推荐人
+                RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);
+                mYFinish();
+            }
         } else {
             mYFinish();
         }
