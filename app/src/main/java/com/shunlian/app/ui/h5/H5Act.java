@@ -655,6 +655,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         //3.5s 加载 0->80 进度的加载 为了实现,特意调节长了事件
         mProgressbar.setCurProgress(80, 3500, () -> {
             //3.5s 加载 80->100 进度的加载
+            if (mProgressbar!=null)
             mProgressbar.setCurProgress(100, 3500, () -> finishOperation(false));
         });
     }

@@ -321,6 +321,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
         storePresenter = new StorePresenter(this, this, storeId);
         if (getIntent().getBooleanExtra("discount", false)) {
+            storePresenter.initFirst(storeId,false);
+            initFirst = true;
             discountClick();
         } else {
             firstClick();
@@ -347,7 +349,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         mllayout_discount.setVisibility(View.GONE);
         rv_new.setVisibility(View.GONE);
         if (!initFirst) {
-            storePresenter.initFirst(storeId);
+            storePresenter.initFirst(storeId,true);
             initFirst = true;
         }
     }

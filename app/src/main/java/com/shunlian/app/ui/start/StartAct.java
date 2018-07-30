@@ -46,8 +46,8 @@ public class StartAct extends MBaseActivity implements IMain {
 
     @Override
     protected void initData() {
-        setHeader();
         versionJudge();
+        setHeader();
         //假如时间间隔超过一天则自动清除图片缓存
 //        long lastTime = SharedPrefUtil.getCacheSharedPrfLong("lastTime", -1);
 //        if (lastTime != -1 && System.currentTimeMillis() - lastTime > 24 * 60 * 60 * 1000) {

@@ -19,6 +19,7 @@ import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.VideoPlayActivity;
+import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
@@ -175,17 +176,11 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 gone(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
                 GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, a.thumb);
-                if (!isEmpty(a.thumb)) {
-                    List<String> bigImgList = new ArrayList<>();
-                    bigImgList.add(a.thumb);
-                    articleViewHolder.miv_big_icon.setOnClickListener(view -> {
-                        //点击查看大图
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList<String>) bigImgList;
-                        bigImgEntity.index = 0;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    });
-                }
+                articleViewHolder.miv_big_icon.setOnClickListener(view -> {
+                    if (!isEmpty(a.id)) {
+                        ArticleH5Act.startAct(context, a.id, ArticleH5Act.MODE_SONIC);
+                    }
+                });
                 break;
             case "2"://九宫格模式
                 gone(articleViewHolder.miv_big_icon);

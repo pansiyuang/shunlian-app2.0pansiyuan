@@ -161,6 +161,7 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
             downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
+                    if (downTime_order!=null)
                     downTime_order.cancelDownTimer();
                 }
             });

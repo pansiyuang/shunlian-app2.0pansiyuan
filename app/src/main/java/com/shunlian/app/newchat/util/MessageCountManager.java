@@ -206,4 +206,10 @@ public class MessageCountManager implements IMessageCountView {
 
         void OnLoadFail();
     }
+
+    public void cancleRequest() {
+        if (mPresenter != null ) {
+            mPresenter.cancelRequest();
+        }
+    }
 }

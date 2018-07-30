@@ -88,13 +88,13 @@ public class StorePresenter extends BasePresenter<StoreView> {
         initDiscountOne(storeId, promotionId, discountType, discountPage, count);
     }
 
-    public void initFirst(String storeId){
+    public void initFirst(String storeId,boolean showLoading){
         Map<String, String> map = new HashMap<>();
         map.put("storeId", storeId);
         sortAndMD5(map);
 
         Call<BaseEntity<StoreIndexEntity>> baseEntityCall = getApiService().storeIndex(map);
-        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreIndexEntity>>() {
+        getNetData(showLoading,baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreIndexEntity>>() {
             @Override
             public void onSuccess(BaseEntity<StoreIndexEntity> entity) {
                 super.onSuccess(entity);
@@ -148,7 +148,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
         sortAndMD5(map);
 
         Call<BaseEntity<StoreGoodsListEntity>> baseEntityCall = getApiService().storeGoodsList(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreGoodsListEntity>>() {
+        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreGoodsListEntity>>() {
             @Override
             public void onSuccess(BaseEntity<StoreGoodsListEntity> entity) {
                 super.onSuccess(entity);
@@ -171,7 +171,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
         sortAndMD5(map);
 
         Call<BaseEntity<StoreNewGoodsListEntity>> baseEntityCall = getApiService().storeNewGoodsList(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreNewGoodsListEntity>>() {
+        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreNewGoodsListEntity>>() {
             @Override
             public void onSuccess(BaseEntity<StoreNewGoodsListEntity> entity) {
                 super.onSuccess(entity);
@@ -190,7 +190,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
         sortAndMD5(map);
 
         Call<BaseEntity<StorePromotionGoodsListEntity>> baseEntityCall = getApiService().storePromotionGoodsList(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<StorePromotionGoodsListEntity>>() {
+        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<StorePromotionGoodsListEntity>>() {
             @Override
             public void onSuccess(BaseEntity<StorePromotionGoodsListEntity> entity) {
                 super.onSuccess(entity);
@@ -562,7 +562,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
         sortAndMD5(map);
 
         Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getUserId(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -94,6 +95,9 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
+    @BindView(R.id.rlayout_message)
+    RelativeLayout rlayout_message;
+
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
@@ -167,7 +171,12 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
         GradientDrawable background = (GradientDrawable) mtv_msg_count.getBackground();
         int w = TransformUtil.dip2px(this, 0.5f);
         background.setStroke(w, getColorResouce(R.color.white));
-        mtv_msg_count.setText(count);
+        if (!isEmpty(count)&&Integer.parseInt(count)>0){
+            mtv_msg_count.setVisibility(View.VISIBLE);
+            mtv_msg_count.setText(count);
+        }else {
+            mtv_msg_count.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -205,10 +214,10 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
                 super.onTextChanged(s, start, before, count);
                 if (!isEmpty(s)) {
                     visible(mtv_send);
-                    gone(miv_icon, mtv_msg_count);
+                    gone(rlayout_message);
                 } else {
                     gone(mtv_send);
-                    visible(miv_icon, mtv_msg_count);
+                    visible(rlayout_message);
                 }
             }
         });
@@ -322,10 +331,12 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     @Override
     public void faBu(DiscoveryCommentListEntity.Mdata.Commentlist data) {
+        Common.staticToasts(this, "发布成功，等待审核", R.mipmap.icon_common_duihao);
         pDiscoverTieziDetail.mDatas.add(0, data);
         commentAdapter.notifyDataSetChanged();
-        num++;
-        mtv_msg_count.setText(String.valueOf(num));
+//        num++;
+//        mtv_msg_count.setText(String.valueOf(num));
+//        mtv_msg_count.setVisibility(View.VISIBLE);
     }
 
 }

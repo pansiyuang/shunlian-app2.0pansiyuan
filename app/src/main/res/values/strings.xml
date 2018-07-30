@@ -128,7 +128,7 @@
     <string name="store_sort">分类</string>
     <string name="store_first">店铺首页</string>
     <string name="store_baby">店铺宝贝</string>
-    <string name="store_babys">全部宝贝</string>
+    <string name="store_babys">全部商品</string>
     <string name="store_discount">促销</string>
     <string name="store_new">新品</string>
     <string name="store_zonghe">综合</string>
@@ -139,7 +139,7 @@
     <string name="store_baokuan">爆款</string>
     <string name="store_remai">热卖</string>
     <string name="store_diaozha">吊炸</string>
-    <string name="store_baobeifenlei">宝贝分类</string>
+    <string name="store_baobeifenlei">商品分类</string>
     <string name="store_dianpujianjie">店铺简介</string>
     <string name="store_dianpufenlei">店铺分类</string>
     <string name="store_kefu">客服</string>

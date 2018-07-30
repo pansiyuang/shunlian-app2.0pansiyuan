@@ -2,6 +2,7 @@ package com.shunlian.app.ui.store;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.StoreIntroduceView;
 import com.shunlian.app.widget.MyImageView;
@@ -192,6 +194,10 @@ public class StoreIntroduceAct extends BaseActivity implements StoreIntroduceVie
             case R.id.miv_close:
                 mFinish();
                 break;
+            case R.id.mtv_dianhua:
+                if (!isEmpty(mtv_dianhua.getText()))
+                initDialogs(mtv_dianhua.getText().toString());
+                break;
             case R.id.miv_chat:
                 storeIntroducePresenter.getUserId(storeId);
                 break;
@@ -210,6 +216,7 @@ public class StoreIntroduceAct extends BaseActivity implements StoreIntroduceVie
         miv_chat.setOnClickListener(this);
         miv_close.setOnClickListener(this);
         mrlayout_erweima.setOnClickListener(this);
+        mtv_dianhua.setOnClickListener(this);
     }
 
     @Override
@@ -291,6 +298,14 @@ public class StoreIntroduceAct extends BaseActivity implements StoreIntroduceVie
         mtv_number.setText(focusNum+ "人");
     }
 
+    public void initDialogs(String phone) {
+        PromptDialog promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(phone, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+            startActivity(intentServePhoneOne);
+            promptDialog.dismiss();
+        }, "取消", view -> promptDialog.dismiss()).show();
+    }
 
     @Override
     public void getUserId(String userId) {

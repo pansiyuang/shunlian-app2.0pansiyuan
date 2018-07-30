@@ -90,11 +90,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private static final int ITEM_DIFFERENT = (1 << 3) | 1;//不同条目数
 
     private final LayoutInflater mInflater;
+    private final int mDeviceWidth;
+    public ParamDialog paramDialog;
     private GoodsDeatilEntity mGoodsEntity;
     private boolean isAttentionShop;
     private List<GoodsDeatilEntity.StoreInfo.Item> storeItems;
     private GoodsDetailShopAdapter goodsDetailShopAdapter;
-    public ParamDialog paramDialog;
     private RecyclerDialog recyclerDialog;
     private MyTextView tv_select_param;
     private StringBuilder strLengthMeasure;//字符串长度测量
@@ -103,58 +104,59 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private boolean isStartDownTime = false;
     private int voucherPosition;//点击优惠券位置
     private long day = 0l;
-    private final int mDeviceWidth;
     private String mRichText = null;//富文本内容
     private long act_start;//活动开始显示的时间
+    private String re = "(w=|h=)(\\d+)";
+    private Pattern p = Pattern.compile(re);
 
     public GoodsDetailAdapter(Context context, GoodsDeatilEntity entity, List<String> lists) {
         super(context, false, lists);
         mInflater = LayoutInflater.from(context);
         mGoodsEntity = entity;
         recyclerDialog = new RecyclerDialog(context);
-        paramDialog = new ParamDialog(context,mGoodsEntity);
+        paramDialog = new ParamDialog(context, mGoodsEntity);
         paramDialog.setOnSelectCallBack(this);
         mDeviceWidth = DeviceInfoUtil.getDeviceWidth(context);
         act_start = System.currentTimeMillis();
 
         GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
-        if (detail != null){
+        if (detail != null) {
             mRichText = detail.text;
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0){
+        if (position == 0) {
             return BANNER_LAYOUT;
-        }else if (position == 1){
+        } else if (position == 1) {
             return TITLE_LAYOUT;
-        }else if (position == 1 << 1){
+        } else if (position == 1 << 1) {
             return ACTIVITY_COUPON_LAYOUT;
-        }else if (position == (1|(1 << 1))){
+        } else if (position == (1 | (1 << 1))) {
             return PARAM_ATTRS_LAYOUT;
-        }else if (position == (1 << 2)){
+        } else if (position == (1 << 2)) {
             return COMMNT_LAYOUT;
-        }else if (position == ((1 << 2) | 1)){
+        } else if (position == ((1 << 2) | 1)) {
             return STORE_GOODS_LAYOUT;
-        }else if (position == ((1 << 2) | (1 << 1))){
+        } else if (position == ((1 << 2) | (1 << 1))) {
             return GOODS_DETAIL_DIVISION;
-        }else if (position == ((1 << 2) | 3)){
+        } else if (position == ((1 << 2) | 3)) {
             return COUPON_LAYOUT;
-        }else if (position == (1 << 3)){
-            if (isEmpty(mRichText)){
+        } else if (position == (1 << 3)) {
+            if (isEmpty(mRichText)) {
                 return super.getItemViewType(position);
-            }else {
+            } else {
                 return RICH_TEXT_LAYOUT;
             }
-        }else {
+        } else {
             return super.getItemViewType(position);
         }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType){
+        switch (viewType) {
             case BANNER_LAYOUT:
                 View banner_layout = mInflater.inflate(R.layout.banner, parent, false);
                 return new BannerHolder(banner_layout);
@@ -189,9 +191,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     @Override
     public int getItemCount() {
-        if (isEmpty(mRichText)){
+        if (isEmpty(mRichText)) {
             return super.getItemCount() + ITEM_DIFFERENT - 1;
-        }else {
+        } else {
             return super.getItemCount() + ITEM_DIFFERENT;
         }
     }
@@ -200,33 +202,33 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
         //LogUtil.zhLogW("onBindViewHolder========"+itemViewType);
-        switch (itemViewType){
+        switch (itemViewType) {
             case BANNER_LAYOUT:
-                handleBannerTitle(holder,position);
+                handleBannerTitle(holder, position);
                 break;
             case TITLE_LAYOUT:
-                handlerTitle(holder,position);
+                handlerTitle(holder, position);
                 break;
             case ACTIVITY_COUPON_LAYOUT:
-                handlerActivityCoupon(holder,position);
+                handlerActivityCoupon(holder, position);
                 break;
             case PARAM_ATTRS_LAYOUT:
                 //handlerParamAttrs(holder,position);
                 break;
             case COMMNT_LAYOUT:
-                handlerComment(holder,position);
+                handlerComment(holder, position);
                 break;
             case STORE_GOODS_LAYOUT:
-                handlerStoreGoods(holder,position);
+                handlerStoreGoods(holder, position);
                 break;
             case GOODS_DETAIL_DIVISION:
 
                 break;
             case COUPON_LAYOUT:
-                handlerCoupon(holder,position);
+                handlerCoupon(holder, position);
                 break;
             case RICH_TEXT_LAYOUT:
-                handlerRichText(holder,position);
+                handlerRichText(holder, position);
                 break;
             default:
                 super.onBindViewHolder(holder, position);
@@ -241,12 +243,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param position
      */
     private void handlerRichText(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof RichTextHolder){
+        if (holder instanceof RichTextHolder) {
             RichTextHolder mHolder = (RichTextHolder) holder;
             MyTextView textView = (MyTextView) mHolder.itemView;
-            if (isEmpty(mRichText)){
+            if (isEmpty(mRichText)) {
                 gone(textView);
-            }else {
+            } else {
                 visible(textView);
                 textView.setText(mRichText);
             }
@@ -268,20 +270,20 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param position
      */
     private void handlerCoupon(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof CouponHolder){
+        if (holder instanceof CouponHolder) {
             CouponHolder mHolder = (CouponHolder) holder;
             RecyclerView recy_view_coupon = (RecyclerView) mHolder.itemView;
             //详情优惠券
-            couponAdapter = new StoreVoucherAdapter(context,false,mGoodsEntity.voucher);
+            couponAdapter = new StoreVoucherAdapter(context, false, mGoodsEntity.voucher);
             recy_view_coupon.setAdapter(couponAdapter);
 
-            couponAdapter.setOnItemClickListener((view,posi)-> {
-                    GoodsDeatilEntity.Voucher voucher = mGoodsEntity.voucher.get(posi);
-                    if (context instanceof GoodsDetailAct){
-                        GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
-                        goodsDetailAct.getCouchers(voucher.voucher_id);
-                        detailCouponPosi = posi;
-                    }
+            couponAdapter.setOnItemClickListener((view, posi) -> {
+                GoodsDeatilEntity.Voucher voucher = mGoodsEntity.voucher.get(posi);
+                if (context instanceof GoodsDetailAct) {
+                    GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+                    goodsDetailAct.getCouchers(voucher.voucher_id);
+                    detailCouponPosi = posi;
+                }
             });
         }
     }
@@ -292,50 +294,50 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param position
      */
     private void handlerStoreGoods(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof StoreGoodsHolder){
+        if (holder instanceof StoreGoodsHolder) {
             StoreGoodsHolder mHolder = (StoreGoodsHolder) holder;
             GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
             GlideUtils.getInstance().loadOverrideImage(context,
-                    mHolder.miv_shop_head,store_info.store_icon,100,100);
+                    mHolder.miv_shop_head, store_info.store_icon, 100, 100);
             mHolder.mtv_store_name.setText(store_info.decoration_name);
             mHolder.mtv_goods_count.setText(store_info.goods_count);
             mHolder.mtv_attention_count.setText(store_info.attention_count);
             mHolder.mtv_description_consistency.setText(store_info.description_consistency);
             mHolder.mtv_quality_satisfy.setText(store_info.quality_satisfy);
-            GlideUtils.getInstance().loadImage(context,mHolder.miv_starBar,store_info.star);
-            if ("1".equals(store_info.is_attention)){
+            GlideUtils.getInstance().loadImage(context, mHolder.miv_starBar, store_info.star);
+            if ("1".equals(store_info.is_attention)) {
                 mHolder.setCollectionState(1);
                 isAttentionShop = true;
-            }else {
+            } else {
                 mHolder.setCollectionState(0);
                 isAttentionShop = false;
             }
 
-            if ("1".equals(store_info.quality_logo)){
+            if ("1".equals(store_info.quality_logo)) {
                 mHolder.mtv_quality_goods.setVisibility(View.VISIBLE);
                 GradientDrawable qualityDrawable = (GradientDrawable) mHolder.mtv_quality_goods.getBackground();
                 qualityDrawable.setColor(Color.parseColor("#9414FD"));
-            }else {
+            } else {
                 mHolder.mtv_quality_goods.setVisibility(View.GONE);
             }
 
-            if (isEmpty(store_info.hot)){
+            if (isEmpty(store_info.hot)) {
                 gone(mHolder.mll_self_hot);
-            }else {
+            } else {
                 visible(mHolder.mll_self_hot);
             }
 
-            if (isEmpty(store_info.push)){
+            if (isEmpty(store_info.push)) {
                 gone(mHolder.mll_self_push);
-            }else {
+            } else {
                 visible(mHolder.mll_self_push);
             }
 
-            setStoreOtherGoods(mHolder.recy_view,store_info.hot);
+            setStoreOtherGoods(mHolder.recy_view, store_info.hot);
         }
     }
 
-    private void setStoreOtherGoods(RecyclerView recy_view,List<GoodsDeatilEntity.StoreInfo.Item> item){
+    private void setStoreOtherGoods(RecyclerView recy_view, List<GoodsDeatilEntity.StoreInfo.Item> item) {
         if (storeItems == null) storeItems = new ArrayList<>();
         storeItems.clear();
         storeItems.addAll(item);
@@ -345,12 +347,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             recy_view.setLayoutManager(storeManager);
             recy_view.setNestedScrollingEnabled(false);
             int space = TransformUtil.dip2px(context, 10);
-            recy_view.addItemDecoration(new HorItemDecoration(space,0,0));
+            recy_view.addItemDecoration(new HorItemDecoration(space, 0, 0));
             goodsDetailShopAdapter = new GoodsDetailShopAdapter(context, false, storeItems);
             recy_view.setAdapter(goodsDetailShopAdapter);
-            goodsDetailShopAdapter.setOnItemClickListener((v,position)->
-                GoodsDetailAct.startAct(context,storeItems.get(position).id));
-        }else {
+            goodsDetailShopAdapter.setOnItemClickListener((v, position) ->
+                    GoodsDetailAct.startAct(context, storeItems.get(position).id));
+        } else {
             goodsDetailShopAdapter.notifyDataSetChanged();
         }
     }
@@ -361,22 +363,22 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param position
      */
     private void handlerComment(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof CommntHolder){
+        if (holder instanceof CommntHolder) {
             CommntHolder mHolder = (CommntHolder) holder;
 
             final ArrayList<GoodsDeatilEntity.Comments> comments = mGoodsEntity.comments;
             GoodsDeatilEntity.GoodsData goods_data = mGoodsEntity.goods_data;
             String comments_num = goods_data.comments_num;
-            String star_rate =  isEmpty(goods_data.star_rate) ? "0" : goods_data.star_rate;
-            mHolder.mtv_comment_num.setText(String.format(getString(R.string.good_comment),comments_num));
-            mHolder.mtv_haopinglv.setText(String.format(getString(R.string.praise_rate),star_rate));
+            String star_rate = isEmpty(goods_data.star_rate) ? "0" : goods_data.star_rate;
+            mHolder.mtv_comment_num.setText(String.format(getString(R.string.good_comment), comments_num));
+            mHolder.mtv_haopinglv.setText(String.format(getString(R.string.praise_rate), star_rate));
 
-            if (isEmpty(comments)){
+            if (isEmpty(comments)) {
                 mHolder.recy_cardview.setVisibility(View.GONE);
                 mHolder.view_line1.setVisibility(View.GONE);
                 mHolder.view_line2.setVisibility(View.VISIBLE);
                 mHolder.miv_empty.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 mHolder.view_line1.setVisibility(View.VISIBLE);
                 mHolder.recy_cardview.setVisibility(View.VISIBLE);
                 mHolder.miv_empty.setVisibility(View.GONE);
@@ -384,7 +386,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 CommentCardViewAdapter commentCardViewAdapter = new
                         CommentCardViewAdapter(context, false, comments);
                 mHolder.recy_cardview.setAdapter(commentCardViewAdapter);
-                commentCardViewAdapter.setOnItemClickListener((view,pos)-> {
+                commentCardViewAdapter.setOnItemClickListener((view, pos) -> {
                     if (pos >= comments.size()) {
                         valueAnimator(view, null);
                     } else {
@@ -430,19 +432,19 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param position
      */
     private void handlerActivityCoupon(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ActivityCouponHolder){
+        if (holder instanceof ActivityCouponHolder) {
             ActivityCouponHolder mHolder = (ActivityCouponHolder) holder;
             ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
-            if (vouchers != null && vouchers.size() > 0){
+            if (vouchers != null && vouchers.size() > 0) {
                 mHolder.view_coupon.setVisibility(View.VISIBLE);
                 mHolder.mll_ling_Coupon.setVisibility(View.VISIBLE);
                 mHolder.mll_Coupon.removeAllViews();
-                if (strLengthMeasure == null)strLengthMeasure = new StringBuilder();
-                strLengthMeasure.delete(0,strLengthMeasure.length());
+                if (strLengthMeasure == null) strLengthMeasure = new StringBuilder();
+                strLengthMeasure.delete(0, strLengthMeasure.length());
                 for (int i = 0; i < vouchers.size(); i++) {
-                    if (i > 2){
+                    if (i > 2) {
                         break;
-                    }else {
+                    } else {
                         GoodsDeatilEntity.Voucher voucher = vouchers.get(i);
                         MyTextView textView = new MyTextView(context);
                         textView.setTextSize(11);
@@ -454,9 +456,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         background.setColor(Color.WHITE);
                         int padding = TransformUtil.dip2px(context, 4);
                         textView.setPadding(padding, padding, padding, padding);
-                        if (Float.parseFloat(voucher.use_condition) == 0){
+                        if (Float.parseFloat(voucher.use_condition) == 0) {
                             textView.setText(voucher.denomination.concat("元无门槛优惠券"));
-                        }else {
+                        } else {
                             textView.setText(getString(R.string.pull).concat(voucher.use_condition)
                                     .concat(getString(R.string.reduce)).concat(voucher.denomination));
                         }
@@ -467,65 +469,66 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
                         //长度兼容
                         strLengthMeasure.append(textView.getText());
-                        if (strLengthMeasure.length() > 22){
+                        if (strLengthMeasure.length() > 22) {
                             mHolder.mll_Coupon.removeViewAt(mHolder.mll_Coupon.getChildCount() - 1);
                         }
                     }
                 }
 
-            }else {
+            } else {
                 mHolder.view_coupon.setVisibility(View.GONE);
                 mHolder.mll_ling_Coupon.setVisibility(View.GONE);
             }
             mHolder.mll_act_detail.removeAllViews();
             if (isEmpty(mGoodsEntity.full_cut)
                     && isEmpty(mGoodsEntity.full_discount)
-                    && isEmpty(mGoodsEntity.buy_gift)){
+                    && isEmpty(mGoodsEntity.buy_gift)) {
                 mHolder.mrl_activity.setVisibility(View.GONE);
                 mHolder.view_activity.setVisibility(View.GONE);
-            }else {
+            } else {
                 mHolder.view_activity.setVisibility(View.VISIBLE);
                 mHolder.mrl_activity.setVisibility(View.VISIBLE);
             }
-            if (mGoodsEntity.full_cut != null && mGoodsEntity.full_cut.size() > 0){
-               setActivityInfo(mHolder.mll_act_detail,0,mGoodsEntity.full_cut);
+            if (mGoodsEntity.full_cut != null && mGoodsEntity.full_cut.size() > 0) {
+                setActivityInfo(mHolder.mll_act_detail, 0, mGoodsEntity.full_cut);
             }
 
 
-            if (mGoodsEntity.full_discount != null && mGoodsEntity.full_discount.size() > 0){
-                setActivityInfo(mHolder.mll_act_detail,1,mGoodsEntity.full_discount);
+            if (mGoodsEntity.full_discount != null && mGoodsEntity.full_discount.size() > 0) {
+                setActivityInfo(mHolder.mll_act_detail, 1, mGoodsEntity.full_discount);
             }
 
-            if (mGoodsEntity.buy_gift != null && mGoodsEntity.buy_gift.size() > 0){
-                setActivityInfo(mHolder.mll_act_detail,2,mGoodsEntity.buy_gift);
+            if (mGoodsEntity.buy_gift != null && mGoodsEntity.buy_gift.size() > 0) {
+                setActivityInfo(mHolder.mll_act_detail, 2, mGoodsEntity.buy_gift);
             }
 
-            if (isEmpty(mGoodsEntity.combo)){
+            if (isEmpty(mGoodsEntity.combo)) {
                 mHolder.mtv_combo.setVisibility(View.GONE);
                 mHolder.view_combo.setVisibility(View.GONE);
-            }else {
+            } else {
                 mHolder.view_combo.setVisibility(View.VISIBLE);
                 mHolder.mtv_combo.setVisibility(View.VISIBLE);
             }
         }
     }
+
     /**
      *
      * @param parent
      * @param state 0 = 满减   1 = 满折   2 = 买赠
      * @param detailList
      */
-    private void setActivityInfo(ViewGroup parent,int state,
-                                 List<GoodsDeatilEntity.ActivityDetail> detailList){
+    private void setActivityInfo(ViewGroup parent, int state,
+                                 List<GoodsDeatilEntity.ActivityDetail> detailList) {
         View subView1 = mInflater.inflate(R.layout.activity_layout, parent, false);
         MyTextView mtv_title = (MyTextView) subView1.findViewById(R.id.mtv_title);
         GradientDrawable background = (GradientDrawable) mtv_title.getBackground();
         background.setColor(getColor(R.color.value_FEF0F3));
         if (state == 0) {
-            mtv_title.setText(String.format(getString(R.string.full_cut),"",""));
-        }else if (state == 1){
+            mtv_title.setText(String.format(getString(R.string.full_cut), "", ""));
+        } else if (state == 1) {
             mtv_title.setText(getString(R.string.full_discount));
-        }else {
+        } else {
             mtv_title.setText(getString(R.string.buy_gift));
         }
         MyLinearLayout mll_content = (MyLinearLayout) subView1.findViewById(R.id.mll_content);
@@ -543,50 +546,51 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             GoodsDeatilEntity.ActivityDetail ad = detailList.get(i);
             if (state == 0) {
                 sb.append(ad.prom_title);
-            }else if (state == 1){
+            } else if (state == 1) {
                 sb.append(ad.prom_title);
-            }else {
+            } else {
                 sb.append(ad.prom_title);
             }
             sb.append(",");
         }
-        sb.replace(sb.length()-1,sb.length(),"");
+        sb.replace(sb.length() - 1, sb.length(), "");
         textView.setText(sb);
         parent.addView(subView1);
     }
+
     /**
      * 商品信息
      * @param holder
      * @param position
      */
     private void handlerTitle(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof TitleHolder){
+        if (holder instanceof TitleHolder) {
             final TitleHolder mHolder = (TitleHolder) holder;
 
             int pref_length = 0;
             String title = mGoodsEntity.title;
             final String is_preferential = mGoodsEntity.is_preferential;
-            if (mGoodsEntity.tt_act != null){
+            if (mGoodsEntity.tt_act != null) {
                 pref_length = 5;//显示天天特惠标题
                 title = mGoodsEntity.tt_act.title;
                 visible(mHolder.miv_pref);
-            }else {
+            } else {
                 gone(mHolder.miv_pref);
-                if (!isEmpty(is_preferential)){//显示正常标题
+                if (!isEmpty(is_preferential)) {//显示正常标题
                     GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
                     infoDrawable.setColor(Color.parseColor("#FB0036"));
                     mHolder.mtv_discount_info.setText(is_preferential);
                     visible(mHolder.mtv_discount_info);
                     pref_length = is_preferential.length();
-                }else {
+                } else {
                     gone(mHolder.mtv_discount_info);
                     pref_length = 0;
                 }
             }
 
-            if (pref_length != 0){
-                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length)+title);
-            }else {
+            if (pref_length != 0) {
+                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length) + title);
+            } else {
                 mHolder.mtv_title.setText(title);
             }
 
@@ -594,11 +598,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
             String shipping_fee = mGoodsEntity.shipping_fee;
             if (!isEmpty(shipping_fee) && !"0".equals(shipping_fee)) {
-                mHolder.mtv_free_shipping.setText(String.format(getString(R.string.not_mail),shipping_fee));
+                mHolder.mtv_free_shipping.setText(String.format(getString(R.string.not_mail), shipping_fee));
             } else {
                 mHolder.mtv_free_shipping.setText(getString(R.string.free_shipping));
             }
             GoodsDeatilEntity.GoodsData goods_data = mGoodsEntity.goods_data;
+            if (goods_data != null)
+                mHolder.mtv_sales.setText(String.format(getString(R.string.sold), goods_data.sales));
             if (goods_data != null) {
                 mHolder.mtv_sales.setText(String.format(getString(R.string.sold), goods_data.sales));
                 int stock = Integer.parseInt(isEmpty(mGoodsEntity.stock)?"0":mGoodsEntity.stock);
@@ -611,11 +617,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
             mHolder.mtv_address.setText(mGoodsEntity.area);
 
-            if ("1".equals(mGoodsEntity.is_new)){
+            if ("1".equals(mGoodsEntity.is_new)) {
                 visible(mHolder.mtv_new_goods);
                 GradientDrawable newDrawable = (GradientDrawable) mHolder.mtv_new_goods.getBackground();
                 newDrawable.setColor(Color.parseColor("#FBB700"));
-            }else {
+            } else {
                 gone(mHolder.mtv_new_goods);
             }
 
@@ -623,7 +629,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 visible(mHolder.mtv_explosion_goods);
                 GradientDrawable explosionDrawable = (GradientDrawable) mHolder.mtv_explosion_goods.getBackground();
                 explosionDrawable.setColor(Color.parseColor("#FB6400"));
-            }else {
+            } else {
                 gone(mHolder.mtv_explosion_goods);
             }
 
@@ -631,15 +637,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 visible(mHolder.mtv_hot_goods);
                 GradientDrawable hotDrawable = (GradientDrawable) mHolder.mtv_hot_goods.getBackground();
                 hotDrawable.setColor(Color.parseColor("#FB3500"));
-            }else {
+            } else {
                 gone(mHolder.mtv_hot_goods);
             }
 
-            if ("1".equals(mGoodsEntity.is_recommend)){
+            if ("1".equals(mGoodsEntity.is_recommend)) {
                 visible(mHolder.mtv_recommend_goods);
                 GradientDrawable recommedDrawable = (GradientDrawable) mHolder.mtv_recommend_goods.getBackground();
                 recommedDrawable.setColor(Color.parseColor("#FB0000"));
-            }else {
+            } else {
                 gone(mHolder.mtv_recommend_goods);
             }
 
@@ -654,25 +660,26 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
 
             /************活动连接****************/
-            if (mGoodsEntity.activity != null && !isEmpty(mGoodsEntity.activity.desc)){
+            if (mGoodsEntity.activity != null && !isEmpty(mGoodsEntity.activity.desc)) {
                 visible(mHolder.mtv_act);
                 mHolder.mtv_act.setText(mGoodsEntity.activity.desc);
-            }else {
+            } else {
                 gone(mHolder.mtv_act);
             }
         }
     }
+
     /*
     专题活动
      */
     private void specialActivity(final TitleHolder mHolder) {
         GoodsDeatilEntity.SpecailAct common_activity = mGoodsEntity.common_activity;
-        if (common_activity == null){
-            gone(mHolder.mllayout_specail_act,mHolder.mllayout_specail_before_act);
-        }else {
+        if (common_activity == null) {
+            gone(mHolder.mllayout_specail_act, mHolder.mllayout_specail_before_act);
+        } else {
             visible(mHolder.mllayout_specail_act);
             String activity_status = common_activity.activity_status;
-            if ("1".equals(activity_status)){//活动未开始
+            if ("1".equals(activity_status)) {//活动未开始
                 visible(
                         mHolder.miv_special_pic,
                         mHolder.mllayout_specail_before_act,
@@ -693,18 +700,18 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.mtv_special_before_original_price.setStrikethrough()
                         .setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
                 if ("1".equals(common_activity.if_act_price)) {//显示预览价格
-                    visible( mHolder.mtv_special_before_price);
+                    visible(mHolder.mtv_special_before_price);
                     mHolder.mtv_special_before_price.setText(
                             "活动价:" + getString(R.string.rmb).concat(common_activity.actprice));
-                }else {
-                   gone( mHolder.mtv_special_before_price);
+                } else {
+                    gone(mHolder.mtv_special_before_price);
                 }
 
                 GradientDrawable background = (GradientDrawable) mHolder
                         .mllayout_before_downTime.getBackground();
                 background.setColor(getColor(R.color.transparent));
                 int i = TransformUtil.dip2px(context, 1);
-                background.setStroke(i,getColor(R.color.my_gray_one));
+                background.setStroke(i, getColor(R.color.my_gray_one));
 
 //                GlideUtils.getInstance().loadImage(context,
 //                        mHolder.miv_special_before_pic,mGoodsEntity.pics.get(0));
@@ -731,7 +738,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                             isStartDownTime = false;
                             if (context instanceof GoodsDetailAct) {
                                 GoodsDetailAct act = (GoodsDetailAct) context;
-                                if (act.isFinishing()) {
+                                if (act.isFinishing() && mHolder != null && mHolder.ddp_special_before_downTime != null) {
                                     mHolder.ddp_special_before_downTime.cancelDownTimer();
                                     return;
                                 }
@@ -739,11 +746,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                             }
                         });
                     }
-                }else {
+                } else {
                     gone(mHolder.mllayout_specail_before_downtime);
                 }
 
-            }else {//活动开始
+            } else {//活动开始
                 visible(
                         mHolder.mrlayout_special_preBgL,
                         mHolder.mrlayout_special_preBgR,
@@ -761,7 +768,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         getString(R.string.rmb).concat(common_activity.actprice));
 
                 mHolder.mtv_special_original_price.setStrikethrough().setText(
-                        "原价:"+getString(R.string.rmb).concat(common_activity.old_price));
+                        "原价:" + getString(R.string.rmb).concat(common_activity.old_price));
                 mHolder.ddp_special_downTime.setLabelBackgroundColor(getColor(R.color.white));
                 mHolder.ddp_special_downTime.setTimeUnitTextColor(getColor(R.color.pink_color));
                 mHolder.ddp_special_downTime.setTimeTextColor(getColor(R.color.pink_color));
@@ -772,11 +779,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         common_activity.end_remain_seconds;
                 //time = "10";
                 int runTime = (int) ((System.currentTimeMillis() - act_start) / 1000);
-                long down_time = Long.parseLong(time)-runTime;
+                long down_time = Long.parseLong(time) - runTime;
                 day = down_time / (3600 * 24);
-                if (day > 0){
-                    mHolder.mtv_special_title.setText(String.format(format,day));
-                }else {
+                if (day > 0) {
+                    mHolder.mtv_special_title.setText(String.format(format, day));
+                } else {
                     mHolder.mtv_special_title.setText("距结束");
                 }
                 long inner_day = down_time % (3600 * 24);
@@ -787,26 +794,30 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 if (!isStartDownTime) {
                     isStartDownTime = true;
                     mHolder.ddp_special_downTime.setDownTimerListener(() -> {
-                        if (day > 0) {
-                            day = day - 1;
+                        try {
                             if (day > 0) {
-                                mHolder.mtv_special_title.setText(String.format(format, day));
-                            } else {
-                                mHolder.mtv_special_title.setText("距结束");
-                            }
-                            mHolder.ddp_special_downTime.cancelDownTimer();
-                            mHolder.ddp_special_downTime.setDownTime(3600);
-                            mHolder.ddp_special_downTime.startDownTimer();
-                        } else {
-                            isStartDownTime = false;
-                            if (context instanceof GoodsDetailAct) {
-                                GoodsDetailAct act = (GoodsDetailAct) context;
-                                if (act.isFinishing()) {
-                                    mHolder.ddp_special_downTime.cancelDownTimer();
-                                    return;
+                                day = day - 1;
+                                if (day > 0) {
+                                    mHolder.mtv_special_title.setText(String.format(format, day));
+                                } else {
+                                    mHolder.mtv_special_title.setText("距结束");
                                 }
-                                act.refreshDetail();
+                                mHolder.ddp_special_downTime.cancelDownTimer();
+                                mHolder.ddp_special_downTime.setDownTime(3600);
+                                mHolder.ddp_special_downTime.startDownTimer();
+                            } else {
+                                isStartDownTime = false;
+                                if (context instanceof GoodsDetailAct) {
+                                    GoodsDetailAct act = (GoodsDetailAct) context;
+                                    if (act.isFinishing() && mHolder != null && mHolder.ddp_special_downTime != null) {
+                                        mHolder.ddp_special_downTime.cancelDownTimer();
+                                        return;
+                                    }
+                                    act.refreshDetail();
+                                }
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     });
                 }
@@ -821,9 +832,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         GoodsDeatilEntity.TTAct tt_act = mGoodsEntity.tt_act;
         if (tt_act != null) {
             visible(mHolder.mllayout_preferential);
-            gone(mHolder.mllayout_common_price,mHolder.mtv_sales);
+            gone(mHolder.mllayout_common_price, mHolder.mtv_sales);
 
-            if ("1".equals(tt_act.sale)){//1：活动进行中   0：活动未开始
+            if ("1".equals(tt_act.sale)) {//1：活动进行中   0：活动未开始
                 mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.pink_color));
                 mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_FEEBE7));
                 mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.new_text));
@@ -834,7 +845,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 //visible(mHolder.seekbar_grow,mHolder.mtv_desc);
                 //mHolder.seekbar_grow.setProgress(Integer.parseInt(tt_act.percent));
                 //mHolder.mtv_desc.setText(tt_act.str_surplus_stock);
-            }else {
+            } else {
                 mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.value_2096F2));
                 mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_DBEFFF));
                 mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.value_2096F2));
@@ -865,7 +876,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     isStartDownTime = false;
                     if (context instanceof GoodsDetailAct) {
                         GoodsDetailAct act = (GoodsDetailAct) context;
-                        if (act.isFinishing()) {
+                        if (!act.isFinishing() && mHolder != null && mHolder.ddp_downTime != null) {
                             mHolder.ddp_downTime.cancelDownTimer();
                             return;
                         }
@@ -873,8 +884,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     }
                 });
             }
-        }else {
-            visible(mHolder.mtv_sales,mHolder.mllayout_common_price);
+        } else {
+            visible(mHolder.mtv_sales, mHolder.mllayout_common_price);
             gone(mHolder.mllayout_preferential);
         }
     }
@@ -885,20 +896,20 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param position
      */
     private void handleBannerTitle(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof BannerHolder){
+        if (holder instanceof BannerHolder) {
             BannerHolder mHolder = (BannerHolder) holder;
             if (mGoodsEntity.pics != null) {
                 String type = mGoodsEntity.type;
-                if ("1".equals(type)){
-                    mHolder.kanner.setBanner(mGoodsEntity.pics,1);
-                }else {
+                if ("1".equals(type)) {
+                    mHolder.kanner.setBanner(mGoodsEntity.pics, 1);
+                } else {
                     mHolder.kanner.setBanner(mGoodsEntity.pics);
                 }
-                mHolder.kanner.setOnItemClickL(pos-> {
+                mHolder.kanner.setOnItemClickL(pos -> {
                     BigImgEntity entity = new BigImgEntity();
                     entity.itemList = mGoodsEntity.pics;
                     entity.index = pos;
-                    LookBigImgAct.startAct(context,entity);
+                    LookBigImgAct.startAct(context, entity);
                 });
             }
         }
@@ -916,8 +927,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         return new PicListHolder(detailView);
     }
 
-    private String re = "(w=|h=)(\\d+)";
-    private Pattern p = Pattern.compile(re);
     /**
      * 处理列表
      *
@@ -926,39 +935,39 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      */
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof PicListHolder){
+        if (holder instanceof PicListHolder) {
             final PicListHolder mHolder = (PicListHolder) holder;
             String s = null;
-            if (isEmpty(mRichText)){
+            if (isEmpty(mRichText)) {
                 s = lists.get(position - ITEM_DIFFERENT + 1);
-            }else {
+            } else {
                 s = lists.get(position - ITEM_DIFFERENT);
             }
 
             //LogUtil.zhLogW("====s: "+s);
 
-            if (Pattern.matches(".*(w=\\d+&h=\\d+).*",s)){
-                Matcher m =p.matcher(s);
+            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", s)) {
+                Matcher m = p.matcher(s);
                 int w = 0;
                 int h = 0;
-                if (m.find()){
+                if (m.find()) {
                     w = Integer.parseInt(m.group(2));
-                }else {
+                } else {
                     w = 720;
                 }
-                if (m.find()){
+                if (m.find()) {
                     h = Integer.parseInt(m.group(2));
-                }else {
+                } else {
                     h = 330;
                 }
                 //LogUtil.zhLogW("===w="+w+"  h="+h);
                 int i = (int) (mDeviceWidth * h * 1.0f / w);
                 GlideUtils.getInstance()
-                        .loadOverrideImage(context,mHolder.miv_pic,s,mDeviceWidth,i);
-            }else {
+                        .loadOverrideImage(context, mHolder.miv_pic, s, mDeviceWidth, i);
+            } else {
                 int i = (int) (mDeviceWidth * 330 * 1.0f / 720);
                 GlideUtils.getInstance()
-                        .loadOverrideImage(context,mHolder.miv_pic,s,mDeviceWidth,i);
+                        .loadOverrideImage(context, mHolder.miv_pic, s, mDeviceWidth, i);
             }
         }
     }
@@ -969,9 +978,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (tv_select_param != null && sku != null)
             tv_select_param.setText(getString(R.string.selection).concat("  ").concat(sku.name));
 
-        if (context instanceof GoodsDetailAct){
+        if (context instanceof GoodsDetailAct) {
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
-            goodsDetailAct.selectGoodsInfo(sku,count);
+            goodsDetailAct.selectGoodsInfo(sku, count);
         }
     }
 
@@ -980,43 +989,44 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param voucher
      */
     public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
-        if (detailCouponPosi != -1){
-            if (couponAdapter != null){
+        if (detailCouponPosi != -1) {
+            if (couponAdapter != null) {
                 mGoodsEntity.voucher.remove(detailCouponPosi);
-                mGoodsEntity.voucher.add(detailCouponPosi,voucher);
+                mGoodsEntity.voucher.add(detailCouponPosi, voucher);
                 couponAdapter.notifyItemChanged(detailCouponPosi);
             }
-        }else {
-            if (recyclerDialog != null){//领取成功之后id == voucher_id
-                recyclerDialog.getVoucherSuccess(voucher.voucher_id,voucher.is_get);
+        } else {
+            if (recyclerDialog != null) {//领取成功之后id == voucher_id
+                recyclerDialog.getVoucherSuccess(voucher.voucher_id, voucher.is_get);
             }
         }
         detailCouponPosi = -1;
     }
 
 
-    public class PicListHolder extends BaseRecyclerViewHolder{
+    public class PicListHolder extends BaseRecyclerViewHolder {
 
         @BindView(R.id.miv_pic)
         MyImageView miv_pic;
+
         public PicListHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
-            itemView.setOnClickListener((v)->{
+            itemView.setOnClickListener((v) -> {
                 String s = null;
                 BigImgEntity entity = new BigImgEntity();
                 entity.itemList = (ArrayList<String>) lists;
-                if (isEmpty(mRichText)){
+                if (isEmpty(mRichText)) {
                     entity.index = getAdapterPosition() - ITEM_DIFFERENT + 1;
-                }else {
-                    entity.index= getAdapterPosition() - ITEM_DIFFERENT;
+                } else {
+                    entity.index = getAdapterPosition() - ITEM_DIFFERENT;
                 }
-                LookBigImgAct.startAct(context,entity);
+                LookBigImgAct.startAct(context, entity);
             });
         }
     }
 
-    public class TitleHolder extends BaseRecyclerViewHolder{
+    public class TitleHolder extends BaseRecyclerViewHolder {
 
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
@@ -1151,28 +1161,29 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         public TitleHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
-            if (isEmpty(mGoodsEntity.self_buy_earn)){
+            if (isEmpty(mGoodsEntity.self_buy_earn)) {
                 gone(llayout_plus);
-            }else {
+            } else {
                 visible(llayout_plus);
-                mtv_plus_prefPrice.setText(getString(R.string.rmb)+mGoodsEntity.self_buy_earn);
-            }
-        }
-        @OnClick(R.id.mtv_act)
-        public void actTitle(){
-            GoodsDeatilEntity.Act activity = mGoodsEntity.activity;
-            if (activity.url != null){
-                Common.goGoGo(context,activity.url.type,activity.url.item_id);
+                mtv_plus_prefPrice.setText(getString(R.string.rmb) + mGoodsEntity.self_buy_earn);
             }
         }
 
-        @OnClick({R.id.miv_share,R.id.mtv_share})
-        public void share(){
-            ((GoodsDetailAct)context).moreAnim();
+        @OnClick(R.id.mtv_act)
+        public void actTitle() {
+            GoodsDeatilEntity.Act activity = mGoodsEntity.activity;
+            if (activity.url != null) {
+                Common.goGoGo(context, activity.url.type, activity.url.item_id);
+            }
+        }
+
+        @OnClick({R.id.miv_share, R.id.mtv_share})
+        public void share() {
+            ((GoodsDetailAct) context).moreAnim();
         }
     }
 
-    public class BannerHolder extends BaseRecyclerViewHolder{
+    public class BannerHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.kanner)
         Kanner kanner;
 
@@ -1224,18 +1235,18 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
          */
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.mll_ling_Coupon:
-                    if (recyclerDialog == null){
+                    if (recyclerDialog == null) {
                         recyclerDialog = new RecyclerDialog(context);
                     }
-                    if (!recyclerDialog.isShowing()){
+                    if (!recyclerDialog.isShowing()) {
                         recyclerDialog.setVoucheres(mGoodsEntity.voucher);
                         recyclerDialog.show();
                         recyclerDialog.setOnVoucherCallBack(new RecyclerDialog.OnVoucherCallBack() {
                             @Override
-                            public void itemVoucher(GoodsDeatilEntity.Voucher voucher, int position){
-                                if (context instanceof GoodsDetailAct){
+                            public void itemVoucher(GoodsDeatilEntity.Voucher voucher, int position) {
+                                if (context instanceof GoodsDetailAct) {
                                     voucherPosition = position;
                                     GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
                                     goodsDetailAct.getCouchers(voucher.voucher_id);
@@ -1245,22 +1256,22 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     }
                     break;
                 case R.id.mtv_combo:
-                    if (recyclerDialog == null){
+                    if (recyclerDialog == null) {
                         recyclerDialog = new RecyclerDialog(context);
                     }
-                    if (!recyclerDialog.isShowing()){
-                        recyclerDialog.setCombos(mGoodsEntity.combo,mGoodsEntity.id);
+                    if (!recyclerDialog.isShowing()) {
+                        recyclerDialog.setCombos(mGoodsEntity.combo, mGoodsEntity.id);
                         recyclerDialog.show();
                     }
                     break;
                 case R.id.mrl_activity:
-                    if (recyclerDialog == null){
+                    if (recyclerDialog == null) {
                         recyclerDialog = new RecyclerDialog(context);
                     }
-                    if (!recyclerDialog.isShowing()){
+                    if (!recyclerDialog.isShowing()) {
                         String store_id = mGoodsEntity.store_info.store_id;
                         recyclerDialog.setActivity(mGoodsEntity.full_cut,
-                                mGoodsEntity.full_discount,mGoodsEntity.buy_gift,store_id);
+                                mGoodsEntity.full_discount, mGoodsEntity.buy_gift, store_id);
                         recyclerDialog.show();
                     }
                     break;
@@ -1268,7 +1279,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         }
     }
 
-    public class ParamAttrsHolder extends BaseRecyclerViewHolder implements View.OnClickListener{
+    public class ParamAttrsHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.mtv_params)
         MyTextView mtv_params;
@@ -1300,34 +1311,34 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         public ParamAttrsHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
-            if (!isEmpty(mGoodsEntity.attrs)){
+            if (!isEmpty(mGoodsEntity.attrs)) {
                 mtv_params.setOnClickListener(this);
-                visible(mtv_params,view_params);
-            }else {
-                gone(mtv_params,view_params);
+                visible(mtv_params, view_params);
+            } else {
+                gone(mtv_params, view_params);
             }
 
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
-            if (!isEmpty(mGoodsEntity.return_7)){
+            if (!isEmpty(mGoodsEntity.return_7)) {
                 mtv_reason.setText(mGoodsEntity.return_7);
-                visible(miv_reason,mtv_reason);
-            }else {
-                gone(miv_reason,mtv_reason);
+                visible(miv_reason, mtv_reason);
+            } else {
+                gone(miv_reason, mtv_reason);
             }
 
-            if (!isEmpty(mGoodsEntity.send_time)){
+            if (!isEmpty(mGoodsEntity.send_time)) {
                 mtv_send_time.setText(mGoodsEntity.send_time);
-                visible(miv_send_time,mtv_send_time);
-            }else {
-                gone(miv_send_time,mtv_send_time);
+                visible(miv_send_time, mtv_send_time);
+            } else {
+                gone(miv_send_time, mtv_send_time);
             }
 
-            if (!isEmpty(mGoodsEntity.quality_guarantee)){
+            if (!isEmpty(mGoodsEntity.quality_guarantee)) {
                 mtv_certified_products.setText(mGoodsEntity.quality_guarantee);
-                visible(miv_certified_products,mtv_certified_products);
-            }else {
-                gone(miv_certified_products,mtv_certified_products);
+                visible(miv_certified_products, mtv_certified_products);
+            } else {
+                gone(miv_certified_products, mtv_certified_products);
             }
 
         }
@@ -1339,7 +1350,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
          */
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.tv_select_param:
                     if (paramDialog == null) {
                         paramDialog = new ParamDialog(context, mGoodsEntity);
@@ -1350,10 +1361,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     }
                     break;
                 case R.id.mtv_params:
-                    if (recyclerDialog == null){
+                    if (recyclerDialog == null) {
                         recyclerDialog = new RecyclerDialog(context);
                     }
-                    if (!recyclerDialog.isShowing()){
+                    if (!recyclerDialog.isShowing()) {
                         recyclerDialog.setAttributes(mGoodsEntity.attrs);
                         recyclerDialog.show();
                     }
@@ -1381,6 +1392,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.view_line2)
         View view_line2;
+
         public CommntHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
@@ -1388,7 +1400,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             miv_empty.setOnClickListener(this);
             mtv_haopinglv.setOnClickListener(this);
             LinearLayoutManager manager1 = new LinearLayoutManager
-                    (context,LinearLayoutManager.HORIZONTAL,false);
+                    (context, LinearLayoutManager.HORIZONTAL, false);
             recy_cardview.setLayoutManager(manager1);
             recy_cardview.setNestedScrollingEnabled(false);
             recy_cardview.setFocusable(false);
@@ -1458,6 +1470,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.miv_starBar)
         MyImageView miv_starBar;
+
         public StoreGoodsHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(true);
@@ -1471,13 +1484,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             recy_view.setFocusable(false);
         }
 
-        public void setCollectionState(int state){
+        public void setCollectionState(int state) {
             GradientDrawable background = (GradientDrawable) mtv_collection.getBackground();
-            if (state == 1){
+            if (state == 1) {
                 background.setColor(getResources().getColor(R.color.pink_color));
                 mtv_collection.setTextColor(Color.WHITE);
                 mtv_collection.setText(getString(R.string.discover_alear_follow));
-            }else {
+            } else {
                 background.setColor(getResources().getColor(R.color.transparent));
                 mtv_collection.setTextColor(getResources().getColor(R.color.pink_color));
                 mtv_collection.setText(getString(R.string.discover_follow));
@@ -1485,7 +1498,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         }
 
         @Subscribe(threadMode = ThreadMode.MAIN)
-        public void followStoreState(DefMessageEvent event){
+        public void followStoreState(DefMessageEvent event) {
             setCollectionState(event.followStoreState);
             EventBus.getDefault().unregister(this);
         }
@@ -1499,7 +1512,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @Override
         public void onClick(View v) {
             GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.mtv_collection:
                     /*if (TextUtils.isEmpty(SharedPrefUtil.getSharedPrfString("token",""))){
                         Common.staticToast("尚未登录");
@@ -1507,10 +1520,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     }*/
                     EventBus.getDefault().register(this);
                     GoodsDetailAct detailAct = (GoodsDetailAct) context;
-                    if (isAttentionShop){
+                    if (isAttentionShop) {
                         detailAct.delFollowStore();
                         //setCollectionState(0);
-                    }else {
+                    } else {
                         detailAct.followStore();
                         //setCollectionState(1);
                     }
@@ -1524,7 +1537,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     break;
                 case R.id.mll_self_push:
                     setState(2);
-                    setStoreOtherGoods(recy_view,store_info.push);
+                    setStoreOtherGoods(recy_view, store_info.push);
                     break;
                 case R.id.miv_starBar:
                 case R.id.miv_shop_head:
@@ -1535,7 +1548,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
         }
 
-        private void setState(int state){
+        private void setState(int state) {
             mtv_self_hot.setTextColor(state == 1 ? getResources().getColor(R.color.new_text)
                     : getResources().getColor(R.color.value_88));
 
@@ -1547,7 +1560,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         }
     }
 
-    public class GoodsDetailDivisionHolder extends BaseRecyclerViewHolder{
+    public class GoodsDetailDivisionHolder extends BaseRecyclerViewHolder {
 
         public GoodsDetailDivisionHolder(View itemView) {
             super(itemView);
@@ -1555,20 +1568,20 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         }
     }
 
-    public class CouponHolder extends BaseRecyclerViewHolder{
+    public class CouponHolder extends BaseRecyclerViewHolder {
 
         public CouponHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
             RecyclerView recy_view_coupon = (RecyclerView) itemView;
-            LinearLayoutManager manager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
+            LinearLayoutManager manager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             recy_view_coupon.setLayoutManager(manager);
             recy_view_coupon.setNestedScrollingEnabled(false);
             recy_view_coupon.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
     }
 
-    public class RichTextHolder extends BaseRecyclerViewHolder{
+    public class RichTextHolder extends BaseRecyclerViewHolder {
 
         public RichTextHolder(View itemView) {
             super(itemView);

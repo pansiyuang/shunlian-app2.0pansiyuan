@@ -90,7 +90,7 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                                     oneHolder.isStartDownTime = false;
                                     if (context instanceof DayDayAct) {
                                         DayDayAct act = (DayDayAct) context;
-                                        if (act.isFinishing()) {
+                                        if (act.isFinishing()&&oneHolder!=null&&oneHolder.ddp_downTime!=null) {
                                             oneHolder.ddp_downTime.cancelDownTimer();
                                             return;
                                         }

@@ -880,6 +880,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         }
     }
 
+
     @Override
     public void showFailureView(int request_code) {
 //        refreshview.stopRefresh(true);

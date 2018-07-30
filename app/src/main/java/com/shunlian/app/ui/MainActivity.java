@@ -140,7 +140,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void onRestart() {
         super.onRestart();
-//        initMessage();
+        initMessage();
     }
 
     public void initMessage(){
@@ -161,7 +161,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     protected void initData() {
         pMain = new PMain(MainActivity.this, MainActivity.this);
         pMain.entryInfo();
-//        initMessage();
+        initMessage();
         if (updateDialogV == null)
             updateDialogV = new UpdateDialog(this) {
                 @Override
@@ -413,7 +413,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             }
         } else {
             discoverFrag.setArgument(flag);
-//            discoverFrag.initMessage(data);
+            discoverFrag.initMessage(data);
         }
         switchContent(discoverFrag);
         pageIndex = 2;
