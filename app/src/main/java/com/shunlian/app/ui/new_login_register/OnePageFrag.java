@@ -237,7 +237,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         mPresenter = new RegisterAndBindPresenter(baseActivity, this);
 
         //如果有推荐人，直接填写推荐人
-        String member_id = SharedPrefUtil.getSharedPrfString("share_code", "");
+        String member_id = SharedPrefUtil.getSharedUserString("share_code", "");
         if (!isEmpty(member_id)){
             met_id.setText(member_id);
             met_id.setEnabled(false);

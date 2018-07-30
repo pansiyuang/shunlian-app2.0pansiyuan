@@ -16,6 +16,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.presenter.PDiscover;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.discover.DiscoverGuanzhuFrag;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.DiscoverQuanZiFrag;
