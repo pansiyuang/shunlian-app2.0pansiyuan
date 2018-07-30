@@ -59,7 +59,7 @@ public class UpdateDialog implements IMain {
     public UpdateDialog(Activity activity) {
         this.activity = activity;
         PMain pMain = new PMain(activity, this);
-        pMain.getUpdateInfo("Android", SharedPrefUtil.getSharedPrfString("localVersion", "2.0.0"));
+        pMain.getUpdateInfo("Android", SharedPrefUtil.getCacheSharedPrf("localVersion", "2.0.0"));
 
     }
 
@@ -255,12 +255,12 @@ public class UpdateDialog implements IMain {
         updateType = data.updateType;
         updateUrl = data.updateUrl;
         fileMd5 = data.fileMd5;
-        SharedPrefUtil.saveSharedPrfString("updateLog", updateLog);
-        SharedPrefUtil.saveSharedPrfString("newVersion", data.newVersion);
-        SharedPrefUtil.saveSharedPrfString("needUpdate", needUpdate);
-        SharedPrefUtil.saveSharedPrfString("updateType", updateType);
-        SharedPrefUtil.saveSharedPrfString("updateUrl", updateUrl);
-        SharedPrefUtil.saveSharedPrfString("fileMd5", fileMd5);
+        SharedPrefUtil.saveCacheSharedPrf("updateLog", updateLog);
+        SharedPrefUtil.saveCacheSharedPrf("newVersion", data.newVersion);
+        SharedPrefUtil.saveCacheSharedPrf("needUpdate", needUpdate);
+        SharedPrefUtil.saveCacheSharedPrf("updateType", updateType);
+        SharedPrefUtil.saveCacheSharedPrf("updateUrl", updateUrl);
+        SharedPrefUtil.saveCacheSharedPrf("fileMd5", fileMd5);
 //                    updateType = "force";//调试强制更新
         if ("yes".equals(needUpdate)) {
             initUpdateDialog();

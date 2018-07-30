@@ -361,7 +361,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     @Override
     public void setProfitInfo(MyProfitEntity.ProfitInfo profitInfo) {
         mProfitInfo = profitInfo;
-        isShowData = SharedPrefUtil.getSharedPrfBoolean(KEY, true);
+        isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY, true);
         changeState();
         profit_help_url = profitInfo.profit_help_url;
 
@@ -663,7 +663,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     public void isShowData() {
         isShowData = !isShowData;
         changeState();
-        SharedPrefUtil.saveSharedPrfBoolean(KEY, isShowData);
+        SharedPrefUtil.saveCacheSharedPrfBoolean(KEY, isShowData);
     }
 
     private void changeState() {

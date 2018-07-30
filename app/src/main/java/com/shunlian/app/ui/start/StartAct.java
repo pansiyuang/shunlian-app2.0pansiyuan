@@ -101,7 +101,7 @@ public class StartAct extends MBaseActivity implements IMain {
 //        }
         isHave=true;
         pMain = new PMain(this, this);
-        pMain.getUpdateInfo("Android", SharedPrefUtil.getSharedPrfString("localVersion", "2.0.0"));
+        pMain.getUpdateInfo("Android", SharedPrefUtil.getCacheSharedPrf("localVersion", "2.0.0"));
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -171,7 +171,7 @@ public class StartAct extends MBaseActivity implements IMain {
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
             localVersion = packageInfo.versionName;//应用现在的版本名称
-            SharedPrefUtil.saveSharedPrfString("localVersion", localVersion);
+            SharedPrefUtil.saveCacheSharedPrf("localVersion", localVersion);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -179,13 +179,13 @@ public class StartAct extends MBaseActivity implements IMain {
 
     public void isFirstJudge() {
         //如果是第一次启动app，或者版本更新后需要启动引导页
-        if (SharedPrefUtil.getCacheSharedPrfBoolean("isFirst", true) || !SharedPrefUtil.getSharedPrfString("localVersion", "-1").equals(localVersion)) {
+        if (SharedPrefUtil.getCacheSharedPrfBoolean("isFirst", true) || !SharedPrefUtil.getCacheSharedPrf("localVersion", "-1").equals(localVersion)) {
 //            Constant.IS_GUIDE = true;
             deleteShortCut();
             createShortCut();
-            SharedPrefUtil.saveSharedPrfString("localVersion", localVersion);
+            SharedPrefUtil.saveCacheSharedPrf("localVersion", localVersion);
             SharedPrefUtil.saveCacheSharedPrfBoolean("isFirst", false);
-            SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
+//            SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
             Intent intent = new Intent(getBaseContext(), GuideAct.class);
             startActivity(intent);
 //            暂时关闭引导页
@@ -223,10 +223,10 @@ public class StartAct extends MBaseActivity implements IMain {
                 this.data=data;
             }
             if ("1".equals(data.is_tag)&&!isEmpty(data.tag )){
-                SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(data.tag));
+                SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(data.tag));
                 JpushUtil.setJPushAlias();
             }
-            SharedPrefUtil.saveSharedPrfString("plus_role", data.plus_role);
+            SharedPrefUtil.saveSharedUserString("plus_role", data.plus_role);
         }
     }
 
@@ -267,7 +267,7 @@ public class StartAct extends MBaseActivity implements IMain {
     public void entryInfo(CommonEntity data) {
         if (isHave){
             Constant.EMAIL=data.ducha_email;
-            SharedPrefUtil.saveSharedPrfString("plus_role", data.is_plus);
+            SharedPrefUtil.saveSharedUserString("plus_role", data.is_plus);
             SharedPrefUtil.saveCacheSharedPrf("is_open",data.is_open);
             SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
             SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);

@@ -437,10 +437,10 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
     private void saveUserInfo(BaseEntity<RegisterFinishEntity> entity) {
         Common.staticToast(entity.message);
         RegisterFinishEntity content = entity.data;
-        SharedPrefUtil.saveSharedPrfString("token", content.token);
-        SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
-        SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
-        SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
+        SharedPrefUtil.saveSharedUserString("token", content.token);
+        SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
+        SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
+        SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
 
         EasyWebsocketClient.getInstance(baseActivity).initChat(); //初始化聊天
         JpushUtil.setJPushAlias();

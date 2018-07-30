@@ -420,7 +420,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         mTodayVip = today_vip;
         mTodayOrder = today_order;
 
-        isShowData = SharedPrefUtil.getSharedPrfBoolean(KEY,true);
+        isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY,true);
         changeState();
     }
 
@@ -435,7 +435,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         mFendian = fendian;
         mXiaofei = xiaofei;
 
-        isShowData = SharedPrefUtil.getSharedPrfBoolean(KEY,true);
+        isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY,true);
         changeState();
 
         GradientDrawable child_store_background = (GradientDrawable) view_child_store.getBackground();
@@ -652,7 +652,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     public void isShowData(){
         isShowData = !isShowData;
         changeState();
-        SharedPrefUtil.saveSharedPrfBoolean(KEY,isShowData);
+        SharedPrefUtil.saveCacheSharedPrfBoolean(KEY,isShowData);
     }
 
     private void changeState() {

@@ -11,7 +11,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpArticleAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
-import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -19,7 +18,6 @@ import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
@@ -490,7 +488,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
-        SharedPrefUtil.saveSharedPrfString("plus_role", personalcenterEntity.plus_role);
+        SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity = personalcenterEntity;
         if (isEmpty(personalcenterEntity.note)) {
             gone(mtv_hint);
@@ -639,9 +637,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 miv_levels.setImageResource(R.mipmap.img_plus_phb_jingli);
             }
         }
-        String avatar = SharedPrefUtil.getSharedPrfString("personal_avatar", "null");
+        String avatar = SharedPrefUtil.getSharedUserString("personal_avatar", "null");
         if (!equals(avatar, personalcenterEntity.avatar) || miv_avar.getDrawable() == null) {
-            SharedPrefUtil.saveSharedPrfString("personal_avatar", personalcenterEntity.avatar);
+            SharedPrefUtil.saveSharedUserString("personal_avatar", personalcenterEntity.avatar);
             GlideUtils.getInstance().loadCircleAvar(baseContext, miv_avar, personalcenterEntity.avatar);
         }
         mtv_shangping.setText(personalcenterEntity.goods_fav_num);

@@ -51,7 +51,7 @@ public class ReceivedCookiesInterceptor implements Interceptor {
             cookieBuffer.append("path=/;");
             cookieBuffer.append("domain=api.shunliandongli.com");
             LogUtil.augusLogW("yxf-pp-"+ cookieBuffer.toString());
-            SharedPrefUtil.saveSharedPrfString("cookie", cookieBuffer.toString());
+            SharedPrefUtil.saveSharedUserString("cookie", cookieBuffer.toString());
         }
         return originalResponse;
     }

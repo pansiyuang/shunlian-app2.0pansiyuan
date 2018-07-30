@@ -278,13 +278,13 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
     @Override
     public void loginMobileSuccess(LoginFinishEntity content) {
         //登陆成功啦
-        SharedPrefUtil.saveSharedPrfString("token", content.token);
-        SharedPrefUtil.saveSharedPrfString("avatar", content.avatar);
-        SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
-        SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
-        SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        SharedPrefUtil.saveSharedUserString("token", content.token);
+        SharedPrefUtil.saveSharedUserString("avatar", content.avatar);
+        SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
+        SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
+        SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
         if (content.tag!=null)
-            SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(content.tag));
+            SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));
         JpushUtil.setJPushAlias();
         //通知登录成功
         DefMessageEvent event = new DefMessageEvent();

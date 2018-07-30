@@ -154,7 +154,7 @@ public class SelectLabelPresenter extends BasePresenter<ISelectLabelView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
-                SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(tag));
+                SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(tag));
                 JpushUtil.setJPushAlias();
                 iView.success();
             }

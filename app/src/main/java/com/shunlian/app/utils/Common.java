@@ -206,7 +206,7 @@ public class Common {
 
     public static void goGoGo(Context context, String type, String... params) {
         //params从第7个参数开始是聊天的参数
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
+        String token = SharedPrefUtil.getSharedUserString("token", "");
         LogUtil.augusLogW("where---" + type);
         if (type == null) {
             return;
@@ -869,8 +869,8 @@ public class Common {
      * @return
      */
     public static boolean isAlreadyLogin() {
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
-        String member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
+        String token = SharedPrefUtil.getSharedUserString("token", "");
+        String member_id = SharedPrefUtil.getSharedUserString("member_id", "");
         if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(member_id)) {
             return true;
         }
@@ -1179,7 +1179,7 @@ public class Common {
      */
 
     public static boolean isPlus() {
-        String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
+        String plus = SharedPrefUtil.getSharedUserString("plus_role", "");
         if (!TextUtils.isEmpty(plus) && Integer.parseInt(plus) > 0)
             return true;
         return false;

@@ -328,9 +328,9 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             Common.staticToast("请检查你的网络状态");
             return;
         }
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
+        String token = SharedPrefUtil.getSharedUserString("token", "");
         LogUtil.httpLogW("token:" + token);
-        String roleType = SharedPrefUtil.getSharedPrfString("role_type", "member");
+        String roleType = SharedPrefUtil.getSharedUserString("role_type", "member");
         if (TextUtils.isEmpty(token)) {
             return;
         }
@@ -416,7 +416,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                         currentMemberStatus = MemberStatus.Member;
                         break;
                 }
-                SharedPrefUtil.saveSharedPrfString("user_id", userInfoEntity.info.user.user_id);
+                SharedPrefUtil.saveSharedUserString("user_id", userInfoEntity.info.user.user_id);
                 LogUtil.httpLogW("Websocket 用户状态初始化为:" + currentMemberStatus);
             }
         } catch (Exception e) {
@@ -483,7 +483,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             return;
         }
         userInfoEntity.info.role_type = roleType;
-        SharedPrefUtil.saveSharedPrfString("role_type", roleType);
+        SharedPrefUtil.saveSharedUserString("role_type", roleType);
         switch (roleType) {
             case "seller":
                 mUser = userInfoEntity.info.bind.bind_seller.user;
@@ -498,7 +498,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                 currentMemberStatus = MemberStatus.Member;
                 break;
         }
-        SharedPrefUtil.saveSharedPrfString("user_id", mUser.user_id);
+        SharedPrefUtil.saveSharedUserString("user_id", mUser.user_id);
         if (switchStatusListener != null) {
             switchStatusListener.switchSuccess(roleType);
         }

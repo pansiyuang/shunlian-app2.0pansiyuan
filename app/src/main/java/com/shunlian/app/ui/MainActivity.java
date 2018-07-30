@@ -19,7 +19,6 @@ import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
-import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -650,7 +649,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     public void entryInfo(CommonEntity data) {
         Constant.EMAIL=data.ducha_email;
-        SharedPrefUtil.saveSharedPrfString("plus_role", data.is_plus);
+        SharedPrefUtil.saveSharedUserString("plus_role", data.is_plus);
         SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
         SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
         SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);

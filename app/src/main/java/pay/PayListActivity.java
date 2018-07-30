@@ -200,9 +200,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         if (!isEmpty(mPhoneNumber)){//手机充值成功
             PhonePaySuccessAct.startAct(this,order_id);
         }else if (!isEmpty(mProductId)){
-            String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
+            String plus = SharedPrefUtil.getSharedUserString("plus_role", "");
             if (isEmpty(plus) || Integer.parseInt(plus) <= 1)
-                SharedPrefUtil.saveSharedPrfString("plus_role", "1");
+                SharedPrefUtil.saveSharedUserString("plus_role", "1");
             PaySuccessAct.startAct(this, order_id, price, pay_sn, true);
         }else {
             PaySuccessAct.startAct(this, order_id, price, pay_sn, false);
