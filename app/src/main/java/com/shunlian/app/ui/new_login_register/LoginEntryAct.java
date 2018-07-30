@@ -9,7 +9,6 @@ import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.view.IView;
-import com.shunlian.app.wxapi.WXEntryActivity;
 
 import butterknife.OnClick;
 
@@ -47,13 +46,13 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     @OnClick(R.id.llayout_wechat_login)
     public void wechatLogin(){
-        WXEntryActivity.startAct(this,"login",null);
-        finish();
-        /*if (presenter == null) {
+        /*WXEntryActivity.startAct(this,"login",null);
+        finish();*/
+        if (presenter == null) {
             presenter = new TestWXLoginPresenter(this, this);
         }else {
             presenter.initApi();
-        }*/
+        }
     }
 
     @OnClick(R.id.mbtn_login)

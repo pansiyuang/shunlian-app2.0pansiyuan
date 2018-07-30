@@ -1,15 +1,26 @@
 package com.shunlian.app.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.newchat.util.MessageCountManager;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
+import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.new_login_register.RegisterAndBindingAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -67,7 +78,7 @@ public class TestWXLoginPresenter extends BasePresenter {
 
                 } else if ("1".equals(status)) {
 
-                    Common.staticToast(entity.message);
+                    loginSuccess(entity, wxLoginEntity);
 
                 } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
 
@@ -81,5 +92,36 @@ public class TestWXLoginPresenter extends BasePresenter {
                 }
             }
         });
+    }
+
+    private void loginSuccess(BaseEntity<WXLoginEntity> entity, WXLoginEntity wxLoginEntity) {
+        Common.staticToast(entity.message);
+
+        //登陆成功啦
+        SharedPrefUtil.saveSharedPrfString("token", wxLoginEntity.token);
+        SharedPrefUtil.saveSharedPrfString("avatar", wxLoginEntity.avatar);
+        SharedPrefUtil.saveSharedPrfString("plus_role", wxLoginEntity.plus_role);
+        SharedPrefUtil.saveSharedPrfString("refresh_token", wxLoginEntity.refresh_token);
+        SharedPrefUtil.saveSharedPrfString("member_id", wxLoginEntity.member_id);
+        if (wxLoginEntity.tag!=null)
+            SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(wxLoginEntity.tag));
+        JpushUtil.setJPushAlias();
+        //通知登录成功
+        DefMessageEvent event = new DefMessageEvent();
+        event.loginSuccess = true;
+        EventBus.getDefault().post(event);
+
+        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+            Common.goGoGo(context, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
+                    ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
+                    ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
+        }
+        EasyWebsocketClient.getInstance(context).initChat(); //初始化聊天
+        MessageCountManager.getInstance(context).initData();
+
+        if (!"1".equals(wxLoginEntity.is_tag)){
+            SexSelectAct.startAct(context);
+        }
+        ((Activity)context).finish();
     }
 }

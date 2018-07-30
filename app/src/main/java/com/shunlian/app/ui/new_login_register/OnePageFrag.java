@@ -106,7 +106,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         met_id.setOnTouchListener((v, event) ->{
             if (!isRuning1){
                 isRuning1 = true;
-                runAnimation("导购员ID",R.id.rlayout_id,met_id);
+                runAnimation("导购专员ID",R.id.rlayout_id,met_id);
             }
             return false;
         });
@@ -197,7 +197,10 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
      */
     private void checkPicCode(CharSequence s) {
         //如果推荐人id不正确，不允许执行下一步
-        if (rlayout_id.getVisibility() == View.VISIBLE && !isRefereesIdRight)return;
+        if (rlayout_id.getVisibility() == View.VISIBLE && !isRefereesIdRight){
+            setEdittextFocusable(true,met_id);
+            return;
+        }
 
         String mobile = met_mobile.getText().toString().trim();
         //如果手机号不正确，不允许执行下一步
@@ -205,6 +208,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             if (isEmpty(mobile) || (!isEmpty(mobile) && mobile.length() != 11) || !iSMobileRight){
                 iSMobileRight(false);
                 if (mFlag != RegisterAndBindingAct.FLAG_LOGIN)mbtn_login.setEnabled(false);
+                return;
             }
         }
 
@@ -269,7 +273,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
                 break;
             case RegisterAndBindingAct.FLAG_BIND_ID://绑定id
-                mtv_tip.setText("绑定导购员ID");
+                mtv_tip.setText("绑定导购专员ID");
                 gone(rlayout_mobile,mbtn_login);
 
                 break;
@@ -320,6 +324,11 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
     @OnClick(R.id.mbtn_login)
     public void btnLogin(){
+        if (!iSMobileRight){
+            Common.staticToast("手机号错误");
+            setEdittextFocusable(true,met_mobile);
+            return;
+        }
         String mobile = met_mobile.getText().toString().trim();
         String picCode = met_pic_code.getText().toString().trim();
         ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
@@ -409,15 +418,18 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         visible(miv_tip);
         if (isRight){
             miv_tip.setImageResource(R.mipmap.correct_g);
-            //setEdittextFocusable(true,met_pic_code);
         }else {
             miv_tip.setImageResource(R.mipmap.credit_error);
+            setEdittextFocusable(true,met_mobile);
         }
     }
 
     @Override
     public void isRefereesId(boolean isRight) {
         isRefereesIdRight = isRight;
+        if (!isRight){
+            setEdittextFocusable(true,met_id);
+        }
     }
 
     @Override
@@ -437,21 +449,51 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                 mbtn_login.setEnabled(true);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
+                if (!isRefereesIdRight){
+                    Common.staticToast("导购专员id错误");
+                    setEdittextFocusable(true,met_id);
+                    return;
+                }
+                if (!iSMobileRight){
+                    Common.staticToast("手机号错误");
+                    setEdittextFocusable(true,met_mobile);
+                    return;
+                }
                 //注册
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mobile,picCode,
                         "",mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE_ID){
+                if (!isRefereesIdRight){
+                    Common.staticToast("导购专员id错误");
+                    setEdittextFocusable(true,met_id);
+                    return;
+                }
+                if (!iSMobileRight){
+                    Common.staticToast("手机号错误");
+                    setEdittextFocusable(true,met_mobile);
+                    return;
+                }
                 //绑定
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE){
+                if (!iSMobileRight){
+                    Common.staticToast("手机号错误");
+                    setEdittextFocusable(true,met_mobile);
+                    return;
+                }
                 //绑定手机
                 ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_ID){
+                if (!isRefereesIdRight){
+                    Common.staticToast("导购专员id错误");
+                    setEdittextFocusable(true,met_id);
+                    return;
+                }
                 //绑定id
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mMobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
