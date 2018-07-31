@@ -249,6 +249,9 @@
     <string name="shop_promotion_activity">店铺促销活动</string>
     <string name="selection">选择</string>
     <string name="feedback">反馈</string>
+    <string name="goods_jiarujinhuo">加入进货单</string>
+    <string name="goods_tuangoupifa">团购批发</string>
+    <string name="goods_tuangoushangping">团购商品%s件起拍~</string>
     <string name="ready_to_delete_history">确定要清空搜索的历史记录么？</string>
 
     <!--购物车-->

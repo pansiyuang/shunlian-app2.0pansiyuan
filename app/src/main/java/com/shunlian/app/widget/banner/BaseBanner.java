@@ -298,7 +298,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
                 }
             });
         }
-        if (params.length > 0 && params[0] == 1) {
+        if (params.length > 0 ) {
             ImageView imageView = new ImageView(getContext());
             addView(imageView, 1);
             RelativeLayout.LayoutParams layoutParams = (LayoutParams) imageView.getLayoutParams();
@@ -307,7 +307,14 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             layoutParams.height = i;
             layoutParams.topMargin = dp2px(70);
             layoutParams.leftMargin = i / 5;
-            imageView.setImageResource(R.mipmap.img_plus_youping_xiao);
+            switch (params[0]){
+                case 1:
+                    imageView.setImageResource(R.mipmap.img_plus_youping_xiao);
+                    break;
+                case 2:
+                    imageView.setImageResource(R.mipmap.img_biaoqian_tuangou);
+                    break;
+            }
         }
         startScroll();
     }

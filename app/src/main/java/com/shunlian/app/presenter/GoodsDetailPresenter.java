@@ -134,6 +134,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
 
                     if ("1".equals(data.type)){
                         iView.superiorProduct();
+                    }else if ("2".equals(data.type)){
+                        iView.groupBuy();
                     }
                 }
             }

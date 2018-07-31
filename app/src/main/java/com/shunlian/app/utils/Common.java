@@ -322,8 +322,8 @@ public class Common {
                 PlusGifDetailAct.startAct(context, params[0]);
                 break;
             case "login":
-                //LoginAct.startAct(context);
-                LoginEntryAct.startAct(context);
+                LoginAct.startAct(context);
+//                LoginEntryAct.startAct(context);
                 break;
             case "article":
                 ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);
