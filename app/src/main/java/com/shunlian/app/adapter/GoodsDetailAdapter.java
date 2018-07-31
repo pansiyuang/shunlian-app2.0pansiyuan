@@ -900,10 +900,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             BannerHolder mHolder = (BannerHolder) holder;
             if (mGoodsEntity.pics != null) {
                 String type = mGoodsEntity.type;
-                if ("1".equals(type)) {
-                    mHolder.kanner.setBanner(mGoodsEntity.pics, 1);
-                } else {
-                    mHolder.kanner.setBanner(mGoodsEntity.pics);
+                switch (type){
+                    case "1":
+                        mHolder.kanner.setBanner(mGoodsEntity.pics, 1);
+                        break;
+                    case "2":
+                        mHolder.kanner.setBanner(mGoodsEntity.pics, 2);
+                        break;
+                    default:
+                        mHolder.kanner.setBanner(mGoodsEntity.pics);
+                        break;
                 }
                 mHolder.kanner.setOnItemClickL(pos -> {
                     BigImgEntity entity = new BigImgEntity();

@@ -238,7 +238,7 @@ public class Common {
                 break;
             case "coupon":
                 if (TextUtils.isEmpty(token)) {
-                    LoginAct.startAct(context);
+                    Common.goGoGo(context,"login");
                 } else {
                     GetCouponAct.startAct(context);
                 }
@@ -277,7 +277,7 @@ public class Common {
                 break;
             case "myshop":
                 if (TextUtils.isEmpty(token)) {
-                    LoginAct.startAct(context);
+                    Common.goGoGo(context,"login");
                 } else {
                     MyLittleStoreActivity.startAct(context);
                 }
@@ -298,7 +298,7 @@ public class Common {
 //                break;
             case "commission":
                 if (TextUtils.isEmpty(token)) {
-                    LoginAct.startAct(context);
+                    Common.goGoGo(context,"login");
                 } else {
                     MyProfitAct.startAct(context, false);
                 }
@@ -309,7 +309,7 @@ public class Common {
 //                break;
             case "voucherlist":
                 if (TextUtils.isEmpty(token)) {
-                    LoginAct.startAct(context);
+                    Common.goGoGo(context,"login");
                 } else {
                     CouponListAct.startAct(context);
                 }
@@ -322,8 +322,8 @@ public class Common {
                 PlusGifDetailAct.startAct(context, params[0]);
                 break;
             case "login":
-                //LoginAct.startAct(context);
-                LoginEntryAct.startAct(context);
+                LoginAct.startAct(context);
+//                LoginEntryAct.startAct(context);
                 break;
             case "article":
                 ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);
@@ -333,7 +333,7 @@ public class Common {
                 break;
             case "myorder"://我的订单
                 if (TextUtils.isEmpty(token)) {
-                    LoginAct.startAct(context);
+                    Common.goGoGo(context,"login");
                 } else {
                     OrderDetailAct.startAct(context, params[0]);
                 }
@@ -401,7 +401,7 @@ public class Common {
 //               Common.goGoGo(context, toPage, id, id1,id2, id3,id4, id5,id6,to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
 
                 if (TextUtils.isEmpty(token)) {
-                    LoginAct.startAct(context);
+                    Common.goGoGo(context,"login");
                 } else {
 
                     ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();

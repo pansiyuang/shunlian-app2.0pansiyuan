@@ -77,6 +77,11 @@ public interface IGoodsDetailView extends IView {
     default void superiorProduct(){}
 
     /**
+     * 团购
+     */
+    default void groupBuy(){}
+
+    /**
      * 库存不足
      */
     void stockDeficiency(String stock);
