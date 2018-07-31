@@ -151,7 +151,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             int limit = Integer.valueOf(goods.limit_min_buy);
 
             if ((Integer.valueOf(goods.qty) - 1) < limit) {
-                Common.staticToast("团购数量不能少于" + limit);
+                Common.staticToast(String.format(getString(R.string.goods_tuangoushangping), limit));
                 return;
             }
             int count = Integer.valueOf(goods.qty) - 1;
@@ -172,19 +172,36 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (!isEmpty(s.toString())) {
                     int goodsCount = Integer.valueOf(s.toString());
                     int limitCount;
+                    int goodsType = goods.type;
+                    switch (goodsType) {
+                        case 0: //普通商品
+                            break;
+                        case 1: //优品
+                            break;
+                        case 2: //团购
+                            limitCount = Integer.valueOf(goods.limit_min_buy);
+                            if (goodsCount < limitCount) {
+                                Common.staticToast(String.format(getString(R.string.goods_tuangoushangping), limitCount));
+                                enableViewHolder.edt_goods_count.setText(limitCount + "");
+                                enableViewHolder.edt_goods_count.setSelection(String.valueOf(limitCount).length());
+                                return;
+                            }
+                            break;
+                    }
+
                     if (goodsCount > stock) {
                         Common.staticToast("最多只能添加" + stock + "件商品哦");
                         enableViewHolder.edt_goods_count.setText(stock + "");
                         enableViewHolder.edt_goods_count.setSelection(String.valueOf(stock).length());
                     }
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
             }
         });
 
