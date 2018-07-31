@@ -139,7 +139,7 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
         map.put("id", articleId);
         sortAndMD5(map);
         Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().userLike(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
@@ -159,7 +159,7 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
         map.put("id", articleId);
         sortAndMD5(map);
         Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().userUnLike(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);

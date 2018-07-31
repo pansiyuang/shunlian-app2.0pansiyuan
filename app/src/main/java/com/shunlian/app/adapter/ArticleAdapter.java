@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -98,6 +99,24 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, TransformUtil.dip2px(context, 10));
                 tagViewHolder.itemView.setLayoutParams(layoutParams);
             }
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        if (!isEmpty(payloads) && holder instanceof ArticleViewHolder) {
+            ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
+            ArticleEntity.Article article = (ArticleEntity.Article) payloads.get(0);
+
+            articleViewHolder.tv_share_count.setText(article.forwards);
+            articleViewHolder.tv_evaluate_count.setText(article.likes);
+            if ("0".equals(article.had_like)) {
+                articleViewHolder.miv_evaluate.setImageResource(R.mipmap.icon_found_zan_n);
+            } else {
+                articleViewHolder.miv_evaluate.setImageResource(R.mipmap.icon_found_zan_h);
+            }
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
         }
     }
 
@@ -218,7 +237,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         for (int i = 0; i < lists.size(); i++) {
             if (articleId.equals(lists.get(i).id)) {
                 lists.get(i).had_like = hadLike;
-                notifyItemChanged(i + 1);
+                notifyItemChanged(i + 1, lists.get(i));
                 break;
             }
         }
