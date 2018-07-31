@@ -214,6 +214,18 @@ public class RegisterAndBindingAct extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * 是否显示注册按钮
+     * @param isShow
+     */
+    public void isShowRegisterBtn(boolean isShow){
+        if (isShow){
+            visible(mtv_register);
+        }else {
+            gone(mtv_register);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

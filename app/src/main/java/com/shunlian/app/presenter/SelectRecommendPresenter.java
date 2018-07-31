@@ -25,7 +25,6 @@ public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView
     public SelectRecommendPresenter(Context context, ISelectRecommendView iView, String member_id) {
         super(context, iView);
         this.member_id = member_id;
-        initApi();
     }
 
     @Override
@@ -68,15 +67,14 @@ public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView
         map.put("code",id);
         sortAndMD5(map);
 
-        Call<BaseEntity<MemberCodeListEntity.ListBean>>
+        Call<BaseEntity<MemberCodeListEntity>>
                 baseEntityCall = getApiService().codeInfo(map);
 
         getNetData(baseEntityCall,new SimpleNetDataCallback
-                <BaseEntity<MemberCodeListEntity.ListBean>>(){
+                <BaseEntity<MemberCodeListEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<MemberCodeListEntity.ListBean> entity) {
+            public void onSuccess(BaseEntity<MemberCodeListEntity> entity) {
                 super.onSuccess(entity);
-
                 iView.codeInfo(entity.data);
             }
         });

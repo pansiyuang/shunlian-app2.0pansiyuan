@@ -2,6 +2,7 @@ package com.shunlian.app.ui.register;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
@@ -111,13 +112,6 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         miv_cancale.setOnClickListener(this);
         tv_select.setOnClickListener(this);
         tv_sure.setOnClickListener(this);
-        frame_detail.setOnTouchListener((v, event) -> {
-            boolean b = inRangeOfView(ll_detail_content, event);
-            if (!b){
-                dialogHidden();
-            }
-            return false;
-        });
     }
 
     @Override
@@ -141,6 +135,8 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         presenter = new SelectRecommendPresenter(this,this, id);
         if (!isEmpty(id) && isFocus){
             presenter.codeDetail(id);
+        }else {
+            presenter.initApi();
         }
 
         GridLayoutManager manager = new GridLayoutManager(this,3);
@@ -245,23 +241,6 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                 TextView tv_nickname = holder.getView(R.id.tv_nickname);
                 tv_nickname.setText(s.nickname);
 
-                //old等级
-                /*TextView tv_title = holder.getView(R.id.tv_title);
-                if ("1".equals(s.member_role)){
-                    tv_title.setVisibility(View.VISIBLE);
-                    tv_title.setText(s.member_role_msg);
-                    tv_title.setBackgroundResource(R.mipmap.bg_login_chuangkejingying);
-                }else if ("2".equals(s.member_role)){
-                    tv_title.setVisibility(View.VISIBLE);
-                    tv_title.setText(s.member_role_msg);
-                    tv_title.setBackgroundResource(R.mipmap.bg_login_jingyingdaoshi);
-                }else {
-                    tv_title.setVisibility(View.INVISIBLE);
-                }
-                MyImageView miv_vip = holder.getView(R.id.miv_vip);
-                Bitmap bitmap = TransformUtil.convertVIP(SelectRecommendAct.this, s.level);
-                miv_vip.setImageBitmap(bitmap);*/
-
                 MyImageView miv_select = holder.getView(R.id.miv_select);
                 if (position == selelctPosi){
                     visible(miv_select);
@@ -276,13 +255,16 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                 }
 
                 MyImageView miv_large_vip = holder.getView(R.id.miv_large_vip);
-                int memberRole = Integer.parseInt(isEmpty(s.member_role)?"0":s.member_role);
+                int memberRole = Integer.parseInt(isEmpty(s.role)?"0":s.role);
                 if (memberRole == 1){//店主
                     miv_large_vip.setImageResource(R.mipmap.img_plus_phb_dianzhu);
                 }else if (memberRole == 2){//主管
                     miv_large_vip.setImageResource(R.mipmap.img_plus_phb_zhuguan);
                 }else if (memberRole >= 3){//经理
                     miv_large_vip.setImageResource(R.mipmap.img_plus_phb_jingli);
+                }else {
+                    Bitmap bitmap = TransformUtil.convertNewVIP(SelectRecommendAct.this, s.level);
+                    miv_large_vip.setImageBitmap(bitmap);
                 }
             }
         };
@@ -306,19 +288,24 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         recommenderId = listBean.code;
         member_id = listBean.member_id;
 
+        //等级描述
+        mtv_vip.setText(listBean.member_role_msg);
         //等级
-        int memberRole = Integer.parseInt(isEmpty(listBean.member_role)?"0":listBean.member_role);
+        int memberRole = Integer.parseInt(isEmpty(listBean.role)?"0":listBean.role);
         if (memberRole == 1){//店主
             miv_vip.setImageResource(R.mipmap.img_plus_phb_dianzhu);
         }else if (memberRole == 2){//主管
             miv_vip.setImageResource(R.mipmap.img_plus_phb_zhuguan);
         }else if (memberRole >= 3){//经理
             miv_vip.setImageResource(R.mipmap.img_plus_phb_jingli);
+        }else {
+            Bitmap bitmap = TransformUtil.convertNewVIP(SelectRecommendAct.this, listBean.level);
+            miv_vip.setImageBitmap(bitmap);
+            //等级描述
+            mtv_vip.setText(listBean.level);
         }
         //推荐人id
         mtv_id.setText(recommenderId);
-        //等级描述
-        mtv_vip.setText(listBean.member_role_msg);
         //标签
         mtv_label.setText(listBean.tag_val);
         //简介
@@ -338,8 +325,9 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
      * @param bean
      */
     @Override
-    public void codeInfo(MemberCodeListEntity.ListBean bean) {
-        showDialog(bean);
+    public void codeInfo(MemberCodeListEntity bean) {
+        if (bean.info != null)
+            showDialog(bean.info);
     }
 
     @Override

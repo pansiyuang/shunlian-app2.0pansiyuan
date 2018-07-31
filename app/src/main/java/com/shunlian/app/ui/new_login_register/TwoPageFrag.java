@@ -159,6 +159,7 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
             gone(rlayout_nickname);
         }
         countDown();
+        ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(false);
     }
 
     /**
@@ -186,6 +187,7 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
         }
         countDown();
         input_code.clearAll();
+        ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(false);
     }
 
     @OnClick(R.id.mtv_downTime)

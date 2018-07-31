@@ -140,7 +140,6 @@
         android:background="@drawable/rounded_corner_solid_pink_50px"
         android:gravity="center"
         android:text="登录"
-        android:enabled="false"
         android:textColor="@color/white"
         android:textSize="15dp"
         android:visibility="gone" />
