@@ -17,6 +17,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String id;
     public String title;
     public String introduction;//商品简介
+    public String limit_min_buy;//团购商品最少购买数
     public Detail detail;
     public String free_shipping;
     public String shipping_fee;//运费
@@ -34,7 +35,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String send_time;
     public String quality_guarantee;
     public String credit;
-    public String type;// 普通商品0，优品1
+    public String type;// 普通商品0，优品1,团购商品2
 
     public String is_preferential;//店铺优惠  没有值的时候为空字符串
     public String member_cart_count;//详情页用户购物车角标数字
@@ -886,6 +887,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public boolean isSelect;
         public String every_day_ing;
         public String reduced;
+        public String limit_min_buy;//团购商品最少购买数
 
         public Goods() {
         }
@@ -933,6 +935,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.send_area);
             dest.writeString(this.comment_num);
             dest.writeString(this.comment_rate);
+            dest.writeString(this.limit_min_buy);
             dest.writeString(this.from);
             dest.writeParcelable(this.every_day, flags);
             dest.writeInt(this.index);
@@ -978,6 +981,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.send_area = in.readString();
             this.comment_num = in.readString();
             this.comment_rate = in.readString();
+            this.limit_min_buy = in.readString();
             this.from = in.readString();
             this.every_day = in.readParcelable(EveryDay.class.getClassLoader());
             this.index = in.readInt();
@@ -1043,6 +1047,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String thumb;
         public String price;
         public String max_price;
+        public String limit_min_buy;
         public List<Specs> specs;
         public List<Sku> sku;
 
@@ -1379,6 +1384,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.title);
         dest.writeParcelable(this.detail, flags);
         dest.writeString(this.free_shipping);
+        dest.writeString(this.limit_min_buy);
         dest.writeString(this.shipping_fee);
         dest.writeString(this.area);
         dest.writeString(this.market_price);
@@ -1423,6 +1429,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.title = in.readString();
         this.detail = in.readParcelable(Detail.class.getClassLoader());
         this.free_shipping = in.readString();
+        this.limit_min_buy = in.readString();
         this.shipping_fee = in.readString();
         this.area = in.readString();
         this.market_price = in.readString();

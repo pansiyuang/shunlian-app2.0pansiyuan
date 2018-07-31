@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,39 +43,29 @@ import static com.shunlian.app.utils.DeviceInfoUtil.getDeviceHeight;
 
 public class ParamDialog extends Dialog implements View.OnClickListener {
 
+    public boolean isSelectCount = true;//默认可以选择数量
     @BindView(R.id.iv_dialogPhoto)
     MyImageView iv_dialogPhoto;
-
     @BindView(R.id.dia_tv_price)
     TextView dia_tv_price;
-
     @BindView(R.id.tv_count)
     TextView tv_count;
-
     @BindView(R.id.recycler_param)
     RecyclerView recycler_param;
-
     @BindView(R.id.btn_minus)
     Button btn_minus;
-
     @BindView(R.id.btn_add)
     Button btn_add;
-
     @BindView(R.id.tv_number)
     TextView tv_number;
-
     @BindView(R.id.tv_param)
     TextView tv_param;
-
     @BindView(R.id.btn_complete)
     Button btn_complete;
-
     @BindView(R.id.iv_cancel)
     MyImageView iv_cancel;
-
     @BindView(R.id.rLayout_count)
     RelativeLayout rLayout_count;
-
     private List<GoodsDeatilEntity.Specs> specs;
     private List<GoodsDeatilEntity.Sku> mSku;
     private GoodsDeatilEntity goodsDeatilEntity;
@@ -88,13 +79,16 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private int recycleHeight;
     private int totalStock;
     private String hasOption = "0";//是否有参数
+    private int limit_min_buy = 1;//团购最小购买数
     private int currentCount = 1;
     private LinkedHashMap<String, GoodsDeatilEntity.Values> linkedHashMap;
-    public boolean isSelectCount = true;//默认可以选择数量
 
     public ParamDialog(Context context, GoodsDeatilEntity goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
+        if (!TextUtils.isEmpty(goods.limit_min_buy))
+            limit_min_buy = Integer.parseInt(goods.limit_min_buy);
+        currentCount = limit_min_buy;
         init();
         setParam(goods);
     }
@@ -102,6 +96,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     public ParamDialog(Context context, GoodsDeatilEntity.Goods goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
+        if (!TextUtils.isEmpty(goods.limit_min_buy))
+            limit_min_buy = Integer.parseInt(goods.limit_min_buy);
+        currentCount = limit_min_buy;
         init();
         setParamGoods(goods);
     }
@@ -136,6 +133,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
                 (LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
         recycler_param.setLayoutParams(params);
+        tv_number.setText(String.valueOf(currentCount));
     }
 
     public void setParam(GoodsDeatilEntity goods) {
@@ -252,11 +250,15 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 if (totalStock == 0) {
                     return;
                 }
-                currentCount--;
-                if (currentCount <= 1) {
-                    currentCount = 1;
+                if (currentCount > limit_min_buy) {
+                    currentCount--;
+                    if (currentCount <= 1) {
+                        currentCount = 1;
+                    }
+                    tv_number.setText(String.valueOf(currentCount));
+                } else {
+                    Common.staticToast(String.format(mContext.getString(R.string.goods_tuangoushangping), String.valueOf(limit_min_buy)));
                 }
-                tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
                 if (currentCount == 0) {
@@ -280,6 +282,63 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 dismiss();
                 break;
         }
+    }
+
+    /**
+     * 检查是否点击所有的item
+     */
+    public GoodsDeatilEntity.Sku checkLinkmap(boolean isComplete) {
+        if (linkedHashMap == null) {
+            return null;
+        }
+        mCurrentValues.clear();
+        //检查某项是否点击了
+        Iterator it = linkedHashMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            if (e.getValue() == null) {
+                if (isComplete) {
+                    Common.staticToast("请选择" + e.getKey());
+                }
+                return null;
+            }
+            mCurrentValues.add((GoodsDeatilEntity.Values) e.getValue());
+        }
+        // 按升序排序
+        Collections.sort(mCurrentValues, (values, t1) ->
+                Integer.valueOf(values.id).compareTo(Integer.valueOf(t1.id)));
+
+        //拼接id字符 按下划线拼接
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < mCurrentValues.size(); i++) {
+            result.append(mCurrentValues.get(i).id);
+            if (i != mCurrentValues.size() - 1) {
+                result.append("_");
+            }
+        }
+        //从sku中遍历获取sku
+        if (mSku == null || mSku.size() == 0) {
+            return null;
+        }
+        for (int i = 0; i < mSku.size(); i++) {
+            if (result.toString().equals(mSku.get(i).specs)) {
+                return mSku.get(i);
+            }
+        }
+        return null;
+    }
+
+    public void setOnSelectCallBack(OnSelectCallBack callBack) {
+        this.selectCallBack = callBack;
+        if (!isSelectCount) {
+            rLayout_count.setVisibility(View.GONE);
+        } else {
+            rLayout_count.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public interface OnSelectCallBack {
+        void onSelectComplete(GoodsDeatilEntity.Sku sku, int count);
     }
 
     public class ParamItemAdapter extends RecyclerView.Adapter<ParamItemAdapter.ViewHolder> {
@@ -343,7 +402,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                                     if (count <= 0) {
                                         currentCount = 0;
                                     } else {
-                                        currentCount = 1;
+                                        currentCount = limit_min_buy;
                                     }
                                     tv_number.setText(String.valueOf(currentCount));
                                 } catch (Exception e) {
@@ -376,64 +435,5 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 ButterKnife.bind(this, view);
             }
         }
-    }
-
-
-    /**
-     * 检查是否点击所有的item
-     */
-    public GoodsDeatilEntity.Sku checkLinkmap(boolean isComplete) {
-        if (linkedHashMap == null) {
-            return null;
-        }
-        mCurrentValues.clear();
-        //检查某项是否点击了
-        Iterator it = linkedHashMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry e = (Map.Entry) it.next();
-            if (e.getValue() == null) {
-                if (isComplete) {
-                    Common.staticToast("请选择" + e.getKey());
-                }
-                return null;
-            }
-            mCurrentValues.add((GoodsDeatilEntity.Values) e.getValue());
-        }
-        // 按升序排序
-        Collections.sort(mCurrentValues, (values, t1) ->
-                Integer.valueOf(values.id).compareTo(Integer.valueOf(t1.id)));
-
-        //拼接id字符 按下划线拼接
-        StringBuffer result = new StringBuffer();
-        for (int i = 0; i < mCurrentValues.size(); i++) {
-            result.append(mCurrentValues.get(i).id);
-            if (i != mCurrentValues.size() - 1) {
-                result.append("_");
-            }
-        }
-        //从sku中遍历获取sku
-        if (mSku == null || mSku.size() == 0) {
-            return null;
-        }
-        for (int i = 0; i < mSku.size(); i++) {
-            if (result.toString().equals(mSku.get(i).specs)) {
-                return mSku.get(i);
-            }
-        }
-        return null;
-    }
-
-    public void setOnSelectCallBack(OnSelectCallBack callBack) {
-        this.selectCallBack = callBack;
-        if (!isSelectCount) {
-            rLayout_count.setVisibility(View.GONE);
-        } else {
-            rLayout_count.setVisibility(View.VISIBLE);
-        }
-    }
-
-
-    public interface OnSelectCallBack {
-        void onSelectComplete(GoodsDeatilEntity.Sku sku, int count);
     }
 }
