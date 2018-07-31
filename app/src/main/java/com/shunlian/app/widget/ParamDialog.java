@@ -96,6 +96,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     public ParamDialog(Context context, GoodsDeatilEntity.Goods goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
+        if (!TextUtils.isEmpty(goods.limit_min_buy))
+            limit_min_buy = Integer.parseInt(goods.limit_min_buy);
+        currentCount = limit_min_buy;
         init();
         setParamGoods(goods);
     }

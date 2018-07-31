@@ -161,6 +161,7 @@ public class SearchResultPresenter extends BasePresenter<ICollectionSearchResult
                 goods.thumb = entity.data.thumb;
                 goods.stock = entity.data.stock;
                 goods.price = entity.data.price;
+                goods.limit_min_buy = entity.data.limit_min_buy;
                 goods.goods_id = goods_id;
                 iView.showGoodsSku(goods);
             }
