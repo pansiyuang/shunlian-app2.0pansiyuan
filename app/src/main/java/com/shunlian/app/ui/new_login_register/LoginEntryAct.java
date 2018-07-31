@@ -3,13 +3,17 @@ package com.shunlian.app.ui.new_login_register;
 import android.content.Context;
 import android.content.Intent;
 
+import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.TestWXLoginPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.view.IView;
+import com.shunlian.app.widget.MyButton;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -21,6 +25,9 @@ public class LoginEntryAct extends BaseActivity implements IView{
     /***************登录条款************/
     public static final String TERMS_OF_SERVICE = "agreement/1";
     private TestWXLoginPresenter presenter;
+
+    @BindView(R.id.mbtn_old_login)
+    MyButton mbtn_old_login;
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,LoginEntryAct.class));
@@ -42,23 +49,32 @@ public class LoginEntryAct extends BaseActivity implements IView{
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        if (BuildConfig.DEBUG){
+            visible(mbtn_old_login);
+        }
     }
 
     @OnClick(R.id.llayout_wechat_login)
     public void wechatLogin(){
-        /*WXEntryActivity.startAct(this,"login",null);
-        finish();*/
+        /*WXEntryActivity.startAct(this,"login",null);*/
         if (presenter == null) {
             presenter = new TestWXLoginPresenter(this, this);
         }else {
             presenter.initApi();
         }
+        finish();
     }
 
     @OnClick(R.id.mbtn_login)
     public void mobileLogin(){
         RegisterAndBindingAct.startAct(this,
                 RegisterAndBindingAct.FLAG_LOGIN,null,null,null);
+        finish();
+    }
+
+    @OnClick(R.id.mbtn_old_login)
+    public void oldLoginEntry(){
+        LoginAct.startAct(this);
         finish();
     }
 

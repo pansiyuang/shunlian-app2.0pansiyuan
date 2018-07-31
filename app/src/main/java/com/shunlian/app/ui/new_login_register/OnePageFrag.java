@@ -275,6 +275,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         if (this.mFlag != mFlag){
             miv_tip.setVisibility(View.INVISIBLE);
             if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
+                met_mobile.setText("");
                 setDispatchFocusable(1);
             }
         }

@@ -53,8 +53,8 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
     MyTextView mtv_toolbar_msgCount;
 
     private Map<String, String> goods_sku;
-    private int combo_size;
     private String combo_id;
+    private int sku_size;//属性数量
     private MessageCountManager messageCountManager;
 
     public static void startAct(Context context,String combo_id,String goods_id){
@@ -131,14 +131,27 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
     @Override
     public void comboDetailData(ComboDetailEntity entity) {
         GoodsDeatilEntity.Combo current_combo = entity.current_combo;
-        combo_size = current_combo.goods.size();
+        int combo_size = current_combo.goods.size();
+        for (int i = 0; i < combo_size; i++) {
+            GoodsDeatilEntity.Goods goods = current_combo.goods.get(i);
+            String has_option = goods.goods_info.has_option;
+            if ("1".equals(has_option)){
+                sku_size++;
+            }
+        }
         ComboDetailAdapter adapter = new ComboDetailAdapter(this,current_combo.goods,entity);
         recy_view.setAdapter(adapter);
         adapter.setSelectParamsListener((goods_id, sku) -> goods_sku.put(goods_id,sku));
+
+
     }
 
     @OnClick(R.id.mtv_buy)
     public void buyCombo(){
+        if (goods_sku.size() != sku_size){
+            Common.staticToast("请选择商品属性");
+            return;
+        }
         ComboEntity comboEntity = new ComboEntity(combo_id,goods_sku);
         try {
             String s = new ObjectMapper().writeValueAsString(comboEntity);
