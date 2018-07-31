@@ -2467,7 +2467,7 @@ public interface ApiService {
      * @return
      */
     @GET("member/register/codeInfo")
-    Call<BaseEntity<MemberCodeListEntity.ListBean>> codeInfo(@QueryMap Map<String, String> map);
+    Call<BaseEntity<MemberCodeListEntity>> codeInfo(@QueryMap Map<String, String> map);
 
     /**
      * 我还想要

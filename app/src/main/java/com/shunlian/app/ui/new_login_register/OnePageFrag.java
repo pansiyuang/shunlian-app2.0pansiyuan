@@ -128,20 +128,14 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         });
 
         //推荐人输入框验证
-        //addTextChangedListener(met_id,1);
+        setOnFocusChangeListener(met_id,1);
         //手机号输入框验证
         addTextChangedListener(met_mobile,2);
+        //setOnFocusChangeListener(met_mobile,2);
         //图形验证码输入框验证
         addTextChangedListener(met_pic_code,3);
 
-        met_id.setOnFocusChangeListener((view, hasFocus) -> {
-            //失去焦点时检验推荐人id是否正确
-            if (!hasFocus && rlayout_id.getVisibility() == View.VISIBLE){
-                String refereesId = met_id.getText().toString().trim();
-                if (mPresenter != null)
-                    mPresenter.checkRefereesId(refereesId);
-            }
-        });
+
     }
 
     /**
@@ -156,13 +150,36 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                 super.onTextChanged(s, start, before, count);
                 switch (state){
                     case 1:
-                        checkReferees(s);
                         break;
                     case 2:
-                        checkMobileAPI(s);
+                        if (s.length() >= 11){
+                            checkMobileAPI();
+                        }else {
+                            iSMobileRight(false);
+                        }
                         break;
                     case 3:
-                        checkPicCode(s);
+                        if (mFlag != RegisterAndBindingAct.FLAG_LOGIN) checkPicCode(s);
+                        break;
+                }
+            }
+        });
+    }
+
+    /**
+     *
+     * @param editText
+     * @param state 1监听输入推荐人  2 监听输入手机号
+     */
+    private void setOnFocusChangeListener(EditText editText,int state){
+        editText.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus){
+                switch (state){
+                    case 1:
+                        checkReferees();
+                        break;
+                    case 2:
+                        checkMobileAPI();
                         break;
                 }
             }
@@ -171,30 +188,36 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
     /**
      * 检验推荐人id
-     * @param s
      */
-    private void checkReferees(CharSequence s) {
-
+    private void checkReferees() {
+        //失去焦点时检验推荐人id是否正确
+        if (rlayout_id != null && rlayout_id.getVisibility() == View.VISIBLE){
+            String refereesId = met_id.getText().toString().trim();
+            if (mPresenter != null)
+                mPresenter.checkRefereesId(refereesId);
+        }
     }
 
     /**
      * 接口验证手机号
-     * @param s
      */
-    private void checkMobileAPI(CharSequence s) {
-        if (s.length() >= 11){
+    private void checkMobileAPI() {
+        String mobile = met_mobile.getText().toString().trim();
+        if (mobile.length() == 11){
             if (mPresenter != null){
                 if (mFlag == RegisterAndBindingAct.FLAG_LOGIN){
                     //登录验证手机号
-                    mPresenter.checkMobile(s.toString().trim(),"1");
+                    mPresenter.checkMobile(mobile,"1");
                 }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
                     //注册验证手机号
-                    mPresenter.checkMobile(s.toString().trim(),"0");
+                    mPresenter.checkMobile(mobile,"0");
                 }else {
                     //微信登录验证手机号
-                    mPresenter.checkMobile(s.toString().trim(),"2");
+                    mPresenter.checkMobile(mobile,"2");
                 }
             }
+        }else {
+            iSMobileRight(false);
         }
     }
 
@@ -203,27 +226,15 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
      * @param s
      */
     private void checkPicCode(CharSequence s) {
-        //如果推荐人id不正确，不允许执行下一步
-        if (rlayout_id.getVisibility() == View.VISIBLE && !isRefereesIdRight){
-            setEdittextFocusable(true,met_id);
-            return;
-        }
-
-        String mobile = met_mobile.getText().toString().trim();
-        //如果手机号不正确，不允许执行下一步
-        if (mFlag != RegisterAndBindingAct.FLAG_BIND_ID){
-            if (isEmpty(mobile) || (!isEmpty(mobile) && mobile.length() != 11) || !iSMobileRight){
-                iSMobileRight(false);
-                if (mFlag != RegisterAndBindingAct.FLAG_LOGIN)mbtn_login.setEnabled(false);
-                return;
-            }
-        }
-
         if (s.length()>=4 && mPresenter != null){
-            String picCode = met_pic_code.getText().toString().trim();
-            if (isEmpty(mobile)){
+            String mobile = "";
+            if (mFlag == RegisterAndBindingAct.FLAG_BIND_ID){
                 mobile = mMobile;
+            }else {
+               mobile = met_mobile.getText().toString().trim();
             }
+            String picCode = met_pic_code.getText().toString().trim();
+
             mPresenter.sendSmsCode(mobile, picCode);
         }
     }
@@ -249,7 +260,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         if (!isEmpty(member_id)){
             met_id.setText(member_id);
             met_id.setEnabled(false);
-            setEdittextFocusable(true,met_mobile);
+            setDispatchFocusable(2);
             mtv_select_id.setText(visity_specialist);
             if (mPresenter != null)
                 mPresenter.checkRefereesId(member_id);
@@ -264,7 +275,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         if (this.mFlag != mFlag){
             miv_tip.setVisibility(View.INVISIBLE);
             if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
-                setEdittextFocusable(true,met_id);
+                setDispatchFocusable(1);
             }
         }
         this.mFlag = mFlag;
@@ -273,6 +284,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     }
 
     private void showStatus(int flag) {
+        ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(false);
         switch (flag) {
             case RegisterAndBindingAct.FLAG_REGISTER://注册
                 mtv_tip.setText("注册");
@@ -299,6 +311,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                 mtv_tip.setText("手机号登录");
                 gone(rlayout_id);
                 visible(mbtn_login);
+                ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(true);
 
                 break;
         }
@@ -310,7 +323,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         this.mSelectMember_id = memberID.member_id;
         met_id.setText(mRecommenderId);
         isRefereesIdRight = true;
-        setEdittextFocusable(true, met_mobile);
+        setDispatchFocusable(2);
     }
 
     @OnClick(R.id.mtv_select_id)
@@ -341,13 +354,18 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             return;
         }
 
-        if (!iSMobileRight){
-            Common.staticToast("手机号错误");
-            setEdittextFocusable(true,met_mobile);
+        if (isEmpty(picCode)){
+            Common.staticToast("请输入验证码");
             return;
         }
-        ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
-                null,mMember_id,mFlag);
+
+        if (!iSMobileRight){
+            Common.staticToast("手机号错误");
+            setDispatchFocusable(2);
+            return;
+        }
+        if (mPresenter != null)
+            mPresenter.sendSmsCode(mobile, picCode);
     }
 
     private void runAnimation(String text,int subject,EditText view) {
@@ -435,7 +453,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             miv_tip.setImageResource(R.mipmap.correct_g);
         }else {
             miv_tip.setImageResource(R.mipmap.credit_error);
-            setEdittextFocusable(true,met_mobile);
+            setDispatchFocusable(2);
         }
     }
 
@@ -443,7 +461,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     public void isRefereesId(boolean isRight) {
         isRefereesIdRight = isRight;
         if (!isRight){
-            setEdittextFocusable(true,met_id);
+            setDispatchFocusable(1);
         }
     }
 
@@ -461,59 +479,76 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             Common.hideKeyboard(met_pic_code);
             if (mFlag == RegisterAndBindingAct.FLAG_LOGIN) {
                 //登录
-                mbtn_login.setEnabled(true);
+                ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
+                        null,mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
-                if (!isRefereesIdRight){
-                    Common.staticToast("导购专员id错误");
-                    setEdittextFocusable(true,met_id);
-                    return;
-                }
-                if (!iSMobileRight){
-                    Common.staticToast("手机号错误");
-                    setEdittextFocusable(true,met_mobile);
-                    return;
-                }
+                if (!isRefereesIdRight())return;
+                if (!isMobileRight())return;
                 //注册
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mobile,picCode,
                         "",mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE_ID){
-                if (!isRefereesIdRight){
-                    Common.staticToast("导购专员id错误");
-                    setEdittextFocusable(true,met_id);
-                    return;
-                }
-                if (!iSMobileRight){
-                    Common.staticToast("手机号错误");
-                    setEdittextFocusable(true,met_mobile);
-                    return;
-                }
+                if (!isRefereesIdRight())return;
+                if (!isMobileRight())return;
                 //绑定
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE){
-                if (!iSMobileRight){
-                    Common.staticToast("手机号错误");
-                    setEdittextFocusable(true,met_mobile);
-                    return;
-                }
+                if (!isMobileRight())return;
                 //绑定手机
                 ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_ID){
-                if (!isRefereesIdRight){
-                    Common.staticToast("导购专员id错误");
-                    setEdittextFocusable(true,met_id);
-                    return;
-                }
+                if (!isRefereesIdRight())return;
                 //绑定id
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mMobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
             }
+        }
+    }
+
+    /**
+     * 导购专员id不对跳转导购专员输入框
+     * @return
+     */
+    private boolean isRefereesIdRight(){
+        if (!isRefereesIdRight){
+            Common.staticToast("导购专员id错误");
+            setDispatchFocusable(1);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 手机号不对跳转手机号输入框
+     * @return
+     */
+    private boolean isMobileRight(){
+        if (!iSMobileRight){
+            Common.staticToast("手机号错误");
+            setDispatchFocusable(2);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @param state 1导购获取焦点，2手机号获取焦点，3验证码获取焦点
+     */
+    private void setDispatchFocusable(int state){
+        if (state == 1){
+            setEdittextFocusable(true,met_id);
+        }else if (state == 2){
+            setEdittextFocusable(true,met_mobile);
+        }else if (state == 3){
+            setEdittextFocusable(true,met_pic_code);
         }
     }
 }

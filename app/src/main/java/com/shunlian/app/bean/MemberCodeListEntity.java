@@ -11,6 +11,7 @@ import java.util.List;
 public class MemberCodeListEntity {
 
     public List<ListBean> list;
+    public ListBean info;
 
     public String url;
     @Override

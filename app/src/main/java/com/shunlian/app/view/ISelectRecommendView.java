@@ -18,5 +18,5 @@ public interface ISelectRecommendView extends IView {
      * 详情
      * @param bean
      */
-    void codeInfo(MemberCodeListEntity.ListBean bean);
+    void codeInfo(MemberCodeListEntity bean);
 }
