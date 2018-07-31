@@ -30,7 +30,6 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
 
     public RegisterAndBindPresenter(Context context, IRegisterAndBindView iView) {
         super(context, iView);
-        initApi();
     }
 
     /**
@@ -53,7 +52,7 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
      * 处理网络请求
      */
     @Override
-    protected void initApi() {
+    public void initApi() {
         getCode();
     }
 

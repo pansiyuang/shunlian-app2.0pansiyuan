@@ -190,10 +190,6 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
 
     @OnClick(R.id.mtv_downTime)
     public void resetDownTime(){
-        if (countDownTimer != null){
-            countDownTimer.cancel();
-            countDownTimer.start();
-        }
         if (mPresenter != null){
             mPresenter.sendSmsCode(mMobile,picCode);
         }
@@ -274,6 +270,13 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
 
     }
 
+    @Override
+    public void smsCode(String message) {
+        if (!isEmpty(message) && countDownTimer != null){
+            countDownTimer.cancel();
+            countDownTimer.start();
+        }
+    }
 
     @Override
     public void loginMobileSuccess(LoginFinishEntity content) {

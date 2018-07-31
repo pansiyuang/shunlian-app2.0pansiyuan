@@ -20,7 +20,6 @@ import com.shunlian.app.view.IView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -103,8 +102,7 @@ public class TestWXLoginPresenter extends BasePresenter {
         SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
         SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
-        if (wxLoginEntity.tag!=null)
-            SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(wxLoginEntity.tag));
+
         JpushUtil.setJPushAlias();
         //通知登录成功
         DefMessageEvent event = new DefMessageEvent();

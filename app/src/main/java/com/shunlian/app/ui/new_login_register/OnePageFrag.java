@@ -235,6 +235,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         showStatus(mFlag);
 
         mPresenter = new RegisterAndBindPresenter(baseActivity, this);
+        mPresenter.initApi();
 
         //如果有推荐人，直接填写推荐人
         String member_id = SharedPrefUtil.getSharedUserString("share_code", "");
@@ -324,13 +325,20 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
     @OnClick(R.id.mbtn_login)
     public void btnLogin(){
+
+        String mobile = met_mobile.getText().toString().trim();
+        String picCode = met_pic_code.getText().toString().trim();
+
+        if (isEmpty(mobile)){
+            Common.staticToast("手机号不能为空喔~");
+            return;
+        }
+
         if (!iSMobileRight){
             Common.staticToast("手机号错误");
             setEdittextFocusable(true,met_mobile);
             return;
         }
-        String mobile = met_mobile.getText().toString().trim();
-        String picCode = met_pic_code.getText().toString().trim();
         ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
                 null,mMember_id,mFlag);
     }
