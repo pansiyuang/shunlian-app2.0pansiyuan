@@ -29,8 +29,7 @@
             android:padding="10dp"
             android:src="@mipmap/img_shoppingcar_selected_n" />
 
-        <TextView
-            android:id="@+id/tv_store"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -38,14 +37,27 @@
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/ll_right"
             android:layout_toRightOf="@+id/miv_store_select"
-            android:drawableLeft="@mipmap/img_shoppingcar_shop"
-            android:drawablePadding="4dp"
-            android:drawableRight="@mipmap/img_common_viewarrow_1"
-            android:ellipsize="end"
             android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_store"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/img_shoppingcar_shop"
+                android:drawablePadding="4dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_common_viewarrow_1" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_right"

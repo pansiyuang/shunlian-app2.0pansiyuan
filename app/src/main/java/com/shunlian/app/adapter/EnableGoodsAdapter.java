@@ -148,6 +148,12 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             if (isFastClick()) {
                 return;
             }
+            int limit = Integer.valueOf(goods.limit_min_buy);
+
+            if ((Integer.valueOf(goods.qty) - 1) < limit) {
+                Common.staticToast("团购数量不能少于" + limit);
+                return;
+            }
             int count = Integer.valueOf(goods.qty) - 1;
             if (count <= 0) {
                 return;
@@ -167,7 +173,9 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isEmpty(s.toString())) {
-                    if (Integer.valueOf(s.toString()) > stock) {
+                    int goodsCount = Integer.valueOf(s.toString());
+                    int limitCount;
+                    if (goodsCount > stock) {
                         Common.staticToast("最多只能添加" + stock + "件商品哦");
                         enableViewHolder.edt_goods_count.setText(stock + "");
                         enableViewHolder.edt_goods_count.setSelection(String.valueOf(stock).length());
