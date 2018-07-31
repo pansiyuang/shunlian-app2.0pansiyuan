@@ -128,11 +128,20 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         });
 
         //推荐人输入框验证
-        addTextChangedListener(met_id,1);
+        //addTextChangedListener(met_id,1);
         //手机号输入框验证
         addTextChangedListener(met_mobile,2);
         //图形验证码输入框验证
         addTextChangedListener(met_pic_code,3);
+
+        met_id.setOnFocusChangeListener((view, hasFocus) -> {
+            //失去焦点时检验推荐人id是否正确
+            if (!hasFocus && rlayout_id.getVisibility() == View.VISIBLE){
+                String refereesId = met_id.getText().toString().trim();
+                if (mPresenter != null)
+                    mPresenter.checkRefereesId(refereesId);
+            }
+        });
     }
 
     /**
@@ -173,19 +182,17 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
      * @param s
      */
     private void checkMobileAPI(CharSequence s) {
-        if (rlayout_id.getVisibility() == View.VISIBLE){//检验推荐人id是否正确
-            String refereesId = met_id.getText().toString().trim();
-            if (mPresenter != null)
-                mPresenter.checkRefereesId(refereesId);
-        }
         if (s.length() >= 11){
             if (mPresenter != null){
                 if (mFlag == RegisterAndBindingAct.FLAG_LOGIN){
                     //登录验证手机号
                     mPresenter.checkMobile(s.toString().trim(),"1");
-                }else {
+                }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
                     //注册验证手机号
                     mPresenter.checkMobile(s.toString().trim(),"0");
+                }else {
+                    //微信登录验证手机号
+                    mPresenter.checkMobile(s.toString().trim(),"2");
                 }
             }
         }

@@ -219,6 +219,8 @@
                     android:id="@+id/mtv_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -255,6 +257,8 @@
                     android:id="@+id/mtv_synopsis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
