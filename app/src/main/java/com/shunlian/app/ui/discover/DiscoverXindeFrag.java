@@ -73,13 +73,10 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
 
     @Override
     protected void initListener() {
-        lay_refresh.setOnRefreshListener(new onRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getExperienceList(true);
-                }
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getExperienceList(true);
             }
         });
 
