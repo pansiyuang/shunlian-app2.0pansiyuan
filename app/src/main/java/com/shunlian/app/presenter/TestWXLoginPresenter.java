@@ -6,6 +6,7 @@ import android.content.Context;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -18,6 +19,7 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +34,7 @@ public class TestWXLoginPresenter extends BasePresenter {
 
     public TestWXLoginPresenter(Context context, IView iView) {
         super(context, iView);
+        EventBus.getDefault().register(this);
         initApi();
     }
 
@@ -48,7 +51,7 @@ public class TestWXLoginPresenter extends BasePresenter {
      */
     @Override
     public void detachView() {
-
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -89,8 +92,17 @@ public class TestWXLoginPresenter extends BasePresenter {
                     RegisterAndBindingAct.startAct(context,
                             RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);
                 }
+
+                ((Activity)context).finish();
             }
         });
+    }
+
+    private DispachJump mJump;
+
+    @Subscribe(sticky = true)
+    public void eventBus(DispachJump jump) {
+        mJump = jump;
     }
 
     private void loginSuccess(BaseEntity<WXLoginEntity> entity, WXLoginEntity wxLoginEntity) {
@@ -117,8 +129,12 @@ public class TestWXLoginPresenter extends BasePresenter {
         EasyWebsocketClient.getInstance(context).initChat(); //初始化聊天
         MessageCountManager.getInstance(context).initData();
 
+        if (mJump != null){
+            Common.goGoGo(context,mJump.jumpType,mJump.items);
+        }
+
         if (!"1".equals(wxLoginEntity.is_tag)){
-            SexSelectAct.startAct(context);
+            SexSelectAct.startAct(context,mJump != null);
         }
         ((Activity)context).finish();
     }

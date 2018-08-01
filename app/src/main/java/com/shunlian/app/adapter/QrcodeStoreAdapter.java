@@ -173,7 +173,7 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         @Override
         public void onClick(View v) {
             if (listener != null) {
-                listener.onItemClick(v, getAdapterPosition());
+                listener.onItemClick(v, getAdapterPosition()-1);
             }
         }
     }

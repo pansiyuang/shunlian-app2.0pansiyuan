@@ -56,13 +56,13 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     @OnClick(R.id.llayout_wechat_login)
     public void wechatLogin(){
-        /*WXEntryActivity.startAct(this,"login",null);*/
+        //WXEntryActivity.startAct(this,"login",null);
         if (presenter == null) {
             presenter = new TestWXLoginPresenter(this, this);
         }else {
             presenter.initApi();
         }
-        finish();
+        //finish();
     }
 
     @OnClick(R.id.mbtn_login)
@@ -102,5 +102,12 @@ public class LoginEntryAct extends BaseActivity implements IView{
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null)
+            presenter.detachView();
     }
 }

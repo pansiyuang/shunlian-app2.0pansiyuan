@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.RegisterAndBindPresenter;
@@ -29,6 +30,7 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.VerificationCodeInput;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashSet;
 
@@ -73,6 +75,7 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
     private String refereesId;
     private boolean isRuning = false;
     private int mFlag;
+    private DispachJump mJump;
 
     /**
      * 设置布局id
@@ -144,6 +147,7 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
      */
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         mPresenter = new RegisterAndBindPresenter(baseActivity,this);
         Bundle arguments = getArguments();
         mMobile = arguments.getString("mobile");
@@ -250,6 +254,7 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
             countDownTimer = null;
         }
         isRuning = false;
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -280,6 +285,11 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
         }
     }
 
+    @Subscribe(sticky = true)
+    public void eventBus(DispachJump jump) {
+        mJump = jump;
+    }
+
     @Override
     public void loginMobileSuccess(LoginFinishEntity content) {
         //登陆成功啦
@@ -305,12 +315,12 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
 
-        /*if (!isEmpty(jumpType)){
-            Common.goGoGo(baseActivity,jumpType);
-        }*/
+        if (mJump != null){
+            Common.goGoGo(baseActivity,mJump.jumpType,mJump.items);
+        }
 
         if (!"1".equals(content.is_tag)){
-            SexSelectAct.startAct(baseActivity);
+            SexSelectAct.startAct(baseActivity,mJump != null);
         }
         baseActivity.finish();
     }

@@ -367,7 +367,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             super(itemView);
             baseBind = ButterKnife.bind(this, itemView);
             unbinders.add(baseBind);
-            itemView.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
         }
 
         /**

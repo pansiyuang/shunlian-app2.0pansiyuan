@@ -422,6 +422,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void shoppingCarClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
+            Common.theRelayJump("shoppingcar",null);
             Common.goGoGo(this,"login");
             isCart = true;
             return;
@@ -446,6 +447,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void personCenterClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
+            Common.theRelayJump("personCenter",null);
             Common.goGoGo(this,"login");
             isPerson = true;
             return;
