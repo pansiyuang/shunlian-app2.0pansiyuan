@@ -381,6 +381,9 @@ public class Common {
 //                String url = InterentTools.H5_HOST + "special/127";
                 H5SpecialAct.startAct(context, url, H5Act.MODE_SONIC);
                 break;
+            case "url":
+                H5Act.startAct(context, params[0], H5Act.MODE_SONIC);
+                break;
             case "slyoupin"://顺联优品
                 SuperProductsAct.startAct(context);
                 break;

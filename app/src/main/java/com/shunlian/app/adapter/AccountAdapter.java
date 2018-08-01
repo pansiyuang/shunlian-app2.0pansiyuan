@@ -41,7 +41,7 @@ public class AccountAdapter extends BaseRecyclerAdapter<CommonEntity> {
         mHolder.mtv_name.setText(ad.account_name);
     }
 
-    public class ActivityMoreHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
+    public class ActivityMoreHolder extends BaseRecyclerViewHolder{
 
         @BindView(R.id.mtv_name)
         MyTextView mtv_name;
