@@ -402,7 +402,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View view) {
-            if (listener != null){
+            if (listener != null&&getAdapterPosition()>=0&&getAdapterPosition()<lists.size()){
                 listener.onItemClick(view,getAdapterPosition());
             }
         }
