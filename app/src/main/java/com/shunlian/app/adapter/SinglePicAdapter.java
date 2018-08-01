@@ -58,6 +58,7 @@ public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
 
         public MViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             int picWidth = (Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context,(gap==0?10:gap)*2) - TransformUtil.dip2px(context,(border==0?20:border)*2)) / 3;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
             miv_pic.setLayoutParams(params);

@@ -67,6 +67,7 @@ public class ZXingPresenter extends BasePresenter<IZXingView>{
                 ScanCodeEntity data = entity.data;
                 SharedPrefUtil.saveSharedUserString("share_code", data.share_code);
                 ScanCodeEntity.Url mUrl = data.url;
+
                 if (!isEmpty(mUrl.item_id_list)){
                     String[] temp = new String[mUrl.item_id_list.size()];
                     Common.goGoGo(context,mUrl.type,mUrl.item_id_list.toArray(temp));

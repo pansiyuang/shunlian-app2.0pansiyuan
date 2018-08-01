@@ -212,7 +212,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         }
 
         if (!"1".equals(content.is_tag)){
-            SexSelectAct.startAct(baseActivity);
+            SexSelectAct.startAct(baseActivity,!isEmpty(jumpType));
         }
         baseActivity.finish();
     }

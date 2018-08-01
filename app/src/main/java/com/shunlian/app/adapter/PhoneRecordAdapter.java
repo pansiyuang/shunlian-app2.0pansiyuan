@@ -76,6 +76,7 @@ public class PhoneRecordAdapter extends BaseRecyclerAdapter<PhoneRecordEntity.MD
 
         public SingleViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
         }
 
     }
