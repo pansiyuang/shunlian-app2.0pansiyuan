@@ -603,10 +603,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.mtv_free_shipping.setText(getString(R.string.free_shipping));
             }
             GoodsDeatilEntity.GoodsData goods_data = mGoodsEntity.goods_data;
-            if (goods_data != null)
-                mHolder.mtv_sales.setText(String.format(getString(R.string.sold), goods_data.sales));
             if (goods_data != null) {
-                mHolder.mtv_sales.setText(String.format(getString(R.string.sold), goods_data.sales));
+                mHolder.mtv_sales.setText(isEmpty(goods_data.sales_desc)?"":goods_data.sales_desc);
                 int stock = Integer.parseInt(isEmpty(mGoodsEntity.stock)?"0":mGoodsEntity.stock);
                 if ("0".equals(mGoodsEntity.status) || stock <= 0){//商品下架或者库存为0显示几个人还想要
                     visible(mHolder.mtv_want);
