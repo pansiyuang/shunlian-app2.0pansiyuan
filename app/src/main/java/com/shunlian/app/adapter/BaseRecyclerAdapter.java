@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ProgressView;
 
@@ -372,6 +373,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
                 itemView.setOnClickListener(this);
             }else if (isShowFooter&&lists.size()==getItemCount()-1){
                 itemView.setOnClickListener(this);
+            }else {
+                itemView.setOnClickListener(null);
             }
         }
 
@@ -403,12 +406,13 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             ButterKnife.bind(this, itemView);
 //            Unbinder bind = ButterKnife.bind(this, itemView);
 //            unbinders.add(bind);
-            if (!isShowFooter&&lists.size()==getItemCount()){
+            if (!isShowFooter && lists.size() == getItemCount()) {
                 itemView.setOnClickListener(this);
-            }else if (isShowFooter&&lists.size()==getItemCount()-1){
+            } else if (isShowFooter && lists.size() == getItemCount() - 1) {
                 itemView.setOnClickListener(this);
+            } else {
+                itemView.setOnClickListener(null);
             }
-//            itemView.setOnClickListener(this);
         }
 
         @Override
