@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -108,6 +109,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private long act_start;//活动开始显示的时间
     private String re = "(w=|h=)(\\d+)";
     private Pattern p = Pattern.compile(re);
+    private Rect mRect;
 
     public GoodsDetailAdapter(Context context, GoodsDeatilEntity entity, List<String> lists) {
         super(context, false, lists);
@@ -435,59 +437,59 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof ActivityCouponHolder) {
             ActivityCouponHolder mHolder = (ActivityCouponHolder) holder;
             ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
-            if (vouchers != null && vouchers.size() > 0) {
-                mHolder.view_coupon.setVisibility(View.VISIBLE);
-                mHolder.mll_ling_Coupon.setVisibility(View.VISIBLE);
+            if (!isEmpty(vouchers)) {
+                visible(mHolder.view_coupon,mHolder.mll_ling_Coupon);
                 mHolder.mll_Coupon.removeAllViews();
-                if (strLengthMeasure == null) strLengthMeasure = new StringBuilder();
+                if (strLengthMeasure == null) {
+                    strLengthMeasure = new StringBuilder();
+                    mRect = new Rect();
+                }
                 strLengthMeasure.delete(0, strLengthMeasure.length());
                 for (int i = 0; i < vouchers.size(); i++) {
-                    if (i > 2) {
-                        break;
+                    if (i > 2)break;
+                    GoodsDeatilEntity.Voucher voucher = vouchers.get(i);
+                    MyTextView textView = new MyTextView(context);
+                    textView.setTextSize(11);
+                    textView.setMaxLines(1);
+                    textView.setEllipsize(TextUtils.TruncateAt.END);
+                    textView.setTextColor(getResources().getColor(R.color.value_FC2F57));
+                    textView.setBackgroundResource(R.drawable.edge_frame_r3);
+                    GradientDrawable background = (GradientDrawable) textView.getBackground();
+                    background.setColor(Color.WHITE);
+                    int padding = TransformUtil.dip2px(context, 4);
+                    textView.setPadding(padding, padding, padding, padding);
+                    if (Float.parseFloat(voucher.use_condition) == 0) {
+                        textView.setText(voucher.denomination.concat("元无门槛优惠券"));
                     } else {
-                        GoodsDeatilEntity.Voucher voucher = vouchers.get(i);
-                        MyTextView textView = new MyTextView(context);
-                        textView.setTextSize(11);
-                        textView.setMaxLines(1);
-                        textView.setEllipsize(TextUtils.TruncateAt.END);
-                        textView.setTextColor(getResources().getColor(R.color.value_FC2F57));
-                        textView.setBackgroundResource(R.drawable.edge_frame_r3);
-                        GradientDrawable background = (GradientDrawable) textView.getBackground();
-                        background.setColor(Color.WHITE);
-                        int padding = TransformUtil.dip2px(context, 4);
-                        textView.setPadding(padding, padding, padding, padding);
-                        if (Float.parseFloat(voucher.use_condition) == 0) {
-                            textView.setText(voucher.denomination.concat("元无门槛优惠券"));
-                        } else {
-                            textView.setText(getString(R.string.pull).concat(voucher.use_condition)
-                                    .concat(getString(R.string.reduce)).concat(voucher.denomination));
-                        }
-                        mHolder.mll_Coupon.addView(textView);
-                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
-                        layoutParams.leftMargin = TransformUtil.dip2px(context, 5.5f);
-                        textView.setLayoutParams(layoutParams);
+                        textView.setText(getString(R.string.pull).concat(voucher.use_condition)
+                                .concat(getString(R.string.reduce)).concat(voucher.denomination));
+                    }
+                    mHolder.mll_Coupon.addView(textView);
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
+                    layoutParams.leftMargin = TransformUtil.dip2px(context, 5.5f);
+                    textView.setLayoutParams(layoutParams);
 
-                        //长度兼容
-                        strLengthMeasure.append(textView.getText());
-                        if (strLengthMeasure.length() > 22) {
-                            mHolder.mll_Coupon.removeViewAt(mHolder.mll_Coupon.getChildCount() - 1);
-                        }
+                    //长度兼容
+                    strLengthMeasure.append(textView.getText());
+                    textView.getPaint().getTextBounds(strLengthMeasure.toString(),
+                            0,strLengthMeasure.length(),mRect);
+                    //strLengthMeasure.length() > 22
+                    if ((mRect.right-mRect.left) > (mDeviceWidth-100)) {
+                        mHolder.mll_Coupon.removeViewAt(mHolder.mll_Coupon.getChildCount() - 1);
+                        break;
                     }
                 }
 
             } else {
-                mHolder.view_coupon.setVisibility(View.GONE);
-                mHolder.mll_ling_Coupon.setVisibility(View.GONE);
+                gone(mHolder.view_coupon,mHolder.mll_ling_Coupon);
             }
             mHolder.mll_act_detail.removeAllViews();
             if (isEmpty(mGoodsEntity.full_cut)
                     && isEmpty(mGoodsEntity.full_discount)
                     && isEmpty(mGoodsEntity.buy_gift)) {
-                mHolder.mrl_activity.setVisibility(View.GONE);
-                mHolder.view_activity.setVisibility(View.GONE);
+                gone(mHolder.mrl_activity,mHolder.view_activity);
             } else {
-                mHolder.view_activity.setVisibility(View.VISIBLE);
-                mHolder.mrl_activity.setVisibility(View.VISIBLE);
+                visible(mHolder.mrl_activity,mHolder.view_activity);
             }
             if (mGoodsEntity.full_cut != null && mGoodsEntity.full_cut.size() > 0) {
                 setActivityInfo(mHolder.mll_act_detail, 0, mGoodsEntity.full_cut);
@@ -503,11 +505,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
 
             if (isEmpty(mGoodsEntity.combo)) {
-                mHolder.mtv_combo.setVisibility(View.GONE);
-                mHolder.view_combo.setVisibility(View.GONE);
+                gone(mHolder.mtv_combo,mHolder.view_combo);
             } else {
-                mHolder.view_combo.setVisibility(View.VISIBLE);
-                mHolder.mtv_combo.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_combo,mHolder.view_combo);
             }
         }
     }
