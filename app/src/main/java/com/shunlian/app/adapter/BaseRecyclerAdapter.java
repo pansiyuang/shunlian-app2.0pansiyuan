@@ -367,7 +367,12 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             super(itemView);
             baseBind = ButterKnife.bind(this, itemView);
             unbinders.add(baseBind);
-            itemView.setOnClickListener(this);
+//            itemView.setOnClickListener(this);
+            if (!isShowFooter&&lists.size()==getItemCount()){
+                itemView.setOnClickListener(this);
+            }else if (isShowFooter&&lists.size()==getItemCount()-1){
+                itemView.setOnClickListener(this);
+            }
         }
 
         /**
@@ -384,7 +389,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View view) {
-            if (listener != null&&getAdapterPosition()>=0&&getAdapterPosition()<lists.size()){
+            if (listener != null&&getAdapterPosition()<getItemCount()){
 //            if (listener != null){
                 listener.onItemClick(view,getAdapterPosition());
             }
@@ -398,12 +403,18 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             ButterKnife.bind(this, itemView);
 //            Unbinder bind = ButterKnife.bind(this, itemView);
 //            unbinders.add(bind);
-            itemView.setOnClickListener(this);
+            if (!isShowFooter&&lists.size()==getItemCount()){
+                itemView.setOnClickListener(this);
+            }else if (isShowFooter&&lists.size()==getItemCount()-1){
+                itemView.setOnClickListener(this);
+            }
+//            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (listener != null&&getAdapterPosition()>=0&&getAdapterPosition()<lists.size()){
+            if (listener != null&&getAdapterPosition()<getItemCount()){
+//            if (listener != null){
                 listener.onItemClick(view,getAdapterPosition());
             }
         }

@@ -48,6 +48,7 @@ public class OperateAdapter extends BaseRecyclerAdapter<String> {
 
         public SingleViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, TransformUtil.dip2px(context,56));
             mtv_name.setLayoutParams(params);
             mtv_name.setGravity(Gravity.CENTER_VERTICAL);

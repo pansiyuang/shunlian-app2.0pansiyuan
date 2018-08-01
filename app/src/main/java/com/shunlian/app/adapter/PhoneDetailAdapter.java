@@ -47,6 +47,7 @@ public class PhoneDetailAdapter extends BaseRecyclerAdapter<String> {
 
         public SingleViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
         }
 
     }
