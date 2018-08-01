@@ -53,6 +53,7 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.ChatManager;
@@ -79,7 +80,7 @@ import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
-import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
+import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
@@ -93,6 +94,8 @@ import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.wxapi.WXEntryPresenter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -143,7 +146,7 @@ public class Common {
             case "checkin":
                 return "SignInAct";
             case "myshop":
-                return "MyLittleStoreActivity";
+                return "QrcodeStoreAct";
             case "find":
             case "my":
             case "cart":
@@ -237,6 +240,7 @@ public class Common {
                 break;
             case "coupon":
                 if (TextUtils.isEmpty(token)) {
+                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
                 } else {
                     GetCouponAct.startAct(context);
@@ -275,11 +279,8 @@ public class Common {
                 DayDayAct.startAct(context);
                 break;
             case "myshop":
-                if (TextUtils.isEmpty(token)) {
-                    Common.goGoGo(context,"login");
-                } else {
-                    MyLittleStoreActivity.startAct(context);
-                }
+                if (!TextUtils.isEmpty(params[0]))
+                    QrcodeStoreAct.startAct(context,params[0]);
                 break;
             case "checkin":
                 SignInAct.startAct(context);
@@ -297,6 +298,7 @@ public class Common {
 //                break;
             case "commission":
                 if (TextUtils.isEmpty(token)) {
+                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
                 } else {
                     MyProfitAct.startAct(context, false);
@@ -308,6 +310,7 @@ public class Common {
 //                break;
             case "voucherlist":
                 if (TextUtils.isEmpty(token)) {
+                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
                 } else {
                     CouponListAct.startAct(context);
@@ -332,6 +335,7 @@ public class Common {
                 break;
             case "myorder"://我的订单
                 if (TextUtils.isEmpty(token)) {
+                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
                 } else {
                     OrderDetailAct.startAct(context, params[0]);
@@ -400,6 +404,7 @@ public class Common {
 //               Common.goGoGo(context, toPage, id, id1,id2, id3,id4, id5,id6,to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
 
                 if (TextUtils.isEmpty(token)) {
+                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
                 } else {
 
@@ -422,6 +427,18 @@ public class Common {
                 MainActivity.startAct(context, "");
                 break;
         }
+    }
+
+    /**
+     * 接力跳转
+     * @param type
+     * @param items
+     */
+    public static void theRelayJump(String type,String[] items){
+        DispachJump dispachJump = new DispachJump();
+        dispachJump.jumpType = type;
+        dispachJump.items = items;
+        EventBus.getDefault().postSticky(dispachJump);
     }
 
     public static String getURLParameterValue(String url, String parameter) {

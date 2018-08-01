@@ -5,14 +5,11 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ScanCodeEntity;
-import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IZXingView;
 import com.shunlian.app.widget.TipDialog;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,18 +68,12 @@ public class ZXingPresenter extends BasePresenter<IZXingView>{
                 SharedPrefUtil.saveSharedUserString("share_code", data.share_code);
                 ScanCodeEntity.Url mUrl = data.url;
 
-                DispachJump dispachJump = new DispachJump();
-
                 if (!isEmpty(mUrl.item_id_list)){
                     String[] temp = new String[mUrl.item_id_list.size()];
                     Common.goGoGo(context,mUrl.type,mUrl.item_id_list.toArray(temp));
-
-                    dispachJump.items = temp;
                 }else {
                     Common.goGoGo(context,mUrl.type);
                 }
-                dispachJump.jumpType = mUrl.type;
-                EventBus.getDefault().postSticky(dispachJump);
                 ((Activity) context).finish();
             }
 

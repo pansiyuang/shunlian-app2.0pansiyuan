@@ -368,7 +368,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 }
 
                 if (!"1".equals(wxLoginEntity.is_tag)){
-                    SexSelectAct.startAct(this);
+                    SexSelectAct.startAct(this,!isEmpty(jumpType));
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
                     finishAndRemoveTask();

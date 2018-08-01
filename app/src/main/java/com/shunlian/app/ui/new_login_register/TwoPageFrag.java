@@ -320,7 +320,7 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
         }
 
         if (!"1".equals(content.is_tag)){
-            SexSelectAct.startAct(baseActivity);
+            SexSelectAct.startAct(baseActivity,mJump != null);
         }
         baseActivity.finish();
     }

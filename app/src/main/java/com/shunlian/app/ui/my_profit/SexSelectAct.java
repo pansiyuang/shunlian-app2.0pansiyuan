@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
@@ -45,9 +44,12 @@ public class SexSelectAct extends BaseActivity {
     MyButton mbt_next;
 
     private int sexSelect = -1;
+    private boolean isJump;
 
-    public static void startAct(Context context){
-        context.startActivity(new Intent(context,SexSelectAct.class));
+    public static void startAct(Context context,boolean isJump){
+        Intent intent = new Intent(context, SexSelectAct.class);
+        intent.putExtra("isJump",isJump);
+        context.startActivity(intent);
     }
 
     /**
@@ -67,6 +69,8 @@ public class SexSelectAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        isJump = getIntent().getBooleanExtra("isJump", false);
 
         closeSideslip();
         GradientDrawable background = (GradientDrawable) mbt_next.getBackground();
@@ -115,7 +119,8 @@ public class SexSelectAct extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == Activity.RESULT_OK){
             finish();
-            MainActivity.startAct(this,"personCenter");
+            /*if (!isJump)
+                MainActivity.startAct(this,"personCenter");*/
         }
     }
 
