@@ -103,7 +103,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private int detailCouponPosi = -1;//详情下的优惠券位置
     private StoreVoucherAdapter couponAdapter;
     private boolean isStartDownTime = false;
-    private int voucherPosition;//点击优惠券位置
+    //private int voucherPosition;//点击优惠券位置
     private long day = 0l;
     private String mRichText = null;//富文本内容
     private long act_start;//活动开始显示的时间
@@ -461,8 +461,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     if (Float.parseFloat(voucher.use_condition) == 0) {
                         textView.setText(voucher.denomination.concat("元无门槛优惠券"));
                     } else {
-                        textView.setText(getString(R.string.pull).concat(voucher.use_condition)
-                                .concat(getString(R.string.reduce)).concat(voucher.denomination));
+                        textView.setText(getString(R.string.pull)+voucher.use_condition
+                                .concat(getString(R.string.reduce))+voucher.denomination);
                     }
                     mHolder.mll_Coupon.addView(textView);
                     LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
@@ -595,7 +595,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
 
             mHolder.mtv_price.setText(mGoodsEntity.price);
-            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
+            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb)+mGoodsEntity.market_price);
             String shipping_fee = mGoodsEntity.shipping_fee;
             if (!isEmpty(shipping_fee) && !"0".equals(shipping_fee)) {
                 mHolder.mtv_free_shipping.setText(String.format(getString(R.string.not_mail), shipping_fee));
@@ -696,11 +696,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 }
 
                 mHolder.mtv_special_before_original_price.setStrikethrough()
-                        .setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
+                        .setText(getString(R.string.rmb)+mGoodsEntity.market_price);
                 if ("1".equals(common_activity.if_act_price)) {//显示预览价格
                     visible(mHolder.mtv_special_before_price);
                     mHolder.mtv_special_before_price.setText(
-                            "活动价:" + getString(R.string.rmb).concat(common_activity.actprice));
+                            "活动价:" + getString(R.string.rmb)+common_activity.actprice);
                 } else {
                     gone(mHolder.mtv_special_before_price);
                 }
@@ -736,7 +736,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                             isStartDownTime = false;
                             if (context instanceof GoodsDetailAct) {
                                 GoodsDetailAct act = (GoodsDetailAct) context;
-                                if (act.isFinishing() && mHolder != null && mHolder.ddp_special_before_downTime != null) {
+                                if (act.isFinishing() && mHolder != null
+                                        && mHolder.ddp_special_before_downTime != null) {
                                     mHolder.ddp_special_before_downTime.cancelDownTimer();
                                     return;
                                 }
@@ -763,10 +764,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         mHolder.mllayout_specail_before_downtime);
 
                 mHolder.mtv_special_price.setText(
-                        getString(R.string.rmb).concat(common_activity.actprice));
+                        getString(R.string.rmb)+common_activity.actprice);
 
                 mHolder.mtv_special_original_price.setStrikethrough().setText(
-                        "原价:" + getString(R.string.rmb).concat(common_activity.old_price));
+                        "原价:" + getString(R.string.rmb)+common_activity.old_price);
                 mHolder.ddp_special_downTime.setLabelBackgroundColor(getColor(R.color.white));
                 mHolder.ddp_special_downTime.setTimeUnitTextColor(getColor(R.color.pink_color));
                 mHolder.ddp_special_downTime.setTimeTextColor(getColor(R.color.pink_color));
@@ -800,14 +801,17 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                                 } else {
                                     mHolder.mtv_special_title.setText("距结束");
                                 }
-                                mHolder.ddp_special_downTime.cancelDownTimer();
-                                mHolder.ddp_special_downTime.setDownTime(3600);
-                                mHolder.ddp_special_downTime.startDownTimer();
+                                if (mHolder.ddp_special_downTime != null) {
+                                    mHolder.ddp_special_downTime.cancelDownTimer();
+                                    mHolder.ddp_special_downTime.setDownTime(3600);
+                                    mHolder.ddp_special_downTime.startDownTimer();
+                                }
                             } else {
                                 isStartDownTime = false;
                                 if (context instanceof GoodsDetailAct) {
                                     GoodsDetailAct act = (GoodsDetailAct) context;
-                                    if (act.isFinishing() && mHolder != null && mHolder.ddp_special_downTime != null) {
+                                    if (act.isFinishing() && mHolder != null
+                                            && mHolder.ddp_special_downTime != null) {
                                         mHolder.ddp_special_downTime.cancelDownTimer();
                                         return;
                                     }
@@ -858,7 +862,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
             mHolder.mtv_pPrice.setText(tt_act.act_price);
             mHolder.mtv_pmarketPrice.setStrikethrough()
-                    .setText(getString(R.string.rmb).concat(tt_act.market_price));
+                    .setText(getString(R.string.rmb)+tt_act.market_price);
             mHolder.mtv_act_title.setText(tt_act.content);
 
             mHolder.ddp_downTime.cancelDownTimer();
@@ -980,7 +984,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
 //        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
         if (tv_select_param != null && sku != null)
-            tv_select_param.setText(getString(R.string.selection).concat("  ").concat(sku.name));
+            tv_select_param.setText(getString(R.string.selection)+"  "+sku.name);
 
         if (context instanceof GoodsDetailAct) {
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
@@ -1251,7 +1255,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                             @Override
                             public void itemVoucher(GoodsDeatilEntity.Voucher voucher, int position) {
                                 if (context instanceof GoodsDetailAct) {
-                                    voucherPosition = position;
+                                    //voucherPosition = position;
                                     GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
                                     goodsDetailAct.getCouchers(voucher.voucher_id);
                                 }
