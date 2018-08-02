@@ -14,5 +14,6 @@ public class ArticleDetailEntity {
     public String title;
     public String full_title;
     public String thumb;
+    public String thumb_type;
     public GoodsDeatilEntity.UserInfo user_info;
 }

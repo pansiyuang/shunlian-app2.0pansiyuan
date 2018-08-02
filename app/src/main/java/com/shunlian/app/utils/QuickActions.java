@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -110,7 +112,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private PopMenu mPopMenu;
     private ShareInfoParam mShareInfoParam;
     private String shareType = "", shareId = "";
-//    private String tag="";
+    private Handler mHandler;
+    //    private String tag="";
 
 
     public QuickActions(@NonNull Context context) {
@@ -139,7 +142,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mllayout_car.setOnClickListener(this);
         mllayout_help.setOnClickListener(this);
         httpDialog = new HttpDialog(mContext);
-
+        mHandler = new Handler(mContext.getMainLooper());
         px = TransformUtil.dip2px(mContext, 30);
         topMargin = px;
         rightMargin = px / 2;
@@ -562,7 +565,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 if (textPicState == 1)//店铺分享
                                     saveshareShopPic();
                                 else if (textPicState == 2)//发现分享
-                                    saveshareFindPic();
+                                    savePicAndTxt();
                                 else if (textPicState == 3) {//优品分享
                                     mShareInfoParam.isSuperiorProduct = true;
                                     saveshareGoodsPic();
@@ -1068,6 +1071,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         if (TextUtils.isEmpty(mShareInfoParam.thumb_type)) {
             return;
         }
+        LogUtil.httpLogW("thumb_type:" + mShareInfoParam.thumb_type);
         switch (mShareInfoParam.thumb_type) {
             case "0"://大图小图模式
             case "1":
@@ -1117,12 +1121,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         String fileName = dirName + videoUrl.substring(i, videoUrl.length());
         File file1 = new File(fileName);
 
-        if (!httpDialog.isShowing()) {
-            httpDialog.show();
-        }
         if (file1.exists()) {
             saveVideoDialog();
         } else {
+            mHandler.post(() -> {
+                if (httpDialog != null && !httpDialog.isShowing()) {
+                    httpDialog.show();
+                }
+            });
             new Thread(() -> downLoadVideo(fileName)).start();
         }
     }
@@ -1156,19 +1162,25 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         Uri localUri = Uri.parse("file://" + fileDir);
         Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
         getContext().sendBroadcast(localIntent);
+
         saveVideoDialog();
     }
 
     public void saveVideoDialog() {
-        Common.copyText(getContext(), mShareInfoParam.shareLink, mShareInfoParam.title, false);
-        if (promptDialog == null) {
-            promptDialog = new PromptDialog((Activity) getContext());
-        }
-        promptDialog.setSureAndCancleListener(getResources().getString(R.string.discover_articlevideo),
-                getResources().getString(R.string.discover_articleurl), "", getResources().getString(R.string.discover_quweixinfenxiang), v -> {
-                    Common.openWeiXin(getContext(), "", "");
-                    promptDialog.dismiss();
-                }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
-        promptDialog.show();
+        mHandler.post(() -> {
+            if (httpDialog != null && httpDialog.isShowing()) {
+                httpDialog.dismiss();
+            }
+            Common.copyText(getContext(), mShareInfoParam.shareLink, mShareInfoParam.title, false);
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog((Activity) getContext());
+            }
+            promptDialog.setSureAndCancleListener(getResources().getString(R.string.discover_articlevideo),
+                    getResources().getString(R.string.discover_articleurl), "", getResources().getString(R.string.discover_quweixinfenxiang), v -> {
+                        Common.openWeiXin(getContext(), "", "");
+                        promptDialog.dismiss();
+                    }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
+            promptDialog.show();
+        });
     }
 }
