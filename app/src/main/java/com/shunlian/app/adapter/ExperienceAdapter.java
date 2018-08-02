@@ -1,5 +1,7 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,8 +23,11 @@ import com.shunlian.app.ui.discover.DiscoverXindeFrag;
 import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -39,6 +44,7 @@ import static com.shunlian.app.utils.MyOnClickListener.isFastClick;
 
 public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Experience> {
     private DiscoverXindeFrag mFragment;
+    private PromptDialog promptDialog;
 
     public ExperienceAdapter(Context context, List<ExperienceEntity.Experience> lists, DiscoverXindeFrag fragment) {
         super(context, true, lists);
@@ -157,6 +163,12 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
                 }
                 return false;
             });
+            holderView.tv_share_count.setOnClickListener(view -> {
+                if (isFastClick()) {
+                    return;
+                }
+                share(context, experience);
+            });
         }
     }
 
@@ -205,6 +217,9 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
         @BindView(R.id.tv_evaluate_count)
         TextView tv_evaluate_count;
 
+        @BindView(R.id.tv_share_count)
+        TextView tv_share_count;
+
         @BindView(R.id.ll_goods)
         LinearLayout ll_goods;
 
@@ -224,5 +239,21 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
                 listener.onItemClick(v, getAdapterPosition());
             }
         }
+    }
+
+    public void share(Context context, ExperienceEntity.Experience experience) {
+        DownLoadImageThread thread = new DownLoadImageThread(context, (ArrayList<String>) experience.image);
+        thread.start();
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(experience.content);
+        if (promptDialog == null) {
+            promptDialog = new PromptDialog((Activity) context);
+            promptDialog.setSureAndCancleListener(getString(R.string.discover_xindewenzi),
+                    getString(R.string.discover_xindetupian), "", getString(R.string.discover_quweixinfenxiang), v -> {
+                        Common.openWeiXin(context, "", "");
+                        promptDialog.dismiss();
+                    }, getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
+        }
+        promptDialog.show();
     }
 }

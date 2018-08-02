@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.discover;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +23,6 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
-import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SaveAlbumDialog;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.CustomVideoPlayer;
