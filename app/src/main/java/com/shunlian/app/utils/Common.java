@@ -87,6 +87,7 @@ import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.plus.PlusGifDetailAct;
 import com.shunlian.app.ui.plus.PlusOrderAct;
 import com.shunlian.app.ui.plus.SuperProductsAct;
+import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -201,6 +202,10 @@ public class Common {
                 return "UserCouponListAct";
             case "discountgoods":
                 return "CouponGoodsAct";
+            case "invite":
+                return "QrCodeAct";
+            case "url":
+                return "H5Act";
             default:
                 return "";
         }
@@ -216,6 +221,9 @@ public class Common {
         switch (type) {
             case "virtual":
                 MoreCreditAct.startAct(context);
+                break;
+            case "invite":
+                QrCodeAct.startAct(context,params[0]);
                 break;
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
