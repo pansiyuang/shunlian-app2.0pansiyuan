@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -124,6 +125,12 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        setHideStatusAndNavigation();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         customVideoPlayer.releaseAllVideos();
@@ -180,7 +187,7 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
                         break;
                     case "图文分享":
                         if (!Common.isAlreadyLogin()) {
-                            Common.goGoGo(this,"login");
+                            Common.goGoGo(this, "login");
                         } else {
                             isShare = true;
                             readToDownLoad();
@@ -309,6 +316,7 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        LogUtil.httpLogW("shareLink:");
         Common.copyText(VideoPlayActivity.this, baseEntity.data.shareLink, currentArticle.title, false);
         if (httpDialog.isShowing()) {
             httpDialog.dismiss();
