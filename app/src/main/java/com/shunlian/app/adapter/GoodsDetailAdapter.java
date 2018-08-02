@@ -474,7 +474,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     textView.getPaint().getTextBounds(strLengthMeasure.toString(),
                             0,strLengthMeasure.length(),mRect);
                     //strLengthMeasure.length() > 22
-                    if ((mRect.right-mRect.left) > (mDeviceWidth-100)) {
+                    if ((mRect.right+100) > mDeviceWidth) {
                         mHolder.mll_Coupon.removeViewAt(mHolder.mll_Coupon.getChildCount() - 1);
                         break;
                     }
