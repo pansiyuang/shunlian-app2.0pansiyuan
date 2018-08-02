@@ -401,6 +401,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     private void handleJump() {
         String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
+        if (isEmpty(jumpType))return;
         ObjectMapper om = new ObjectMapper();
         try {
             DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
