@@ -603,6 +603,8 @@
     <string name="discover_quweixinfenxiang">去微信分享</string>
     <string name="discover_wenzifuzhi">素材库文字已复制</string>
     <string name="discover_tupianbaocun">素材库图片已保存到手机相册</string>
+    <string name="discover_articledewenzi">文章文字已复制</string>
+    <string name="discover_articletupian">文章图片已保存到手机相册</string>
     <string name="discover_xindewenzi">心得文字已复制</string>
     <string name="discover_xindetupian">心得图片已保存到手机相册</string>
     <string name="discover_articlevideo">精选视频已保存</string>
