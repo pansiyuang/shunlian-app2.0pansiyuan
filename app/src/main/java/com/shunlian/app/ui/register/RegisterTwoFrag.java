@@ -446,7 +446,7 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         JpushUtil.setJPushAlias();
 
         if (!"1".equals(content.is_tag)){
-            SexSelectAct.startAct(baseActivity,false);
+            SexSelectAct.startAct(baseActivity);
         }else {
             Common.goGoGo(baseActivity,"mainPage");
         }

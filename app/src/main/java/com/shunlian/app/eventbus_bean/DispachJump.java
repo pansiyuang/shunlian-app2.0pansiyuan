@@ -3,11 +3,13 @@ package com.shunlian.app.eventbus_bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by Administrator on 2018/4/25.
  * 跳转分发
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DispachJump implements Parcelable {
 
     /**跳转到个人中心*/

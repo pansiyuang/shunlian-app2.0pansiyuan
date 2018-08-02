@@ -103,7 +103,29 @@ public class TestWXLoginPresenter extends BasePresenter {
     @Subscribe(sticky = true)
     public void eventBus(DispachJump jump) {
         mJump = jump;
+        /*ObjectMapper om = new ObjectMapper();
+        try {
+            String s = om.writeValueAsString(jump);
+            LogUtil.zhLogW("==eventBus======"+s);
+            SharedPrefUtil.saveCacheSharedPrf("wx_jump", s);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }*/
     }
+
+    /*private void handleJump() {
+        String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
+        LogUtil.zhLogW("==handleJump======"+jumpType);
+        ObjectMapper om = new ObjectMapper();
+        try {
+            DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
+            if (dispachJump != null) {
+                Common.goGoGo(context, dispachJump.jumpType,dispachJump.items);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
 
     private void loginSuccess(BaseEntity<WXLoginEntity> entity, WXLoginEntity wxLoginEntity) {
         Common.staticToast(entity.message);
@@ -132,9 +154,10 @@ public class TestWXLoginPresenter extends BasePresenter {
         if (mJump != null){
             Common.goGoGo(context,mJump.jumpType,mJump.items);
         }
+        //handleJump();
 
         if (!"1".equals(wxLoginEntity.is_tag)){
-            SexSelectAct.startAct(context,mJump != null);
+            SexSelectAct.startAct(context);
         }
         ((Activity)context).finish();
     }

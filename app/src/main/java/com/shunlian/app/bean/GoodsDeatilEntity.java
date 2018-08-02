@@ -797,6 +797,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public static class GoodsData implements Parcelable {
         //销量
         public String sales;
+        public String sales_desc;
         //浏览量
         public String views;
         //好评率
@@ -816,6 +817,7 @@ public class GoodsDeatilEntity implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.sales);
+            dest.writeString(this.sales_desc);
             dest.writeString(this.views);
             dest.writeString(this.star_rate);
             dest.writeString(this.comments_num);
@@ -824,6 +826,7 @@ public class GoodsDeatilEntity implements Parcelable {
 
         protected GoodsData(Parcel in) {
             this.sales = in.readString();
+            this.sales_desc = in.readString();
             this.views = in.readString();
             this.star_rate = in.readString();
             this.comments_num = in.readString();

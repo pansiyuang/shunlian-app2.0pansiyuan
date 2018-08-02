@@ -176,8 +176,7 @@
         android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal"
-        app:ll_control_adapter="true"
-        app:ll_control_height="100">
+        android:minHeight="50dp">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_total_sale"

@@ -17,14 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.ExchangDetailEntity;
-import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.discover.other.CommentDetailAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.my_comment.LookBigImgAct;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
@@ -165,7 +163,7 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mHolder.tv_evaluate_count.setCompoundDrawables(drawable, null, null, null);
 
-            if (!isEmpty(mExperience_info.image)) {
+            /*if (!isEmpty(mExperience_info.image)) {
                 visible(mHolder.recycler_img);
                 GridImageAdapter gridImageAdapter = new GridImageAdapter(context, mExperience_info.image);
                 mHolder.recycler_img.setAdapter(gridImageAdapter);
@@ -177,7 +175,10 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
                 });
             } else {
                 gone(mHolder.recycler_img);
-            }
+            }*/
+
+            BitmapUtil.discoverImg(mHolder.miv_pic,mHolder.recycler_img,null,mExperience_info.image
+                    ,(Activity) context,0,0,0,8,0,0,10,10);
         }
     }
 
@@ -423,6 +424,9 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_pic)
+        MyImageView miv_pic;
 
 
         public ExperienceDetailTitleHolder(View itemView) {

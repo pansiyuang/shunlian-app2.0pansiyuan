@@ -96,7 +96,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     iView.goodsDetailData(data);
                     iView.isFavorite(data.is_fav);
                     iView.goodsOffShelf(data.status);//是否下架
-                    iView.stockDeficiency(data.stock);//是否有库存
+                    if (!isEmpty(data.stock) && Integer.parseInt(data.stock) <= 0)
+                        iView.stockDeficiency(data.stock);//是否有库存
                     if (!"0".equals(data.status)){//非下架商品
                         GoodsDeatilEntity.TTAct tt_act = data.tt_act;
                         if (tt_act != null){
@@ -664,7 +665,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
-                Common.staticToast(entity.message);
+                Common.staticToast("已抢购~好物补货通知您！");
             }
         });
     }

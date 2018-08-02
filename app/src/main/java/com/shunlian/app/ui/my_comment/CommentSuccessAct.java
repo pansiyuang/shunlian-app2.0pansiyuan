@@ -82,8 +82,8 @@ public class CommentSuccessAct extends BaseActivity implements ICommentSuccessVi
 
         adapter.setOnItemClickListener((view, position) -> {
             int p = position - 1;
-            if (p < otherComments.size()) {
-                CommentSuccessEntity.Comment comment1 = otherComments.get(position - 1);
+            if (p < otherComments.size() && p >= 0) {
+                CommentSuccessEntity.Comment comment1 = otherComments.get(p);
                 if (position < commentSize + 1) {
                     ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.order_sn, comment1.thumb,
                             comment1.title, comment1.price, comment1.goods_id);
