@@ -324,7 +324,6 @@ public class Common {
                 PlusGifDetailAct.startAct(context, params[0]);
                 break;
             case "login":
-//                LoginAct.startAct(context);
                 LoginEntryAct.startAct(context);
                 break;
             case "article":

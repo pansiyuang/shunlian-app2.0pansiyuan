@@ -225,7 +225,7 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
         }
 
         if (!"1".equals(content.is_tag)){
-            SexSelectAct.startAct(baseActivity,!isEmpty(jumpType));
+            SexSelectAct.startAct(baseActivity);
         }
         baseActivity.finish();
     }

@@ -311,7 +311,10 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         sortAndMD5(map);
         String stringEntry = null;
         try {
-            stringEntry = new ObjectMapper().writeValueAsString(map);
+            if (objectMapper == null){
+                objectMapper = new ObjectMapper();
+            }
+            stringEntry = objectMapper.writeValueAsString(map);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

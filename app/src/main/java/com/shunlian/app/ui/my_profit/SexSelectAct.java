@@ -44,11 +44,9 @@ public class SexSelectAct extends BaseActivity {
     MyButton mbt_next;
 
     private int sexSelect = -1;
-    private boolean isJump;
 
-    public static void startAct(Context context,boolean isJump){
+    public static void startAct(Context context){
         Intent intent = new Intent(context, SexSelectAct.class);
-        intent.putExtra("isJump",isJump);
         context.startActivity(intent);
     }
 
@@ -69,8 +67,6 @@ public class SexSelectAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
-        isJump = getIntent().getBooleanExtra("isJump", false);
 
         closeSideslip();
         GradientDrawable background = (GradientDrawable) mbt_next.getBackground();
@@ -119,8 +115,6 @@ public class SexSelectAct extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == Activity.RESULT_OK){
             finish();
-            /*if (!isJump)
-                MainActivity.startAct(this,"personCenter");*/
         }
     }
 
