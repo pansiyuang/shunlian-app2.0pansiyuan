@@ -2,6 +2,7 @@ package com.shunlian.app.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.shunlian.app.adapter.SysMsgAdapter;
 import com.shunlian.app.bean.BaseEntity;
@@ -168,12 +169,50 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
             case "11":
                 DayDayAct.startAct(context);
                 break;
+            case "15":
+                analysisUrl(body.url);
+                break;
         }
         if ("0".equals(msgType.is_read)) {
             msgRead(msgType.type, msgType.id);
             msgType.is_read = "1";
             adapter.notifyItemChanged(position);
         }
+    }
+
+    private void analysisUrl(String url) {
+        if (url.startsWith("slmall://")) {
+            String type = interceptBody(url);
+            if (!TextUtils.isEmpty(type)) {
+                String id = "";
+                String id1 = "";
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
+                    id = interceptId(url);
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+                    id1 = interceptId(url);
+                Common.goGoGo(context, type, id, id1);
+            }
+        }
+    }
+
+    private String interceptId(String url) {
+        String[] split = url.split("\\?");
+        String s = split[1];
+        String[] split1 = s.split("=");
+        String s1 = split1[1];
+        return s1;
+    }
+
+    private String interceptBody(String url) {
+        String[] split = url.split("\\?");
+        String s = split[0];
+        if (!TextUtils.isEmpty(s)) {
+            String[] split1 = s.split("//");
+            if (!TextUtils.isEmpty(split1[1])) {
+                return split1[1];
+            }
+        }
+        return null;
     }
 
 
