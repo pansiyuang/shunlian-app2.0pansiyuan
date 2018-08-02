@@ -1,6 +1,8 @@
 package com.shunlian.app.adapter;
 
 import android.app.Activity;
+import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -17,14 +19,17 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ExchangDetailEntity;
+import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.discover.other.CommentDetailAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -48,8 +53,9 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
     private static final int ITEM_HEAD = 666;
     private static final int ITEM_TITLE = 888;
     private final LayoutInflater inflater;
+    private PromptDialog promptDialog;
 
-    public ExperienceDetailAdapter(Context context,boolean isShowFooter,
+    public ExperienceDetailAdapter(Context context, boolean isShowFooter,
                                    ExchangDetailEntity.ExperienceInfo experience_info,
                                    List<FindCommentListEntity.ItemComment> lists) {
         super(context, isShowFooter, lists);
@@ -88,7 +94,7 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
         return super.getItemCount()
                 + (mExperience_info == null ? 0 : 1)//头部内容
                 + 1 //评论条目
-                + (isEmpty(lists)? 1:0);
+                + (isEmpty(lists) ? 1 : 0);
     }
 
     /**
@@ -130,7 +136,7 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
         if (holder instanceof ExperienceDetailTitleHolder) {
             ExperienceDetailTitleHolder mHolder = (ExperienceDetailTitleHolder) holder;
             ExchangDetailEntity.MemberInfo member_info = mExperience_info.member_info;
-            if (member_info != null){
+            if (member_info != null) {
                 GlideUtils.getInstance().loadCircleImage(context, mHolder.miv_avatar, member_info.avatar);
                 mHolder.tv_name.setText(member_info.nickname);
             }
@@ -141,7 +147,7 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
                 ExchangDetailEntity.GoodsBean goods = mExperience_info.goods;
                 GlideUtils.getInstance().loadImage(context, mHolder.miv_icon, goods.thumb);
                 mHolder.tv_title.setText(goods.title);
-                mHolder.tv_price.setText(getString(R.string.rmb)+goods.price);
+                mHolder.tv_price.setText(getString(R.string.rmb) + goods.price);
             } else {
                 gone(mHolder.ll_goods);
             }
@@ -198,7 +204,7 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
                     mHolder.tv_evaluate_count.setCompoundDrawables(drawable, null, null, null);
                     mHolder.tv_evaluate_count.setText(info.praise_num);
                 }
-            }else if (payloads.get(0) instanceof FindCommentListEntity.ItemComment){
+            } else if (payloads.get(0) instanceof FindCommentListEntity.ItemComment) {
                 FindCommentListEntity.ItemComment itemComment = (FindCommentListEntity.ItemComment) payloads.get(0);
                 if (holder instanceof ExperienceDetailHolder) {
                     ExperienceDetailHolder mHolder = (ExperienceDetailHolder) holder;
@@ -226,13 +232,13 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ExperienceDetailHolder) {
             ExperienceDetailHolder mHolder = (ExperienceDetailHolder) holder;
-            if (isEmpty(lists)){
+            if (isEmpty(lists)) {
                 gone(mHolder.rlayout_comment);
                 visible(mHolder.nei_empty);
                 mHolder.nei_empty.setImageResource(R.mipmap.img_empty_common)
                         .setText("我来说两句").setButtonText("");
                 return;
-            }else {
+            } else {
                 visible(mHolder.rlayout_comment);
                 gone(mHolder.nei_empty);
             }
@@ -279,7 +285,7 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
             SubCommentItemView view = new SubCommentItemView(context);
             FindCommentListEntity.ReplyList replyList = reply_list.get(j);
             if (!isEmpty(replyList.at)) {
-                String source = replyList.at+replyList.reply;
+                String source = replyList.at + replyList.reply;
                 SpannableStringBuilder changetextbold = Common.changetextbold(source, replyList.at);
                 view.setContent(changetextbold);
             } else {
@@ -368,13 +374,13 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
                 case R.id.ll_sub_bg:
                     if ("0".equals(mExperience_info.check_comment)) {
                         FindCommentListEntity.ItemComment itemComment = lists
-                                .get(getAdapterPosition()-2);
-                        CommentDetailAct.startAct(context,mExperience_info.id, itemComment.item_id);
+                                .get(getAdapterPosition() - 2);
+                        CommentDetailAct.startAct(context, mExperience_info.id, itemComment.item_id);
                     }
                     break;
                 default:
-                    if (listener != null && !isEmpty(lists)){
-                        listener.onItemClick(v,getAdapterPosition());
+                    if (listener != null && !isEmpty(lists)) {
+                        listener.onItemClick(v, getAdapterPosition());
                     }
                     break;
             }
@@ -408,6 +414,9 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
         @BindView(R.id.tv_evaluate_count)
         TextView tv_evaluate_count;
 
+        @BindView(R.id.tv_share_count)
+        TextView tv_share_count;
+
         @BindView(R.id.recycler_img)
         RecyclerView recycler_img;
 
@@ -433,6 +442,7 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
             recycler_img.addItemDecoration(gridSpacingItemDecoration);
             itemView.setOnClickListener(this);
             ll_goods.setOnClickListener(this);
+            tv_share_count.setOnClickListener(this);
         }
 
         /**
@@ -448,13 +458,16 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
                     event.praisePosition = getAdapterPosition();
                     EventBus.getDefault().post(event);
                     break;
+                case R.id.tv_share_count:
+                    share();
+                    break;
                 case R.id.ll_goods:
                     String id = mExperience_info.goods.id;
-                    GoodsDetailAct.startAct(context,id);
+                    GoodsDetailAct.startAct(context, id);
                     break;
                 default:
-                    if (listener != null){
-                        listener.onItemClick(v,getAdapterPosition());
+                    if (listener != null) {
+                        listener.onItemClick(v, getAdapterPosition());
                     }
                     break;
             }
@@ -478,5 +491,21 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
             layoutParams.leftMargin = i;
             mtv_title.setLayoutParams(layoutParams);
         }
+    }
+
+    public void share() {
+        DownLoadImageThread thread = new DownLoadImageThread(context, (ArrayList<String>) mExperience_info.image);
+        thread.start();
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(mExperience_info.content);
+        if (promptDialog == null) {
+            promptDialog = new PromptDialog((Activity) context);
+            promptDialog.setSureAndCancleListener(getString(R.string.discover_xindewenzi),
+                    getString(R.string.discover_xindetupian), "", getString(R.string.discover_quweixinfenxiang), v -> {
+                        Common.openWeiXin(context, "", "");
+                        promptDialog.dismiss();
+                    }, getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
+        }
+        promptDialog.show();
     }
 }

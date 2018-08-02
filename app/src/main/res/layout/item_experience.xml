@@ -138,7 +138,20 @@
             android:drawableLeft="@mipmap/icon_found_pinglun_zan_n"
             android:drawablePadding="7dp"
             android:gravity="center"
+            android:paddingRight="10dp"
             android:paddingLeft="10dp"
+            android:textColor="@color/value_878B8A"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_share_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/icon_found_fenxiang"
+            android:drawablePadding="7dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:textColor="@color/value_878B8A"
             android:textSize="13sp" />
     </LinearLayout>

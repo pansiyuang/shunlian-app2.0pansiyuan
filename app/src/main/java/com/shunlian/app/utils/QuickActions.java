@@ -95,7 +95,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private int px;
     private PopMenu mPopMenu;
     private ShareInfoParam mShareInfoParam;
-    private String shareType="",shareId="";
+    private String shareType = "", shareId = "";
 //    private String tag="";
 
 
@@ -138,16 +138,16 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mrlayout_message:
-                Common.goGoGo(getContext(),"message");
+                Common.goGoGo(getContext(), "message");
                 hide();
                 break;
             case R.id.mllayout_firstPage:
-                Common.goGoGo(getContext(),"");
+                Common.goGoGo(getContext(), "");
                 hide();
                 break;
             case R.id.mllayout_share:
-                if (!Common.isAlreadyLogin()){
-                    Common.goGoGo(mContext,"login");
+                if (!Common.isAlreadyLogin()) {
+                    Common.goGoGo(mContext, "login");
                     reset();
                     /*final PromptDialog promptDialog = new PromptDialog((Activity) mContext);
                     promptDialog.setTvSureColor(R.color.white);
@@ -166,23 +166,23 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 }
                 break;
             case R.id.mllayout_PersonalCenter:
-                Common.goGoGo(getContext(),"personCenter");
+                Common.goGoGo(getContext(), "personCenter");
                 hide();
                 break;
             case R.id.mllayout_car:
-                Common.goGoGo(getContext(),"shoppingcar");
+                Common.goGoGo(getContext(), "shoppingcar");
                 hide();
                 break;
             case R.id.mllayout_feedback:
-                Common.goGoGo(getContext(),"feedback");
+                Common.goGoGo(getContext(), "feedback");
                 hide();
                 break;
             case R.id.mllayout_help:
-                Common.goGoGo(getContext(),"help");
+                Common.goGoGo(getContext(), "help");
                 hide();
                 break;
             case R.id.mllayout_search:
-                Common.goGoGo(getContext(),"search");
+                Common.goGoGo(getContext(), "search");
                 hide();
                 break;
         }
@@ -201,7 +201,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         }
 
         for (int i = 0; i < showItemPos.length; i++) {
-            showItem(showItemPos[i],showItemPos[0]);
+            showItem(showItemPos[i], showItemPos[0]);
         }
 
         int totalHeight = showItemPos.length * 90 + 60;
@@ -209,8 +209,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         int[] realWH = TransformUtil.countRealWH(getContext(), 300, totalHeight);
         RelativeLayout.LayoutParams layoutParams = (LayoutParams)
                 mllayout_content.getLayoutParams();
-        layoutParams.width =realWH[0];
-        layoutParams.height =realWH[1];
+        layoutParams.width = realWH[0];
+        layoutParams.height = realWH[1];
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             layoutParams.topMargin = topMargin;
         else
@@ -239,7 +239,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             bind.unbind();
     }
 
-    private void showItem(int position,int first) {
+    private void showItem(int position, int first) {
         switch (position) {
             case 1:
                 mrlayout_message.setVisibility(VISIBLE);
@@ -286,8 +286,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
-        if (ev.getAction() == MotionEvent.ACTION_DOWN)
-        {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             boolean b = inRangeOfView(mllayout_content, ev);
             if (!b)
                 hide();
@@ -295,27 +294,28 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         return super.onInterceptTouchEvent(ev);
     }
 
-    private boolean inRangeOfView(View view, MotionEvent ev){
+    private boolean inRangeOfView(View view, MotionEvent ev) {
         int[] location = new int[2];
         view.getLocationOnScreen(location);
         int x = location[0];
         int y = location[1];
-        if(ev.getX() < x || ev.getX() > (x + view.getWidth())
-                || ev.getY() < y || ev.getY() > (y + view.getHeight())){
+        if (ev.getX() < x || ev.getX() > (x + view.getWidth())
+                || ev.getY() < y || ev.getY() > (y + view.getHeight())) {
             return false;
         }
         return true;
     }
 
-    public void shareInfo(ShareInfoParam shareInfoParam){
+    public void shareInfo(ShareInfoParam shareInfoParam) {
         mShareInfoParam = shareInfoParam;
     }
 
     /**
      * 消息数量
+     *
      * @param count
      */
-    public void setMessageCount(String count){
+    public void setMessageCount(String count) {
         if (!TextUtils.isEmpty(count)) {
             mtv_message_count.setVisibility(VISIBLE);
             mtv_message_count.setText(count);
@@ -326,17 +326,17 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 发现详情页
      */
     public void findDetail(String articleId) {
-        if (!TextUtils.isEmpty(articleId)){
+        if (!TextUtils.isEmpty(articleId)) {
             topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext);
-        }else {
-            topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
+        } else {
+            topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px;
         }
         rightMargin = px / 6;
         setShowItem(1, 2, 3, 6, 7, 8);
-        if (TextUtils.isEmpty(articleId)){
-            shareStyle2Dialog(false,2);
-        }else {
-            shareStyle2Dialog(false,2,"article",articleId);
+        if (TextUtils.isEmpty(articleId)) {
+            shareStyle2Dialog(false, 2);
+        } else {
+            shareStyle2Dialog(false, 2, "article", articleId);
         }
 
     }
@@ -349,7 +349,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px / 10;
         rightMargin = px / 6;
         setShowItem(1, 3, 4, 6, 8);
-        shareStyle2Dialog(false,1);
+        shareStyle2Dialog(false, 1);
     }
 
     /**
@@ -384,99 +384,99 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 消息界面
      */
     public void message() {
-        setShowItem(2,3,4,6,7);
+        setShowItem(2, 3, 4, 6, 7);
     }
 
     /**
      * 售后
      */
-    public void afterSale(){
-        setShowItem(1,2,3,6,7);
+    public void afterSale() {
+        setShowItem(1, 2, 3, 6, 7);
     }
 
     /**
      * 活动
      */
-    public void activity(){
-        setShowItem(1,2,3,4,5,6);
+    public void activity() {
+        setShowItem(1, 2, 3, 4, 5, 6);
     }
 
     /**
      * 专题页
      */
-    public void special(){
+    public void special() {
 //        tag="special";
-        setShowItem(1,2,3,6,7,8);
+        setShowItem(1, 2, 3, 6, 7, 8);
         shareStyle1Dialog();
     }
 
     /**
      * 订单页
      */
-    public void order(){
-        setShowItem(1,2,3,6,7);
+    public void order() {
+        setShowItem(1, 2, 3, 6, 7);
     }
 
     /**
      * 支付成功
      */
-    public void paySuccess(){
-        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px /10;
+    public void paySuccess() {
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px / 10;
         rightMargin = px / 6;
-        setShowItem(1,2,3,6,7);
+        setShowItem(1, 2, 3, 6, 7);
     }
 
     /**
      * 发现评论列表
      */
-    public void findCommentList(){
-        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px /10;
-        setShowItem(1,2,3,6,7);
+    public void findCommentList() {
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px / 10;
+        setShowItem(1, 2, 3, 6, 7);
     }
 
     /**
      * 帮助
      */
     public void help() {
-        setShowItem(1,2,3,4,6);
+        setShowItem(1, 2, 3, 4, 6);
     }
 
     /**
      * 要分享的帮助
      */
-    public void shareHelp(){
-        setShowItem(1,2,3,4,6,8);
+    public void shareHelp() {
+        setShowItem(1, 2, 3, 4, 6, 8);
         shareStyle1Dialog();
     }
 
     /**
      * 课堂详情分享
      */
-    public void classDetailShare(){
+    public void classDetailShare() {
 //        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
 //        rightMargin = px / 6;
-        setShowItem(1,2,3,4,6,8);
+        setShowItem(1, 2, 3, 4, 6, 8);
         shareStyle1Dialog();
     }
 
     /**
      * 搜索
      */
-    public void search(){
-        setShowItem(1,3,4,5,6,7);
+    public void search() {
+        setShowItem(1, 3, 4, 5, 6, 7);
     }
 
     /**
      * 店铺二级
      */
-    public void Store(){
-        setShowItem(1,3,4,6,7);
+    public void Store() {
+        setShowItem(1, 3, 4, 6, 7);
     }
 
     /**
      * 只能分享微信和复制链接
      */
-    public void shareStyle1Dialog(){
+    public void shareStyle1Dialog() {
         mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
                 .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
@@ -497,6 +497,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 break;
                         }
                     }
+
                     @Override
                     public void onClickClose(View view) {
                         mllayout_content.setVisibility(VISIBLE);
@@ -513,14 +514,15 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 //                break;
 //        }
 //    }
+
     /**
      * 分享微信和复制链接，图文分享
      */
-    public void shareStyle2Dialog(boolean isShow,int textPicState,String type,String id){
+    public void shareStyle2Dialog(boolean isShow, int textPicState, String type, String id) {
         mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
                 .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
-                .addMenuItem(new PopMenuItem(textPicState==4?"保存二维码":"图文分享",
-                        textPicState==4?getResources().getDrawable(R.mipmap.icon_erweima):
+                .addMenuItem(new PopMenuItem(textPicState == 4 ? "保存二维码" : "图文分享",
+                        textPicState == 4 ? getResources().getDrawable(R.mipmap.icon_erweima) :
                                 getResources().getDrawable(R.mipmap.img_tuwenfenxiang)))
                 .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
                 .setIsfull(textPicState == 1)
@@ -529,8 +531,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onItemClick(PopMenu popMenu, int position) {
                         switch (position) {
                             case 0:
-                                Constant.SHARE_TYPE=type;
-                                Constant.SHARE_ID=id;
+                                Constant.SHARE_TYPE = type;
+                                Constant.SHARE_ID = id;
                                 mllayout_content.setVisibility(VISIBLE);
                                 WXEntryActivity.startAct(getContext(),
                                         "shareFriend", mShareInfoParam);
@@ -538,8 +540,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 break;
                             case 1:
                                 copyText(false);
-                                shareType=type;
-                                shareId=id;
+                                shareType = type;
+                                shareId = id;
                                 mllayout_content.setVisibility(VISIBLE);
                                 if (textPicState == 1)//店铺分享
                                     saveshareShopPic();
@@ -548,7 +550,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 else if (textPicState == 3) {//优品分享
                                     mShareInfoParam.isSuperiorProduct = true;
                                     saveshareGoodsPic();
-                                }else if (textPicState == 4){//plus分享
+                                } else if (textPicState == 4) {//plus分享
                                     savesharePLUS();
                                 }
                                 setVisibility(INVISIBLE);
@@ -560,6 +562,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 break;
                         }
                     }
+
                     @Override
                     public void onClickClose(View view) {
                         mllayout_content.setVisibility(VISIBLE);
@@ -568,14 +571,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
                     @Override
                     public void onHideCallback(Activity mActivity) {
-                        if (textPicState == 1){
+                        if (textPicState == 1) {
                             ImmersionBar.with(mActivity).shareSever(0.0f).init();
-                        }else {
+                        } else {
                             super.onHideCallback(mActivity);
                         }
                     }
                 }).build();
-        if (isShow){
+        if (isShow) {
             removeAllViews();
             if (!mPopMenu.isShowing()) {
                 mPopMenu.show();
@@ -586,11 +589,11 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 分享微信和复制链接，图文分享
      */
-    public void shareStyle2Dialog(boolean isShow,int textPicState){
+    public void shareStyle2Dialog(boolean isShow, int textPicState) {
         mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
                 .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
-                .addMenuItem(new PopMenuItem(textPicState==4?"保存二维码":"图文分享",
-                        textPicState==4?getResources().getDrawable(R.mipmap.icon_erweima):
+                .addMenuItem(new PopMenuItem(textPicState == 4 ? "保存二维码" : "图文分享",
+                        textPicState == 4 ? getResources().getDrawable(R.mipmap.icon_erweima) :
                                 getResources().getDrawable(R.mipmap.img_tuwenfenxiang)))
                 .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
                 .setIsfull(textPicState == 1)
@@ -614,7 +617,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 else if (textPicState == 3) {//优品分享
                                     mShareInfoParam.isSuperiorProduct = true;
                                     saveshareGoodsPic();
-                                }else if (textPicState == 4){//plus分享
+                                } else if (textPicState == 4) {//plus分享
                                     savesharePLUS();
                                 }
                                 setVisibility(INVISIBLE);
@@ -626,21 +629,23 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 break;
                         }
                     }
+
                     @Override
                     public void onClickClose(View view) {
                         mllayout_content.setVisibility(VISIBLE);
                         hide();
                     }
+
                     @Override
                     public void onHideCallback(Activity mActivity) {
-                        if (textPicState == 1){
+                        if (textPicState == 1) {
                             ImmersionBar.with(mActivity).shareSever(0.0f).init();
-                        }else {
+                        } else {
                             super.onHideCallback(mActivity);
                         }
                     }
                 }).build();
-        if (isShow){
+        if (isShow) {
             removeAllViews();
             if (!mPopMenu.isShowing()) {
                 mPopMenu.show();
@@ -664,7 +669,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
 
         MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
-        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
+        mtv_nickname.setText("来自" + mShareInfoParam.userName + "的分享");
 
         int i = TransformUtil.countRealWidth(getContext(), 400);
         Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
@@ -701,22 +706,23 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                         miv_user_head.setImageBitmap(resource);
 
-                        if (TextUtils.isEmpty(mShareInfoParam.shop_logo)){
+                        if (TextUtils.isEmpty(mShareInfoParam.shop_logo)) {
                             miv_shop_head.setVisibility(GONE);
                             savePic(inflate);
-                        }else {
+                        } else {
                             shopPic(inflate, miv_shop_head);
                         }
                     }
+
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         miv_user_head.setImageResource(R.mipmap.img_set_defaulthead);
 
-                        if (TextUtils.isEmpty(mShareInfoParam.shop_logo)){
+                        if (TextUtils.isEmpty(mShareInfoParam.shop_logo)) {
                             miv_shop_head.setVisibility(GONE);
                             savePic(inflate);
-                        }else {
+                        } else {
                             shopPic(inflate, miv_shop_head);
                         }
                     }
@@ -753,8 +759,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 .inflate(R.layout.share_goods, this, false);
 
         if (mContext instanceof GoodsDetailAct &&
-                ImmersionBar.hasNavigationBar((Activity) mContext)){
-            ((GoodsDetailAct)mContext).setFullScreen(true);
+                ImmersionBar.hasNavigationBar((Activity) mContext)) {
+            ((GoodsDetailAct) mContext).setFullScreen(true);
         }
 
         ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
@@ -768,55 +774,54 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
 
         MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
-        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
+        mtv_nickname.setText("来自" + mShareInfoParam.userName + "的分享");
 
         MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
         int i = TransformUtil.dip2px(getContext(), 92.5f);
-        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null,i);
+        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
         miv_code.setImageBitmap(qrImage);
-
 
 
         MyTextView mtv_title = (MyTextView) inflate.findViewById(R.id.mtv_title);
         mtv_title.setText(mShareInfoParam.title);
 
         MyTextView mtv_desc = (MyTextView) inflate.findViewById(R.id.mtv_desc);
-        if (!TextUtils.isEmpty(mShareInfoParam.desc)){
+        if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
             mtv_desc.setVisibility(VISIBLE);
             mtv_desc.setText(mShareInfoParam.desc);
-        }else {
+        } else {
             mtv_desc.setVisibility(GONE);
         }
 
         MyTextView mtv_price = (MyTextView) inflate.findViewById(R.id.mtv_price);
-        mtv_price.setText("￥"+mShareInfoParam.goodsPrice);
+        mtv_price.setText("￥" + mShareInfoParam.goodsPrice);
 
         MyTextView mtv_time = (MyTextView) inflate.findViewById(R.id.mtv_time);
         MyTextView mtv_act_label = (MyTextView) inflate.findViewById(R.id.mtv_act_label);
 
         MyTextView mtv_goodsID = (MyTextView) inflate.findViewById(R.id.mtv_goodsID);
-        mtv_goodsID.setText("商品编号:"+mShareInfoParam.goods_id+"(搜索可直达)");
+        mtv_goodsID.setText("商品编号:" + mShareInfoParam.goods_id + "(搜索可直达)");
 
         LinearLayout llayout_day = (LinearLayout) inflate.findViewById(R.id.llayout_day);
 
-        if (TextUtils.isEmpty(mShareInfoParam.start_time)){
+        if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
             llayout_day.setVisibility(GONE);
-        }else {
+        } else {
             mtv_time.setText(mShareInfoParam.start_time);
             mtv_act_label.setText(mShareInfoParam.act_label);
         }
 
         //显示优品图标
         MyImageView miv_SuperiorProduct = (MyImageView) inflate.findViewById(R.id.miv_SuperiorProduct);
-        if (mShareInfoParam.isSuperiorProduct){
+        if (mShareInfoParam.isSuperiorProduct) {
             miv_SuperiorProduct.setVisibility(VISIBLE);
-        }else {
+        } else {
             miv_SuperiorProduct.setVisibility(GONE);
         }
 
         //下载图片
         if (mShareInfoParam.downloadPic != null && mShareInfoParam.downloadPic.size() > 0) {
-            DownLoadImageThread thread = new DownLoadImageThread(mContext,mShareInfoParam.downloadPic);
+            DownLoadImageThread thread = new DownLoadImageThread(mContext, mShareInfoParam.downloadPic);
             thread.start();
         }
 
@@ -829,6 +834,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         miv_user_head.setImageBitmap(resource);
                         goodsPic(inflate, miv_goods_pic);
                     }
+
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
@@ -845,25 +851,26 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                         miv_goods_pic.setImageBitmap(resource);
-                        inflate.postDelayed(()->{
+                        inflate.postDelayed(() -> {
                             Bitmap bitmapByView = getBitmapByView(inflate);
                             boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
                             if (isSuccess) {
-                                if (mContext instanceof GoodsDetailAct){
-                                    ((GoodsDetailAct)mContext).moreHideAnim();
+                                if (mContext instanceof GoodsDetailAct) {
+                                    ((GoodsDetailAct) mContext).moreHideAnim();
                                     if (mContext instanceof GoodsDetailAct &&
-                                            ImmersionBar.hasNavigationBar((Activity) mContext)){
-                                        ((GoodsDetailAct)mContext).setFullScreen(false);
+                                            ImmersionBar.hasNavigationBar((Activity) mContext)) {
+                                        ((GoodsDetailAct) mContext).setFullScreen(false);
                                     }
                                 }
-                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType,shareId);
+                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
                                 dialog.show();
                             } else {
                                 Common.staticToast("分享失败");
                             }
                             reset();
-                        },100);
+                        }, 100);
                     }
+
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
@@ -891,7 +898,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
 
         MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
-        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
+        mtv_nickname.setText("来自" + mShareInfoParam.userName + "的分享");
 
         int i = TransformUtil.countRealWidth(getContext(), 320);
         Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
@@ -903,9 +910,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mtv_title.setText(mShareInfoParam.title);
 
         MyTextView mtv_desc = (MyTextView) inflate.findViewById(R.id.mtv_desc);
-        if (TextUtils.isEmpty(mShareInfoParam.desc)){
+        if (TextUtils.isEmpty(mShareInfoParam.desc)) {
             mtv_desc.setVisibility(GONE);
-        }else {
+        } else {
             mtv_desc.setVisibility(VISIBLE);
             mtv_desc.setText(mShareInfoParam.desc);
         }
@@ -926,6 +933,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         miv_user_head.setImageBitmap(resource);
                         findPic(inflate, miv_bigpic, miv_smallpic);
                     }
+
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
@@ -941,11 +949,11 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     @Override
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
-                        if ("1".equals(mShareInfoParam.thumb_type)){//显示大图
+                        if ("1".equals(mShareInfoParam.thumb_type)) {//显示大图
                             miv_bigpic.setVisibility(VISIBLE);
                             miv_smallpic.setVisibility(GONE);
                             miv_bigpic.setImageBitmap(resource);
-                        }else {
+                        } else {
                             miv_bigpic.setVisibility(GONE);
                             miv_smallpic.setVisibility(VISIBLE);
                             miv_smallpic.setImageBitmap(resource);
@@ -965,7 +973,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 保存plus分享图
      */
-    public void savesharePLUS(){
+    public void savesharePLUS() {
         removeAllViews();
         setVisibility(INVISIBLE);
         final View inflate = LayoutInflater.from(getContext())
@@ -1007,7 +1015,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
 
     public void copyText(boolean isToast) {
-        Common.copyText(getContext(),mShareInfoParam.shareLink,mShareInfoParam.isCopyTitle?mShareInfoParam.title:mShareInfoParam.desc,isToast);
+        Common.copyText(getContext(), mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, isToast);
     }
 
     public Bitmap getBitmapByView(View view) {
@@ -1019,7 +1027,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         return bitmap;
     }
 
-    private void reset(){
+    private void reset() {
         removeAllViews();
         addView(mActionView);
         hide();
@@ -1030,7 +1038,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             Bitmap bitmapByView = getBitmapByView(inflate);
             boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
             if (isSuccess) {
-                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType,shareId);
+                LogUtil.httpLogW("图片保存成功");
+                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
                 dialog.show();
             } else {
                 Common.staticToast("分享失败");
