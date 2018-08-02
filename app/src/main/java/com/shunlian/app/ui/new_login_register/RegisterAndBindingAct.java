@@ -66,6 +66,7 @@ public class RegisterAndBindingAct extends BaseActivity {
         intent.putExtra("mobile",mobile);
         intent.putExtra("unique_sign",unique_sign);
         intent.putExtra("member_id",member_id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

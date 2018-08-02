@@ -30,7 +30,9 @@ public class LoginEntryAct extends BaseActivity implements IView{
     MyButton mbtn_old_login;
 
     public static void startAct(Context context){
-        context.startActivity(new Intent(context,LoginEntryAct.class));
+        Intent intent = new Intent(context, LoginEntryAct.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
     /**
      * 布局id
