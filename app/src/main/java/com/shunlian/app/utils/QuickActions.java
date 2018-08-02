@@ -1101,7 +1101,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             }
             promptDialog.setSureAndCancleListener(getResources().getString(R.string.discover_articledewenzi),
                     getResources().getString(R.string.discover_articletupian), "", getResources().getString(R.string.discover_quweixinfenxiang), v -> {
-                        Common.openWeiXin(getContext(), "", "");
+                        Common.openWeiXin(getContext(), shareType, shareId);
                         promptDialog.dismiss();
                     }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
             promptDialog.show();
@@ -1177,7 +1177,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             }
             promptDialog.setSureAndCancleListener(getResources().getString(R.string.discover_articlevideo),
                     getResources().getString(R.string.discover_articleurl), "", getResources().getString(R.string.discover_quweixinfenxiang), v -> {
-                        Common.openWeiXin(getContext(), "", "");
+                        Common.openWeiXin(getContext(), shareType, shareId);
                         promptDialog.dismiss();
                     }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
             promptDialog.show();
