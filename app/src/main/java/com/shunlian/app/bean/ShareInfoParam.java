@@ -40,6 +40,7 @@ public class ShareInfoParam implements Serializable {
     public String thumb_type;//0小图（左右布局，图在右侧），1大图（上下布局，图是通栏显示）
     public String start_time;//活动开始时间
     public String act_label;//活动开始时间
+    public String video_url;//视频地址
 
     //是否是优品  默认不是
     public boolean isSuperiorProduct;

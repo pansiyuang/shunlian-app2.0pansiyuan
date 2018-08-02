@@ -2,11 +2,16 @@ package com.shunlian.app.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -23,6 +28,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -35,6 +41,13 @@ import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -89,14 +102,18 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             , R.id.view_car, R.id.view_feedback, R.id.view_help, R.id.view_share})
     List<View> view_line;
 
+    private String dirName;
     private Unbinder bind;
     private int topMargin;
     private int rightMargin;
     private int px;
+    private PromptDialog promptDialog;
+    private HttpDialog httpDialog;
     private PopMenu mPopMenu;
     private ShareInfoParam mShareInfoParam;
     private String shareType = "", shareId = "";
-//    private String tag="";
+    private Handler mHandler;
+    //    private String tag="";
 
 
     public QuickActions(@NonNull Context context) {
@@ -111,6 +128,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         super(context, attrs, defStyleAttr);
         mContext = context;
 
+        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
         mActionView = LayoutInflater.from(mContext).inflate(R.layout.layout_quick_actions, this, false);
         addView(mActionView);
         bind = ButterKnife.bind(this, mActionView);
@@ -123,7 +141,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mllayout_search.setOnClickListener(this);
         mllayout_car.setOnClickListener(this);
         mllayout_help.setOnClickListener(this);
-
+        httpDialog = new HttpDialog(mContext);
+        mHandler = new Handler(mContext.getMainLooper());
         px = TransformUtil.dip2px(mContext, 30);
         topMargin = px;
         rightMargin = px / 2;
@@ -546,7 +565,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 if (textPicState == 1)//店铺分享
                                     saveshareShopPic();
                                 else if (textPicState == 2)//发现分享
-                                    saveshareFindPic();
+                                    savePicAndTxt();
                                 else if (textPicState == 3) {//优品分享
                                     mShareInfoParam.isSuperiorProduct = true;
                                     saveshareGoodsPic();
@@ -613,7 +632,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 if (textPicState == 1)//店铺分享
                                     saveshareShopPic();
                                 else if (textPicState == 2)//发现分享
-                                    saveshareFindPic();
+                                    savePicAndTxt();
                                 else if (textPicState == 3) {//优品分享
                                     mShareInfoParam.isSuperiorProduct = true;
                                     saveshareGoodsPic();
@@ -1046,5 +1065,122 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             }
             reset();
         }, 100);
+    }
+
+    public void savePicAndTxt() {
+        if (TextUtils.isEmpty(mShareInfoParam.thumb_type)) {
+            return;
+        }
+        LogUtil.httpLogW("thumb_type:" + mShareInfoParam.thumb_type);
+        switch (mShareInfoParam.thumb_type) {
+            case "0"://大图小图模式
+            case "1":
+                saveshareFindPic();
+                break;
+            case "2":
+                savePics();
+                break;
+            case "3":
+                if (!TextUtils.isEmpty(mShareInfoParam.video_url)) {
+                    readToDownLoad(mShareInfoParam.video_url);
+                }
+                break;
+        }
+    }
+
+    public void savePics() {
+        try {
+            if (mShareInfoParam.downloadPic == null && mShareInfoParam.downloadPic.size() == 0) {
+                return;
+            }
+            DownLoadImageThread thread = new DownLoadImageThread(getContext(), mShareInfoParam.downloadPic);
+            thread.start();
+            Common.copyText(getContext(), mShareInfoParam.shareLink, mShareInfoParam.title, false);
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog((Activity) getContext());
+            }
+            promptDialog.setSureAndCancleListener(getResources().getString(R.string.discover_articledewenzi),
+                    getResources().getString(R.string.discover_articletupian), "", getResources().getString(R.string.discover_quweixinfenxiang), v -> {
+                        Common.openWeiXin(getContext(), shareType, shareId);
+                        promptDialog.dismiss();
+                    }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
+            promptDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readToDownLoad(String videoUrl) {
+        File file = new File(dirName);
+        // 文件夹不存在时创建
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        // 下载后的文件名
+        int i = videoUrl.lastIndexOf("/"); // 取的最后一个斜杠后的字符串为名
+        String fileName = dirName + videoUrl.substring(i, videoUrl.length());
+        File file1 = new File(fileName);
+
+        if (file1.exists()) {
+            saveVideoDialog();
+        } else {
+            mHandler.post(() -> {
+                if (httpDialog != null && !httpDialog.isShowing()) {
+                    httpDialog.show();
+                }
+            });
+            new Thread(() -> downLoadVideo(fileName)).start();
+        }
+    }
+
+    public void downLoadVideo(String fileName) {
+        try {
+            URL url = new URL(mShareInfoParam.video_url);
+            // 打开连接
+            URLConnection conn = url.openConnection();
+            // 打开输入流
+            InputStream is = conn.getInputStream();
+            // 创建字节流
+            byte[] bs = new byte[1024];
+            int len;
+            OutputStream os = new FileOutputStream(fileName);
+            // 写数据
+            while ((len = is.read(bs)) != -1) {
+                os.write(bs, 0, len);
+            }
+            // 完成后关闭流
+            saveVideoFile(fileName);
+            os.close();
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveVideoFile(String fileDir) {
+        //strDir视频路径
+        Uri localUri = Uri.parse("file://" + fileDir);
+        Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
+        getContext().sendBroadcast(localIntent);
+
+        saveVideoDialog();
+    }
+
+    public void saveVideoDialog() {
+        mHandler.post(() -> {
+            if (httpDialog != null && httpDialog.isShowing()) {
+                httpDialog.dismiss();
+            }
+            Common.copyText(getContext(), mShareInfoParam.shareLink, mShareInfoParam.title, false);
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog((Activity) getContext());
+            }
+            promptDialog.setSureAndCancleListener(getResources().getString(R.string.discover_articlevideo),
+                    getResources().getString(R.string.discover_articleurl), "", getResources().getString(R.string.discover_quweixinfenxiang), v -> {
+                        Common.openWeiXin(getContext(), shareType, shareId);
+                        promptDialog.dismiss();
+                    }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
+            promptDialog.show();
+        });
     }
 }

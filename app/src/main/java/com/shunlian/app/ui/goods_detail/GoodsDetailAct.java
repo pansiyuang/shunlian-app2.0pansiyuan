@@ -81,62 +81,92 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public static int CURRENT_ID = GOODS_ID;
     public int toolbarHeight;//toolbar高
     public int bottomListHeight;//底部导航高度
+
+
     @BindView(R.id.rnview)
     RollNumView rnview;
+
     @BindView(R.id.mtv_add_car)
     MyTextView mtv_add_car;
+
     @BindView(R.id.rl_rootview)
     RelativeLayout rl_rootview;
+
     @BindView(R.id.miv_is_fav)
     MyImageView miv_is_fav;
+
     @BindView(R.id.mtv_buy_immediately)
     MyTextView mtv_buy_immediately;
+
     @BindView(R.id.mll_share)
     MyLinearLayout mll_share;
+
     @BindView(R.id.miv_more)
     MyImageView miv_more;
+
     @BindView(R.id.miv_close_share)
     MyImageView miv_close_share;
+
     @BindView(R.id.mll_goods)
     MyLinearLayout mll_goods;
+
     @BindView(R.id.mtv_goods)
     MyTextView mtv_goods;
+
     @BindView(R.id.view_goods)
     View view_goods;
+
     @BindView(R.id.mll_detail)
     MyLinearLayout mll_detail;
+
     @BindView(R.id.mtv_detail)
     MyTextView mtv_detail;
+
     @BindView(R.id.view_detail)
     View view_detail;
+
     @BindView(R.id.mll_comment)
     MyLinearLayout mll_comment;
+
     @BindView(R.id.mtv_comment)
     MyTextView mtv_comment;
+
     @BindView(R.id.view_comment)
     View view_comment;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
     @BindView(R.id.mll_item)
     MyLinearLayout mll_item;
+
     @BindView(R.id.miv_close)
     MyImageView miv_close;
+
     @BindView(R.id.mll_bottom)
     MyLinearLayout mll_bottom;
+
     @BindView(R.id.mllayout_car)
     MyLinearLayout mllayout_car;
+
     @BindView(R.id.mll_chat)
     MyLinearLayout mll_chat;
+
     @BindView(R.id.line)
     View line;
+
     @BindView(R.id.mtv_off_shelf)
     MyTextView mtv_off_shelf;
+
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
+
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
+
     @BindView(R.id.mtv_want)
     MyTextView mtv_want;
+
     private GoodsDeatilFrag goodsDeatilFrag;
     private MyImageView myImageView;
     private GoodsDetailPresenter goodsDetailPresenter;
@@ -1160,13 +1190,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void stockDeficiency(String stock) {
-        if (!isEmpty(stock) && Integer.parseInt(stock) <= 0) {
-            visible(mtv_want);
-            gone(mtv_add_car, mtv_buy_immediately);
-        } else {
-            gone(mtv_want);
-            visible(mtv_add_car, mtv_buy_immediately);
-        }
+        visible(mtv_want);
+        gone(mtv_add_car, mtv_buy_immediately);
     }
 
     @Override

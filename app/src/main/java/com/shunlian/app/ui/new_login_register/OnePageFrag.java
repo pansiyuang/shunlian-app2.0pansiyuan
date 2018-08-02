@@ -267,19 +267,17 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         }
     }
 
-    public void resetPage(int mFlag, String mobile, String unique_sign, String member_id) {
+    public void resetPage(int flag, String mobile, String unique_sign, String member_id) {
         this.mMobile = mobile;
         this.mUniqueSign = unique_sign;
         this.mMember_id = member_id;
-        //LogUtil.zhLogW(this.mFlag+"====<>========"+mFlag);
-        if (this.mFlag != mFlag){
+        //LogUtil.zhLogW(this.mFlag+"====<>========"+flag);
+        if (this.mFlag != flag && flag == RegisterAndBindingAct.FLAG_REGISTER){
+            met_mobile.setText("");
+            setDispatchFocusable(1);
             miv_tip.setVisibility(View.INVISIBLE);
-            if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
-                met_mobile.setText("");
-                setDispatchFocusable(1);
-            }
         }
-        this.mFlag = mFlag;
+        this.mFlag = flag;
         showStatus(mFlag);
         resetCode();
     }

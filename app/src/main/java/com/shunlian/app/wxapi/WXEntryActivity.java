@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -45,6 +47,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler, WXEntryView {
@@ -323,8 +326,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     @Subscribe(sticky = true)
     public void eventBus(DispachJump jump) {
-        if (jump != null && !isEmpty(jump.jumpType))
-            SharedPrefUtil.saveCacheSharedPrf("wx_jump",jump.jumpType);
+        if (jump != null && !isEmpty(jump.jumpType)) {
+            ObjectMapper om = new ObjectMapper();
+            try {
+                String s = om.writeValueAsString(jump);
+                SharedPrefUtil.saveCacheSharedPrf("wx_jump", s);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
         EventBus.getDefault().unregister(this);
         EventBus.getDefault().postSticky(jump);
     }
@@ -362,13 +372,11 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                             ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
                             ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
                 }
-                String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
-                if (!isEmpty(jumpType)) {
-                    Common.goGoGo(this, jumpType);
-                }
+                //处理跳转页面
+                handleJump();
 
                 if (!"1".equals(wxLoginEntity.is_tag)){
-                    SexSelectAct.startAct(this,!isEmpty(jumpType));
+                    SexSelectAct.startAct(this);
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
                     finishAndRemoveTask();
@@ -389,6 +397,19 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             mYFinish();
         }
         mYFinish();
+    }
+
+    private void handleJump() {
+        String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
+        ObjectMapper om = new ObjectMapper();
+        try {
+            DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
+            if (dispachJump != null) {
+                Common.goGoGo(this, dispachJump.jumpType,dispachJump.items);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

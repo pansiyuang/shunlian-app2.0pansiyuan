@@ -43,44 +43,66 @@ public class NetAndEmptyInterface extends LinearLayout {
         setBackgroundColor(getResources().getColor(R.color.white));
         setGravity(Gravity.CENTER);
 
-        imageView = new MyImageView(getContext());
+        addImageView();
 
+        addTextView();
+
+        addButton();
+
+    }
+
+    private void addImageView() {
+        imageView = new MyImageView(getContext());
+        addView(imageView,0);
+    }
+
+    private void addTextView() {
         textView = new MyTextView(getContext());
         textView.setTextColor(getResources().getColor(R.color.color_value_6c));
         textView.setTextSize(15);
         textView.setGravity(Gravity.CENTER);
+        addView(textView,1);
+        LayoutParams textParams1 = (LayoutParams) textView.getLayoutParams();
+        textParams1.topMargin = TransformUtil.dip2px(getContext(), 20);
+        textView.setLayoutParams(textParams1);
+    }
 
-
+    private void addButton() {
         button = new MyButton(getContext());
         button.setBackgroundResource(R.drawable.rounded_rectangle_lin_gray_4px);
         button.setTextSize(15);
         button.setGravity(Gravity.CENTER);
         button.setTextColor(getResources().getColor(R.color.new_gray));
         button.setWHProportion(250, 65);
-
-        addView(imageView);
-        addView(textView);
-        addView(button);
-
-        LinearLayout.LayoutParams textParams1 = (LayoutParams) textView.getLayoutParams();
-        textParams1.topMargin = TransformUtil.dip2px(getContext(), 20);
-        textView.setLayoutParams(textParams1);
-
-
-        LinearLayout.LayoutParams buttonParams = (LayoutParams) button.getLayoutParams();
+        addView(button,2);
+        LayoutParams buttonParams = (LayoutParams) button.getLayoutParams();
         buttonParams.topMargin = TransformUtil.dip2px(getContext(), 30);
         button.setLayoutParams(buttonParams);
     }
-
     /**
      * 网络异常
      *
      * @return 返回button控件，以便于直接设置点击监听
      */
     public MyButton setNetExecption() {
+        if (imageView == null){
+            removeViewAt(0);
+            addImageView();
+        }
         imageView.setImageResource(R.mipmap.img_empty_wuwangluo);
+
+        if (textView == null){
+            removeViewAt(1);
+            addTextView();
+        }
         textView.setText("网络状态待提升");
+
+        if (button == null){
+            removeViewAt(2);
+            addButton();
+        }
         button.setText("点击重试");
+
         return button;
     }
 
@@ -91,6 +113,10 @@ public class NetAndEmptyInterface extends LinearLayout {
      * @return
      */
     public NetAndEmptyInterface setImageResource(@DrawableRes int resId) {
+        if (imageView == null){
+            removeViewAt(0);
+            addImageView();
+        }
         imageView.setImageResource(resId);
         return this;
     }
@@ -102,6 +128,10 @@ public class NetAndEmptyInterface extends LinearLayout {
      * @return
      */
     public NetAndEmptyInterface setText(CharSequence text) {
+        if (textView == null){
+            removeViewAt(1);
+            addTextView();
+        }
         if (TextUtils.isEmpty(text)) {
             textView.setVisibility(GONE);
         } else {
@@ -118,6 +148,10 @@ public class NetAndEmptyInterface extends LinearLayout {
      * @return 返回button控件，以便于直接设置点击监听
      */
     public MyButton setButtonText(CharSequence text) {
+        if (button == null){
+            removeViewAt(2);
+            addButton();
+        }
         if (TextUtils.isEmpty(text)) {
             button.setVisibility(GONE);
         } else {
