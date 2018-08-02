@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Arrays;
+
 /**
  * Created by Administrator on 2018/4/25.
  * 跳转分发
@@ -49,4 +51,13 @@ public class DispachJump implements Parcelable {
             return new DispachJump[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "DispachJump{" +
+                "personal='" + personal + '\'' +
+                ", jumpType='" + jumpType + '\'' +
+                ", items=" + Arrays.toString(items) +
+                '}';
+    }
 }

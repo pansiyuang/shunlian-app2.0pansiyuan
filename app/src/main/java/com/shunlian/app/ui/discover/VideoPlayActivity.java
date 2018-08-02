@@ -24,6 +24,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SaveAlbumDialog;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.CustomVideoPlayer;
@@ -81,6 +82,7 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
     public HttpDialog httpDialog;
     private Dialog dialog_operate;
     public String dirName;
+    private PromptDialog promptDialog;
     private ArticleEntity.Article currentArticle;
     private boolean isShare;
     private ArrayList<String> imgList;
@@ -316,14 +318,19 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        LogUtil.httpLogW("shareLink:");
         Common.copyText(VideoPlayActivity.this, baseEntity.data.shareLink, currentArticle.title, false);
         if (httpDialog.isShowing()) {
             httpDialog.dismiss();
         }
-        if (saveAlbumDialog == null) {
-            saveAlbumDialog = new SaveAlbumDialog(this, "article", currentArticle.id);
+        Common.copyText(this, baseEntity.data.shareLink, currentArticle.title, false);
+        if (promptDialog == null) {
+            promptDialog = new PromptDialog(this);
         }
-        saveAlbumDialog.show();
+        promptDialog.setSureAndCancleListener(getResources().getString(R.string.discover_articlevideo),
+                getResources().getString(R.string.discover_articleurl), "", getResources().getString(R.string.discover_quweixinfenxiang), v -> {
+                    Common.openWeiXin(VideoPlayActivity.this, "article", currentArticle.id);
+                    promptDialog.dismiss();
+                }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
+        promptDialog.show();
     }
 }

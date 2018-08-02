@@ -30,7 +30,6 @@ import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.mylibrary.OSUtils;
@@ -326,15 +325,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     @Subscribe(sticky = true)
     public void eventBus(DispachJump jump) {
-        LogUtil.augusLogW("yxftest---1111");
         if (jump != null && !isEmpty(jump.jumpType)) {
             ObjectMapper om = new ObjectMapper();
             try {
-                LogUtil.augusLogW("yxftest---2222");
+                if (jump.items == null){
+                    jump.items = new String[0];
+                }
                 String s = om.writeValueAsString(jump);
                 SharedPrefUtil.saveCacheSharedPrf("wx_jump", s);
             } catch (JsonProcessingException e) {
-                LogUtil.augusLogW("yxftest2222---"+e);
                 e.printStackTrace();
             }
         }
@@ -375,12 +374,11 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                             ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
                             ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
                 }
-                //处理跳转页面
-                handleJump();
 
                 if (!"1".equals(wxLoginEntity.is_tag)){
                     SexSelectAct.startAct(this);
                 }
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
                     finishAndRemoveTask();
                 }else {
@@ -400,23 +398,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             mYFinish();
         }
         mYFinish();
-    }
-
-    private void handleJump() {
-//        LogUtil.augusLogW("yxftest---8888");
-//        String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
-//        ObjectMapper om = new ObjectMapper();
-//        try {
-//            LogUtil.augusLogW("yxftest---55555");
-//            DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
-//            if (dispachJump != null) {
-//                Common.goGoGo(this, dispachJump.jumpType,dispachJump.items);
-                Common.goGoGo(this, "");
-//            }
-//        } catch (IOException e) {
-//            LogUtil.augusLogW("yxftest---6666"+e);
-//            e.printStackTrace();
-//        }
     }
 
     @Override

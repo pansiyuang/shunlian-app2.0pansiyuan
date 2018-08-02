@@ -19,7 +19,6 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
