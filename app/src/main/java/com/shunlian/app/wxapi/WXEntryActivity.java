@@ -47,7 +47,6 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.IOException;
 import java.util.HashSet;
 
 public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler, WXEntryView {
@@ -329,6 +328,9 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (jump != null && !isEmpty(jump.jumpType)) {
             ObjectMapper om = new ObjectMapper();
             try {
+                if (jump.items == null){
+                    jump.items = new String[0];
+                }
                 String s = om.writeValueAsString(jump);
                 SharedPrefUtil.saveCacheSharedPrf("wx_jump", s);
             } catch (JsonProcessingException e) {
@@ -372,12 +374,11 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                             ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
                             ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
                 }
-                //处理跳转页面
-                handleJump();
 
                 if (!"1".equals(wxLoginEntity.is_tag)){
                     SexSelectAct.startAct(this);
                 }
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
                     finishAndRemoveTask();
                 }else {
@@ -397,20 +398,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             mYFinish();
         }
         mYFinish();
-    }
-
-    private void handleJump() {
-        String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
-        if (isEmpty(jumpType))return;
-        ObjectMapper om = new ObjectMapper();
-        try {
-            DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
-            if (dispachJump != null) {
-                Common.goGoGo(this, dispachJump.jumpType,dispachJump.items);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

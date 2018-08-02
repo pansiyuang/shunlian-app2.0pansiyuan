@@ -13,12 +13,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -30,10 +33,10 @@ import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5Frag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -45,6 +48,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.UpdateDialog;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -231,6 +235,25 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         switch2jump(flag);
         if ("route_login".equals(flag)){
             Common.goGoGo(this,"login");
+        }
+        handleJump();
+    }
+
+    private void handleJump() {
+        String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
+        LogUtil.zhLogW("===handleJump======="+jumpType);
+        if (isEmpty(jumpType))return;
+        ObjectMapper om = new ObjectMapper();
+        try {
+            DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
+            LogUtil.zhLogW("===dispachJump======="+dispachJump.toString());
+            if (dispachJump != null) {
+                Common.goGoGo(this, dispachJump.jumpType);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
         }
     }
 
