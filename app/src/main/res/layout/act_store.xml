@@ -76,7 +76,6 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="8dp"
                             android:layout_toRightOf="@id/miv_storeLogo"
-                            android:text="美特斯邦威"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
 
