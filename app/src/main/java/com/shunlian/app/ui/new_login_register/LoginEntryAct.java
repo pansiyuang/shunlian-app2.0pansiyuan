@@ -63,9 +63,7 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     @OnClick(R.id.llayout_wechat_login)
     public void wechatLogin(){
-        //WXEntryActivity.startAct(this,"login",null);
         WXLogin();
-        finish();
         /*if (presenter == null) {
             presenter = new TestWXLoginPresenter(this, this);
         }else {
