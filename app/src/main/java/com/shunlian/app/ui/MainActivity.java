@@ -13,12 +13,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -30,10 +33,10 @@ import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5Frag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -45,6 +48,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.UpdateDialog;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -56,6 +60,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private static final String[] flags = {"mainPage", "myPlus", "discover", "shoppingcar", "personCenter"};
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
     public int position = 0;
+    public CommonEntity data;
     @BindView(R.id.fl_main)
     MyFrameLayout fl_main;
     @BindView(R.id.ll_tab_main_page)
@@ -90,16 +95,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     MyImageView miv_person_center;
     @BindView(R.id.tv_person_center)
     TextView tv_person_center;
-
     @BindView(R.id.mtv_message_count)
     MyTextView mtv_message_count;
-
     @BindView(R.id.view_message)
     View view_message;
-
     //    private MainPageFrag mainPageFrag;
     private FirstPageFrag mainPageFrag;
-//    private MyPlusFrag myPlusFrag;
+    //    private MyPlusFrag myPlusFrag;
     private SortFrag sortFrag;
     private H5PlusFrag h5PlusFrag;
     private DiscoverFrag discoverFrag;
@@ -108,7 +110,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private long mExitTime;
     private FragmentManager fragmentManager;
     private int pageIndex;
-    private String flag;
+    private String flag="default";
     private Dialog dialog_ad;
     private MessageCountManager messageCountManager;
     private PMain pMain;
@@ -117,7 +119,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
-    public CommonEntity data;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -142,22 +143,26 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         initMessage();
     }
 
-    public void initMessage(){
-        if (Common.isAlreadyLogin()){
+    public void initMessage() {
+        if (Common.isAlreadyLogin()) {
             pMain.getDiscoveryUnreadCount();
             view_message.setVisibility(View.GONE);
-        }else {
-            if (discoverFrag!=null)
+        } else {
+            if (discoverFrag != null)
                 discoverFrag.initMessage(null);
             mtv_message_count.setVisibility(View.GONE);
             view_message.setVisibility(View.VISIBLE);
         }
     }
+
     /**
      * 初始化数据
      */
     @Override
     protected void initData() {
+//        if (fragmentMap!=null&&fragmentMap.size()>0){
+//            fragmentMap.clear();
+//        }else {
         pMain = new PMain(MainActivity.this, MainActivity.this);
         pMain.entryInfo();
         initMessage();
@@ -170,8 +175,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     }
                 }
             };
+//        }
         fragmentManager = getSupportFragmentManager();
         mainPageClick();
+//        flag = getIntent().getStringExtra("flag");
+//        if (!isEmpty(flag))
+//            switch2jump(flag);
 
         if (Common.isAlreadyLogin()) {
             EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
@@ -222,6 +231,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+        if (!isEmpty(getIntent().getStringExtra("flag")))
         flag = getIntent().getStringExtra("flag");
         /*if (TextUtils.isEmpty(flag)) {
             mainPageClick();
@@ -229,8 +239,27 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             switch2jump(flag);
         }*/
         switch2jump(flag);
-        if ("route_login".equals(flag)){
-            Common.goGoGo(this,"login");
+        if ("route_login".equals(flag)) {
+            Common.goGoGo(this, "login");
+        }
+        handleJump();
+    }
+
+    private void handleJump() {
+        String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
+        LogUtil.zhLogW("===handleJump======="+jumpType);
+        if (isEmpty(jumpType))return;
+        ObjectMapper om = new ObjectMapper();
+        try {
+            DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
+            LogUtil.zhLogW("===dispachJump======="+dispachJump.toString());
+            if (dispachJump != null) {
+                Common.goGoGo(this, dispachJump.jumpType);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
         }
     }
 
@@ -274,7 +303,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
             view.animate().scaleX(1).scaleY(1).setDuration(300).start();
         }
-        if (view.getId()== R.id.ll_tab_discover){
+        if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
             mtv_message_count.setVisibility(View.GONE);
         }
@@ -287,7 +316,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     case R.id.ll_tab_main_page:
                         if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
                             cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
-                            if (cateGoryFrag.rv_view != null){
+                            if (cateGoryFrag.rv_view != null) {
                                 cateGoryFrag.rv_view.scrollToPosition(0);
                                 FirstPageFrag.mAppbar.setExpanded(true);
                             }
@@ -337,18 +366,18 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         //先判断此碎片是否第一次点击，是的话初始化碎片
         String url;
         if (!Common.isAlreadyLogin() || !Common.isPlus()) {
-            url=SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD);
-        }else {
-            url=SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD);
+            url = SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD);
+        } else {
+            url = SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD);
         }
-        if (h5PlusFrag== null) {
+        if (h5PlusFrag == null) {
             h5PlusFrag = (H5PlusFrag) fragmentMap.get(flags[1]);
             if (h5PlusFrag == null) {
                 h5PlusFrag = (H5PlusFrag) H5PlusFrag.getInstance(url, H5Frag.MODE_SONIC);
                 fragmentMap.put(flags[1], h5PlusFrag);
             }
         } else {
-            h5PlusFrag.h5Url=url;
+            h5PlusFrag.h5Url = url;
             h5PlusFrag.reFresh();
         }
 
@@ -381,10 +410,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        chageTabItem(pageIndex);
 //    }
 
-    public void sortClick(){
+    public void sortClick() {
         isFirst = false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
-        if (sortFrag== null) {
+        if (sortFrag == null) {
             sortFrag = (SortFrag) fragmentMap.get(flags[1]);
             if (sortFrag == null) {
                 sortFrag = new SortFrag();
@@ -422,8 +451,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void shoppingCarClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.theRelayJump("shoppingcar",null);
-            Common.goGoGo(this,"login");
+            Common.theRelayJump("shoppingcar", null);
+            Common.goGoGo(this, "login");
             isCart = true;
             return;
         }
@@ -447,8 +476,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void personCenterClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.theRelayJump("personCenter",null);
-            Common.goGoGo(this,"login");
+            Common.theRelayJump("personCenter", null);
+            Common.goGoGo(this, "login");
             isPerson = true;
             return;
         }
@@ -650,7 +679,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void entryInfo(CommonEntity data) {
-        Constant.EMAIL=data.ducha_email;
+        Constant.EMAIL = data.ducha_email;
         SharedPrefUtil.saveSharedUserString("plus_role", data.is_plus);
         SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
         SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
@@ -659,7 +688,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void setDiscoveryUnreadCount(CommonEntity data) {
-       this.data=data;
+        this.data = data;
         mtv_message_count.setVisibility(View.VISIBLE);
         if (data.total > 99) {
             mtv_message_count.setText("99+");
@@ -668,7 +697,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         } else {
             mtv_message_count.setText(String.valueOf(data.total));
         }
-        if (discoverFrag!=null){
+        if (discoverFrag != null) {
             discoverFrag.initMessage(data);
         }
     }

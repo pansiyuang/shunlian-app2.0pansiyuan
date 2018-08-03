@@ -21,6 +21,7 @@ import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -235,6 +236,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             case R.id.mll_message:
                 mAppbar.setExpanded(false);
                 MessageActivity.startAct(getActivity());
+//                H5Act.startAct(getActivity(),"https://plus.mengtianvip.com/Nha_Trang",H5Act.MODE_SONIC);
                 break;
             case R.id.miv_photo:
                 Common.goGoGo(getContext(), logoType, logoId);

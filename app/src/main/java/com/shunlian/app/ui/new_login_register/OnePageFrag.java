@@ -439,7 +439,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         if (bytes != null && miv_pic_code != null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             miv_pic_code.setImageBitmap(bitmap);
-        } else {
+        } else if (getActivity()!=null&&!getActivity().isFinishing()){
             Common.staticToast(getString(R.string.RegisterOneAct_hqyzmsb));
         }
     }

@@ -134,6 +134,7 @@ public class ChangeUserFrag extends BaseFragment implements IChangeUserView, Vie
     public void setCode(byte[] bytes) {
         if (bytes != null) {
             if (met_code != null) met_code.setText("");
+            if (miv_code!=null)
             miv_code.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
         }
     }
