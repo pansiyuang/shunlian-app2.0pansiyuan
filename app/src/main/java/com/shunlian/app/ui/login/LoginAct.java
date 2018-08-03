@@ -13,8 +13,14 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.register.RegisterAct;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,5 +183,30 @@ public class LoginAct extends BaseActivity {
         gone(frame_content);
         fragmentManager.beginTransaction().remove(inputVerfiCodeFrag).commit();
         isCanBack = false;
+    }
+
+    /**
+     * 微信登录
+     */
+    public void WXLogin(){
+        IWXAPI api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
+        api.registerApp(Constant.WX_APP_ID);
+
+        int wxSdkVersion = api.getWXAppSupportAPI();
+        if (wxSdkVersion >= Constant.TIMELINE_SUPPORTED_VERSION){
+            // send oauth request
+            final SendAuth.Req req = new SendAuth.Req();
+            req.scope = "snsapi_userinfo";
+            req.state = SharedPrefUtil.getCacheSharedPrf("X-Device-ID",
+                    "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
+            api.sendReq(req);
+            finish();
+        }else if (wxSdkVersion == 0) {
+            Common.staticToast("请先安装微信");
+            finish();
+        } else {
+            Common.staticToast("当前微信版本过低，请更新后再试");
+            finish();
+        }
     }
 }

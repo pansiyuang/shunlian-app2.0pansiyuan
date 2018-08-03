@@ -117,7 +117,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
-    private boolean isPerson = false, isCart = false, isFirst = false;
+    private boolean isFirst = false;
     //    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
@@ -210,15 +210,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        } else {
 //            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
 //        }
-        if (Common.isAlreadyLogin()) {
-            if (isPerson) {
-                personCenterClick();
-                isPerson = false;
-            } else if (isCart) {
-                shoppingCarClick();
-                isCart = false;
-            }
-        }
+        if (Common.isAlreadyLogin()) {handleJump();}
         super.onResume();
     }
 
@@ -227,6 +219,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         super.onNewIntent(intent);
         setIntent(intent);
         flag = getIntent().getStringExtra("flag");
+        //LogUtil.zhLogW("===onNewIntent======="+flag);
         /*if (TextUtils.isEmpty(flag)) {
             mainPageClick();
         } else {
@@ -241,14 +234,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     private void handleJump() {
         String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
-        LogUtil.zhLogW("===handleJump======="+jumpType);
         if (isEmpty(jumpType))return;
         ObjectMapper om = new ObjectMapper();
         try {
             DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
-            LogUtil.zhLogW("===dispachJump======="+dispachJump.toString());
             if (dispachJump != null) {
-                Common.goGoGo(this, dispachJump.jumpType);
+                Common.goGoGo(this, dispachJump.jumpType,dispachJump.items);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -447,7 +438,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (!Common.isAlreadyLogin()) {
             Common.theRelayJump("shoppingcar",null);
             Common.goGoGo(this,"login");
-            isCart = true;
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -472,7 +462,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (!Common.isAlreadyLogin()) {
             Common.theRelayJump("personCenter",null);
             Common.goGoGo(this,"login");
-            isPerson = true;
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片

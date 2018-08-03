@@ -1055,7 +1055,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     public void refreshDetail() {
-        if (goodsDeatilFrag != null) {
+        if (goodsDetailPresenter != null) {
             goodsDetailPresenter.refreshDetail();
         }
     }
