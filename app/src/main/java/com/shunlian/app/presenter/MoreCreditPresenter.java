@@ -115,7 +115,7 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
                     if ("1".equals(listBean.isBuy)) {
                         moreCreditAdapter.currentPos = position;
                         moreCreditAdapter.notifyDataSetChanged();
-                    }else {
+                    }else if (!isEmpty(listBean.message)){
                         Common.staticToasts(context,listBean.message,0);
                     }
                 });

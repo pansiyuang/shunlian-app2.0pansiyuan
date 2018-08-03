@@ -126,6 +126,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     private String flag_jingxuan = "nice", flag_guanzhu = "focus",
             flag_xinde = "experience", flag_quanzi = "circle", flag_sucaiku = "material";
     private boolean isSecond = false;
+    private CommonEntity data;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -145,6 +146,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     }
 
     public void initMessage(CommonEntity data) {
+        this.data = data;
         if (data == null) {
             mtv_message_jingxuan.setVisibility(View.GONE);
             mtv_message_guanzhu.setVisibility(View.GONE);
@@ -216,16 +218,14 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 //                LogUtil.augusLogW("yxf---"+verticalOffset);
 //            }
 //        });
-        String flag = getArguments().getString("flag");
-        if (!isEmpty(flag)) {
-            setArgument(flag);
-        } else {
-            jingXuanFrag();
-        }
+        String flag ="nice";
+        if (getArguments() != null&&!isEmpty(getArguments().getString("flag")))
+            flag = getArguments().getString("flag");
+        setArgument(flag);
         miv_empty.setFocusable(false);
         MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity!=null)
-        initMessage(mainActivity.data);
+        if (mainActivity != null)
+            initMessage(mainActivity.data);
     }
 
     @Override
@@ -250,6 +250,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(0);
         judge(flag_jingxuan);
         mtv_message_jingxuan.setVisibility(View.GONE);
+        if (data != null)
+            data.nice = 0;
     }
 
     public void guanZhuFrag() {
@@ -267,6 +269,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(1);
         judge(flag_guanzhu);
         mtv_message_guanzhu.setVisibility(View.GONE);
+        if (data != null)
+            data.focus = 0;
     }
 
     public void xindeFrag() {
@@ -284,6 +288,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(2);
         judge(flag_xinde);
         mtv_message_xinde.setVisibility(View.GONE);
+        if (data != null)
+            data.experience = 0;
     }
 
     public void quanziFrag() {
@@ -301,6 +307,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(3);
         judge(flag_quanzi);
         mtv_message_quanzi.setVisibility(View.GONE);
+        if (data != null)
+            data.circle = 0;
     }
 
     public void sucaikuFrag() {
@@ -318,6 +326,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(4);
         judge(flag_sucaiku);
         mtv_message_sucaiku.setVisibility(View.GONE);
+        if (data != null)
+            data.material = 0;
     }
 
     public void judge(String flag) {
@@ -387,14 +397,15 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         }
     }
 
-    private void setParam(int length,MyTextView mtv){
-        int multiple=4-length;
+    private void setParam(int length, MyTextView mtv) {
+        int multiple = 4 - length;
 //        LayoutParams取父布局类型,参数中的ViewGroup.LayoutParams.WRAP_CONTENT参数都是指向一个值如：RelativeLayout.LayoutParams.WRAP_CONTENT，LinearLayout.LayoutParams.WRAP_CONTENT
-        RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, TransformUtil.dip2px(baseContext,6),TransformUtil.dip2px(baseContext,6*multiple),0);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,RelativeLayout.TRUE);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, TransformUtil.dip2px(baseContext, 6), TransformUtil.dip2px(baseContext, 6 * multiple), 0);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         mtv.setLayoutParams(layoutParams);
     }
+
     @Override
     public void setNavData(final DiscoveryNavEntity navEntity) {
         if (isEmpty(navEntity.flash_list)) {
@@ -423,8 +434,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
                     mrlayout_jingxuan.setVisibility(View.VISIBLE);
                     flag_jingxuan = navEntity.nav_list.get(0).code;
-                    if (navEntity.nav_list.get(0).name.length()<4){
-                        setParam(navEntity.nav_list.get(0).name.length(),mtv_message_jingxuan);
+                    if (navEntity.nav_list.get(0).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
                     }
                     break;
                 case 2:
@@ -434,11 +445,11 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
                     flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
-                    if (navEntity.nav_list.get(0).name.length()<4){
-                        setParam(navEntity.nav_list.get(0).name.length(),mtv_message_jingxuan);
+                    if (navEntity.nav_list.get(0).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
                     }
-                    if (navEntity.nav_list.get(1).name.length()<4){
-                        setParam(navEntity.nav_list.get(1).name.length(),mtv_message_guanzhu);
+                    if (navEntity.nav_list.get(1).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu);
                     }
                     break;
                 case 3:
@@ -451,14 +462,14 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
                     flag_xinde = navEntity.nav_list.get(2).code;
-                    if (navEntity.nav_list.get(0).name.length()<4){
-                        setParam(navEntity.nav_list.get(0).name.length(),mtv_message_jingxuan);
+                    if (navEntity.nav_list.get(0).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
                     }
-                    if (navEntity.nav_list.get(1).name.length()<4){
-                        setParam(navEntity.nav_list.get(1).name.length(),mtv_message_guanzhu);
+                    if (navEntity.nav_list.get(1).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu);
                     }
-                    if (navEntity.nav_list.get(2).name.length()<4){
-                        setParam(navEntity.nav_list.get(2).name.length(),mtv_message_xinde);
+                    if (navEntity.nav_list.get(2).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(2).name.length(), mtv_message_xinde);
                     }
                     break;
                 case 4:
@@ -474,17 +485,17 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     flag_guanzhu = navEntity.nav_list.get(1).code;
                     flag_xinde = navEntity.nav_list.get(2).code;
                     flag_quanzi = navEntity.nav_list.get(3).code;
-                    if (navEntity.nav_list.get(0).name.length()<4){
-                        setParam(navEntity.nav_list.get(0).name.length(),mtv_message_jingxuan);
+                    if (navEntity.nav_list.get(0).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
                     }
-                    if (navEntity.nav_list.get(1).name.length()<4){
-                        setParam(navEntity.nav_list.get(1).name.length(),mtv_message_guanzhu);
+                    if (navEntity.nav_list.get(1).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu);
                     }
-                    if (navEntity.nav_list.get(2).name.length()<4){
-                        setParam(navEntity.nav_list.get(2).name.length(),mtv_message_xinde);
+                    if (navEntity.nav_list.get(2).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(2).name.length(), mtv_message_xinde);
                     }
-                    if (navEntity.nav_list.get(3).name.length()<4){
-                        setParam(navEntity.nav_list.get(3).name.length(),mtv_message_quanzi);
+                    if (navEntity.nav_list.get(3).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(3).name.length(), mtv_message_quanzi);
                     }
                     break;
                 case 5:
@@ -503,20 +514,20 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     flag_xinde = navEntity.nav_list.get(2).code;
                     flag_quanzi = navEntity.nav_list.get(3).code;
                     flag_sucaiku = navEntity.nav_list.get(4).code;
-                    if (navEntity.nav_list.get(0).name.length()<4){
-                        setParam(navEntity.nav_list.get(0).name.length(),mtv_message_jingxuan);
+                    if (navEntity.nav_list.get(0).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
                     }
-                    if (navEntity.nav_list.get(1).name.length()<4){
-                        setParam(navEntity.nav_list.get(1).name.length(),mtv_message_guanzhu);
+                    if (navEntity.nav_list.get(1).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu);
                     }
-                    if (navEntity.nav_list.get(2).name.length()<4){
-                        setParam(navEntity.nav_list.get(2).name.length(),mtv_message_xinde);
+                    if (navEntity.nav_list.get(2).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(2).name.length(), mtv_message_xinde);
                     }
-                    if (navEntity.nav_list.get(3).name.length()<4){
-                        setParam(navEntity.nav_list.get(3).name.length(),mtv_message_quanzi);
+                    if (navEntity.nav_list.get(3).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(3).name.length(), mtv_message_quanzi);
                     }
-                    if (navEntity.nav_list.get(4).name.length()<4){
-                        setParam(navEntity.nav_list.get(4).name.length(),mtv_message_sucaiku);
+                    if (navEntity.nav_list.get(4).name.length() < 4) {
+                        setParam(navEntity.nav_list.get(4).name.length(), mtv_message_sucaiku);
                     }
                     break;
             }
@@ -541,7 +552,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 break;
             case R.id.miv_experience_publish:
                 if (!Common.isAlreadyLogin()) {
-                    Common.goGoGo(baseActivity,"login");
+                    Common.goGoGo(baseActivity, "login");
                     return;
                 }
                 ExperiencePublishActivity.startAct(getActivity());
@@ -550,6 +561,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     }
 
     public void setArgument(String flag) {
+        LogUtil.augusLogW("yxftest---"+flag);
         if (!isEmpty(flag))
             switch (flag) {
                 case "nice":
@@ -566,6 +578,9 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     break;
                 case "material":
                     sucaiku();
+                    break;
+                default:
+                    jingXuan();
                     break;
             }
     }

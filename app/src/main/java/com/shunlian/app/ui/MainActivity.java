@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private long mExitTime;
     private FragmentManager fragmentManager;
     private int pageIndex;
-    private String flag;
+    private String flag="default";
     private Dialog dialog_ad;
     private MessageCountManager messageCountManager;
     private PMain pMain;
@@ -231,6 +231,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+        if (!isEmpty(getIntent().getStringExtra("flag")))
         flag = getIntent().getStringExtra("flag");
         /*if (TextUtils.isEmpty(flag)) {
             mainPageClick();
