@@ -2,6 +2,7 @@ package com.shunlian.app.ui.new_login_register;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
@@ -11,6 +12,7 @@ import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.MyButton;
@@ -134,10 +136,4 @@ public class LoginEntryAct extends BaseActivity implements IView{
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        /*if (presenter != null)
-            presenter.detachView();*/
-    }
 }

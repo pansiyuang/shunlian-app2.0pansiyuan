@@ -245,6 +245,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         }
         switch (view.getId()) {
             case R.id.mtv_contact:
+                if (refundDetail!=null)
                 exchangeDetailPresenter.getUserId(refundDetail.store_id);
                 break;
             case R.id.mtv_wuliu:

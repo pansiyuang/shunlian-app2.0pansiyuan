@@ -594,7 +594,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     }
 
     public void setArgument(String flag) {
-        LogUtil.augusLogW("yxftest---"+flag);
         if (!isEmpty(flag))
             switch (flag) {
                 case "nice":

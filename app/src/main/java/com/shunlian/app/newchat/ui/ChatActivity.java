@@ -1104,6 +1104,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     @Override
     protected void onDestroy() {
         mWebsocketClient.removeOnMessageReceiveListener(this);
+//        暂时不能释放，会奔溃
+//        if (mAdapter!=null)
+//            mAdapter.mRelease();
+//        if (et_input!=null)
+//            et_input.mRelease();
         super.onDestroy();
     }
 }

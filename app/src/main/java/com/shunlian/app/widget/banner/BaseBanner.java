@@ -208,8 +208,6 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
 
 
         lp_vp = new LayoutParams(itemWidth, itemHeight);
-        LogUtil.augusLogW("yxf33---"+itemWidth);
-        LogUtil.augusLogW("yxf44---"+itemHeight);
         addView(vp, lp_vp);
 
         //top parent of indicators

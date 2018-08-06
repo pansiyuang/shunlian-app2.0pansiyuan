@@ -368,18 +368,20 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                 break;
             case R.id.mtv_more:
             case R.id.miv_arrow:
-                if (isMore) {
-                    miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
-                    mtv_more.setText(R.string.category_gengduo);
-                    isMore = false;
-                    pingpaiAdapter.isAll = false;
-                } else {
-                    miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
-                    mtv_more.setText(R.string.category_shouqi);
-                    isMore = true;
-                    pingpaiAdapter.isAll = true;
+                if (pingpaiAdapter!=null){
+                    if (isMore) {
+                        miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
+                        mtv_more.setText(R.string.category_gengduo);
+                        isMore = false;
+                        pingpaiAdapter.isAll = false;
+                    } else {
+                        miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
+                        mtv_more.setText(R.string.category_shouqi);
+                        isMore = true;
+                        pingpaiAdapter.isAll = true;
+                    }
+                    pingpaiAdapter.notifyDataSetChanged();
                 }
-                pingpaiAdapter.notifyDataSetChanged();
                 break;
             case R.id.mtv_locate:
                 isopt = true;

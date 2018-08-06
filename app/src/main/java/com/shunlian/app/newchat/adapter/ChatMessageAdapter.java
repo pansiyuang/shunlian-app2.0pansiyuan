@@ -116,6 +116,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     private MemberStatus memberStatus;
     private int chatRole;
 
+    public void mRelease(){
+        if (am!=null)
+            am.close();
+    }
     public ChatMessageAdapter(Context context, List<MsgInfo> lists, RecyclerView recyclerView) {
         super(context, false, lists);
         objectMapper = new ObjectMapper();

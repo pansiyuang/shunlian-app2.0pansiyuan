@@ -179,6 +179,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             } else {
                 mposition = position - 1;
             }
+            if (mposition<0)
+                return;
             GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
             if (!isEmpty(goods.id)) {
                 GoodsDetailAct.startAct(CategoryAct.this, goods.id);
