@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.tv_person_center)
     TextView tv_person_center;
     @BindView(R.id.mtv_message_count)
-    MyTextView mtv_message_count;
+    public MyTextView mtv_message_count;
     @BindView(R.id.view_message)
     View view_message;
     //    private MainPageFrag mainPageFrag;
