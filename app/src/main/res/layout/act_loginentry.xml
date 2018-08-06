@@ -36,7 +36,7 @@
         android:layout_below="@+id/miv_sldl"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="120dp"
         android:background="@drawable/rounded_corner_green_48px"
         android:gravity="center"
         android:orientation="horizontal">
@@ -64,26 +64,23 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_stroke_pink_48px"
+        android:background="@drawable/rounded_stroke_6cpx"
         android:gravity="center"
         android:text="手机登录"
-        android:textColor="@color/pink_color"
+        android:textColor="@color/value_484848"
         android:textSize="15sp" />
 
-    <com.shunlian.app.widget.MyButton
-        android:id="@+id/mbtn_old_login"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#90fb0036"
-        android:text="旧版登录入口"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:visibility="gone"
-        android:layout_marginTop="15dp"
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_pwd_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/mbtn_login"
         android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp" />
+        android:paddingBottom="20dp"
+        android:paddingTop="23dp"
+        android:text="账号密码登录"
+        android:textColor="@color/value_484848"
+        android:textSize="12sp" />
     <!--登录协议-->
     <LinearLayout
         android:id="@+id/llayout_login_agreement"

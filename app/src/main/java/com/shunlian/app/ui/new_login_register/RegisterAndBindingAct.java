@@ -33,7 +33,7 @@ public class RegisterAndBindingAct extends BaseActivity {
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
-    /***********登录*************/
+    /***********验证码登录*************/
     public static final int FLAG_LOGIN = 1;
 
     /*******注册*********/
@@ -48,6 +48,10 @@ public class RegisterAndBindingAct extends BaseActivity {
     public static final int FLAG_BIND_ID = 1 << 3;
     /*******绑定手机号和推荐人*********/
     public static final int FLAG_BIND_MOBILE_ID = 1 << 4;
+    /*******密码登录*********/
+    public static final int FLAG_PWD_LOGIN = 1 << 5;
+    /*******找回密码*********/
+    public static final int FLAG_FIND_PWD = 1 << 6;
 
     private FragmentManager mFragmentManager;
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
@@ -114,6 +118,15 @@ public class RegisterAndBindingAct extends BaseActivity {
     @OnClick(R.id.mtv_register)
     public void register(){
         mFlag = FLAG_REGISTER;
+        oneFrag();
+        gone(mtv_register);
+    }
+
+    /**
+     * 找回密码
+     */
+    public void findPWD(){
+        mFlag = FLAG_FIND_PWD;
         oneFrag();
         gone(mtv_register);
     }

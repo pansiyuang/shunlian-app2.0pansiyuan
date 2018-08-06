@@ -33,7 +33,6 @@
             android:layout_centerVertical="true"
             android:gravity="start|center_vertical"
             android:hint="请输入导购专员ID"
-            android:inputType="number"
             android:maxLines="1" />
 
 
@@ -72,9 +71,7 @@
             style="@style/editText_attribute"
             android:layout_centerVertical="true"
             android:gravity="start|center_vertical"
-            android:hint="请输入手机号"
-            android:inputType="number"
-            android:maxLength="11" />
+            android:hint="请输入手机号"/>
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_tip"
@@ -99,6 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rlayout_mobile"
+        android:visibility="visible"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="30dp">
@@ -124,6 +122,44 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_below="@+id/miv_pic_code"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_value_6c" />
+    </RelativeLayout>
+
+    <!--密码-->
+    <RelativeLayout
+        android:id="@+id/rlayout_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlayout_mobile"
+        android:visibility="gone"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/met_pwd"
+            style="@style/editText_attribute"
+            android:layout_centerVertical="true"
+            android:gravity="start|center_vertical"
+            android:inputType="textPassword"
+            android:hint="请输入密码"/>
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_find_pwd"
+            android:layout_width="104dp"
+            android:layout_height="43dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:text="忘记密码"
+            android:textColor="#FF007AFF"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/mtv_find_pwd"
             android:layout_marginTop="10dp"
             android:background="@color/color_value_6c" />
     </RelativeLayout>
