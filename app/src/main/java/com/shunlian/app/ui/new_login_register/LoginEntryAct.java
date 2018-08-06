@@ -81,6 +81,7 @@ public class LoginEntryAct extends BaseActivity implements IView{
     @OnClick(R.id.mbtn_old_login)
     public void oldLoginEntry(){
         LoginAct.startAct(this);
+        finish();
     }
 
     @OnClick(R.id.llayout_login_agreement)

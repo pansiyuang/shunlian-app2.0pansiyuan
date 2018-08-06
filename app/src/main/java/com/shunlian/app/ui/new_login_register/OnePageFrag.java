@@ -233,6 +233,9 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             }else {
                mobile = met_mobile.getText().toString().trim();
             }
+            if (mFlag == RegisterAndBindingAct.FLAG_LOGIN){
+                Common.hideKeyboard(met_pic_code);
+            }
             String picCode = met_pic_code.getText().toString().trim();
 
             mPresenter.sendSmsCode(mobile, picCode);

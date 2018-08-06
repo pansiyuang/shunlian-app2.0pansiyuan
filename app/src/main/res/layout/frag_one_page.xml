@@ -33,7 +33,6 @@
             android:layout_centerVertical="true"
             android:gravity="start|center_vertical"
             android:hint="请输入导购专员ID"
-            android:inputType="number"
             android:maxLines="1" />
 
 
