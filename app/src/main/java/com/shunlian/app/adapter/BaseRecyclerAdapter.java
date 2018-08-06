@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ProgressView;
 

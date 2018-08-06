@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -50,10 +49,10 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.HashSet;
 
 public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler, WXEntryView {
-    private String deviceId;
+
     private IWXAPI api;
     private String flag;
-    private MyHandler mHandler;
+    //private MyHandler mHandler;
     private String currentDesc;
     private String currTitle;
     private String shareLink;
@@ -77,21 +76,14 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     protected void initData() {
         setHideStatusAndNavigation();
         EventBus.getDefault().register(this);
-        deviceId = SharedPrefUtil.getCacheSharedPrf("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
+        wxEntryPresenter = new WXEntryPresenter(this, this);
         //初始注册方法必须有，即使就算第二次回调启动的时候先调用onResp，也必须有注册方法，否则会出错
         api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
-        // 注册到微信列表，没什么用，笔者不知道干嘛用的，有知道的请告诉我，该文件顶部有我博客链接。或加Q1692475028,谢谢！
-        Intent intent = getIntent();
-        flag = intent.getExtras().getString("flag");
-        if (isEmpty(flag)) {
-            try {
-                api.handleIntent(getIntent(), this);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        }else {
-            api.registerApp(Constant.WX_APP_ID);
-            SharedPrefUtil.saveCacheSharedPrf("flag", flag);
+
+        try {
+            api.handleIntent(getIntent(), this);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         int wxSdkVersion = api.getWXAppSupportAPI();
@@ -107,19 +99,16 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     public void initGet() {
-        mHandler = new MyHandler();
+        //mHandler = new MyHandler();
         //必须用getExtras
         Intent intent = getIntent();
+        flag = intent.getExtras().getString("flag");
         ShareInfoParam shareInfoParam = (ShareInfoParam) intent.getSerializableExtra("shareInfoParam");
-        if (!isEmpty(flag)) {
-            if (flag.equals("login") || flag.equals("bind")) {
-                login();
-            }else if (shareInfoParam != null) {
-                if (!isEmpty(shareInfoParam.photo)) {
-                    downloadPic(shareInfoParam);
-                } else {
-                    defShare(shareInfoParam);
-                }
+        if (!isEmpty(flag) && shareInfoParam != null) {
+            if (!isEmpty(shareInfoParam.photo)) {
+                downloadPic(shareInfoParam);
+            } else {
+                defShare(shareInfoParam);
             }
         }
     }
@@ -164,6 +153,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             defShare();
         }
     }
+
     //下载图片成功后去分享
     private void downloadPic(ShareInfoParam shareInfoParam) {
         Glide.with(this).load(shareInfoParam.photo)
@@ -197,7 +187,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
      * @return
      */
     private String buildTransaction(final String type) {
-        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+        return (type == null) ? String.valueOf(System.currentTimeMillis())
+                : type + System.currentTimeMillis();
     }
 
     /**
@@ -260,15 +251,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         api.handleIntent(intent, this);
     }
 
-    public void login() {
-        // send oauth request
-        final SendAuth.Req req = new SendAuth.Req();
-        req.scope = "snsapi_userinfo";
-        req.state = deviceId;
-        api.sendReq(req);
-        mYFinish();
-    }
-
     @Override
     public void onReq(BaseReq baseReq) {
 
@@ -282,8 +264,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         }
         switch (baseResp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
-                String flag = SharedPrefUtil.getCacheSharedPrf("flag", "");
-                if ("login".equals(flag)) {
+                if (isEmpty(flag)) {
                     SendAuth.Resp sendAuthResp = (SendAuth.Resp) baseResp;// 用于分享时不要有这个，不能强转
                     String code = sendAuthResp.code;
                     wxEntryPresenter.wxLogin(code);
@@ -313,16 +294,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         }
     }
 
-    @Override
-    public void showFailureView(int rquest_code) {
-
-    }
-
-    @Override
-    public void showDataEmptyView(int rquest_code) {
-
-    }
-
     @Subscribe(sticky = true)
     public void eventBus(DispachJump jump) {
         if (jump != null && !isEmpty(jump.jumpType)) {
@@ -332,13 +303,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     jump.items = new String[0];
                 }
                 String s = om.writeValueAsString(jump);
+                //LogUtil.zhLogW("=eventBus===wx========="+s);
                 SharedPrefUtil.saveCacheSharedPrf("wx_jump", s);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }
-        EventBus.getDefault().unregister(this);
-        EventBus.getDefault().postSticky(jump);
     }
 
     @Override
@@ -350,42 +320,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String member_id = wxLoginEntity.member_id;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {//绑定手机号不需要推荐人
-                //RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
                 RegisterAndBindingAct.startAct(this,
                         RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);
                 mYFinish();
-            } else if ("1".equals(status)) {
-                Common.staticToast(entity.message);
-                SharedPrefUtil.saveSharedUserString("token", wxLoginEntity.token);
-                SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
-                SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
-                SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
-                if (wxLoginEntity.tag != null)
-                    SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(wxLoginEntity.tag));
-                JpushUtil.setJPushAlias();
-                //通知登录成功
-                DefMessageEvent event = new DefMessageEvent();
-                event.loginSuccess = true;
-                EventBus.getDefault().post(event);
-
-                EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
-                if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
-                    Common.goGoGo(this, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
-                            ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
-                            ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
-                }
-
-                if (!"1".equals(wxLoginEntity.is_tag)){
-                    SexSelectAct.startAct(this);
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
-                    finishAndRemoveTask();
-                }else {
-                    finish();
-                }
+            } else if ("1".equals(status)) {//登录成功
+                loginSuccess(entity, wxLoginEntity);
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
-                //RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
                 RegisterAndBindingAct.startAct(this,
                         RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);
                 mYFinish();
@@ -397,7 +337,36 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         } else {
             mYFinish();
         }
-        mYFinish();
+    }
+
+    private void loginSuccess(BaseEntity<WXLoginEntity> entity, WXLoginEntity wxLoginEntity) {
+        Common.staticToast(entity.message);
+        SharedPrefUtil.saveSharedUserString("token", wxLoginEntity.token);
+        SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
+        SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
+        SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
+        if (wxLoginEntity.tag != null)
+            SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(wxLoginEntity.tag));
+        JpushUtil.setJPushAlias();
+        //通知登录成功
+        DefMessageEvent event = new DefMessageEvent();
+        event.loginSuccess = true;
+        EventBus.getDefault().post(event);
+
+        EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
+        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+            Common.goGoGo(this, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
+                    ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
+                    ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
+        }
+        if (!"1".equals(wxLoginEntity.is_tag)){
+            SexSelectAct.startAct(this);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+            finishAndRemoveTask();
+        }else {
+            finish();
+        }
     }
 
     @Override
@@ -410,7 +379,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-//                    showSaveSuccessDialog();
+                    //showSaveSuccessDialog();
                     break;
                 case 2:
                     Common.staticToast("保存图片失败,请重试");
@@ -430,21 +399,22 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     @Override
+    public void showFailureView(int rquest_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int rquest_code) {
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
     private void mYFinish(){
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
-            finishAndRemoveTask();
-        }else {
-            finish();
-        }*/
         finish();
-    }
-
-    protected boolean isEmpty(CharSequence sequence){
-        return TextUtils.isEmpty(sequence);
     }
 }

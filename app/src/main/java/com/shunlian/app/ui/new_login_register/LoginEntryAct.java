@@ -9,9 +9,14 @@ import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.MyButton;
-import com.shunlian.app.wxapi.WXEntryActivity;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -58,8 +63,7 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     @OnClick(R.id.llayout_wechat_login)
     public void wechatLogin(){
-        WXEntryActivity.startAct(this,"login",null);
-        finish();
+        WXLogin();
         /*if (presenter == null) {
             presenter = new TestWXLoginPresenter(this, this);
         }else {
@@ -77,7 +81,6 @@ public class LoginEntryAct extends BaseActivity implements IView{
     @OnClick(R.id.mbtn_old_login)
     public void oldLoginEntry(){
         LoginAct.startAct(this);
-        finish();
     }
 
     @OnClick(R.id.llayout_login_agreement)
@@ -104,6 +107,31 @@ public class LoginEntryAct extends BaseActivity implements IView{
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    /**
+     * 微信登录
+     */
+    public void WXLogin(){
+        IWXAPI api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
+        api.registerApp(Constant.WX_APP_ID);
+
+        int wxSdkVersion = api.getWXAppSupportAPI();
+        if (wxSdkVersion >= Constant.TIMELINE_SUPPORTED_VERSION){
+            // send oauth request
+            final SendAuth.Req req = new SendAuth.Req();
+            req.scope = "snsapi_userinfo";
+            req.state = SharedPrefUtil.getCacheSharedPrf("X-Device-ID",
+                    "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
+            api.sendReq(req);
+            finish();
+        }else if (wxSdkVersion == 0) {
+            Common.staticToast("请先安装微信");
+            finish();
+        } else {
+            Common.staticToast("当前微信版本过低，请更新后再试");
+            finish();
+        }
     }
 
     @Override
