@@ -21,6 +21,18 @@ public class DispachJump implements Parcelable {
 
     public String[] items;//参数列表
 
+    public DispachJump() {
+    }
+
+    @Override
+    public String toString() {
+        return "DispachJump{" +
+                "personal='" + personal + '\'' +
+                ", jumpType='" + jumpType + '\'' +
+                ", items=" + Arrays.toString(items) +
+                '}';
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -28,11 +40,9 @@ public class DispachJump implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.personal);
         dest.writeString(this.jumpType);
         dest.writeStringArray(this.items);
-    }
-
-    public DispachJump() {
     }
 
     protected DispachJump(Parcel in) {
@@ -40,7 +50,7 @@ public class DispachJump implements Parcelable {
         this.items = in.createStringArray();
     }
 
-    public static final Parcelable.Creator<DispachJump> CREATOR = new Parcelable.Creator<DispachJump>() {
+    public static final Creator<DispachJump> CREATOR = new Creator<DispachJump>() {
         @Override
         public DispachJump createFromParcel(Parcel source) {
             return new DispachJump(source);
@@ -51,13 +61,4 @@ public class DispachJump implements Parcelable {
             return new DispachJump[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "DispachJump{" +
-                "personal='" + personal + '\'' +
-                ", jumpType='" + jumpType + '\'' +
-                ", items=" + Arrays.toString(items) +
-                '}';
-    }
 }

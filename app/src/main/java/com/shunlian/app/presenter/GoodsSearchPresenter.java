@@ -54,7 +54,6 @@ public class GoodsSearchPresenter extends BasePresenter<IGoodsSearchView> {
 
     private void requestData(GoodsSearchParam goodsSearchParam, boolean isShowLoading) {
         Map<String, String> map = new HashMap<>();
-        LogUtil.augusLogW("yxf--"+goodsSearchParam);
 
         if (!TextUtils.isEmpty(goodsSearchParam.min_price)) {
             map.put("min_price", goodsSearchParam.min_price);
@@ -109,7 +108,6 @@ public class GoodsSearchPresenter extends BasePresenter<IGoodsSearchView> {
                 super.onSuccess(entity);
                 isLoading = false;
                 SearchGoodsEntity searchGoodsEntity = entity.data;
-                LogUtil.augusLogW("85yxf--"+searchGoodsEntity);
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
                 iView.getSearchGoods(searchGoodsEntity, currentPage, allPage);

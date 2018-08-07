@@ -129,7 +129,6 @@ public class CollectionStoresPresenter extends BasePresenter<ICollectionStoresVi
         }
         Map<String, String> map = new HashMap<>();
         map.put("ids",ids);
-        LogUtil.augusLogW("id--"+ids);
         sortAndMD5(map);
         storesFavRemoveCall = getApiService().removeFavoShop(map);
         getNetData(storesFavRemoveCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {

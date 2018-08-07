@@ -47,7 +47,6 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
         finishAct();
         initListener();
         initData();
-        LogUtil.augusLogW("yxfdddd----");
 //        SharedPrefUtil.saveCacheSharedPrf("localVersion", getVersionName());
     }
 

@@ -25,6 +25,7 @@ import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -34,7 +35,6 @@ import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.SelectAccountDialog;
-import com.shunlian.app.wxapi.WXEntryActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -75,7 +75,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     private View rootView;
     private boolean isHidden = true;
     public LoginPresenter loginPresenter;
-    private String jumpType;
+    private DispachJump mJump;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -159,8 +159,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.tv_wx_login:
-                WXEntryActivity.startAct(baseActivity, "login", null);
-                baseActivity.finish();
+                ((LoginAct)baseActivity).WXLogin();
                 break;
         }
     }
@@ -179,9 +178,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     @Subscribe(sticky = true)
     public void eventBus(DispachJump jump) {
-        jumpType = jump.jumpType;
-        EventBus.getDefault().unregister(this);
-        EventBus.getDefault().postSticky(jump);
+        mJump = jump;
     }
 
     @Override
@@ -202,13 +199,14 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
         MessageCountManager.getInstance(getActivity()).initData();
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
-        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
-            Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
-                    ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
-                    ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
-        }
-        if (!isEmpty(jumpType)) {
-            Common.goGoGo(baseActivity, jumpType);
+//        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+//            Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
+//                    ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
+//                    ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
+//        }
+
+        if (mJump != null){
+            Common.goGoGo(baseActivity,mJump.jumpType,mJump.items);
         }
 
         if (!"1".equals(content.is_tag)){

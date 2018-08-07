@@ -5,15 +5,12 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.EmojisUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -33,11 +30,11 @@ public class EmojiAdapter extends RecyclerView.Adapter {
     private final AssetManager am;
     private EmojisVPAdapter mVp;
 
-    public EmojiAdapter(Context context, int pageSize, EmojisVPAdapter emojiAdapter) {
+    public EmojiAdapter(Context context, int pageSize, EmojisVPAdapter emojiAdapter,AssetManager am) {
         mContext = context;
         mEmojiStart = pageSize * 21;
         mPageSize = pageSize;
-        am = mContext.getAssets();
+        this.am = am;
         this.mVp = emojiAdapter;
     }
 

@@ -50,10 +50,8 @@ public class ExperiencePublishPresenter extends BasePresenter<IExperiencePublish
     }
 
     public void uploadPic(List<ImageEntity> filePath, final String uploadPath) {
-        if (isEmpty(filePath)) {
-            LogUtil.augusLogW("ddddddddd11111");
+        if (isEmpty(filePath))
             return;
-        }
         List<MultipartBody.Part> parts = new ArrayList<>();
         for (int i = 0; i < filePath.size(); i++) {
             File file = filePath.get(i).file;

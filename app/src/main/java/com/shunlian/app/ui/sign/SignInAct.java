@@ -214,6 +214,7 @@ public class SignInAct extends BaseActivity implements  ISignInView {
             signGoodsAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+                    if (position>=0)
                     GoodsDetailAct.startAct(SignInAct.this, mDataList.get(position).id);
                 }
             });

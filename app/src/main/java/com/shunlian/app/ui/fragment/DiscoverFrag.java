@@ -127,6 +127,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             flag_xinde = "experience", flag_quanzi = "circle", flag_sucaiku = "material";
     private boolean isSecond = false;
     private CommonEntity data;
+    private MainActivity mainActivity;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -223,7 +224,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             flag = getArguments().getString("flag");
         setArgument(flag);
         miv_empty.setFocusable(false);
-        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
         if (mainActivity != null)
             initMessage(mainActivity.data);
     }
@@ -243,6 +244,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             jingxuanFrag = (DiscoverJingxuanFrag) fragments.get(FLAG_JINGXUAN);
         }
         switchContent(jingxuanFrag);
+        messageCall("nice");
     }
 
     @OnClick(R.id.mrlayout_jingxuan)
@@ -250,8 +252,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(0);
         judge(flag_jingxuan);
         mtv_message_jingxuan.setVisibility(View.GONE);
-        if (data != null)
-            data.nice = 0;
     }
 
     public void guanZhuFrag() {
@@ -262,6 +262,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             guanzhuFrag = (DiscoverGuanzhuFrag) fragments.get(FLAG_GUANZHU);
         }
         switchContent(guanzhuFrag);
+        messageCall("focus");
     }
 
     @OnClick(R.id.mrlayout_guanzhu)
@@ -269,8 +270,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(1);
         judge(flag_guanzhu);
         mtv_message_guanzhu.setVisibility(View.GONE);
-        if (data != null)
-            data.focus = 0;
     }
 
     public void xindeFrag() {
@@ -281,6 +280,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             xindeFrag = (DiscoverXindeFrag) fragments.get(FLAG_GOUMAIXINDE);
         }
         switchContent(xindeFrag);
+        messageCall("experience");
     }
 
     @OnClick(R.id.mrlayout_goumaixinde)
@@ -288,8 +288,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(2);
         judge(flag_xinde);
         mtv_message_xinde.setVisibility(View.GONE);
-        if (data != null)
-            data.experience = 0;
     }
 
     public void quanziFrag() {
@@ -300,6 +298,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             quanZiFrag = (DiscoverQuanZiFrag) fragments.get(FLAG_QUANZI);
         }
         switchContent(quanZiFrag);
+        messageCall("circle");
     }
 
     @OnClick(R.id.mrlayout_quanzi)
@@ -307,8 +306,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(3);
         judge(flag_quanzi);
         mtv_message_quanzi.setVisibility(View.GONE);
-        if (data != null)
-            data.circle = 0;
     }
 
     public void sucaikuFrag() {
@@ -319,6 +316,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             sucaikuFrag = (DiscoverSucaikuFrag) fragments.get(FLAG_SUCAIKU);
         }
         switchContent(sucaikuFrag);
+        messageCall("material");
     }
 
     @OnClick(R.id.mrlayout_sucaiku)
@@ -326,10 +324,45 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         showSataus(4);
         judge(flag_sucaiku);
         mtv_message_sucaiku.setVisibility(View.GONE);
-        if (data != null)
-            data.material = 0;
     }
 
+    public void messageCall(String flag){
+        if (data != null){
+            int count=0;
+            if (!isEmpty(flag))
+            switch (flag) {
+                case "nice":
+                    count=data.nice;
+                    data.nice=0;
+                    break;
+                case "focus":
+                    count=data.focus;
+                    data.focus=0;
+                    break;
+                case "experience":
+                    count=data.experience;
+                    data.experience=0;
+                    break;
+                case "circle":
+                    count=data.circle;
+                    data.circle=0;
+                    break;
+                case "material":
+                    count=data.material;
+                    data.material=0;
+                    break;
+            }
+            data.total=data.total-count;
+            if (mainActivity != null&&mainActivity.mtv_message_count!=null){
+                if (data.total<=0){
+                    mainActivity.mtv_message_count.setVisibility(View.GONE);
+                }else {
+                    mainActivity.mtv_message_count.setVisibility(View.VISIBLE);
+                    mainActivity.mtv_message_count.setText(String.valueOf(data.total));
+                }
+            }
+        }
+    }
     public void judge(String flag) {
         if (!isEmpty(flag))
             switch (flag) {
@@ -561,7 +594,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     }
 
     public void setArgument(String flag) {
-        LogUtil.augusLogW("yxftest---"+flag);
         if (!isEmpty(flag))
             switch (flag) {
                 case "nice":

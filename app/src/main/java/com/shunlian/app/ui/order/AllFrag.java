@@ -309,6 +309,7 @@ public class AllFrag extends LazyFragment implements IOrderListView {
         } else if (request_code == OrderListPresenter.OTHER_CODE) {
             visible(nei_empty);
             gone(recy_view);
+            if (nei_empty!=null)
             nei_empty.setNetExecption().setOnClickListener(v ->  {
                     if (mPresenter != null) {
                         requestData(id);

@@ -143,11 +143,11 @@ public class TestWXLoginPresenter extends BasePresenter {
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
 
-        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
-            Common.goGoGo(context, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
-                    ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
-                    ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
-        }
+//        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+//            Common.goGoGo(context, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
+//                    ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
+//                    ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
+//        }
         EasyWebsocketClient.getInstance(context).initChat(); //初始化聊天
         MessageCountManager.getInstance(context).initData();
 

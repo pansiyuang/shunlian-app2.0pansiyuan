@@ -736,7 +736,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                             isStartDownTime = false;
                             if (context instanceof GoodsDetailAct) {
                                 GoodsDetailAct act = (GoodsDetailAct) context;
-                                if (act.isFinishing() && mHolder != null
+                                if (!act.isFinishing() && mHolder != null
                                         && mHolder.ddp_special_before_downTime != null) {
                                     mHolder.ddp_special_before_downTime.cancelDownTimer();
                                     return;
@@ -810,7 +810,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                                 isStartDownTime = false;
                                 if (context instanceof GoodsDetailAct) {
                                     GoodsDetailAct act = (GoodsDetailAct) context;
-                                    if (act.isFinishing() && mHolder != null
+                                    if (!act.isFinishing() && mHolder != null
                                             && mHolder.ddp_special_downTime != null) {
                                         mHolder.ddp_special_downTime.cancelDownTimer();
                                         return;

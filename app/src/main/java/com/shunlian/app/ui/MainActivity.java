@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.tv_person_center)
     TextView tv_person_center;
     @BindView(R.id.mtv_message_count)
-    MyTextView mtv_message_count;
+    public MyTextView mtv_message_count;
     @BindView(R.id.view_message)
     View view_message;
     //    private MainPageFrag mainPageFrag;
@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
-    private boolean isPerson = false, isCart = false, isFirst = false;
+    private boolean isFirst = false;
     //    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
@@ -160,9 +160,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
      */
     @Override
     protected void initData() {
-//        if (fragmentMap!=null&&fragmentMap.size()>0){
-//            fragmentMap.clear();
-//        }else {
         pMain = new PMain(MainActivity.this, MainActivity.this);
         pMain.entryInfo();
         initMessage();
@@ -175,12 +172,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     }
                 }
             };
-//        }
         fragmentManager = getSupportFragmentManager();
         mainPageClick();
-//        flag = getIntent().getStringExtra("flag");
-//        if (!isEmpty(flag))
-//            switch2jump(flag);
 
         if (Common.isAlreadyLogin()) {
             EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
@@ -215,15 +208,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        } else {
 //            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
 //        }
-        if (Common.isAlreadyLogin()) {
-            if (isPerson) {
-                personCenterClick();
-                isPerson = false;
-            } else if (isCart) {
-                shoppingCarClick();
-                isCart = false;
-            }
-        }
+        if (Common.isAlreadyLogin()) {handleJump();}
         super.onResume();
     }
 
@@ -247,14 +232,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     private void handleJump() {
         String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
-        LogUtil.zhLogW("===handleJump======="+jumpType);
         if (isEmpty(jumpType))return;
         ObjectMapper om = new ObjectMapper();
         try {
             DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
-            LogUtil.zhLogW("===dispachJump======="+dispachJump.toString());
             if (dispachJump != null) {
-                Common.goGoGo(this, dispachJump.jumpType);
+                Common.goGoGo(this, dispachJump.jumpType,dispachJump.items);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -451,9 +434,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void shoppingCarClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.theRelayJump("shoppingcar", null);
-            Common.goGoGo(this, "login");
-            isCart = true;
+            Common.theRelayJump("shoppingcar",null);
+            Common.goGoGo(this,"login");
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -476,9 +458,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void personCenterClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.theRelayJump("personCenter", null);
-            Common.goGoGo(this, "login");
-            isPerson = true;
+            Common.theRelayJump("personCenter",null);
+            Common.goGoGo(this,"login");
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -689,13 +670,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     public void setDiscoveryUnreadCount(CommonEntity data) {
         this.data = data;
-        mtv_message_count.setVisibility(View.VISIBLE);
-        if (data.total > 99) {
-            mtv_message_count.setText("99+");
-        } else if (data.total <= 0) {
-            mtv_message_count.setVisibility(View.GONE);
-        } else {
-            mtv_message_count.setText(String.valueOf(data.total));
+        if (mtv_message_count!=null){
+            mtv_message_count.setVisibility(View.VISIBLE);
+            if (data.total > 99) {
+                mtv_message_count.setText("99+");
+            } else if (data.total <= 0) {
+                mtv_message_count.setVisibility(View.GONE);
+            } else {
+                mtv_message_count.setText(String.valueOf(data.total));
+            }
         }
         if (discoverFrag != null) {
             discoverFrag.initMessage(data);

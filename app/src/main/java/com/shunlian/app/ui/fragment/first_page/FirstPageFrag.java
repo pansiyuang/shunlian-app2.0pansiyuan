@@ -236,7 +236,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             case R.id.mll_message:
                 mAppbar.setExpanded(false);
                 MessageActivity.startAct(getActivity());
-//                H5Act.startAct(getActivity(),"https://plus.mengtianvip.com/Nha_Trang",H5Act.MODE_SONIC);
+//                H5Act.startAct(getActivity(),"http://game.shunliandongli.com/game/farm/game",H5Act.MODE_SONIC);
                 break;
             case R.id.miv_photo:
                 Common.goGoGo(getContext(), logoType, logoId);

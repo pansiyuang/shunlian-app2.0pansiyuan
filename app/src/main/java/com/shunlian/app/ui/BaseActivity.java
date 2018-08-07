@@ -127,7 +127,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         finishAct();
         initListener();
         initData();
-        LogUtil.augusLogW("yxfdddd9999----");
 //        SharedPrefUtil.saveCacheSharedPrf("localVersion", getVersionName());
 
     }

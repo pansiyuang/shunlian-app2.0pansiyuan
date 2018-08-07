@@ -47,6 +47,7 @@ import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.HttpDialog;

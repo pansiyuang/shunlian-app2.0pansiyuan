@@ -248,7 +248,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     @Override
     public void onBackPressed() {
         if (isBack)
-            MainActivity.startAct(getBaseContext(), "personCenter");
+            MainActivity.startAct(this, "personCenter");
         super.onBackPressed();
     }
 
@@ -457,7 +457,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         switch (view.getId()) {
             case R.id.miv_close:
                 if (isBack)
-                    MainActivity.startAct(getBaseContext(), "personCenter");
+                    MainActivity.startAct(this, "personCenter");
                 finish();
                 break;
             case R.id.miv_balance:

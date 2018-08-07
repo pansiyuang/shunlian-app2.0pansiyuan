@@ -19,7 +19,6 @@ import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.PhoneTextWatcher;
-import com.shunlian.app.wxapi.WXEntryActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -113,8 +112,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
                 }
                 break;
             case R.id.tv_wx_login:
-                WXEntryActivity.startAct(baseActivity, "login", null);
-                baseActivity.finish();
+                ((LoginAct)baseActivity).WXLogin();
                 break;
         }
     }
