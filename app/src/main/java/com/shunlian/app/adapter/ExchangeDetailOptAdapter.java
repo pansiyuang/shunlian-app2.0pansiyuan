@@ -87,6 +87,9 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
                     case "view_history_enable":
                         ConsultHistoryAct.startAct(context, refund_id);
                         break;
+                    case "cancle_apply":
+                        cancleapply(refund_id);
+                        break;
                     case "edit_apply_enable":
                         if ("1".equals(mEdit.edit_apply_type)) {
                             SelectServiceActivity.startAct(context, mEdit.og_id);
@@ -120,6 +123,28 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
                 }
             }
         });
+    }
+
+    /**
+     * 撤销售后
+     */
+    public void cancleapply(final String refund_id) {
+        final PromptDialog promptDialog = new PromptDialog((Activity) context);
+        promptDialog.setSureAndCancleListener(getString(R.string.confirm_ninjiangchexiao),
+                getString(R.string.confirm), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (exchangeDetailAct != null) {
+                            exchangeDetailAct.cancleapply(refund_id);
+                        }
+                        promptDialog.dismiss();
+                    }
+                }, getString(R.string.errcode_cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        promptDialog.dismiss();
+                    }
+                }).show();
     }
 
     /**

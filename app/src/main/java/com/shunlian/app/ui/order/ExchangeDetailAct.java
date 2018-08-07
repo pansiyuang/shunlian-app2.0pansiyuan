@@ -260,6 +260,17 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     }
 
     /**
+     * 撤销售后
+     *
+     * @param refund_id
+     */
+    public void cancleapply(String refund_id) {
+        if (exchangeDetailPresenter != null) {
+            exchangeDetailPresenter.cancleapply(refund_id);
+        }
+    }
+
+    /**
      * 换货确认收货
      *
      * @param refund_id
@@ -426,7 +437,14 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void confirmReceive() {
+        if (exchangeDetailPresenter!=null)
         exchangeDetailPresenter.initApiData();
+    }
+
+    @Override
+    public void cancleapplyCall() {
+        if (exchangeDetailPresenter!=null)
+            exchangeDetailPresenter.initApiData();
     }
 
     @Override
