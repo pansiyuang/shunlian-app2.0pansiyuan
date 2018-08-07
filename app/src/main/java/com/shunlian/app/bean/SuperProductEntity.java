@@ -21,6 +21,7 @@ public class SuperProductEntity {
         public String desc;
         public String price;
         public String earned;
+        public String stock;
         public int is_new;
         public int is_explosion;
         public int is_hot;

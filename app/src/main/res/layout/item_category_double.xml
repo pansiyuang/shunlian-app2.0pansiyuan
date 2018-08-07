@@ -5,16 +5,31 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_icon"
-        android:layout_width="185dp"
-        android:layout_height="180dp"
-        android:scaleType="centerCrop" />
+    <RelativeLayout
+        android:id="@+id/rl_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="185dp"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_seller_out"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_yishouwan_xiao"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_product"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
@@ -24,7 +39,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/miv_icon"
+        android:layout_below="@+id/rl_icon"
         android:paddingBottom="10dp"
         android:paddingLeft="7.5dp"
         android:paddingRight="7.5dp"
@@ -123,7 +138,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ll_price"
             android:layout_marginTop="5dp"
-            android:text="399条评论 99%好评"
             android:textColor="@color/share_text"
             android:textSize="9sp" />
 

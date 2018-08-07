@@ -14,18 +14,33 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_icon"
-            android:layout_width="106dp"
-            android:layout_height="106dp"
-            android:scaleType="centerCrop" />
+        <RelativeLayout
+            android:id="@+id/rl_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_icon"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:scaleType="centerCrop" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_seller_out"
+                android:layout_width="57dp"
+                android:layout_height="57dp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_yishouwan_da"
+                android:visibility="visible" />
+        </RelativeLayout>
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_product"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="7dp"
             android:scaleType="centerCrop"
             android:src="@mipmap/img_plus_youping_xiao"
             android:visibility="gone" />
@@ -33,7 +48,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/miv_icon"
+            android:layout_toRightOf="@+id/rl_icon"
             android:paddingLeft="17dp"
             android:paddingRight="9.5dp">
 
@@ -129,7 +144,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_price"
                 android:layout_marginTop="5dp"
-                android:text="399条评论 99%好评"
                 android:textColor="@color/share_text"
                 android:textSize="9sp" />
 

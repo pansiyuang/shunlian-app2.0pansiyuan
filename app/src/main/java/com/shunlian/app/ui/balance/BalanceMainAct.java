@@ -81,9 +81,11 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
                 BalanceDetailAct.startAct(getBaseContext());
                 break;
             case R.id.mrlayout_zhifushezhi:
+                if (data!=null)
                 BalancePaySetAct.startAct(this,data.is_set_password,false);
                 break;
             case R.id.mrlayout_tixiandao:
+                if (data!=null)
                 AlipayMyAct.startAct(this,data.havePayAccount,!data.is_set_password,false,data.account_number);
                 break;
             case R.id.mrlayout_licai:

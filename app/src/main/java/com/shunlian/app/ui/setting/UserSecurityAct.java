@@ -13,6 +13,7 @@ import com.shunlian.app.ui.setting.change_user.ModifyAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IChangeUserView;
 import com.shunlian.app.widget.MyRelativeLayout;

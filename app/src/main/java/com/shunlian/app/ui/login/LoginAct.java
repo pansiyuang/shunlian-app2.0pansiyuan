@@ -15,6 +15,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -88,6 +89,7 @@ public class LoginAct extends BaseActivity {
         int i = TransformUtil.dip2px(this, 20);
         TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
     }
+
 
     private void initView() {
         fragmentManager = getSupportFragmentManager();

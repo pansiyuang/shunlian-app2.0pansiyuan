@@ -136,7 +136,6 @@ public class Common {
     }
 
     public static String transClassName(String toPage) {
-        LogUtil.augusLogW("yyy---" + toPage);
         switch (toPage) {
             case "goods":
                 return "GoodsDetailAct";
@@ -531,7 +530,6 @@ public class Common {
 
         Location location = null;
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            LogUtil.augusLogW("opop1111");
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); // 通过GPS获取位置
             //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
@@ -545,14 +543,12 @@ public class Common {
                 locateDialog(activity);
             return location;
         } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            LogUtil.augusLogW("opop2222");
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // 通过NETWORK获取位置
             //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             if (location == null)
                 locateDialog(activity);
             return location;
         } else {
-            LogUtil.augusLogW("opop3333");
             locateDialog(activity);
             return null;
         }

@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.tv_person_center)
     TextView tv_person_center;
     @BindView(R.id.mtv_message_count)
-    MyTextView mtv_message_count;
+    public MyTextView mtv_message_count;
     @BindView(R.id.view_message)
     View view_message;
     //    private MainPageFrag mainPageFrag;
@@ -670,13 +670,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     public void setDiscoveryUnreadCount(CommonEntity data) {
         this.data = data;
-        mtv_message_count.setVisibility(View.VISIBLE);
-        if (data.total > 99) {
-            mtv_message_count.setText("99+");
-        } else if (data.total <= 0) {
-            mtv_message_count.setVisibility(View.GONE);
-        } else {
-            mtv_message_count.setText(String.valueOf(data.total));
+        if (mtv_message_count!=null){
+            mtv_message_count.setVisibility(View.VISIBLE);
+            if (data.total > 99) {
+                mtv_message_count.setText("99+");
+            } else if (data.total <= 0) {
+                mtv_message_count.setVisibility(View.GONE);
+            } else {
+                mtv_message_count.setText(String.valueOf(data.total));
+            }
         }
         if (discoverFrag != null) {
             discoverFrag.initMessage(data);

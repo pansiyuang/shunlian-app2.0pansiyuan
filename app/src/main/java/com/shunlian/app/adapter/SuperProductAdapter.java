@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -134,6 +135,15 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
                 goodsViewHolder.tv_earn_money.setText(getString(R.string.common_yuan) + superProduct.earned);
             }
 
+            if (!isEmpty(superProduct.stock)) {
+                int stock = Integer.valueOf(superProduct.stock);
+                if (stock <= 0) {
+                    goodsViewHolder.miv_sale_out.setVisibility(View.VISIBLE);
+                } else {
+                    goodsViewHolder.miv_sale_out.setVisibility(View.GONE);
+                }
+            }
+
             goodsViewHolder.ll_tags.removeAllViews();
             if (1 == superProduct.is_new) {
                 goodsViewHolder.ll_tags.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), goodsViewHolder));
@@ -189,6 +199,9 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
 
+        @BindView(R.id.miv_sale_out)
+        MyImageView miv_sale_out;
+
         @BindView(R.id.tv_products_title)
         TextView tv_products_title;
 
@@ -212,9 +225,9 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
 
         public GoodsViewHolder(View itemView) {
             super(itemView);
-            int picWidth = Common.getScreenWidth((Activity) context)-TransformUtil.dip2px(context,20);
-            int picHeight=picWidth*158/341;
-            miv_icon.setLayoutParams(new LinearLayout.LayoutParams(picWidth,picHeight));
+            int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20);
+            int picHeight = picWidth * 158 / 341;
+            miv_icon.setLayoutParams(new RelativeLayout.LayoutParams(picWidth, picHeight));
             miv_icon.setScaleType(ImageView.ScaleType.FIT_XY);
         }
     }
@@ -228,7 +241,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
         int padding = TransformUtil.dip2px(context, 3f);
         textView.setPadding(padding, 0, padding, 0);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         if (viewHolder.ll_tags.getChildCount() == 0) {
             params.setMargins(0, 0, 0, 0);

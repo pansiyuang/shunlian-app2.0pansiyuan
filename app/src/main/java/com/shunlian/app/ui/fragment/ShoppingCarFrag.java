@@ -461,13 +461,10 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         if (!isEmpty(goodsList)) {
             probabyGoods.addAll(goodsList);
             if (goodsAdapter == null) {
-                GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
                 goodsAdapter = new ProbabyLikeGoodsAdapter(getActivity(), probabyGoods);
-                probabyHolderView.recycler_list.setNestedScrollingEnabled(false);
-                probabyHolderView.recycler_list.setLayoutManager(manager);
                 probabyHolderView.recycler_list.setAdapter(goodsAdapter);
             } else {
-                goodsAdapter.notifyItemChanged(0, probabyGoods.size());
+                goodsAdapter.notifyDataSetChanged();
             }
             probabyTitleView.setVisibility(View.VISIBLE);
         } else {
@@ -544,6 +541,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
         public ProbabyFooterHolderView(View view) {
             recycler_list = (RecyclerView) view.findViewById(R.id.recycler_list);
+            GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+            recycler_list.setNestedScrollingEnabled(false);
+            recycler_list.setLayoutManager(manager);
         }
     }
 

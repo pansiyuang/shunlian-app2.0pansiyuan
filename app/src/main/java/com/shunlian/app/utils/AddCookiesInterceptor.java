@@ -38,7 +38,6 @@ public class AddCookiesInterceptor implements Interceptor {
         String cookie = SharedPrefUtil.getSharedUserString("cookie", "");
         String token = SharedPrefUtil.getSharedUserString("token", "");
         //添加cookie
-        LogUtil.augusLogW("yxf--oo--"+ cookie);
         builder.addHeader("Cookie", cookie);
         builder.addHeader("Token", token);
         return chain.proceed(builder.build());

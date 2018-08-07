@@ -271,34 +271,41 @@ public class EmojisUtils {
         return map;
     }
 
-    public static Bitmap getEmojiBitmap(Context context, int index) {
-        InputStream is = null;
-        Bitmap resizedBitmap = null;
-        try {
-            AssetManager am = context.getAssets();
-            is = am.open(String.format("emojis/%d.png", index));
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
-            Matrix matrix = new Matrix();
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
-            // 缩放图片的尺寸
-            int i1 = TransformUtil.dip2px(context, 28);
-            float scaleWidth = (float) i1 / width;
-            float scaleHeight = (float) i1 / height;
-            matrix.postScale(scaleWidth, scaleHeight);
-            resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                    is = null;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return resizedBitmap;
-    }
+    //暂时先不用
+//    public static Bitmap getEmojiBitmap(Context context, int index) {
+//        InputStream is = null;
+//        Bitmap resizedBitmap = null;
+//        AssetManager am=null;
+//        try {
+//            am = context.getAssets();
+//            is = am.open(String.format("emojis/%d.png", index));
+//            Bitmap bitmap = BitmapFactory.decodeStream(is);
+//            Matrix matrix = new Matrix();
+//            int width = bitmap.getWidth();
+//            int height = bitmap.getHeight();
+//            // 缩放图片的尺寸
+//            int i1 = TransformUtil.dip2px(context, 28);
+//            float scaleWidth = (float) i1 / width;
+//            float scaleHeight = (float) i1 / height;
+//            matrix.postScale(scaleWidth, scaleHeight);
+//            resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (is != null) {
+//                    is.close();
+//                    is = null;
+//                }
+////                if (am!=null){
+////                    am.close();
+////                    am=null;
+////                }
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return resizedBitmap;
+//    }
 }

@@ -73,6 +73,13 @@ public class PingListAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
             viewHolder.mtv_marketPrice.setText(goods.market_price);
             viewHolder.mtv_marketPrice.setStrikethrough();
             viewHolder.mtv_gou.setText(String.format(getString(R.string.first_yigou),goods.sales));
+            if (goods.stock <= 0) {
+                viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
+                viewHolder.mtv_price.setTextColor(getColor(R.color.value_A0A0A0));
+            } else {
+                viewHolder.miv_seller_out.setVisibility(View.GONE);
+                viewHolder.mtv_price.setTextColor(getColor(R.color.pink_color));
+            }
         }
     }
 
@@ -81,6 +88,9 @@ public class PingListAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
     public class SingleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
+
+        @BindView(R.id.miv_seller_out)
+        MyImageView miv_seller_out;
 
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;

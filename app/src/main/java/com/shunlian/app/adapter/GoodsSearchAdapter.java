@@ -77,7 +77,7 @@ public class GoodsSearchAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         if (holder instanceof SingleViewHolder) {
             GoodsDeatilEntity.Goods goods;
             if (mStore != null) {
-                goods = mGoods.get(position - 1);
+                goods = mGoods.get(position>0?position - 1:0);
             } else {
                 goods = mGoods.get(position);
             }

@@ -1,6 +1,7 @@
 package com.shunlian.app.newchat.adapter;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,12 +21,13 @@ public class EmojisVPAdapter extends PagerAdapter {
     private Context mContext;
     private final LayoutInflater inflater;
     private OnEmojiClickListenter mListener;
+    private final AssetManager am;
 
-    public EmojisVPAdapter(Context context) {
+    public EmojisVPAdapter(Context context,AssetManager am) {
         mContext = context;
         inflater = LayoutInflater.from(mContext);
+        this.am=am;
     }
-
 
     @Override
     public int getCount() {
@@ -48,7 +50,7 @@ public class EmojisVPAdapter extends PagerAdapter {
         container.addView(recycler_view);
         GridLayoutManager manager = new GridLayoutManager(mContext, 7);
         recycler_view.setLayoutManager(manager);
-        recycler_view.setAdapter(new EmojiAdapter(mContext, position, this));
+        recycler_view.setAdapter(new EmojiAdapter(mContext, position, this,am));
         return recycler_view;
     }
 

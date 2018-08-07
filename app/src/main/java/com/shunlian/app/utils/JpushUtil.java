@@ -94,8 +94,8 @@ public class JpushUtil {
         String member_id;
         member_id = SharedPrefUtil.getSharedUserString("member_id", "null");
         tagss = SharedPrefUtil.getSharedUserStringss("tags", null);
-        if (tagss!=null)
-        LogUtil.augusLogW(tagss.toString());
+//        if (tagss!=null)
+//        LogUtil.augusLogW(tagss.toString());
         //tagss=new HashSet<>();
 //        tagss.add("123");
 //        tagss.add("456");

@@ -555,15 +555,12 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
             isPause = true;
             isStop = true;
             if (lLayout_toast != null) {
-                LogUtil.augusLogW("position:gone");
                 lLayout_toast.setVisibility(View.GONE);
             }
             if (outTimer != null) {
-                LogUtil.augusLogW("position:cancel");
                 outTimer.cancel();
             }
             if (handler != null) {
-                LogUtil.augusLogW("position:remove");
                 if (runnableA != null) {
                     handler.removeCallbacks(runnableA);
                 }
