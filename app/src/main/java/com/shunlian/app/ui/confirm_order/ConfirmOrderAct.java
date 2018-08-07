@@ -77,6 +77,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @BindView(R.id.miv_anonymous)
     MyImageView miv_anonymous;
 
+    @BindView(R.id.mtv_station)
+    MyTextView mtv_station;
+
     private String mTotalPrice;
     private boolean isOrderBuy = false;//是否直接购买
     private String detail_address;
@@ -136,9 +139,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             //LogUtil.zhLogW("v="+v+String.format("scrollY=%d;oldScrollY=%d",scrollY,oldScrollY));
             //LogUtil.zhLogW("v="+v+String.format("scrollX=%d;oldScrollX=%d",scrollX,oldScrollX));
             if (scrollY >= 260) {
-                visible(mtv_address);
+                visible(mtv_address,mtv_station);
             } else {
-                gone(mtv_address);
+                gone(mtv_address,mtv_station);
             }
         });
     }
@@ -192,22 +195,29 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @Override
     public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled,
                                      List<GoodsDeatilEntity.Goods> disabled,
-                                     ConfirmOrderEntity.Address address) {
+                                     ConfirmOrderEntity.Address address,
+                                     List<ConfirmOrderEntity.NoDelivery> noDeliveryList) {
+        String text = "";
         if (address != null){
             addressId = address.id;
             detail_address = address.detail_address;
-            mtv_address.setText(String.format(getResources().getString(R.string.send_to),detail_address));
+            text = String.format(getStringResouce(R.string.send_to), detail_address);
         }else {
-            mtv_address.setText(getResources().getString(R.string.add_address));
+            text = getStringResouce(R.string.add_address);
         }
-        if (!isEmpty(enabled)) {
-            this.enabled = enabled;
-            ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
-                    false, enabled, disabled,address,isOrderBuy);
-            recy_view.setAdapter(df);
+        mtv_address.setText(text);
+        mtv_station.setText(text);
 
-            df.setSelectVoucherListener(position ->calculateAmount(enabled));
-        }
+        //如果有不在发货区域商品就禁止下单
+        if (!isEmpty(noDeliveryList)){mtv_go_pay.setEnabled(false);}
+
+        this.enabled = enabled;
+        ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
+                enabled, disabled,address,isOrderBuy,noDeliveryList);
+        recy_view.setAdapter(df);
+
+        df.setSelectVoucherListener(position ->calculateAmount(enabled));
+
     }
 
     /**
@@ -215,6 +225,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
      * @param enabled
      */
     private void calculateAmount(List<ConfirmOrderEntity.Enabled> enabled) {
+        if (enabled == null)enabled = new ArrayList<>();
         float currentPrice = 0;
         for (int i = 0; i < enabled.size(); i++) {
             String store_discount_price = enabled.get(i).store_discount_price;

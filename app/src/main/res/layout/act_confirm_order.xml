@@ -241,15 +241,24 @@
 
             </RelativeLayout>
             <!--占位-->
-            <View
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_station"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:visibility="gone"
                 android:background="@color/white"
-                android:layout_height="40dp"/>
+                android:paddingBottom="7.5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="7.5dp"
+                android:textSize="12sp"
+                android:textColor="@color/white"/>
         </LinearLayout>
 
     </com.shunlian.app.widget.MyNestedScrollView>
 
-
+    <!--收货地址-->
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_address"
         android:layout_width="match_parent"
