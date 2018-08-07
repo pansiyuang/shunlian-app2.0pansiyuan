@@ -206,6 +206,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             mShareInfoParam.video_url = article.video_url;
             mArticleId = article.id;
 
+            imgList.clear();
             if ("2".equals(article.thumb_type)) {
                 for (String s : article.thumb_list) {
                     imgList.add(s);

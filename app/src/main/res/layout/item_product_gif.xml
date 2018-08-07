@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:scaleType="centerCrop"
-            android:src="@mipmap/img_plus_yishouwan"
+            android:src="@mipmap/img_yishouwan_da"
             android:visibility="gone" />
     </RelativeLayout>
 
