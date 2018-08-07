@@ -8,8 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.presenter.PLUSConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -156,8 +159,19 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
                     recy_view.scrollToPosition(0);
                     return;
                 }
+                BuyGoodsParams params = new BuyGoodsParams();
+                params.addressId = addressId;
+                params.product_id = product_id;
+                params.price = mTotalPrice;
+                params.sku_id = sku_id;
 
-                PayListActivity.startActPlus(this,product_id,sku_id,addressId,mTotalPrice,"");
+                String paramsStr = "";
+                try {
+                    paramsStr = new ObjectMapper().writeValueAsString(params);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                PayListActivity.startAct(this,paramsStr);
                 break;
             case R.id.miv_close:
                 backSelect();
