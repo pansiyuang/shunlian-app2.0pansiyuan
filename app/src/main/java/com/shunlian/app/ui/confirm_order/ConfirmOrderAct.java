@@ -209,7 +209,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         mtv_station.setText(text);
 
         //如果有不在发货区域商品就禁止下单
-        if (!isEmpty(noDeliveryList)){mtv_go_pay.setEnabled(false);}
+        if (!isEmpty(noDeliveryList)) {
+            mtv_go_pay.setEnabled(false);
+        }else {
+            mtv_go_pay.setEnabled(true);
+        }
 
         this.enabled = enabled;
         ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
