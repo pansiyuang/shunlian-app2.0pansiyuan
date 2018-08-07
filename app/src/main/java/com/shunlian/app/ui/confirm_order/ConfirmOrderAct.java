@@ -192,7 +192,8 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @Override
     public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled,
                                      List<GoodsDeatilEntity.Goods> disabled,
-                                     ConfirmOrderEntity.Address address) {
+                                     ConfirmOrderEntity.Address address,
+                                     List<ConfirmOrderEntity.NoDelivery> noDeliveryList) {
         if (address != null){
             addressId = address.id;
             detail_address = address.detail_address;
@@ -200,14 +201,14 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         }else {
             mtv_address.setText(getResources().getString(R.string.add_address));
         }
-        if (!isEmpty(enabled)) {
-            this.enabled = enabled;
-            ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
-                    false, enabled, disabled,address,isOrderBuy);
-            recy_view.setAdapter(df);
 
-            df.setSelectVoucherListener(position ->calculateAmount(enabled));
-        }
+        this.enabled = enabled;
+        ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
+                enabled, disabled,address,isOrderBuy,noDeliveryList);
+        recy_view.setAdapter(df);
+
+        df.setSelectVoucherListener(position ->calculateAmount(enabled));
+
     }
 
     /**
@@ -215,6 +216,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
      * @param enabled
      */
     private void calculateAmount(List<ConfirmOrderEntity.Enabled> enabled) {
+        if (enabled == null)enabled = new ArrayList<>();
         float currentPrice = 0;
         for (int i = 0; i < enabled.size(); i++) {
             String store_discount_price = enabled.get(i).store_discount_price;

@@ -2,7 +2,6 @@ package com.shunlian.app.utils;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.text.TextUtils;
@@ -26,6 +25,7 @@ public class PromptDialog {
     private TextView tvMessage;
     private TextView tv_messages;
     private MyTextView mtv_describe;
+    private View view_line;
 
     public PromptDialog(Activity ctx) {
         this.ctx = ctx;
@@ -42,6 +42,7 @@ public class PromptDialog {
         tvMessage = (TextView) logoutDialog.findViewById(R.id.tv_message);
         tv_messages = (TextView) logoutDialog.findViewById(R.id.tv_messages);
         mtv_describe = (MyTextView) logoutDialog.findViewById(R.id.mtv_describe);
+        view_line = logoutDialog.findViewById(R.id.view_line);
     }
 
     public void setTvSureText(CharSequence text) {
@@ -130,8 +131,10 @@ public class PromptDialog {
      */
     public void tvSureVisibility(boolean isGone) {
         if (isGone) {
+            view_line.setVisibility(View.GONE);
             tvSure.setVisibility(View.GONE);
         } else {
+            view_line.setVisibility(View.VISIBLE);
             tvSure.setVisibility(View.VISIBLE);
         }
     }
@@ -143,8 +146,10 @@ public class PromptDialog {
      */
     public void tvCancleVisibility(boolean isGone) {
         if (isGone) {
+            view_line.setVisibility(View.GONE);
             tvCancle.setVisibility(View.GONE);
         } else {
+            view_line.setVisibility(View.VISIBLE);
             tvCancle.setVisibility(View.VISIBLE);
         }
     }

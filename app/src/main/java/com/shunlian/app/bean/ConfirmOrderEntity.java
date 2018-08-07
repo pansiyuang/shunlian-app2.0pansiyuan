@@ -12,6 +12,7 @@ import java.util.List;
 public class ConfirmOrderEntity {
 
     public List<Enabled> enabled;
+    public List<NoDelivery> no_delivery;//不在配送范围内
     public List<GoodsDeatilEntity.Goods> disabled;
     public String user_stage_voucher;//1表示平台最优，应该默认选择平台优惠券
     public List<Voucher> stage_voucher;//平台优惠券
@@ -113,5 +114,19 @@ public class ConfirmOrderEntity {
         public String title;
         public String thumb;
         public String price;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class NoDelivery{
+        public String areas;
+        public String hint;
+        public String title;
+        public String thumb;
+        public String price;
+        public String qty;
+        public String sku_id;
+        public String status;
+        public String sku;
+        public String goods_id;
     }
 }
