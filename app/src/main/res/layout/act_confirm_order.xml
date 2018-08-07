@@ -240,6 +240,11 @@
                     android:src="@mipmap/img_xuanze_n"/>
 
             </RelativeLayout>
+            <!--占位-->
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:layout_height="40dp"/>
         </LinearLayout>
 
     </com.shunlian.app.widget.MyNestedScrollView>
