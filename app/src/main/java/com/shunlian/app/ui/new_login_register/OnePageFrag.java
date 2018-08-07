@@ -3,6 +3,7 @@ package com.shunlian.app.ui.new_login_register;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,6 +93,9 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     @BindView(R.id.mtv_find_pwd)
     MyTextView mtv_find_pwd;
 
+    @BindView(R.id.miv_eyes_tip)
+    MyImageView miv_eyes_tip;
+
     private RegisterAndBindPresenter mPresenter;
     private final String visity_specialist = "查看导购专员";
     private boolean isRuning1 = false;
@@ -107,6 +111,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     private String mUniqueSign;
     private String mMember_id;
     private DispachJump mJump;
+    private boolean isHiddenPwd = true;
 
     /**
      * 设置布局id
@@ -121,9 +126,23 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         return view;
     }
 
+    private void isShowPwd(EditText editText, boolean isShow) {
+        if (isShow) {//显示
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+        editText.setSelection(editText.getText().length());
+    }
+
     @Override
     protected void initListener() {
         super.initListener();
+        miv_eyes_tip.setOnClickListener(view -> {
+            miv_eyes_tip.setImageResource(isHiddenPwd?R.mipmap.icon_login_eyes_h:R.mipmap.icon_login_eyes_n);
+            isShowPwd(met_pwd,isHiddenPwd);
+            isHiddenPwd = !isHiddenPwd;
+        });
         met_id.setOnTouchListener((v, event) ->{
             if (!isRuning1){
                 isRuning1 = true;
