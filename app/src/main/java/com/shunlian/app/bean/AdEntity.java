@@ -16,6 +16,22 @@ public class AdEntity implements Serializable{
     public String plus_role;
     public List<String> tag;
     public AD list;
+    public String suspensionShow;
+    public Suspension suspension;
+
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Suspension implements Serializable {
+        public String id;
+        public String image;
+        public Link link;
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Link implements Serializable{
+            public String type;
+            public String item_id;
+        }
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AD implements Serializable{
         public String id;

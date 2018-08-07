@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.fragment.first_page;
 
+import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -8,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
@@ -21,11 +23,11 @@ import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -54,7 +56,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public static String firstId = "";
     public static boolean isExpand = false;
     //    @BindView(R.id.mAppbar)
+    public static MyImageView miv_entry;
     public static AppBarLayout mAppbar;
+    public static boolean isHide=false;
     public ArrayList<Fragment> fragments;
     @BindView(R.id.mll_message)
     MyLinearLayout mll_message;
@@ -89,6 +93,13 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View rootView = inflater.inflate(R.layout.frag_first_page, container, false);
         mAppbar = (AppBarLayout) rootView.findViewById(R.id.mAppbar);
+        miv_entry = (MyImageView) rootView.findViewById(R.id.miv_entry);
+        int value=TransformUtil.dip2px(baseActivity,80);
+        RelativeLayout.LayoutParams layoutParams= new RelativeLayout.LayoutParams(value,value);
+        layoutParams.setMargins(0,0,0,value);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        miv_entry.setLayoutParams(layoutParams);
         return rootView;
     }
 
@@ -147,6 +158,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         super.initListener();
         mll_message.setOnClickListener(this);
         miv_photo.setOnClickListener(this);
+        miv_entry.setOnClickListener(this);
         mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -184,7 +196,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             @Override
             public void onPageSelected(int arg0) {
                 mAppbar.setExpanded(true);
-                mainActivity.position = arg0;
+                if (mainActivity!=null){
+                    mainActivity.position = arg0;
+                }
+
             }
 
             @Override
@@ -240,6 +255,20 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 break;
             case R.id.miv_photo:
                 Common.goGoGo(getContext(), logoType, logoId);
+                break;
+            case R.id.miv_entry:
+                if (isHide){
+                    int value=TransformUtil.dip2px(baseActivity,80);
+                    RelativeLayout.LayoutParams layoutParams= new RelativeLayout.LayoutParams(value,value);
+                    layoutParams.setMargins(0,0,0,value);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    miv_entry.setLayoutParams(layoutParams);
+                    isHide=false;
+                }else {
+                    if (mainActivity!=null&&mainActivity.adEntity!=null)
+                    Common.goGoGo(baseActivity,mainActivity.adEntity.suspension.link.type,mainActivity.adEntity.suspension.link.item_id);
+                }
                 break;
         }
 

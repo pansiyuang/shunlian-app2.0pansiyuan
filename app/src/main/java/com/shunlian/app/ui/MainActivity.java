@@ -119,6 +119,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
+    public AdEntity adEntity;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -163,6 +164,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         pMain = new PMain(MainActivity.this, MainActivity.this);
         pMain.entryInfo();
         initMessage();
+        fragmentManager = getSupportFragmentManager();
+        mainPageClick();
         if (updateDialogV == null)
             updateDialogV = new UpdateDialog(this) {
                 @Override
@@ -172,9 +175,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     }
                 }
             };
-        fragmentManager = getSupportFragmentManager();
-        mainPageClick();
-
         if (Common.isAlreadyLogin()) {
             EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
             messageCountManager = MessageCountManager.getInstance(this);
@@ -642,6 +642,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void setAD(AdEntity data) {
+        adEntity=data;
+        if ("1".equals(data.suspensionShow)&&mainPageFrag!=null){
+            FirstPageFrag.miv_entry.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImageZheng(this,FirstPageFrag.miv_entry,data.suspension.image);
+        }else {
+            FirstPageFrag.miv_entry.setVisibility(View.GONE);
+        }
         if ("1".equals(data.show) && !SharedPrefUtil.getCacheSharedPrf("ad_id", "").equals(data.list.ad_sn)) {
             initDialog(data);
             SharedPrefUtil.saveCacheSharedPrf("ad_id", data.list.ad_sn);

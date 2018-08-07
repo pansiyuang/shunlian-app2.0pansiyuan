@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ll_layout"
+    android:id="@+id/mrlayout_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_title"
@@ -194,8 +193,15 @@
         android:id="@+id/nei_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone" 
+        android:layout_below="@id/mllayout_title"/>
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_entry"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="fitXY"
         android:visibility="gone" />
-</com.shunlian.app.widget.MyLinearLayout>
+</com.shunlian.app.widget.MyRelativeLayout>
 
 
 
