@@ -162,6 +162,11 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
         }else {
             gone(rlayout_nickname);
         }
+        if (mFlag == RegisterAndBindingAct.FLAG_FIND_PWD){
+            mbtn_login.setText("下一步");
+        }else {
+            mbtn_login.setText("登录");
+        }
         countDown();
         ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(false);
     }
@@ -188,6 +193,11 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
             met_nickname.setText("");
         }else {
             gone(rlayout_nickname);
+        }
+        if (mFlag == RegisterAndBindingAct.FLAG_FIND_PWD){
+            mbtn_login.setText("下一步");
+        }else {
+            mbtn_login.setText("登录");
         }
         countDown();
         input_code.clearAll();
@@ -219,6 +229,8 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
                 mPresenter.register(mMobile,mSmsCode,refereesId,"",unique_sign);
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_ID){//绑定id
                 mPresenter.bindShareid(mMember_id,refereesId,mMobile,mSmsCode);
+            }else if (mFlag == RegisterAndBindingAct.FLAG_FIND_PWD){//找回密码
+
             }
         }else {
             Common.staticToast("请输入短信验证码");

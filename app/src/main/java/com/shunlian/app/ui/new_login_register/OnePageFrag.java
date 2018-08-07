@@ -194,7 +194,9 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                         }
                         break;
                     case 3:
-                        if (mFlag != RegisterAndBindingAct.FLAG_LOGIN) checkPicCode(s);
+                        if (mFlag != RegisterAndBindingAct.FLAG_LOGIN ||
+                                mFlag != RegisterAndBindingAct.FLAG_FIND_PWD)
+                            checkPicCode(s);
                         break;
                 }
             }
@@ -358,6 +360,16 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
                 break;
             case RegisterAndBindingAct.FLAG_FIND_PWD://找回密码
+                mtv_tip.setText("找回密码");
+                gone(rlayout_id,rlayout_pwd);
+                visible(mbtn_login,rlayout_pic_code);
+                ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(false);
+                RelativeLayout.LayoutParams
+                        lp2 = (RelativeLayout.LayoutParams) mbtn_login.getLayoutParams();
+                lp2.addRule(RelativeLayout.BELOW,R.id.rlayout_pic_code);
+                mbtn_login.setLayoutParams(lp2);
+                mbtn_login.setText("下一步");
+
                 break;
             default://默认登录
                 mtv_tip.setText("手机号登录");
@@ -558,7 +570,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             if (mFlag == RegisterAndBindingAct.FLAG_LOGIN) {
                 //登录
                 ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
-                        null,mMember_id,mFlag);
+                        mUniqueSign,mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
                 if (!isRefereesIdRight())return;
@@ -586,6 +598,10 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mMobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
+            }else if (mFlag == RegisterAndBindingAct.FLAG_FIND_PWD){
+                //找回密码
+                ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
+                        mUniqueSign,mMember_id,mFlag);
             }
         }
     }
