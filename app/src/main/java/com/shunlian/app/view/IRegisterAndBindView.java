@@ -38,4 +38,9 @@ public interface IRegisterAndBindView extends IView {
      */
     default void loginMobileSuccess(LoginFinishEntity entity){}
 
+    /**
+     * 找回密码成功
+     * @param message
+     */
+    default void findPwdSuccess(String message){}
 }

@@ -33,6 +33,7 @@
             android:layout_centerVertical="true"
             android:gravity="start|center_vertical"
             android:hint="请输入新密码"
+            android:inputType="textPassword"
             android:maxLines="1" />
 
 
@@ -43,8 +44,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="10dp"
-            android:src="@mipmap/icon_login_eyes_h"
-            android:visibility="visible" />
+            android:src="@mipmap/icon_login_eyes_n"/>
 
         <View
             android:layout_width="match_parent"
@@ -70,6 +70,7 @@
             style="@style/editText_attribute"
             android:layout_centerVertical="true"
             android:gravity="start|center_vertical"
+            android:inputType="textPassword"
             android:hint="请确认密码" />
 
         <com.shunlian.app.widget.MyImageView
@@ -79,8 +80,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="10dp"
-            android:src="@mipmap/icon_login_eyes_h"
-            android:visibility="visible" />
+            android:src="@mipmap/icon_login_eyes_n"/>
 
         <View
             android:layout_width="match_parent"

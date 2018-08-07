@@ -194,7 +194,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                         }
                         break;
                     case 3:
-                        if (mFlag != RegisterAndBindingAct.FLAG_LOGIN ||
+                        if (mFlag != RegisterAndBindingAct.FLAG_LOGIN &&
                                 mFlag != RegisterAndBindingAct.FLAG_FIND_PWD)
                             checkPicCode(s);
                         break;

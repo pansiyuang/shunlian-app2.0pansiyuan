@@ -230,7 +230,7 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_ID){//绑定id
                 mPresenter.bindShareid(mMember_id,refereesId,mMobile,mSmsCode);
             }else if (mFlag == RegisterAndBindingAct.FLAG_FIND_PWD){//找回密码
-
+                ((RegisterAndBindingAct)baseActivity).findPwd(mMobile,mSmsCode);
             }
         }else {
             Common.staticToast("请输入短信验证码");

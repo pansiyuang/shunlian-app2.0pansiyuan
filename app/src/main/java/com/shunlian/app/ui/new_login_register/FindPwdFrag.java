@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.new_login_register;
 
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +12,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.presenter.RegisterAndBindPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.view.IRegisterAndBindView;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by zhanghe on 2018/8/7.
  */
 
-public class FindPwdFrag extends BaseFragment {
+public class FindPwdFrag extends BaseFragment implements IRegisterAndBindView{
 
     @BindView(R.id.rlayout_root)
     RelativeLayout rlayout_root;
@@ -50,6 +55,13 @@ public class FindPwdFrag extends BaseFragment {
     private boolean isRuning1 = false;
     private boolean isRuning2 = false;
 
+    private boolean isHiddenPwd = true;
+    private boolean isHiddenRPwd = true;
+
+    private String mMobile;
+    private String mSmsCode;
+    private RegisterAndBindPresenter presenter;
+
     /**
      * 设置布局id
      *
@@ -67,10 +79,13 @@ public class FindPwdFrag extends BaseFragment {
     @Override
     protected void initListener() {
         super.initListener();
+        miv_tip1.setOnClickListener(this);
+        miv_tip2.setOnClickListener(this);
+
         met_pwd.setOnTouchListener((v, event) ->{
             if (!isRuning1){
                 isRuning1 = true;
-                runAnimation("昵称",R.id.rlayout_pwd,met_pwd);
+                runAnimation("新密码",R.id.rlayout_pwd,met_pwd);
             }
             return false;
         });
@@ -78,7 +93,7 @@ public class FindPwdFrag extends BaseFragment {
         met_confirm_pwd.setOnTouchListener((v, event) ->{
             if (!isRuning2){
                 isRuning2 = true;
-                runAnimation("昵称",R.id.rlayout_confirm_pwd,met_confirm_pwd);
+                runAnimation("确认密码",R.id.rlayout_confirm_pwd,met_confirm_pwd);
             }
             return false;
         });
@@ -89,10 +104,30 @@ public class FindPwdFrag extends BaseFragment {
      */
     @Override
     protected void initData() {
-
         Bundle arguments = getArguments();
-        String mobile = arguments.getString("mobile");
+        mMobile = arguments.getString("mobile");
+        mSmsCode = arguments.getString("smsCode");
+        presenter = new RegisterAndBindPresenter(baseActivity,this);
+    }
 
+    public void resetPage(String mobile, String smsCode) {
+        this.mMobile = mobile;
+        this.mSmsCode = smsCode;
+        met_pwd.setText("");
+        met_confirm_pwd.setText("");
+    }
+
+    @OnClick(R.id.mbtn_login)
+    public void goLogin(){
+        String pwd = met_pwd.getText().toString().trim();
+        String rpwd = met_confirm_pwd.getText().toString().trim();
+        if (!pwd.equals(rpwd)){
+            Common.staticToast("密码不一致");
+            return;
+        }
+        if (presenter != null){
+            presenter.findPsw(mMobile,pwd,rpwd,mSmsCode);
+        }
     }
 
 
@@ -133,10 +168,64 @@ public class FindPwdFrag extends BaseFragment {
         });
     }
 
+    private void isShowPwd(EditText editText, boolean isShow) {
+        if (isShow) {//显示
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+        editText.setSelection(editText.getText().length());
+    }
+
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()){
+            case R.id.miv_tip1:
+                miv_tip1.setImageResource(isHiddenPwd?R.mipmap.icon_login_eyes_h:R.mipmap.icon_login_eyes_n);
+                isShowPwd(met_pwd,isHiddenPwd);
+                isHiddenPwd = !isHiddenPwd;
+                break;
+            case R.id.miv_tip2:
+                miv_tip2.setImageResource(isHiddenRPwd?R.mipmap.icon_login_eyes_h:R.mipmap.icon_login_eyes_n);
+                isShowPwd(met_confirm_pwd,isHiddenRPwd);
+                isHiddenRPwd = !isHiddenRPwd;
+                break;
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         isRuning1 = false;
         isRuning2 = false;
     }
+
+    @Override
+    public void findPwdSuccess(String message) {
+        Common.staticToast(message);
+        LoginEntryAct.startAct(baseActivity);
+        baseActivity.finish();
+    }
+
+    /**
+     * 显示网络请求失败的界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    /**
+     * 显示空数据界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
 }

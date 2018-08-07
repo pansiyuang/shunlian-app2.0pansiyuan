@@ -55,7 +55,7 @@ public class RegisterAndBindingAct extends BaseActivity {
 
     private FragmentManager mFragmentManager;
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
-    private static final String[] flags = {"one_frag", "two_frag"};
+    private static final String[] flags = {"one_frag", "two_frag","find_pwd"};
     private int mFlag;
     private OnePageFrag onePageFrag;
     private TwoPageFrag twoPageFrag;
@@ -63,6 +63,7 @@ public class RegisterAndBindingAct extends BaseActivity {
     private String mUniqueSign;
     private String mMobile;
     private String mMember_id;
+    private FindPwdFrag findPwdFrag;
 
     public static void startAct(Context context, int flag,String mobile,String unique_sign,String member_id) {
         Intent intent = new Intent(context,RegisterAndBindingAct.class);
@@ -185,6 +186,32 @@ public class RegisterAndBindingAct extends BaseActivity {
         }
 
         switchContent(twoPageFrag);
+    }
+
+    /**
+     * 找回密码
+     * @param mobile
+     * @param smsCode
+     */
+    public void findPwd(String mobile,String smsCode){
+        isCanBack = true;
+        if (findPwdFrag == null){
+            findPwdFrag = (FindPwdFrag) fragmentMap.get(flags[2]);
+            if (findPwdFrag == null){
+                findPwdFrag = new FindPwdFrag();
+                fragmentMap.put(flags[2],findPwdFrag);
+                Bundle bundle = new Bundle();
+                bundle.putString("mobile",mobile);
+                bundle.putString("smsCode",smsCode);
+                findPwdFrag.setArguments(bundle);
+            }else {
+                findPwdFrag.resetPage(mobile,smsCode);
+            }
+        }else {
+            findPwdFrag.resetPage(mobile,smsCode);
+        }
+
+        switchContent(findPwdFrag);
     }
 
 

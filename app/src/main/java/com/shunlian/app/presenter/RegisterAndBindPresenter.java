@@ -4,8 +4,10 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IRegisterAndBindView;
@@ -273,6 +275,37 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
                 super.onSuccess(entity);
                 Common.staticToast(entity.message);
                 iView.loginMobileSuccess(entity.data);
+            }
+        });
+    }
+
+    /**
+     * 找回密码
+     * @param mobile
+     * @param password
+     * @param pwd
+     * @param code
+     */
+    public void findPsw(String mobile, String password, String pwd, String code) {
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", mobile);
+        map.put("password", password);
+        map.put("pwd", pwd);
+        map.put("code", code);
+        sortAndMD5(map);
+        String s = null;
+        try {
+            s = new ObjectMapper().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), s);
+        Call<BaseEntity<RegisterFinishEntity>> register = getApiService().findPsw(requestBody);
+        getNetData(register, new SimpleNetDataCallback<BaseEntity<RegisterFinishEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<RegisterFinishEntity> entity) {
+                super.onSuccess(entity);
+                iView.findPwdSuccess(entity.message);
             }
         });
     }
