@@ -82,7 +82,7 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
     @BindView(R.id.llayout_clause)
     LinearLayout llayout_clause;
 
-    private String jumpType;
+    private DispachJump mJump;
 
 
     /**
@@ -192,7 +192,7 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
 
     @Subscribe(sticky =true)
     public void eventBus(DispachJump jump){
-        jumpType = jump.jumpType;
+        mJump = jump;
     }
 
     @Override
@@ -220,8 +220,8 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
 
-        if (!isEmpty(jumpType)){
-            Common.goGoGo(baseActivity,jumpType);
+        if (mJump != null){
+            Common.goGoGo(baseActivity,mJump.jumpType,mJump.items);
         }
 
         if (!"1".equals(content.is_tag)){
