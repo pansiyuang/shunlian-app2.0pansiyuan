@@ -42,8 +42,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/credit_error"
-            android:visibility="invisible" />
+            android:padding="10dp"
+            android:src="@mipmap/icon_login_eyes_h"
+            android:visibility="visible" />
 
         <View
             android:layout_width="match_parent"
@@ -65,11 +66,11 @@
         android:layout_marginTop="35dp">
 
         <EditText
-            android:id="@+id/met_mobile"
+            android:id="@+id/met_confirm_pwd"
             style="@style/editText_attribute"
             android:layout_centerVertical="true"
             android:gravity="start|center_vertical"
-            android:hint="请确认密码"/>
+            android:hint="请确认密码" />
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_tip2"
@@ -77,8 +78,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/credit_error"
-            android:visibility="invisible" />
+            android:padding="10dp"
+            android:src="@mipmap/icon_login_eyes_h"
+            android:visibility="visible" />
 
         <View
             android:layout_width="match_parent"
