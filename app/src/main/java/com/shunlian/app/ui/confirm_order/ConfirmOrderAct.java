@@ -77,6 +77,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @BindView(R.id.miv_anonymous)
     MyImageView miv_anonymous;
 
+    @BindView(R.id.mtv_station)
+    MyTextView mtv_station;
+
     private String mTotalPrice;
     private boolean isOrderBuy = false;//是否直接购买
     private String detail_address;
@@ -136,9 +139,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             //LogUtil.zhLogW("v="+v+String.format("scrollY=%d;oldScrollY=%d",scrollY,oldScrollY));
             //LogUtil.zhLogW("v="+v+String.format("scrollX=%d;oldScrollX=%d",scrollX,oldScrollX));
             if (scrollY >= 260) {
-                visible(mtv_address);
+                visible(mtv_address,mtv_station);
             } else {
-                gone(mtv_address);
+                gone(mtv_address,mtv_station);
             }
         });
     }
@@ -194,13 +197,16 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                                      List<GoodsDeatilEntity.Goods> disabled,
                                      ConfirmOrderEntity.Address address,
                                      List<ConfirmOrderEntity.NoDelivery> noDeliveryList) {
+        String text = "";
         if (address != null){
             addressId = address.id;
             detail_address = address.detail_address;
-            mtv_address.setText(String.format(getResources().getString(R.string.send_to),detail_address));
+            text = String.format(getStringResouce(R.string.send_to), detail_address);
         }else {
-            mtv_address.setText(getResources().getString(R.string.add_address));
+            text = getStringResouce(R.string.add_address);
         }
+        mtv_address.setText(text);
+        mtv_station.setText(text);
 
         this.enabled = enabled;
         ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,

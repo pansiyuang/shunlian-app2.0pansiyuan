@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -564,8 +565,10 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 }
                 promptDialog.tvCancleVisibility(true);
                 promptDialog.setTvSureText("取消");
+                SpannableStringBuilder ssb = Common.changeColor(noDelivery.areas
+                        + noDelivery.hint, noDelivery.hint, getColor(R.color.pink_color));
                 promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
-                        .setSureAndCancleListener(noDelivery.areas + noDelivery.hint, "取消",
+                        .setSureAndCancleListener(ssb, "取消",
                                 view1 -> {
                             if (promptDialog != null)
                                 promptDialog.dismiss();
