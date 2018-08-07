@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -68,6 +70,16 @@ public class StoreMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
             vipViewholder.tv_id_number.setText(storeMsg.create_time);
             vipViewholder.tv_attention_date.setText("预计收益:" + getString(R.string.common_yuan) + body.money);
         }
+        vipViewholder.tv_anonymous_price.setText("预计收益:" + getString(R.string.common_yuan) + body.money);
+
+        if (body.anonymous == 1) {//匿名购买
+            vipViewholder.ll_anonymous.setVisibility(View.VISIBLE);
+            vipViewholder.rl_memberInfo.setVisibility(View.GONE);
+        } else {
+            vipViewholder.ll_anonymous.setVisibility(View.GONE);
+            vipViewholder.rl_memberInfo.setVisibility(View.VISIBLE);
+        }
+
         vipViewholder.tv_msg_del.setOnClickListener(v -> {
             if (mListener != null) {
                 mListener.onDel(position);
@@ -94,6 +106,15 @@ public class StoreMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
 
         @BindView(R.id.tv_msg_del)
         TextView tv_msg_del;
+
+        @BindView(R.id.rl_memberInfo)
+        RelativeLayout rl_memberInfo;
+
+        @BindView(R.id.ll_anonymous)
+        LinearLayout ll_anonymous;
+
+        @BindView(R.id.tv_anonymous_price)
+        TextView tv_anonymous_price;
 
         public VipViewholder(View itemView) {
             super(itemView);
