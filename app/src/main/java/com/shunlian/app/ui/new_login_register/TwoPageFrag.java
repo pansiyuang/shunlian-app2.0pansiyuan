@@ -21,7 +21,6 @@ import com.shunlian.app.presenter.RegisterAndBindPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IRegisterAndBindView;
