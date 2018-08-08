@@ -13,6 +13,8 @@ import java.util.List;
 public class GetDataEntity {
     @JsonProperty(value = "data")//关键字重名
     public List<MData> datas;
+    public String default_keyword;
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class MData {
