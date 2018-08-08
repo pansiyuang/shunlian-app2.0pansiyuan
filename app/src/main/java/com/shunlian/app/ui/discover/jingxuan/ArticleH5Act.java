@@ -186,6 +186,7 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
         shareInfoParam.title = detailEntity.title;
         shareInfoParam.desc = detailEntity.full_title;
         shareInfoParam.img = detailEntity.thumb;
+        shareInfoParam.isCopyTitle = true;
         shareInfoParam.thumb_type = "1";
         if (detailEntity.user_info != null) {
             shareInfoParam.userName = detailEntity.user_info.nickname;

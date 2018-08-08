@@ -35,6 +35,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
     private SearchGoodsEntity.RefStore mStore;
     private RecyclerView.LayoutParams params;
     private List<GoodsDeatilEntity.Goods> mGoods;
+    private StringBuffer mSb;
 
     public DoubleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, SearchGoodsEntity.RefStore store) {
         super(context, isShowFooter, lists);
@@ -42,6 +43,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mStore = store;
         this.mGoods = lists;
+        mSb = new StringBuffer();
     }
 
     public void setData(List<GoodsDeatilEntity.Goods> lists) {
@@ -212,15 +214,32 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                     viewHolder.miv_product.setVisibility(View.GONE);
                 }
 
-                if ("0".equals(goods.comment_num)) {
-                    viewHolder.tv_comment.setText("暂无评论");
-                } else {
-                    if ("0".equals(goods.comment_rate)) {
-                        viewHolder.tv_comment.setText(goods.comment_num + "条评论");
+                mSb.setLength(0);
+                if (!isEmpty(goods.sales_desc)) {
+                    mSb.append(goods.sales_desc);
+                }
+                if (!isEmpty(goods.comment_rate)) {
+                    int rate = Integer.valueOf(goods.comment_rate);
+                    if (rate <= 0) {
+                        viewHolder.tv_comment.setText(mSb.toString());
                     } else {
-                        viewHolder.tv_comment.setText(goods.comment_num + "条评论  " + goods.comment_rate + "%好评");
+                        if (isEmpty(goods.sales_desc)) {
+                            mSb.append(goods.comment_rate + "%好评");
+                        } else {
+                            mSb.append("  " + goods.comment_rate + "%好评");
+                        }
+                        viewHolder.tv_comment.setText(mSb.toString());
                     }
                 }
+
+                if (1 == goods.is_sell_out) {
+                    viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
+                    viewHolder.tv_price.setTextColor(getColor(R.color.value_A0A0A0));
+                } else {
+                    viewHolder.miv_seller_out.setVisibility(View.GONE);
+                    viewHolder.tv_price.setTextColor(getColor(R.color.pink_color));
+                }
+
                 viewHolder.tv_address.setText(goods.send_area);
             }
         } catch (Exception e) {
@@ -331,6 +350,9 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         @BindView(R.id.miv_product)
         MyImageView miv_product;
+
+        @BindView(R.id.miv_seller_out)
+        MyImageView miv_seller_out;
 
         @BindView(R.id.tv_title)
         TextView tv_title;

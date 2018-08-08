@@ -4,18 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
-import com.shunlian.app.widget.MyButton;
+import com.shunlian.app.widget.MyTextView;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -33,8 +31,8 @@ public class LoginEntryAct extends BaseActivity implements IView{
     public static final String TERMS_OF_SERVICE = "agreement/1";
     //private TestWXLoginPresenter presenter;
 
-    @BindView(R.id.mbtn_old_login)
-    MyButton mbtn_old_login;
+    @BindView(R.id.mtv_pwd_login)
+    MyTextView mtv_pwd_login;
 
     public static void startAct(Context context){
         Intent intent = new Intent(context, LoginEntryAct.class);
@@ -58,9 +56,6 @@ public class LoginEntryAct extends BaseActivity implements IView{
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        if (BuildConfig.DEBUG){
-            visible(mbtn_old_login);
-        }
     }
 
     @OnClick(R.id.llayout_wechat_login)
@@ -80,9 +75,11 @@ public class LoginEntryAct extends BaseActivity implements IView{
         finish();
     }
 
-    @OnClick(R.id.mbtn_old_login)
-    public void oldLoginEntry(){
-        LoginAct.startAct(this);
+    @OnClick(R.id.mtv_pwd_login)
+    public void pwdLoginEntry(){
+        RegisterAndBindingAct.startAct(this,
+                RegisterAndBindingAct.FLAG_PWD_LOGIN,null,null,null);
+        finish();
     }
 
     @OnClick(R.id.llayout_login_agreement)

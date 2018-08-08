@@ -15,6 +15,7 @@ import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -33,12 +34,14 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
     private LayoutInflater mInflater;
     private SearchGoodsEntity.RefStore mStore;
     private List<GoodsDeatilEntity.Goods> mGoods;
+    private StringBuffer mSb;
 
     public SingleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, SearchGoodsEntity.RefStore store) {
         super(context, isShowFooter, lists);
         mInflater = LayoutInflater.from(context);
         this.mGoods = lists;
         this.mStore = store;
+        mSb = new StringBuffer();
     }
 
     public SingleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
@@ -189,15 +192,32 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                     viewHolder.ll_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
                 }
 
-                if ("0".equals(goods.comment_num)) {
-                    viewHolder.tv_comment.setText("暂无评论");
-                } else {
-                    if ("0".equals(goods.comment_rate)) {
-                        viewHolder.tv_comment.setText(goods.comment_num + "条评论");
+                mSb.setLength(0);
+                if (!isEmpty(goods.sales_desc)) {
+                    mSb.append(goods.sales_desc);
+                }
+                if (!isEmpty(goods.comment_rate)) {
+                    int rate = Integer.valueOf(goods.comment_rate);
+                    if (rate <= 0) {
+                        viewHolder.tv_comment.setText(mSb.toString());
                     } else {
-                        viewHolder.tv_comment.setText(goods.comment_num + "条评论  " + goods.comment_rate + "%好评");
+                        if (isEmpty(goods.sales_desc)) {
+                            mSb.append(goods.comment_rate + "%好评");
+                        } else {
+                            mSb.append("  " + goods.comment_rate + "%好评");
+                        }
+                        viewHolder.tv_comment.setText(mSb.toString());
                     }
                 }
+
+                if (1 == goods.is_sell_out) {
+                    viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
+                    viewHolder.tv_price.setTextColor(getColor(R.color.value_A0A0A0));
+                } else {
+                    viewHolder.miv_seller_out.setVisibility(View.GONE);
+                    viewHolder.tv_price.setTextColor(getColor(R.color.pink_color));
+                }
+
                 viewHolder.tv_address.setText(goods.send_area);
                 if (goods.type == 1) { //是优品
                     viewHolder.miv_product.setVisibility(View.VISIBLE);
@@ -291,6 +311,9 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         @BindView(R.id.miv_product)
         MyImageView miv_product;
+
+        @BindView(R.id.miv_seller_out)
+        MyImageView miv_seller_out;
 
         @BindView(R.id.tv_title)
         TextView tv_title;

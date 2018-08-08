@@ -3,6 +3,7 @@ package com.shunlian.app.ui.new_login_register;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.eventbus_bean.SelectMemberID;
+import com.shunlian.app.newchat.util.MessageCountManager;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.RegisterAndBindPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.register.SelectRecommendAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterAndBindView;
@@ -28,6 +37,8 @@ import com.shunlian.app.widget.MyTextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -73,11 +84,24 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     @BindView(R.id.mtv_select_id)
     MyTextView mtv_select_id;
 
+    @BindView(R.id.rlayout_pwd)
+    RelativeLayout rlayout_pwd;
+
+    @BindView(R.id.met_pwd)
+    EditText met_pwd;
+
+    @BindView(R.id.mtv_find_pwd)
+    MyTextView mtv_find_pwd;
+
+    @BindView(R.id.miv_eyes_tip)
+    MyImageView miv_eyes_tip;
+
     private RegisterAndBindPresenter mPresenter;
     private final String visity_specialist = "查看导购专员";
     private boolean isRuning1 = false;
     private boolean isRuning2 = false;
     private boolean isRuning3 = false;
+    private boolean isRuning4 = false;
     private String mRecommenderId;//推荐人id
     private String mSelectMember_id;//选择导购员的member_id
     private int mFlag;
@@ -86,6 +110,8 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     private String mMobile;
     private String mUniqueSign;
     private String mMember_id;
+    private DispachJump mJump;
+    private boolean isHiddenPwd = true;
 
     /**
      * 设置布局id
@@ -100,9 +126,23 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         return view;
     }
 
+    private void isShowPwd(EditText editText, boolean isShow) {
+        if (isShow) {//显示
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+        editText.setSelection(editText.getText().length());
+    }
+
     @Override
     protected void initListener() {
         super.initListener();
+        miv_eyes_tip.setOnClickListener(view -> {
+            miv_eyes_tip.setImageResource(isHiddenPwd?R.mipmap.icon_login_eyes_h:R.mipmap.icon_login_eyes_n);
+            isShowPwd(met_pwd,isHiddenPwd);
+            isHiddenPwd = !isHiddenPwd;
+        });
         met_id.setOnTouchListener((v, event) ->{
             if (!isRuning1){
                 isRuning1 = true;
@@ -114,7 +154,13 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         met_mobile.setOnTouchListener((v, event) ->{
             if (!isRuning2){
                 isRuning2 = true;
-                runAnimation("手机号",R.id.rlayout_mobile,met_mobile);
+                String tip = "";
+                if (mFlag == RegisterAndBindingAct.FLAG_PWD_LOGIN){
+                    tip = "账号ID";
+                }else {
+                    tip = "手机号";
+                }
+                runAnimation(tip,R.id.rlayout_mobile,met_mobile);
             }
             return false;
         });
@@ -123,6 +169,14 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             if (!isRuning3){
                 isRuning3 = true;
                 runAnimation("验证码",R.id.rlayout_pic_code,met_pic_code);
+            }
+            return false;
+        });
+
+        met_pwd.setOnTouchListener((v, event) ->{
+            if (!isRuning4){
+                isRuning4 = true;
+                runAnimation("密码",R.id.rlayout_pwd,met_pwd);
             }
             return false;
         });
@@ -159,7 +213,9 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                         }
                         break;
                     case 3:
-                        if (mFlag != RegisterAndBindingAct.FLAG_LOGIN) checkPicCode(s);
+                        if (mFlag != RegisterAndBindingAct.FLAG_LOGIN &&
+                                mFlag != RegisterAndBindingAct.FLAG_FIND_PWD)
+                            checkPicCode(s);
                         break;
                 }
             }
@@ -233,6 +289,9 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             }else {
                mobile = met_mobile.getText().toString().trim();
             }
+            if (mFlag == RegisterAndBindingAct.FLAG_LOGIN){
+                Common.hideKeyboard(met_pic_code);
+            }
             String picCode = met_pic_code.getText().toString().trim();
 
             mPresenter.sendSmsCode(mobile, picCode);
@@ -284,33 +343,65 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
     private void showStatus(int flag) {
         ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(false);
+        met_mobile.setHint("请输入手机号");
         switch (flag) {
             case RegisterAndBindingAct.FLAG_REGISTER://注册
                 mtv_tip.setText("注册");
-                visible(rlayout_id);
-                gone(mbtn_login);
+                visible(rlayout_id,rlayout_pic_code);
+                gone(mbtn_login,rlayout_pwd);
 
                 break;
             case RegisterAndBindingAct.FLAG_BIND_ID://绑定id
                 mtv_tip.setText("绑定导购专员ID");
-                gone(rlayout_mobile,mbtn_login);
+                visible(rlayout_pic_code);
+                gone(rlayout_mobile,mbtn_login,rlayout_pwd);
 
                 break;
             case RegisterAndBindingAct.FLAG_BIND_MOBILE://绑定手机号
                 mtv_tip.setText("绑定手机号");
-                gone(rlayout_id,mbtn_login);
+                visible(rlayout_pic_code);
+                gone(rlayout_id,mbtn_login,rlayout_pwd);
 
                 break;
             case RegisterAndBindingAct.FLAG_BIND_MOBILE_ID://绑定手机号和id
                 mtv_tip.setText("绑定");
-                gone(mbtn_login);
+                visible(rlayout_pic_code);
+                gone(mbtn_login,rlayout_pwd);
+
+                break;
+            case RegisterAndBindingAct.FLAG_PWD_LOGIN://密码登录
+                mtv_tip.setText("账号密码登录");
+                visible(rlayout_pwd,mbtn_login);
+                gone(rlayout_id,rlayout_pic_code);
+                ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(true);
+                RelativeLayout.LayoutParams
+                        lp = (RelativeLayout.LayoutParams) mbtn_login.getLayoutParams();
+                lp.addRule(RelativeLayout.BELOW,R.id.rlayout_pwd);
+                mbtn_login.setLayoutParams(lp);
+                met_mobile.setHint("请输入账号ID");
+
+                break;
+            case RegisterAndBindingAct.FLAG_FIND_PWD://找回密码
+                mtv_tip.setText("找回密码");
+                gone(rlayout_id,rlayout_pwd);
+                visible(mbtn_login,rlayout_pic_code);
+                ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(false);
+                RelativeLayout.LayoutParams
+                        lp2 = (RelativeLayout.LayoutParams) mbtn_login.getLayoutParams();
+                lp2.addRule(RelativeLayout.BELOW,R.id.rlayout_pic_code);
+                mbtn_login.setLayoutParams(lp2);
+                mbtn_login.setText("下一步");
 
                 break;
             default://默认登录
                 mtv_tip.setText("手机号登录");
-                gone(rlayout_id);
-                visible(mbtn_login);
+                gone(rlayout_id,rlayout_pwd);
+                visible(mbtn_login,rlayout_pic_code);
                 ((RegisterAndBindingAct) baseActivity).isShowRegisterBtn(true);
+                RelativeLayout.LayoutParams
+                        lp1 = (RelativeLayout.LayoutParams) mbtn_login.getLayoutParams();
+                lp1.addRule(RelativeLayout.BELOW,R.id.rlayout_pic_code);
+                mbtn_login.setLayoutParams(lp1);
 
                 break;
         }
@@ -342,27 +433,48 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         met_pic_code.setText("");
     }
 
+    @OnClick(R.id.mtv_find_pwd)
+    public void findPWD(){
+        ((RegisterAndBindingAct)baseActivity).findPWD();
+    }
+
     @OnClick(R.id.mbtn_login)
     public void btnLogin(){
 
         String mobile = met_mobile.getText().toString().trim();
         String picCode = met_pic_code.getText().toString().trim();
+        String pwd = met_pwd.getText().toString().trim();
 
+        if (mFlag == RegisterAndBindingAct.FLAG_PWD_LOGIN){//密码登录
+            if (isEmpty(mobile)){
+                Common.staticToast("账号不能为空喔~");
+                return;
+            }
+
+            if (isEmpty(pwd)){
+                Common.staticToast("请输入密码");
+                return;
+            }
+            if (mPresenter != null)
+                mPresenter.loginPwd(mobile, pwd);
+            return;
+        }
+
+        //验证码登录
         if (isEmpty(mobile)){
             Common.staticToast("手机号不能为空喔~");
             return;
         }
-
-        if (isEmpty(picCode)){
-            Common.staticToast("请输入验证码");
-            return;
-        }
-
         if (!iSMobileRight){
             Common.staticToast("手机号错误");
             setDispatchFocusable(2);
             return;
         }
+        if (isEmpty(picCode)){
+            Common.staticToast("请输入验证码");
+            return;
+        }
+
         if (mPresenter != null)
             mPresenter.sendSmsCode(mobile, picCode);
     }
@@ -411,6 +523,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         isRuning1 = false;
         isRuning2 = false;
         isRuning3 = false;
+        isRuning4 = false;
         EventBus.getDefault().unregister(this);
     }
 
@@ -479,7 +592,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             if (mFlag == RegisterAndBindingAct.FLAG_LOGIN) {
                 //登录
                 ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
-                        null,mMember_id,mFlag);
+                        mUniqueSign,mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_REGISTER){
                 if (!isRefereesIdRight())return;
@@ -507,6 +620,10 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mMobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
+            }else if (mFlag == RegisterAndBindingAct.FLAG_FIND_PWD){
+                //找回密码
+                ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
+                        mUniqueSign,mMember_id,mFlag);
             }
         }
     }
@@ -549,5 +666,45 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         }else if (state == 3){
             setEdittextFocusable(true,met_pic_code);
         }
+    }
+
+    @Subscribe(sticky = true)
+    public void eventBus(DispachJump jump) {
+        mJump = jump;
+    }
+
+    @Override
+    public void loginMobileSuccess(LoginFinishEntity content) {
+        //登陆成功啦
+        SharedPrefUtil.saveSharedUserString("token", content.token);
+        SharedPrefUtil.saveSharedUserString("avatar", content.avatar);
+        SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
+        SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
+        SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
+        if (content.tag!=null)
+            SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));
+        JpushUtil.setJPushAlias();
+        //通知登录成功
+        DefMessageEvent event = new DefMessageEvent();
+        event.loginSuccess = true;
+        EventBus.getDefault().post(event);
+
+        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+            Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
+                    ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
+                    ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
+        }
+
+        EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
+        MessageCountManager.getInstance(getActivity()).initData();
+
+        if (mJump != null){
+            Common.goGoGo(baseActivity,mJump.jumpType,mJump.items);
+        }
+
+        if (!"1".equals(content.is_tag)){
+            SexSelectAct.startAct(baseActivity);
+        }
+        baseActivity.finish();
     }
 }

@@ -33,7 +33,7 @@ public class RegisterAndBindingAct extends BaseActivity {
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
-    /***********登录*************/
+    /***********验证码登录*************/
     public static final int FLAG_LOGIN = 1;
 
     /*******注册*********/
@@ -48,10 +48,14 @@ public class RegisterAndBindingAct extends BaseActivity {
     public static final int FLAG_BIND_ID = 1 << 3;
     /*******绑定手机号和推荐人*********/
     public static final int FLAG_BIND_MOBILE_ID = 1 << 4;
+    /*******密码登录*********/
+    public static final int FLAG_PWD_LOGIN = 1 << 5;
+    /*******找回密码*********/
+    public static final int FLAG_FIND_PWD = 1 << 6;
 
     private FragmentManager mFragmentManager;
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
-    private static final String[] flags = {"one_frag", "two_frag"};
+    private static final String[] flags = {"one_frag", "two_frag","find_pwd"};
     private int mFlag;
     private OnePageFrag onePageFrag;
     private TwoPageFrag twoPageFrag;
@@ -59,6 +63,7 @@ public class RegisterAndBindingAct extends BaseActivity {
     private String mUniqueSign;
     private String mMobile;
     private String mMember_id;
+    private FindPwdFrag findPwdFrag;
 
     public static void startAct(Context context, int flag,String mobile,String unique_sign,String member_id) {
         Intent intent = new Intent(context,RegisterAndBindingAct.class);
@@ -118,6 +123,15 @@ public class RegisterAndBindingAct extends BaseActivity {
         gone(mtv_register);
     }
 
+    /**
+     * 找回密码
+     */
+    public void findPWD(){
+        mFlag = FLAG_FIND_PWD;
+        oneFrag();
+        gone(mtv_register);
+    }
+
     private void oneFrag() {
         isCanBack = false;
         if (onePageFrag == null){
@@ -172,6 +186,32 @@ public class RegisterAndBindingAct extends BaseActivity {
         }
 
         switchContent(twoPageFrag);
+    }
+
+    /**
+     * 找回密码
+     * @param mobile
+     * @param smsCode
+     */
+    public void findPwd(String mobile,String smsCode){
+        isCanBack = true;
+        if (findPwdFrag == null){
+            findPwdFrag = (FindPwdFrag) fragmentMap.get(flags[2]);
+            if (findPwdFrag == null){
+                findPwdFrag = new FindPwdFrag();
+                fragmentMap.put(flags[2],findPwdFrag);
+                Bundle bundle = new Bundle();
+                bundle.putString("mobile",mobile);
+                bundle.putString("smsCode",smsCode);
+                findPwdFrag.setArguments(bundle);
+            }else {
+                findPwdFrag.resetPage(mobile,smsCode);
+            }
+        }else {
+            findPwdFrag.resetPage(mobile,smsCode);
+        }
+
+        switchContent(findPwdFrag);
     }
 
 

@@ -63,23 +63,34 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         DetailOrderRecordHolder mHolder = (DetailOrderRecordHolder) holder;
         DetailOrderRecordEntity.Item item = lists.get(position);
-        mHolder.mtv_order.setText("订单号："+item.order_sn);
-        mHolder.mtv_order_state.setText(item.status_desc);
-        mHolder.mtv_order_time.setText("下单日期："+item.order_time);
-        mHolder.recy_view.setAdapter(new GoodsItemAdapter(context, item.order_goods));
+        if ("1".equals(item.anonymous)) {//匿名购买
+            gone(mHolder.view_line,mHolder.view_line1,
+                    mHolder.recy_view,mHolder.mtv_order_time,
+                    mHolder.mtv_buy,mHolder.mtv_order_state);
+            visible(mHolder.mtv_forecast_earnings);
+            mHolder.mtv_order.setText("匿名购买");
+            mHolder.mtv_forecast_earnings.setText("预估收益："+item.estimate_profit);
+        }else {
+            visible(mHolder.view_line,mHolder.view_line1,
+                    mHolder.recy_view,mHolder.mtv_order_time,
+                    mHolder.mtv_buy,mHolder.mtv_order_state);
+            gone(mHolder.mtv_forecast_earnings);
 
-        GradientDrawable background = (GradientDrawable) mHolder.mtv_buy.getBackground();
-        background.setColor(Color.parseColor("#FB0036"));
-        background.setColor(Color.parseColor("#FB9A00"));
-        background.setStroke(0,getColor(R.color.white));
-//        String deal_type = item.deal_type;
-        GradientDrawable buyDrawable = (GradientDrawable) mHolder.mtv_buy.getBackground();
-        if ("1".equals(item.deal_type)) {
-            mHolder.mtv_buy.setText("买");
-            buyDrawable.setColor(Color.parseColor("#FB9A00"));
-        } else {
-            mHolder.mtv_buy.setText("卖");
-            buyDrawable.setColor(getColor(R.color.pink_color));
+            mHolder.mtv_order.setText("订单号：" + item.order_sn);
+            mHolder.mtv_order_state.setText(item.status_desc);
+            mHolder.mtv_order_time.setText("下单日期：" + item.order_time);
+            mHolder.recy_view.setAdapter(new GoodsItemAdapter(context, item.order_goods));
+
+
+            GradientDrawable buyDrawable = (GradientDrawable) mHolder.mtv_buy.getBackground();
+            buyDrawable.setStroke(0, getColor(R.color.white));
+            if ("1".equals(item.deal_type)) {
+                mHolder.mtv_buy.setText("买");
+                buyDrawable.setColor(Color.parseColor("#FB9A00"));
+            } else {
+                mHolder.mtv_buy.setText("卖");
+                buyDrawable.setColor(getColor(R.color.pink_color));
+            }
         }
     }
 
@@ -99,6 +110,15 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
 
         @BindView(R.id.mtv_buy)
         MyTextView mtv_buy;
+
+        @BindView(R.id.mtv_forecast_earnings)
+        MyTextView mtv_forecast_earnings;
+
+        @BindView(R.id.view_line)
+        View view_line;
+
+        @BindView(R.id.view_line1)
+        View view_line1;
 
         public DetailOrderRecordHolder(View itemView) {
             super(itemView);

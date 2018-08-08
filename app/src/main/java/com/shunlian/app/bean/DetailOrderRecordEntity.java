@@ -28,6 +28,8 @@ public class DetailOrderRecordEntity {
         public String status_desc;
         public String order_time;
         public String deal_type;
+        public String estimate_profit;
+        public String anonymous;//是否匿名  1是0否
         public List<OrderGoods> order_goods;
     }
 

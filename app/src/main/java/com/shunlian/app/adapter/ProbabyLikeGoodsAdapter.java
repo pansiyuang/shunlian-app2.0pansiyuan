@@ -120,9 +120,9 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
 
             int margin = TransformUtil.dip2px(context, 5);
             if (goods.index % 2 == 0) {//左边
-                layoutParams.setMargins(0, margin, margin, 0);
+                layoutParams.setMargins(0, 0, margin, margin);
             } else { //右边
-                layoutParams.setMargins(0, margin, 0, 0);
+                layoutParams.setMargins(0, 0, 0, margin);
             }
             childrenViewHolder.mrlayout_plus.setVisibility(View.GONE);
             childrenViewHolder.ll_rootView.setOnClickListener(v -> GoodsDetailAct.startAct(context, goods.id));

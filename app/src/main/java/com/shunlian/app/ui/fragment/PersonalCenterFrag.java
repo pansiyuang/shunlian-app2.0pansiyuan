@@ -611,7 +611,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         }
         invite_code=personalcenterEntity.invite_code;
         mtv_yaoqingma.setText("邀请码:" + invite_code);
-        miv_levels.setVisibility(View.VISIBLE);
+
 
 //        switch (personalcenterEntity.role) {
 //            case "1":
