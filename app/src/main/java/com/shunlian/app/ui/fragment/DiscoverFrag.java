@@ -219,19 +219,26 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 //                LogUtil.augusLogW("yxf---"+verticalOffset);
 //            }
 //        });
-        String flag ="nice";
-        if (getArguments() != null&&!isEmpty(getArguments().getString("flag")))
-            flag = getArguments().getString("flag");
-        setArgument(flag);
-        miv_empty.setFocusable(false);
         mainActivity = (MainActivity) getActivity();
         if (mainActivity != null)
             initMessage(mainActivity.data);
+        String flag ="nice";
+        if (getArguments() != null&&!isEmpty(getArguments().getString("flag"))&&
+                "nicefocusexperiencecirclematerial".contains(getArguments().getString("flag"))){
+            flag = getArguments().getString("flag");
+        }
+        setArgument(flag);
+        miv_empty.setFocusable(false);
     }
 
     @Override
     protected void initListener() {
         miv_search.setOnClickListener(this);
+        mrlayout_jingxuan.setOnClickListener(this);
+        mrlayout_guanzhu.setOnClickListener(this);
+        mrlayout_goumaixinde.setOnClickListener(this);
+        mrlayout_quanzi.setOnClickListener(this);
+        mrlayout_sucaiku.setOnClickListener(this);
         miv_experience_publish.setOnClickListener(this);
         super.initListener();
     }
@@ -247,7 +254,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         messageCall("nice");
     }
 
-    @OnClick(R.id.mrlayout_jingxuan)
     public void jingXuan() {
         showSataus(0);
         judge(flag_jingxuan);
@@ -265,7 +271,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         messageCall("focus");
     }
 
-    @OnClick(R.id.mrlayout_guanzhu)
     public void guanZhu() {
         showSataus(1);
         judge(flag_guanzhu);
@@ -283,7 +288,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         messageCall("experience");
     }
 
-    @OnClick(R.id.mrlayout_goumaixinde)
     public void xinde() {
         showSataus(2);
         judge(flag_xinde);
@@ -301,7 +305,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         messageCall("circle");
     }
 
-    @OnClick(R.id.mrlayout_quanzi)
     public void quanzi() {
         showSataus(3);
         judge(flag_quanzi);
@@ -319,7 +322,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         messageCall("material");
     }
 
-    @OnClick(R.id.mrlayout_sucaiku)
     public void sucaiku() {
         showSataus(4);
         judge(flag_sucaiku);
@@ -354,10 +356,11 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             }
             data.total=data.total-count;
             if (mainActivity != null&&mainActivity.mtv_message_count!=null){
-                if (data.total<=0){
+                if (data.total > 99) {
+                    mainActivity.mtv_message_count.setText("99+");
+                } else if (data.total <= 0) {
                     mainActivity.mtv_message_count.setVisibility(View.GONE);
-                }else {
-                    mainActivity.mtv_message_count.setVisibility(View.VISIBLE);
+                } else {
                     mainActivity.mtv_message_count.setText(String.valueOf(data.total));
                 }
             }
@@ -578,10 +581,26 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void mOnClick(View view) {
+        super.mOnClick(view);
+        switch (view.getId()) {
             case R.id.miv_search:
                 SearchArticleActivity.startAct(getActivity());
+                break;
+            case R.id.mrlayout_jingxuan:
+                jingXuan();
+                break;
+            case R.id.mrlayout_guanzhu:
+                guanZhu();
+                break;
+            case R.id.mrlayout_goumaixinde:
+                xinde();
+                break;
+            case R.id.mrlayout_quanzi:
+                quanzi();
+                break;
+            case R.id.mrlayout_sucaiku:
+                sucaiku();
                 break;
             case R.id.miv_experience_publish:
                 if (!Common.isAlreadyLogin()) {
@@ -592,6 +611,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 break;
         }
     }
+
 
     public void setArgument(String flag) {
         if (!isEmpty(flag))
@@ -610,9 +630,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     break;
                 case "material":
                     sucaiku();
-                    break;
-                default:
-                    jingXuan();
                     break;
             }
     }
