@@ -79,7 +79,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     private TagAdapter<String> historyAdapter;
     private SimpleRecyclerAdapter simpleRecyclerAdapter;
     private List<String> mTips;
-    private List<String> hotTags = new ArrayList<>();
+    private List<HotSearchEntity.HotKeywords> hotTags = new ArrayList<>();
     private List<String> histotyTags = new ArrayList<>();
     private String currentKeyWord;
     private String currentFlag;
@@ -181,7 +181,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         historyAdapter = new TagAdapter<String>(histotyTags) {
             @Override
             public View getView(FlowLayout parent, int position, String s) {
-                View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_tag_layout, taglayout_history, false);
+                View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_goods_tag_layout, taglayout_history, false);
                 TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
                 tv.setText(s);
                 return view;
@@ -273,10 +273,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         hotTags.clear();
         histotyTags.clear();
 
-        if (!isEmpty(entity.hot_keywords)) {
+        if (!isEmpty(entity.new_hot_keywords)) {
             tv_hot.setVisibility(View.VISIBLE);
             taglayout_hot.setVisibility(View.VISIBLE);
-            hotTags.addAll(entity.hot_keywords);
+            hotTags.addAll(entity.new_hot_keywords);
         } else {
             tv_hot.setVisibility(View.GONE);
             taglayout_hot.setVisibility(View.GONE);
@@ -296,12 +296,19 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         hotAdapter = new TagAdapter(hotTags) {
             @Override
             public View getView(FlowLayout parent, final int position, Object o) {
-                final String tagStr = hotTags.get(position);
-                View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_tag_layout, taglayout_hot, false);
-                TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
-                tv.setText(tagStr);
+                final HotSearchEntity.HotKeywords hotKeyword = hotTags.get(position);
+                View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_goods_tag_layout, taglayout_hot, false);
+                TextView tv = view.findViewById(R.id.tv_history_tag);
+                tv.setText(hotKeyword.label);
+                if (1 == hotKeyword.high_light) {
+                    tv.setBackgroundResource(R.drawable.rounded_corner_solid_ff5c7f_8px);
+                    tv.setTextColor(getColorResouce(R.color.white));
+                } else {
+                    tv.setBackgroundResource(R.drawable.rounded_corner_solid_f7_8px);
+                    tv.setTextColor(getColorResouce(R.color.text_gray2));
+                }
 
-                view.setOnClickListener(v -> switchToJump(entity.hot_keywords.get(position)));
+                view.setOnClickListener(v -> switchToJump(entity.new_hot_keywords.get(position).label));
                 return view;
             }
         };
@@ -311,7 +318,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             @Override
             public View getView(FlowLayout parent, final int position, Object o) {
                 final String tagStr = histotyTags.get(position);
-                View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_tag_layout, taglayout_history, false);
+                View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_goods_tag_layout, taglayout_history, false);
                 TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
                 tv.setText(tagStr);
                 view.setOnClickListener(v -> switchToJump(entity.history_list.get(position)));

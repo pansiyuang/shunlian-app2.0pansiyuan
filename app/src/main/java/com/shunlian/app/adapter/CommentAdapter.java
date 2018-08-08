@@ -186,8 +186,14 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             }
 
             GlideUtils.getInstance().loadCircleHeadImage(context,mHolder.civ_head,data.avatar);
-            Bitmap bitmap = TransformUtil.convertNewVIP(context, data.level);
-            mHolder.miv_vip.setImageBitmap(bitmap);
+            if (!isEmpty(data.level)) {
+                Bitmap bitmap = TransformUtil.convertNewVIP(context, data.level);
+                mHolder.miv_vip.setImageBitmap(bitmap);
+                mHolder.miv_vip.setVisibility(View.VISIBLE);
+            } else {
+                mHolder.miv_vip.setVisibility(View.GONE);
+            }
+
             if (!isEmpty(data.plus_role)){//大于0为plus以上等级，1PLUS店主，2主管，>=3经理
                 visible(mHolder.miv_medal);
                 int plusRole = Integer.parseInt(data.plus_role);

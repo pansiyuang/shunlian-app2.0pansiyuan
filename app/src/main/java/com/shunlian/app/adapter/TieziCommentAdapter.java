@@ -66,8 +66,14 @@ public class TieziCommentAdapter extends BaseRecyclerAdapter<DiscoveryCommentLis
                 }
             }
         });
-        Bitmap bitmap = TransformUtil.convertNewVIP(context, content.level);
-        viewHolder.miv_vip.setImageBitmap(bitmap);
+
+        if (!isEmpty(content.level)) {
+            Bitmap bitmap = TransformUtil.convertNewVIP(context, content.level);
+            viewHolder.miv_vip.setImageBitmap(bitmap);
+            viewHolder.miv_vip.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.miv_vip.setVisibility(View.GONE);
+        }
         viewHolder.mtv_name.setText(content.nickname);
         viewHolder.mtv_zan_count.setText(content.likes);
         viewHolder.mtv_time.setText(content.add_time);
