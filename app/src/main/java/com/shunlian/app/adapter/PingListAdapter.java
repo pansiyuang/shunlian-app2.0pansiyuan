@@ -73,7 +73,7 @@ public class PingListAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
             viewHolder.mtv_marketPrice.setText(goods.market_price);
             viewHolder.mtv_marketPrice.setStrikethrough();
             viewHolder.mtv_gou.setText(String.format(getString(R.string.first_yigou),goods.sales));
-            if (goods.stock <= 0) {
+            if (!isEmpty(goods.stock)&&Float.parseFloat(goods.stock)==0) {
                 viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
                 viewHolder.mtv_price.setTextColor(getColor(R.color.value_A0A0A0));
             } else {

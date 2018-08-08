@@ -59,6 +59,12 @@ public class KoubeiAdapter extends BaseRecyclerAdapter<CoreHotEntity.Hot.Goods> 
             } else {
                 mHolder.mtv_hao.setVisibility(View.GONE);
             }
+
+            if (!isEmpty(data.stock)&&Float.parseFloat(data.stock)==0) {
+                mHolder.miv_seller_out.setVisibility(View.VISIBLE);
+            } else {
+                mHolder.miv_seller_out.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,6 +86,9 @@ public class KoubeiAdapter extends BaseRecyclerAdapter<CoreHotEntity.Hot.Goods> 
 
         @BindView(R.id.mtv_hao)
         MyTextView mtv_hao;
+
+        @BindView(R.id.miv_seller_out)
+        MyImageView miv_seller_out;
 
         public ActivityMoreHolder(View itemView) {
             super(itemView);
