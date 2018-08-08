@@ -10,9 +10,7 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AccountAdapter;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.CommonEntity;
-import com.shunlian.app.ui.login.LoginPswFrag;
 import com.shunlian.app.utils.SharedPrefUtil;
 
 import java.util.ArrayList;
@@ -24,6 +22,8 @@ import java.util.List;
 
 public class SelectAccountDialog extends Dialog  {
 
+
+    private IDefLoginListener mListener;
 
     public SelectAccountDialog(Fragment fragment) {
         this(fragment.getContext(), R.style.MyDialogStyleBottom);
@@ -78,14 +78,21 @@ public class SelectAccountDialog extends Dialog  {
         setCancelable(true);
         AccountAdapter accountAdapter=new AccountAdapter(fragment.getContext(),false,commonEntities);
         recyclerView.setAdapter(accountAdapter);
-        accountAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                LoginPswFrag loginPswFrag= (LoginPswFrag) fragment;
-                loginPswFrag.loginPresenter.LoginUserName(commonEntities.get(position).account_name,commonEntities.get(position).account_number);
-                dismiss();
+        accountAdapter.setOnItemClickListener((view1, position) -> {
+            if (mListener != null) {
+                CommonEntity commonEntity = commonEntities.get(position);
+                mListener.login(commonEntity.account_name,commonEntity.account_number);
             }
+            dismiss();
         });
+    }
+
+    public void setDefLoginListener(IDefLoginListener listener){
+        mListener = listener;
+    }
+
+    public interface IDefLoginListener{
+        void login(String account,String pwd);
     }
 
     private CommonEntity addAccount(String account,String account_number,String account_type){

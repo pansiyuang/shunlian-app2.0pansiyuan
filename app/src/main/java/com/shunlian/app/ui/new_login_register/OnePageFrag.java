@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -25,7 +26,6 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.register.SelectRecommendAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -33,6 +33,7 @@ import com.shunlian.app.view.IRegisterAndBindView;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.SelectAccountDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -95,6 +96,9 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
     @BindView(R.id.miv_eyes_tip)
     MyImageView miv_eyes_tip;
+
+    @BindView(R.id.mtv_def_login)
+    MyTextView mtv_def_login;
 
     private RegisterAndBindPresenter mPresenter;
     private final String visity_specialist = "查看导购专员";
@@ -206,10 +210,12 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                     case 1:
                         break;
                     case 2:
-                        if (s.length() >= 11){
-                            checkMobileAPI();
-                        }else {
-                            iSMobileRight(false);
+                        if (mFlag != RegisterAndBindingAct.FLAG_PWD_LOGIN) {
+                            if (s.length() >= 11) {
+                                checkMobileAPI();
+                            } else {
+                                iSMobileRight(false);
+                            }
                         }
                         break;
                     case 3:
@@ -323,6 +329,10 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             mtv_select_id.setText(visity_specialist);
             if (mPresenter != null)
                 mPresenter.checkRefereesId(member_id);
+        }
+
+        if (BuildConfig.DEBUG){
+            visible(mtv_def_login);
         }
     }
 
@@ -689,11 +699,11 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
 
-        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+        /*if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
             Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
                     ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
                     ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
-        }
+        }*/
 
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
@@ -706,5 +716,17 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             SexSelectAct.startAct(baseActivity);
         }
         baseActivity.finish();
+    }
+
+
+    @OnClick(R.id.mtv_def_login)
+    public void defLogin(){
+        SelectAccountDialog selectAccountDialog=new SelectAccountDialog(this);
+        selectAccountDialog.setCanceledOnTouchOutside(true);
+        selectAccountDialog.setDefLoginListener((account, pwd) -> {
+            if (mPresenter != null)
+                mPresenter.loginPwd(account, pwd);
+        });
+        selectAccountDialog.show();
     }
 }
