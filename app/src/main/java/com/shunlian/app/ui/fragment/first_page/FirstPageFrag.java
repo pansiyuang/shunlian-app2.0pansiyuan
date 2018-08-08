@@ -229,7 +229,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_search)
     public void search() {
-        SearchGoodsActivity.startAct(baseActivity, mtv_search.getText().toString(), "sortFrag");
+        SearchGoodsActivity.startAct(baseActivity, getStringResouce(R.string.first_souni).equals(mtv_search.getText().toString())?"":mtv_search.getText().toString(), "sortFrag");
     }
 
     @Override
