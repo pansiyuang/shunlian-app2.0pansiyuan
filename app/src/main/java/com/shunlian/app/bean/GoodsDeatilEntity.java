@@ -886,7 +886,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String has_coupon;            //是否 有优惠券，1是，0否
         public String has_discount;          //是否 有折扣，1是，0否
         public String has_gift;              //是否 有赠品，1是，0否
-        public int type;
+        public int type;                     //0普通商品、1优品、2团购
         public int is_sell_out;
         public String sales_desc;
         public String self_buy_earn;

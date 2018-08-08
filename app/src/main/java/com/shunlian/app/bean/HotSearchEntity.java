@@ -16,7 +16,7 @@ public class HotSearchEntity {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class HotKeywords {
-        public String goods;
+        public String type;
         public String label;
         public int high_light;
         public String item_id;

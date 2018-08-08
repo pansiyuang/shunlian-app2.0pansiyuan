@@ -139,8 +139,10 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
                 int stock = Integer.valueOf(superProduct.stock);
                 if (stock <= 0) {
                     goodsViewHolder.miv_sale_out.setVisibility(View.VISIBLE);
+                    goodsViewHolder.tv_products_price.setTextColor(getColor(R.color.value_A0A0A0));
                 } else {
                     goodsViewHolder.miv_sale_out.setVisibility(View.GONE);
+                    goodsViewHolder.tv_products_price.setTextColor(getColor(R.color.new_text));
                 }
             }
 
