@@ -110,7 +110,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private long mExitTime;
     private FragmentManager fragmentManager;
     private int pageIndex;
-    private String flag="default";
+//    private String flag="default";
+    private String flag;
     private Dialog dialog_ad;
     private MessageCountManager messageCountManager;
     private PMain pMain;
@@ -216,7 +217,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        if (!isEmpty(getIntent().getStringExtra("flag")))
+//        if (!isEmpty(getIntent().getStringExtra("flag")))
         flag = getIntent().getStringExtra("flag");
         /*if (TextUtils.isEmpty(flag)) {
             mainPageClick();
@@ -424,7 +425,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             }
         } else {
             discoverFrag.setArgument(flag);
-            discoverFrag.initMessage(data);
+            if (Common.isAlreadyLogin()){
+                discoverFrag.initMessage(data);
+            }else {
+                discoverFrag.initMessage(null);
+            }
+
         }
         switchContent(discoverFrag);
         pageIndex = 2;

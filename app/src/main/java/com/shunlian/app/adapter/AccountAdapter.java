@@ -38,7 +38,7 @@ public class AccountAdapter extends BaseRecyclerAdapter<CommonEntity> {
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ActivityMoreHolder mHolder = (ActivityMoreHolder) holder;
         CommonEntity ad = lists.get(position);
-        mHolder.mtv_name.setText(ad.account_name);
+        mHolder.mtv_name.setText(ad.account_type);
     }
 
     public class ActivityMoreHolder extends BaseRecyclerViewHolder{

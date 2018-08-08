@@ -126,11 +126,12 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
 //                    oneHolder.mrlayout_progress.setVisibility(View.GONE);
 //                }
                     oneHolder.mtv_number.setVisibility(View.VISIBLE);
-                    if (!isEmpty(data.evaluate_num)&&Float.parseFloat(data.evaluate_num)>0){
-                        oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyourenpingjia),data.evaluate_num));
-                    }else {
-                        oneHolder.mtv_number.setText(getString(R.string.day_zanwupingjia));
-                    }
+                    oneHolder.mtv_number.setText(data.sales_desc);
+//                    if (!isEmpty(data.evaluate_num)&&Float.parseFloat(data.evaluate_num)>0){
+//                        oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyourenpingjia),data.evaluate_num));
+//                    }else {
+//                        oneHolder.mtv_number.setText(getString(R.string.day_zanwupingjia));
+//                    }
                 } else {
                     if ("1".equals(data.remind_status)) {
                         oneHolder.isRemind = true;

@@ -10,13 +10,29 @@
         android:layout_height="0.5dp"
         android:background="@color/value_E6E4E4" />
 
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_photo"
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_photo"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:scaleType="fitXY" />
+        android:layout_marginLeft="10dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_seller_out"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/img_yishouwan_da"
+            android:visibility="gone" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_title"

@@ -55,6 +55,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public static boolean isExpand = false;
     //    @BindView(R.id.mAppbar)
     public static AppBarLayout mAppbar;
+    public static MyTextView mtv_search;
     public ArrayList<Fragment> fragments;
     @BindView(R.id.mll_message)
     MyLinearLayout mll_message;
@@ -89,6 +90,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View rootView = inflater.inflate(R.layout.frag_first_page, container, false);
         mAppbar = (AppBarLayout) rootView.findViewById(R.id.mAppbar);
+        mtv_search = (MyTextView) rootView.findViewById(R.id.mtv_search);
         return rootView;
     }
 
@@ -227,7 +229,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_search)
     public void search() {
-        SearchGoodsActivity.startAct(baseActivity, "", "sortFrag");
+        SearchGoodsActivity.startAct(baseActivity, mtv_search.getText().toString(), "sortFrag");
     }
 
     @Override

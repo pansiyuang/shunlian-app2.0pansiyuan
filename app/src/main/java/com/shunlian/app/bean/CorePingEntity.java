@@ -37,7 +37,7 @@ public class CorePingEntity {
         public String slogan;
         public String content;
         public String logo;
-        public int stock;
+        public String stock;
         public String promotion_type;
         public String promotion_id;
         public String count_down;

@@ -85,6 +85,7 @@ public class ActivityListEntity {
                 public int percent;
                 public String str_surplus_stock;
                 public String sale;
+                public String sales_desc;
 
                 @Override
                 public String toString() {

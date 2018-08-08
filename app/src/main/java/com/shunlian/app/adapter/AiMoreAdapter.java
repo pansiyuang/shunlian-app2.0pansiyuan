@@ -18,6 +18,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -100,6 +101,13 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
                     viewHolder.mllayout_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
                 }
 
+                if (!isEmpty(goods.stock)&&Float.parseFloat(goods.stock)==0) {
+                    viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
+                    viewHolder.mtv_price.setTextColor(getColor(R.color.value_A0A0A0));
+                } else {
+                    viewHolder.miv_seller_out.setVisibility(View.GONE);
+                    viewHolder.mtv_price.setTextColor(getColor(R.color.new_text));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,6 +143,12 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
 
+        @BindView(R.id.miv_seller_out)
+        MyImageView miv_seller_out;
+
+        @BindView(R.id.mrlayout_photo)
+        MyRelativeLayout mrlayout_photo;
+
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
 
@@ -148,7 +162,7 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
             super(itemView);
             int picWidth = (Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context,20)) / 2;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
-            miv_photo.setLayoutParams(params);
+            mrlayout_photo.setLayoutParams(params);
             itemView.setOnClickListener(this);
         }
 

@@ -395,6 +395,7 @@
     <string name="append_comment">追评</string>
     <string name="confirm_goods_receipt">要确认收货吗？</string>
     <string name="confirm_goods_receipt_label">确认收货后卖家将收到您的货款</string>
+    <string name="confirm_ninjiangchexiao">您将撤销本次申请，如果问题未解决，您还可以再次发起售后申请。确定继续吗？</string>
     <string name="confirm_extend_goods_time">确认延长收货时间？</string>
     <string name="order_extend_once">每笔订单只能延迟一次哦</string>
     <string name="goods_status">货物状态</string>
@@ -552,7 +553,7 @@
     <string name="personal_xiaodianhuiyuan">小店会员</string>
     <string name="personal_xiaodiandingdan">小店订单</string>
     <string name="personal_jianghupaiming">江湖排名</string>
-    <string name="personal_benzhouxiaoshou">PLUS专享本月销售排行榜</string>
+    <string name="personal_benzhouxiaoshou">优品本月销售排行榜</string>
     <string name="personal_youpingbenyue">【优品】本月销售排行榜</string>
     <string name="personal_faxianhuiyuan">发现会员</string>
     <string name="personal_yaoqingpengyou">邀请朋友创业</string>
