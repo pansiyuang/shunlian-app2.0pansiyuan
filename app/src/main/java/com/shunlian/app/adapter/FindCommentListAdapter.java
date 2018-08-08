@@ -133,8 +133,13 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
 
         mHolder.mtv_name.setText(itemComment.nickname);
 
-        Bitmap bitmap = TransformUtil.convertNewVIP(context, itemComment.level);
-        mHolder.miv_vip.setImageBitmap(bitmap);
+        if (!isEmpty(itemComment.level)) {
+            Bitmap bitmap = TransformUtil.convertNewVIP(context, itemComment.level);
+            mHolder.miv_vip.setImageBitmap(bitmap);
+            mHolder.miv_vip.setVisibility(View.VISIBLE);
+        } else {
+            mHolder.miv_vip.setVisibility(View.GONE);
+        }
 
         mHolder.mtv_time.setText(itemComment.add_time);
 

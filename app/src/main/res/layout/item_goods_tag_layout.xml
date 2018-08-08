@@ -12,6 +12,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corner_solid_f7_8px"
         android:padding="6dp"
-        android:textColor="@color/new_text"
+        android:textColor="@color/text_gray2"
         android:textSize="13sp" />
 </LinearLayout>

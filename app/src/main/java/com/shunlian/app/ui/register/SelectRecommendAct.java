@@ -263,8 +263,13 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                 }else if (memberRole >= 3){//经理
                     miv_large_vip.setImageResource(R.mipmap.img_plus_phb_jingli);
                 }else {
-                    Bitmap bitmap = TransformUtil.convertNewVIP(SelectRecommendAct.this, s.level);
-                    miv_large_vip.setImageBitmap(bitmap);
+                    if (!isEmpty(s.level)) {
+                        Bitmap bitmap = TransformUtil.convertNewVIP(SelectRecommendAct.this, s.level);
+                        miv_large_vip.setImageBitmap(bitmap);
+                        miv_large_vip.setVisibility(View.VISIBLE);
+                    } else {
+                        miv_large_vip.setVisibility(View.GONE);
+                    }
                 }
             }
         };
@@ -299,10 +304,17 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         }else if (memberRole >= 3){//经理
             miv_vip.setImageResource(R.mipmap.img_plus_phb_jingli);
         }else {
-            Bitmap bitmap = TransformUtil.convertNewVIP(SelectRecommendAct.this, listBean.level);
-            miv_vip.setImageBitmap(bitmap);
-            //等级描述
-            mtv_vip.setText(listBean.level);
+            if(!isEmpty(listBean.level)){
+                Bitmap bitmap = TransformUtil.convertNewVIP(SelectRecommendAct.this, listBean.level);
+                miv_vip.setImageBitmap(bitmap);
+                //等级描述
+                mtv_vip.setText(listBean.level);
+                mtv_vip.setVisibility(View.VISIBLE);
+                miv_vip.setVisibility(View.VISIBLE);
+            } else {
+                miv_vip.setVisibility(View.GONE);
+                mtv_vip.setVisibility(View.GONE);
+            }
         }
         //推荐人id
         mtv_id.setText(recommenderId);

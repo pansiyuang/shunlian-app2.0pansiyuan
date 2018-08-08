@@ -465,13 +465,13 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     public void onRatingChanged(FiveStarBar simpleRatingBar, float rating, boolean fromUser) {
         switch (simpleRatingBar.getId()) {
             case R.id.ratingBar_logistics:
-                currentLogisticsStar = (int) rating;
+                currentLogisticsStar = (int) rating * 2;
                 break;
             case R.id.ratingBar_attitude:
-                currentAttitudeStar = (int) rating;
+                currentAttitudeStar = (int) rating * 2;
                 break;
             case R.id.ratingBar_consistent:
-                currentConsistentStar = (int) rating;
+                currentConsistentStar = (int) rating * 2;
                 break;
         }
     }

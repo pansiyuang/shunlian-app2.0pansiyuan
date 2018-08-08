@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.fragment;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -40,6 +41,7 @@ import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonalView;
 import com.shunlian.app.widget.CompileScrollView;
 import com.shunlian.app.widget.MyImageView;
@@ -582,36 +584,15 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 mtv_equals.setText(defaultBuilder);
                 break;
         }
-        miv_level.setVisibility(View.VISIBLE);
-        switch (personalcenterEntity.level) {
-            default:
-                miv_level.setVisibility(View.INVISIBLE);
-                break;
-            case "0":
-                miv_level.setImageResource(R.mipmap.v0);
-                break;
-            case "1":
-                miv_level.setImageResource(R.mipmap.v1);
-                break;
-            case "2":
-                miv_level.setImageResource(R.mipmap.v2);
-                break;
-            case "3":
-                miv_level.setImageResource(R.mipmap.v3);
-                break;
-            case "4":
-                miv_level.setImageResource(R.mipmap.v4);
-                break;
-            case "5":
-                miv_level.setImageResource(R.mipmap.v5);
-                break;
-            case "6":
-                miv_level.setImageResource(R.mipmap.v6);
-                break;
+        if (!isEmpty(personalcenterEntity.level)) {
+            Bitmap bitmap = TransformUtil.convertNewVIP(getActivity(), personalcenterEntity.level);
+            miv_level.setImageBitmap(bitmap);
+            miv_level.setVisibility(View.VISIBLE);
+        } else {
+            miv_level.setVisibility(View.GONE);
         }
-        invite_code=personalcenterEntity.invite_code;
+        invite_code = personalcenterEntity.invite_code;
         mtv_yaoqingma.setText("邀请码:" + invite_code);
-        miv_levels.setVisibility(View.VISIBLE);
 
 //        switch (personalcenterEntity.role) {
 //            case "1":
