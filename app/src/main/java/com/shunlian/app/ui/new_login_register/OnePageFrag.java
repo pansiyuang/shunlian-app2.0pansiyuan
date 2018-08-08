@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -33,6 +34,7 @@ import com.shunlian.app.view.IRegisterAndBindView;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.SelectAccountDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -95,6 +97,9 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
     @BindView(R.id.miv_eyes_tip)
     MyImageView miv_eyes_tip;
+
+    @BindView(R.id.mtv_def_login)
+    MyTextView mtv_def_login;
 
     private RegisterAndBindPresenter mPresenter;
     private final String visity_specialist = "查看导购专员";
@@ -320,6 +325,10 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             mtv_select_id.setText(visity_specialist);
             if (mPresenter != null)
                 mPresenter.checkRefereesId(member_id);
+        }
+
+        if (BuildConfig.DEBUG){
+//            visible(mtv_def_login);
         }
     }
 
@@ -703,5 +712,13 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
             SexSelectAct.startAct(baseActivity);
         }
         baseActivity.finish();
+    }
+
+
+    @OnClick(R.id.mtv_def_login)
+    public void defLogin(){
+        SelectAccountDialog selectAccountDialog=new SelectAccountDialog(this);
+        selectAccountDialog.setCanceledOnTouchOutside(true);
+        selectAccountDialog.show();
     }
 }
