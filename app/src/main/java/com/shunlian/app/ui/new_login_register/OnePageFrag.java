@@ -26,7 +26,6 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.register.SelectRecommendAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -697,11 +696,11 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
 
-        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+        /*if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
             Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
                     ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
                     ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
-        }
+        }*/
 
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
