@@ -38,6 +38,7 @@ public class StoreMsgEntity {
         public String comment_uid;
         public String member_id;
         public int role;
+        public int anonymous;
         public String target;
         public String target_id;
         public String comment_time;

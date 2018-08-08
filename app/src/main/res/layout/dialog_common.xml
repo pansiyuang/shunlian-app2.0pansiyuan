@@ -72,6 +72,7 @@
             android:background="@drawable/bg_dialog_bottoml"/>
 
         <View
+            android:id="@+id/view_line"
             android:layout_width="0.5dp"
             android:layout_height="match_parent"
             android:background="@color/my_line_gray" />

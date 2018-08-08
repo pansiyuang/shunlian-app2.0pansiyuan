@@ -70,16 +70,20 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
      * @param stage_voucher_id 平台优惠券
      * @param paytype
      */
-    public void orderCheckout(String shop_goods, String address_id,String stage_voucher_id, String paytype) {
+    public void orderCheckout(String shop_goods, String address_id,String stage_voucher_id,
+                              String anonymous, String paytype) {
         Map<String, String> map = new HashMap<>();
         map.put("shop_goods", shop_goods);
         map.put("address_id", address_id);
         map.put("stage_voucher_id", stage_voucher_id);
+        map.put("anonymous", anonymous);
         map.put("paytype", paytype);
         sortAndMD5(map);
-        Call<BaseEntity<PayOrderEntity>> baseEntityCall = getAddCookieApiService().orderCheckout(getRequestBody(map));
+        Call<BaseEntity<PayOrderEntity>>
+                baseEntityCall = getAddCookieApiService().orderCheckout(getRequestBody(map));
 
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<PayOrderEntity>>() {
+        getNetData(true, baseEntityCall,
+                new SimpleNetDataCallback<BaseEntity<PayOrderEntity>>() {
             @Override
             public void onSuccess(BaseEntity<PayOrderEntity> entity) {
                 super.onSuccess(entity);

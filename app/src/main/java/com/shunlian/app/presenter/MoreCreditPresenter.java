@@ -3,9 +3,11 @@ package com.shunlian.app.presenter;
 import android.app.Activity;
 import android.content.Context;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.shunlian.app.adapter.MoreCreditAdapter;
 import com.shunlian.app.adapter.TopUpHistoryAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.CreditPhoneListEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.MoreCreditEntity;
@@ -130,7 +132,17 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
         if (moreCreditAdapter != null && (moreCreditAdapter.currentPos >= 0
                 && moreCreditAdapter.currentPos < list.size())) {
             MoreCreditEntity.ListBean listBean = list.get(moreCreditAdapter.currentPos);
-            PayListActivity.startAct((Activity) context, phone, listBean.face_price,listBean.sale_price);
+            BuyGoodsParams params = new BuyGoodsParams();
+            params.phoneNum = phone;
+            params.face_price = listBean.face_price;
+            params.price = listBean.sale_price;
+            String paramsStr = "";
+            try {
+                paramsStr = objectMapper.writeValueAsString(params);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            PayListActivity.startAct((Activity) context,paramsStr);
         }else {
             //Common.staticToast("请选择充值面额");
         }

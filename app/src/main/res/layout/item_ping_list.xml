@@ -4,53 +4,71 @@
     android:layout_width="match_parent"
     android:layout_height="140dp"
     android:background="@color/white">
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/value_F7F7F7"
-        android:layout_alignParentBottom="true"/>
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_photo"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:scaleType="fitXY"
-        android:layout_marginLeft="10dp"
-        android:layout_centerVertical="true"/>
+        android:layout_alignParentBottom="true"
+        android:background="@color/value_F7F7F7" />
+
+    <RelativeLayout
+        android:id="@+id/rl_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_photo"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:scaleType="fitXY" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_seller_out"
+            android:layout_width="57dp"
+            android:layout_height="57dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_yishouwan_da"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/miv_photo"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/rl_photo"
         android:ellipsize="end"
         android:lines="2"
-        android:layout_marginRight="10dp"
         android:textColor="@color/new_text"
         android:textSize="14sp" />
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_gou"
-        android:layout_below="@id/mtv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/mtv_title"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_toRightOf="@id/miv_photo"
         android:layout_marginTop="14dp"
+        android:layout_toRightOf="@id/rl_photo"
         android:ellipsize="end"
         android:lines="1"
         android:textColor="@color/share_text"
         android:textSize="12sp" />
+
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_price"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/miv_photo"
+        android:layout_toRightOf="@id/rl_photo"
         android:ellipsize="end"
         android:lines="1"
         android:textColor="@color/pink_color"
@@ -58,10 +76,10 @@
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_marketPrice"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_toRightOf="@id/mtv_price"

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="18dp"
+        android:maxLines="1"
+        android:text="请重新设置密码"
+        android:textColor="@color/value_484848"
+        android:textSize="30sp" />
+
+    <!--新密码-->
+    <RelativeLayout
+        android:id="@+id/rlayout_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_tip"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/met_pwd"
+            style="@style/editText_attribute"
+            android:layout_centerVertical="true"
+            android:gravity="start|center_vertical"
+            android:hint="请输入新密码"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_tip1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@mipmap/icon_login_eyes_n"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/miv_tip1"
+            android:layout_marginTop="15dp"
+            android:background="@color/color_value_6c" />
+
+    </RelativeLayout>
+
+    <!--确认密码-->
+    <RelativeLayout
+        android:id="@+id/rlayout_confirm_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlayout_pwd"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="35dp">
+
+        <EditText
+            android:id="@+id/met_confirm_pwd"
+            style="@style/editText_attribute"
+            android:layout_centerVertical="true"
+            android:gravity="start|center_vertical"
+            android:inputType="textPassword"
+            android:hint="请确认密码" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_tip2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@mipmap/icon_login_eyes_n"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/miv_tip2"
+            android:layout_marginTop="15dp"
+            android:background="@color/color_value_6c" />
+    </RelativeLayout>
+
+    <!--登录按钮-->
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_login"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_below="@+id/rlayout_confirm_pwd"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_corner_solid_pink_50px"
+        android:gravity="center"
+        android:text="去登录"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:visibility="visible" />
+
+</RelativeLayout>

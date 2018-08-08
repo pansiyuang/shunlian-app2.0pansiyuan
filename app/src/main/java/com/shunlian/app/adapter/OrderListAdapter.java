@@ -11,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
@@ -338,16 +341,22 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                 case R.id.mtv_title3:
                     text = mtv_title3.getText();
                     if (getString(R.string.order_fukuan).equals(text)) {//付款
+                        BuyGoodsParams params = new BuyGoodsParams();
+                        params.order_id = orders.id;
+                        params.price = orders.total_amount;
+                        String paramsStr = "";
+                        try {
+                            paramsStr = new ObjectMapper().writeValueAsString(params);
+                        } catch (JsonProcessingException e) {
+                            e.printStackTrace();
+                        }
                         if (mAllFrag != null) {
-                            PayListActivity.startAct(mAllFrag.getActivity(),
-                                    null, null,orders.id,orders.total_amount,"");
+                            PayListActivity.startAct(mAllFrag.getActivity(),paramsStr);
                             AllFrag.isRefreshItem = true;
                         }else if (mSearchOrderAct != null){
-                            PayListActivity.startAct(mSearchOrderAct,
-                                    null, null,orders.id,orders.total_amount,"");
+                            PayListActivity.startAct(mSearchOrderAct,paramsStr);
                             SearchOrderResultActivity.isRefreshItem = true;
                         }
-
                     } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
 
                         confirmreceipt(orders);

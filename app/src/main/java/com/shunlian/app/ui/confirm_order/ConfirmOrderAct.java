@@ -8,11 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ConfirmOrderAdapter;
+import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SubmitGoodsEntity;
@@ -69,6 +71,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @BindView(R.id.mtv_discount)
     MyTextView mtv_discount;
 
+    @BindView(R.id.rlayout_anonymous)
+    RelativeLayout rlayout_anonymous;
+
+    @BindView(R.id.miv_anonymous)
+    MyImageView miv_anonymous;
+
+    @BindView(R.id.mtv_station)
+    MyTextView mtv_station;
+
     private String mTotalPrice;
     private boolean isOrderBuy = false;//是否直接购买
     private String detail_address;
@@ -85,6 +96,8 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private DiscountListDialog mStageVoucherDialog;
     private ConfirmOrderEntity.Enabled mStageVoucherEntity;
     private String mStageVoucherId="";//平台优化券id
+    private boolean isAnonymous;//是否匿名
+    private ObjectMapper mOM;
 
     public static void startAct(Context context,String cart_ids,String type){
         if (!Common.isAlreadyLogin()){
@@ -119,15 +132,16 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         mtv_go_pay.setOnClickListener(this);
         miv_close.setOnClickListener(this);
         mllayout_discount.setOnClickListener(this);
+        rlayout_anonymous.setOnClickListener(this);
 
         nsv_view.setOnScrollChangeListener((MyNestedScrollView.OnScrollChangeListener)
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             //LogUtil.zhLogW("v="+v+String.format("scrollY=%d;oldScrollY=%d",scrollY,oldScrollY));
             //LogUtil.zhLogW("v="+v+String.format("scrollX=%d;oldScrollX=%d",scrollX,oldScrollX));
             if (scrollY >= 260) {
-                visible(mtv_address);
+                visible(mtv_address,mtv_station);
             } else {
-                gone(mtv_address);
+                gone(mtv_address,mtv_station);
             }
         });
     }
@@ -136,6 +150,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        mOM = new ObjectMapper();
         Intent intent = getIntent();
         cart_ids = intent.getStringExtra("cart_ids");
         goods_id = intent.getStringExtra("goods_id");
@@ -180,22 +195,33 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @Override
     public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled,
                                      List<GoodsDeatilEntity.Goods> disabled,
-                                     ConfirmOrderEntity.Address address) {
+                                     ConfirmOrderEntity.Address address,
+                                     List<ConfirmOrderEntity.NoDelivery> noDeliveryList) {
+        String text = "";
         if (address != null){
             addressId = address.id;
             detail_address = address.detail_address;
-            mtv_address.setText(String.format(getResources().getString(R.string.send_to),detail_address));
+            text = String.format(getStringResouce(R.string.send_to), detail_address);
         }else {
-            mtv_address.setText(getResources().getString(R.string.add_address));
+            text = getStringResouce(R.string.add_address);
         }
-        if (!isEmpty(enabled)) {
-            this.enabled = enabled;
-            ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
-                    false, enabled, disabled,address,isOrderBuy);
-            recy_view.setAdapter(df);
+        mtv_address.setText(text);
+        mtv_station.setText(text);
 
-            df.setSelectVoucherListener(position ->calculateAmount(enabled));
+        //如果有不在发货区域商品就禁止下单
+        if (!isEmpty(noDeliveryList)) {
+            mtv_go_pay.setEnabled(false);
+        }else {
+            mtv_go_pay.setEnabled(true);
         }
+
+        this.enabled = enabled;
+        ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
+                enabled, disabled,address,isOrderBuy,noDeliveryList);
+        recy_view.setAdapter(df);
+
+        df.setSelectVoucherListener(position ->calculateAmount(enabled));
+
     }
 
     /**
@@ -203,6 +229,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
      * @param enabled
      */
     private void calculateAmount(List<ConfirmOrderEntity.Enabled> enabled) {
+        if (enabled == null)enabled = new ArrayList<>();
         float currentPrice = 0;
         for (int i = 0; i < enabled.size(); i++) {
             String store_discount_price = enabled.get(i).store_discount_price;
@@ -299,14 +326,27 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 }
                 String shop_goods = null;
                 try {
-                    shop_goods = new ObjectMapper().writeValueAsString(mosaicParams());
+                    shop_goods = mOM.writeValueAsString(mosaicParams());
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
                 //LogUtil.zhLogW("go_pay=============="+shop_goods);
                 String price = mtv_total_price.getText().toString();
-                PayListActivity.startAct(this,shop_goods,addressId,null,
-                        price.substring(1,price.length()),mStageVoucherId);
+
+                BuyGoodsParams params = new BuyGoodsParams();
+                params.addressId = addressId;
+                params.shop_goods = shop_goods;
+                params.price = price.substring(1,price.length());
+                params.stage_voucher_id = mStageVoucherId;
+                params.anonymous = isAnonymous?"1":"0";//1匿名 0不匿名
+
+                String paramsStr = "";
+                try {
+                    paramsStr = mOM.writeValueAsString(params);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                PayListActivity.startAct(this,paramsStr);
                 break;
             case R.id.miv_close:
                 backSelect();
@@ -332,6 +372,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 });
                 mStageVoucherDialog.show();
                 break;
+            case R.id.rlayout_anonymous:
+                if (!isAnonymous){
+                    miv_anonymous.setImageResource(R.mipmap.img_xuanze_h);
+                }else {
+                    miv_anonymous.setImageResource(R.mipmap.img_xuanze_n);
+                }
+                isAnonymous = !isAnonymous;
+                break;
+
         }
     }
 

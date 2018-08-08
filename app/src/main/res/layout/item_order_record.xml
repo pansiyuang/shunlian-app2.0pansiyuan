@@ -7,9 +7,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:gravity="center_vertical"
-        android:layout_marginTop="14dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
@@ -41,9 +40,20 @@
             android:gravity="right"
             android:textColor="@color/new_text"
             android:textSize="12sp" />
+
+        <!--匿名下的预估收益-->
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_forecast_earnings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:visibility="gone"
+            android:textColor="@color/pink_color"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <View
+        android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="10dp"
@@ -59,6 +69,7 @@
         android:overScrollMode="never" />
 
     <View
+        android:id="@+id/view_line1"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="6dp"
