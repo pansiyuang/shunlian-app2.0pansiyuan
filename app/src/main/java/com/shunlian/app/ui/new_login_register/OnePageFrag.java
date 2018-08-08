@@ -211,10 +211,12 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                     case 1:
                         break;
                     case 2:
-                        if (s.length() >= 11){
-                            checkMobileAPI();
-                        }else {
-                            iSMobileRight(false);
+                        if (mFlag != RegisterAndBindingAct.FLAG_PWD_LOGIN) {
+                            if (s.length() >= 11) {
+                                checkMobileAPI();
+                            } else {
+                                iSMobileRight(false);
+                            }
                         }
                         break;
                     case 3:
@@ -328,7 +330,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         }
 
         if (BuildConfig.DEBUG){
-//            visible(mtv_def_login);
+            visible(mtv_def_login);
         }
     }
 
@@ -719,6 +721,10 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
     public void defLogin(){
         SelectAccountDialog selectAccountDialog=new SelectAccountDialog(this);
         selectAccountDialog.setCanceledOnTouchOutside(true);
+        selectAccountDialog.setDefLoginListener((account, pwd) -> {
+            if (mPresenter != null)
+                mPresenter.loginPwd(account, pwd);
+        });
         selectAccountDialog.show();
     }
 }
