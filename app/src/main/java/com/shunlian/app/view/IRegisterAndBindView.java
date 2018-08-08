@@ -43,4 +43,10 @@ public interface IRegisterAndBindView extends IView {
      * @param message
      */
     default void findPwdSuccess(String message){}
+
+    /**
+     * 检验手机短信验证码
+     * @param message
+     */
+    default void checkMobileSmsCode(String message){}
 }
