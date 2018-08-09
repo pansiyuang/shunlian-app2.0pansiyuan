@@ -53,6 +53,7 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.MessageActivity;
@@ -94,6 +95,7 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -205,6 +207,8 @@ public class Common {
                 return "QrCodeAct";
             case "url":
                 return "H5Act";
+            case "HTMLShare":
+                return "WXEntryActivity";
             default:
                 return "";
         }
@@ -218,6 +222,22 @@ public class Common {
             return;
         }
         switch (type) {
+            case "HTMLShare":
+                if (!TextUtils.isEmpty(params[0])){
+                    copyText(context,params[1],params[3],false);
+                    ShareInfoParam shareInfoParam = new ShareInfoParam();
+                    if ("1".equals(params[0])){
+                        shareInfoParam.photo = params[2];
+                        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+                    }else if ("2".equals(params[0])){
+                        shareInfoParam.shareLink = params[1];
+                        shareInfoParam.title = params[3];
+                        shareInfoParam.desc = params[4];
+                        shareInfoParam.img = params[2];
+                        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+                    }
+                }
+                break;
             case "virtual":
                 MoreCreditAct.startAct(context);
                 break;
@@ -1134,16 +1154,36 @@ public class Common {
 
     public static void urlToPage(Context context, String url) {
         //LogUtil.httpLogW("链接:" + url);
+        if (TextUtils.isEmpty(url))
+            return;
+        try {
+            url=java.net.URLDecoder.decode(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (url.startsWith("slmall://")) {
             String type = interceptBody(url);
             if (!TextUtils.isEmpty(type)) {
                 String id = "";
                 String id1 = "";
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
-                    id = interceptId(url);
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
-                    id1 = interceptId(url);
-                Common.goGoGo(context, type, id, id1);
+                String id2 = "";
+                String id3 = "";
+                String id4 = "";
+                try {
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
+                        id=java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id"));
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+                        id1 = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id1"));
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id2")))
+                        id2 = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id2"));
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id3")))
+                        id3 = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id3"));
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id4")))
+                        id4 = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id4"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Common.goGoGo(context, type, id, id1,id2,id3,id4);
             }
         }
     }

@@ -15,6 +15,7 @@ import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.message.PunishAct;
 import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
@@ -170,7 +171,8 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
                 DayDayAct.startAct(context);
                 break;
             case "15":
-                analysisUrl(body.url);
+                Common.urlToPage(context,body.url);
+//                analysisUrl(body.url);
                 break;
         }
         if ("0".equals(msgType.is_read)) {
@@ -180,40 +182,43 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
         }
     }
 
-    private void analysisUrl(String url) {
-        if (url.startsWith("slmall://")) {
-            String type = interceptBody(url);
-            if (!TextUtils.isEmpty(type)) {
-                String id = "";
-                String id1 = "";
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
-                    id = interceptId(url);
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
-                    id1 = interceptId(url);
-                Common.goGoGo(context, type, id, id1);
-            }
-        }
-    }
+//    private void analysisUrl(String url) {
+//        if (url.startsWith("slmall://")) {
+//            String type = interceptBody(url);
+//            if (!TextUtils.isEmpty(type)) {
+//                String id = "";
+//                String id1 = "";
+//                String id2 = "";
+//                String id3 = "";
+//                String id4 = "";
+//                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
+//                    id = interceptId(url);
+//                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+//                    id1 = interceptId(url);
+//                Common.goGoGo(context, type, id, id1);
+//            }
+//        }
+//    }
 
-    private String interceptId(String url) {
-        String[] split = url.split("\\?");
-        String s = split[1];
-        String[] split1 = s.split("=");
-        String s1 = split1[1];
-        return s1;
-    }
-
-    private String interceptBody(String url) {
-        String[] split = url.split("\\?");
-        String s = split[0];
-        if (!TextUtils.isEmpty(s)) {
-            String[] split1 = s.split("//");
-            if (!TextUtils.isEmpty(split1[1])) {
-                return split1[1];
-            }
-        }
-        return null;
-    }
+//    private String interceptId(String url) {
+//        String[] split = url.split("\\?");
+//        String s = split[1];
+//        String[] split1 = s.split("=");
+//        String s1 = split1[1];
+//        return s1;
+//    }
+//
+//    private String interceptBody(String url) {
+//        String[] split = url.split("\\?");
+//        String s = split[0];
+//        if (!TextUtils.isEmpty(s)) {
+//            String[] split1 = s.split("//");
+//            if (!TextUtils.isEmpty(split1[1])) {
+//                return split1[1];
+//            }
+//        }
+//        return null;
+//    }
 
 
     private void msgRead(String type,String msg_id){

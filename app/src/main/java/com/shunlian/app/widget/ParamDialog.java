@@ -107,7 +107,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         if (currentGoodsType == 2 && !TextUtils.isEmpty(goods.limit_min_buy))
             limit_min_buy = Integer.parseInt(goods.limit_min_buy);
         currentCount = limit_min_buy;
-        currentCount = limit_min_buy;
         init();
         setParamGoods(goods);
     }
@@ -262,10 +261,14 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
                 if (currentGoodsType == 2) {
                     if (currentCount > limit_min_buy) {
-                        currentCount--;
+//                        currentCount--;
+//                        if (currentCount <= 1) {
+//                            currentCount = 1;
+//                        }
                         if (currentCount <= 1) {
-                            currentCount = 1;
+                            return;
                         }
+                        currentCount--;
                     } else {
                         Common.staticToast(String.format(mContext.getString(R.string.goods_tuangoushangping), String.valueOf(limit_min_buy)));
                     }

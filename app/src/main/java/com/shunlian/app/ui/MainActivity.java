@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -361,6 +362,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 fragmentMap.put(flags[1], h5PlusFrag);
             }
         } else {
+            try {
+                if (!TextUtils.isEmpty(url))
+                    url=java.net.URLDecoder.decode(url);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             h5PlusFrag.h5Url = url;
             h5PlusFrag.reFresh();
         }
