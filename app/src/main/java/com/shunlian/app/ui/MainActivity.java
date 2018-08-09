@@ -290,7 +290,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
-            mtv_message_count.setVisibility(View.GONE);
+//            mtv_message_count.setVisibility(View.GONE);
         }
         if (handler == null)
             handler = new Handler();
