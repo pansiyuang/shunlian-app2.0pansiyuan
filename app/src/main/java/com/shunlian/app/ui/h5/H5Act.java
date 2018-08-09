@@ -194,6 +194,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
      */
     @Override
     protected void initData() {
+        member_id = SharedPrefUtil.getSharedUserString("member_id", "");
         immersionBar.statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true)
