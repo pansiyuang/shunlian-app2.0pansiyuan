@@ -1064,10 +1064,14 @@ public class GoodsDeatilEntity implements Parcelable {
         public String stock;
         public String thumb;
         public String price;
+        public int type;
         public String max_price;
         public String limit_min_buy;
         public List<Specs> specs;
         public List<Sku> sku;
+
+        public GoodsInfo() {
+        }
 
         @Override
         public int describeContents() {
@@ -1080,13 +1084,11 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.stock);
             dest.writeString(this.thumb);
             dest.writeString(this.price);
+            dest.writeInt(this.type);
             dest.writeString(this.max_price);
             dest.writeString(this.limit_min_buy);
-            dest.writeList(this.specs);
-            dest.writeList(this.sku);
-        }
-
-        public GoodsInfo() {
+            dest.writeTypedList(this.specs);
+            dest.writeTypedList(this.sku);
         }
 
         protected GoodsInfo(Parcel in) {
@@ -1094,15 +1096,14 @@ public class GoodsDeatilEntity implements Parcelable {
             this.stock = in.readString();
             this.thumb = in.readString();
             this.price = in.readString();
+            this.type = in.readInt();
             this.max_price = in.readString();
             this.limit_min_buy = in.readString();
-            this.specs = new ArrayList<Specs>();
-            in.readList(this.specs, Specs.class.getClassLoader());
-            this.sku = new ArrayList<Sku>();
-            in.readList(this.sku, Sku.class.getClassLoader());
+            this.specs = in.createTypedArrayList(Specs.CREATOR);
+            this.sku = in.createTypedArrayList(Sku.CREATOR);
         }
 
-        public static final Parcelable.Creator<GoodsInfo> CREATOR = new Parcelable.Creator<GoodsInfo>() {
+        public static final Creator<GoodsInfo> CREATOR = new Creator<GoodsInfo>() {
             @Override
             public GoodsInfo createFromParcel(Parcel source) {
                 return new GoodsInfo(source);

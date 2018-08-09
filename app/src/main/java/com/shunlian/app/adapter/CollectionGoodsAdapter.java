@@ -118,6 +118,9 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
             mHolder.mtv_fold.setVisibility("1".equals(goods.has_discount)?View.VISIBLE : View.GONE);
             mHolder.mtv_gift.setVisibility("1".equals(goods.has_gift)?View.VISIBLE : View.GONE);
 
+            int i = TransformUtil.dip2px(context, 20);
+            TransformUtil.expandViewTouchDelegate(mHolder.miv_shopping_car, i, i, i, i);
+
             String status = goods.status;
             if ("0".equals(status)){//失效
                 mHolder.mtv_expired.setVisibility(View.VISIBLE);
