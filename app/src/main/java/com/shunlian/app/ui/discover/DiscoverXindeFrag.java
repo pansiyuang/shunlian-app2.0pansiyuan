@@ -132,6 +132,7 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
         } else {
             mAdapter.notifyItemRangeChanged(0, experienceList.size());
         }
+        mAdapter.setPageLoading(page,totalPage);
     }
 
     @Override
