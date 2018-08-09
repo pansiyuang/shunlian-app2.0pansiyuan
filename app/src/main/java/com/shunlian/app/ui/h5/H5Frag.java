@@ -188,6 +188,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
      */
     @Override
     protected void initData() {
+        member_id = SharedPrefUtil.getSharedUserString("member_id", "");
         ImmersionBar.with(this).fitsSystemWindows(true)
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)

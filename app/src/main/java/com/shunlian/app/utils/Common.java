@@ -53,6 +53,7 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.MessageActivity;
@@ -94,6 +95,7 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -218,6 +220,22 @@ public class Common {
             return;
         }
         switch (type) {
+            case "HTMLShare":
+                if (!TextUtils.isEmpty(params[0])){
+                    copyText(context,params[1],params[3],false);
+                    ShareInfoParam shareInfoParam = new ShareInfoParam();
+                    if ("1".equals(params[0])){
+                        shareInfoParam.photo = params[2];
+                        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+                    }else if ("2".equals(params[0])){
+                        shareInfoParam.shareLink = params[1];
+                        shareInfoParam.title = params[3];
+                        shareInfoParam.desc = params[4];
+                        shareInfoParam.img = params[2];
+                        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+                    }
+                }
+                break;
             case "virtual":
                 MoreCreditAct.startAct(context);
                 break;

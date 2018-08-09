@@ -102,6 +102,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         mHandler = new MyHandler();
         //必须用getExtras
         Intent intent = getIntent();
+        if (intent.getExtras()!=null)
         flag = intent.getExtras().getString("flag");
         ShareInfoParam shareInfoParam = (ShareInfoParam) intent.getSerializableExtra("shareInfoParam");
         if (!isEmpty(flag)) SharedPrefUtil.saveCacheSharedPrf("wx_flag",flag);
