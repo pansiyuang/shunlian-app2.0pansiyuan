@@ -31,6 +31,7 @@ public class CoreHotEntity {
             public String sales;
             public String userName;
             public String views;
+            public String stock;
             public String content;
         }
     }

@@ -170,6 +170,7 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
             nei_empty.setVisibility(View.GONE);
             recycler_list.setVisibility(View.VISIBLE);
         }
+        msgAdapter.setPageLoading(page, total);
     }
 
     @Override
@@ -209,6 +210,10 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
             }
         }
         msgAdapter.notifyDataSetChanged();
+        if (isEmpty(storeMsgList)) {
+            nei_empty.setVisibility(View.VISIBLE);
+            recycler_list.setVisibility(View.GONE);
+        }
     }
 
     @Override

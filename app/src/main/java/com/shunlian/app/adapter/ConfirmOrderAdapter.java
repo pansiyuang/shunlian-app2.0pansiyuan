@@ -1,13 +1,16 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
@@ -16,6 +19,7 @@ import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.receive_adress.AddressListActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.widget.DiscountListDialog;
@@ -38,32 +42,36 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
 
     public static final int ITEM_ADDRESS = 2;//地址条目
     public static final int ITEM_INVALID = 3;//失效商品
-    public static final int ITEM_STATION = 4;//占位条目
+    public static final int ITEM_AREA_DELIVERY = 4;//局部地区不发货
     private List<GoodsDeatilEntity.Goods> disabled;
     private ConfirmOrderEntity.Address mAddress;
     private boolean mIsOrderBuy;
+    private List<ConfirmOrderEntity.NoDelivery> mNoDeliveryList;
     private ISelectVoucherListener mListener;
+    private PromptDialog promptDialog;
 
-    public ConfirmOrderAdapter(Context context, boolean isShowFooter,
+    public ConfirmOrderAdapter(Context context,
                                List<ConfirmOrderEntity.Enabled> lists,
                                List<GoodsDeatilEntity.Goods> disabled,
-                               ConfirmOrderEntity.Address address, boolean isOrderBuy) {
-        super(context, isShowFooter, lists);
+                               ConfirmOrderEntity.Address address, boolean isOrderBuy,
+                               List<ConfirmOrderEntity.NoDelivery> noDeliveryList) {
+        super(context, false, lists);
         this.disabled = disabled;
         mAddress = address;
         mIsOrderBuy = isOrderBuy;
+        mNoDeliveryList = noDeliveryList;
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0){
+        if (position == 0){//收货地址
             return ITEM_ADDRESS;
-        }else if (position + 1  == getItemCount()){
-            return ITEM_STATION;
-        }else if (position + 2 == getItemCount() && isHasInvalid()){
+        }else if (isHasInvalid() && position + 1 == getItemCount()){//显示商品失效条目
             return ITEM_INVALID;
-        }else {
+        }else if (isHasDelivery() && position >= 1 + lists.size()){//显示不发获取区域条目
+            return ITEM_AREA_DELIVERY;
+        }else {//正常商品显示
             return super.getItemViewType(position);
         }
     }
@@ -73,16 +81,34 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
      * @return
      */
     private boolean isHasInvalid(){
-        return disabled != null && disabled.size() > 0;
+        return !isEmpty(disabled);
+    }
+
+    /**
+     * 是否有不发货区域商品
+     * @return
+     */
+    private boolean isHasDelivery(){return !isEmpty(mNoDeliveryList);}
+
+    /**
+     * 不发货区域商品数量
+     * @return
+     */
+    private int noDeliveryGoodsCount(){
+        return isEmpty(mNoDeliveryList)?0:mNoDeliveryList.size();
     }
 
     @Override
     public int getItemCount() {
-        if (isHasInvalid()){
-            return super.getItemCount() + 3;
-        }else {
-            return super.getItemCount() + 2;
+        int count = 1;
+        if (isHasDelivery()){
+            count += mNoDeliveryList.size();
         }
+        if (isHasInvalid()){
+            count += 1;
+        }
+        count += super.getItemCount();
+        return count;
     }
 
     @Override
@@ -96,9 +122,9 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 View invalid_layout = LayoutInflater.from(context)
                         .inflate(R.layout.only_recycler_layout, parent, false);
                 return new InvalidGoodsHolder(invalid_layout);
-            case ITEM_STATION:
+            case ITEM_AREA_DELIVERY:
                 View station_layout = LayoutInflater.from(context)
-                        .inflate(android.R.layout.simple_list_item_1, parent, false);
+                        .inflate(R.layout.item_area_delivery, parent, false);
                 return new StationHolder(station_layout);
             default:
                 return super.onCreateViewHolder(parent, viewType);
@@ -112,6 +138,9 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
         switch (itemViewType){
             case ITEM_ADDRESS:
                 handleAddress(holder,position);
+                break;
+            case ITEM_AREA_DELIVERY:
+                handleNoDelivery(holder,position);
                 break;
             case ITEM_INVALID:
                 handlerInvalidGoods(holder,position);
@@ -140,6 +169,19 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 mHolder.mtv_address.setText(String.format(getString(R.string.address),mAddress.detail_address));
             }
         }
+    }
+
+    private void handleNoDelivery(RecyclerView.ViewHolder holder, int position) {
+        StationHolder mHolder = (StationHolder) holder;
+        int i = position - 1 - lists.size();
+        if (i>=mNoDeliveryList.size() || i < 0)return;
+        ConfirmOrderEntity.NoDelivery goods = mNoDeliveryList.get(i);
+
+        GlideUtils.getInstance().loadImage(context,mHolder.miv_goods,goods.thumb);
+        mHolder.mtv_count.setText("x"+goods.qty);
+        mHolder.mtv_title.setText(goods.title);
+        mHolder.mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+goods.price,11));
+        mHolder.mtv_attribute.setText(goods.sku);
     }
 
     private void handlerInvalidGoods(RecyclerView.ViewHolder holder, int position) {
@@ -483,12 +525,55 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
 
     public class StationHolder extends BaseRecyclerViewHolder{
 
+        @BindView(R.id.mtv_look_tip)
+        MyTextView mtv_look_tip;
+
+        @BindView(R.id.miv_goods)
+        MyImageView miv_goods;
+
+        @BindView(R.id.mtv_price)
+        MyTextView mtv_price;
+
+        @BindView(R.id.mtv_title)
+        MyTextView mtv_title;
+
+        @BindView(R.id.mtv_attribute)
+        MyTextView mtv_attribute;
+
+        @BindView(R.id.mtv_count)
+        MyTextView mtv_count;
+
+        @BindView(R.id.mrl_rootview)
+        MyRelativeLayout mrl_rootview;
+
         public StationHolder(View itemView) {
             super(itemView);
-            ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
-            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            layoutParams.height = TransformUtil.dip2px(context,41);
-            itemView.setLayoutParams(layoutParams);
+            int px = TransformUtil.dip2px(context, 10);
+            LinearLayout.LayoutParams
+                    lp = (LinearLayout.LayoutParams) mrl_rootview.getLayoutParams();
+            lp.leftMargin = px;
+            lp.rightMargin = px;
+            lp.bottomMargin = px;
+            lp.topMargin = px;
+            mrl_rootview.setLayoutParams(lp);
+
+            mtv_look_tip.setOnClickListener(view -> {
+                int i = getAdapterPosition() - 1 - lists.size();
+                ConfirmOrderEntity.NoDelivery noDelivery = mNoDeliveryList.get(i);
+                if (promptDialog == null) {
+                    promptDialog = new PromptDialog((Activity) context);
+                }
+                promptDialog.tvCancleVisibility(true);
+                promptDialog.setTvSureText("取消");
+                SpannableStringBuilder ssb = Common.changeColor(noDelivery.areas
+                        + noDelivery.hint, noDelivery.hint, getColor(R.color.pink_color));
+                promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
+                        .setSureAndCancleListener(ssb, "取消",
+                                view1 -> {
+                            if (promptDialog != null)
+                                promptDialog.dismiss();
+                        },"",null).show();
+            });
         }
     }
 

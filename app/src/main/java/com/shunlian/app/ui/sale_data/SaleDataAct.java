@@ -466,12 +466,12 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     public void setEliteTutorData(List<SaleDataEntity.NewMemberInfo> master_info_new, String member_role_code) {
         //member_role_code = "2";
         if ("1".equals(member_role_code)){
-            mtv_name.setText(getStringResouce(R.string.elite_tutor));
-            miv_jingying.setImageResource(R.mipmap.img_jingyingdaoshi);
-            visible(mtv_name,miv_jingying,member_role_line);
-        }else if ("2".equals(member_role_code)){
             mtv_name.setText(getStringResouce(R.string.gen_guest_elite));
             miv_jingying.setImageResource(R.mipmap.img_chuangkejingying);
+            visible(mtv_name,miv_jingying,member_role_line);
+        }else if ("2".equals(member_role_code)){
+            mtv_name.setText(getStringResouce(R.string.elite_tutor));
+            miv_jingying.setImageResource(R.mipmap.img_jingyingdaoshi);
             visible(mtv_name,miv_jingying,member_role_line);
         }else {
             gone(mtv_name,miv_jingying,member_role_line);

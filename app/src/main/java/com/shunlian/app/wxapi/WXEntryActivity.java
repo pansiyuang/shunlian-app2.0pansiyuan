@@ -52,7 +52,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     private IWXAPI api;
     private String flag;
-    //private MyHandler mHandler;
+    private MyHandler mHandler;
     private String currentDesc;
     private String currTitle;
     private String shareLink;
@@ -99,11 +99,13 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     public void initGet() {
-        //mHandler = new MyHandler();
+        mHandler = new MyHandler();
         //必须用getExtras
         Intent intent = getIntent();
+        if (intent.getExtras()!=null)
         flag = intent.getExtras().getString("flag");
         ShareInfoParam shareInfoParam = (ShareInfoParam) intent.getSerializableExtra("shareInfoParam");
+        if (!isEmpty(flag)) SharedPrefUtil.saveCacheSharedPrf("wx_flag",flag);
         if (!isEmpty(flag) && shareInfoParam != null) {
             if (!isEmpty(shareInfoParam.photo)) {
                 downloadPic(shareInfoParam);
@@ -253,7 +255,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     @Override
     public void onReq(BaseReq baseReq) {
-
     }
 
     @Override
@@ -264,7 +265,9 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         }
         switch (baseResp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
-                if (isEmpty(flag)) {
+                //区分登录还是分享
+                String wx_flag = SharedPrefUtil.getCacheSharedPrf("wx_flag", "");
+                if (isEmpty(wx_flag)) {
                     SendAuth.Resp sendAuthResp = (SendAuth.Resp) baseResp;// 用于分享时不要有这个，不能强转
                     String code = sendAuthResp.code;
                     wxEntryPresenter.wxLogin(code);
@@ -276,6 +279,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     }
                     Common.staticToast("分享成功");
                 }
+                SharedPrefUtil.saveCacheSharedPrf("wx_flag","");
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
                 result = R.string.errcode_cancel;

@@ -20,8 +20,10 @@ import android.widget.LinearLayout;
 import com.alipay.sdk.app.H5PayCallback;
 import com.alipay.sdk.app.PayTask;
 import com.alipay.sdk.util.H5PayResultModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.PayListAdapter;
+import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.presenter.PayListPresenter;
@@ -43,6 +45,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -67,7 +70,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     LinearLayout lLayout_pay;
     private PayListPresenter payListPresenter;
     private IWXAPI wxapi;
+    //订单内id
     private String order_id;
+    //外部穿过来的订单id
     private String orderId;
     private String price;
     private String shop_goods;
@@ -83,6 +88,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String mTopUpPrice;
     /********平台优惠券id***********/
     private String stageVoucherId;
+    /*********匿名购买**********/
+    private String anonymous;
 
 
     @SuppressLint("HandlerLeak")
@@ -94,7 +101,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                     @SuppressWarnings("unchecked")
                     PayResult payResult = new PayResult((String) msg.obj);
                     LogUtil.zhLogW("msg.obj===========" + msg.obj);
-                    /**
+                    /**u4332882527
                      对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
                      */
                     String resultInfo = payResult.getResult();// 同步返回需要验证的信息
@@ -120,58 +127,16 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         }
     };
 
-    /**
-     *
-     * @param activity
-     * @param shop_goods
-     * @param addressId
-     * @param order_id
-     * @param price
-     */
-    public static void startAct(Activity activity, String shop_goods, String addressId,
-                                String order_id, String price,String stage_voucher_id) {
-        PayListActivity.activity = activity;
-        Intent intent = new Intent(activity, PayListActivity.class);
-        intent.putExtra("shop_goods", shop_goods);
-        intent.putExtra("addressId", addressId);
-        intent.putExtra("order_id", order_id);
-        intent.putExtra("price", price);
-        intent.putExtra("stage_voucher_id", stage_voucher_id);
-        activity.startActivity(intent);
-    }
 
     /**
-     * plus支付
+     * 传参使用json格式，减少字段
      * @param activity
-     * @param product_id
-     * @param sku_id
-     * @param addressId
-     * @param price
-     * @param plus
+     * @param params
      */
-    public static void startActPlus(Activity activity, String product_id, String sku_id,
-                                String addressId,String price, String plus) {
+    public static void startAct(Activity activity,String params){
         PayListActivity.activity = activity;
         Intent intent = new Intent(activity, PayListActivity.class);
-        intent.putExtra("product_id", product_id);
-        intent.putExtra("addressId", addressId);
-        intent.putExtra("sku_id", sku_id);
-        intent.putExtra("price", price);
-        activity.startActivity(intent);
-    }
-
-    /**
-     * 手机充值
-     * @param activity
-     * @param number
-     * @param face_price
-     */
-    public static void startAct(Activity activity, String number, String face_price,String price){
-        PayListActivity.activity = activity;
-        Intent intent = new Intent(activity, PayListActivity.class);
-        intent.putExtra("number", number);
-        intent.putExtra("face_price", face_price);
-        intent.putExtra("price", price);
+        intent.putExtra("params", params);
         activity.startActivity(intent);
     }
 
@@ -232,20 +197,10 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void initData() {
         setStatusBarColor(R.color.transparent);
-        //正常支付
-        shop_goods = getIntent().getStringExtra("shop_goods");
-        addressId = getIntent().getStringExtra("addressId");
-        orderId = getIntent().getStringExtra("order_id");
-        price = getIntent().getStringExtra("price");
-        stageVoucherId = getIntent().getStringExtra("stage_voucher_id");
-
-        //plus支付
-        mProductId = getIntent().getStringExtra("product_id");
-        mSkuId = getIntent().getStringExtra("sku_id");
-
-        //手机充值
-        mPhoneNumber = getIntent().getStringExtra("number");
-        mTopUpPrice = getIntent().getStringExtra("face_price");
+        Intent intent = getIntent();
+        //支付
+        String paramsStr = intent.getStringExtra("params");
+        parseParams(paramsStr);
 
         boolean isPLUS = false;
         if (!isEmpty(mProductId)) isPLUS = true;
@@ -255,6 +210,32 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         wxapi.registerApp(Constant.WX_APP_ID);// 注册到微信列表
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_pay.setLayoutManager(manager);
+    }
+
+    /*
+    解析参数
+     */
+    private void parseParams(String paramsStr) {
+        if (!isEmpty(paramsStr)){
+            ObjectMapper om = new ObjectMapper();
+            try {
+                BuyGoodsParams params = om.readValue(paramsStr, BuyGoodsParams.class);
+                shop_goods = params.shop_goods;
+                addressId = params.addressId;
+                price = params.price;
+                stageVoucherId = params.stage_voucher_id;
+                orderId = params.order_id;
+                anonymous = params.anonymous;
+                //plus支付
+                mProductId = params.product_id;
+                mSkuId = params.sku_id;
+                //手机充值
+                mPhoneNumber = params.phoneNum;
+                mTopUpPrice = params.face_price;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -473,7 +454,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 break;
             case "alipay":
                 if (!isEmpty(shop_goods)) {
-                    payListPresenter.orderCheckout(shop_goods,addressId,stageVoucherId,pay_types.code);
+                    payListPresenter.orderCheckout(shop_goods,addressId,stageVoucherId,anonymous,pay_types.code);
                 } else if (!isEmpty(orderId)) {
                     payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
                 }else if (!isEmpty(mPhoneNumber)){//手机充值
@@ -487,7 +468,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 break;
             case "unionpay":
                 if (!isEmpty(shop_goods)) {
-                    payListPresenter.orderCheckout(shop_goods, addressId,stageVoucherId,pay_types.code);
+                    payListPresenter.orderCheckout(shop_goods, addressId,stageVoucherId,anonymous,pay_types.code);
                 } else if (!isEmpty(orderId)) {
                     payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
                 }else if (!isEmpty(mPhoneNumber)){//手机充值
@@ -501,7 +482,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                                 getString(R.string.SelectRecommendAct_sure), (v) -> {
                                     if (!isEmpty(shop_goods)) {
                                         payListPresenter.orderCheckout(shop_goods,
-                                                addressId,stageVoucherId,pay_types.code);
+                                                addressId,stageVoucherId,anonymous,pay_types.code);
                                     }else if (!isEmpty(orderId)) {
                                         payListPresenter.fromOrderListGoPay(orderId,
                                                 pay_types.code);

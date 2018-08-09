@@ -19,6 +19,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.banner.MyKanner;
@@ -139,8 +140,10 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
                 int stock = Integer.valueOf(superProduct.stock);
                 if (stock <= 0) {
                     goodsViewHolder.miv_sale_out.setVisibility(View.VISIBLE);
+                    goodsViewHolder.tv_products_price.setTextColor(getColor(R.color.value_A0A0A0));
                 } else {
                     goodsViewHolder.miv_sale_out.setVisibility(View.GONE);
+                    goodsViewHolder.tv_products_price.setTextColor(getColor(R.color.new_text));
                 }
             }
 
@@ -241,7 +244,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
         int padding = TransformUtil.dip2px(context, 3f);
         textView.setPadding(padding, 0, padding, 0);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         if (viewHolder.ll_tags.getChildCount() == 0) {
             params.setMargins(0, 0, 0, 0);

@@ -9,9 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.OrderGoodAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -620,7 +623,17 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 if (getString(R.string.order_fukuan).equals(text)) {//付款
                     AllFrag.isRefreshItem = true;
                     SearchOrderResultActivity.isRefreshItem = true;
-                    PayListActivity.startAct(this, null, null, orderId, orderdetailEntity.total_amount,"");
+
+                    BuyGoodsParams params = new BuyGoodsParams();
+                    params.order_id = orderId;
+                    params.price = orderdetailEntity.total_amount;
+                    String paramsStr = "";
+                    try {
+                        paramsStr = new ObjectMapper().writeValueAsString(params);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                    PayListActivity.startAct(this,paramsStr);
                 } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
                     confirmreceipt();
                 } else if (getString(R.string.comment).equals(text)) {//评价

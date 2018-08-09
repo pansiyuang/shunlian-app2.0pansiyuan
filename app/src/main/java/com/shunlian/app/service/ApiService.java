@@ -757,6 +757,12 @@ public interface ApiService {
     Call<BaseEntity<CommonEntity>> confirmReceive(@Body RequestBody body);
 
     /**
+     * 撤销售后
+     */
+    @POST("member/refund/cancleapply")
+    Call<BaseEntity<CommonEntity>> cancleapply(@Body RequestBody body);
+
+    /**
      * 获取支付列表
      *
      * @param map
@@ -2476,4 +2482,12 @@ public interface ApiService {
      */
     @GET("goods/want")
     Call<BaseEntity<EmptyEntity>> goodsWant(@QueryMap Map<String, String> map);
+
+    /**
+     * 验证短信验证码
+     * @param body
+     * @return
+     */
+    @POST("member/common/checkMobileCode")
+    Call<BaseEntity<EmptyEntity>> checkMobileCode(@Body RequestBody body);
 }

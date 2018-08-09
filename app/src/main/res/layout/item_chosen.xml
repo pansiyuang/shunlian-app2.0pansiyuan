@@ -106,6 +106,11 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop" />
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#66000000"></RelativeLayout>
+
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_play"
                     android:layout_width="50dp"
@@ -142,9 +147,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:orientation="horizontal"
                 android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:orientation="horizontal">
+                android:paddingRight="12dp">
 
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_share"
@@ -189,9 +194,9 @@
                 android:id="@+id/ll_evaluate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:gravity="center">
+                android:paddingRight="12dp">
 
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_evaluate"

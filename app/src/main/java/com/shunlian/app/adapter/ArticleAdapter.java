@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -161,6 +162,9 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 }
             });
             articleViewHolder.ll_share.setOnClickListener(v -> {
+                if(isFastClick()){
+                    return;
+                }
                 mFragment.shareArticle(position);
             });
             articleViewHolder.ll_comment.setOnClickListener(v -> CommentListAct.startAct(mFragment.getActivity(), article.id));

@@ -32,6 +32,7 @@ public class CoreNewsEntity {
         public String send_area;
         public String sales;
         public String views;
+        public String stock;
         public String introduction;
         public String comment_num;
         public String comment_rate;

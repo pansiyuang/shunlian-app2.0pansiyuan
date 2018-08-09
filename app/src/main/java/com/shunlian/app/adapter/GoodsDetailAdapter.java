@@ -605,13 +605,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             GoodsDeatilEntity.GoodsData goods_data = mGoodsEntity.goods_data;
             if (goods_data != null) {
                 mHolder.mtv_sales.setText(isEmpty(goods_data.sales_desc)?"":goods_data.sales_desc);
-                int stock = Integer.parseInt(isEmpty(mGoodsEntity.stock)?"0":mGoodsEntity.stock);
+                /*int stock = Integer.parseInt(isEmpty(mGoodsEntity.stock)?"0":mGoodsEntity.stock);
                 if ("0".equals(mGoodsEntity.status) || stock <= 0){//商品下架或者库存为0显示几个人还想要
                     visible(mHolder.mtv_want);
                     mHolder.mtv_want.setText(goods_data.want_num+"人还想要");
                 }else {
                     gone(mHolder.mtv_want);
-                }
+                }*/
             }
             mHolder.mtv_address.setText(mGoodsEntity.area);
 
@@ -1522,18 +1522,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
             switch (v.getId()) {
                 case R.id.mtv_collection:
-                    /*if (TextUtils.isEmpty(SharedPrefUtil.getSharedUserString("token",""))){
-                        Common.staticToast("尚未登录");
+                    if (!Common.isAlreadyLogin()){
+                        Common.goGoGo(context,"login");
                         return;
-                    }*/
-                    EventBus.getDefault().register(this);
+                    }
+                    EventBus.getDefault().register(StoreGoodsHolder.this);
                     GoodsDetailAct detailAct = (GoodsDetailAct) context;
                     if (isAttentionShop) {
                         detailAct.delFollowStore();
-                        //setCollectionState(0);
                     } else {
                         detailAct.followStore();
-                        //setCollectionState(1);
                     }
                     isAttentionShop = !isAttentionShop;
                     break;

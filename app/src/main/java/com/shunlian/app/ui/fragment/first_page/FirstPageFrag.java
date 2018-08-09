@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.fragment.first_page;
 
-import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -59,6 +58,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public static MyImageView miv_entry;
     public static AppBarLayout mAppbar;
     public static boolean isHide=false;
+    public static MyTextView mtv_search;
     public ArrayList<Fragment> fragments;
     @BindView(R.id.mll_message)
     MyLinearLayout mll_message;
@@ -100,6 +100,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         miv_entry.setLayoutParams(layoutParams);
+        mtv_search = (MyTextView) rootView.findViewById(R.id.mtv_search);
         return rootView;
     }
 
@@ -242,7 +243,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_search)
     public void search() {
-        SearchGoodsActivity.startAct(baseActivity, "", "sortFrag");
+        SearchGoodsActivity.startAct(baseActivity, getStringResouce(R.string.first_souni).equals(mtv_search.getText().toString())?"":mtv_search.getText().toString(), "sortFrag");
     }
 
     @Override

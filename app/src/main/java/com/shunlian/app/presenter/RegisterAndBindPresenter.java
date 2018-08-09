@@ -3,10 +3,10 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IRegisterAndBindView;
@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -132,45 +130,63 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
         map.put("mobile", phone);
         map.put("vcode", code);
         sortAndMD5(map);
-        try {
-            String s = new ObjectMapper().writeValueAsString(map);
-            RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
-            Call<BaseEntity<String>> baseEntityCall = getAddCookieApiService().sendSmsCode(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<String>>() {
-                @Override
-                public void onSuccess(BaseEntity<String> entity) {
-                    super.onSuccess(entity);
-                    iView.smsCode(entity.message);
-                }
 
-                @Override
-                public void onErrorCode(int code, String message) {
-                    super.onErrorCode(code, message);
-                    Common.staticToast(message);
-                    iView.smsCode(null);
-                }
-            });
+        Call<BaseEntity<String>>
+                baseEntityCall = getAddCookieApiService().sendSmsCode(getRequestBody(map));
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<String>>() {
+            @Override
+            public void onSuccess(BaseEntity<String> entity) {
+                super.onSuccess(entity);
+                iView.smsCode(entity.message);
+            }
 
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToast(message);
+                iView.smsCode(null);
+            }
+        });
     }
 
-
+    /**
+     * 手机号登录
+     * @param mobile
+     * @param code
+     */
     public void loginMobile(String mobile, String code) {
         Map<String, String> map = new HashMap<>();
         map.put("type", "mobile");
         map.put("mobile", mobile);
         map.put("code", code);
         sortAndMD5(map);
-        String stringEntry = null;
-        try {
-            stringEntry = new ObjectMapper().writeValueAsString(map);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
-        Call<BaseEntity<LoginFinishEntity>> requestBodyCall = getSaveCookieApiService().login(requestBody);
+
+        Call<BaseEntity<LoginFinishEntity>>
+                requestBodyCall = getSaveCookieApiService().login(getRequestBody(map));
+
+        getNetData(true,requestBodyCall,new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
+                super.onSuccess(entity);
+                iView.loginMobileSuccess(entity.data);
+            }
+        });
+    }
+
+    /**
+     * 密码登录
+     * @param username
+     * @param password
+     */
+    public void loginPwd(String username, String password) {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", "username");
+        map.put("username", username);
+        map.put("password", password);
+        sortAndMD5(map);
+
+        Call<BaseEntity<LoginFinishEntity>>
+                requestBodyCall = getSaveCookieApiService().login(getRequestBody(map));
 
         getNetData(true,requestBodyCall,new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
             @Override
@@ -199,14 +215,9 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
         map.put("code",code);
         map.put("nickname",nickname);
         sortAndMD5(map);
-        String s = null;
-        try {
-            s = new ObjectMapper().writeValueAsString(map);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), s);
-        Call<BaseEntity<LoginFinishEntity>> register = getSaveCookieApiService().new_register(requestBody);
+
+        Call<BaseEntity<LoginFinishEntity>>
+                register = getSaveCookieApiService().new_register(getRequestBody(map));
         getNetData(register, new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>() {
             @Override
             public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
@@ -241,6 +252,54 @@ public class RegisterAndBindPresenter extends BasePresenter<IRegisterAndBindView
                 super.onSuccess(entity);
                 Common.staticToast(entity.message);
                 iView.loginMobileSuccess(entity.data);
+            }
+        });
+    }
+
+    /**
+     * 找回密码
+     * @param mobile
+     * @param password
+     * @param pwd
+     * @param code
+     */
+    public void findPsw(String mobile, String password, String pwd, String code) {
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", mobile);
+        map.put("password", password);
+        map.put("pwd", pwd);
+        map.put("code", code);
+        sortAndMD5(map);
+
+        Call<BaseEntity<RegisterFinishEntity>>
+                register = getApiService().findPsw(getRequestBody(map));
+        getNetData(register, new SimpleNetDataCallback<BaseEntity<RegisterFinishEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<RegisterFinishEntity> entity) {
+                super.onSuccess(entity);
+                iView.findPwdSuccess(entity.message);
+            }
+        });
+    }
+
+    /**
+     * 检验短信验证码
+     * @param mobile
+     * @param smscode
+     */
+    public void checkMobileCode(String mobile,String smscode){
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", mobile);
+        map.put("mobile_code", smscode);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>>
+                baseEntityCall = getApiService().checkMobileCode(getRequestBody(map));
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.checkMobileSmsCode(entity.message);
             }
         });
     }

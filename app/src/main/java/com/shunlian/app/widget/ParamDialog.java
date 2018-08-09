@@ -81,12 +81,18 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private String hasOption = "0";//是否有参数
     private int limit_min_buy = 1;//团购最小购买数
     private int currentCount = 1;
+    private int currentGoodsType = 0; //0普通商品、1优品、2团购
     private LinkedHashMap<String, GoodsDeatilEntity.Values> linkedHashMap;
 
     public ParamDialog(Context context, GoodsDeatilEntity goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
-        if (!TextUtils.isEmpty(goods.limit_min_buy))
+
+        if (!TextUtils.isEmpty(goods.type)) {
+            currentGoodsType = Integer.valueOf(goods.type);
+        }
+
+        if (currentGoodsType == 2 && !TextUtils.isEmpty(goods.limit_min_buy))
             limit_min_buy = Integer.parseInt(goods.limit_min_buy);
         currentCount = limit_min_buy;
         init();
@@ -96,7 +102,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     public ParamDialog(Context context, GoodsDeatilEntity.Goods goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
-        if (!TextUtils.isEmpty(goods.limit_min_buy))
+
+        currentGoodsType = Integer.valueOf(goods.type);
+        if (currentGoodsType == 2 && !TextUtils.isEmpty(goods.limit_min_buy))
             limit_min_buy = Integer.parseInt(goods.limit_min_buy);
         currentCount = limit_min_buy;
         init();
@@ -250,15 +258,27 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 if (totalStock == 0) {
                     return;
                 }
-                if (currentCount > limit_min_buy) {
-                    currentCount--;
-                    if (currentCount <= 1) {
-                        currentCount = 1;
+
+                if (currentGoodsType == 2) {
+                    if (currentCount > limit_min_buy) {
+//                        currentCount--;
+//                        if (currentCount <= 1) {
+//                            currentCount = 1;
+//                        }
+                        if (currentCount <= 1) {
+                            return;
+                        }
+                        currentCount--;
+                    } else {
+                        Common.staticToast(String.format(mContext.getString(R.string.goods_tuangoushangping), String.valueOf(limit_min_buy)));
                     }
-                    tv_number.setText(String.valueOf(currentCount));
                 } else {
-                    Common.staticToast(String.format(mContext.getString(R.string.goods_tuangoushangping), String.valueOf(limit_min_buy)));
+                    if (currentCount <= 1) {
+                        return;
+                    }
+                    currentCount--;
                 }
+                tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
                 if (currentCount == 0) {
@@ -366,8 +386,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 @Override
                 public View getView(FlowLayout parent, int position, Object o) {
                     GoodsDeatilEntity.Values values = mValues.get(position);
-                    View view = LayoutInflater.from(getContext()).inflate(R.layout.item_tag,
-                            parent, false);
+                    View view = LayoutInflater.from(getContext()).inflate(R.layout.item_tag, parent, false);
                     TextView tv = (TextView) view.findViewById(R.id.tv_tag);
                     tv.setText(values.name);
 

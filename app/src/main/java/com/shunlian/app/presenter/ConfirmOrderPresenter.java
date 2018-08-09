@@ -134,7 +134,8 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
         }
 
         iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));
-        iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
+        iView.confirmOrderAllGoods(data.enabled,
+                data.disabled,data.address,data.no_delivery);
 
         if (!isEmpty(data.stage_voucher)){
             ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
