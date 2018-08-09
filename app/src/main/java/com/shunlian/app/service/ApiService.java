@@ -2482,4 +2482,12 @@ public interface ApiService {
      */
     @GET("goods/want")
     Call<BaseEntity<EmptyEntity>> goodsWant(@QueryMap Map<String, String> map);
+
+    /**
+     * 验证短信验证码
+     * @param body
+     * @return
+     */
+    @POST("member/common/checkMobileCode")
+    Call<BaseEntity<EmptyEntity>> checkMobileCode(@Body RequestBody body);
 }
