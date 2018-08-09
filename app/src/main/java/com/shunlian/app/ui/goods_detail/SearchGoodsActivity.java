@@ -23,6 +23,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.collection.SearchResultAct;
 import com.shunlian.app.ui.myself_store.GoodsSearchAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -307,8 +308,17 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                     tv.setBackgroundResource(R.drawable.rounded_corner_solid_f7_8px);
                     tv.setTextColor(getColorResouce(R.color.text_gray2));
                 }
-
-                view.setOnClickListener(v -> switchToJump(entity.new_hot_keywords.get(position).label));
+                view.setOnClickListener(view1 -> {
+                    HotSearchEntity.HotKeywords hotky = entity.new_hot_keywords.get(position);
+                    if (isEmpty(hotky.type)) {
+                        return;
+                    }
+                    if ("search".equals(hotky.type)) {
+                        switchToJump(hotky.item_id);
+                    } else {
+                        Common.goGoGo(SearchGoodsActivity.this, hotky.type, hotky.item_id);
+                    }
+                });
                 return view;
             }
         };
@@ -360,6 +370,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_search_cancel:
+                Common.hideKeyboard(tv_search_cancel);
                 finish();
                 break;
             case R.id.ll_clear:

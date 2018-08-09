@@ -148,12 +148,6 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             if (isFastClick()) {
                 return;
             }
-            int limit = Integer.valueOf(goods.limit_min_buy);
-
-            if ((Integer.valueOf(goods.qty) - 1) < limit) {
-                Common.staticToast(String.format(getString(R.string.goods_tuangoushangping), limit));
-                return;
-            }
             int count = Integer.valueOf(goods.qty) - 1;
             if (count <= 0) {
                 return;
