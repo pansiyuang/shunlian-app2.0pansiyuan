@@ -110,7 +110,13 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
     public static void startAct(Context context, String url, int mode) {
         Intent intentH5 = new Intent(context, H5Act.class);
-        intentH5.putExtra("url", url);
+        try {
+            if (!TextUtils.isEmpty(url))
+                url=java.net.URLDecoder.decode(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        intentH5.putExtra("url",url);
         intentH5.putExtra("mode", mode);
         intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intentH5);
@@ -584,18 +590,20 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             return;
         }
         LogUtil.httpLogW("链接:" + url);
-        if (url.startsWith("slmall://")) {
-            String type = interceptBody(url);
-            if (!TextUtils.isEmpty(type)) {
-                String id = "";
-                String id1 = "";
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
-                    id = interceptId(url);
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
-                    id1 = interceptId(url);
-                Common.goGoGo(H5Act.this, type, id, id1);
-            }
-        }
+        Common.urlToPage(H5Act.this,url);
+//        if (url.startsWith("slmall://")) {
+//            String type = interceptBody(url);
+//            if (!TextUtils.isEmpty(type)) {
+//                String id = "";
+//                String id1 = "";
+//
+//                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
+//                    id = interceptId(url);
+//                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+//                    id1 = interceptId(url);
+//                Common.goGoGo(H5Act.this, type, id, id1);
+//            }
+//        }
     }
 
     /**
@@ -605,17 +613,17 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
      * @param url
      * @return
      */
-    private String interceptBody(String url) {
-        String[] split = url.split("\\?");
-        String s = split[0];
-        if (!TextUtils.isEmpty(s)) {
-            String[] split1 = s.split("//");
-            if (!TextUtils.isEmpty(split1[1])) {
-                return split1[1];
-            }
-        }
-        return null;
-    }
+//    private String interceptBody(String url) {
+//        String[] split = url.split("\\?");
+//        String s = split[0];
+//        if (!TextUtils.isEmpty(s)) {
+//            String[] split1 = s.split("//");
+//            if (!TextUtils.isEmpty(split1[1])) {
+//                return split1[1];
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * 截取商品id
@@ -623,16 +631,16 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
      * @param url
      * @return
      */
-    private String interceptId(String url) {
-        String[] split = url.split("\\?");
-        String s = split[1];
-        String[] split1 = s.split("=");
-        String s1 = split1[1];
-        /*if (s1.matches("[0-9]+")){
-            return s1;
-        }*/
-        return s1;
-    }
+//    private String interceptId(String url) {
+//        String[] split = url.split("\\?");
+//        String s = split[1];
+//        String[] split1 = s.split("=");
+//        String s1 = split1[1];
+//        /*if (s1.matches("[0-9]+")){
+//            return s1;
+//        }*/
+//        return s1;
+//    }
 
     @Override
     public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {

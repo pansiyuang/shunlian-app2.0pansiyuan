@@ -168,7 +168,16 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     @Override
     public void getArticleDetail(ArticleDetailEntity detailEntity) {
         if (!isEmpty(detailEntity.h5_detail_url)) {
-            h5Url = detailEntity.h5_detail_url;
+            if (!isEmpty(detailEntity.h5_detail_url)) {
+                try {
+                    h5Url = java.net.URLDecoder.decode(detailEntity.h5_detail_url);
+                } catch (Exception e) {
+                    h5Url = detailEntity.h5_detail_url;
+                    e.printStackTrace();
+                }
+            } else {
+                h5Url = detailEntity.h5_detail_url;
+            }
             reFresh();
         }
 

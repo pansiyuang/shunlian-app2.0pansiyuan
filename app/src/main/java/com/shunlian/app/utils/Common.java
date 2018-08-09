@@ -1134,16 +1134,36 @@ public class Common {
 
     public static void urlToPage(Context context, String url) {
         //LogUtil.httpLogW("链接:" + url);
+        if (TextUtils.isEmpty(url))
+            return;
+        try {
+            url=java.net.URLDecoder.decode(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (url.startsWith("slmall://")) {
             String type = interceptBody(url);
             if (!TextUtils.isEmpty(type)) {
                 String id = "";
                 String id1 = "";
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
-                    id = interceptId(url);
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
-                    id1 = interceptId(url);
-                Common.goGoGo(context, type, id, id1);
+                String id2 = "";
+                String id3 = "";
+                String id4 = "";
+                try {
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
+                        id=java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id"));
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+                        id1 = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id1"));
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id2")))
+                        id2 = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id2"));
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id3")))
+                        id3 = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id3"));
+                    if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id4")))
+                        id4 = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id4"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Common.goGoGo(context, type, id, id1,id2,id3,id4);
             }
         }
     }

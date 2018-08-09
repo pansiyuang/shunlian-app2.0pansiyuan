@@ -118,6 +118,8 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     public static BaseFragment getInstance(String h5Url, int mode) {
         H5PlusFrag fragment = new H5PlusFrag();
         Bundle args = new Bundle();
+        if (!TextUtils.isEmpty(h5Url))
+            h5Url=java.net.URLDecoder.decode(h5Url);
         args.putSerializable("h5Url", h5Url);
         args.putSerializable("mode", mode);
         fragment.setArguments(args);
@@ -190,10 +192,13 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         view_line.setVisibility(View.GONE);
 //        httpDialog = new HttpDialog(this);
         activity = getActivity();
+        if (activity!=null)
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        h5Url = (String) getArguments().getSerializable("h5Url");
-        mode = (int) getArguments().getSerializable("mode");
+        if (getArguments()!=null){
+            h5Url = (String) getArguments().getSerializable("h5Url");
+            mode = (int) getArguments().getSerializable("mode");
+        }
         if (!isEmpty(h5Url))
             beforeUrl=h5Url;
         if (!isEmpty(h5Url)) {
@@ -588,18 +593,19 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             return;
         }
         LogUtil.httpLogW("链接:" + url);
-        if (url.startsWith("slmall://")) {
-            String type = interceptBody(url);
-            if (!TextUtils.isEmpty(type)) {
-                String id = "";
-                String id1 = "";
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
-                    id = interceptId(url);
-                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
-                    id1 = interceptId(url);
-                Common.goGoGo(activity, type, id, id1);
-            }
-        }
+        Common.urlToPage(activity,url);
+//        if (url.startsWith("slmall://")) {
+//            String type = interceptBody(url);
+//            if (!TextUtils.isEmpty(type)) {
+//                String id = "";
+//                String id1 = "";
+//                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
+//                    id = interceptId(url);
+//                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+//                    id1 = interceptId(url);
+//                Common.goGoGo(activity, type, id, id1);
+//            }
+//        }
     }
 
     /**
@@ -609,17 +615,17 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
      * @param url
      * @return
      */
-    private String interceptBody(String url) {
-        String[] split = url.split("\\?");
-        String s = split[0];
-        if (!TextUtils.isEmpty(s)) {
-            String[] split1 = s.split("//");
-            if (!TextUtils.isEmpty(split1[1])) {
-                return split1[1];
-            }
-        }
-        return null;
-    }
+//    private String interceptBody(String url) {
+//        String[] split = url.split("\\?");
+//        String s = split[0];
+//        if (!TextUtils.isEmpty(s)) {
+//            String[] split1 = s.split("//");
+//            if (!TextUtils.isEmpty(split1[1])) {
+//                return split1[1];
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * 截取商品id
@@ -627,16 +633,16 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
      * @param url
      * @return
      */
-    private String interceptId(String url) {
-        String[] split = url.split("\\?");
-        String s = split[1];
-        String[] split1 = s.split("=");
-        String s1 = split1[1];
-        /*if (s1.matches("[0-9]+")){
-            return s1;
-        }*/
-        return s1;
-    }
+//    private String interceptId(String url) {
+//        String[] split = url.split("\\?");
+//        String s = split[1];
+//        String[] split1 = s.split("=");
+//        String s1 = split1[1];
+//        /*if (s1.matches("[0-9]+")){
+//            return s1;
+//        }*/
+//        return s1;
+//    }
 
     @Override
     public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {

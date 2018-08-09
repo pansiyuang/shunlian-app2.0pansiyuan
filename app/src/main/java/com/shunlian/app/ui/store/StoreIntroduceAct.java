@@ -198,6 +198,10 @@ public class StoreIntroduceAct extends BaseActivity implements StoreIntroduceVie
                 if (!isEmpty(mtv_dianhua.getText()))
                 initDialogs(mtv_dianhua.getText().toString());
                 break;
+            case R.id.mtv_weixin:
+                if (mtv_weixin.getText()!=null)
+                Common.copyText(this,mtv_weixin.getText().toString());
+                break;
             case R.id.miv_chat:
                 storeIntroducePresenter.getUserId(storeId);
                 break;
@@ -217,6 +221,7 @@ public class StoreIntroduceAct extends BaseActivity implements StoreIntroduceVie
         miv_close.setOnClickListener(this);
         mrlayout_erweima.setOnClickListener(this);
         mtv_dianhua.setOnClickListener(this);
+        mtv_weixin.setOnClickListener(this);
     }
 
     @Override
