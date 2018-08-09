@@ -207,6 +207,8 @@ public class Common {
                 return "QrCodeAct";
             case "url":
                 return "H5Act";
+            case "HTMLShare":
+                return "WXEntryActivity";
             default:
                 return "";
         }
