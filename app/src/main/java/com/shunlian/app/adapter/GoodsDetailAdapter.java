@@ -34,6 +34,7 @@ import com.shunlian.app.widget.RecyclerDialog;
 import com.shunlian.app.widget.banner.Kanner;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.EventBusException;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -1508,7 +1509,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void followStoreState(DefMessageEvent event) {
             setCollectionState(event.followStoreState);
-            EventBus.getDefault().unregister(this);
+            EventBus.getDefault().unregister(StoreGoodsHolder.this);
         }
 
 
@@ -1526,7 +1527,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         Common.goGoGo(context,"login");
                         return;
                     }
-                    EventBus.getDefault().register(StoreGoodsHolder.this);
+                    try {
+                        EventBus.getDefault().register(StoreGoodsHolder.this);
+                    }catch (EventBusException e){}
                     GoodsDetailAct detailAct = (GoodsDetailAct) context;
                     if (isAttentionShop) {
                         detailAct.delFollowStore();
