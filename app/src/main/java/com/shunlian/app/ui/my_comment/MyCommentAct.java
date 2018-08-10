@@ -99,10 +99,9 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView,
                 super.onScrolled(recyclerView, dx, dy);
                 if (manager != null) {
                     int lastPosition = manager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == manager.getItemCount()) {
-                        if (presenter != null) {
-                            presenter.onRefresh();
-                        }
+                    if (lastPosition + 1 == manager.getItemCount()
+                            && manager.getItemCount() > 0 && presenter != null) {
+                        presenter.onRefresh();
                     }
                 }
             }
@@ -178,7 +177,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView,
 
     @OnClick(R.id.rl_more)
     public void more() {
-        quick_actions.setVisibility(View.VISIBLE);
+        visible(quick_actions);
         quick_actions.comment();
     }
 

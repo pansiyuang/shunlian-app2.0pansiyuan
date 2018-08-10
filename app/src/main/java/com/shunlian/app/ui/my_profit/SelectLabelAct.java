@@ -132,4 +132,13 @@ public class SelectLabelAct extends BaseActivity implements ISelectLabelView{
             presenter.submit(label);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+            presenter = null;
+        }
+    }
 }

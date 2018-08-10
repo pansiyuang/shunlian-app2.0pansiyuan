@@ -124,7 +124,8 @@ public class SaleDetailAct extends BaseActivity implements ISaleDetailView{
                 super.onScrolled(recyclerView, dx, dy);
                 if (manager != null){
                     int lastPosition = manager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == manager.getItemCount()&&presenter!=null){
+                    if (lastPosition + 1 == manager.getItemCount()
+                            && manager.getItemCount() > 0 &&presenter!=null){
                         presenter.onRefresh();
                     }
                 }
