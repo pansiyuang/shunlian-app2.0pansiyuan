@@ -162,6 +162,9 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 }
             });
             articleViewHolder.ll_share.setOnClickListener(v -> {
+                if(isFastClick()){
+                    return;
+                }
                 mFragment.shareArticle(position);
             });
             articleViewHolder.ll_comment.setOnClickListener(v -> CommentListAct.startAct(mFragment.getActivity(), article.id));

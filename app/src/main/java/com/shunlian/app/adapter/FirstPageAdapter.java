@@ -909,6 +909,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         FourHolder(View itemView) {
             super(itemView);
+            int picWidth = Common.getScreenWidth((Activity) context);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth*226 /360);
+            params.setMargins(0,TransformUtil.dip2px(context, 10),0,0);
+            mllayout_root.setLayoutParams(params);
             downTime_first.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
