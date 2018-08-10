@@ -352,6 +352,7 @@ public class Common {
                 PlusGifDetailAct.startAct(context, params[0]);
                 break;
             case "login":
+                theRelayJump(null,null);
                 LoginEntryAct.startAct(context);
                 break;
             case "article":
