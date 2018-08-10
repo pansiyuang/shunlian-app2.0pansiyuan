@@ -125,21 +125,23 @@ public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.
 
     @Override
     public void setShareInfo(ShareEntity shareEntity) {
-        visible(rl_title_more);
-        rl_title_more.setOnClickListener(v -> {
-            quick_actions.setVisibility(View.VISIBLE);
-            if (shareEntity!=null&&shareEntity.share!=null){
-                shareInfoParam=new ShareInfoParam();
-                shareInfoParam.desc=shareEntity.share.content;
-                shareInfoParam.title=shareEntity.share.title;
-                shareInfoParam.img=shareEntity.share.pic;
-                shareInfoParam.shareLink=shareEntity.share.share_url;
-                quick_actions.special();
-                quick_actions.shareInfo(shareInfoParam);
-            }else {
-                quick_actions.order();
-            }
-        });
+        if (rl_title_more!=null){
+            visible(rl_title_more);
+            rl_title_more.setOnClickListener(v -> {
+                quick_actions.setVisibility(View.VISIBLE);
+                if (shareEntity!=null&&shareEntity.share!=null){
+                    shareInfoParam=new ShareInfoParam();
+                    shareInfoParam.desc=shareEntity.share.content;
+                    shareInfoParam.title=shareEntity.share.title;
+                    shareInfoParam.img=shareEntity.share.pic;
+                    shareInfoParam.shareLink=shareEntity.share.share_url;
+                    quick_actions.special();
+                    quick_actions.shareInfo(shareInfoParam);
+                }else {
+                    quick_actions.order();
+                }
+            });
+        }
     }
 
     @Override

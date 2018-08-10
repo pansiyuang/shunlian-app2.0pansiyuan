@@ -227,6 +227,12 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 //        }
         pFirstPage.getMenuData();
         mainActivity = (MainActivity) getActivity();
+        if (mainActivity!=null&&mainActivity.adEntity!=null&&"1".equals(mainActivity.adEntity.suspensionShow)){
+            miv_entry.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImageZheng(mainActivity,FirstPageFrag.miv_entry,mainActivity.adEntity.suspension.image);
+        }else {
+            miv_entry.setVisibility(View.GONE);
+        }
         nei_empty.setImageResource(R.mipmap.img_empty_wuwangluo)
                 .setText(getString(R.string.common_wangluozhuangkuang))
                 .setButtonText(getStringResouce(R.string.common_dianjichongshi))
