@@ -134,210 +134,214 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
-        switch (itemViewType) {
-            case TYPE9:
-                if (holder instanceof OneHolder) {
-                    OneHolder oneHolder = (OneHolder) holder;
-                    StoreIndexEntity.Body data = datas.get(position);
-                    if (TextUtils.isEmpty(data.title)) {
-                        oneHolder.view_lineOne.setVisibility(View.GONE);
-                        oneHolder.view_lineTwo.setVisibility(View.GONE);
-                        oneHolder.mtv_one.setVisibility(View.GONE);
-                    } else {
-                        if (0 == position) {
-                            oneHolder.view_lineOne.setVisibility(View.VISIBLE);
-                            oneHolder.view_lineTwo.setVisibility(View.GONE);
-                        } else {
+        try {
+            switch (itemViewType) {
+                case TYPE9:
+                    if (holder instanceof OneHolder) {
+                        OneHolder oneHolder = (OneHolder) holder;
+                        StoreIndexEntity.Body data = datas.get(position);
+                        if (TextUtils.isEmpty(data.title)) {
                             oneHolder.view_lineOne.setVisibility(View.GONE);
-                            oneHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                            oneHolder.view_lineTwo.setVisibility(View.GONE);
+                            oneHolder.mtv_one.setVisibility(View.GONE);
+                        } else {
+                            if (0 == position) {
+                                oneHolder.view_lineOne.setVisibility(View.VISIBLE);
+                                oneHolder.view_lineTwo.setVisibility(View.GONE);
+                            } else {
+                                oneHolder.view_lineOne.setVisibility(View.GONE);
+                                oneHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                            }
+                            oneHolder.mtv_one.setVisibility(View.VISIBLE);
+                            oneHolder.mtv_one.setText(data.title);
                         }
-                        oneHolder.mtv_one.setVisibility(View.VISIBLE);
-                        oneHolder.mtv_one.setText(data.title);
-                    }
 
 //                    oneHolder.goodsId_left=data.ldata.id;
-                    oneHolder.goodsId_left = data.ldata.item_id;
-                    oneHolder.type_left = data.ldata.type;
+                        oneHolder.goodsId_left = data.ldata.item_id;
+                        oneHolder.type_left = data.ldata.type;
 
-                    oneHolder.mtv_descl.setText(data.ldata.title);
-                    oneHolder.mtv_numberl.setText("已售" + data.ldata.sales);
-                    oneHolder.mtv_pricel.setText(data.ldata.price);
-                    GlideUtils.getInstance().loadImage(context, oneHolder.miv_onel, data.ldata.whole_thumb);
+                        oneHolder.mtv_descl.setText(data.ldata.title);
+                        oneHolder.mtv_numberl.setText("已售" + data.ldata.sales);
+                        oneHolder.mtv_pricel.setText(data.ldata.price);
+                        GlideUtils.getInstance().loadImage(context, oneHolder.miv_onel, data.ldata.whole_thumb);
 
-                    if (TextUtils.isEmpty(data.rdata.title) && TextUtils.isEmpty(data.rdata.whole_thumb)) {
-                        oneHolder.mllayout_oner.setVisibility(View.INVISIBLE);
-                    } else {
-                        //                    oneHolder.goodsId_right=data.rdata.id;
-                        oneHolder.goodsId_right = data.rdata.item_id;
-                        oneHolder.type_right = data.rdata.type;
-
-                        oneHolder.mllayout_oner.setVisibility(View.VISIBLE);
-                        oneHolder.mtv_descr.setText(data.rdata.title);
-                        oneHolder.mtv_numberr.setText("已售" + data.rdata.sales);
-                        oneHolder.mtv_pricer.setText(data.rdata.price);
-                        GlideUtils.getInstance().loadImage(context, oneHolder.miv_oner, data.rdata.whole_thumb);
-                    }
-
-                }
-                break;
-            case TYPE2:
-                if (holder instanceof TwoHolder) {
-                    TwoHolder twoHolder = (TwoHolder) holder;
-                    StoreIndexEntity.Body data = datas.get(position);
-//                    twoHolder.goods_id=data.ldata.id;
-                    twoHolder.goods_id = data.ldata.item_id;
-                    twoHolder.type = data.ldata.type;
-                    if (TextUtils.isEmpty(data.title)) {
-                        twoHolder.view_lineOne.setVisibility(View.GONE);
-                        twoHolder.view_lineTwo.setVisibility(View.GONE);
-                        twoHolder.mtv_two.setVisibility(View.GONE);
-                    } else {
-                        if (0 == position) {
-                            twoHolder.view_lineOne.setVisibility(View.VISIBLE);
-                            twoHolder.view_lineTwo.setVisibility(View.GONE);
+                        if (TextUtils.isEmpty(data.rdata.title) && TextUtils.isEmpty(data.rdata.whole_thumb)) {
+                            oneHolder.mllayout_oner.setVisibility(View.INVISIBLE);
                         } else {
-                            twoHolder.view_lineOne.setVisibility(View.GONE);
-                            twoHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                            //                    oneHolder.goodsId_right=data.rdata.id;
+                            oneHolder.goodsId_right = data.rdata.item_id;
+                            oneHolder.type_right = data.rdata.type;
+
+                            oneHolder.mllayout_oner.setVisibility(View.VISIBLE);
+                            oneHolder.mtv_descr.setText(data.rdata.title);
+                            oneHolder.mtv_numberr.setText("已售" + data.rdata.sales);
+                            oneHolder.mtv_pricer.setText(data.rdata.price);
+                            GlideUtils.getInstance().loadImage(context, oneHolder.miv_oner, data.rdata.whole_thumb);
                         }
-                        twoHolder.mtv_two.setVisibility(View.VISIBLE);
-                        twoHolder.mtv_two.setText(data.title);
+
                     }
-                    twoHolder.mtv_desc.setText(data.ldata.title);
-                    twoHolder.mtv_number.setText("已售" + data.ldata.sales);
-                    twoHolder.mtv_price.setText(data.ldata.price);
-                    LinearLayoutManager firstManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-                    twoHolder.rv_type.setLayoutManager(firstManager);
-                    twoHolder.rv_type.setNestedScrollingEnabled(false);
-                    twoHolder.rv_type.setAdapter(new StoreTypeAdapter(context, false, data.ldata.label));
-                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_two, data.ldata.whole_thumb);
-                }
-                break;
-            case TYPE3:
-                if (holder instanceof ThreeHolder) {
-                    ThreeHolder threeHolder = (ThreeHolder) holder;
-                    StoreIndexEntity.Body data = datas.get(position);
-                    if (0 == position) {
-                        threeHolder.view_lineOne.setVisibility(View.VISIBLE);
-                        threeHolder.view_lineTwo.setVisibility(View.GONE);
-                    } else {
-                        threeHolder.view_lineOne.setVisibility(View.GONE);
-                        threeHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                    break;
+                case TYPE2:
+                    if (holder instanceof TwoHolder) {
+                        TwoHolder twoHolder = (TwoHolder) holder;
+                        StoreIndexEntity.Body data = datas.get(position);
+//                    twoHolder.goods_id=data.ldata.id;
+                        twoHolder.goods_id = data.ldata.item_id;
+                        twoHolder.type = data.ldata.type;
+                        if (TextUtils.isEmpty(data.title)) {
+                            twoHolder.view_lineOne.setVisibility(View.GONE);
+                            twoHolder.view_lineTwo.setVisibility(View.GONE);
+                            twoHolder.mtv_two.setVisibility(View.GONE);
+                        } else {
+                            if (0 == position) {
+                                twoHolder.view_lineOne.setVisibility(View.VISIBLE);
+                                twoHolder.view_lineTwo.setVisibility(View.GONE);
+                            } else {
+                                twoHolder.view_lineOne.setVisibility(View.GONE);
+                                twoHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                            }
+                            twoHolder.mtv_two.setVisibility(View.VISIBLE);
+                            twoHolder.mtv_two.setText(data.title);
+                        }
+                        twoHolder.mtv_desc.setText(data.ldata.title);
+                        twoHolder.mtv_number.setText("已售" + data.ldata.sales);
+                        twoHolder.mtv_price.setText(data.ldata.price);
+                        LinearLayoutManager firstManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                        twoHolder.rv_type.setLayoutManager(firstManager);
+                        twoHolder.rv_type.setNestedScrollingEnabled(false);
+                        twoHolder.rv_type.setAdapter(new StoreTypeAdapter(context, false, data.ldata.label));
+                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_two, data.ldata.whole_thumb);
                     }
-                    threeHolder.mtv_three.setText(data.title);
-                }
-                break;
-            case TYPE4:
-                if (holder instanceof FourHolder) {
-                    FourHolder fourHolder = (FourHolder) holder;
-                    StoreIndexEntity.Body data = datas.get(position);
-                    if (0 == position) {
-                        fourHolder.view_lineOne.setVisibility(View.VISIBLE);
-                        fourHolder.view_lineTwo.setVisibility(View.GONE);
-                    } else {
-                        fourHolder.view_lineOne.setVisibility(View.GONE);
-                        fourHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                    break;
+                case TYPE3:
+                    if (holder instanceof ThreeHolder) {
+                        ThreeHolder threeHolder = (ThreeHolder) holder;
+                        StoreIndexEntity.Body data = datas.get(position);
+                        if (0 == position) {
+                            threeHolder.view_lineOne.setVisibility(View.VISIBLE);
+                            threeHolder.view_lineTwo.setVisibility(View.GONE);
+                        } else {
+                            threeHolder.view_lineOne.setVisibility(View.GONE);
+                            threeHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                        }
+                        threeHolder.mtv_three.setText(data.title);
                     }
-                    fourHolder.mtv_four.setText(data.textare);
-                }
-                break;
-            case TYPE5:
-                if (holder instanceof FiveHolder) {
-                    FiveHolder fiveHolder = (FiveHolder) holder;
-                    StoreIndexEntity.Body data = datas.get(position);
-                    if (0 == position) {
-                        fiveHolder.view_lineOne.setVisibility(View.VISIBLE);
-                        fiveHolder.view_lineTwo.setVisibility(View.GONE);
-                    } else {
-                        fiveHolder.view_lineOne.setVisibility(View.GONE);
-                        fiveHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                    break;
+                case TYPE4:
+                    if (holder instanceof FourHolder) {
+                        FourHolder fourHolder = (FourHolder) holder;
+                        StoreIndexEntity.Body data = datas.get(position);
+                        if (0 == position) {
+                            fourHolder.view_lineOne.setVisibility(View.VISIBLE);
+                            fourHolder.view_lineTwo.setVisibility(View.GONE);
+                        } else {
+                            fourHolder.view_lineOne.setVisibility(View.GONE);
+                            fourHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                        }
+                        fourHolder.mtv_four.setText(data.textare);
                     }
-                    if (data.data != null && data.data.size() > 0) {
-                        fiveHolder.goods_id = data.data.get(0).item_id;
-                        fiveHolder.type = data.data.get(0).type;
-                        fiveHolder.mtv_five.setText(data.data.get(0).description);
-                        GlideUtils.getInstance().loadImage(context, fiveHolder.miv_five, data.data.get(0).whole_thumb);
+                    break;
+                case TYPE5:
+                    if (holder instanceof FiveHolder) {
+                        FiveHolder fiveHolder = (FiveHolder) holder;
+                        StoreIndexEntity.Body data = datas.get(position);
+                        if (0 == position) {
+                            fiveHolder.view_lineOne.setVisibility(View.VISIBLE);
+                            fiveHolder.view_lineTwo.setVisibility(View.GONE);
+                        } else {
+                            fiveHolder.view_lineOne.setVisibility(View.GONE);
+                            fiveHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                        }
+                        if (data.data != null && data.data.size() > 0) {
+                            fiveHolder.goods_id = data.data.get(0).item_id;
+                            fiveHolder.type = data.data.get(0).type;
+                            fiveHolder.mtv_five.setText(data.data.get(0).description);
+                            GlideUtils.getInstance().loadImage(context, fiveHolder.miv_five, data.data.get(0).whole_thumb);
+                        }
                     }
-                }
-                break;
-            case TYPE6:
-                if (holder instanceof SixHolder) {
-                    SixHolder sixHolder = (SixHolder) holder;
-                    StoreIndexEntity.Body data = datas.get(position);
-                    if (0 == position) {
-                        sixHolder.view_lineOnel.setVisibility(View.VISIBLE);
-                        sixHolder.view_lineTwol.setVisibility(View.GONE);
-                        sixHolder.view_lineOner.setVisibility(View.VISIBLE);
-                        sixHolder.view_lineTwor.setVisibility(View.GONE);
-                    } else {
-                        sixHolder.view_lineOnel.setVisibility(View.GONE);
-                        sixHolder.view_lineTwol.setVisibility(View.VISIBLE);
-                        sixHolder.view_lineOner.setVisibility(View.GONE);
-                        sixHolder.view_lineTwor.setVisibility(View.VISIBLE);
+                    break;
+                case TYPE6:
+                    if (holder instanceof SixHolder) {
+                        SixHolder sixHolder = (SixHolder) holder;
+                        StoreIndexEntity.Body data = datas.get(position);
+                        if (0 == position) {
+                            sixHolder.view_lineOnel.setVisibility(View.VISIBLE);
+                            sixHolder.view_lineTwol.setVisibility(View.GONE);
+                            sixHolder.view_lineOner.setVisibility(View.VISIBLE);
+                            sixHolder.view_lineTwor.setVisibility(View.GONE);
+                        } else {
+                            sixHolder.view_lineOnel.setVisibility(View.GONE);
+                            sixHolder.view_lineTwol.setVisibility(View.VISIBLE);
+                            sixHolder.view_lineOner.setVisibility(View.GONE);
+                            sixHolder.view_lineTwor.setVisibility(View.VISIBLE);
+                        }
+                        if (data.data != null && data.data.size() > 1) {
+                            sixHolder.goodsId_left = data.data.get(0).item_id;
+                            sixHolder.type_left = data.data.get(0).type;
+                            sixHolder.goodsId_right = data.data.get(1).item_id;
+                            sixHolder.type_right = data.data.get(1).type;
+                            sixHolder.mtv_sixl.setText(data.data.get(0).description);
+                            GlideUtils.getInstance().loadImage(context, sixHolder.miv_sixl, data.data.get(0).whole_thumb);
+                            sixHolder.mtv_sixr.setText(data.data.get(1).description);
+                            GlideUtils.getInstance().loadImage(context, sixHolder.miv_sixr, data.data.get(1).whole_thumb);
+                        }
                     }
-                    if (data.data != null && data.data.size() > 1) {
-                        sixHolder.goodsId_left = data.data.get(0).item_id;
-                        sixHolder.type_left = data.data.get(0).type;
-                        sixHolder.goodsId_right = data.data.get(1).item_id;
-                        sixHolder.type_right = data.data.get(1).type;
-                        sixHolder.mtv_sixl.setText(data.data.get(0).description);
-                        GlideUtils.getInstance().loadImage(context, sixHolder.miv_sixl, data.data.get(0).whole_thumb);
-                        sixHolder.mtv_sixr.setText(data.data.get(1).description);
-                        GlideUtils.getInstance().loadImage(context, sixHolder.miv_sixr, data.data.get(1).whole_thumb);
+                    break;
+                case TYPE7:
+                    if (holder instanceof SevenHolder) {
+                        SevenHolder sevenHolder = (SevenHolder) holder;
+                        sevenHolder.mdatas = datas.get(position).data;
+                        if (0 == position) {
+                            sevenHolder.view_lineOne.setVisibility(View.VISIBLE);
+                            sevenHolder.view_lineTwo.setVisibility(View.GONE);
+                        } else {
+                            sevenHolder.view_lineOne.setVisibility(View.GONE);
+                            sevenHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                        }
+                        if (sevenHolder.mdatas != null && sevenHolder.mdatas.size() > 0) {
+                            sevenHolder.storeKanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
+                            sevenHolder.storeKanner.setBanners(sevenHolder.mdatas, sevenHolder.mtv_number, sevenHolder.mtv_seven);
+                        }
                     }
-                }
-                break;
-            case TYPE7:
-                if (holder instanceof SevenHolder) {
-                    SevenHolder sevenHolder = (SevenHolder) holder;
-                    sevenHolder.mdatas = datas.get(position).data;
-                    if (0 == position) {
-                        sevenHolder.view_lineOne.setVisibility(View.VISIBLE);
-                        sevenHolder.view_lineTwo.setVisibility(View.GONE);
-                    } else {
-                        sevenHolder.view_lineOne.setVisibility(View.GONE);
-                        sevenHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                    break;
+                case TYPE8:
+                    if (holder instanceof EightHolder) {
+                        EightHolder eightHolder = (EightHolder) holder;
+                        StoreIndexEntity.Body data = datas.get(position);
+                        if (0 == position) {
+                            eightHolder.view_lineOnel.setVisibility(View.VISIBLE);
+                            eightHolder.view_lineTwol.setVisibility(View.GONE);
+                            eightHolder.view_lineOner.setVisibility(View.VISIBLE);
+                            eightHolder.view_lineTwor.setVisibility(View.GONE);
+                            eightHolder.view_lineOnem.setVisibility(View.VISIBLE);
+                            eightHolder.view_lineTwom.setVisibility(View.GONE);
+                        } else {
+                            eightHolder.view_lineOnel.setVisibility(View.GONE);
+                            eightHolder.view_lineTwol.setVisibility(View.VISIBLE);
+                            eightHolder.view_lineOner.setVisibility(View.GONE);
+                            eightHolder.view_lineTwor.setVisibility(View.VISIBLE);
+                            eightHolder.view_lineOnem.setVisibility(View.GONE);
+                            eightHolder.view_lineTwom.setVisibility(View.VISIBLE);
+                        }
+                        if (data.data != null && data.data.size() > 2) {
+                            eightHolder.goodsId_left = data.data.get(0).item_id;
+                            eightHolder.type_left = data.data.get(0).type;
+                            eightHolder.goodsId_mid = data.data.get(1).item_id;
+                            eightHolder.type_mid = data.data.get(1).type;
+                            eightHolder.goodsId_right = data.data.get(2).item_id;
+                            eightHolder.type_right = data.data.get(2).type;
+                            eightHolder.mtv_eightl.setText(data.data.get(0).description);
+                            GlideUtils.getInstance().loadImage(context, eightHolder.miv_eightl, data.data.get(0).whole_thumb);
+                            eightHolder.mtv_eightm.setText(data.data.get(1).description);
+                            GlideUtils.getInstance().loadImage(context, eightHolder.miv_eightm, data.data.get(1).whole_thumb);
+                            eightHolder.mtv_eightr.setText(data.data.get(2).description);
+                            GlideUtils.getInstance().loadImage(context, eightHolder.miv_eightr, data.data.get(2).whole_thumb);
+                        }
                     }
-                    if (sevenHolder.mdatas != null && sevenHolder.mdatas.size() > 0) {
-                        sevenHolder.storeKanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
-                        sevenHolder.storeKanner.setBanners(sevenHolder.mdatas, sevenHolder.mtv_number, sevenHolder.mtv_seven);
-                    }
-                }
-                break;
-            case TYPE8:
-                if (holder instanceof EightHolder) {
-                    EightHolder eightHolder = (EightHolder) holder;
-                    StoreIndexEntity.Body data = datas.get(position);
-                    if (0 == position) {
-                        eightHolder.view_lineOnel.setVisibility(View.VISIBLE);
-                        eightHolder.view_lineTwol.setVisibility(View.GONE);
-                        eightHolder.view_lineOner.setVisibility(View.VISIBLE);
-                        eightHolder.view_lineTwor.setVisibility(View.GONE);
-                        eightHolder.view_lineOnem.setVisibility(View.VISIBLE);
-                        eightHolder.view_lineTwom.setVisibility(View.GONE);
-                    } else {
-                        eightHolder.view_lineOnel.setVisibility(View.GONE);
-                        eightHolder.view_lineTwol.setVisibility(View.VISIBLE);
-                        eightHolder.view_lineOner.setVisibility(View.GONE);
-                        eightHolder.view_lineTwor.setVisibility(View.VISIBLE);
-                        eightHolder.view_lineOnem.setVisibility(View.GONE);
-                        eightHolder.view_lineTwom.setVisibility(View.VISIBLE);
-                    }
-                    if (data.data != null && data.data.size() > 2) {
-                        eightHolder.goodsId_left = data.data.get(0).item_id;
-                        eightHolder.type_left = data.data.get(0).type;
-                        eightHolder.goodsId_mid = data.data.get(1).item_id;
-                        eightHolder.type_mid = data.data.get(1).type;
-                        eightHolder.goodsId_right = data.data.get(2).item_id;
-                        eightHolder.type_right = data.data.get(2).type;
-                        eightHolder.mtv_eightl.setText(data.data.get(0).description);
-                        GlideUtils.getInstance().loadImage(context, eightHolder.miv_eightl, data.data.get(0).whole_thumb);
-                        eightHolder.mtv_eightm.setText(data.data.get(1).description);
-                        GlideUtils.getInstance().loadImage(context, eightHolder.miv_eightm, data.data.get(1).whole_thumb);
-                        eightHolder.mtv_eightr.setText(data.data.get(2).description);
-                        GlideUtils.getInstance().loadImage(context, eightHolder.miv_eightr, data.data.get(2).whole_thumb);
-                    }
-                }
-                break;
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

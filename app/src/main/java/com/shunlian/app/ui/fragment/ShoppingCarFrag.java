@@ -339,6 +339,10 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             enable.isEditGood = edit;
             editMap.put(enable.store_id, edit); //修改所有店铺状态
         }
+
+        if(!edit){
+            Common.hideKeyboard(tv_title_right);
+        }
     }
 
     public void showVouchersDialog(int position) {

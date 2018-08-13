@@ -111,6 +111,7 @@ public class ADAct extends MBaseActivity {
                 Constant.JPUSH.add(adEntity.list.link.item_id);
                 Constant.JPUSH.add("");
                 Common.goGoGo(getBaseContext(), adEntity.list.link.type, adEntity.list.link.item_id);
+//                Common.goGoGo(getBaseContext(), "url", "https://wx.shunliandongli.com/special/145");
                 finish();
                 break;
         }

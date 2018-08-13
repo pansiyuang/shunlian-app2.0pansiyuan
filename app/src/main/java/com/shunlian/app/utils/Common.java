@@ -138,6 +138,8 @@ public class Common {
     }
 
     public static String transClassName(String toPage) {
+        if (TextUtils.isEmpty(toPage))
+            return "";
         switch (toPage) {
             case "goods":
                 return "GoodsDetailAct";

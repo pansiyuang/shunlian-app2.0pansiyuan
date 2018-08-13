@@ -89,6 +89,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
                 AlipayMyAct.startAct(this,data.havePayAccount,!data.is_set_password,false,data.account_number);
                 break;
             case R.id.mrlayout_licai:
+                if (data!=null)
                 H5Act.startAct(this,data.profit_help_url,H5Act.MODE_SONIC);
                 break;
         }
