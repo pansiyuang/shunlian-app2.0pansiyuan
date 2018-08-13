@@ -43,7 +43,14 @@ public class DetailOrderRecordPresenter extends BasePresenter<IDetailOrderRecord
      */
     @Override
     public void detachView() {
-
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
+        if (items != null){
+            items.clear();
+            items = null;
+        }
     }
 
     /**

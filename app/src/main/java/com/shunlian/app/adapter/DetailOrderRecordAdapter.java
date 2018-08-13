@@ -15,6 +15,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,6 +26,7 @@ import butterknife.BindView;
 
 public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRecordEntity.Item> {
 
+    private List<BaseRecyclerAdapter> adapterList = new ArrayList<>();
     public DetailOrderRecordAdapter(Context context, List<DetailOrderRecordEntity.Item> lists) {
         super(context, true, lists);
     }
@@ -79,7 +81,9 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
             mHolder.mtv_order.setText("订单号：" + item.order_sn);
             mHolder.mtv_order_state.setText(item.status_desc);
             mHolder.mtv_order_time.setText("下单日期：" + item.order_time);
-            mHolder.recy_view.setAdapter(new GoodsItemAdapter(context, item.order_goods));
+            GoodsItemAdapter goodsItemAdapter = new GoodsItemAdapter(context, item.order_goods);
+            if (adapterList != null)adapterList.add(goodsItemAdapter);
+            mHolder.recy_view.setAdapter(goodsItemAdapter);
 
 
             GradientDrawable buyDrawable = (GradientDrawable) mHolder.mtv_buy.getBackground();
@@ -92,6 +96,20 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
                 buyDrawable.setColor(getColor(R.color.pink_color));
             }
         }
+    }
+
+    @Override
+    public void unbind() {
+        super.unbind();
+        for (BaseRecyclerAdapter adapter : adapterList) {
+            if (adapter != null && adapter.lists != null){
+                adapter.unbind();
+                adapter.lists.clear();
+                adapter = null;
+            }
+        }
+        adapterList.clear();
+        adapterList = null;
     }
 
     public class DetailOrderRecordHolder extends BaseRecyclerViewHolder {

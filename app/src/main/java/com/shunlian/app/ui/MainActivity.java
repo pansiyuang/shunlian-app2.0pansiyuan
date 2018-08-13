@@ -447,8 +447,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void shoppingCarClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.theRelayJump("shoppingcar",null);
             Common.goGoGo(this,"login");
+            Common.theRelayJump("shoppingcar",null);
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -471,8 +471,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void personCenterClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.theRelayJump("personCenter",null);
             Common.goGoGo(this,"login");
+            Common.theRelayJump("personCenter",null);
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片

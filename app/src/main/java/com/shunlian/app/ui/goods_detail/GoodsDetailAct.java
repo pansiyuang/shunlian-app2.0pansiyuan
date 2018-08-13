@@ -666,10 +666,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     @Override
-    public void onClick(View v) {
-//        if (MyOnClickListener.isClickable(this)){
-//            return;
-//        }
+    public void mOnClick(View v) {
         switch (v.getId()) {
             case R.id.mtv_add_car:
                 if (!Common.isAlreadyLogin()) {

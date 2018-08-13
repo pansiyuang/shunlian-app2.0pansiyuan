@@ -19,7 +19,6 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.CollectionGoodsPresenter;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICollectionGoodsView;
@@ -373,7 +372,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
         paramDialog.show();
         paramDialog.setOnSelectCallBack((sku, count) -> {
             if (mPresenter != null){
-                mPresenter.addCart(goods.goods_id,sku.id,String.valueOf(count));
+                mPresenter.addCart(goods.goods_id,sku==null?"":sku.id,String.valueOf(count));
             }
         });
     }

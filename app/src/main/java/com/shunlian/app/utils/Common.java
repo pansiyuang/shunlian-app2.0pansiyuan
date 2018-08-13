@@ -159,7 +159,7 @@ public class Common {
             case "voucherlist":
                 return "CouponListAct";
             case "login":
-                return "LoginAct";
+                return "LoginEntryAct";
             case "article":
                 return "ArticleH5Act";
             case "artdetails":
@@ -270,8 +270,8 @@ public class Common {
                 break;
             case "coupon":
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
                     GetCouponAct.startAct(context);
                 }
@@ -328,8 +328,8 @@ public class Common {
 //                break;
             case "commission":
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
                     MyProfitAct.startAct(context, false);
                 }
@@ -340,8 +340,8 @@ public class Common {
 //                break;
             case "voucherlist":
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
                     CouponListAct.startAct(context);
                 }
@@ -365,8 +365,8 @@ public class Common {
                 break;
             case "myorder"://我的订单
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
                     OrderDetailAct.startAct(context, params[0]);
                 }
@@ -437,8 +437,8 @@ public class Common {
 //               Common.goGoGo(context, toPage, id, id1,id2, id3,id4, id5,id6,to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
 
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
 
                     ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
