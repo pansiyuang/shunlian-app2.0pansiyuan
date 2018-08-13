@@ -715,6 +715,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             helpArticleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+                    if (position<0)
+                        return;
                     HelpcenterIndexEntity.ArticleCategory questionCategory = personalcenterEntity.article.get(position);
                     HelpClassAct.startAct(getContext(), questionCategory.id);
                 }

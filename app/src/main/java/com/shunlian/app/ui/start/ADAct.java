@@ -68,7 +68,7 @@ public class ADAct extends MBaseActivity {
                     @Override
                     public void run() {
                         time = time+1;
-                        if (time!=3)
+                        if (mtv_count!=null&&time!=3)
                         mtv_count.setText(getStringResouce(R.string.first_tianguo) +" "+(3-time));
                     }
                 });

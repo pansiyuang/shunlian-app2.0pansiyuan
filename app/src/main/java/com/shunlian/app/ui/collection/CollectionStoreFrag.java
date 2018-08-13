@@ -158,6 +158,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
         for (CollectionStoresEntity.Store goods : stores) {
             goods.isSelect = false;
         }
+        if (adapter!=null)
         adapter.notifyItemRangeChanged(0,stores.size(),stores);
         isAllSelect = false;
         gone(flayout_category);

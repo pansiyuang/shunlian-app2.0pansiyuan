@@ -179,7 +179,7 @@ public class GlideUtils {
      * @param heightSize
      */
     public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize) {
-        if (imageView == null) return;
+        if (imageView == null||withSize<=0||heightSize<=0) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.img_default_common)
