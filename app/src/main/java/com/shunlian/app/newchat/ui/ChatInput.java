@@ -33,7 +33,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.newchat.adapter.EmojisVPAdapter;
 import com.shunlian.app.newchat.adapter.FastAdapter;
 import com.shunlian.app.newchat.adapter.PanelAdapter;
@@ -43,7 +42,6 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IChatInputView;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +109,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
 
     public void mRelease(){
         if (am!=null)
-        am.close();
+            am.close();
     }
     private void initView() {
         btnAdd.setOnClickListener(this);
@@ -476,7 +474,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
             float scaleHeight = (float) i / height;
             matrix.postScale(scaleWidth, scaleHeight);
             resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return resizedBitmap;

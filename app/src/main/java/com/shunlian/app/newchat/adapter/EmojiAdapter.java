@@ -15,7 +15,6 @@ import com.shunlian.app.utils.EmojisUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -75,7 +74,7 @@ public class EmojiAdapter extends RecyclerView.Adapter {
                 matrix.postScale(scaleWidth, scaleHeight);
                 final Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
                 mHloder.imageView.setImageBitmap(resizedBitmap);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
