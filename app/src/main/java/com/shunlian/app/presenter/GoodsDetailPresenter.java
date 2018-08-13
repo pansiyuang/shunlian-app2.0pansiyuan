@@ -44,8 +44,6 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     public static final String pageSize = "20";//评价每页数量
     private String type = "ALL";
     private String act_id;
-    private String shareLink;
-    private String goodsTitle;
     private ShareInfoParam shareInfoParam;
     private String mayBeBuyGoodsId;
     private final GoodsDetailAct mDetailAct;
@@ -113,7 +111,6 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     }
 
                     /**************分享****************/
-                    goodsTitle = data.title;
                     shareInfoParam.title = data.title;
                     shareInfoParam.img = data.pics.get(0);
                     shareInfoParam.goodsPrice = data.price;
@@ -121,10 +118,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     shareInfoParam.downloadPic = data.pics;
                     shareInfoParam.goods_id = goods_id;
                     if (data.user_info != null){
-                        shareLink = data.user_info.share_url;
+                        shareInfoParam.shareLink = data.user_info.share_url;
                         shareInfoParam.userAvatar = data.user_info.avatar;
                         shareInfoParam.userName = data.user_info.nickname;
-                        shareInfoParam.shareLink = shareLink;
                     }
                     /**************分享****************/
 
@@ -606,7 +602,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * 复制链接
      */
     public void copyText(boolean isToast) {
-        Common.copyText(context,shareLink,goodsTitle,isToast);
+        if (shareInfoParam == null)return;
+        Common.copyText(context,shareInfoParam.shareLink,shareInfoParam.desc,isToast);
     }
 
     /**
@@ -615,6 +612,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      */
     public ShareInfoParam getShareInfoParam() {
         return shareInfoParam;
+    }
+
+    public void setShareInfoParam(ShareInfoParam shareInfoParam) {
+        this.shareInfoParam = shareInfoParam;
     }
 
     /**
