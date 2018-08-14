@@ -570,7 +570,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
             int pref_length = 0;
             String title = mGoodsEntity.title;
-            final String is_preferential = mGoodsEntity.is_preferential;
+            String is_preferential = mGoodsEntity.is_preferential;
             if (mGoodsEntity.tt_act != null) {
                 pref_length = 5;//显示天天特惠标题
                 title = mGoodsEntity.tt_act.title;
@@ -578,8 +578,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             } else {
                 gone(mHolder.miv_pref);
                 if (!isEmpty(is_preferential)) {//显示正常标题
-                    GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
-                    infoDrawable.setColor(Color.parseColor("#FB0036"));
                     mHolder.mtv_discount_info.setText(is_preferential);
                     visible(mHolder.mtv_discount_info);
                     pref_length = is_preferential.length();

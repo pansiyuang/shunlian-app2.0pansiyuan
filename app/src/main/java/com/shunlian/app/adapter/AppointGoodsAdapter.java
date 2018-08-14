@@ -40,9 +40,21 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         GoodsDeatilEntity.Goods goods = lists.get(position);
         GlideUtils.getInstance().loadImage(context,mHolder.miv_goods,goods.thumb);
         mHolder.mtv_count.setText("x"+goods.qty);
-        mHolder.mtv_title.setText(goods.title);
         mHolder.mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+goods.price,11));
         mHolder.mtv_attribute.setText(goods.sku);
+
+        // TODO: 2018/8/14 标签 
+        String label = "茶话会";
+        int pref_length = 0;
+        if (!isEmpty(label)){
+            visible(mHolder.mtv_label);
+            mHolder.mtv_label.setText(label);
+            pref_length = label.length();
+        }else {
+            gone(mHolder.mtv_label);
+            pref_length = 0;
+        }
+        mHolder.mtv_title.setText(Common.getPlaceholder(pref_length) + goods.title);
     }
 
     public class AppointGoodsHolder extends BaseRecyclerViewHolder{
@@ -61,6 +73,9 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
 
         @BindView(R.id.mtv_count)
         MyTextView mtv_count;
+
+        @BindView(R.id.mtv_label)
+        MyTextView mtv_label;
 
         public AppointGoodsHolder(View itemView) {
             super(itemView);

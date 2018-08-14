@@ -224,15 +224,15 @@
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_discount_info"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_rectangle_3px"
+            android:layout_height="15dp"
+            android:layout_alignTop="@+id/mtv_title"
+            android:background="@drawable/rounded_rectangle_pink_4px"
             android:textColor="@color/white"
-            app:tv_control_adapter="true"
-            app:tv_control_height="29"
             android:textSize="11sp"
+            android:maxLines="1"
+            android:gravity="center"
             android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            app:tv_margin_top="4"/>
+            android:paddingRight="2dp"/>
 
         <!--天天特惠图片-->
         <com.shunlian.app.widget.MyImageView
