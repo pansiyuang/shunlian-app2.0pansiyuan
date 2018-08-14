@@ -833,7 +833,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         GoodsDeatilEntity.TTAct tt_act = mGoodsEntity.tt_act;
         if (tt_act != null) {
             visible(mHolder.mllayout_preferential);
-            gone(mHolder.mllayout_common_price, mHolder.mtv_sales);
+            gone(mHolder.mtv_price_rmb,mHolder.mtv_price,mHolder.mtv_marketPrice, mHolder.mtv_sales);
 
             if ("1".equals(tt_act.sale)) {//1：活动进行中   0：活动未开始
                 mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.pink_color));
@@ -886,7 +886,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 });
             }
         } else {
-            visible(mHolder.mtv_sales, mHolder.mllayout_common_price);
+            visible(mHolder.mtv_sales, mHolder.mtv_price_rmb,mHolder.mtv_price,mHolder.mtv_marketPrice);
             gone(mHolder.mllayout_preferential);
         }
     }
@@ -1083,8 +1083,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_act_title)
         MyTextView mtv_act_title;
 
-        @BindView(R.id.mllayout_common_price)
-        MyLinearLayout mllayout_common_price;
+        /*@BindView(R.id.mllayout_common_price)
+        MyLinearLayout mllayout_common_price;*/
 
         @BindView(R.id.miv_pref)
         MyImageView miv_pref;

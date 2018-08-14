@@ -230,6 +230,7 @@
             android:textColor="@color/white"
             android:textSize="11sp"
             android:maxLines="1"
+            android:visibility="gone"
             android:gravity="center"
             android:paddingLeft="2dp"
             android:paddingRight="2dp"/>
@@ -358,6 +359,7 @@
 
         </LinearLayout>
 
+        <!--新品-->
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_new_goods"
             android:layout_width="wrap_content"
@@ -371,7 +373,7 @@
             android:padding="3dp"
             android:gravity="center"/>
 
-
+        <!--爆款-->
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_explosion_goods"
             android:layout_width="wrap_content"
@@ -385,6 +387,7 @@
             android:padding="3dp"
             android:gravity="center"/>
 
+        <!--热卖-->
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_hot_goods"
             android:layout_width="wrap_content"
@@ -398,6 +401,7 @@
             android:padding="3dp"
             android:gravity="center"/>
 
+        <!--推荐-->
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_recommend_goods"
             android:layout_width="wrap_content"
@@ -410,6 +414,7 @@
             app:tv_margin_left="12"
             android:padding="3dp"
             android:gravity="center"/>
+
         <!--还想要-->
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_want"
