@@ -11,9 +11,9 @@ import com.shunlian.app.adapter.GoodsDetailAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.widget.CustomScaleViewPager;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
-import com.shunlian.app.widget.banner.Kanner;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                         miv_top.setVisibility(View.INVISIBLE);
                     }
                     View firstView = manager.findViewByPosition(firstPosition);
-                    if (firstView instanceof Kanner){
+                    if (firstView instanceof CustomScaleViewPager){
                         totalDy += dy;
                         detailAct.setBgColor(firstPosition,totalDy);
                     }else {

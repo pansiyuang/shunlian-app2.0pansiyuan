@@ -2,7 +2,10 @@ package com.shunlian.app.widget;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+
+import com.shunlian.app.adapter.GoodsDetailBannerAdapter;
 
 import java.util.ArrayList;
 
@@ -48,6 +51,10 @@ public class CustomScaleViewPager extends ViewPager {
     public void setBanner(ArrayList<String> pics, String type) {
         mPics = pics;
         mType = type;
+        if (mHasVideo && !TextUtils.isEmpty(mVideoPath))
+            mPics.add(0,mVideoPath);
+        GoodsDetailBannerAdapter adapter = new GoodsDetailBannerAdapter(getContext(),mHasVideo,mPics);
+        setAdapter(adapter);
     }
 
 

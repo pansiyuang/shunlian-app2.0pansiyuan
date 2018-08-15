@@ -128,7 +128,7 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
     protected int mGestureDownVolume;
     protected float mGestureDownBrightness;
     protected long mSeekTimePosition;
-    boolean tmp_test_back = false;
+    public boolean tmp_test_back = false;
 
     public JZVideoPlayer(Context context) {
         super(context);
@@ -441,33 +441,7 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.start) {
-            Log.i(TAG, "onClick start [" + this.hashCode() + "] ");
-            if (dataSourceObjects == null || JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex) == null) {
-                Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (currentState == CURRENT_STATE_NORMAL) {
-                if (!JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("file") && !
-                        JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("/") &&
-                        !JZUtils.isWifiConnected(getContext()) && !WIFI_TIP_DIALOG_SHOWED) {
-                    showWifiDialog();
-                    return;
-                }
-                startVideo();
-                onEvent(JZUserAction.ON_CLICK_START_ICON);//开始的事件应该在播放之后，此处特殊
-            } else if (currentState == CURRENT_STATE_PLAYING) {
-                onEvent(JZUserAction.ON_CLICK_PAUSE);
-                Log.d(TAG, "pauseVideo [" + this.hashCode() + "] ");
-                JZMediaManager.pause();
-                onStatePause();
-            } else if (currentState == CURRENT_STATE_PAUSE) {
-                onEvent(JZUserAction.ON_CLICK_RESUME);
-                JZMediaManager.start();
-                onStatePlaying();
-            } else if (currentState == CURRENT_STATE_AUTO_COMPLETE) {
-                onEvent(JZUserAction.ON_CLICK_START_AUTO_COMPLETE);
-                startVideo();
-            }
+            playerControl();
         } else if (i == R.id.fullscreen) {
             Log.i(TAG, "onClick fullscreen [" + this.hashCode() + "] ");
             if (currentState == CURRENT_STATE_AUTO_COMPLETE) return;
@@ -481,6 +455,36 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
             }
         } else if (i == R.id.iv_more) {
         } else if (i == R.id.back) {
+        }
+    }
+
+    protected void playerControl() {
+        Log.i(TAG, "onClick start [" + this.hashCode() + "] ");
+        if (dataSourceObjects == null || JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex) == null) {
+            Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (currentState == CURRENT_STATE_NORMAL) {
+            if (!JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("file") && !
+                    JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("/") &&
+                    !JZUtils.isWifiConnected(getContext()) && !WIFI_TIP_DIALOG_SHOWED) {
+                showWifiDialog();
+                return;
+            }
+            startVideo();
+            onEvent(JZUserAction.ON_CLICK_START_ICON);//开始的事件应该在播放之后，此处特殊
+        } else if (currentState == CURRENT_STATE_PLAYING) {
+            onEvent(JZUserAction.ON_CLICK_PAUSE);
+            Log.d(TAG, "pauseVideo [" + this.hashCode() + "] ");
+            JZMediaManager.pause();
+            onStatePause();
+        } else if (currentState == CURRENT_STATE_PAUSE) {
+            onEvent(JZUserAction.ON_CLICK_RESUME);
+            JZMediaManager.start();
+            onStatePlaying();
+        } else if (currentState == CURRENT_STATE_AUTO_COMPLETE) {
+            onEvent(JZUserAction.ON_CLICK_START_AUTO_COMPLETE);
+            startVideo();
         }
     }
 

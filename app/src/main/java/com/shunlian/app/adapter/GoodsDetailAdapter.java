@@ -920,7 +920,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     entity.index = pos;
                     LookBigImgAct.startAct(context, entity);
                 });*/
-                String path = "http://jzvd.nathen.cn/63f3f73712544394be981d9e4f56b612/69c5767bb9e54156b5b60a1b6edeb3b5-5287d2089db37e62345123a1be272f8b.mp4";
+                String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
                 mHolder.vp_video_banner.setHasVideo(true);
                 mHolder.vp_video_banner.setVideoPath(path);
                 mHolder.vp_video_banner.setBanner(mGoodsEntity.pics,type);
