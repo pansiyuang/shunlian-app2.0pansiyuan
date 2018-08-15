@@ -68,6 +68,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     public PopupWindow clarityPopWindow;
     public TextView mRetryBtn;
     public LinearLayout mRetryLayout;
+    private ImageView playControl;
 
     protected DismissControlViewTimerTask mDismissControlViewTimerTask;
     protected Dialog mProgressDialog;
@@ -98,8 +99,6 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             }
         }
     };
-    private ImageView playControl;
-    private ImageView iv_start;
 
     public SmallVideoPlayer(Context context) {
         super(context);
@@ -131,9 +130,6 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         fullscreenButton.setVisibility(VISIBLE);
         playControl = findViewById(R.id.iv_play_control);
         playControl.setVisibility(VISIBLE);
-        startButton.setVisibility(GONE);
-        iv_start = findViewById(R.id.iv_start);
-        iv_start.setVisibility(VISIBLE);
 
 
         thumbImageView.setOnClickListener(this);
@@ -142,7 +138,6 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         tinyBackImageView.setOnClickListener(this);
         mRetryBtn.setOnClickListener(this);
         playControl.setOnClickListener(this);
-        iv_start.setOnClickListener(this);
     }
 
     public void setUp(Object[] dataSourceObjects, int defaultUrlMapIndex, int screen, Object... objects) {
@@ -216,7 +211,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     public void onStatePreparingChangingUrl(int urlMapIndex, long seekToInAdvance) {
         super.onStatePreparingChangingUrl(urlMapIndex, seekToInAdvance);
         loadingProgressBar.setVisibility(VISIBLE);
-        //startButton.setVisibility(INVISIBLE);
+        startButton.setVisibility(INVISIBLE);
     }
 
     @Override
@@ -267,13 +262,15 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             Constructor<SmallVideoPlayer> constructor = (Constructor<SmallVideoPlayer>) getClass().getConstructor(Context.class);
             SmallVideoPlayer jzVideoPlayer = constructor.newInstance(getContext());
             jzVideoPlayer.setId(cn.jzvd.R.id.jz_tiny_id);
-            int w = TransformUtil.dip2px(getContext(), 125);
-            int h = TransformUtil.dip2px(getContext(), 70);
+            int w = TransformUtil.dip2px(getContext(), 160);
+            int h = TransformUtil.dip2px(getContext(), 100);
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, h);
             lp.gravity = Gravity.RIGHT | Gravity.TOP;
             int statusBarHeight = ImmersionBar.getStatusBarHeight((Activity) getContext());
             int topmargin = TransformUtil.dip2px(getContext(), 54);
+            int rightmargin = TransformUtil.dip2px(getContext(), 10);
             lp.topMargin = topmargin+statusBarHeight;
+            lp.rightMargin = rightmargin;
             vp.addView(jzVideoPlayer, lp);
             jzVideoPlayer.setUp(dataSourceObjects, currentUrlMapIndex, SmallVideoPlayer.SCREEN_WINDOW_TINY, objects);
             jzVideoPlayer.setState(currentState);
@@ -420,8 +417,6 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                 playControl.setImageResource(R.drawable.img_xiangqing_zanting);
             }
             playerControl();
-        }else if (i == R.id.iv_start){
-            iv_start.setVisibility(GONE);
         }
     }
 
@@ -722,7 +717,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                                         int thumbImg, int bottomPro, int retryLayout) {
         topContainer.setVisibility(GONE);
         bottomContainer.setVisibility(bottomCon);
-        //startButton.setVisibility(startBtn);
+        startButton.setVisibility(startBtn);
         loadingProgressBar.setVisibility(loadingPro);
         thumbImageView.setVisibility(thumbImg);
         bottomProgressBar.setVisibility(bottomPro);
@@ -731,18 +726,18 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     public void updateStartImage() {
         if (currentState == CURRENT_STATE_PLAYING) {
-            //startButton.setVisibility(VISIBLE);
-            //startButton.setImageResource(cn.jzvd.R.drawable.jz_click_pause_selector);
+            startButton.setVisibility(VISIBLE);
+            startButton.setImageResource(cn.jzvd.R.drawable.jz_click_pause_selector);
             replayTextView.setVisibility(INVISIBLE);
         } else if (currentState == CURRENT_STATE_ERROR) {
-            //startButton.setVisibility(INVISIBLE);
+            startButton.setVisibility(INVISIBLE);
             replayTextView.setVisibility(INVISIBLE);
         } else if (currentState == CURRENT_STATE_AUTO_COMPLETE) {
-            //startButton.setVisibility(VISIBLE);
-            //startButton.setImageResource(cn.jzvd.R.drawable.icon_faxian_chongbo);
+            startButton.setVisibility(VISIBLE);
+            startButton.setImageResource(cn.jzvd.R.drawable.icon_faxian_chongbo);
             replayTextView.setVisibility(VISIBLE);
         } else {
-            //startButton.setImageResource(cn.jzvd.R.drawable.jz_click_play_selector);
+            startButton.setImageResource(cn.jzvd.R.drawable.jz_click_play_selector);
             replayTextView.setVisibility(INVISIBLE);
         }
     }
@@ -902,7 +897,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                 public void run() {
                     bottomContainer.setVisibility(View.INVISIBLE);
                     topContainer.setVisibility(View.GONE);
-                    //startButton.setVisibility(View.INVISIBLE);
+                    startButton.setVisibility(View.INVISIBLE);
                     if (clarityPopWindow != null) {
                         clarityPopWindow.dismiss();
                     }

@@ -214,12 +214,6 @@
             android:layout_height="@dimen/jz_start_button_w_h_normal"
             android:src="@drawable/jz_click_play_selector" />
 
-        <ImageView
-            android:id="@+id/iv_start"
-            android:visibility="gone"
-            android:layout_width="@dimen/jz_start_button_w_h_normal"
-            android:layout_height="@dimen/jz_start_button_w_h_normal"
-            android:src="@drawable/icon_xiangqing_moren_bofang" />
     </LinearLayout>
 
 

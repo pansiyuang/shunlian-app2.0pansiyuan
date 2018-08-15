@@ -6,6 +6,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.GlideUtils;
@@ -60,7 +61,15 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
             GlideUtils.getInstance().loadImage(mContext, videoPlayer.thumbImageView, mPics.get(position+1));
             videoPlayer.setUp(videoPath, JZVideoPlayer.SCREEN_WINDOW_NORMAL);
             view.setOnClickListener(v -> videoPlayer.startVideo());
-            view.postDelayed(() -> videoPlayer.startWindowTiny(),2000);
+            //view.postDelayed(() -> videoPlayer.startWindowTiny(),2000);
+
+            ImageView iv_close = view.findViewById(R.id.iv_close);
+            ImageView iv_voice = view.findViewById(R.id.iv_voice);
+            iv_close.setOnClickListener(v -> videoPlayer.onCompletion());
+
+            iv_voice.setOnClickListener(v -> {
+
+            });
         }else {
             String pic = mPics.get(position);
             view = mInflater.inflate(R.layout.item_detail, container, false);
