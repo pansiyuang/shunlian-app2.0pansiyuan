@@ -41,6 +41,7 @@ public class PersonalcenterEntity {
     public String son_manage_url;
     public String son_order_url;
     public String plus_role;
+    public String bcm_role;
     public List<User> sl_user_ranks;
     public List<HelpcenterIndexEntity.ArticleCategory> article;
 

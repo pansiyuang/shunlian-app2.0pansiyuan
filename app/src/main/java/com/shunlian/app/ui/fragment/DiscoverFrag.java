@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/16.
@@ -123,11 +123,14 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     private DiscoverQuanZiFrag quanZiFrag;
     private DiscoverFlashAdapter flashAdapter;
     private PDiscover pDiscover;
-    private String flag_jingxuan = "nice", flag_guanzhu = "focus",
-            flag_xinde = "experience", flag_quanzi = "circle", flag_sucaiku = "material";
-    private boolean isSecond = false;
+    //    private String flag_jingxuan = "nice", flag_guanzhu = "focus",
+//            flag_xinde = "experience", flag_quanzi = "circle", flag_sucaiku = "material";
+    private String flag_jingxuan = "", flag_guanzhu = "",
+            flag_xinde = "", flag_quanzi = "", flag_sucaiku = "";
+//    private boolean isSecond = false;
     private CommonEntity data;
     private MainActivity mainActivity;
+    private String flag = "";
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -148,7 +151,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 
     public void initMessage(CommonEntity data) {
         this.data = data;
-        if (mtv_message_jingxuan==null)
+        if (mtv_message_jingxuan == null)
             return;
         if (data == null) {
             mtv_message_jingxuan.setVisibility(View.GONE);
@@ -163,45 +166,17 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         mtv_message_xinde.setVisibility(View.VISIBLE);
         mtv_message_quanzi.setVisibility(View.VISIBLE);
         mtv_message_sucaiku.setVisibility(View.VISIBLE);
-        if (data.nice > 99) {
-            mtv_message_jingxuan.setText("99+");
-        } else if (data.nice <= 0) {
-            mtv_message_jingxuan.setVisibility(View.GONE);
-        } else {
-            mtv_message_jingxuan.setText(String.valueOf(data.nice));
-        }
-        if (data.focus > 99) {
-            mtv_message_guanzhu.setText("99+");
-        } else if (data.focus <= 0) {
-            mtv_message_guanzhu.setVisibility(View.GONE);
-        } else {
-            mtv_message_guanzhu.setText(String.valueOf(data.focus));
-        }
-        if (data.experience > 99) {
-            mtv_message_xinde.setText("99+");
-        } else if (data.experience <= 0) {
-            mtv_message_xinde.setVisibility(View.GONE);
-        } else {
-            mtv_message_xinde.setText(String.valueOf(data.experience));
-        }
-        if (data.circle > 99) {
-            mtv_message_quanzi.setText("99+");
-        } else if (data.circle <= 0) {
-            mtv_message_quanzi.setVisibility(View.GONE);
-        } else {
-            mtv_message_quanzi.setText(String.valueOf(data.circle));
-        }
-        if (data.material > 99) {
-            mtv_message_sucaiku.setText("99+");
-        } else if (data.material <= 0) {
-            mtv_message_sucaiku.setVisibility(View.GONE);
-        } else {
-            mtv_message_sucaiku.setText(String.valueOf(data.material));
-        }
-        if (!isSecond) {
-            mtv_message_jingxuan.setVisibility(View.GONE);
-            isSecond = true;
-        }
+
+        judges(flag_jingxuan, mtv_message_jingxuan);
+        judges(flag_guanzhu, mtv_message_guanzhu);
+        judges(flag_xinde, mtv_message_xinde);
+        judges(flag_quanzi, mtv_message_quanzi);
+        judges(flag_sucaiku, mtv_message_sucaiku);
+
+//        if (!isSecond) {
+//            mtv_message_jingxuan.setVisibility(View.GONE);
+//            isSecond = true;
+//        }
 
     }
 
@@ -223,13 +198,11 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 //        });
         mainActivity = (MainActivity) getActivity();
         if (mainActivity != null)
-            initMessage(mainActivity.data);
-        String flag ="nice";
-        if (getArguments() != null&&!isEmpty(getArguments().getString("flag"))&&
-                "nicefocusexperiencecirclematerial".contains(getArguments().getString("flag"))){
+            data = mainActivity.data;
+        if (getArguments() != null && !isEmpty(getArguments().getString("flag")) &&
+                "nicefocusexperiencecirclematerial".contains(getArguments().getString("flag"))) {
             flag = getArguments().getString("flag");
         }
-        setArgument(flag);
         miv_empty.setFocusable(false);
     }
 
@@ -330,34 +303,34 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         mtv_message_sucaiku.setVisibility(View.GONE);
     }
 
-    public void messageCall(String flag){
-        if (data != null){
-            int count=0;
+    public void messageCall(String flag) {
+        if (data != null) {
+            int count = 0;
             if (!isEmpty(flag))
-            switch (flag) {
-                case "nice":
-                    count=data.nice;
-                    data.nice=0;
-                    break;
-                case "focus":
-                    count=data.focus;
-                    data.focus=0;
-                    break;
-                case "experience":
-                    count=data.experience;
-                    data.experience=0;
-                    break;
-                case "circle":
-                    count=data.circle;
-                    data.circle=0;
-                    break;
-                case "material":
-                    count=data.material;
-                    data.material=0;
-                    break;
-            }
-            data.total=data.total-count;
-            if (mainActivity != null&&mainActivity.mtv_message_count!=null){
+                switch (flag) {
+                    case "nice":
+                        count = data.nice;
+                        data.nice = 0;
+                        break;
+                    case "focus":
+                        count = data.focus;
+                        data.focus = 0;
+                        break;
+                    case "experience":
+                        count = data.experience;
+                        data.experience = 0;
+                        break;
+                    case "circle":
+                        count = data.circle;
+                        data.circle = 0;
+                        break;
+                    case "material":
+                        count = data.material;
+                        data.material = 0;
+                        break;
+                }
+            data.total = data.total - count;
+            if (mainActivity != null && mainActivity.mtv_message_count != null) {
                 if (data.total > 99) {
                     mainActivity.mtv_message_count.setText("99+");
                 } else if (data.total <= 0) {
@@ -368,6 +341,36 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             }
         }
     }
+
+    public void judges(String flag, MyTextView mtv_message) {
+        int count = 0;
+        if (!isEmpty(flag))
+            switch (flag) {
+                case "nice":
+                    count = data.nice;
+                    break;
+                case "focus":
+                    count = data.focus;
+                    break;
+                case "experience":
+                    count = data.experience;
+                    break;
+                case "circle":
+                    count = data.circle;
+                    break;
+                case "material":
+                    count = data.material;
+                    break;
+            }
+        if (count > 99) {
+            mtv_message.setText("99+");
+        } else if (count <= 0) {
+            mtv_message.setVisibility(View.GONE);
+        } else {
+            mtv_message.setText(String.valueOf(count));
+        }
+    }
+
     public void judge(String flag) {
         if (!isEmpty(flag))
             switch (flag) {
@@ -435,11 +438,26 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         }
     }
 
-    private void setParam(int length, MyTextView mtv) {
-        int multiple = 4 - length;
+//    private void setParam(int length, MyTextView mtv,MyTextView mtvs) {
+//        int multiple = 4 - length;
+////        LayoutParams取父布局类型,参数中的ViewGroup.LayoutParams.WRAP_CONTENT参数都是指向一个值如：RelativeLayout.LayoutParams.WRAP_CONTENT，LinearLayout.LayoutParams.WRAP_CONTENT
+//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        layoutParams.setMargins(-TransformUtil.dip2px(baseContext, 4* multiple), TransformUtil.dip2px(baseContext, 6), 0, 0);
+////        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+//        layoutParams.addRule(RelativeLayout.RIGHT_OF, mtvs.getId());
+//        mtv.setLayoutParams(layoutParams);
+//    }
+
+    private void setParam(int length, MyTextView mtv, int tab) {//5个tab//4个
+        float multiple;
+        if (length > 3) {
+            multiple = 0.5f;
+        } else {
+            multiple = 4 - length;
+        }
 //        LayoutParams取父布局类型,参数中的ViewGroup.LayoutParams.WRAP_CONTENT参数都是指向一个值如：RelativeLayout.LayoutParams.WRAP_CONTENT，LinearLayout.LayoutParams.WRAP_CONTENT
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, TransformUtil.dip2px(baseContext, 6), TransformUtil.dip2px(baseContext, 6 * multiple), 0);
+        layoutParams.setMargins(0, TransformUtil.dip2px(baseContext, 6), TransformUtil.dip2px(baseContext, (6 * 6 / tab) * multiple), 0);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         mtv.setLayoutParams(layoutParams);
     }
@@ -466,15 +484,15 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 flashAdapter.notifyDataSetChanged();
             }
         }
+
         if (!isEmpty(navEntity.nav_list)) {
             switch (navEntity.nav_list.size()) {
                 case 1:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
                     mrlayout_jingxuan.setVisibility(View.VISIBLE);
                     flag_jingxuan = navEntity.nav_list.get(0).code;
-                    if (navEntity.nav_list.get(0).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
-                    }
+
+                    setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan, 1);
                     break;
                 case 2:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
@@ -483,12 +501,9 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
                     flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
-                    if (navEntity.nav_list.get(0).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
-                    }
-                    if (navEntity.nav_list.get(1).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu);
-                    }
+
+                    setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan, 2);
+                    setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu, 2);
                     break;
                 case 3:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
@@ -500,15 +515,10 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
                     flag_xinde = navEntity.nav_list.get(2).code;
-                    if (navEntity.nav_list.get(0).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
-                    }
-                    if (navEntity.nav_list.get(1).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu);
-                    }
-                    if (navEntity.nav_list.get(2).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(2).name.length(), mtv_message_xinde);
-                    }
+
+                    setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan, 3);
+                    setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu, 3);
+                    setParam(navEntity.nav_list.get(2).name.length(), mtv_message_xinde, 3);
                     break;
                 case 4:
                     mtv_quanzi.setText(navEntity.nav_list.get(3).name);
@@ -523,18 +533,11 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     flag_guanzhu = navEntity.nav_list.get(1).code;
                     flag_xinde = navEntity.nav_list.get(2).code;
                     flag_quanzi = navEntity.nav_list.get(3).code;
-                    if (navEntity.nav_list.get(0).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
-                    }
-                    if (navEntity.nav_list.get(1).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu);
-                    }
-                    if (navEntity.nav_list.get(2).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(2).name.length(), mtv_message_xinde);
-                    }
-                    if (navEntity.nav_list.get(3).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(3).name.length(), mtv_message_quanzi);
-                    }
+
+                    setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan, 4);
+                    setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu, 4);
+                    setParam(navEntity.nav_list.get(2).name.length(), mtv_message_xinde, 4);
+                    setParam(navEntity.nav_list.get(3).name.length(), mtv_message_quanzi, 4);
                     break;
                 case 5:
                     mtv_sucaiku.setText(navEntity.nav_list.get(4).name);
@@ -552,24 +555,25 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     flag_xinde = navEntity.nav_list.get(2).code;
                     flag_quanzi = navEntity.nav_list.get(3).code;
                     flag_sucaiku = navEntity.nav_list.get(4).code;
-                    if (navEntity.nav_list.get(0).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan);
-                    }
-                    if (navEntity.nav_list.get(1).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu);
-                    }
-                    if (navEntity.nav_list.get(2).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(2).name.length(), mtv_message_xinde);
-                    }
-                    if (navEntity.nav_list.get(3).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(3).name.length(), mtv_message_quanzi);
-                    }
-                    if (navEntity.nav_list.get(4).name.length() < 4) {
-                        setParam(navEntity.nav_list.get(4).name.length(), mtv_message_sucaiku);
-                    }
+
+                    setParam(navEntity.nav_list.get(0).name.length(), mtv_message_jingxuan, 5);
+                    setParam(navEntity.nav_list.get(1).name.length(), mtv_message_guanzhu, 5);
+                    setParam(navEntity.nav_list.get(2).name.length(), mtv_message_xinde, 5);
+                    setParam(navEntity.nav_list.get(3).name.length(), mtv_message_quanzi, 5);
+                    setParam(navEntity.nav_list.get(4).name.length(), mtv_message_sucaiku, 5);
                     break;
             }
+            if ((flag_jingxuan+flag_guanzhu+flag_xinde+flag_quanzi+flag_sucaiku).contains("experience")){
+                miv_experience_publish.setVisibility(View.VISIBLE);
+            }else {
+                miv_experience_publish.setVisibility(View.GONE);
+            }
+            if (isEmpty(flag))
+                flag=navEntity.nav_list.get(0).code;
+            setArgument(flag);
+            initMessage(data);
         }
+
     }
 
     @Override
@@ -616,23 +620,36 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 
 
     public void setArgument(String flag) {
-        if (!isEmpty(flag))
-            switch (flag) {
-                case "nice":
-                    jingXuan();
-                    break;
-                case "focus":
-                    guanZhu();
-                    break;
-                case "experience":
-                    xinde();
-                    break;
-                case "circle":
-                    quanzi();
-                    break;
-                case "material":
-                    sucaiku();
-                    break;
+        if (!isEmpty(flag) && "nicefocusexperiencecirclematerial".contains(flag)) {
+            if (flag.equals(flag_guanzhu)) {
+                guanZhu();
+            } else if (flag.equals(flag_xinde)) {
+                xinde();
+            } else if (flag.equals(flag_quanzi)) {
+                quanzi();
+            } else if (flag.equals(flag_sucaiku)) {
+                sucaiku();
+            } else {
+                jingXuan();
             }
+        }
+//        if (!isEmpty(flag))
+//            switch (flag) {
+//                case "nice":
+//                    jingXuan();
+//                    break;
+//                case "focus":
+//                    guanZhu();
+//                    break;
+//                case "experience":
+//                    xinde();
+//                    break;
+//                case "circle":
+//                    quanzi();
+//                    break;
+//                case "material":
+//                    sucaiku();
+//                    break;
+//            }
     }
 }

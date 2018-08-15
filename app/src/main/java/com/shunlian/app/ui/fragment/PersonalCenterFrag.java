@@ -157,6 +157,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     MyLinearLayout mllayout_zuji;
     @BindView(R.id.miv_levels)
     MyImageView miv_levels;
+    @BindView(R.id.miv_jingli)
+    MyImageView miv_jingli;
     @BindView(R.id.miv_isShow_data)
     MyImageView miv_isShow_data;
     @BindView(R.id.miv_shezhi)
@@ -492,6 +494,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity = personalcenterEntity;
+        if (!isEmpty(personalcenterEntity.bcm_role)&&"1".equals(personalcenterEntity.bcm_role)){
+            miv_jingli.setVisibility(View.VISIBLE);
+        }else {
+            miv_jingli.setVisibility(View.GONE);
+        }
         if (isEmpty(personalcenterEntity.note)) {
             gone(mtv_hint);
         } else {

@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
@@ -62,6 +61,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
     public int position = 0;
     public CommonEntity data;
+    @BindView(R.id.mtv_message_count)
+    public MyTextView mtv_message_count;
+    public AdEntity adEntity;
     @BindView(R.id.fl_main)
     MyFrameLayout fl_main;
     @BindView(R.id.ll_tab_main_page)
@@ -96,8 +98,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     MyImageView miv_person_center;
     @BindView(R.id.tv_person_center)
     TextView tv_person_center;
-    @BindView(R.id.mtv_message_count)
-    public MyTextView mtv_message_count;
     @BindView(R.id.view_message)
     View view_message;
     //    private MainPageFrag mainPageFrag;
@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private long mExitTime;
     private FragmentManager fragmentManager;
     private int pageIndex;
-//    private String flag="default";
+    //    private String flag="default";
     private String flag;
     private Dialog dialog_ad;
     private MessageCountManager messageCountManager;
@@ -121,7 +121,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
-    public AdEntity adEntity;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -143,7 +142,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        initMessage();
+        if (!isEmpty(flag) &&"nicefocusexperiencecirclematerial".contains(flag)){
+            flag="";
+        }else {
+            initMessage();
+        }
     }
 
     public void initMessage() {
@@ -210,7 +213,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        } else {
 //            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
 //        }
-        if (Common.isAlreadyLogin()) {handleJump();}
+        if (Common.isAlreadyLogin()) {
+            handleJump();
+        }
         super.onResume();
     }
 
@@ -234,16 +239,16 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     private void handleJump() {
         String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
-        if (isEmpty(jumpType))return;
+        if (isEmpty(jumpType)) return;
         ObjectMapper om = new ObjectMapper();
         try {
             DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
             if (dispachJump != null) {
-                Common.goGoGo(this, dispachJump.jumpType,dispachJump.items);
+                Common.goGoGo(this, dispachJump.jumpType, dispachJump.items);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
         }
     }
@@ -364,7 +369,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         } else {
             try {
                 if (!TextUtils.isEmpty(url))
-                    url=java.net.URLDecoder.decode(url);
+                    url = java.net.URLDecoder.decode(url);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -432,12 +437,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             }
         } else {
             discoverFrag.setArgument(flag);
-            if (Common.isAlreadyLogin()){
+            if (Common.isAlreadyLogin()) {
                 discoverFrag.initMessage(data);
-            }else {
+            } else {
                 discoverFrag.initMessage(null);
             }
-
         }
         switchContent(discoverFrag);
         pageIndex = 2;
@@ -447,8 +451,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void shoppingCarClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.goGoGo(this,"login");
-            Common.theRelayJump("shoppingcar",null);
+            Common.goGoGo(this, "login");
+            Common.theRelayJump("shoppingcar", null);
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -471,8 +475,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void personCenterClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.goGoGo(this,"login");
-            Common.theRelayJump("personCenter",null);
+            Common.goGoGo(this, "login");
+            Common.theRelayJump("personCenter", null);
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -655,11 +659,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void setAD(AdEntity data) {
-        adEntity=data;
-        if ("1".equals(data.suspensionShow)&&mainPageFrag!=null){
+        adEntity = data;
+        if ("1".equals(data.suspensionShow) && mainPageFrag != null) {
             FirstPageFrag.miv_entry.setVisibility(View.VISIBLE);
-            GlideUtils.getInstance().loadImageZheng(this,FirstPageFrag.miv_entry,data.suspension.image);
-        }else {
+            GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, data.suspension.image);
+        } else {
             FirstPageFrag.miv_entry.setVisibility(View.GONE);
         }
         if ("1".equals(data.show) && !SharedPrefUtil.getCacheSharedPrf("ad_id", "").equals(data.list.ad_sn)) {
@@ -690,7 +694,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     public void setDiscoveryUnreadCount(CommonEntity data) {
         this.data = data;
-        if (mtv_message_count!=null){
+        if (mtv_message_count != null) {
             mtv_message_count.setVisibility(View.VISIBLE);
             if (data.total > 99) {
                 mtv_message_count.setText("99+");
