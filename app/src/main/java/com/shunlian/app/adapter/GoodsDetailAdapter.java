@@ -25,13 +25,13 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
+import com.shunlian.app.widget.CustomScaleViewPager;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.RecyclerDialog;
-import com.shunlian.app.widget.banner.Kanner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusException;
@@ -161,7 +161,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case BANNER_LAYOUT:
-                View banner_layout = mInflater.inflate(R.layout.banner, parent, false);
+                View banner_layout = mInflater.inflate(R.layout.video_banner_layout, parent, false);
                 return new BannerHolder(banner_layout);
             case TITLE_LAYOUT:
                 View title_layout = mInflater.inflate(R.layout.title_layout, parent, false);
@@ -903,7 +903,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             BannerHolder mHolder = (BannerHolder) holder;
             if (mGoodsEntity.pics != null) {
                 String type = mGoodsEntity.type;
-                switch (type){
+               /*switch (type){
                     case "1":
                         mHolder.kanner.setBanner(mGoodsEntity.pics, 1);
                         break;
@@ -914,12 +914,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         mHolder.kanner.setBanner(mGoodsEntity.pics);
                         break;
                 }
-                mHolder.kanner.setOnItemClickL(pos -> {
+                 mHolder.kanner.setOnItemClickL(pos -> {
                     BigImgEntity entity = new BigImgEntity();
                     entity.itemList = mGoodsEntity.pics;
                     entity.index = pos;
                     LookBigImgAct.startAct(context, entity);
-                });
+                });*/
+                String path = "http://jzvd.nathen.cn/63f3f73712544394be981d9e4f56b612/69c5767bb9e54156b5b60a1b6edeb3b5-5287d2089db37e62345123a1be272f8b.mp4";
+                mHolder.vp_video_banner.setHasVideo(true);
+                mHolder.vp_video_banner.setVideoPath(path);
+                mHolder.vp_video_banner.setBanner(mGoodsEntity.pics,type);
             }
         }
     }
@@ -1193,8 +1197,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     }
 
     public class BannerHolder extends BaseRecyclerViewHolder {
-        @BindView(R.id.kanner)
-        Kanner kanner;
+        /*@BindView(R.id.kanner)
+        Kanner kanner;*/
+
+        @BindView(R.id.vp_video_banner)
+        CustomScaleViewPager vp_video_banner;
 
         public BannerHolder(View itemView) {
             super(itemView);
