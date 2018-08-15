@@ -156,7 +156,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
             dayDayMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    if (rv_list.getScrollState()==0){
+                    if (dayDayMenuAdapter!=null&&rv_list.getScrollState()==0){
                         dayDayMenuAdapter.selectPosition = position;
                         dayDayMenuAdapter.notifyDataSetChanged();
                         dayListAdapter=null;

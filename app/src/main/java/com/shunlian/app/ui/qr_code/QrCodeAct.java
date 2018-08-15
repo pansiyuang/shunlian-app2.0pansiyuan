@@ -109,6 +109,7 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
         GlideUtils.getInstance().loadImageZheng(this, miv_code, data.qrcode_path);
         String invitedNum = String.format(getString(R.string.qr_yiyaoqing), data.invited);
         SpannableStringBuilder invitedNumBuilder = Common.changeColorAndSize(invitedNum, data.invited, 16, getColorResouce(R.color.pink_color));
+        if (mtv_chakanxiaodian!=null)
         mtv_yiyaoqing.setText(invitedNumBuilder);
     }
 }

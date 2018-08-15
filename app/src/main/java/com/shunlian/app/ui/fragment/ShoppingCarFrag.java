@@ -300,6 +300,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                     tv_title_right.setText(getString(R.string.edit));
                     setEditMode(false);
                 }
+                if (shopCarStoreAdapter!=null)
                 shopCarStoreAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_toal_del:
