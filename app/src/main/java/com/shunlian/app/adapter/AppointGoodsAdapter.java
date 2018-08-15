@@ -43,8 +43,7 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         mHolder.mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+goods.price,11));
         mHolder.mtv_attribute.setText(goods.sku);
 
-        // TODO: 2018/8/14 标签 
-        String label = "茶话会";
+        String label = goods.big_label;
         int pref_length = 0;
         if (!isEmpty(label)){
             visible(mHolder.mtv_label);

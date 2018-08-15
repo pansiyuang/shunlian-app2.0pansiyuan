@@ -128,5 +128,6 @@ public class ConfirmOrderEntity {
         public String status;
         public String sku;
         public String goods_id;
+        public String big_label;
     }
 }

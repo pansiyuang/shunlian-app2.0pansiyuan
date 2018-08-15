@@ -184,7 +184,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             mHolder.mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb) + goods.price, 11));
             mHolder.mtv_attribute.setText(goods.sku);
 
-            setLabel(mHolder.mtv_label,mHolder.mtv_title,goods.title,"茶话会");
+            setLabel(mHolder.mtv_label,mHolder.mtv_title,goods.title,goods.big_label);
         }
     }
 
@@ -221,7 +221,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     MyTextView mtv_label = holder.getView(R.id.mtv_label);
 
 
-                    setLabel(mtv_label,mtv_title,s.title,"茶话会");
+                    setLabel(mtv_label,mtv_title,s.title,s.big_label);
                 }
             };
             mHolder.recy_view.setAdapter(adapter);
@@ -604,7 +604,6 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
 
 
     private void setLabel(TextView tv_label,TextView tv_title,String str_title,String str_label){
-        // TODO: 2018/8/14 标签
         int pref_length = 0;
         if (!isEmpty(str_label)){
             visible(tv_label);
