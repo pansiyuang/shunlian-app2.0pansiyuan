@@ -124,4 +124,13 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
         recy_view.setAdapter(adapter);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+            presenter = null;
+        }
+    }
 }

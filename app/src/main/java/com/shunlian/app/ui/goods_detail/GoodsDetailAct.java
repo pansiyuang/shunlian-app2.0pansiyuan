@@ -666,10 +666,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     @Override
-    public void onClick(View v) {
-//        if (MyOnClickListener.isClickable(this)){
-//            return;
-//        }
+    public void mOnClick(View v) {
         switch (v.getId()) {
             case R.id.mtv_add_car:
                 if (!Common.isAlreadyLogin()) {
@@ -1215,11 +1212,12 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        if (quick_actions != null) {
-            mShareInfoParam.userName = baseEntity.data.userName;
-            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
-            mShareInfoParam.shareLink = baseEntity.data.shareLink;
-            mShareInfoParam.desc = baseEntity.data.desc;
+        mShareInfoParam.userName = baseEntity.data.userName;
+        mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+        mShareInfoParam.shareLink = baseEntity.data.shareLink;
+        mShareInfoParam.desc = baseEntity.data.desc;
+        if (goodsDetailPresenter != null){
+            goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
         }
     }
 }

@@ -55,7 +55,14 @@ public class SelectLabelPresenter extends BasePresenter<ISelectLabelView> {
      */
     @Override
     public void detachView() {
-
+        if (list != null){
+            list.clear();
+            list = null;
+        }
+        if (tag != null){
+            tag.clear();
+            tag = null;
+        }
     }
 
     /**

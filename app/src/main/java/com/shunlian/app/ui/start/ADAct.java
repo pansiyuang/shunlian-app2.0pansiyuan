@@ -68,7 +68,7 @@ public class ADAct extends MBaseActivity {
                     @Override
                     public void run() {
                         time = time+1;
-                        if (time!=3)
+                        if (mtv_count!=null&&time!=3)
                         mtv_count.setText(getStringResouce(R.string.first_tianguo) +" "+(3-time));
                     }
                 });
@@ -111,6 +111,7 @@ public class ADAct extends MBaseActivity {
                 Constant.JPUSH.add(adEntity.list.link.item_id);
                 Constant.JPUSH.add("");
                 Common.goGoGo(getBaseContext(), adEntity.list.link.type, adEntity.list.link.item_id);
+//                Common.goGoGo(getBaseContext(), "url", "https://wx.shunliandongli.com/special/145");
                 finish();
                 break;
         }

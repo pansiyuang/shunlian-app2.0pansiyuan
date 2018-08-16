@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.FirstPageAdapter;
@@ -16,6 +17,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
@@ -88,6 +90,19 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         rv_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int value= TransformUtil.dip2px(baseActivity,80);
+                RelativeLayout.LayoutParams layoutParams= new RelativeLayout.LayoutParams(value,value);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                if (dy>0){
+                    layoutParams.setMargins(0,0,-value/2,value);
+                    FirstPageFrag.isHide=true;
+                }else {
+                    layoutParams.setMargins(0,0,0,value);
+                    FirstPageFrag.isHide=false;
+                }
+                FirstPageFrag.miv_entry.setLayoutParams(layoutParams);
+
                 if (!FirstPageFrag.isExpand&&0>=getScollYDistance())
                     FirstPageFrag.mAppbar.setExpanded(true);
                 if (gridLayoutManager != null) {
@@ -143,7 +158,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 ////            rv_view.setVisibility(View.VISIBLE);
 //            mtv_empty.setVisibility(View.VISIBLE);
 //            rv_view.setVisibility(View.GONE);
-        if (!isEmpty(getDataEntity.default_keyword))
+        if (getDataEntity!=null&&!isEmpty(getDataEntity.default_keyword))
         FirstPageFrag.mtv_search.setText(getDataEntity.default_keyword);
         if (lay_refresh != null)
             lay_refresh.setRefreshing(false);

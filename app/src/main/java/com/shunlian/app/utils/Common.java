@@ -138,6 +138,8 @@ public class Common {
     }
 
     public static String transClassName(String toPage) {
+        if (TextUtils.isEmpty(toPage))
+            return "";
         switch (toPage) {
             case "goods":
                 return "GoodsDetailAct";
@@ -157,7 +159,7 @@ public class Common {
             case "voucherlist":
                 return "CouponListAct";
             case "login":
-                return "LoginAct";
+                return "LoginEntryAct";
             case "article":
                 return "ArticleH5Act";
             case "artdetails":
@@ -230,6 +232,7 @@ public class Common {
                         shareInfoParam.photo = params[2];
                         WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
                     }else if ("2".equals(params[0])){
+//                        shareInfoParam.shareLink = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=95684227_hao_pg&wd=Rxjava%20%2Bre&oq=android%25E5%25AF%25B9url%25E8%25A7%25A3%25E7%25A0%2581&rsv_pq=dc1f4fe400029324&rsv_t=3a61SdbfGVa6%2BW9Dsq4tVpuDsLQVpB7q0%2BGONNSdL6LBQ35u0c1y7BXBoGsrkj2Hu1dcTf0U&rqlang=cn&rsv_enter=1&rsv_n=2&rsv_sug3=1&rsv_sug2=0&inputT=909&rsv_sug4=909";
                         shareInfoParam.shareLink = params[1];
                         shareInfoParam.title = params[3];
                         shareInfoParam.desc = params[4];
@@ -267,8 +270,8 @@ public class Common {
                 break;
             case "coupon":
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
                     GetCouponAct.startAct(context);
                 }
@@ -325,8 +328,8 @@ public class Common {
 //                break;
             case "commission":
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
                     MyProfitAct.startAct(context, false);
                 }
@@ -337,8 +340,8 @@ public class Common {
 //                break;
             case "voucherlist":
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
                     CouponListAct.startAct(context);
                 }
@@ -351,6 +354,7 @@ public class Common {
                 PlusGifDetailAct.startAct(context, params[0]);
                 break;
             case "login":
+                theRelayJump(null,null);
                 LoginEntryAct.startAct(context);
                 break;
             case "article":
@@ -361,8 +365,8 @@ public class Common {
                 break;
             case "myorder"://我的订单
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
                     OrderDetailAct.startAct(context, params[0]);
                 }
@@ -433,8 +437,8 @@ public class Common {
 //               Common.goGoGo(context, toPage, id, id1,id2, id3,id4, id5,id6,to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
 
                 if (TextUtils.isEmpty(token)) {
-                    theRelayJump(type,params);
                     Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
                 } else {
 
                     ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
@@ -680,6 +684,7 @@ public class Common {
      */
     public static String getPlaceholder(int num) {
         String str = "\u3000";
+        if (num == 1)str += " ";
         for (int i = 0; i < num - 1; i++) {
             str = str.concat("\u3000");
         }

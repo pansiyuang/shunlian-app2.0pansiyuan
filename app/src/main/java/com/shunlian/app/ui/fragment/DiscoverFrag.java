@@ -150,6 +150,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 
     public void initMessage(CommonEntity data) {
         this.data = data;
+        if (mtv_message_jingxuan==null)
+            return;
         if (data == null) {
             mtv_message_jingxuan.setVisibility(View.GONE);
             mtv_message_guanzhu.setVisibility(View.GONE);

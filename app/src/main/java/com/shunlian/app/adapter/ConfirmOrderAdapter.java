@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
@@ -172,16 +173,19 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
     }
 
     private void handleNoDelivery(RecyclerView.ViewHolder holder, int position) {
-        StationHolder mHolder = (StationHolder) holder;
-        int i = position - 1 - lists.size();
-        if (i>=mNoDeliveryList.size() || i < 0)return;
-        ConfirmOrderEntity.NoDelivery goods = mNoDeliveryList.get(i);
+        if (holder instanceof  StationHolder) {
+            StationHolder mHolder = (StationHolder) holder;
+            int i = position - 1 - lists.size();
+            if (i >= mNoDeliveryList.size() || i < 0) return;
+            ConfirmOrderEntity.NoDelivery goods = mNoDeliveryList.get(i);
 
-        GlideUtils.getInstance().loadImage(context,mHolder.miv_goods,goods.thumb);
-        mHolder.mtv_count.setText("x"+goods.qty);
-        mHolder.mtv_title.setText(goods.title);
-        mHolder.mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+goods.price,11));
-        mHolder.mtv_attribute.setText(goods.sku);
+            GlideUtils.getInstance().loadImage(context, mHolder.miv_goods, goods.thumb);
+            mHolder.mtv_count.setText("x" + goods.qty);
+            mHolder.mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb) + goods.price, 11));
+            mHolder.mtv_attribute.setText(goods.sku);
+
+            setLabel(mHolder.mtv_label,mHolder.mtv_title,goods.title,goods.big_label);
+        }
     }
 
     private void handlerInvalidGoods(RecyclerView.ViewHolder holder, int position) {
@@ -204,7 +208,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     mrl_rootview.setPadding(padding,padding,padding,0);
 
                     MyTextView mtv_title = holder.getView(R.id.mtv_title);
-                    mtv_title.setText(s.title);
+
                     MyTextView mtv_price = holder.getView(R.id.mtv_price);
                     mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+s.price,11));
                     MyTextView mtv_attribute = holder.getView(R.id.mtv_attribute);
@@ -213,6 +217,11 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     mtv_count.setText(String.format(getString(R.string.x),s.qty));
                     MyImageView miv_goods = holder.getView(R.id.miv_goods);
                     GlideUtils.getInstance().loadImage(context,miv_goods,s.thumb);
+
+                    MyTextView mtv_label = holder.getView(R.id.mtv_label);
+
+
+                    setLabel(mtv_label,mtv_title,s.title,s.big_label);
                 }
             };
             mHolder.recy_view.setAdapter(adapter);
@@ -546,6 +555,9 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
         @BindView(R.id.mrl_rootview)
         MyRelativeLayout mrl_rootview;
 
+        @BindView(R.id.mtv_label)
+        MyTextView mtv_label;
+
         public StationHolder(View itemView) {
             super(itemView);
             int px = TransformUtil.dip2px(context, 10);
@@ -588,5 +600,19 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
     public interface ISelectVoucherListener{
 
         void onSelectVoucher(int position);
+    }
+
+
+    private void setLabel(TextView tv_label,TextView tv_title,String str_title,String str_label){
+        int pref_length = 0;
+        if (!isEmpty(str_label)){
+            visible(tv_label);
+            tv_label.setText(str_label);
+            pref_length = str_label.length();
+        }else {
+            gone(tv_label);
+            pref_length = 0;
+        }
+        tv_title.setText(Common.getPlaceholder(pref_length) + str_title);
     }
 }

@@ -1,7 +1,6 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,12 +59,10 @@ public class OrderGoodsAdapter extends BaseRecyclerAdapter<MyOrderEntity.OrderGo
         mHolder.mtv_count.setText(String.format(getString(R.string.x),orderGoodsBean.qty));
         String offered = orderGoodsBean.offered;
         if (isEmpty(offered)){
-            mHolder.mtv_label.setVisibility(View.GONE);
+            gone(mHolder.mtv_label);
             mHolder.mtv_title.setText(orderGoodsBean.title);
         }else {
-            mHolder.mtv_label.setVisibility(View.VISIBLE);
-            GradientDrawable background = (GradientDrawable) mHolder.mtv_label.getBackground();
-            background.setColor(getColor(R.color.pink_color));
+            visible(mHolder.mtv_label);
             mHolder.mtv_label.setText(offered);
             mHolder.mtv_title.setText(Common.getPlaceholder(offered.length())
                     .concat(orderGoodsBean.title));

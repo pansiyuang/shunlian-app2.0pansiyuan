@@ -272,6 +272,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     }
 
     public void showEmptyView(boolean isShowEmpty) {
+        if (nei_empty==null)
+            return;
         if (isShowEmpty) {
             nei_empty.setImageResource(R.mipmap.img_empty_dingdan).setText("暂无商品").setButtonText(null);
             nei_empty.setVisibility(View.VISIBLE);

@@ -121,6 +121,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
+    public AdEntity adEntity;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -165,6 +166,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         pMain = new PMain(MainActivity.this, MainActivity.this);
         pMain.entryInfo();
         initMessage();
+        fragmentManager = getSupportFragmentManager();
+        mainPageClick();
         if (updateDialogV == null)
             updateDialogV = new UpdateDialog(this) {
                 @Override
@@ -174,9 +177,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     }
                 }
             };
-        fragmentManager = getSupportFragmentManager();
-        mainPageClick();
-
         if (Common.isAlreadyLogin()) {
             EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
             messageCountManager = MessageCountManager.getInstance(this);
@@ -290,7 +290,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
-            mtv_message_count.setVisibility(View.GONE);
+//            mtv_message_count.setVisibility(View.GONE);
         }
         if (handler == null)
             handler = new Handler();
@@ -447,8 +447,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void shoppingCarClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.theRelayJump("shoppingcar",null);
             Common.goGoGo(this,"login");
+            Common.theRelayJump("shoppingcar",null);
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -471,8 +471,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void personCenterClick() {
         isFirst = false;
         if (!Common.isAlreadyLogin()) {
-            Common.theRelayJump("personCenter",null);
             Common.goGoGo(this,"login");
+            Common.theRelayJump("personCenter",null);
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -655,6 +655,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void setAD(AdEntity data) {
+        adEntity=data;
+        if ("1".equals(data.suspensionShow)&&mainPageFrag!=null){
+            FirstPageFrag.miv_entry.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImageZheng(this,FirstPageFrag.miv_entry,data.suspension.image);
+        }else {
+            FirstPageFrag.miv_entry.setVisibility(View.GONE);
+        }
         if ("1".equals(data.show) && !SharedPrefUtil.getCacheSharedPrf("ad_id", "").equals(data.list.ad_sn)) {
             initDialog(data);
             SharedPrefUtil.saveCacheSharedPrf("ad_id", data.list.ad_sn);

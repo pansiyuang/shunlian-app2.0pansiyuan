@@ -120,8 +120,10 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
             iView.setAdapter(adapter);
             adapter.setOnReloadListener(() -> onRefresh());
             adapter.setOnItemClickListener((v, position) -> {
-                SystemMsgEntity.MsgType msgType = msgTypes.get(position);
-                handlerType(msgType,position);
+                if (position>=0&&position<msgTypes.size()){
+                    SystemMsgEntity.MsgType msgType = msgTypes.get(position);
+                    handlerType(msgType,position);
+                }
             });
         } else {
             adapter.notifyDataSetChanged();

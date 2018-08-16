@@ -38,6 +38,21 @@
         app:tv_margin_right="46"
         app:tv_margin_top="5" />
 
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_label"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_alignTop="@+id/mtv_title"
+        android:background="@drawable/rounded_rectangle_pink_4px"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:maxLines="1"
+        android:visibility="gone"
+        android:layout_alignLeft="@+id/mtv_title"
+        android:gravity="center"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"/>
+
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_attribute"

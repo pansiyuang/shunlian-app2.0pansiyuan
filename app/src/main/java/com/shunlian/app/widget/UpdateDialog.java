@@ -50,6 +50,7 @@ public class UpdateDialog implements IMain {
     private String updateType;
     private String updateUrl;
     private String fileMd5;
+    private String newVersion;
     private TextView tv_checkUpdate;
     private CBProgressBar cbProgressBar;
     private PromptDialog promptDialog;
@@ -98,9 +99,11 @@ public class UpdateDialog implements IMain {
             MyTextView mtv_close = (MyTextView) updateDialog.findViewById(R.id.mtv_close);
 //        TextView tv_update = (TextView) updateDialog.findViewById(R.id.tv_update);
             MyTextView mtv_content = (MyTextView) updateDialog.findViewById(R.id.mtv_content);
+            MyTextView mtv_version = (MyTextView) updateDialog.findViewById(R.id.mtv_version);
 //        TextView tv_cancel = (TextView) updateDialog.findViewById(R.id.tv_cancel);
             mtv_content.setText(updateLog);
             mtv_content.setMovementMethod(new ScrollingMovementMethod());
+            mtv_version.setText("V"+newVersion);
 //        tv_newVersion.setText("发现新版本" + newVersion);
 //        tv_oldVersion.setText("（当前版本" + localVersion + "）");
             if ("force".equals(updateType)) {
@@ -255,8 +258,9 @@ public class UpdateDialog implements IMain {
         updateType = data.updateType;
         updateUrl = data.updateUrl;
         fileMd5 = data.fileMd5;
+        newVersion = data.newVersion;
         SharedPrefUtil.saveCacheSharedPrf("updateLog", updateLog);
-        SharedPrefUtil.saveCacheSharedPrf("newVersion", data.newVersion);
+        SharedPrefUtil.saveCacheSharedPrf("newVersion", newVersion);
         SharedPrefUtil.saveCacheSharedPrf("needUpdate", needUpdate);
         SharedPrefUtil.saveCacheSharedPrf("updateType", updateType);
         SharedPrefUtil.saveCacheSharedPrf("updateUrl", updateUrl);

@@ -34,6 +34,7 @@ import com.shunlian.app.widget.RecyclerDialog;
 import com.shunlian.app.widget.banner.Kanner;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.EventBusException;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -569,7 +570,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
             int pref_length = 0;
             String title = mGoodsEntity.title;
-            final String is_preferential = mGoodsEntity.is_preferential;
+            String is_preferential = mGoodsEntity.is_preferential;
             if (mGoodsEntity.tt_act != null) {
                 pref_length = 5;//显示天天特惠标题
                 title = mGoodsEntity.tt_act.title;
@@ -577,8 +578,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             } else {
                 gone(mHolder.miv_pref);
                 if (!isEmpty(is_preferential)) {//显示正常标题
-                    GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
-                    infoDrawable.setColor(Color.parseColor("#FB0036"));
                     mHolder.mtv_discount_info.setText(is_preferential);
                     visible(mHolder.mtv_discount_info);
                     pref_length = is_preferential.length();
@@ -834,7 +833,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         GoodsDeatilEntity.TTAct tt_act = mGoodsEntity.tt_act;
         if (tt_act != null) {
             visible(mHolder.mllayout_preferential);
-            gone(mHolder.mllayout_common_price, mHolder.mtv_sales);
+            gone(mHolder.mtv_price_rmb,mHolder.mtv_price,mHolder.mtv_marketPrice, mHolder.mtv_sales);
 
             if ("1".equals(tt_act.sale)) {//1：活动进行中   0：活动未开始
                 mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.pink_color));
@@ -887,7 +886,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 });
             }
         } else {
-            visible(mHolder.mtv_sales, mHolder.mllayout_common_price);
+            visible(mHolder.mtv_sales, mHolder.mtv_price_rmb,mHolder.mtv_price,mHolder.mtv_marketPrice);
             gone(mHolder.mllayout_preferential);
         }
     }
@@ -1084,8 +1083,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_act_title)
         MyTextView mtv_act_title;
 
-        @BindView(R.id.mllayout_common_price)
-        MyLinearLayout mllayout_common_price;
+        /*@BindView(R.id.mllayout_common_price)
+        MyLinearLayout mllayout_common_price;*/
 
         @BindView(R.id.miv_pref)
         MyImageView miv_pref;
@@ -1508,7 +1507,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void followStoreState(DefMessageEvent event) {
             setCollectionState(event.followStoreState);
-            EventBus.getDefault().unregister(this);
+            EventBus.getDefault().unregister(StoreGoodsHolder.this);
         }
 
 
@@ -1526,7 +1525,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         Common.goGoGo(context,"login");
                         return;
                     }
-                    EventBus.getDefault().register(StoreGoodsHolder.this);
+                    try {
+                        EventBus.getDefault().register(StoreGoodsHolder.this);
+                    }catch (EventBusException e){}
                     GoodsDetailAct detailAct = (GoodsDetailAct) context;
                     if (isAttentionShop) {
                         detailAct.delFollowStore();

@@ -7,9 +7,6 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.upload.ProgressListener;
-import com.shunlian.app.utils.upload.UploadFileRequestBody;
 import com.shunlian.app.view.INewFeedBackView;
 
 import java.io.File;
@@ -78,6 +75,7 @@ public class NewFeedBackPresenter extends BasePresenter<INewFeedBackView> {
         List<MultipartBody.Part> parts = new ArrayList<>();
         for (int i = 0; i < filePath.size(); i++) {
             File file = filePath.get(i).file;
+            if (file == null)continue;
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("file[]", file.getName(), requestBody);
             parts.add(part);

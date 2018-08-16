@@ -188,8 +188,10 @@ public class StoreIntroduceAct extends BaseActivity implements StoreIntroduceVie
                 }
                 break;
             case R.id.mrlayout_yingye:
-                storeIntroduceEntity.isCode=false;
-                StoreLicenseAct.startAct(this,storeIntroduceEntity);
+                if (storeIntroduceEntity!=null){
+                    storeIntroduceEntity.isCode=false;
+                    StoreLicenseAct.startAct(this,storeIntroduceEntity);
+                }
                 break;
             case R.id.miv_close:
                 mFinish();
@@ -206,8 +208,10 @@ public class StoreIntroduceAct extends BaseActivity implements StoreIntroduceVie
                 storeIntroducePresenter.getUserId(storeId);
                 break;
             case R.id.mrlayout_erweima:
-                storeIntroduceEntity.isCode=true;
-                StoreLicenseAct.startAct(this,storeIntroduceEntity);
+                if (storeIntroduceEntity!=null){
+                    storeIntroduceEntity.isCode=true;
+                    StoreLicenseAct.startAct(this,storeIntroduceEntity);
+                }
                 break;
         }
     }

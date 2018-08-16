@@ -91,13 +91,11 @@ public class SaleDetailPresenter extends BasePresenter<ISaleDetailView> {
             public void onSuccess(BaseEntity<SaleDetailEntity> entity) {
                 super.onSuccess(entity);
                 isLoading = false;
-
                 SaleDetailEntity data = entity.data;
                 SaleDetailEntity.Page pager = data.pager;
                 currentPage = Integer.parseInt(pager.page);
                 allPage = Integer.parseInt(pager.total_page);
                 if (currentPage == 1){
-                    dataItems.clear();
                     if (mType == SaleDetailAct.REWARD_DETAIL){
                         iView.setTotalSale_Profit(null,data.total);
                     }else {
@@ -129,11 +127,9 @@ public class SaleDetailPresenter extends BasePresenter<ISaleDetailView> {
     @Override
     public void onRefresh() {
         super.onRefresh();
-        if (!isLoading){
-            if (currentPage <= allPage){
-                isLoading = true;
-                paging(false);
-            }
+        if (!isLoading && currentPage <= allPage){
+            isLoading = true;
+            paging(false);
         }
     }
 }

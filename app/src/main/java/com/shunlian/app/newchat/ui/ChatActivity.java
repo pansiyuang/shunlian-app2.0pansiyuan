@@ -1059,6 +1059,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 readedMsg(chat_m_user_Id);
             }
             runOnUiThread(() -> {
+                if (recycler_chat != null)
                 recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
             });
         } catch (Exception e) {

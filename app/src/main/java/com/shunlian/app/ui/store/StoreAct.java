@@ -551,6 +551,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             storeBabyAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+                    if (position<mDataList.size())
                     GoodsDetailAct.startAct(StoreAct.this, mDataList.get(position).id);
                 }
             });
