@@ -16,8 +16,9 @@ public class CustomScaleViewPager extends ViewPager {
 
     private boolean mHasVideo;
     private String mVideoPath;
-    private ArrayList<String> mPics;
+    private ArrayList<String> mPics = new ArrayList<>();
     private String mType;
+    private GoodsDetailBannerAdapter adapter;
 
     public CustomScaleViewPager(Context context) {
         this(context,null);
@@ -49,14 +50,17 @@ public class CustomScaleViewPager extends ViewPager {
      * @param type 类型 1是优品  2是团购
      */
     public void setBanner(ArrayList<String> pics, String type) {
-        mPics = pics;
+        mPics.clear();
+        mPics.addAll(pics);
         mType = type;
         if (mHasVideo && !TextUtils.isEmpty(mVideoPath))
             mPics.add(0,mVideoPath);
-        GoodsDetailBannerAdapter adapter = new GoodsDetailBannerAdapter(getContext(),mHasVideo,mPics);
-        setAdapter(adapter);
-    }
 
+        if (adapter == null) {
+            adapter = new GoodsDetailBannerAdapter(getContext(), mHasVideo, mPics);
+            setAdapter(adapter);
+        }
+    }
 
 
 }

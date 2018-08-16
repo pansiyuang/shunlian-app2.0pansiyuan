@@ -385,6 +385,7 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
         mScreenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
         mScreenHeight = getContext().getResources().getDisplayMetrics().heightPixels;
         mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        mGestureDownVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
         try {
             if (isCurrentPlay()) {
@@ -561,6 +562,9 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
                         int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
                         int deltaV = (int) (max * deltaY * 3 / mScreenHeight);
                         mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mGestureDownVolume + deltaV, 0);
+                        int streamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        Log.i(TAG, "ACTION_MOVE 声音变化 [" + streamVolume + "] ");
+
                         //dialog中显示百分比
                         int volumePercent = (int) (mGestureDownVolume * 100 / max + deltaY * 3 * 100 / mScreenHeight);
                         showVolumeDialog(-deltaY, volumePercent);
@@ -1181,5 +1185,32 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
                 });
             }
         }
+    }
+
+    /**
+     * 声音模式  1
+     * 静音模式 0
+     * @param mode
+     */
+    public void setRingerMode(int mode){
+        Log.i(TAG,"==setRingerMode======="+mode);
+        if (mAudioManager != null) {
+            if (mode == 0){
+                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,0,0);
+            }else if (mode == 1){
+                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,mGestureDownVolume,0);
+            }
+        }
+    }
+
+    /**
+     * 获取音频模式
+     * @return
+     */
+    public int getRingerMode(){
+        if (mAudioManager != null){
+           return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        }
+        return 0;
     }
 }

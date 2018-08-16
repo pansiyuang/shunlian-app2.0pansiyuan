@@ -27,7 +27,7 @@
         android:layout_height="31dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/img_xiangqing_yinliang_h"
+        android:src="@drawable/img_xiangqing_yinliang_n"
         android:layout_alignParentRight="true"
         />
 </RelativeLayout>
