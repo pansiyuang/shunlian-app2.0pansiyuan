@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
 
     private MyLinearLayout mllayout_count;
     private MyImageView miv_goods_icon;
+    private MyTextView mtv_label;
     private MyTextView tv_goods_name;
     private MyTextView tv_goods_price;
     private MyTextView tv_goods_param;
@@ -104,6 +106,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         View view = LayoutInflater.from(getContext()).inflate(R.layout.goods_info, null);
         addView(view);
 
+        mtv_label=(MyTextView)view.findViewById(R.id.mtv_label);
         mllayout_count = (MyLinearLayout) view.findViewById(R.id.mllayout_count);
         GradientDrawable background = (GradientDrawable) mllayout_count.getBackground();
         background.setColor(Color.WHITE);
@@ -143,6 +146,24 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
      */
     public CustomerGoodsView setGoodsTitle(CharSequence sequence) {
         tv_goods_name.setText(sequence);
+        return this;
+    }
+
+    /**
+     * 商品title
+     *
+     * @return
+     */
+    public CustomerGoodsView setGoodsTitles(String title,String label) {
+        if (TextUtils.isEmpty(label)){
+            mtv_label.setVisibility(GONE);
+            tv_goods_name.setText(title);
+        }else {
+            mtv_label.setVisibility(VISIBLE);
+            mtv_label.setText(label);
+            tv_goods_name.setText(Common.getPlaceholder(label.length())
+                    .concat(title));
+        }
         return this;
     }
 

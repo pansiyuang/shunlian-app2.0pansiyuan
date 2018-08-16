@@ -76,13 +76,13 @@ public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<RefundListEntity
                 price = getString(R.string.rmb).concat(refundList.price);
             }
             mHolder.cgv_goods.setLabelName(refundList.store_name,true)
-            .setGoodsTitle(refundList.title).setGoodsParams(refundList.sku_desc)
+            .setGoodsTitles(refundList.title,refundList.big_label).setGoodsParams(refundList.sku_desc)
             .setGoodsCount(String.format(getString(R.string.x),refundList.goods_num))
                     .setGoodsPrice(price)
             .setRefundPrice(getString(R.string.refund_balance)
                     .concat(getString(R.string.rmb).concat(refundList.refund_amount))).setIsArrow(true);
             GlideUtils.getInstance().loadImage(context,mHolder.cgv_goods.getGoodsIcon(),refundList.thumb);
-            mHolder.mtv_label.setText(refundList.status_msg);
+            mHolder.mtv_labels.setText(refundList.status_msg);
             GlideUtils.getInstance().loadImage(context,mHolder.miv_icon,refundList.type_icon);
 
         }
@@ -96,8 +96,8 @@ public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<RefundListEntity
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
 
-        @BindView(R.id.mtv_label)
-        MyTextView mtv_label;
+        @BindView(R.id.mtv_labels)
+        MyTextView mtv_labels;
 
         @BindView(R.id.mtv_look_detail)
         MyTextView mtv_look_detail;

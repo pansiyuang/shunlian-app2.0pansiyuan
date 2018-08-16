@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.DetailOrderRecordEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -70,13 +71,22 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
                     mHolder.recy_view,mHolder.mtv_order_time,
                     mHolder.mtv_buy,mHolder.mtv_order_state);
             visible(mHolder.mtv_forecast_earnings);
+
+//            String offered = "天天测试";
+            String offered = item.big_label;
+            if (isEmpty(offered)){
+                gone(mHolder.mtv_label);
+            }else {
+                visible(mHolder.mtv_label);
+                mHolder.mtv_label.setText(offered);
+            }
             mHolder.mtv_order.setText("匿名购买");
             mHolder.mtv_forecast_earnings.setText("预估收益："+item.estimate_profit);
         }else {
             visible(mHolder.view_line,mHolder.view_line1,
                     mHolder.recy_view,mHolder.mtv_order_time,
                     mHolder.mtv_buy,mHolder.mtv_order_state);
-            gone(mHolder.mtv_forecast_earnings);
+            gone(mHolder.mtv_forecast_earnings,mHolder.mtv_label);
 
             mHolder.mtv_order.setText("订单号：" + item.order_sn);
             mHolder.mtv_order_state.setText(item.status_desc);
@@ -116,6 +126,9 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
 
         @BindView(R.id.mtv_order)
         MyTextView mtv_order;
+
+        @BindView(R.id.mtv_label)
+        MyTextView mtv_label;
 
         @BindView(R.id.mtv_order_state)
         MyTextView mtv_order_state;
@@ -178,11 +191,22 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
             DetailOrderRecordEntity.OrderGoods item = lists.get(position);
             GlideUtils.getInstance().loadImage(context,mHolder.miv_goods_pic,item.thumb);
             mHolder.mtv_order_source.setText(item.child_type);
-            mHolder.mtv_goods_title.setText(item.title);
+//            mHolder.mtv_goods_title.setText(item.title);
             mHolder.mtv_goods_attr.setText(item.sku);
             mHolder.mtv_goods_count.setText("x"+item.qty);
             mHolder.mtv_goods_price.setText(getString(R.string.rmb)+item.price);
             mHolder.mtv_assertionProfit.setText(item.estimate_profit);
+            String offered = item.big_label;
+//            String offered = "测试";
+            if (isEmpty(offered)){
+                gone(mHolder.mtv_label);
+                mHolder.mtv_goods_title.setText(item.title);
+            }else {
+                visible(mHolder.mtv_label);
+                mHolder.mtv_label.setText(offered);
+                mHolder.mtv_goods_title.setText(Common.getPlaceholder(offered.length())
+                        .concat(item.title));
+            }
         }
 
 
@@ -191,6 +215,9 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
 
             @BindView(R.id.mtv_order_source)
             MyTextView mtv_order_source;
+
+            @BindView(R.id.mtv_label)
+            MyTextView mtv_label;
 
             @BindView(R.id.mtv_goods_title)
             MyTextView mtv_goods_title;
