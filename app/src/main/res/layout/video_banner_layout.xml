@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.CustomScaleViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/vp_video_banner"
+<com.shunlian.app.widget.VideoBannerWrapper xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vbw"
     android:layout_width="match_parent"
-    android:layout_height="360dp"/>
+    android:layout_height="360dp"
+    app:bb_scale = "1"/>

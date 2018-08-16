@@ -12,9 +12,9 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
-import com.shunlian.app.widget.CustomScaleViewPager;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
+import com.shunlian.app.widget.VideoBannerWrapper;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import org.greenrobot.eventbus.EventBus;
@@ -79,7 +79,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                         miv_top.setVisibility(View.INVISIBLE);
                     }
                     View firstView = manager.findViewByPosition(firstPosition);
-                    if (firstView instanceof CustomScaleViewPager){
+                    if (firstView instanceof VideoBannerWrapper){
                         totalDy += dy;
                         detailAct.setBgColor(firstPosition,totalDy);
                     }else {

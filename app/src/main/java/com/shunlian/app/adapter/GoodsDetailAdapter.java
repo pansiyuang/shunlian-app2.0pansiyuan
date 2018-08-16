@@ -25,13 +25,13 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
-import com.shunlian.app.widget.CustomScaleViewPager;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.RecyclerDialog;
+import com.shunlian.app.widget.VideoBannerWrapper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusException;
@@ -921,9 +921,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     LookBigImgAct.startAct(context, entity);
                 });*/
                 String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
-                mHolder.vp_video_banner.setHasVideo(true);
-                mHolder.vp_video_banner.setVideoPath(path);
-                mHolder.vp_video_banner.setBanner(mGoodsEntity.pics,type);
+                mHolder.vbw.setBanner(path,mGoodsEntity.pics,isEmpty(type)?0:Integer.parseInt(type));
             }
         }
     }
@@ -1200,8 +1198,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         /*@BindView(R.id.kanner)
         Kanner kanner;*/
 
-        @BindView(R.id.vp_video_banner)
-        CustomScaleViewPager vp_video_banner;
+        @BindView(R.id.vbw)
+        VideoBannerWrapper vbw;
 
         public BannerHolder(View itemView) {
             super(itemView);

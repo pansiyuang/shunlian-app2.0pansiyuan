@@ -1208,8 +1208,14 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
      * @return
      */
     public int getRingerMode(){
-        if (mAudioManager != null){
+
+        /*if (mAudioManager != null){
            return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        }*/
+        if (mAudioManager != null){
+            int streamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            Log.i(TAG,"==getRingerMode======="+streamVolume);
+            return streamVolume;
         }
         return 0;
     }

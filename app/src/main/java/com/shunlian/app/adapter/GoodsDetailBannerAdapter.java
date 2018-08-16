@@ -62,6 +62,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
+        if (mHasVideo)return mPics.size()-1;
         return mPics.size();
     }
 
@@ -118,6 +119,8 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
+
+
 
 
     public void destroy(){

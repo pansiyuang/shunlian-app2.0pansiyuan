@@ -14,10 +14,8 @@ import java.util.ArrayList;
  */
 public class CustomScaleViewPager extends ViewPager {
 
-    private boolean mHasVideo;
     private String mVideoPath;
     private ArrayList<String> mPics = new ArrayList<>();
-    private String mType;
     private GoodsDetailBannerAdapter adapter;
 
     public CustomScaleViewPager(Context context) {
@@ -28,36 +26,20 @@ public class CustomScaleViewPager extends ViewPager {
         super(context, attrs);
     }
 
-    /**
-     * 是否有视频
-     * @param hasVideo
-     */
-    public void setHasVideo(boolean hasVideo) {
-        mHasVideo = hasVideo;
-    }
-
-    /**
-     * 视频路径
-     * @param path
-     */
-    public void setVideoPath(String path) {
-        mVideoPath = path;
-    }
 
     /**
      * 图片banner图
      * @param pics
-     * @param type 类型 1是优品  2是团购
      */
-    public void setBanner(ArrayList<String> pics, String type) {
+    public void setBanner(String path,ArrayList<String> pics) {
         mPics.clear();
         mPics.addAll(pics);
-        mType = type;
-        if (mHasVideo && !TextUtils.isEmpty(mVideoPath))
+        mVideoPath = path;
+        if (!TextUtils.isEmpty(mVideoPath))
             mPics.add(0,mVideoPath);
 
         if (adapter == null) {
-            adapter = new GoodsDetailBannerAdapter(getContext(), mHasVideo, mPics);
+            adapter = new GoodsDetailBannerAdapter(getContext(), !TextUtils.isEmpty(mVideoPath), mPics);
             setAdapter(adapter);
         }
     }
