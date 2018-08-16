@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.fragment;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +8,7 @@ import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -101,6 +103,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     MyTextView mtv_name;
     @BindView(R.id.miv_level)
     MyImageView miv_level;
+    @BindView(R.id.miv_game)
+    MyImageView miv_game;
     @BindView(R.id.miv_avar)
     MyImageView miv_avar;
     @BindView(R.id.mtv_yaoqingma)
@@ -372,6 +376,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mtv_qiandao.setOnClickListener(this);
         mtv_yaoqingma.setOnClickListener(this);
         mllayout_quanbu.setOnClickListener(this);
+        miv_game.setOnClickListener(this);
         mllayout_guanfangkefu.setOnClickListener(this);
         mllayout_huiyuanguanli.setOnClickListener(this);
         mllayout_huiyuandingdan.setOnClickListener(this);
@@ -494,6 +499,16 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity = personalcenterEntity;
+        if (personalcenterEntity.game_door!=null&&!isEmpty(personalcenterEntity.game_door.thumb)){
+            int picWidth = Common.getScreenWidth(baseActivity) - TransformUtil.dip2px(baseActivity,20);
+            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(picWidth,picWidth*100/356);
+            layoutParams.setMargins(0,TransformUtil.dip2px(baseActivity,10),0,0);
+            miv_game.setLayoutParams(layoutParams);
+            GlideUtils.getInstance().loadImageChang(baseActivity,miv_game,personalcenterEntity.game_door.thumb);
+            miv_game.setVisibility(View.VISIBLE);
+        }else {
+            miv_game.setVisibility(View.GONE);
+        }
         if (!isEmpty(personalcenterEntity.bcm_role)&&"1".equals(personalcenterEntity.bcm_role)){
             miv_jingli.setVisibility(View.VISIBLE);
         }else {
@@ -769,11 +784,16 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //        }, 500, percent / 10);
 //    }
 
+
     @Override
-    public void onClick(View view) {
+    public void mOnClick(View view) {
+        super.mOnClick(view);
         switch (view.getId()) {
             case R.id.mllayout_quanbu:
                 MyOrderAct.startAct(baseContext, 1);
+                break;
+            case R.id.miv_game:
+                Common.goGoGo(baseActivity,personalcenterEntity.game_door.url.type,personalcenterEntity.game_door.url.item_id);
                 break;
             case R.id.mtv_chakanpaihang:
                 SaleRankAct.startAct(baseContext);

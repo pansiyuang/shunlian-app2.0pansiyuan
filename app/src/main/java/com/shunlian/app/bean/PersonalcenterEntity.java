@@ -40,6 +40,7 @@ public class PersonalcenterEntity {
     public String note;
     public String son_manage_url;
     public String son_order_url;
+    public Game game_door;
     public String plus_role;
     public String bcm_role;
     public List<User> sl_user_ranks;
@@ -72,6 +73,16 @@ public class PersonalcenterEntity {
                 ", my_rank_code='" + my_rank_code + '\'' +
                 ", sl_user_ranks=" + sl_user_ranks +
                 '}';
+    }
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Game {
+        public String thumb;
+        public Url url;
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Url {
+            public String type;
+            public String item_id;
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
