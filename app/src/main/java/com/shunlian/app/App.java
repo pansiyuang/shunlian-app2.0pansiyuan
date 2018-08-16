@@ -11,6 +11,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SwitchHostUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -127,5 +128,10 @@ public class App extends Application {
         if (BuildConfig.DEBUG){
             SwitchHostUtil.setHostMethod();
         }
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(this);
     }
 }

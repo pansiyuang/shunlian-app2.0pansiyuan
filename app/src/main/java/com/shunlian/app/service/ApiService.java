@@ -370,6 +370,12 @@ public interface ApiService {
     Call<BaseEntity<ProbabyLikeGoodsEntity>> getProbablyLikeList(@QueryMap Map<String, String> map);
 
     /**
+     * 你可能想买
+     */
+    @GET("cart/wanthotgoods")
+    Call<BaseEntity<RecommendEntity>> getWantHotGoodsList(@QueryMap Map<String, String> map);
+
+    /**
      * 商品详情页足迹
      *
      * @param body

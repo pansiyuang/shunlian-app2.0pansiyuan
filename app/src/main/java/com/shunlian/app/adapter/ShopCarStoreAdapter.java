@@ -16,6 +16,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.store.StoreAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.RecyclerDialog;
@@ -153,6 +154,7 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
             } else { //编辑
                 parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.edit));
                 enabled.isEditGood = false;
+                Common.hideKeyboard(parentViewHolder.tv_edit);
             }
             if (mListener != null) {
                 mListener.OnChangeEdit(enabled.store_id, enabled.isEditGood);

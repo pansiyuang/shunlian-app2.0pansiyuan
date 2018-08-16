@@ -32,7 +32,7 @@
                 android:layout_centerInParent="true"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/img_yishouwan_da"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </RelativeLayout>
 
         <com.shunlian.app.widget.MyImageView

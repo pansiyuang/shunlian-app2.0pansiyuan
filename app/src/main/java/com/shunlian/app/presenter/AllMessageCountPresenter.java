@@ -45,7 +45,7 @@ public class AllMessageCountPresenter extends BasePresenter<IMessageCountView> {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
-        Call<BaseEntity<AllMessageCountEntity>> baseEntityCall = getAddCookieApiService().messageAllCount(map);
+        baseEntityCall = getAddCookieApiService().messageAllCount(map);
         getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<AllMessageCountEntity>>() {
             @Override
             public void onSuccess(BaseEntity<AllMessageCountEntity> entity) {

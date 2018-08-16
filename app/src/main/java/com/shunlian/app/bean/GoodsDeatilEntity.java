@@ -901,6 +901,10 @@ public class GoodsDeatilEntity implements Parcelable {
         public String every_day_ing;
         public String reduced;
         public String limit_min_buy;//团购商品最少购买数
+        public String big_label;//团购商品最少购买数
+
+        public Goods() {
+        }
 
         @Override
         public int describeContents() {
@@ -927,7 +931,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.price);
             dest.writeString(this.old_price);
             dest.writeString(this.left);
-            dest.writeList(this.all_prom);
+            dest.writeTypedList(this.all_prom);
             dest.writeString(this.cate_id);
             dest.writeString(this.cate_name);
             dest.writeString(this.sales);
@@ -954,9 +958,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.every_day_ing);
             dest.writeString(this.reduced);
             dest.writeString(this.limit_min_buy);
-        }
-
-        public Goods() {
+            dest.writeString(this.big_label);
         }
 
         protected Goods(Parcel in) {
@@ -978,8 +980,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.price = in.readString();
             this.old_price = in.readString();
             this.left = in.readString();
-            this.all_prom = new ArrayList<AllProm>();
-            in.readList(this.all_prom, AllProm.class.getClassLoader());
+            this.all_prom = in.createTypedArrayList(AllProm.CREATOR);
             this.cate_id = in.readString();
             this.cate_name = in.readString();
             this.sales = in.readString();
@@ -1006,9 +1007,10 @@ public class GoodsDeatilEntity implements Parcelable {
             this.every_day_ing = in.readString();
             this.reduced = in.readString();
             this.limit_min_buy = in.readString();
+            this.big_label = in.readString();
         }
 
-        public static final Parcelable.Creator<Goods> CREATOR = new Parcelable.Creator<Goods>() {
+        public static final Creator<Goods> CREATOR = new Creator<Goods>() {
             @Override
             public Goods createFromParcel(Parcel source) {
                 return new Goods(source);

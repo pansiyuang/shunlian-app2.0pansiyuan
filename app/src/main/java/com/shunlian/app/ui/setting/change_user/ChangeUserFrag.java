@@ -107,7 +107,7 @@ public class ChangeUserFrag extends BaseFragment implements IChangeUserView, Vie
 
         //返回键扩大点击范围
         int i = TransformUtil.dip2px(baseActivity, 20);
-        TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
+        TransformUtil.expandViewTouchDelegate(miv_close, i, i, i, i);
         presenter = new ChangeUserPresenter(baseActivity, this);
 
         reset();
@@ -123,7 +123,11 @@ public class ChangeUserFrag extends BaseFragment implements IChangeUserView, Vie
             met_phone.setText("");
         } else {
             visible(mtv_prompt);
-            mtv_change_user.setText("更换账号");
+            if (isSetPwd) {
+                mtv_change_user.setText("更换密码");
+            } else {
+                mtv_change_user.setText("更换账号");
+            }
             setEdittextFocusable(false, met_phone);
             setEdittextFocusable(true, met_code);
             presenter.getMobile();
@@ -134,8 +138,8 @@ public class ChangeUserFrag extends BaseFragment implements IChangeUserView, Vie
     public void setCode(byte[] bytes) {
         if (bytes != null) {
             if (met_code != null) met_code.setText("");
-            if (miv_code!=null)
-            miv_code.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            if (miv_code != null)
+                miv_code.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
         }
     }
 
@@ -194,10 +198,10 @@ public class ChangeUserFrag extends BaseFragment implements IChangeUserView, Vie
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.miv_close){
-            if (isBind){
+        if (v.getId() == R.id.miv_close) {
+            if (isBind) {
                 ((ModifyAct) baseActivity).modifyOnePage(false, false, null);
-            }else {
+            } else {
                 baseActivity.finish();
             }
         }
