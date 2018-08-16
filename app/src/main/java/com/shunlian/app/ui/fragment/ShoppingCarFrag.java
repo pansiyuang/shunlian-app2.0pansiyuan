@@ -198,10 +198,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                     // scrollPos记录当前可见的List顶端的一行的位置
                     scrollPos = expand_shoppingcar.getFirstVisiblePosition();
                 }
-                if (!isEmpty(mCarEntity.enabled)) {
-                    View v = expand_shoppingcar.getChildAt(0);
-                    scrollTop = (v == null) ? 0 : v.getTop();
-                }
+                View v = expand_shoppingcar.getChildAt(0);
+                scrollTop = (v == null) ? 0 : v.getTop();
             }
 
             @Override
@@ -278,9 +276,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             showEmptyView(false);
         }
 
-        if (!isEmpty(mCarEntity.enabled)) {
-            expand_shoppingcar.setSelectionFromTop(scrollPos, scrollTop);
-        }
+        expand_shoppingcar.setSelectionFromTop(scrollPos, scrollTop);
     }
 
     @Override
@@ -303,8 +299,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                 } else {
                     setEditMode(false);
                 }
-                if (shopCarStoreAdapter!=null)
-                shopCarStoreAdapter.notifyDataSetChanged();
+                if (shopCarStoreAdapter != null)
+                    shopCarStoreAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_toal_del:
                 if (TextUtils.isEmpty(orderGoodsIds.toString())) {

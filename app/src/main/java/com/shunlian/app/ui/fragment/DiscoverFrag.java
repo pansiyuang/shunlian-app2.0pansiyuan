@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.VideoTestActivity;
 import com.shunlian.app.adapter.DiscoverFlashAdapter;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
@@ -607,12 +606,11 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 sucaiku();
                 break;
             case R.id.miv_experience_publish:
-//                if (!Common.isAlreadyLogin()) {
-//                    Common.goGoGo(baseActivity, "login");
-//                    return;
-//                }
-//                ExperiencePublishActivity.startAct(getActivity());
-                startActivity(new Intent(getActivity(), VideoTestActivity.class));
+                if (!Common.isAlreadyLogin()) {
+                    Common.goGoGo(baseActivity, "login");
+                    return;
+                }
+                ExperiencePublishActivity.startAct(getActivity());
                 break;
         }
     }
