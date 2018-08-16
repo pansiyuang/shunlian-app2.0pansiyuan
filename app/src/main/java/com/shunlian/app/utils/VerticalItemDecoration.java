@@ -37,14 +37,30 @@ public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
     }
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//        outRect.bottom = space;
+//        outRect.top = topMargin;
+//        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+//        if (layoutManager instanceof LinearLayoutManager){
+//            LinearLayoutManager manager = (LinearLayoutManager) layoutManager;
+//            int lastPosition = manager.findLastVisibleItemPosition();
+//            if (lastPosition + 1 == manager.getItemCount()){
+//                outRect.bottom = bottomMargin;
+//            }
+//        }
         outRect.bottom = space;
         outRect.top = topMargin;
-        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-        if (layoutManager instanceof LinearLayoutManager){
-            LinearLayoutManager manager = (LinearLayoutManager) layoutManager;
-            int lastPosition = manager.findLastVisibleItemPosition();
-            if (lastPosition + 1 == manager.getItemCount()){
+        if (parent.getChildAdapterPosition(view) + 1 == state.getItemCount()) {
+            if (bottomMargin != 0) {
                 outRect.bottom = bottomMargin;
+            } else {
+                outRect.bottom = 0;
+            }
+        }
+        if (topMargin != 0) {
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = topMargin;
+            } else {
+                outRect.top = 0;
             }
         }
     }
@@ -59,6 +75,19 @@ public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
 
     //绘制横向 item 分割线
     private void drawHorizontal(Canvas canvas, RecyclerView parent) {
+//        final int left = parent.getPaddingLeft();
+//        final int right = parent.getMeasuredWidth() - parent.getPaddingRight();
+//        final int childSize = parent.getChildCount();
+//        for (int i = 0; i < childSize; i++) {
+//            final View child = parent.getChildAt(i);
+//            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
+//            final int top = child.getBottom() + layoutParams.bottomMargin;
+//            final int bottom = top + space;
+//            if (i + 1 == childSize)break;
+//            if (mPaint != null) {
+//                canvas.drawRect(left, top, right, bottom, mPaint);
+//            }
+//        }
         final int left = parent.getPaddingLeft();
         final int right = parent.getMeasuredWidth() - parent.getPaddingRight();
         final int childSize = parent.getChildCount();
@@ -67,10 +96,10 @@ public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
             final int top = child.getBottom() + layoutParams.bottomMargin;
             final int bottom = top + space;
-            if (i + 1 == childSize)break;
             if (mPaint != null) {
                 canvas.drawRect(left, top, right, bottom, mPaint);
             }
         }
     }
+
 }

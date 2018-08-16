@@ -34,6 +34,7 @@ public class RefundDetailEntity implements Serializable{
         public String thumb;
         public String title;
         public String sku_desc;
+        public String big_label;
         public String price;
         public String qty;
         public String status_desc;

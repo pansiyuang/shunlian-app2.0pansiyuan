@@ -37,6 +37,7 @@ public class RefundListEntity {
         public String goods_num;
         public String thumb;
         public String title;
+        public String big_label;
         public String sku_desc;
         public String price;
         public String qty;

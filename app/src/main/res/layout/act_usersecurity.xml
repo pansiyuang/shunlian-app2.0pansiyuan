@@ -88,10 +88,11 @@
         android:id="@+id/mbtn_logout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/white"
+        android:background="@color/pink_color"
         android:gravity="center"
+        android:textStyle="bold"
         android:text="退出登录"
-        android:textColor="@color/pink_color"
+        android:textColor="@color/white"
         android:textSize="15sp" />
 
 
