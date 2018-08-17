@@ -16,6 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.utils.LogUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -34,6 +40,7 @@ public class VideoBannerWrapper extends RelativeLayout {
     private View mScrollDot;
     private int spaceWidthDot;//点之间的间距
     private int startLeftPosi;//最左侧点的距离
+    public static int mCurrentPosition;
 
     public VideoBannerWrapper(Context context) {
         this(context,null);
@@ -46,6 +53,7 @@ public class VideoBannerWrapper extends RelativeLayout {
     public VideoBannerWrapper(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
+        EventBus.getDefault().register(this);
         dm = context.getResources().getDisplayMetrics();
         String height = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "layout_height");
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BaseBanner);
@@ -115,16 +123,26 @@ public class VideoBannerWrapper extends RelativeLayout {
         mVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                int v = (int) (spaceWidthDot * (positionOffset + position));
-                RelativeLayout.LayoutParams layoutParams = (LayoutParams) mScrollDot.getLayoutParams();
-                layoutParams.leftMargin = startLeftPosi + v;
-                mScrollDot.setLayoutParams(layoutParams);
+                LogUtil.zhLogW("===positionOffset====="+positionOffset);
+                controlDot(position, positionOffset);
             }
             @Override
-            public void onPageSelected(int position) {}
+            public void onPageSelected(int position) {
+                if (position > 0){
+                    mVP.pausePlay();
+                }
+                mCurrentPosition = position;
+            }
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
+    }
+
+    private void controlDot(int position, float positionOffset) {
+        int v = (int) (spaceWidthDot * (positionOffset + position));
+        LayoutParams layoutParams = (LayoutParams) mScrollDot.getLayoutParams();
+        layoutParams.leftMargin = startLeftPosi + v;
+        mScrollDot.setLayoutParams(layoutParams);
     }
 
     /**
@@ -154,10 +172,7 @@ public class VideoBannerWrapper extends RelativeLayout {
 
                 GradientDrawable gd = (GradientDrawable) mScrollDot.getBackground();
                 gd.setColor(Color.parseColor("#B2FB0036"));
-                RelativeLayout.LayoutParams layoutParams = (LayoutParams) mScrollDot.getLayoutParams();
-                layoutParams.leftMargin = startLeftPosi;
-                mScrollDot.setLayoutParams(layoutParams);
-
+                controlDot(mCurrentPosition,0);
             }
         });
     }
@@ -178,6 +193,7 @@ public class VideoBannerWrapper extends RelativeLayout {
 
         if (mVP != null){
             mVP.setBanner(path,pics);
+            mVP.setCurrentItem(mCurrentPosition);
         }
         setLabelPic(type);
     }
@@ -204,5 +220,18 @@ public class VideoBannerWrapper extends RelativeLayout {
     protected int dp2px(float dp) {
         float scale = mContext.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5F);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void scrollPosition(DefMessageEvent event){
+        if (event.isrelease){
+            destroy();
+        }
+    }
+
+
+    public void destroy(){
+        EventBus.getDefault().unregister(this);
+        mCurrentPosition = 0;
     }
 }

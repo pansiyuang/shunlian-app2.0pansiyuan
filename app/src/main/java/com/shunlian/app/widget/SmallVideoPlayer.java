@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -139,12 +138,36 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         mRetryBtn.setOnClickListener(this);
         playControl.setOnClickListener(this);
         startButton.setOnClickListener(this);
+        backPlayButton.setOnClickListener(this);
     }
 
     @Override
     public void startVideo() {
         super.startVideo();
-        setRingerMode(0);
+    }
+
+    public static void goOnPlayOnResume() {
+        if (JZVideoPlayerManager.getCurrentJzvd() != null) {
+            JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
+            if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_PAUSE) {
+                jzvd.onStatePlaying();
+                JZMediaManager.start();
+            }
+        }
+    }
+
+    public static void goOnPlayOnPause() {
+        if (JZVideoPlayerManager.getCurrentJzvd() != null) {
+            JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
+            if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
+                    jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
+                    jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
+                releaseAllVideos();
+            } else {
+                jzvd.onStatePause();
+                JZMediaManager.pause();
+            }
+        }
     }
 
     public void setUp(Object[] dataSourceObjects, int defaultUrlMapIndex, int screen, Object... objects) {
@@ -203,14 +226,12 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     @Override
     public void onStateNormal() {
         super.onStateNormal();
-        LogUtil.zhLogW("=====onStateNormal=======");
         changeUiToNormal();
     }
 
     @Override
     public void onStatePreparing() {
         super.onStatePreparing();
-        LogUtil.zhLogW("=====onStatePreparing=======");
         changeUiToPreparing();
     }
 
@@ -223,15 +244,23 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     @Override
     public void onStatePlaying() {
+        changePlayState();
         super.onStatePlaying();
-        LogUtil.zhLogW("=====onStatePlaying=======");
         changeUiToPlayingClear();
+    }
+
+    private void changePlayState() {
+        if (currentState == CURRENT_STATE_PLAYING){
+            playControl.setImageResource(R.drawable.img_xiangqing_bofang);
+        }else if (currentState == CURRENT_STATE_PAUSE){
+            playControl.setImageResource(R.drawable.img_xiangqing_zanting);
+        }
     }
 
     @Override
     public void onStatePause() {
+        changePlayState();
         super.onStatePause();
-        LogUtil.zhLogW("=====onStatePause=======");
         changeUiToPauseShow();
         cancelDismissControlViewTimer();
     }
@@ -239,17 +268,54 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     @Override
     public void onStateError() {
         super.onStateError();
-        LogUtil.zhLogW("=====onStateError=======");
         changeUiToError();
     }
 
     @Override
     public void onStateAutoComplete() {
         super.onStateAutoComplete();
-        LogUtil.zhLogW("=====onStateAutoComplete=======");
         changeUiToComplete();
         cancelDismissControlViewTimer();
         bottomProgressBar.setProgress(100);
+    }
+
+
+    public void startWindowFullscreen() {
+        Log.i(TAG, "startWindowFullscreen " + " [" + this.hashCode() + "] ");
+        hideSupportActionBar(getContext());
+
+        ViewGroup vp = (JZUtils.scanForActivity(getContext()))//.getWindow().getDecorView();
+                .findViewById(Window.ID_ANDROID_CONTENT);
+        View old = vp.findViewById(cn.jzvd.R.id.jz_fullscreen_id);
+        if (old != null) {
+            vp.removeView(old);
+        }
+        textureViewContainer.removeView(JZMediaManager.textureView);
+        try {
+            Constructor<SmallVideoPlayer> constructor = (Constructor<SmallVideoPlayer>) getClass().getConstructor(Context.class);
+            SmallVideoPlayer jzVideoPlayer = constructor.newInstance(getContext());
+            jzVideoPlayer.setId(cn.jzvd.R.id.jz_fullscreen_id);
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            vp.addView(jzVideoPlayer, lp);
+            jzVideoPlayer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN);
+            jzVideoPlayer.setUp(dataSourceObjects, currentUrlMapIndex, jzVideoPlayer.SCREEN_WINDOW_FULLSCREEN, objects);
+            jzVideoPlayer.setState(currentState);
+            jzVideoPlayer.addTextureView();
+            JZVideoPlayerManager.setSecondFloor(jzVideoPlayer);
+//            final Animation ra = AnimationUtils.loadAnimation(getContext(), R.anim.start_fullscreen);
+//            jzVideoPlayer.setAnimation(ra);
+            //JZUtils.setRequestedOrientation(getContext(), FULLSCREEN_ORIENTATION);
+
+            onStateNormal();
+            jzVideoPlayer.progressBar.setSecondaryProgress(progressBar.getSecondaryProgress());
+            jzVideoPlayer.startProgressTimer();
+            CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void startWindowTiny() {
@@ -349,7 +415,8 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         } else if (i == cn.jzvd.R.id.surface_container) {
             startDismissControlViewTimer();
         } else if (i == cn.jzvd.R.id.back) {
-//            backPress(); 暂时去掉该功能
+            topContainer.setVisibility(GONE);
+            backPress(); //暂时去掉该功能
         } else if (i == cn.jzvd.R.id.back_tiny) {
             if (JZVideoPlayerManager.getFirstFloor().currentScreen == JZVideoPlayer.SCREEN_WINDOW_LIST) {
                 quitFullscreenOrTinyWindow();
@@ -417,14 +484,10 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             onEvent(JZUserAction.ON_CLICK_START_ERROR);
         } else if (i == cn.jzvd.R.id.iv_more) {
         }else if (i == R.id.iv_play_control || i == R.id.start){
-            if (currentState == CURRENT_STATE_PLAYING){
-                playControl.setImageResource(R.drawable.img_xiangqing_bofang);
-            }else if (currentState == CURRENT_STATE_PAUSE){
-                playControl.setImageResource(R.drawable.img_xiangqing_zanting);
-            }
             playerControl();
         }else if (i == cn.jzvd.R.id.fullscreen) {
             Log.i(TAG, "onClick fullscreen [" + this.hashCode() + "] ");
+            topContainer.setVisibility(VISIBLE);
             if (currentState == CURRENT_STATE_AUTO_COMPLETE) return;
             if (currentScreen == SCREEN_WINDOW_FULLSCREEN) {
                 //quit fullscreen
@@ -435,6 +498,13 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                 startWindowFullscreen();
             }
         }
+    }
+
+
+    @Override
+    public void playerControl() {
+        changePlayState();
+        super.playerControl();
     }
 
     @Override
@@ -588,7 +658,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         switch (currentScreen) {
             case SCREEN_WINDOW_NORMAL:
             case SCREEN_WINDOW_LIST:
-                setAllControlsVisiblity(View.VISIBLE, View.INVISIBLE, View.VISIBLE,
+                setAllControlsVisiblity(View.GONE, View.INVISIBLE, View.VISIBLE,
                         View.INVISIBLE, View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
                 updateStartImage();
                 break;
@@ -606,7 +676,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         switch (currentScreen) {
             case SCREEN_WINDOW_NORMAL:
             case SCREEN_WINDOW_LIST:
-                setAllControlsVisiblity(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
+                setAllControlsVisiblity(View.GONE, View.INVISIBLE, View.INVISIBLE,
                         View.VISIBLE, View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
                 updateStartImage();
                 break;
@@ -625,7 +695,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         switch (currentScreen) {
             case SCREEN_WINDOW_NORMAL:
             case SCREEN_WINDOW_LIST:
-                setAllControlsVisiblity(View.VISIBLE, View.VISIBLE, View.VISIBLE,
+                setAllControlsVisiblity(View.GONE, View.VISIBLE, View.VISIBLE,
                         View.INVISIBLE, View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
                 updateStartImage();
                 break;
@@ -644,7 +714,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         switch (currentScreen) {
             case SCREEN_WINDOW_NORMAL:
             case SCREEN_WINDOW_LIST:
-                setAllControlsVisiblity(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
+                setAllControlsVisiblity(View.GONE, View.INVISIBLE, View.INVISIBLE,
                         View.INVISIBLE, View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
                 break;
             case SCREEN_WINDOW_FULLSCREEN:
@@ -661,7 +731,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         switch (currentScreen) {
             case SCREEN_WINDOW_NORMAL:
             case SCREEN_WINDOW_LIST:
-                setAllControlsVisiblity(View.VISIBLE, View.VISIBLE, View.VISIBLE,
+                setAllControlsVisiblity(View.GONE, View.VISIBLE, View.VISIBLE,
                         View.INVISIBLE, View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
                 updateStartImage();
                 break;
@@ -679,7 +749,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         switch (currentScreen) {
             case SCREEN_WINDOW_NORMAL:
             case SCREEN_WINDOW_LIST:
-                setAllControlsVisiblity(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
+                setAllControlsVisiblity(View.GONE, View.INVISIBLE, View.INVISIBLE,
                         View.INVISIBLE, View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
                 break;
             case SCREEN_WINDOW_FULLSCREEN:
@@ -696,7 +766,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         switch (currentScreen) {
             case SCREEN_WINDOW_NORMAL:
             case SCREEN_WINDOW_LIST:
-                setAllControlsVisiblity(View.VISIBLE, View.INVISIBLE, View.VISIBLE,
+                setAllControlsVisiblity(View.GONE, View.INVISIBLE, View.VISIBLE,
                         View.INVISIBLE, View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
                 updateStartImage();
                 break;
@@ -715,7 +785,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         switch (currentScreen) {
             case SCREEN_WINDOW_NORMAL:
             case SCREEN_WINDOW_LIST:
-                setAllControlsVisiblity(View.INVISIBLE, View.INVISIBLE, View.VISIBLE,
+                setAllControlsVisiblity(View.GONE, View.INVISIBLE, View.VISIBLE,
                         View.INVISIBLE, View.INVISIBLE, View.INVISIBLE, View.VISIBLE);
                 updateStartImage();
                 break;
@@ -732,7 +802,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     public void setAllControlsVisiblity(int topCon, int bottomCon, int startBtn, int loadingPro,
                                         int thumbImg, int bottomPro, int retryLayout) {
-        topContainer.setVisibility(GONE);
+        topContainer.setVisibility(topCon);
         bottomContainer.setVisibility(bottomCon);
         startButton.setVisibility(startBtn);
         loadingProgressBar.setVisibility(loadingPro);

@@ -603,6 +603,7 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
                     }
                     if (mChangeVolume) {
                         onEvent(JZUserAction.ON_TOUCH_SCREEN_SEEK_VOLUME);
+                        mGestureDownVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
                     }
                     startProgressTimer();
                     break;
@@ -1197,8 +1198,10 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
         if (mAudioManager != null) {
             if (mode == 0){
                 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,0,0);
+                onEvent(JZUserAction.ON_TOUCH_SCREEN_SEEK_VOLUME);
             }else if (mode == 1){
                 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,mGestureDownVolume,0);
+                onEvent(JZUserAction.ON_TOUCH_SCREEN_SEEK_VOLUME);
             }
         }
     }
