@@ -18,22 +18,20 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DisabledGoodsAdapter;
 import com.shunlian.app.adapter.ProbabyLikeGoodsAdapter;
+import com.shunlian.app.adapter.RecommendAdapter;
 import com.shunlian.app.adapter.ShopCarStoreAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
+import com.shunlian.app.bean.RecommendEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.utils.GrideItemDecoration;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.view.IShoppingCarView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.RecyclerDialog;
@@ -94,9 +92,6 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     @BindView(R.id.expand_shoppingcar)
     ExpandableListView expand_shoppingcar;
 
-    @BindView(R.id.nei_empty)
-    NetAndEmptyInterface nei_empty;
-
     @BindView(R.id.line_total)
     View line_total;
 
@@ -106,20 +101,25 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     private HashMap<String, Boolean> editMap; //用来记录店铺分组编辑状态
     private View rootView;
     private View footView;
+    private View emptyView;
     private View probabyView;
-    private View probabyTitleView;
+    private View recommendView;
     private ShopCarPresenter shopCarPresenter;
     private ShopCarStoreAdapter shopCarStoreAdapter;
     private ProbabyLikeGoodsAdapter goodsAdapter;
+    private RecommendAdapter recommendAdapter;
     private ShoppingCarEntity mCarEntity;
     private Unbinder mUnbinder;
     private FooterHolderView footerHolderView;
     private ProbabyFooterHolderView probabyHolderView;
+    private EmptyHolderView emptyHolderView;
+    private RecommendGoodsHolderView recommendGoodsHolderView;
     private String isCheckAll; //用来记录是否全选了
     private StringBuffer orderGoodsIds = new StringBuffer();//提交订单的id
     private String disGoodsIds;//失效订单的id
     private RecyclerDialog recyclerDialog;
     private List<ProbabyLikeGoodsEntity.Goods> probabyGoods;
+    private List<RecommendEntity.Goods> recommenGoods;
 
     private int scrollPos;
     private int scrollTop;
@@ -128,8 +128,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.frag_shoppingcar, container, false);
         footView = inflater.inflate(R.layout.foot_shoppingcar_disable, container, false);
-        probabyTitleView = inflater.inflate(R.layout.item_probayby_title, container, false);
-        probabyView = inflater.inflate(R.layout.frag_list, container, false);
+        probabyView = inflater.inflate(R.layout.foot_probayby_goods, container, false);
+        emptyView = inflater.inflate(R.layout.shoppingcar_empty, container, false);
+        recommendView = inflater.inflate(R.layout.foot_recommend_goods, container, false);
         return rootView;
     }
 
@@ -154,16 +155,21 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
         footerHolderView = new FooterHolderView(footView);
         probabyHolderView = new ProbabyFooterHolderView(probabyView);
+        emptyHolderView = new EmptyHolderView(emptyView);
+        recommendGoodsHolderView = new RecommendGoodsHolderView(recommendView);
 
         probabyGoods = new ArrayList<>();
+        recommenGoods = new ArrayList<>();
 
         footView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
-        probabyTitleView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
-        probabyView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
+        probabyView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        emptyView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        recommendView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+
         expand_shoppingcar.addFooterView(footView);
-        expand_shoppingcar.addFooterView(probabyTitleView);
         expand_shoppingcar.addFooterView(probabyView);
-        probabyTitleView.setVisibility(View.GONE);
+        expand_shoppingcar.addFooterView(emptyView);
+        expand_shoppingcar.addFooterView(recommendView);
         recyclerDialog = new RecyclerDialog(baseContext);
     }
 
@@ -192,10 +198,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                     // scrollPos记录当前可见的List顶端的一行的位置
                     scrollPos = expand_shoppingcar.getFirstVisiblePosition();
                 }
-                if (!isEmpty(mCarEntity.enabled)) {
-                    View v = expand_shoppingcar.getChildAt(0);
-                    scrollTop = (v == null) ? 0 : v.getTop();
-                }
+                View v = expand_shoppingcar.getChildAt(0);
+                scrollTop = (v == null) ? 0 : v.getTop();
             }
 
             @Override
@@ -272,14 +276,15 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             showEmptyView(false);
         }
 
-        if (!isEmpty(mCarEntity.enabled)) {
-            expand_shoppingcar.setSelectionFromTop(scrollPos, scrollTop);
-        }
+        expand_shoppingcar.setSelectionFromTop(scrollPos, scrollTop);
     }
 
     @Override
     public void onResume() {
         if (!isHidden()) {
+            rl_price.setVisibility(View.VISIBLE);
+            ll_total_edit.setVisibility(View.GONE);
+            tv_title_right.setText(getString(R.string.edit));
             getShoppingCarData();
         }
         super.onResume();
@@ -290,18 +295,12 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         switch (view.getId()) {
             case R.id.tv_title_right:
                 if (getString(R.string.edit).equals(tv_title_right.getText())) {
-                    rl_price.setVisibility(View.GONE);
-                    ll_total_edit.setVisibility(View.VISIBLE);
-                    tv_title_right.setText(getString(R.string.RegisterTwoAct_finish));
                     setEditMode(true);
                 } else {
-                    rl_price.setVisibility(View.VISIBLE);
-                    ll_total_edit.setVisibility(View.GONE);
-                    tv_title_right.setText(getString(R.string.edit));
                     setEditMode(false);
                 }
-                if (shopCarStoreAdapter!=null)
-                shopCarStoreAdapter.notifyDataSetChanged();
+                if (shopCarStoreAdapter != null)
+                    shopCarStoreAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_toal_del:
                 if (TextUtils.isEmpty(orderGoodsIds.toString())) {
@@ -341,8 +340,15 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             editMap.put(enable.store_id, edit); //修改所有店铺状态
         }
 
-        if(!edit){
+        if (!edit) {
             Common.hideKeyboard(tv_title_right);
+            rl_price.setVisibility(View.VISIBLE);
+            ll_total_edit.setVisibility(View.GONE);
+            tv_title_right.setText(getString(R.string.edit));
+        } else {
+            rl_price.setVisibility(View.GONE);
+            ll_total_edit.setVisibility(View.VISIBLE);
+            tv_title_right.setText(getString(R.string.RegisterTwoAct_finish));
         }
     }
 
@@ -471,9 +477,29 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             } else {
                 goodsAdapter.notifyDataSetChanged();
             }
-            probabyTitleView.setVisibility(View.VISIBLE);
+            probabyHolderView.ll_rootView.setVisibility(View.VISIBLE);
         } else {
-            probabyTitleView.setVisibility(View.GONE);
+            probabyHolderView.ll_rootView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void OnGetWantGoodsList(List<RecommendEntity.Goods> goodsList) {
+        recommenGoods.clear();
+        if (!isEmpty(goodsList)) {
+            recommenGoods.addAll(goodsList);
+            if (recommendAdapter == null) {
+                recommendAdapter = new RecommendAdapter(getActivity(), recommenGoods);
+                recommendGoodsHolderView.recycler_list.setAdapter(recommendAdapter);
+            } else {
+                recommendAdapter.notifyDataSetChanged();
+            }
+            recommendGoodsHolderView.ll_rootView.setVisibility(View.VISIBLE);
+            recommendAdapter.setOnItemClickListener((view, position) -> {
+                GoodsDetailAct.startAct(getActivity(), recommenGoods.get(position).id);
+            });
+        } else {
+            recommendGoodsHolderView.ll_rootView.setVisibility(View.GONE);
         }
     }
 
@@ -491,21 +517,17 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     private void showEmptyView(boolean isEmpty) {
         if (!isEmpty) {
-            expand_shoppingcar.setVisibility(View.VISIBLE);
             line_total.setVisibility(View.VISIBLE);
             rl_total.setVisibility(View.VISIBLE);
             tv_title_right.setVisibility(View.VISIBLE);
-            nei_empty.setVisibility(View.GONE);
+            emptyHolderView.ll_rootView.setVisibility(View.GONE);
         } else {
-            expand_shoppingcar.setVisibility(View.GONE);
             line_total.setVisibility(View.GONE);
             rl_total.setVisibility(View.GONE);
-            nei_empty.setVisibility(View.VISIBLE);
             tv_title_right.setVisibility(View.GONE);
-            nei_empty.setImageResource(R.mipmap.img_empty_gouwuche)
-                    .setText(getString(R.string.shopcar_is_empty))
-                    .setButtonText(getString(R.string.go_to_visit))
-                    .setOnClickListener(v -> MainActivity.startAct(baseContext, "mainPage"));
+            probabyGoods.clear();
+            probabyHolderView.ll_rootView.setVisibility(View.GONE);
+            emptyHolderView.ll_rootView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -543,15 +565,39 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     public class ProbabyFooterHolderView {
         RecyclerView recycler_list;
+        LinearLayout ll_rootView;
 
         public ProbabyFooterHolderView(View view) {
             recycler_list = (RecyclerView) view.findViewById(R.id.recycler_list);
+            ll_rootView = view.findViewById(R.id.ll_rootView);
             GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
             recycler_list.setNestedScrollingEnabled(false);
             recycler_list.setLayoutManager(manager);
         }
     }
 
+    public class RecommendGoodsHolderView {
+        RecyclerView recycler_list;
+        LinearLayout ll_rootView;
+
+        public RecommendGoodsHolderView(View view) {
+            recycler_list = (RecyclerView) view.findViewById(R.id.recycler_list);
+            ll_rootView = view.findViewById(R.id.ll_rootView);
+            GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+            recycler_list.setNestedScrollingEnabled(false);
+            recycler_list.setLayoutManager(manager);
+        }
+    }
+
+    public class EmptyHolderView {
+        NetAndEmptyInterface nei_empty;
+        LinearLayout ll_rootView;
+
+        public EmptyHolderView(View view) {
+            nei_empty = (NetAndEmptyInterface) view.findViewById(R.id.nei_empty);
+            ll_rootView = view.findViewById(R.id.ll_rootView);
+        }
+    }
 
     public String getCheckAll() {
         if (mCarEntity == null || mCarEntity.enabled == null || mCarEntity.enabled.size() == 0) {

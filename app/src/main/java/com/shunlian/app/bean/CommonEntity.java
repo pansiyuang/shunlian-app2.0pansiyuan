@@ -66,4 +66,16 @@ public class CommonEntity {
     public int nice;
     public int focus;
     public int total;
+
+    @Override
+    public String toString() {
+        return "CommonEntity{" +
+                ", circle=" + circle +
+                ", material=" + material +
+                ", experience=" + experience +
+                ", nice=" + nice +
+                ", focus=" + focus +
+                ", total=" + total +
+                '}';
+    }
 }

@@ -9,6 +9,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
+import com.shunlian.app.bean.RecommendEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.login.LoginAct;
@@ -48,6 +49,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
     public void initShopData() {
         getApiData();
         getProbablyLikeList();
+        getWantHotGoodsList();
     }
 
     public void getApiData() {
@@ -298,4 +300,28 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
             e.printStackTrace();
         }
     }
+
+    public void getWantHotGoodsList() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+        try {
+            Call<BaseEntity<RecommendEntity>> baseEntityCall = getApiService().getWantHotGoodsList(map);
+            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<RecommendEntity>>() {
+                @Override
+                public void onSuccess(BaseEntity<RecommendEntity> entity) {
+                    RecommendEntity recommendEntity = entity.data;
+                    iView.OnGetWantGoodsList(recommendEntity.hot_goods);
+                    super.onSuccess(entity);
+                }
+
+                @Override
+                public void onFailure() {
+                    super.onFailure();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -9,6 +9,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.presenter.DetailOrderRecordPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IDetailOrderRecordView;
@@ -85,6 +86,7 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
         recy_view.setLayoutManager(manager);
         int i = TransformUtil.dip2px(this, 10);
         recy_view.addItemDecoration(new VerticalItemDecoration(i,0,0));
+//        recy_view.addItemDecoration(new MVerticalItemDecoration(this,10,0,0));
 
         presenter = new DetailOrderRecordPresenter(this,this);
 

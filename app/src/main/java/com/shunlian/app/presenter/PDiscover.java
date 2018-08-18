@@ -42,7 +42,7 @@ public class PDiscover extends BasePresenter<IDiscover> {
         sortAndMD5(map);
 
         Call<BaseEntity<DiscoveryNavEntity>> baseEntityCall = getApiService().discoveryNav(map);
-        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<DiscoveryNavEntity>>() {
+        getNetData(false,baseEntityCall, new SimpleNetDataCallback<BaseEntity<DiscoveryNavEntity>>() {
             @Override
             public void onSuccess(BaseEntity<DiscoveryNavEntity> entity) {
                 super.onSuccess(entity);

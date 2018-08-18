@@ -900,8 +900,8 @@ public class GoodsDeatilEntity implements Parcelable {
         public boolean isSelect;
         public String every_day_ing;
         public String reduced;
-        public String big_label;
         public String limit_min_buy;//团购商品最少购买数
+        public String big_label;//团购商品最少购买数
 
         public Goods() {
         }
@@ -957,8 +957,8 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeByte(this.isSelect ? (byte) 1 : (byte) 0);
             dest.writeString(this.every_day_ing);
             dest.writeString(this.reduced);
-            dest.writeString(this.big_label);
             dest.writeString(this.limit_min_buy);
+            dest.writeString(this.big_label);
         }
 
         protected Goods(Parcel in) {
@@ -1006,8 +1006,8 @@ public class GoodsDeatilEntity implements Parcelable {
             this.isSelect = in.readByte() != 0;
             this.every_day_ing = in.readString();
             this.reduced = in.readString();
-            this.big_label = in.readString();
             this.limit_min_buy = in.readString();
+            this.big_label = in.readString();
         }
 
         public static final Creator<Goods> CREATOR = new Creator<Goods>() {

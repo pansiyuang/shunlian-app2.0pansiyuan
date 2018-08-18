@@ -65,7 +65,7 @@ public class FoundMsgActivity extends BaseActivity implements ViewPager.OnPageCh
     @BindView(R.id.line_title)
     View line_title;
 
-    private static List<BaseFragment> mFrags = new ArrayList<>();
+    private List<BaseFragment> mFrags = new ArrayList<>();
     private CommonLazyPagerAdapter mPagerAdapter;
     private int topicCount, commentCount;
     private MessageCountManager messageCountManager;

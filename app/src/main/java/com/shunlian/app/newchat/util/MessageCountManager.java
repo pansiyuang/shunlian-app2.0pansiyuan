@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import com.shunlian.app.App;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.presenter.AllMessageCountPresenter;
 import com.shunlian.app.utils.LogUtil;
@@ -23,7 +24,7 @@ public class MessageCountManager implements IMessageCountView {
     private AllMessageCountEntity allMessageCountEntity;
 
     public static MessageCountManager getInstance(Context context) {
-        mContext = context;
+        mContext = App.getContext();
         if (manager == null) {
             synchronized (MessageCountManager.class) {
                 if (manager == null) {

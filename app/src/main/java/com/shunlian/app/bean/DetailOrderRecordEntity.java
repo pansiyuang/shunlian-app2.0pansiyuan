@@ -30,6 +30,7 @@ public class DetailOrderRecordEntity {
         public String deal_type;
         public String estimate_profit;
         public String anonymous;//是否匿名  1是0否
+        public String big_label;
         public List<OrderGoods> order_goods;
     }
 
@@ -43,5 +44,6 @@ public class DetailOrderRecordEntity {
         public String sku;
         public String child_type;
         public String estimate_profit;
+        public String big_label;
     }
 }

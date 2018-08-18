@@ -1,8 +1,11 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.IconTextSpan;
 import com.shunlian.app.widget.ChangePreferDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
@@ -43,6 +47,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     private ParamDialog paramDialog;
     private OnGoodsChangeListener onGoodsChangeListener;
     private ShoppingCarFrag mFrag;
+    private StringBuffer stringBuffer;
 
     public EnableGoodsAdapter(Context context, ShoppingCarFrag frag, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, ShoppingCarEntity.Enabled.Promotion promotion) {
         super(context, isShowFooter, lists);
@@ -76,7 +81,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         final GoodsDeatilEntity.EveryDay everyDay = goods.every_day;
 
         GlideUtils.getInstance().loadImage(mContext, enableViewHolder.miv_goods, goods.thumb);
-        enableViewHolder.tv_goods_title.setText(goods.title);
+        setLabelTitle(enableViewHolder.tv_goods_title, goods.big_label, goods.title);
 
         if (isEmpty(goods.left) || "null".equals(goods.left)) {
             enableViewHolder.tv_goods_notice.setVisibility(View.GONE);
@@ -361,5 +366,23 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         void OnChangePromotion(String goods, String promoId);
 
         void OnGoodsDel(String goodsId);
+    }
+
+    public void setLabelTitle(TextView textView, String label, String title) {
+        if (!isEmpty(label)) {
+            if (stringBuffer == null) {
+                stringBuffer = new StringBuffer();
+            } else {
+                stringBuffer.setLength(0);
+            }
+            IconTextSpan iconTextSpan = new IconTextSpan(context, R.color.pink_color, label);
+            stringBuffer.append("");
+            stringBuffer.append(title);
+            SpannableString spannableString = new SpannableString(stringBuffer.toString());
+            spannableString.setSpan(iconTextSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textView.setText(spannableString);
+        } else {
+            textView.setText(title);
+        }
     }
 }

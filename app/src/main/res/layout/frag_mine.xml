@@ -46,8 +46,19 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="85dp"
                             android:layout_marginRight="10dp"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:maxEms="16"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
+
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_jingli"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/mtv_name"
+                            android:src="@mipmap/icon_dakehujingli"
+                            android:visibility="gone" />
 
                         <com.shunlian.app.widget.MyRelativeLayout
                             android:id="@+id/mrlayout_level"
@@ -262,7 +273,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="39dp"
                             android:layout_below="@id/mlLayout_menu"
-                            android:background="@color/white"/>
+                            android:background="@color/white" />
+
                         <com.shunlian.app.widget.MyRelativeLayout
                             android:id="@+id/mrlayout_plus"
                             android:layout_width="match_parent"
@@ -309,12 +321,13 @@
                         android:id="@+id/mtv_hint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:textSize="12sp"
+                        android:layout_marginTop="10dp"
                         android:background="@color/value_FFF7CC"
+                        android:padding="10dp"
                         android:textColor="@color/new_text"
-                        android:visibility="gone"
-                        android:layout_marginTop="10dp"/>
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
                     <com.shunlian.app.widget.MyLinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="90dp"
@@ -555,6 +568,14 @@
                                 android:textSize="12sp" />
                         </com.shunlian.app.widget.MyLinearLayout>
                     </com.shunlian.app.widget.MyLinearLayout>
+
+                    <com.shunlian.app.widget.MyImageView
+                        android:id="@+id/miv_game"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:visibility="gone"
+                        android:layout_marginTop="10dp" />
 
                     <com.shunlian.app.widget.MyRelativeLayout
                         android:layout_width="match_parent"

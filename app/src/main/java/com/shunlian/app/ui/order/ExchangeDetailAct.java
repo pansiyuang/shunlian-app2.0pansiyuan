@@ -311,8 +311,9 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         }
         GlideUtils.getInstance().loadImage(this, ctgv_goods.getGoodsIcon(), refundDetail.thumb);
         ctgv_goods.setLabelName(refundDetail.store_name, true);
-        ctgv_goods.setGoodsTitle(refundDetail.title);
+        ctgv_goods.setGoodsTitles(refundDetail.title,refundDetail.big_label);
         ctgv_goods.setGoodsParams(refundDetail.sku_desc);
+
         ctgv_goods.setGoodsCount("x" + refundDetail.qty);
         ctgv_goods.setGoodsPrice(getStringResouce(R.string.common_yuan) + refundDetail.price);
 

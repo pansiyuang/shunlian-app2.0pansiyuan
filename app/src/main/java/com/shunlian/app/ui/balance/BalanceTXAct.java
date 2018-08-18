@@ -74,7 +74,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
     }
 
     public void initDialog() {
-        if (gpv_customUi!=null)
+        if (gpv_customUi != null)
             gpv_customUi.clearPassword();
         if (dialog_pay == null) {
             dialog_pay = new Dialog(this, R.style.Mydialog);
@@ -126,7 +126,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setApiData(CommonEntity data) {
-        SpannableStringBuilder tishiBuilder = Common.changeColorAndSize(data.account_type + " (" + data.account_number+")"
+        SpannableStringBuilder tishiBuilder = Common.changeColorAndSize(data.account_type + " (" + data.account_number + ")"
                 , data.account_type, 15, getColorResouce(R.color.new_text));
         account = data.account_number;
         accountType = data.account_type;
@@ -142,24 +142,24 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void tiXianCallback(CommonEntity data, int code, String message) {
         if (data != null) {
-            BalanceResultAct.startAct(this, data.amount, data.account, accountType,"");
+            BalanceResultAct.startAct(this, data.amount, data.account, accountType, "");
         } else {
-            String right,left;
+            String right, left;
             gpv_customUi.clearPassword();
             dialog_pay.dismiss();
             if (code == PASSWORDLOCK) {
                 right = getStringResouce(R.string.errcode_cancel);
                 left = getStringResouce(R.string.balance_zhaohuimima);
-                initHintDialog(message, left,right);
-            } else if (code==PASSWORDERROR){
+                initHintDialog(message, left, right);
+            } else if (code == PASSWORDERROR) {
                 right = getStringResouce(R.string.balance_chongxinshuru);
                 left = getStringResouce(R.string.balance_wangjimima);
-                initHintDialog(message, left,right);
+                initHintDialog(message, left, right);
             }
         }
     }
 
-    public void initHintDialog(String title, String left,String right) {
+    public void initHintDialog(String title, String left, String right) {
         if (promptDialog == null) {
             promptDialog = new PromptDialog(this);
         }
@@ -175,7 +175,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                BalanceVerifyPhoneAct.startAct(getBaseContext(),false,false,true);
+                BalanceVerifyPhoneAct.startAct(getBaseContext(), false, false, true);
             }
         }).show();
     }
@@ -204,9 +204,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
     public void afterTextChanged(Editable editable) {
         String temp = editable.toString();
         int posDot = temp.indexOf(".");
-        if (posDot <= 0) return;
-        if (temp.length() - posDot - 1 > 2)
-        {
+        if (posDot>0&&temp.length() - posDot - 1 > 2) {
             editable.delete(posDot + 3, posDot + 4);
         }
         balance = editable.toString();

@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,6 +101,7 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
     public int currentScreen = -1;
     public Object[] objects = null;
     public long seekToInAdvance = 0;
+    public RelativeLayout layout_top;
     public ImageView startButton;
     public ImageView backPlayButton;
     public ImageView morePlayButton;
@@ -138,6 +140,11 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
     public JZVideoPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
+    }
+
+    public void setGoodsBannerMode() {
+        layout_top.setVisibility(GONE);
+        fullscreenButton.setVisibility(VISIBLE);
     }
 
     public static void releaseAllVideos() {
