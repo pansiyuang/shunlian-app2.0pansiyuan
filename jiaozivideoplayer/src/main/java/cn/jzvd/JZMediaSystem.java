@@ -11,12 +11,16 @@ import java.util.Map;
  * Created by Nathen on 2017/11/8.
  * 实现系统的播放引擎
  */
-public class JZMediaSystem extends JZMediaInterface implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener, MediaPlayer.OnVideoSizeChangedListener {
+public class JZMediaSystem extends JZMediaInterface implements MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener,
+        MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnErrorListener,
+        MediaPlayer.OnInfoListener, MediaPlayer.OnVideoSizeChangedListener {
 
     public MediaPlayer mediaPlayer;
 
     @Override
     public void start() {
+        if (mediaPlayer != null)
         mediaPlayer.start();
     }
 
@@ -51,17 +55,25 @@ public class JZMediaSystem extends JZMediaInterface implements MediaPlayer.OnPre
 
     @Override
     public void pause() {
+        if (mediaPlayer != null)
         mediaPlayer.pause();
     }
 
     @Override
     public boolean isPlaying() {
-        return mediaPlayer.isPlaying();
+        if (mediaPlayer == null)return false;
+        try{
+            return mediaPlayer.isPlaying();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public void seekTo(long time) {
         try {
+            if (mediaPlayer != null)
             mediaPlayer.seekTo((int) time);
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -94,11 +106,13 @@ public class JZMediaSystem extends JZMediaInterface implements MediaPlayer.OnPre
 
     @Override
     public void setSurface(Surface surface) {
+        if (mediaPlayer != null)
         mediaPlayer.setSurface(surface);
     }
 
     @Override
     public void setVolume(float leftVolume, float rightVolume) {
+        if (mediaPlayer != null)
         mediaPlayer.setVolume(leftVolume, rightVolume);
     }
 

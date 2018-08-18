@@ -13,4 +13,8 @@ public class DefMessageEvent {
     public int praisePosition = -1;//点赞的条目位置
 
     public int followStoreState;//商品详情页关注店铺状态
+
+    public int itemPosition;//详情页小窗口显示位置
+
+    public boolean isrelease;//详情页视频是否回收释放
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.SmallVideoPlayer xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/customVideoPlayer"
+    android:layout_width="match_parent"
+    android:layout_height="360dp">
+
+    <!--非wifi网络提示-->
+    <LinearLayout
+        android:id="@+id/ll_wifi_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A6000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="您正在使用非wifi，播放将消耗您的流量"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_continue_to_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/img_xiangqing_jixubofang" />
+
+    </LinearLayout>
+
+</com.shunlian.app.widget.SmallVideoPlayer>
