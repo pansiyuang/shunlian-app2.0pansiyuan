@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
@@ -17,8 +16,8 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.broadcast.NetworkBroadcast;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.SmallVideoPlayer;
 import com.shunlian.app.widget.VideoBannerWrapper;
@@ -45,6 +44,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
     private SmallVideoPlayer videoPlayer;
     private LinearLayout ll_wifi_state;
     private NetworkBroadcast networkBroadcast;
+    private final int deviceWidth;
 
 
     public GoodsDetailBannerAdapter(Context context, String videoPath, ArrayList<String> pics){
@@ -58,7 +58,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
         EventBus.getDefault().register(this);
 
         openNetListener();
-
+        deviceWidth = DeviceInfoUtil.getDeviceWidth(mContext);
 
     }
 
@@ -108,30 +108,9 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
             String pic = mPics.get(position);
             view = mInflater.inflate(R.layout.item_video, container, false);
             videoPlayer = view.findViewById(R.id.customVideoPlayer);
-            GlideUtils.getInstance().loadImage(mContext, videoPlayer.thumbImageView,pic);
+            GlideUtils.getInstance().loadOverrideImage(mContext,videoPlayer.thumbImageView,pic,deviceWidth,deviceWidth);
             videoPlayer.setUp(mVideoPath, JZVideoPlayer.SCREEN_WINDOW_NORMAL);
             view.setOnClickListener(v -> videoPlayer.startVideo());
-
-            //关闭播放
-            ImageView iv_close = view.findViewById(R.id.iv_close);
-            iv_close.setOnClickListener(v -> videoPlayer.onAutoCompletion());
-
-            //是否开启音量
-            ImageView iv_voice = view.findViewById(R.id.iv_voice);
-            iv_voice.setOnClickListener(v -> {
-                if (videoPlayer != null){
-                    videoPlayer.setRingerMode(0);
-                    iv_voice.setVisibility(View.GONE);
-                    /*int ringerMode = videoPlayer.getRingerMode();
-                    if (ringerMode != 0){
-                        videoPlayer.setRingerMode(0);
-                        iv_voice.setImageResource(R.drawable.img_xiangqing_yinliang_h);
-                    }else {
-                        videoPlayer.setRingerMode(1);
-                        iv_voice.setImageResource(R.drawable.img_xiangqing_yinliang_n);
-                    }*/
-                }
-            });
 
             ll_wifi_state = view.findViewById(R.id.ll_wifi_state);
 
@@ -145,7 +124,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
             String pic = mPics.get(position);
             view = mInflater.inflate(R.layout.item_detail, container, false);
             MyImageView miv_pic = view.findViewById(R.id.miv_pic);
-            GlideUtils.getInstance().loadImage(mContext,miv_pic,pic);
+            GlideUtils.getInstance().loadOverrideImage(mContext,miv_pic,pic,deviceWidth,deviceWidth);
             view.setOnClickListener(v -> {
                 BigImgEntity entity = new BigImgEntity();
                 entity.itemList = mPics;
@@ -155,9 +134,8 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
         }
         container.addView(view);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        int i = TransformUtil.dip2px(mContext, 360);
-        layoutParams.height = i;
+        layoutParams.width = deviceWidth;
+        layoutParams.height = deviceWidth;
         view.setLayoutParams(layoutParams);
         return view;
     }
@@ -191,5 +169,13 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
         if (networkBroadcast != null){
             mContext.unregisterReceiver(networkBroadcast);
         }
+
+        if (mPics != null){
+            mPics.clear();
+            mPics = null;
+        }
+
+        videoPlayer = null;
+        ll_wifi_state = null;
     }
 }

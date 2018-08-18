@@ -45,4 +45,12 @@ public class CustomScaleViewPager extends ViewPager {
         if (adapter != null) adapter.pausePlay();
     }
 
+
+    public void destroy(){
+        if (mPics != null) {
+            mPics.clear();
+            mPics = null;
+        }
+        adapter = null;
+    }
 }

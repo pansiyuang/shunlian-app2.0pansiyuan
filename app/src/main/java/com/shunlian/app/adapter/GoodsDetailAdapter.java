@@ -920,8 +920,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     entity.index = pos;
                     LookBigImgAct.startAct(context, entity);
                 });*/
-                String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
-                mHolder.vbw.setBanner(path,mGoodsEntity.pics,isEmpty(type)?0:Integer.parseInt(type));
+                //String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
+                mHolder.vbw.setBanner(mGoodsEntity.video,mGoodsEntity.pics,isEmpty(type)?0:Integer.parseInt(type));
             }
         }
     }
@@ -1204,6 +1204,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         public BannerHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
+            ViewGroup.LayoutParams layoutParams = vbw.getLayoutParams();
+            layoutParams.width = mDeviceWidth;
+            layoutParams.height = mDeviceWidth;
+            vbw.setLayoutParams(layoutParams);
         }
     }
 

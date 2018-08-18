@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.utils.LogUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -123,7 +122,6 @@ public class VideoBannerWrapper extends RelativeLayout {
         mVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                LogUtil.zhLogW("===positionOffset====="+positionOffset);
                 controlDot(position, positionOffset);
             }
             @Override
@@ -231,7 +229,10 @@ public class VideoBannerWrapper extends RelativeLayout {
 
 
     public void destroy(){
+        if (mVP != null)mVP.destroy();
         EventBus.getDefault().unregister(this);
         mCurrentPosition = 0;
+        removeAllViews();
+
     }
 }

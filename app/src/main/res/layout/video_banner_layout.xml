@@ -3,5 +3,5 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/vbw"
     android:layout_width="match_parent"
-    android:layout_height="360dp"
+    android:layout_height="wrap_content"
     app:bb_scale = "1"/>
