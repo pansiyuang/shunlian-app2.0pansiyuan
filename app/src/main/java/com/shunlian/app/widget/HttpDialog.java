@@ -45,7 +45,7 @@ public class HttpDialog extends Dialog {
     };
 
     public HttpDialog(Context context) {
-        this(context.getApplicationContext(), R.style.Mydialog);
+        this(context, R.style.Mydialog);
         mContext = context.getApplicationContext();
         View view = View.inflate(mContext, R.layout.dialog_http, null);
         setCanceledOnTouchOutside(false);
