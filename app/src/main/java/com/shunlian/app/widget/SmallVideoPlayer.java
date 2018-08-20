@@ -333,8 +333,8 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             Constructor<SmallVideoPlayer> constructor = (Constructor<SmallVideoPlayer>) getClass().getConstructor(Context.class);
             SmallVideoPlayer jzVideoPlayer = constructor.newInstance(getContext());
             jzVideoPlayer.setId(cn.jzvd.R.id.jz_tiny_id);
-            int w = TransformUtil.dip2px(getContext(), 160);
-            int h = TransformUtil.dip2px(getContext(), 100);
+            int w = TransformUtil.dip2px(getContext(), 125);
+            int h = TransformUtil.dip2px(getContext(), 70);
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, h);
             lp.gravity = Gravity.RIGHT | Gravity.TOP;
             int statusBarHeight = ImmersionBar.getStatusBarHeight((Activity) getContext());
