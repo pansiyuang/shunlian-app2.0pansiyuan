@@ -191,50 +191,69 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if (holder instanceof TwoHolder) {
                         TwoHolder twoHolder = (TwoHolder) holder;
                         GetDataEntity.MData data = lists.get(position);
-                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav1, data.datass.get(0).thumb, R.mipmap.img_default_home_nav);
-                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav2, data.datass.get(1).thumb, R.mipmap.img_default_home_nav);
-                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav3, data.datass.get(2).thumb, R.mipmap.img_default_home_nav);
-                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav4, data.datass.get(3).thumb, R.mipmap.img_default_home_nav);
-                        twoHolder.mtv_nav1.setText(data.datass.get(0).title);
-                        twoHolder.mtv_nav2.setText(data.datass.get(1).title);
-                        twoHolder.mtv_nav3.setText(data.datass.get(2).title);
-                        twoHolder.mtv_nav4.setText(data.datass.get(3).title);
-                        if (Common.isColor(data.text_color)) {
-                            twoHolder.mtv_nav1.setTextColor(Color.parseColor(data.text_color));
-                            twoHolder.mtv_nav2.setTextColor(Color.parseColor(data.text_color));
-                            twoHolder.mtv_nav3.setTextColor(Color.parseColor(data.text_color));
-                            twoHolder.mtv_nav4.setTextColor(Color.parseColor(data.text_color));
-                        }
                         if (!TextUtils.isEmpty(data.bg_pic)) {
-                            GlideUtils.getInstance().loadBgImage(context, twoHolder.mllayout_nav, data.bg_pic);
+                            GlideUtils.getInstance().loadBgImage(context, twoHolder.rv_nav, data.bg_pic);
                         } else if (Common.isColor(data.bg_color)) {
-                            twoHolder.mllayout_nav.setBackgroundColor(Color.parseColor(data.bg_color));
+                            twoHolder.rv_nav.setBackgroundColor(Color.parseColor(data.bg_color));
                         }
-                        twoHolder.mllayout_nav1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
-                            }
-                        });
-                        twoHolder.mllayout_nav2.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
-                            }
-                        });
-                        twoHolder.mllayout_nav3.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
-                            }
-                        });
-                        twoHolder.mllayout_nav4.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-//                            GetCouponAct.startAct(context);
-                                Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id, data.datass.get(3).url.channe_id);
-                            }
-                        });
+                        if (twoHolder.firstNavyAdapter==null){
+                            twoHolder.firstNavyAdapter=new FirstNavyAdapter(context,false,data.datass,data.text_color);
+                            twoHolder.rv_nav.setLayoutManager(new GridLayoutManager(context,data.datass.size()>5?5:data.datass.size()));
+                            twoHolder.rv_nav.setNestedScrollingEnabled(false);
+                            twoHolder.rv_nav.setAdapter(twoHolder.firstNavyAdapter);
+                            twoHolder.firstNavyAdapter.setOnItemClickListener(new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
+                                }
+                            });
+                        }else {
+                            twoHolder.firstNavyAdapter.notifyDataSetChanged();
+                        }
+//                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav1, data.datass.get(0).thumb, R.mipmap.img_default_home_nav);
+//                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav2, data.datass.get(1).thumb, R.mipmap.img_default_home_nav);
+//                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav3, data.datass.get(2).thumb, R.mipmap.img_default_home_nav);
+//                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav4, data.datass.get(3).thumb, R.mipmap.img_default_home_nav);
+//                        twoHolder.mtv_nav1.setText(data.datass.get(0).title);
+//                        twoHolder.mtv_nav2.setText(data.datass.get(1).title);
+//                        twoHolder.mtv_nav3.setText(data.datass.get(2).title);
+//                        twoHolder.mtv_nav4.setText(data.datass.get(3).title);
+//                        if (Common.isColor(data.text_color)) {
+//                            twoHolder.mtv_nav1.setTextColor(Color.parseColor(data.text_color));
+//                            twoHolder.mtv_nav2.setTextColor(Color.parseColor(data.text_color));
+//                            twoHolder.mtv_nav3.setTextColor(Color.parseColor(data.text_color));
+//                            twoHolder.mtv_nav4.setTextColor(Color.parseColor(data.text_color));
+//                        }
+//                        if (!TextUtils.isEmpty(data.bg_pic)) {
+//                            GlideUtils.getInstance().loadBgImage(context, twoHolder.mllayout_nav, data.bg_pic);
+//                        } else if (Common.isColor(data.bg_color)) {
+//                            twoHolder.mllayout_nav.setBackgroundColor(Color.parseColor(data.bg_color));
+//                        }
+//                        twoHolder.mllayout_nav1.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+//                            }
+//                        });
+//                        twoHolder.mllayout_nav2.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+//                            }
+//                        });
+//                        twoHolder.mllayout_nav3.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
+//                            }
+//                        });
+//                        twoHolder.mllayout_nav4.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+////                            GetCouponAct.startAct(context);
+//                                Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id, data.datass.get(3).url.channe_id);
+//                            }
+//                        });
                     }
                     break;
                 case TYPE3:
@@ -784,52 +803,57 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     }
 
     class TwoHolder extends BaseRecyclerViewHolders {
-        @BindView(R.id.mllayout_nav1)
-        MyLinearLayout mllayout_nav1;
+        @BindView(R.id.rv_nav)
+        RecyclerView rv_nav;
 
-        @BindView(R.id.mllayout_nav2)
-        MyLinearLayout mllayout_nav2;
+        private FirstNavyAdapter firstNavyAdapter;
 
-        @BindView(R.id.mllayout_nav3)
-        MyLinearLayout mllayout_nav3;
-
-        @BindView(R.id.mllayout_nav4)
-        MyLinearLayout mllayout_nav4;
-
-        @BindView(R.id.mllayout_nav)
-        MyLinearLayout mllayout_nav;
-
-        @BindView(R.id.miv_nav1)
-        MyImageView miv_nav1;
-
-        @BindView(R.id.miv_nav2)
-        MyImageView miv_nav2;
-
-        @BindView(R.id.miv_nav3)
-        MyImageView miv_nav3;
-
-        @BindView(R.id.miv_nav4)
-        MyImageView miv_nav4;
-
-        @BindView(R.id.mtv_nav1)
-        MyTextView mtv_nav1;
-
-        @BindView(R.id.mtv_nav2)
-        MyTextView mtv_nav2;
-
-        @BindView(R.id.mtv_nav3)
-        MyTextView mtv_nav3;
-
-        @BindView(R.id.mtv_nav4)
-        MyTextView mtv_nav4;
+//        @BindView(R.id.mllayout_nav1)
+//        MyLinearLayout mllayout_nav1;
+//
+//        @BindView(R.id.mllayout_nav2)
+//        MyLinearLayout mllayout_nav2;
+//
+//        @BindView(R.id.mllayout_nav3)
+//        MyLinearLayout mllayout_nav3;
+//
+//        @BindView(R.id.mllayout_nav4)
+//        MyLinearLayout mllayout_nav4;
+//
+//        @BindView(R.id.mllayout_nav)
+//        MyLinearLayout mllayout_nav;
+//
+//        @BindView(R.id.miv_nav1)
+//        MyImageView miv_nav1;
+//
+//        @BindView(R.id.miv_nav2)
+//        MyImageView miv_nav2;
+//
+//        @BindView(R.id.miv_nav3)
+//        MyImageView miv_nav3;
+//
+//        @BindView(R.id.miv_nav4)
+//        MyImageView miv_nav4;
+//
+//        @BindView(R.id.mtv_nav1)
+//        MyTextView mtv_nav1;
+//
+//        @BindView(R.id.mtv_nav2)
+//        MyTextView mtv_nav2;
+//
+//        @BindView(R.id.mtv_nav3)
+//        MyTextView mtv_nav3;
+//
+//        @BindView(R.id.mtv_nav4)
+//        MyTextView mtv_nav4;
 
 
         TwoHolder(View itemView) {
             super(itemView);
-            int picWidth = Common.getScreenWidth((Activity) context);
-            int height = picWidth * 192 / 720;
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
-            mllayout_nav.setLayoutParams(params);
+//            int picWidth = Common.getScreenWidth((Activity) context);
+//            int height = picWidth * 192 / 720;
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
+//            mllayout_nav.setLayoutParams(params);
         }
     }
 
