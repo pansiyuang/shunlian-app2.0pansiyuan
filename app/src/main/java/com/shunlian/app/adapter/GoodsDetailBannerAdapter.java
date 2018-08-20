@@ -84,6 +84,11 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
                 videoPlayer.startWindowTiny();
         }
 
+        if (event.isPause){
+            SmallVideoPlayer.goOnPlayOnPause();
+            SmallVideoPlayer.backPress();
+        }
+
         if (event.isrelease){
             destroy();
         }
@@ -165,6 +170,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
         isOpenWindowTiny = false;
         if (videoPlayer != null){
             videoPlayer.onAutoCompletion();
+            videoPlayer.release();
         }
         if (networkBroadcast != null){
             mContext.unregisterReceiver(networkBroadcast);

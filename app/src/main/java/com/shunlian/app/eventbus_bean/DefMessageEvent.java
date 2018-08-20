@@ -17,4 +17,6 @@ public class DefMessageEvent {
     public int itemPosition;//详情页小窗口显示位置
 
     public boolean isrelease;//详情页视频是否回收释放
+
+    public boolean isPause;//是否失去焦点
 }

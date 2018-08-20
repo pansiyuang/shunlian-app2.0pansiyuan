@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -78,10 +79,12 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     public SmallVideoPlayer(Context context) {
         super(context);
+        LogUtil.zhLogW("=====SmallVideoPlayer==1========");
     }
 
     public SmallVideoPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
+        LogUtil.zhLogW("=====SmallVideoPlayer==2========");
     }
 
     @Override
@@ -117,6 +120,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         backPlayButton.setOnClickListener(this);
         closeVideo.setOnClickListener(this);
         voiceControl.setOnClickListener(this);
+        LogUtil.zhLogW("=====init==========");
     }
 
     @Override
@@ -125,8 +129,8 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         if (mAudioManager != null) {
             int initialVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
             SharedPrefUtil.saveCacheSharedPrfLong("video_volume",initialVolume);
-            Log.i("JiaoZiVideoPlayer", "开始播放 声音 [" + initialVolume + "] ");
         }
+        LogUtil.zhLogW("=====startVideo==========");
     }
 
     public static void goOnPlayOnResume() {
@@ -177,6 +181,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             JZVideoPlayerManager.setFirstFloor(this);
             backPress();
         }
+        LogUtil.zhLogW("=====setUp==========");
     }
 
     public void changeStartButtonSize(int size) {
@@ -197,12 +202,14 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     public void onStateNormal() {
         super.onStateNormal();
         changeUiToNormal();
+        LogUtil.zhLogW("=====onStateNormal==========");
     }
 
     @Override
     public void onStatePreparing() {
         super.onStatePreparing();
         changeUiToPreparing();
+        LogUtil.zhLogW("=====onStatePreparing==========");
     }
 
     @Override
@@ -216,6 +223,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     public void onStatePlaying() {
         super.onStatePlaying();
         changeUiToPlayingClear();
+        LogUtil.zhLogW("=====onStatePlaying==========");
     }
 
     @Override
@@ -223,12 +231,14 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         super.onStatePause();
         changeUiToPauseShow();
         cancelDismissControlViewTimer();
+        LogUtil.zhLogW("=====onStatePause==========");
     }
 
     @Override
     public void onStateError() {
         super.onStateError();
         changeUiToError();
+        LogUtil.zhLogW("=====onStateError==========");
     }
 
     @Override
@@ -237,10 +247,12 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         changeUiToComplete();
         cancelDismissControlViewTimer();
         bottomProgressBar.setProgress(100);
+        LogUtil.zhLogW("=====onStateAutoComplete==========");
     }
 
 
     public void startWindowFullscreen() {
+        LogUtil.zhLogW("=====startWindowFullscreen==========");
         Log.i(TAG, "startWindowFullscreen " + " [" + this.hashCode() + "] ");
         hideSupportActionBar(getContext());
 
@@ -827,9 +839,9 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         cancelDismissControlViewTimer();
         if (mAudioManager != null){
             int video_volume = (int) SharedPrefUtil.getCacheSharedPrfLong("video_volume", 0);
-            Log.i("JiaoZiVideoPlayer", "恢复声音 [" + video_volume + "] ");
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,video_volume,0);
         }
+        LogUtil.zhLogW("=====onAutoCompletion==========");
     }
 
     @Override
@@ -839,6 +851,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         if (clarityPopWindow != null) {
             clarityPopWindow.dismiss();
         }
+        LogUtil.zhLogW("=====onCompletion==========");
     }
 
     public void dissmissControlView() {
@@ -858,6 +871,17 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                 }
             });
         }
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        if (JZMediaManager.surface != null) JZMediaManager.surface.release();
+        if (JZMediaManager.savedSurfaceTexture != null)
+            JZMediaManager.savedSurfaceTexture.release();
+        JZMediaManager.textureView = null;
+        JZMediaManager.savedSurfaceTexture = null;
+        LogUtil.zhLogW("=====release==========");
     }
 
     public class DismissControlViewTimerTask extends TimerTask {

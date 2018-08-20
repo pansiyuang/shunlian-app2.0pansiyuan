@@ -830,6 +830,9 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
 
     public void addTextureView() {
         Log.d(TAG, "addTextureView [" + this.hashCode() + "] ");
+        if (JZMediaManager.textureView != null && JZMediaManager.textureView.getParent() != null) {
+            ((ViewGroup) JZMediaManager.textureView.getParent()).removeView(JZMediaManager.textureView);
+        }
         FrameLayout.LayoutParams layoutParams =
                 new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,

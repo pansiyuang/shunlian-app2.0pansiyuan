@@ -1017,6 +1017,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             rnview.clearAnimation();
         }
         mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
+        DefMessageEvent event = new DefMessageEvent();
+        event.isPause = true;
+        EventBus.getDefault().post(event);
     }
 
     /**
