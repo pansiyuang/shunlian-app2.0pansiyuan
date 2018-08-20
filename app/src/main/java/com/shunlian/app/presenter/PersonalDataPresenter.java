@@ -92,6 +92,11 @@ public class PersonalDataPresenter extends BasePresenter<IPersonalDataView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
+                if ("nickname".equals(key)){
+                    iView.setNickname(value);
+                }else if ("signature".equals(key)){
+                    iView.setSignature(value);
+                }
                 Common.staticToast(entity.message);
             }
         });

@@ -66,6 +66,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jzvd.JZMediaManager;
 
 /**
  * Created by Administrator on 2017/11/8.
@@ -1017,9 +1018,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             rnview.clearAnimation();
         }
         mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
-        DefMessageEvent event = new DefMessageEvent();
-        event.isPause = true;
-        EventBus.getDefault().post(event);
+        if (!isEmpty(mGoodsDeatilEntity.video) && JZMediaManager.isPlaying()) {
+            DefMessageEvent event = new DefMessageEvent();
+            event.isPause = true;
+            EventBus.getDefault().post(event);
+        }
     }
 
     /**

@@ -388,11 +388,8 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             topContainer.setVisibility(GONE);
             backPress(); //暂时去掉该功能
         } else if (i == cn.jzvd.R.id.back_tiny) {
-            if (JZVideoPlayerManager.getFirstFloor().currentScreen == JZVideoPlayer.SCREEN_WINDOW_LIST) {
-                quitFullscreenOrTinyWindow();
-            } else {
-                backPress();
-            }
+            quitFullscreenOrTinyWindow();
+            goOnPlayOnPause();
         } else if (i == cn.jzvd.R.id.retry_btn) {
             if (dataSourceObjects == null || JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex) == null) {
                 Toast.makeText(getContext(), getResources().getString(cn.jzvd.R.string.no_url), Toast.LENGTH_SHORT).show();
