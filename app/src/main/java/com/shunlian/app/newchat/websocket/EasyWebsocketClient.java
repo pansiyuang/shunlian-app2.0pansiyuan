@@ -47,7 +47,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     private static EasyWebsocketClient mSingleton;
     private Client mClient;
 
-    private static Context mContext;
+    private Context mContext;
     private boolean isInit = false;
 
     //是否在聊天页面
@@ -73,12 +73,15 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
      *
      * @return
      */
+    private EasyWebsocketClient(Context context) {
+        mContext= context.getApplicationContext();
+    }
+
     public static EasyWebsocketClient getInstance(Context context) {
-        mContext = context;
         if (mSingleton == null) {
             synchronized (MessageCountManager.class) {
                 if (mSingleton == null) {
-                    mSingleton = new EasyWebsocketClient();
+                    mSingleton = new EasyWebsocketClient(context);
                 }
             }
         }

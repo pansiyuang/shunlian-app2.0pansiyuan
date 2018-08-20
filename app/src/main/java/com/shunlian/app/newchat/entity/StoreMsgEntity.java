@@ -14,6 +14,7 @@ public class StoreMsgEntity {
     public int page;
     public int page_size;
     public int total;
+    public int total_page;
     public List<StoreMsg> list;
 
     @JsonIgnoreProperties(ignoreUnknown = true)

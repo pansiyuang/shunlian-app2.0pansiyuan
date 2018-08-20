@@ -18,25 +18,25 @@ import com.shunlian.app.view.IMessageCountView;
 public class MessageCountManager implements IMessageCountView {
     private static MessageCountManager manager;
     private AllMessageCountPresenter mPresenter;
-    private static Context mContext;
+    private  Context mContext;
     private OnGetMessageListener mListener;
     private boolean isLoad;
     private AllMessageCountEntity allMessageCountEntity;
 
+    private MessageCountManager(Context context) {
+        this.mContext = context.getApplicationContext();
+        mPresenter = new AllMessageCountPresenter(mContext, this);
+    }
+
     public static MessageCountManager getInstance(Context context) {
-        mContext = App.getContext();
         if (manager == null) {
             synchronized (MessageCountManager.class) {
                 if (manager == null) {
-                    manager = new MessageCountManager();
+                    manager = new MessageCountManager(context);
                 }
             }
         }
         return manager;
-    }
-
-    public MessageCountManager() {
-        mPresenter = new AllMessageCountPresenter(mContext, this);
     }
 
     public void initData() {

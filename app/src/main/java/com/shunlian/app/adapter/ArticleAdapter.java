@@ -25,6 +25,7 @@ import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.widget.MyImageView;
@@ -162,7 +163,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 }
             });
             articleViewHolder.ll_share.setOnClickListener(v -> {
-                if(isFastClick()){
+                if (isFastClick()) {
                     return;
                 }
                 mFragment.shareArticle(position);
@@ -196,7 +197,12 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 visible(articleViewHolder.miv_big_icon);
                 gone(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
+
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) articleViewHolder.miv_big_icon.getLayoutParams();
+                layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                articleViewHolder.miv_big_icon.setLayoutParams(layoutParams);
                 GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, a.thumb);
+
                 articleViewHolder.miv_big_icon.setOnClickListener(view -> {
                     if (!isEmpty(a.id)) {
                         ArticleH5Act.startAct(context, a.id, ArticleH5Act.MODE_SONIC);

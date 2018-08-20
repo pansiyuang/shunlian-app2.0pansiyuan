@@ -30,6 +30,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HourRedDownTimerView;
@@ -251,6 +252,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                     threeHolder.mllayout_four.setVisibility(View.GONE);
                                     threeHolder.mllayout_five.setVisibility(View.GONE);
                                     GlideUtils.getInstance().loadImage(context, threeHolder.miv_one, data.datass.get(0).thumb, R.mipmap.img_default_home_retui);
+                                    LogUtil.httpLogW("图片:" + data.datass.get(0).thumb);
                                     if (!isEmpty(data.datass.get(0).width)) {
                                         int picWidth = Common.getScreenWidth((Activity) context);
                                         int height = picWidth * Integer.parseInt(data.datass.get(0).height) / Integer.parseInt(data.datass.get(0).width);

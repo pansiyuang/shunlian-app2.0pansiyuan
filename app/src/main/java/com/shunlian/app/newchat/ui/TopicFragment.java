@@ -17,6 +17,7 @@ import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFoundTopicView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -34,8 +35,8 @@ public class TopicFragment extends BaseFragment implements IFoundTopicView, Base
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private FoundTopicPresenter mPresenter;
     private LinearLayoutManager manager;
@@ -61,47 +62,54 @@ public class TopicFragment extends BaseFragment implements IFoundTopicView, Base
         recycler_list.setLayoutManager(manager);
         ((SimpleItemAnimator) recycler_list.getItemAnimator()).setSupportsChangeAnimations(false);
 
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
-
         storeMsgList = new ArrayList<>();
-
-        mAdapter = new TopicMsgAdapter(getActivity(), storeMsgList);
-        mAdapter.setOnItemClickListener(this);
-        recycler_list.setAdapter(mAdapter);
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText("暂无数据");
+        nei_empty.setButtonText(null);
     }
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
+        recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getFoundTopicList(true);
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null) {
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()) {
+                        if (mPresenter != null) {
+                            mPresenter.onRefresh();
+                        }
+                    }
                 }
             }
-
-            @Override
-            public void onLoadMore() {
-
-            }
         });
+
         super.initListener();
     }
 
     @Override
     public void getFoundTopicList(List<StoreMsgEntity.StoreMsg> list, int page, int totalPage) {
-        if (refreshview != null) {
-            refreshview.stopRefresh(true);
-            if (page == 1) {
-                storeMsgList.clear();
-            }
+        if (page == 1) {
+            storeMsgList.clear();
             if (!isEmpty(list)) {
-                storeMsgList.addAll(list);
+                nei_empty.setVisibility(View.GONE);
+                recycler_list.setVisibility(View.VISIBLE);
+            } else {
+                recycler_list.setVisibility(View.GONE);
+                nei_empty.setVisibility(View.VISIBLE);
             }
+        }
+        if (!isEmpty(list)) {
+            storeMsgList.addAll(list);
+        }
+        if (mAdapter == null) {
+            mAdapter = new TopicMsgAdapter(getActivity(), storeMsgList);
+            mAdapter.setOnItemClickListener(this);
+            recycler_list.setAdapter(mAdapter);
+        } else {
             mAdapter.notifyDataSetChanged();
         }
+        mAdapter.setPageLoading(page, totalPage);
     }
 
     @Override

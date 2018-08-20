@@ -65,7 +65,7 @@ public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(this);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)
