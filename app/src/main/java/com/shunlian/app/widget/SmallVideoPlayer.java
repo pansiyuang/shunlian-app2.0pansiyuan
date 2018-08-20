@@ -388,7 +388,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             topContainer.setVisibility(GONE);
             backPress(); //暂时去掉该功能
         } else if (i == cn.jzvd.R.id.back_tiny) {
-            quitFullscreenOrTinyWindow();
+            backPress();
             goOnPlayOnPause();
         } else if (i == cn.jzvd.R.id.retry_btn) {
             if (dataSourceObjects == null || JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex) == null) {
