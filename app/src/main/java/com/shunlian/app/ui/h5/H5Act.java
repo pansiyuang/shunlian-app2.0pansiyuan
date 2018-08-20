@@ -13,6 +13,8 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -581,6 +583,23 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         if (null != sonicSessionClient) {
             sonicSessionClient.destroy();
             sonicSessionClient = null;
+        }
+
+        if (mwv_h5 != null) { //webView在xml中使用会出现内存泄漏
+            // 如果先调用destroy()方法，则会命中if (isDestroyed()) return;这一行代码，需要先onDetachedFromWindow()，再
+            // destory()
+            ViewParent parent = mwv_h5.getParent();
+            if (parent != null) {
+                ((ViewGroup) parent).removeView(mwv_h5);
+            }
+
+            mwv_h5.stopLoading();
+            // 退出时调用此方法，移除绑定的服务，否则某些特定系统会报错
+            mwv_h5.getSettings().setJavaScriptEnabled(false);
+            mwv_h5.clearHistory();
+            mwv_h5.clearView();
+            mwv_h5.removeAllViews();
+            mwv_h5.destroy();
         }
         super.onDestroy();
     }

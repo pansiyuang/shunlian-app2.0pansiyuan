@@ -16,7 +16,7 @@ import com.shunlian.app.utils.TransformUtil;
  */
 
 public class HttpDialog extends Dialog {
-    private static Context mContext;
+    private Context mContext;
     private ProgressView mProgressBar;
     private long startTime;
     private static final long min_show_time = 400;//最少显示时间(毫秒)
@@ -45,16 +45,17 @@ public class HttpDialog extends Dialog {
     };
 
     public HttpDialog(Context context) {
-        this(context, R.style.Mydialog);
-        View view = View.inflate(context, R.layout.dialog_http, null);
+        this(context.getApplicationContext(), R.style.Mydialog);
+        mContext = context.getApplicationContext();
+        View view = View.inflate(mContext, R.layout.dialog_http, null);
         setCanceledOnTouchOutside(false);
         setContentView(view);
         mProgressBar = (ProgressView) view.findViewById(R.id.loading_progress);
         //setCancelable(false);
         Window dialogWindow = getWindow();
         WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        p.height = TransformUtil.dip2px(context, 77.5f); // 高度设置为屏幕的0.6
-        p.width = TransformUtil.dip2px(context, 77.5f);// 宽度设置为屏幕的0.65
+        p.height = TransformUtil.dip2px(mContext, 77.5f); // 高度设置为屏幕的0.6
+        p.width = TransformUtil.dip2px(mContext, 77.5f);// 宽度设置为屏幕的0.65
         dialogWindow.setAttributes(p);
     }
 

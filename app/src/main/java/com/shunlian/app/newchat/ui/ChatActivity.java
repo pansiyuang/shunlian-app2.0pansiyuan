@@ -202,6 +202,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             }
         });
         ll_rootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            if (ll_rootView.getRootView() == null) {
+                return;
+            }
             int heightDiff = ll_rootView.getRootView().getHeight() - ll_rootView.getHeight();
             if (heightDiff > 100) { //高度变小100像素则认为键盘弹出
                 LogUtil.httpLogW("键盘弹出");
@@ -1060,7 +1063,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             }
             runOnUiThread(() -> {
                 if (recycler_chat != null)
-                recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
+                    recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
             });
         } catch (Exception e) {
             e.printStackTrace();

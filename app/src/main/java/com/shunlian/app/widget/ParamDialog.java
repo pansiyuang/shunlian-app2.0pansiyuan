@@ -232,7 +232,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         if (specs != null && specs.size() != 0) {
             linkedHashMap = new LinkedHashMap<>();
             for (int i = 0; i < specs.size(); i++) {
-                linkedHashMap.put(specs.get(i).name, null);
+                linkedHashMap.put(specs.get(i).id, null);
                 List<GoodsDeatilEntity.Values> values = specs.get(i).values;
                 if (values != null && values.size() > 0) {
                     for (GoodsDeatilEntity.Values value : values) {
@@ -318,7 +318,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             Map.Entry e = (Map.Entry) it.next();
             if (e.getValue() == null) {
                 if (isComplete) {
-                    Common.staticToast("请选择" + e.getKey());
+                    String specId = (String) e.getKey();
+                    Common.staticToast("请选择" + getSpecName(specId));
                 }
                 return null;
             }
@@ -346,6 +347,16 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             }
         }
         return null;
+    }
+
+    public String getSpecName(String specId) {
+        String skuName = null;
+        for (int i = 0; i < specs.size(); i++) {
+            if (specId.equals(specs.get(i).id)) {
+                skuName = specs.get(i).name;
+            }
+        }
+        return skuName;
     }
 
     public void setOnSelectCallBack(OnSelectCallBack callBack) {
@@ -407,7 +418,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                             valuesItem.isSelect = true;
                             notifyDataChanged();
                             if (linkedHashMap != null) {
-                                linkedHashMap.put(mSpecs.name, values);
+                                linkedHashMap.put(mSpecs.id, values);
                             }
                             if (checkLinkmap(false) != null) {
                                 GoodsDeatilEntity.Sku s = checkLinkmap(false);
