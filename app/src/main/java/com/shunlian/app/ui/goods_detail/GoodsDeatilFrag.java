@@ -12,8 +12,11 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.MyOnClickListener;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
+import com.shunlian.app.widget.SmallVideoPlayer;
 import com.shunlian.app.widget.VideoBannerWrapper;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
@@ -46,6 +49,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private int screenWidth;
     private GoodsDetailAdapter goodsDetailAdapter;
     public int currentFirstItem;//当前第一个条目
+    public static boolean isShowNetTip;//是否提示网络
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -113,6 +117,19 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 }
             }
         });
+
+
+        recy_view_root.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+                SmallVideoPlayer.onChildViewAttachedToWindow(view, R.id.customVideoPlayer);
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(View view) {
+                SmallVideoPlayer.onChildViewDetachedFromWindow(view);
+            }
+        });
     }
 
     private boolean iscCallScrollPosition = false;
@@ -140,6 +157,11 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @Override
     protected void initData() {
         screenWidth = DeviceInfoUtil.getDeviceWidth(baseActivity);
+        int netWorkStatus = NetworkUtils.getNetWorkStatus(baseActivity);
+        if (netWorkStatus != NetworkUtils.NETWORK_WIFI &&
+                netWorkStatus != NetworkUtils.NETWORK_CLASS_UNKNOWN){
+            isShowNetTip = true;
+        }
     }
 
     /**
@@ -219,8 +241,12 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     public void onFailure(){
         if (nei_empty != null){
             visible(nei_empty);
-            nei_empty.setNetExecption().setOnClickListener(v ->
-                ((GoodsDetailAct)baseActivity).refreshDetail());
+            nei_empty.setNetExecption().setOnClickListener(v ->{
+                if (MyOnClickListener.isFastClick()) {
+                    return;
+                }
+                ((GoodsDetailAct)baseActivity).refreshDetail();
+            });
         }
     }
 }

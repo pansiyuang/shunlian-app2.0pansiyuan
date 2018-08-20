@@ -5,7 +5,6 @@ package com.shunlian.app.widget;
  */
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.media.AudioManager;
@@ -153,6 +152,35 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             } else {
                 jzvd.onStatePause();
                 JZMediaManager.pause();
+            }
+        }
+    }
+
+    public static void onChildViewAttachedToWindow(View view, int jzvdId) {
+        if (JZVideoPlayerManager.getCurrentJzvd() != null &&
+                JZVideoPlayerManager.getCurrentJzvd().currentScreen == JZVideoPlayer.SCREEN_WINDOW_TINY) {
+            SmallVideoPlayer videoPlayer = view.findViewById(jzvdId);
+            if (videoPlayer != null && JZUtils.getCurrentFromDataSource(
+                    videoPlayer.dataSourceObjects,
+                    videoPlayer.currentUrlMapIndex).equals
+                    (JZMediaManager.getCurrentDataSource())) {
+                SmallVideoPlayer.backPress();
+            }
+        }
+    }
+
+    public static void onChildViewDetachedFromWindow(View view) {
+        if (JZVideoPlayerManager.getCurrentJzvd() != null &&
+                JZVideoPlayerManager.getCurrentJzvd().currentScreen !=
+                        JZVideoPlayer.SCREEN_WINDOW_TINY) {
+            SmallVideoPlayer
+                    videoPlayer = (SmallVideoPlayer) JZVideoPlayerManager.getCurrentJzvd();
+            if (view instanceof ViewGroup && ((ViewGroup) view).indexOfChild(videoPlayer) != -1) {
+                if (videoPlayer.currentState == JZVideoPlayer.CURRENT_STATE_PAUSE) {
+                    JZVideoPlayer.releaseAllVideos();
+                } else {
+                    videoPlayer.startWindowTiny();
+                }
             }
         }
     }
@@ -371,12 +399,12 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                 return;
             }
             if (currentState == CURRENT_STATE_NORMAL) {
-                if (!JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("file") &&
+                /*if (!JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("file") &&
                         !JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("/") &&
                         !JZUtils.isWifiConnected(getContext()) && !WIFI_TIP_DIALOG_SHOWED) {
                     showWifiDialog();
                     return;
-                }
+                }*/
                 startVideo();
                 onEvent(JZUserActionStandard.ON_CLICK_START_THUMB);//开始的事件应该在播放之后，此处特殊
             } else if (currentState == CURRENT_STATE_AUTO_COMPLETE) {
@@ -395,12 +423,12 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                 Toast.makeText(getContext(), getResources().getString(cn.jzvd.R.string.no_url), Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (!JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("file") && !
+            /*if (!JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("file") && !
                     JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("/") &&
                     !JZUtils.isWifiConnected(getContext()) && !WIFI_TIP_DIALOG_SHOWED) {
                 showWifiDialog();
                 return;
-            }
+            }*/
             initTextureView();//和开始播放的代码重复
             addTextureView();
             JZMediaManager.setDataSource(dataSourceObjects);
@@ -430,7 +458,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     @Override
     public void showWifiDialog() {
-        super.showWifiDialog();
+       /* super.showWifiDialog();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getResources().getString(cn.jzvd.R.string.tips_not_wifi));
         builder.setPositiveButton(getResources().getString(cn.jzvd.R.string.tips_not_wifi_confirm), (dialog, which) -> {
@@ -444,7 +472,38 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             clearFloatScreen();
         });
         builder.setOnCancelListener(dialog -> dialog.dismiss());
-        builder.create().show();
+        builder.create().show();*/
+    }
+
+    @Override
+    protected void playerControl() {
+        Log.i(TAG, "onClick start [" + this.hashCode() + "] ");
+        if (dataSourceObjects == null || JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex) == null) {
+            Toast.makeText(getContext(), getResources().getString(cn.jzvd.R.string.no_url), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (currentState == CURRENT_STATE_NORMAL) {
+            /*if (!JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("file") && !
+                    JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex).toString().startsWith("/") &&
+                    !JZUtils.isWifiConnected(getContext()) && !WIFI_TIP_DIALOG_SHOWED) {
+                showWifiDialog();
+                return;
+            }*/
+            startVideo();
+            onEvent(JZUserAction.ON_CLICK_START_ICON);//开始的事件应该在播放之后，此处特殊
+        } else if (currentState == CURRENT_STATE_PLAYING) {
+            onEvent(JZUserAction.ON_CLICK_PAUSE);
+            Log.d(TAG, "pauseVideo [" + this.hashCode() + "] ");
+            JZMediaManager.pause();
+            onStatePause();
+        } else if (currentState == CURRENT_STATE_PAUSE) {
+            onEvent(JZUserAction.ON_CLICK_RESUME);
+            JZMediaManager.start();
+            onStatePlaying();
+        } else if (currentState == CURRENT_STATE_AUTO_COMPLETE) {
+            onEvent(JZUserAction.ON_CLICK_START_AUTO_COMPLETE);
+            startVideo();
+        }
     }
 
     @Override

@@ -12,10 +12,10 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.ui.goods_detail.GoodsDeatilFrag;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.SmallVideoPlayer;
 import com.shunlian.app.widget.VideoBannerWrapper;
@@ -43,7 +43,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
     private SmallVideoPlayer videoPlayer;
     private LinearLayout ll_wifi_state;
     private final int deviceWidth;
-    private boolean isShowNetTip;//是否提示网络
+
 
 
     public GoodsDetailBannerAdapter(Context context, String videoPath, ArrayList<String> pics){
@@ -57,17 +57,13 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
         EventBus.getDefault().register(this);
 
         deviceWidth = DeviceInfoUtil.getDeviceWidth(mContext);
-
-        int netWorkStatus = NetworkUtils.getNetWorkStatus(context);
-        if (netWorkStatus != NetworkUtils.NETWORK_WIFI &&
-                netWorkStatus != NetworkUtils.NETWORK_CLASS_UNKNOWN){
-            isShowNetTip = true;
-        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void scrollPosition(DefMessageEvent event){
-        if (JZMediaManager.isPlaying()){isOpenWindowTiny = false;}else {
+        if (JZMediaManager.isPlaying()) {
+            isOpenWindowTiny = false;
+        }else {
             isOpenWindowTiny = true;
         }
         if (event.itemPosition >= 1 && !isOpenWindowTiny && VideoBannerWrapper.mCurrentPosition == 0){
@@ -106,11 +102,11 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
             view = mInflater.inflate(R.layout.item_video, container, false);
             videoPlayer = view.findViewById(R.id.customVideoPlayer);
             GlideUtils.getInstance().loadOverrideImage(mContext,videoPlayer.thumbImageView,pic,deviceWidth,deviceWidth);
-            videoPlayer.setUp(mVideoPath, JZVideoPlayer.SCREEN_WINDOW_NORMAL);
+            videoPlayer.setUp(mVideoPath, JZVideoPlayer.SCREEN_WINDOW_LIST);
             view.setOnClickListener(v -> videoPlayer.startVideo());
 
             ll_wifi_state = view.findViewById(R.id.ll_wifi_state);
-            if (isShowNetTip){
+            if (GoodsDeatilFrag.isShowNetTip){
                 ll_wifi_state.setVisibility(View.VISIBLE);
             }else {
                 ll_wifi_state.setVisibility(View.GONE);
@@ -120,7 +116,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
             MyImageView continueToPlay = view.findViewById(R.id.miv_continue_to_play);
             continueToPlay.setOnClickListener(v -> {
                 ll_wifi_state.setVisibility(View.GONE);
-                isShowNetTip = false;
+                GoodsDeatilFrag.isShowNetTip = false;
                 if (JZMediaManager.textureView == null){
                     videoPlayer.startVideo();
                 }else {
@@ -186,5 +182,6 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
 
         videoPlayer = null;
         ll_wifi_state = null;
+        GoodsDeatilFrag.isShowNetTip = false;
     }
 }

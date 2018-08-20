@@ -124,6 +124,8 @@ public class HttpDialog extends Dialog {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 }
