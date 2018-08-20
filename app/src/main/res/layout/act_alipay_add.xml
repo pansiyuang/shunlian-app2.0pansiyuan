@@ -178,19 +178,30 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="11dp"
+        android:orientation="horizontal"
         android:gravity="center_vertical">
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_xieyi"
-            android:padding="5dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
             android:src="@mipmap/img_balance_xieyi_n"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/mtv_xieyi"
             android:textSize="12sp"
+            android:text="@string/balance_woyiyuedu"
             android:textColor="@color/my_gray_one" />
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mtv_xieyi"
+            android:text="@string/balance_yonghuxieyi"
+            android:textSize="12sp"
+            android:textColor="@color/pink_color" />
     </com.shunlian.app.widget.MyLinearLayout>
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_next"
