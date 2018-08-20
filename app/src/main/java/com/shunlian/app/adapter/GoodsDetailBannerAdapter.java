@@ -1,8 +1,6 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
@@ -13,8 +11,8 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
-import com.shunlian.app.broadcast.NetworkBroadcast;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.ui.goods_detail.GoodsDeatilFrag;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -28,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
+import cn.jzvd.JZMediaManager;
 import cn.jzvd.JZVideoPlayer;
 
 /**
@@ -43,8 +42,8 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
     private boolean isOpenWindowTiny;//是否打开小窗口
     private SmallVideoPlayer videoPlayer;
     private LinearLayout ll_wifi_state;
-    private NetworkBroadcast networkBroadcast;
     private final int deviceWidth;
+
 
 
     public GoodsDetailBannerAdapter(Context context, String videoPath, ArrayList<String> pics){
@@ -57,27 +56,16 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
         mInflater = LayoutInflater.from(mContext);
         EventBus.getDefault().register(this);
 
-        openNetListener();
         deviceWidth = DeviceInfoUtil.getDeviceWidth(mContext);
-
-    }
-
-
-    private void openNetListener() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        networkBroadcast = new NetworkBroadcast();
-        mContext.registerReceiver(networkBroadcast, filter);
-        networkBroadcast.setOnUpdateUIListenner(isShow ->{
-            if (isShow && ll_wifi_state != null){
-                ll_wifi_state.setVisibility(View.VISIBLE);
-                pausePlay();
-            }
-        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void scrollPosition(DefMessageEvent event){
+        if (JZMediaManager.isPlaying()) {
+            isOpenWindowTiny = false;
+        }else {
+            isOpenWindowTiny = true;
+        }
         if (event.itemPosition >= 1 && !isOpenWindowTiny && VideoBannerWrapper.mCurrentPosition == 0){
             isOpenWindowTiny = true;
             if (videoPlayer != null)
@@ -114,16 +102,26 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
             view = mInflater.inflate(R.layout.item_video, container, false);
             videoPlayer = view.findViewById(R.id.customVideoPlayer);
             GlideUtils.getInstance().loadOverrideImage(mContext,videoPlayer.thumbImageView,pic,deviceWidth,deviceWidth);
-            videoPlayer.setUp(mVideoPath, JZVideoPlayer.SCREEN_WINDOW_NORMAL);
+            videoPlayer.setUp(mVideoPath, JZVideoPlayer.SCREEN_WINDOW_LIST);
             view.setOnClickListener(v -> videoPlayer.startVideo());
 
             ll_wifi_state = view.findViewById(R.id.ll_wifi_state);
+            if (GoodsDeatilFrag.isShowNetTip){
+                ll_wifi_state.setVisibility(View.VISIBLE);
+            }else {
+                ll_wifi_state.setVisibility(View.GONE);
+            }
 
             //继续播放
             MyImageView continueToPlay = view.findViewById(R.id.miv_continue_to_play);
             continueToPlay.setOnClickListener(v -> {
                 ll_wifi_state.setVisibility(View.GONE);
-                startPlay();
+                GoodsDeatilFrag.isShowNetTip = false;
+                if (JZMediaManager.textureView == null){
+                    videoPlayer.startVideo();
+                }else {
+                    startPlay();
+                }
             });
         }else {
             String pic = mPics.get(position);
@@ -161,7 +159,11 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
      * 暂停播放
      */
     public void startPlay(){
-        SmallVideoPlayer.goOnPlayOnResume();
+        if (JZMediaManager.textureView == null && videoPlayer != null){
+            videoPlayer.startVideo();
+        }else {
+            SmallVideoPlayer.goOnPlayOnResume();
+        }
     }
 
 
@@ -172,9 +174,6 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
             videoPlayer.onAutoCompletion();
             videoPlayer.release();
         }
-        if (networkBroadcast != null){
-            mContext.unregisterReceiver(networkBroadcast);
-        }
 
         if (mPics != null){
             mPics.clear();
@@ -183,5 +182,6 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
 
         videoPlayer = null;
         ll_wifi_state = null;
+        GoodsDeatilFrag.isShowNetTip = false;
     }
 }
