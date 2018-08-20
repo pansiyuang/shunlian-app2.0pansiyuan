@@ -127,10 +127,11 @@ public class App extends Application {
         initJPush();
         if (BuildConfig.DEBUG){
             SwitchHostUtil.setHostMethod();
-            if (LeakCanary.isInAnalyzerProcess(this)) {
-                return;
-            }
-            LeakCanary.install(this);
+//            if (LeakCanary.isInAnalyzerProcess(this)) {
+//                return;
+
+//            }
+//            LeakCanary.install(this);
         }
     }
 }

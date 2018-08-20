@@ -40,7 +40,7 @@ public class PersonalcenterEntity {
     public String note;
     public String son_manage_url;
     public String son_order_url;
-    public Game game_door;
+    public List<Game> game_door;
     public String plus_role;
     public String bcm_role;
     public List<User> sl_user_ranks;

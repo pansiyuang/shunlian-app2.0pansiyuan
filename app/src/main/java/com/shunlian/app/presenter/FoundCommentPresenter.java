@@ -58,9 +58,9 @@ public class FoundCommentPresenter extends BasePresenter<IFoundCommentView> {
                 super.onSuccess(entity);
                 isLoading = false;
                 StoreMsgEntity storeMsgEntity = entity.data;
-                iView.getFoundCommentList(storeMsgEntity.list, storeMsgEntity.page, storeMsgEntity.total);
+                iView.getFoundCommentList(storeMsgEntity.list, storeMsgEntity.page, storeMsgEntity.total_page);
                 currentPage = entity.data.page;
-                allPage = entity.data.total;
+                allPage = entity.data.total_page;
                 currentPage++;
             }
 

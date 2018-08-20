@@ -58,9 +58,9 @@ public class FoundTopicPresenter extends BasePresenter<IFoundTopicView> {
                 super.onSuccess(entity);
                 isLoading = false;
                 StoreMsgEntity storeMsgEntity = entity.data;
-                iView.getFoundTopicList(storeMsgEntity.list, storeMsgEntity.page, storeMsgEntity.total);
+                iView.getFoundTopicList(storeMsgEntity.list, storeMsgEntity.page, storeMsgEntity.total_page);
                 currentPage = entity.data.page;
-                allPage = entity.data.total;
+                allPage = entity.data.total_page;
                 currentPage++;
             }
 

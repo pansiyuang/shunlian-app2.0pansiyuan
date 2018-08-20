@@ -15,6 +15,7 @@ import com.shunlian.app.presenter.FoundCommentPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.view.IFoundCommentView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -27,13 +28,13 @@ import butterknife.BindView;
  * Created by Administrator on 2018/5/10.
  */
 
-public class CommentFragment extends BaseFragment implements IFoundCommentView {
+public class CommentFragment extends BaseFragment implements IFoundCommentView, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private FoundCommentPresenter mPresenter;
     private LinearLayoutManager manager;
@@ -59,36 +60,26 @@ public class CommentFragment extends BaseFragment implements IFoundCommentView {
         recycler_list.setLayoutManager(manager);
         ((SimpleItemAnimator) recycler_list.getItemAnimator()).setSupportsChangeAnimations(false);
 
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
-
         storeMsgList = new ArrayList<>();
-        mAdapter = new CommentMsgAdapter(getActivity(), storeMsgList);
-        recycler_list.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener((view, position) -> {
-            StoreMsgEntity.StoreMsg storeMsg = storeMsgList.get(position);
-            if (isEmpty(storeMsg.id)) {
-                return;
-            }
-            mPresenter.msgRead(String.valueOf(storeMsg.type), storeMsg.id);
-            ArticleH5Act.startAct(getActivity(), storeMsg.id, ArticleH5Act.MODE_SONIC);
-        });
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText("暂无数据");
+        nei_empty.setButtonText(null);
     }
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
+        recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getFoundCommentList(true);
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null) {
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()) {
+                        if (mPresenter != null) {
+                            mPresenter.onRefresh();
+                        }
+                    }
                 }
-            }
-
-            @Override
-            public void onLoadMore() {
-
             }
         });
         super.initListener();
@@ -96,14 +87,26 @@ public class CommentFragment extends BaseFragment implements IFoundCommentView {
 
     @Override
     public void getFoundCommentList(List<StoreMsgEntity.StoreMsg> list, int page, int totalPage) {
-        if (refreshview != null) {
-            refreshview.stopRefresh(true);
-            if (page == 1) {
-                storeMsgList.clear();
-            }
+        if (page == 1) {
+            storeMsgList.clear();
             if (!isEmpty(list)) {
-                storeMsgList.addAll(list);
+                nei_empty.setVisibility(View.GONE);
+                recycler_list.setVisibility(View.VISIBLE);
+            } else {
+                recycler_list.setVisibility(View.GONE);
+                nei_empty.setVisibility(View.VISIBLE);
             }
+        }
+        if (!isEmpty(list)) {
+            storeMsgList.addAll(list);
+        }
+        if (mAdapter == null) {
+            mAdapter = new CommentMsgAdapter(getActivity(), storeMsgList);
+            mAdapter.setOnItemClickListener(this);
+            mAdapter.setPageLoading(page, totalPage);
+            recycler_list.setAdapter(mAdapter);
+        } else {
+            mAdapter.setPageLoading(page, totalPage);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -116,5 +119,15 @@ public class CommentFragment extends BaseFragment implements IFoundCommentView {
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        StoreMsgEntity.StoreMsg storeMsg = storeMsgList.get(position);
+        if (isEmpty(storeMsg.id)) {
+            return;
+        }
+        mPresenter.msgRead(String.valueOf(storeMsg.type), storeMsg.id);
+        ArticleH5Act.startAct(getActivity(), storeMsg.id, ArticleH5Act.MODE_SONIC);
     }
 }
