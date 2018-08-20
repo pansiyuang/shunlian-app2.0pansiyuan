@@ -1,10 +1,12 @@
 package cn.jzvd;
 
 import android.graphics.SurfaceTexture;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
@@ -104,6 +106,7 @@ public class JZMediaManager implements TextureView.SurfaceTextureListener {
         mMediaHandler.sendMessage(msg);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
         if(JZVideoPlayerManager.getCurrentJzvd() == null) return;

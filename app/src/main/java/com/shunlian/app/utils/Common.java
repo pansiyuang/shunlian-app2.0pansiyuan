@@ -89,6 +89,7 @@ import com.shunlian.app.ui.plus.PlusGifDetailAct;
 import com.shunlian.app.ui.plus.PlusOrderAct;
 import com.shunlian.app.ui.plus.SuperProductsAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
+import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -211,6 +212,8 @@ public class Common {
                 return "H5Act";
             case "HTMLShare":
                 return "WXEntryActivity";
+            case "submitlogisticsinfo":
+                return "SubmitLogisticsInfoAct";
             default:
                 return "";
         }
@@ -455,6 +458,9 @@ public class Common {
                     //0，普通用户，1平台客服管理员，2平台普通客服，3商家客服管理员，4商家普通客服
                     ChatManager.getInstance(context).init().switch2jumpChat(params[10], params[11], chatMember);
                 }
+                break;
+            case "submitlogisticsinfo"://提交物流信息
+                SubmitLogisticsInfoAct.startAct(context,params[0],SubmitLogisticsInfoAct.APPLY);
                 break;
             default://首页
                 MainActivity.startAct(context, "");

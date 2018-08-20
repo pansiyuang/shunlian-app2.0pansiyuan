@@ -359,14 +359,12 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
                 && requestCode == NickNameAct.REQUEST_CODE){
             String nickname = data.getStringExtra("nickname");
             if (!isEmpty(nickname) && presenter != null){
-                mtv_nickname.setText(nickname);
                 presenter.setInfo("nickname",nickname);
             }
         }else if (RESULT_OK == resultCode//个性签名
                 && requestCode == AutographAct.REQUEST_CODE){
             String signature = data.getStringExtra("signature");
             if (!isEmpty(signature) && presenter != null){
-                mtv_autograph.setText(signature);
                 presenter.setInfo("signature",signature);
             }
         }else if (RESULT_OK == resultCode//兴趣选择

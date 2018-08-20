@@ -36,6 +36,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String send_time;
     public String quality_guarantee;
     public String credit;
+    public String video;//视频地址
     public String type;// 普通商品0，优品1,团购商品2
 
     public String is_preferential;//店铺优惠  没有值的时候为空字符串
@@ -1400,6 +1401,9 @@ public class GoodsDeatilEntity implements Parcelable {
         };
     }
 
+    public GoodsDeatilEntity() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1428,6 +1432,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.send_time);
         dest.writeString(this.quality_guarantee);
         dest.writeString(this.credit);
+        dest.writeString(this.video);
         dest.writeString(this.type);
         dest.writeString(this.is_preferential);
         dest.writeString(this.member_cart_count);
@@ -1453,9 +1458,6 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.self_buy_earn);
     }
 
-    public GoodsDeatilEntity() {
-    }
-
     protected GoodsDeatilEntity(Parcel in) {
         this.id = in.readString();
         this.title = in.readString();
@@ -1478,6 +1480,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.send_time = in.readString();
         this.quality_guarantee = in.readString();
         this.credit = in.readString();
+        this.video = in.readString();
         this.type = in.readString();
         this.is_preferential = in.readString();
         this.member_cart_count = in.readString();
@@ -1503,7 +1506,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.self_buy_earn = in.readString();
     }
 
-    public static final Parcelable.Creator<GoodsDeatilEntity> CREATOR = new Parcelable.Creator<GoodsDeatilEntity>() {
+    public static final Creator<GoodsDeatilEntity> CREATOR = new Creator<GoodsDeatilEntity>() {
         @Override
         public GoodsDeatilEntity createFromParcel(Parcel source) {
             return new GoodsDeatilEntity(source);

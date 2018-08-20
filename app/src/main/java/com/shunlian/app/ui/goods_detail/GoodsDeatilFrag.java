@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.GoodsDetailAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
-import com.shunlian.app.widget.banner.Kanner;
+import com.shunlian.app.widget.VideoBannerWrapper;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -55,6 +58,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         miv_top.setOnClickListener(this);
         miv_footprint.setOnClickListener(this);
         recy_view_root.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private DefMessageEvent event;
             int[] detail = new int[2];
             int[] comment = new int[2];
             GoodsDetailAct detailAct = (GoodsDetailAct) baseActivity;
@@ -65,13 +69,17 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 if (manager != null){
                     int firstPosition = manager.findFirstVisibleItemPosition();
                     currentFirstItem = firstPosition;
+                    if (event == null)
+                        event = new DefMessageEvent();
+                    event.itemPosition = firstPosition;
+                    EventBus.getDefault().post(event);
                     if (firstPosition > 2){
                         miv_top.setVisibility(View.VISIBLE);
                     }else {
                         miv_top.setVisibility(View.INVISIBLE);
                     }
                     View firstView = manager.findViewByPosition(firstPosition);
-                    if (firstView instanceof Kanner){
+                    if (firstView instanceof VideoBannerWrapper){
                         totalDy += dy;
                         detailAct.setBgColor(firstPosition,totalDy);
                     }else {
@@ -196,6 +204,10 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onDestroyView() {
+
+        DefMessageEvent event = new DefMessageEvent();
+        event.isrelease = true;
+        EventBus.getDefault().post(event);
         if (goodsDetailAdapter != null){
             goodsDetailAdapter.onDetachedFromRecyclerView(recy_view_root);
             goodsDetailAdapter.unbind();
