@@ -114,6 +114,7 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
 
     private boolean hasFolderGened = false;
     private boolean mIsShowCamera = false;
+    private boolean isNeedLoad = true;
 
     @Override
     protected int getLayoutId() {
@@ -256,6 +257,7 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
                         mFolderPopupWindow.dismiss();
 
                         if (index == 0) {
+                            isNeedLoad = true;
                             getSupportLoaderManager().restartLoader(LOADER_ALL, null, mLoaderCallback);
                             btnAlbum.setText(R.string.all_image);
                             mImageAdapter.setShowCamera(mIsShowCamera);
@@ -419,6 +421,11 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            if (isNeedLoad) {
+                isNeedLoad = false;
+            } else {
+                return;
+            }
             mResultFolder.clear();
             if (data != null) {
                 ArrayList<Image> allImages = new ArrayList<>();   //所有图片的集合,不分文件夹
@@ -431,7 +438,6 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
                         continue;
                     }
                     File file = new File(imagePath);
-                    LogUtil.httpLogW("imagePath:" + imagePath  +"    length:"+file.length());
                     if (!file.exists() || file.length() <= 0) {
                         continue;
                     }
