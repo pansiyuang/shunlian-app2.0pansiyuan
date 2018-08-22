@@ -260,7 +260,7 @@ public class ImageGridAdapter extends BaseAdapter {
             if (mItemSize > 0) {
                 // 显示图片
                 Glide.with(mContext)
-                        .load(imageFile)
+                        .load(new MimageFile)
                         .placeholder(R.mipmap.default_error)
                         .error(R.mipmap.default_error)
                         .override(mItemSize, mItemSize)

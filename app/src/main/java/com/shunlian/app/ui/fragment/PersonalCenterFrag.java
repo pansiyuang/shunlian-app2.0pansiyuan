@@ -103,8 +103,10 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     MyTextView mtv_name;
     @BindView(R.id.miv_level)
     MyImageView miv_level;
-    @BindView(R.id.miv_game)
-    MyImageView miv_game;
+    @BindView(R.id.miv_entryL)
+    MyImageView miv_entryL;
+    @BindView(R.id.miv_entryR)
+    MyImageView miv_entryR;
     @BindView(R.id.miv_avar)
     MyImageView miv_avar;
     @BindView(R.id.mtv_yaoqingma)
@@ -215,6 +217,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     MyTextView tv_msg_count;
     @BindView(R.id.mrlayout_plus)
     MyRelativeLayout mrlayout_plus;
+    @BindView(R.id.mllayout_entry)
+    MyLinearLayout mllayout_entry;
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
     private MessageCountManager messageCountManager;
@@ -376,7 +380,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mtv_qiandao.setOnClickListener(this);
         mtv_yaoqingma.setOnClickListener(this);
         mllayout_quanbu.setOnClickListener(this);
-        miv_game.setOnClickListener(this);
+        miv_entryR.setOnClickListener(this);
+        miv_entryL.setOnClickListener(this);
         mllayout_guanfangkefu.setOnClickListener(this);
         mllayout_huiyuanguanli.setOnClickListener(this);
         mllayout_huiyuandingdan.setOnClickListener(this);
@@ -499,15 +504,22 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity = personalcenterEntity;
-        if (personalcenterEntity.game_door!=null&&!isEmpty(personalcenterEntity.game_door.thumb)){
+        if (!isEmpty(personalcenterEntity.game_door)){
             int picWidth = Common.getScreenWidth(baseActivity) - TransformUtil.dip2px(baseActivity,20);
             LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(picWidth,picWidth*100/356);
             layoutParams.setMargins(0,TransformUtil.dip2px(baseActivity,10),0,0);
-            miv_game.setLayoutParams(layoutParams);
-            GlideUtils.getInstance().loadImageChang(baseActivity,miv_game,personalcenterEntity.game_door.thumb);
-            miv_game.setVisibility(View.VISIBLE);
+            mllayout_entry.setLayoutParams(layoutParams);
+            if (personalcenterEntity.game_door.size()==2){
+                GlideUtils.getInstance().loadImageChang(baseActivity,miv_entryL,personalcenterEntity.game_door.get(0).thumb);
+                GlideUtils.getInstance().loadImageChang(baseActivity,miv_entryR,personalcenterEntity.game_door.get(1).thumb);
+                miv_entryR.setVisibility(View.VISIBLE);
+            }else {
+                miv_entryR.setVisibility(View.GONE);
+                GlideUtils.getInstance().loadImageChang(baseActivity,miv_entryL,personalcenterEntity.game_door.get(0).thumb);
+            }
+           mllayout_entry.setVisibility(View.VISIBLE);
         }else {
-            miv_game.setVisibility(View.GONE);
+            mllayout_entry.setVisibility(View.GONE);
         }
         if (!isEmpty(personalcenterEntity.bcm_role)&&"1".equals(personalcenterEntity.bcm_role)){
             miv_jingli.setVisibility(View.VISIBLE);
@@ -792,8 +804,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             case R.id.mllayout_quanbu:
                 MyOrderAct.startAct(baseContext, 1);
                 break;
-            case R.id.miv_game:
-                Common.goGoGo(baseActivity,personalcenterEntity.game_door.url.type,personalcenterEntity.game_door.url.item_id);
+            case R.id.miv_entryL:
+                Common.goGoGo(baseActivity,personalcenterEntity.game_door.get(0).url.type,personalcenterEntity.game_door.get(0).url.item_id);
+                break;
+            case R.id.miv_entryR:
+                Common.goGoGo(baseActivity,personalcenterEntity.game_door.get(1).url.type,personalcenterEntity.game_door.get(1).url.item_id);
                 break;
             case R.id.mtv_chakanpaihang:
                 SaleRankAct.startAct(baseContext);

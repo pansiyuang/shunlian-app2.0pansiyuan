@@ -569,13 +569,25 @@
                         </com.shunlian.app.widget.MyLinearLayout>
                     </com.shunlian.app.widget.MyLinearLayout>
 
-                    <com.shunlian.app.widget.MyImageView
-                        android:id="@+id/miv_game"
+                    <com.shunlian.app.widget.MyLinearLayout
+                        android:id="@+id/mllayout_entry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:scaleType="fitXY"
-                        android:visibility="gone"
-                        android:layout_marginTop="10dp" />
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_entryL"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY" />
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_entryR"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY" />
+                    </com.shunlian.app.widget.MyLinearLayout>
 
                     <com.shunlian.app.widget.MyRelativeLayout
                         android:layout_width="match_parent"

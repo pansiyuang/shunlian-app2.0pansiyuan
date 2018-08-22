@@ -46,11 +46,11 @@ public class HttpDialog extends Dialog {
 
     public HttpDialog(Context context) {
         this(context, R.style.Mydialog);
-        mContext = context.getApplicationContext();
-        View view = View.inflate(mContext, R.layout.dialog_http, null);
+        mContext = context;
+        View view = View.inflate(context, R.layout.dialog_http, null);
         setCanceledOnTouchOutside(false);
         setContentView(view);
-        mProgressBar = (ProgressView) view.findViewById(R.id.loading_progress);
+        mProgressBar = view.findViewById(R.id.loading_progress);
         //setCancelable(false);
         Window dialogWindow = getWindow();
         WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
@@ -88,6 +88,8 @@ public class HttpDialog extends Dialog {
                 }
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
+            }catch (Exception e){
+                e.printStackTrace();
             }
         } else {
             mHandler.sendEmptyMessageDelayed(0, min_show_time - dt);
@@ -123,6 +125,8 @@ public class HttpDialog extends Dialog {
         } catch (WindowManager.BadTokenException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (Exception e){
             e.printStackTrace();
         }
     }

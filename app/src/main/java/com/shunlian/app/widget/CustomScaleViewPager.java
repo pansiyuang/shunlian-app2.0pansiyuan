@@ -31,7 +31,11 @@ public class CustomScaleViewPager extends ViewPager {
      * @param pics
      */
     public void setBanner(String path, ArrayList<String> pics) {
-        mPics.clear();
+        if (mPics == null){
+            mPics = new ArrayList<>();
+        }else {
+            mPics.clear();
+        }
         mPics.addAll(pics);
         mVideoPath = path;
 

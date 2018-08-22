@@ -126,9 +126,9 @@ public class AlipayAddAct extends BaseActivity implements View.OnClickListener, 
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        SpannableStringBuilder titleBuilder = Common.changeColor(getStringResouce(R.string.balance_woyiyuedu)+getStringResouce(R.string.balance_yonghuxieyi),
-                getStringResouce(R.string.balance_yonghuxieyi), getColorResouce(R.color.pink_color));
-        mtv_xieyi.setText(titleBuilder);
+//        SpannableStringBuilder titleBuilder = Common.changeColor(getStringResouce(R.string.balance_woyiyuedu)+getStringResouce(R.string.balance_yonghuxieyi),
+//                getStringResouce(R.string.balance_yonghuxieyi), getColorResouce(R.color.pink_color));
+//        mtv_xieyi.setText(titleBuilder);
         background = (GradientDrawable) mtv_next.getBackground();
         background.setColor(getColorResouce(R.color.color_value_6c));
         mtv_next.setClickable(false);
