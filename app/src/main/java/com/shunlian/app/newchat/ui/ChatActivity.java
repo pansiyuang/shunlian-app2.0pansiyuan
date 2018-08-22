@@ -53,7 +53,6 @@ import com.shunlian.app.presenter.ChatPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.store.StoreAct;
-import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.LogUtil;

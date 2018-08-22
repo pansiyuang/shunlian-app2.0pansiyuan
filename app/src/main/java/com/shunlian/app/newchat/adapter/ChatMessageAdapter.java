@@ -469,7 +469,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             setImg(rightImgViewHolder.miv_img, image);
             if (isEmpty(image.localUrl)) {
                 String imagehost = image.img_host;
-                current_small_url = imagehost + image.img_small;
+                current_small_url = imagehost + image.img_original;
                 GlideUtils.getInstance().loadImage(context, rightImgViewHolder.miv_img, current_small_url);
             } else {
                 current_bigl_url = "file://" + image.localUrl;
