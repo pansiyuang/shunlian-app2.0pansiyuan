@@ -585,22 +585,22 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             sonicSessionClient = null;
         }
 
-        if (mwv_h5 != null) { //webView在xml中使用会出现内存泄漏
-            // 如果先调用destroy()方法，则会命中if (isDestroyed()) return;这一行代码，需要先onDetachedFromWindow()，再
-            // destory()
-            ViewParent parent = mwv_h5.getParent();
-            if (parent != null) {
-                ((ViewGroup) parent).removeView(mwv_h5);
-            }
-
-            mwv_h5.stopLoading();
-            // 退出时调用此方法，移除绑定的服务，否则某些特定系统会报错
-            mwv_h5.getSettings().setJavaScriptEnabled(false);
-            mwv_h5.clearHistory();
-            mwv_h5.clearView();
-            mwv_h5.removeAllViews();
-            mwv_h5.destroy();
-        }
+//        if (mwv_h5 != null) { //webView在xml中使用会出现内存泄漏
+//            // 如果先调用destroy()方法，则会命中if (isDestroyed()) return;这一行代码，需要先onDetachedFromWindow()，再
+//            // destory()
+//            ViewParent parent = mwv_h5.getParent();
+//            if (parent != null) {
+//                ((ViewGroup) parent).removeView(mwv_h5);
+//            }
+//
+//            mwv_h5.stopLoading();
+//            // 退出时调用此方法，移除绑定的服务，否则某些特定系统会报错
+//            mwv_h5.getSettings().setJavaScriptEnabled(false);
+//            mwv_h5.clearHistory();
+//            mwv_h5.clearView();
+//            mwv_h5.removeAllViews();
+//            mwv_h5.destroy();
+//        }
         super.onDestroy();
     }
 
