@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.utils.CenterAlignImageSpan;
+import com.shunlian.app.utils.VerticalImageSpan;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -76,7 +77,7 @@ public class AddressAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.Addre
             SpannableString spanString = new SpannableString("图 " + address);
             Drawable d = getDrawable(R.mipmap.img_address_address_n);
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            CenterAlignImageSpan span = new CenterAlignImageSpan(d);
+            VerticalImageSpan span = new VerticalImageSpan(d);
             spanString.setSpan(span, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             textView.append(spanString);
         } else {
