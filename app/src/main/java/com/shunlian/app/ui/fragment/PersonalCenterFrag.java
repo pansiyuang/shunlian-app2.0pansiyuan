@@ -506,7 +506,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         this.personalcenterEntity = personalcenterEntity;
         if (!isEmpty(personalcenterEntity.game_door)){
             int picWidth = Common.getScreenWidth(baseActivity) - TransformUtil.dip2px(baseActivity,20);
-            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(picWidth,picWidth*100/356);
+            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(picWidth,picWidth*100/360);
             layoutParams.setMargins(0,TransformUtil.dip2px(baseActivity,10),0,0);
             mllayout_entry.setLayoutParams(layoutParams);
             if (personalcenterEntity.game_door.size()==2){
