@@ -123,6 +123,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         NestedSlHeader header = new NestedSlHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
         //end
+        if (getArguments()!=null)
         channel_id = (String) getArguments().getSerializable("channel_id");
         if (FirstPageFrag.firstId.equals(channel_id)) {
             isFirst = true;
