@@ -160,7 +160,7 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
         }
     }
 
-    class OneHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
+   public class OneHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
 
@@ -203,8 +203,8 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
 //        @BindView(R.id.mrlayout_progress)
 //        MyRelativeLayout mrlayout_progress;
 
-        @BindView(R.id.ddp_downTime)
-        DDPDownTimerView ddp_downTime;
+       @BindView(R.id.ddp_downTime)
+       DDPDownTimerView ddp_downTime;
 
 //        @BindView(R.id.seekbar_grow)
 //        SeekBar seekbar_grow;

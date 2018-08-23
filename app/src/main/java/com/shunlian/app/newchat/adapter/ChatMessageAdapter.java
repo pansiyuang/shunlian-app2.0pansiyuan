@@ -437,18 +437,18 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         leftImgViewHolder.tv_name.setText(imageMessage.from_nickname);
         if (imageMessage.msg_body != null) {
             ImageMessage.Image image = imageBody.image;
-            String imgUrl = image.img_host + image.img_small;
+            String imgUrl = image.img_host + image.img_original;
             setImg(leftImgViewHolder.miv_img, image);
 
             GlideUtils.getInstance().loadImage(context, leftImgViewHolder.miv_img, imgUrl);
             GlideUtils.getInstance().loadCornerImage(context, leftImgViewHolder.miv_icon, imageMessage.from_headurl, 3);
 
             leftImgViewHolder.miv_img.setOnClickListener(v -> {
-                if (isEmpty(image.img_small)) {
+                if (isEmpty(image.img_original)) {
                     return;
                 }
                 imgs.clear();
-                imgs.add(image.img_host + image.img_small);
+                imgs.add(image.img_host + image.img_original);
                 //查看大图
                 BigImgEntity bigImgEntity = new BigImgEntity();
                 bigImgEntity.itemList = (ArrayList<String>) imgs;
@@ -469,10 +469,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             setImg(rightImgViewHolder.miv_img, image);
             if (isEmpty(image.localUrl)) {
                 String imagehost = image.img_host;
-//                if (!imagehost.startsWith("https")) {
-//                    imagehost = "https://" + imagehost;
-//                }
-                current_small_url = imagehost + image.img_small;
+                current_small_url = imagehost + image.img_original;
                 GlideUtils.getInstance().loadImage(context, rightImgViewHolder.miv_img, current_small_url);
             } else {
                 current_bigl_url = "file://" + image.localUrl;
@@ -482,7 +479,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 List<String> imgs = new ArrayList<>();
                 imgs.clear();
                 if (isEmpty(image.localUrl)) {
-                    imgs.add(image.img_host + image.img_small);
+                    imgs.add(image.img_host + image.img_original);
                 } else {
                     imgs.add("file://" + image.localUrl);
                 }

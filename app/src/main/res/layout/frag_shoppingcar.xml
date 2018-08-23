@@ -42,6 +42,15 @@
             android:padding="10dp"
             android:src="@mipmap/img_shoppingcar_selected_n" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/miv_total_select"
+            android:text="全选"
+            android:textColor="@color/new_text"
+            android:textSize="15sp" />
+
         <RelativeLayout
             android:id="@+id/rl_price"
             android:layout_width="wrap_content"

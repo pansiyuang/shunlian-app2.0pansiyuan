@@ -1,6 +1,7 @@
 package com.shunlian.app.photopick;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -259,13 +260,19 @@ public class ImageGridAdapter extends BaseAdapter {
 
             if (mItemSize > 0) {
                 // 显示图片
-                Glide.with(mContext)
-                        .load(imageFile)
-                        .placeholder(R.mipmap.default_error)
-                        .error(R.mipmap.default_error)
-                        .override(mItemSize, mItemSize)
-                        .centerCrop()
-                        .into(image);
+                if (!data.path.equals(image.getTag())) {
+                    image.setTag(null);
+                    Glide.with(mContext)
+                            .load(imageFile)
+                            .placeholder(R.mipmap.default_error)
+                            .error(R.mipmap.default_error)
+                            .override(mItemSize, mItemSize)
+                            .skipMemoryCache(false)
+                            .dontAnimate()
+                            .centerCrop()
+                            .into(image);
+                    image.setTag(data.path);
+                }
             }
         }
     }

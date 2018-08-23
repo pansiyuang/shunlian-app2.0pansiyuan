@@ -88,10 +88,6 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        messageCountManager = MessageCountManager.getInstance(this);
-        messageCountManager.initData();
-        messageCountManager.setOnGetMessageListener(this);
-
         tv_title.setText(getStringResouce(R.string.message));
         miv_title_right.setVisibility(View.VISIBLE);
         miv_title_right.setImageResource(R.mipmap.icon_found_sousuo);
@@ -118,8 +114,15 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     @Override
+    protected void onResume() {
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.initData();
+        messageCountManager.setOnGetMessageListener(this);
+        super.onResume();
+    }
+
+    @Override
     protected void onRestart() {
-        messageCountManager.upDateMessageCount();
         messageListFragment.resetData();
         super.onRestart();
     }

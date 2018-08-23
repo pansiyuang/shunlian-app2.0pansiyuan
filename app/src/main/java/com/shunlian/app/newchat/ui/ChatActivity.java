@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -207,7 +208,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             }
             int heightDiff = ll_rootView.getRootView().getHeight() - ll_rootView.getHeight();
             if (heightDiff > 100) { //高度变小100像素则认为键盘弹出
-                LogUtil.httpLogW("键盘弹出");
                 recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
             }
         });
@@ -968,6 +968,15 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     //压缩图片
     public void compressImgs(String imgPath, String tagId, ImageMessage imageMessage) {
+        int picSize = getPicSize(imgPath);
+        LogUtil.httpLogW("图片大小:" + picSize);
+        if (picSize < 1024 * 1024 * 2) {
+            ImageEntity imageEntity = new ImageEntity(imgPath);
+            imageEntity.file = new File(imgPath);
+            mPresenter.uploadPic(imageEntity, "chat", tagId, imageMessage);//上传图片
+            return;
+        }
+
         Luban.with(this).load(imgPath).putGear(3).setCompressListener(new OnCompressListener() {
 
             @Override
@@ -987,6 +996,29 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 Common.staticToast("上传图片失败");
             }
         }).launch();
+    }
+
+    public int getPicSize(String imgPath) {
+        if (isEmpty(imgPath)) {
+            return 0;
+        }
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeFile(imgPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (bitmap == null) {
+            return 0;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {     //API 19
+            return bitmap.getAllocationByteCount();
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {//API 12
+            return bitmap.getByteCount();
+        } else {
+            return bitmap.getRowBytes() * bitmap.getHeight(); //earlier version
+        }
     }
 
     public void upDataChatMemberInfo(BaseMessage baseMessage) {
