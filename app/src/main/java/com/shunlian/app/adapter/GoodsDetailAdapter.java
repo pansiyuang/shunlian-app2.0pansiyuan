@@ -841,7 +841,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.new_text));
                 mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
                 mHolder.mtv_act_title.setTextColor(getColor(R.color.pink_color));
-                mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_BF012A));
+                mHolder.mtv_pmarketPrice.setTextColor(Color.parseColor("#FFFFE2E8"));
                 //gone(mHolder.mtv_follow_count);
                 //visible(mHolder.seekbar_grow,mHolder.mtv_desc);
                 //mHolder.seekbar_grow.setProgress(Integer.parseInt(tt_act.percent));
@@ -852,7 +852,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.value_2096F2));
                 mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
                 mHolder.mtv_act_title.setTextColor(getColor(R.color.new_text));
-                mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_1B78C1));
+                mHolder.mtv_pmarketPrice.setTextColor(Color.parseColor("#FFD8EEFF"));
                 //String remind_count = isEmpty(tt_act.remind_count) ? "0" : tt_act.remind_count;
                 //mHolder.mtv_follow_count.setText(remind_count.concat("人关注"));
                 //visible(mHolder.mtv_follow_count);
