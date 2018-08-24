@@ -434,7 +434,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                         }
                     }
                 }
-                ft.commit();
+//                ft.commit();
+                ft.commitAllowingStateLoss();
             }
         }
     }

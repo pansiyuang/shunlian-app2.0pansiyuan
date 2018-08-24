@@ -412,7 +412,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     }
                 }
             }
-            ft.commit();
+//            ft.commit();
+            ft.commitAllowingStateLoss();
         }
     }
 
@@ -1018,7 +1019,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             rnview.clearAnimation();
         }
         mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
-        if (!isEmpty(mGoodsDeatilEntity.video) && JZMediaManager.isPlaying()) {
+        if (mGoodsDeatilEntity!=null&&!isEmpty(mGoodsDeatilEntity.video) && JZMediaManager.isPlaying()) {
             DefMessageEvent event = new DefMessageEvent();
             event.isPause = true;
             EventBus.getDefault().post(event);
