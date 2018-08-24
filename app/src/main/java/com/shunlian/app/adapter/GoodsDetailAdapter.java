@@ -377,15 +377,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mHolder.mtv_haopinglv.setText(String.format(getString(R.string.praise_rate), star_rate));
 
             if (isEmpty(comments)) {
-                mHolder.recy_cardview.setVisibility(View.GONE);
-                mHolder.view_line1.setVisibility(View.GONE);
-                mHolder.view_line2.setVisibility(View.VISIBLE);
-                mHolder.miv_empty.setVisibility(View.VISIBLE);
+                gone(mHolder.recy_cardview,mHolder.view_line1);
+                visible(mHolder.view_line2,mHolder.miv_empty);
             } else {
-                mHolder.view_line1.setVisibility(View.VISIBLE);
-                mHolder.recy_cardview.setVisibility(View.VISIBLE);
-                mHolder.miv_empty.setVisibility(View.GONE);
-                mHolder.view_line2.setVisibility(View.GONE);
+                visible(mHolder.recy_cardview,mHolder.view_line1);
+                gone(mHolder.view_line2,mHolder.miv_empty);
                 CommentCardViewAdapter commentCardViewAdapter = new
                         CommentCardViewAdapter(context, false, comments);
                 mHolder.recy_cardview.setAdapter(commentCardViewAdapter);

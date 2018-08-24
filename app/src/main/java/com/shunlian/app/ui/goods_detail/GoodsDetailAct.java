@@ -10,7 +10,7 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -192,6 +192,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private int currentQuickAction = -1;//当前快速点击位置
     private ShareInfoParam mShareInfoParam;
     private float mStatusBarAlpha;
+    private FragmentManager mFragmentManager;
 
     public static void startAct(Context context, String goodsId) {
         Intent intent = new Intent(context, GoodsDetailAct.class);
@@ -392,12 +393,17 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     替换fragment内容
      */
     public void switchContent(Fragment show) {
+        if (mFragmentManager == null)
+            mFragmentManager = getSupportFragmentManager();
         if (show != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             if (!show.isAdded()) {
-                ft.add(R.id.mfl_content, show);
+                mFragmentManager.beginTransaction()
+                        .add(R.id.mfl_content, show)
+                        .commitAllowingStateLoss();
             } else {
-                ft.show(show);
+                mFragmentManager.beginTransaction()
+                        .show(show)
+                        .commitAllowingStateLoss();
             }
 
             if (fragments != null && fragments.size() > 0) {
@@ -407,12 +413,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     BaseFragment baseFragment = fragments.get(next);
                     if (show != baseFragment) {
                         if (baseFragment != null && baseFragment.isVisible()) {
-                            ft.hide(baseFragment);
+                            mFragmentManager.beginTransaction()
+                                    .hide(baseFragment)
+                                    .commitAllowingStateLoss();
                         }
                     }
                 }
             }
-            ft.commit();
         }
     }
 
@@ -1018,7 +1025,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             rnview.clearAnimation();
         }
         mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
-        if (!isEmpty(mGoodsDeatilEntity.video) && JZMediaManager.isPlaying()) {
+        if (mGoodsDeatilEntity != null && !isEmpty(mGoodsDeatilEntity.video) && JZMediaManager.isPlaying()) {
             DefMessageEvent event = new DefMessageEvent();
             event.isPause = true;
             EventBus.getDefault().post(event);
@@ -1218,12 +1225,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        mShareInfoParam.userName = baseEntity.data.userName;
-        mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
-        mShareInfoParam.shareLink = baseEntity.data.shareLink;
-        mShareInfoParam.desc = baseEntity.data.desc;
-        if (goodsDetailPresenter != null){
-            goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
+        if (mShareInfoParam != null) {
+            mShareInfoParam.userName = baseEntity.data.userName;
+            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            mShareInfoParam.shareLink = baseEntity.data.shareLink;
+            mShareInfoParam.desc = baseEntity.data.desc;
+            if (goodsDetailPresenter != null) {
+                goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
+            }
         }
     }
 }

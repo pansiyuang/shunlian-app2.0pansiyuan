@@ -557,7 +557,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     finish();
-                } finally {
+                }catch (Exception e){
+                    finish();
+                }finally {
                 }
             }
             return true;
