@@ -156,15 +156,11 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
         if (holder instanceof AddressHolder){
             AddressHolder mHolder = (AddressHolder) holder;
             if (mAddress == null){
-                mHolder.mtv_add_address.setVisibility(View.VISIBLE);
-                mHolder.mtv_address.setVisibility(View.GONE);
-                mHolder.mtv_nickname.setVisibility(View.GONE);
-                mHolder.mtv_phone.setVisibility(View.GONE);
+                visible(mHolder.mtv_add_address);
+                gone(mHolder.mtv_address,mHolder.mtv_nickname,mHolder.mtv_phone);
             }else {
-                mHolder.mtv_add_address.setVisibility(View.GONE);
-                mHolder.mtv_address.setVisibility(View.VISIBLE);
-                mHolder.mtv_nickname.setVisibility(View.VISIBLE);
-                mHolder.mtv_phone.setVisibility(View.VISIBLE);
+                gone(mHolder.mtv_add_address);
+                visible(mHolder.mtv_address,mHolder.mtv_nickname,mHolder.mtv_phone);
                 mHolder.mtv_nickname.setText(mAddress.realname);
                 mHolder.mtv_phone.setText(mAddress.mobile);
                 mHolder.mtv_address.setText(String.format(getString(R.string.address),mAddress.detail_address));
@@ -198,11 +194,9 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 @Override
                 public void convert(SimpleViewHolder holder, GoodsDeatilEntity.Goods s, int position) {
                     if (position == 0){
-                        holder.getView(R.id.mtv_inva).setVisibility(View.VISIBLE);
-                        holder.getView(R.id.line).setVisibility(View.VISIBLE);
+                        visible(holder.getView(R.id.mtv_inva),holder.getView(R.id.line));
                     }else {
-                        holder.getView(R.id.mtv_inva).setVisibility(View.GONE);
-                        holder.getView(R.id.line).setVisibility(View.GONE);
+                        gone(holder.getView(R.id.mtv_inva),holder.getView(R.id.line));
                     }
                     MyRelativeLayout mrl_rootview = holder.getView(R.id.mrl_rootview);
                     mrl_rootview.setPadding(padding,padding,padding,0);
