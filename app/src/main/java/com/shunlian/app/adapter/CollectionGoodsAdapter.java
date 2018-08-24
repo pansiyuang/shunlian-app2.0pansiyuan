@@ -101,16 +101,16 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
             String source = getString(R.string.rmb).concat(goods.price);
             mHolder.mtv_price.setText(Common.changeTextSize(source, getString(R.string.rmb), 12));
             if ("1".equals(goods.free_shipping)) {
-                mHolder.mtv_shippingFree.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_shippingFree);
             } else {
-                mHolder.mtv_shippingFree.setVisibility(View.GONE);
+                gone(mHolder.mtv_shippingFree);
             }
             mHolder.mtv_discount_price.setText(goods.max_dis);
             String favo_num = goods.favo_num;
             if (isEmpty(favo_num)) {
-                mHolder.mtv_collection_count.setVisibility(View.GONE);
+                gone(mHolder.mtv_collection_count);
             } else {
-                mHolder.mtv_collection_count.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_collection_count);
                 mHolder.mtv_collection_count.setText(favo_num.concat("人收藏"));
             }
 
@@ -123,30 +123,31 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
 
             String status = goods.status;
             if ("0".equals(status)){//失效
-                mHolder.mtv_expired.setVisibility(View.VISIBLE);
-                mHolder.miv_shopping_car.setVisibility(View.GONE);
-                mHolder.mtv_shippingFree.setVisibility(View.GONE);
-                mHolder.mtv_discount_price.setVisibility(View.GONE);
-                mHolder.mtv_collection_count.setVisibility(View.GONE);
-                mHolder.mrlayout_discount_title.setVisibility(View.INVISIBLE);
+                visible(mHolder.mtv_expired);
+                gone(mHolder.miv_shopping_car,
+                        mHolder.mtv_shippingFree,
+                        mHolder.mtv_discount_price,
+                        mHolder.mtv_collection_count,
+                        mHolder.mrlayout_discount_title);
                 mHolder.mtv_title.setTextColor(getColor(R.color.color_value_6c));
                 mHolder.mtv_price.setTextColor(getColor(R.color.color_value_6c));
             }else {
-                mHolder.mtv_expired.setVisibility(View.GONE);
-                mHolder.miv_shopping_car.setVisibility(View.VISIBLE);
-                mHolder.mtv_shippingFree.setVisibility(View.VISIBLE);
-                mHolder.mtv_discount_price.setVisibility(View.VISIBLE);
-                mHolder.mtv_collection_count.setVisibility(View.VISIBLE);
+                gone(mHolder.mtv_expired);
+                visible(mHolder.miv_shopping_car,
+                        mHolder.mtv_shippingFree,
+                        mHolder.mtv_discount_price,
+                        mHolder.mtv_collection_count,
+                        mHolder.mrlayout_discount_title);
                 mHolder.mtv_title.setTextColor(getColor(R.color.new_text));
                 mHolder.mrlayout_discount_title.setVisibility(View.VISIBLE);
                 mHolder.mtv_price.setTextColor(getColor(R.color.pink_color));
             }
             if (isShowSelect){
                 mHolder.swipeMenuLayout.setSwipeEnable(false);
-                mHolder.miv_select.setVisibility(View.VISIBLE);
+                visible(mHolder.miv_select);
             }else {
                 mHolder.swipeMenuLayout.setSwipeEnable(true);
-                mHolder.miv_select.setVisibility(View.GONE);
+                gone(mHolder.miv_select);
             }
             /*if (goods.isSelect){
                 mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
@@ -208,7 +209,6 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
             super(itemView);
             swipeMenuLayout = (SwipeMenuLayout) itemView;
             int strokeWidth = TransformUtil.dip2px(context, 0.5f);
-            mtv_cancel_collection.setWHProportion(175,260);
             GradientDrawable background = (GradientDrawable) mtv_shippingFree.getBackground();
             background.setColor(getColor(R.color.white));
             background.setStroke(strokeWidth,getColor(R.color.value_c9));

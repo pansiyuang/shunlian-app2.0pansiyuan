@@ -30,13 +30,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9dp"
                 android:gravity="center"
+                android:layout_marginLeft="11dp"
                 android:orientation="horizontal">
 
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/civ_head"
                     android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginLeft="11dp"/>
+                    android:layout_height="26dp"/>
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_nickname"
@@ -77,16 +77,16 @@
                 android:textSize="12sp"
                 app:tv_control_adapter="true"
                 app:tv_control_width="261"
-                app:tv_margin_left="21"
-                app:tv_margin_top="23" />
+                app:tv_margin_left="20"
+                app:tv_margin_right="20"
+                app:tv_margin_top="20" />
 
         </com.shunlian.app.widget.MyLinearLayout>
 
         <com.shunlian.app.widget.MyRelativeLayout
             android:id="@+id/mrlayout_pic"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp">
+            android:layout_height="match_parent">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_show_pic"

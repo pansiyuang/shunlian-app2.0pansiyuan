@@ -12,10 +12,10 @@
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrlayout_item"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:rl_control_adapter="true"
-        app:rl_control_height="260">
+        android:layout_height="wrap_content">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_select"
@@ -159,21 +159,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/mtv_title"
-            android:layout_below="@+id/mrlayout_price"
             android:textColor="@color/new_gray"
             android:textSize="10sp"
+            android:layout_alignBottom="@+id/miv_goods_pic"
             app:tv_control_adapter="true"
-            app:tv_margin_top="20" />
+            app:tv_margin_top="10" />
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_shopping_car"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/miv_goods_pic"
             android:src="@mipmap/icon_shop_shoppingcart"
             app:iv_control_adapter="true"
-            app:iv_margin_bottom="30"
             app:iv_margin_right="30" />
 
 
@@ -183,14 +182,12 @@
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_cancel_collection"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/pink_color"
         android:gravity="center"
         android:text="@string/cancel_collection"
         android:textColor="@color/white"
         android:textSize="15sp"
-        app:tv_control_adapter="true"
-        app:tv_control_height="260"
-        app:tv_control_width="175" />
+        android:minWidth="88dp"/>
 
 </com.shunlian.app.utils.SwipeMenuLayout>
