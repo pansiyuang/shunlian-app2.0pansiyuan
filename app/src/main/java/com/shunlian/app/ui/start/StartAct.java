@@ -15,6 +15,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
+import com.shunlian.app.bean.GetDataEntity;
+import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
@@ -229,6 +231,21 @@ public class StartAct extends MBaseActivity implements IMain {
     }
 
     @Override
+    public void setContent(GetDataEntity data) {
+        if (isHave)
+            Constant.getDataEntity=data;
+    }
+
+    @Override
+    public void setTab(GetMenuEntity data) {
+        if (isHave&&pMain!=null&&data!=null){
+            Constant.getMenuData=data;
+            if (!isEmpty(data.datas)&&!isEmpty(data.datas.get(0).id))
+            pMain.getContentData(data.datas.get(0).id);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         if (updateDialogV != null) {
             if (updateDialogV.updateDialog != null) {
@@ -256,6 +273,7 @@ public class StartAct extends MBaseActivity implements IMain {
                 updateDialogV = new UpdateDialog(this,data);
             }else {
                 pMain.getSplashAD();
+                pMain.getMenuData();
 //                pMain.entryInfo();
             }
         }

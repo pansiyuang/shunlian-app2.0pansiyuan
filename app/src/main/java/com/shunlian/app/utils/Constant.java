@@ -25,7 +25,9 @@ package com.shunlian.app.utils;
 
 import android.os.Environment;
 
+import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
+import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 
 import java.io.File;
@@ -79,6 +81,10 @@ public final class Constant {
     public static List<String> JPUSH;//推送
 
     public static String MOBILE;//手机号
+
+//    首页缓存
+    public static GetDataEntity getDataEntity;
+    public static GetMenuEntity getMenuData;
 
 
     public static String BUGLY_ID = "1400008795";//正式

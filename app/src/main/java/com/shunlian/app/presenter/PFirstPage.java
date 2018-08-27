@@ -97,7 +97,7 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
         sortAndMD5(map);
 
         Call<BaseEntity<GetMenuEntity>> baseEntityCall = getApiService().channelGetMenu(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GetMenuEntity>>() {
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GetMenuEntity>>() {
             @Override
             public void onSuccess(BaseEntity<GetMenuEntity> entity) {
                 super.onSuccess(entity);
@@ -107,12 +107,12 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
 
     }
 
-    public void getContentData(String id,boolean isShow){
+    public void getContentData(String id){
         Map<String, String> map = new HashMap<>();
         map.put("id",id);
         sortAndMD5(map);
         Call<BaseEntity<GetDataEntity>> baseEntityCall = getApiService().channelGetData(map);
-        getNetData(isShow, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GetDataEntity>>() {
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GetDataEntity>>() {
             @Override
             public void onSuccess(BaseEntity<GetDataEntity> entity) {
                 super.onSuccess(entity);

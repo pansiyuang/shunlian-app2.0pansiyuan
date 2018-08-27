@@ -15,6 +15,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
+import com.shunlian.app.bean.GetDataEntity;
+import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.utils.Constant;
@@ -244,6 +246,16 @@ public class UpdateDialog implements IMain {
 
     @Override
     public void setAD(AdEntity data) {
+
+    }
+
+    @Override
+    public void setContent(GetDataEntity data) {
+
+    }
+
+    @Override
+    public void setTab(GetMenuEntity data) {
 
     }
 
