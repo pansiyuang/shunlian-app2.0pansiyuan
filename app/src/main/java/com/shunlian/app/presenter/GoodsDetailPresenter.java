@@ -63,6 +63,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     private int praisePosition;//点赞位置
     private ProbablyLikeAdapter mLikeAdapter;
     private Call<BaseEntity<EmptyEntity>> mGoodsWantCall;
+    private String goods_title;
 
     public GoodsDetailPresenter(Context context, IGoodsDetailView iView, String goods_id) {
         super(context, iView);
@@ -86,6 +87,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 super.onSuccess(entity);
                 shareInfoParam = new ShareInfoParam();
                 GoodsDeatilEntity data = entity.data;
+                        goods_title = data.title;
                 //LogUtil.augusLogW("dfdfd---"+data.credit);
                 if (!TextUtils.isEmpty(data.credit)&&Integer.parseInt(data.credit)>0){
                     Common.staticToasts(context,String.format(getStringResouce(R.string.common_gongxinin),data.credit),R.mipmap.icon_jifen);
@@ -603,7 +605,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      */
     public void copyText(boolean isToast) {
         if (shareInfoParam == null)return;
-        Common.copyText(context,shareInfoParam.shareLink,shareInfoParam.desc,isToast);
+        String temp = "";
+        if (isToast)temp = shareInfoParam.desc;
+        else temp = goods_title;
+        Common.copyText(context,shareInfoParam.shareLink,temp,isToast);
     }
 
     /**

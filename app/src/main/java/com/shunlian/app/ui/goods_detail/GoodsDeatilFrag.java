@@ -14,7 +14,6 @@ import com.shunlian.app.eventbus_bean.GoodsDetroyEvent;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.MyOnClickListener;
-import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.SmallVideoPlayer;
@@ -50,7 +49,6 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private int screenWidth;
     private GoodsDetailAdapter goodsDetailAdapter;
     public int currentFirstItem;//当前第一个条目
-    public static boolean isShowNetTip;//是否提示网络
     private String goods_id;
 
     @Override
@@ -159,11 +157,6 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @Override
     protected void initData() {
         screenWidth = DeviceInfoUtil.getDeviceWidth(baseActivity);
-        int netWorkStatus = NetworkUtils.getNetWorkStatus(baseActivity);
-        if (netWorkStatus != NetworkUtils.NETWORK_WIFI &&
-                netWorkStatus != NetworkUtils.NETWORK_CLASS_UNKNOWN){
-            isShowNetTip = true;
-        }
     }
 
     /**

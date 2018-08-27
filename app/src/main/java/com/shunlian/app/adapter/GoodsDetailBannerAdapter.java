@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.ui.goods_detail.GoodsDeatilFrag;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -105,17 +104,23 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
             view.setOnClickListener(v -> videoPlayer.startVideo());
 
             ll_wifi_state = view.findViewById(R.id.ll_wifi_state);
-            if (GoodsDeatilFrag.isShowNetTip){
-                ll_wifi_state.setVisibility(View.VISIBLE);
-            }else {
-                ll_wifi_state.setVisibility(View.GONE);
+            if (mVideoBannerWrapper != null &&
+                    mVideoBannerWrapper.getVideoBannerData() != null) {
+                if (mVideoBannerWrapper.getVideoBannerData().isShowNetTip) {
+                    ll_wifi_state.setVisibility(View.VISIBLE);
+                } else {
+                    ll_wifi_state.setVisibility(View.GONE);
+                }
             }
 
             //继续播放
             MyImageView continueToPlay = view.findViewById(R.id.miv_continue_to_play);
             continueToPlay.setOnClickListener(v -> {
                 ll_wifi_state.setVisibility(View.GONE);
-                GoodsDeatilFrag.isShowNetTip = false;
+                if (mVideoBannerWrapper != null &&
+                        mVideoBannerWrapper.getVideoBannerData() != null) {
+                    mVideoBannerWrapper.getVideoBannerData().isShowNetTip = false;
+                }
                 if (JZMediaManager.textureView == null){
                     videoPlayer.startVideo();
                 }else {
@@ -181,6 +186,5 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
 
         videoPlayer = null;
         ll_wifi_state = null;
-        GoodsDeatilFrag.isShowNetTip = false;
     }
 }
