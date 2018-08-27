@@ -193,7 +193,7 @@ public class VideoBannerWrapper extends RelativeLayout {
 
         if (mVP != null){
             mVP.setBanner(path,pics,this);
-            mVP.setCurrentItem(mVideoBannerData.bannerPosition);
+            mVP.setCurrentItem(getCurrentBannerPosition());
         }
         setLabelPic(type);
     }
