@@ -94,8 +94,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
         hide_space = TransformUtil.dip2px(getActivity(), 105.5f);
 
-
-        recycler_list.setHasFixedSize(false);
+//        recycler_list.setHasFixedSize(false);
         printPresenter = new FootPrintPresenter(baseContext, this);
         markDataList = new ArrayList<>();
         delList = new ArrayList<>();
@@ -231,8 +230,8 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         isSelectAll = false;
         selectStatus = 2;
         toSelectAll(false);
-        if (footprintAdapter!=null)
-        footprintAdapter.setEditMode(false);
+        if (footprintAdapter != null)
+            footprintAdapter.setEditMode(false);
     }
 
     /**
@@ -342,6 +341,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             footprintAdapter.initData(markDataList, dateInfoList);
             footprintAdapter.notifyDataSetChanged();
         }
+        footprintAdapter.setPageLoading(page, allPage);
     }
 
     @Override

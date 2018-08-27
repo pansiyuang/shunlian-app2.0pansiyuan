@@ -103,7 +103,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     }
 
     public void resetData() {
-        if (mPresenter!=null){
+        if (mPresenter != null) {
             mPresenter.getSystemMessage();
             mPresenter.getMessageList(false, "", "");
         }
@@ -226,14 +226,21 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     @Override
     public void onItemClick(View view, int position) {
         chatManager.resetPushMode();
-        if (!isEmpty(msgs)) {
+        try {
             if (!mClient.isMember()) {
                 mStatus = MemberStatus.Member;
                 statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Seller, MemberStatus.Member).show();
             } else {
-                ChatMemberEntity.ChatMember member = memberList.get(position - 1);
+                ChatMemberEntity.ChatMember member;
+                if (msgs != null) {
+                    member = memberList.get(position - 1);
+                } else {
+                    member = memberList.get(position); 
+                }
                 ChatManager.getInstance(getActivity()).init().MemberChatToStore(member);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
