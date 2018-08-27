@@ -16,6 +16,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.bean.VideoBannerData;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -111,6 +112,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private String re = "(w=|h=)(\\d+)";
     private Pattern p = Pattern.compile(re);
     private Rect mRect;
+    private final VideoBannerData videoBannerData;
 
     public GoodsDetailAdapter(Context context, GoodsDeatilEntity entity, List<String> lists) {
         super(context, false, lists);
@@ -126,6 +128,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (detail != null) {
             mRichText = detail.text;
         }
+        videoBannerData = new VideoBannerData();
     }
 
     @Override
@@ -915,7 +918,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     LookBigImgAct.startAct(context, entity);
                 });*/
 //                String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
-                mHolder.vbw.setBanner(/*path*/mGoodsEntity.video,mGoodsEntity.pics,isEmpty(type)?0:Integer.parseInt(type));
+                mHolder.vbw.setBanner(mGoodsEntity.video,
+                        mGoodsEntity.pics,
+                        isEmpty(type)?0:Integer.parseInt(type),
+                        videoBannerData);
             }
         }
     }
@@ -986,6 +992,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (context instanceof GoodsDetailAct) {
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
             goodsDetailAct.selectGoodsInfo(sku, count);
+        }
+    }
+
+    @Override
+    public void closeDialog() {
+        if (context instanceof GoodsDetailAct) {
+            GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+            goodsDetailAct.closeParamsDialog();
         }
     }
 

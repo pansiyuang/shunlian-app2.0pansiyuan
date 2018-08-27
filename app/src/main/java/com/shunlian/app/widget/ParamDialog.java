@@ -299,6 +299,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 }
                 break;
             case R.id.iv_cancel:
+                if (selectCallBack != null)
+                    selectCallBack.closeDialog();
                 dismiss();
                 break;
         }
@@ -370,6 +372,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
     public interface OnSelectCallBack {
         void onSelectComplete(GoodsDeatilEntity.Sku sku, int count);
+        default void closeDialog(){}
     }
 
     public class ParamItemAdapter extends RecyclerView.Adapter<ParamItemAdapter.ViewHolder> {

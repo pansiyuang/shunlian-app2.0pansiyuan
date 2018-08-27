@@ -1054,6 +1054,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
     }
 
+    public void closeParamsDialog(){
+        isAddcart = false;
+        isNowBuy = false;
+    }
+
     @OnClick(R.id.mllayout_store)
     public void jumpStore() {
         StoreAct.startAct(this, store_id);

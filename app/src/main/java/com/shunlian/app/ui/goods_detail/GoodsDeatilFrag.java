@@ -10,6 +10,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.GoodsDetailAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.GoodsDetroyEvent;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -50,6 +51,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private GoodsDetailAdapter goodsDetailAdapter;
     public int currentFirstItem;//当前第一个条目
     public static boolean isShowNetTip;//是否提示网络
+    private String goods_id;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -169,6 +171,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
      */
     public void setGoodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
         gone(nei_empty);
+        goods_id = goodsDeatilEntity.id;
         manager = new LinearLayoutManager(baseActivity);
         recy_view_root.setLayoutManager(manager);
         recy_view_root.setNestedScrollingEnabled(false);
@@ -226,8 +229,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onDestroyView() {
-
-        DefMessageEvent event = new DefMessageEvent();
+        GoodsDetroyEvent event = new GoodsDetroyEvent();
         event.isrelease = true;
         EventBus.getDefault().post(event);
         if (goodsDetailAdapter != null){
