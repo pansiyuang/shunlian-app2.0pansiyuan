@@ -82,7 +82,7 @@ public final class Constant {
 
     public static String MOBILE;//手机号
 
-//    首页缓存
+//    首页预加载
     public static GetDataEntity getDataEntity;
     public static GetMenuEntity getMenuData;
 
