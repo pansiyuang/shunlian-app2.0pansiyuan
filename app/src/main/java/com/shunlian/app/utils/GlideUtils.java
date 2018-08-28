@@ -83,6 +83,7 @@ public class GlideUtils {
                 //source:缓存源资源   result：缓存转换后的资源
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
                 .into(imageView);
+//                .into(new GlideDrawableImageViewTarget(imageView, 1));
     }
 
     public void loadImageChang(Context context, ImageView imageView, String imgUrl) {

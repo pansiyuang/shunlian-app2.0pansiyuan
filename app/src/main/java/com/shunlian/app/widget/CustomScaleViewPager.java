@@ -29,8 +29,9 @@ public class CustomScaleViewPager extends ViewPager {
     /**
      * 图片banner图
      * @param pics
+     * @param videoBannerWrapper
      */
-    public void setBanner(String path, ArrayList<String> pics) {
+    public void setBanner(String path, ArrayList<String> pics, VideoBannerWrapper videoBannerWrapper) {
         if (mPics == null){
             mPics = new ArrayList<>();
         }else {
@@ -40,7 +41,7 @@ public class CustomScaleViewPager extends ViewPager {
         mVideoPath = path;
 
         if (adapter == null) {
-            adapter = new GoodsDetailBannerAdapter(getContext(), mVideoPath, mPics);
+            adapter = new GoodsDetailBannerAdapter(getContext(), mVideoPath, mPics,videoBannerWrapper);
             setAdapter(adapter);
         }
     }
@@ -55,6 +56,9 @@ public class CustomScaleViewPager extends ViewPager {
             mPics.clear();
             mPics = null;
         }
-        adapter = null;
+        if (adapter != null){
+            adapter.destroy();
+            adapter = null;
+        }
     }
 }

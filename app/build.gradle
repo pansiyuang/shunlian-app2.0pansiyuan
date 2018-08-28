@@ -28,7 +28,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 22
-        versionName "2.3.0"
+        versionName "2.2.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.ShunLianPower
 
@@ -89,8 +89,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     //rx
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-//    compile 'com.github.bumptech.glide:glide:4.1.1'
+//    compile 'com.github.bumptech.glide:glide:3.7.0' //gif图会闪
+    compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.android.support:recyclerview-v7:27.1.1'
     compile 'com.android.support:cardview-v7:27.1.1'
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
@@ -138,5 +138,5 @@ bugly {
     appId = '1400008795' // 注册时分配的App ID
     appKey = '8fd19263-5cbe-45ff-be6c-000be537123f' // 注册时分配的App Key5+‘’
     appPackage='com.shunlian.app'
-    appVersion='2.2.1'
+    appVersion='2.2.2'
 }

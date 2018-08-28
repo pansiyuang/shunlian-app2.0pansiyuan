@@ -114,12 +114,11 @@
             android:layout_below="@+id/miv_shop_head"
             android:orientation="horizontal"
             app:ll_control_adapter="true"
-            app:ll_control_height="90"
             app:ll_margin_top="20">
 
             <com.shunlian.app.widget.MyLinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -148,7 +147,7 @@
 
             <com.shunlian.app.widget.MyLinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">

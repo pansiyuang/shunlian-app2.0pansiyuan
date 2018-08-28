@@ -16,7 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.bean.VideoBannerData;
+import com.shunlian.app.eventbus_bean.GoodsDetroyEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,7 +40,7 @@ public class VideoBannerWrapper extends RelativeLayout {
     private View mScrollDot;
     private int spaceWidthDot;//点之间的间距
     private int startLeftPosi;//最左侧点的距离
-    public static int mCurrentPosition;
+    private VideoBannerData mVideoBannerData;
 
     public VideoBannerWrapper(Context context) {
         this(context,null);
@@ -129,7 +130,7 @@ public class VideoBannerWrapper extends RelativeLayout {
                 if (position > 0){
                     mVP.pausePlay();
                 }
-                mCurrentPosition = position;
+                setCurrentBannerPosition(position);
             }
             @Override
             public void onPageScrollStateChanged(int state) {}
@@ -170,18 +171,19 @@ public class VideoBannerWrapper extends RelativeLayout {
 
                 GradientDrawable gd = (GradientDrawable) mScrollDot.getBackground();
                 gd.setColor(Color.parseColor("#B2FB0036"));
-                controlDot(mCurrentPosition,0);
+                controlDot(getCurrentBannerPosition(),0);
             }
         });
     }
 
     /**
-     *
-     * @param path 视频地址
+     *  @param path 视频地址
      * @param pics 轮播图片地址
      * @param type 类型 1优品 2 团购
      */
-    public void setBanner(String path, ArrayList<String> pics, int type) {
+    public void setBanner(String path, ArrayList<String> pics, int type, VideoBannerData videoBannerData) {
+        mVideoBannerData = videoBannerData;
+
         if (pics.size() == 1){
             removeView(mAllDot);
             removeView(mScrollDot);
@@ -190,15 +192,16 @@ public class VideoBannerWrapper extends RelativeLayout {
         }
 
         if (mVP != null){
-            mVP.setBanner(path,pics);
-            mVP.setCurrentItem(mCurrentPosition);
+            mVP.setBanner(path,pics,this);
+            mVP.setCurrentItem(getCurrentBannerPosition());
         }
         setLabelPic(type);
     }
 
     private void setLabelPic(int type) {
+        if (getChildCount() <= 0)return;
         ImageView imageView = new ImageView(getContext());
-        addView(imageView, 1);
+        addView(imageView,1);
         LayoutParams layoutParams = (LayoutParams) imageView.getLayoutParams();
         int i = dp2px(50);
         layoutParams.width = i;
@@ -221,18 +224,34 @@ public class VideoBannerWrapper extends RelativeLayout {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void scrollPosition(DefMessageEvent event){
+    public void handleClear(GoodsDetroyEvent event){
         if (event.isrelease){
             destroy();
+            event.isrelease = false;
+            event = null;
         }
+    }
+
+    private void setCurrentBannerPosition(int position){
+        if (mVideoBannerData != null)mVideoBannerData.bannerPosition = position;
+    }
+
+    /**
+     * 获取轮播的当前位置
+     * @return
+     */
+    public int getCurrentBannerPosition(){
+        if (mVideoBannerData != null)
+            return mVideoBannerData.bannerPosition;
+        else
+            return 0;
     }
 
 
     public void destroy(){
         if (mVP != null)mVP.destroy();
         EventBus.getDefault().unregister(this);
-        mCurrentPosition = 0;
+        mVideoBannerData = null;
         removeAllViews();
-
     }
 }

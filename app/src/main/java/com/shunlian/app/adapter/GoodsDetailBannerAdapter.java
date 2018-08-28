@@ -38,6 +38,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
     private Context mContext;
     private String mVideoPath;
     private ArrayList<String> mPics;
+    private VideoBannerWrapper mVideoBannerWrapper;
     private final LayoutInflater mInflater;
     private boolean isOpenWindowTiny;//是否打开小窗口
     private SmallVideoPlayer videoPlayer;
@@ -46,10 +47,12 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
 
 
 
-    public GoodsDetailBannerAdapter(Context context, String videoPath, ArrayList<String> pics){
+    public GoodsDetailBannerAdapter(Context context, String videoPath, ArrayList<String> pics,
+                                    VideoBannerWrapper videoBannerWrapper){
         mContext = context;
         mVideoPath = videoPath;
         mPics = pics;
+        mVideoBannerWrapper = videoBannerWrapper;
         if (mPics == null){
             mPics = new ArrayList<>();
         }
@@ -66,7 +69,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
         }else {
             isOpenWindowTiny = true;
         }
-        if (event.itemPosition >= 1 && !isOpenWindowTiny && VideoBannerWrapper.mCurrentPosition == 0){
+        if (event.itemPosition >= 1 && !isOpenWindowTiny && mVideoBannerWrapper.getCurrentBannerPosition() == 0){
             isOpenWindowTiny = true;
             if (videoPlayer != null)
                 videoPlayer.startWindowTiny();
@@ -75,10 +78,6 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
         if (event.isPause){
             SmallVideoPlayer.goOnPlayOnPause();
             SmallVideoPlayer.backPress();
-        }
-
-        if (event.isrelease){
-            destroy();
         }
     }
 

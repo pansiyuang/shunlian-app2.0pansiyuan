@@ -17,6 +17,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -31,7 +32,7 @@ import butterknife.BindView;
 
 public class CateGoryFrag extends BaseFragment implements IFirstPage {
     public PFirstPage pFirstPage;
-    public String cate_id,sort_type;
+    public String cate_id, sort_type;
     public List<GetDataEntity.MData> mDatass = new ArrayList<>();
     public List<GetDataEntity.MData> mDatasss = new ArrayList<>();
     public List<GetDataEntity.MData> mDatassss = new ArrayList<>();
@@ -44,7 +45,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     private String channel_id;
     private FirstPageAdapter firstPageAdapter;
     private GridLayoutManager gridLayoutManager;
-    private boolean isFirst = false, isShow = true;
+    private boolean isFirst = false, isRefresh = false/*, isShow = true*/;
     private View rootView;
 
 
@@ -64,10 +65,13 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     }
 
     public void refresh() {
+        isRefresh = true;
         mDatasss.clear();
-        pFirstPage.getContentData(channel_id, isShow);
-        isShow = true;
+//        pFirstPage.getContentData(channel_id, isShow);
+        pFirstPage.getContentData(channel_id);
+//        isShow = true;
     }
+
     public int getScollYDistance() {
         int position = gridLayoutManager.findFirstVisibleItemPosition();
         View firstVisiableChildView = gridLayoutManager.findViewByPosition(position);
@@ -81,7 +85,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         lay_refresh.setOnRefreshListener(new onRefreshListener() {
             @Override
             public void onRefresh() {
-                isShow = false;
+//                isShow = false;
                 refresh();
             }
         });
@@ -90,26 +94,27 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         rv_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                int value= TransformUtil.dip2px(baseActivity,80);
-                RelativeLayout.LayoutParams layoutParams= new RelativeLayout.LayoutParams(value,value);
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                if (dy>0){
-                    layoutParams.setMargins(0,0,-value/2,value);
-                    FirstPageFrag.isHide=true;
-                }else {
-                    layoutParams.setMargins(0,0,0,value);
-                    FirstPageFrag.isHide=false;
+                if (dy != 0) {
+                    int value = TransformUtil.dip2px(baseActivity, 80);
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    if (dy > 0) {
+                        layoutParams.setMargins(0, 0, -value / 2, value);
+                        FirstPageFrag.isHide = true;
+                    } else {
+                        layoutParams.setMargins(0, 0, 0, value);
+                        FirstPageFrag.isHide = false;
+                    }
+                    FirstPageFrag.miv_entry.setLayoutParams(layoutParams);
                 }
-                FirstPageFrag.miv_entry.setLayoutParams(layoutParams);
-
-                if (!FirstPageFrag.isExpand&&0>=getScollYDistance())
+                if (!FirstPageFrag.isExpand && 0 >= getScollYDistance())
                     FirstPageFrag.mAppbar.setExpanded(true);
                 if (gridLayoutManager != null) {
                     int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
                         if (pFirstPage != null) {
-                            pFirstPage.refreshBaby(cate_id,sort_type);
+                            pFirstPage.refreshBaby(cate_id, sort_type);
                         }
                     }
                 }
@@ -123,8 +128,8 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         NestedSlHeader header = new NestedSlHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
         //end
-        if (getArguments()!=null)
-        channel_id = (String) getArguments().getSerializable("channel_id");
+        if (getArguments() != null)
+            channel_id = (String) getArguments().getSerializable("channel_id");
         if (FirstPageFrag.firstId.equals(channel_id)) {
             isFirst = true;
         } else {
@@ -132,7 +137,10 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         }
 //        channel_id = "15";
         pFirstPage = new PFirstPage(baseActivity, this, this);
-        pFirstPage.getContentData(channel_id, isShow);
+//        pFirstPage.getContentData(channel_id, isShow);
+        if (isFirst && Constant.getDataEntity != null)
+            setData(Constant.getDataEntity);
+        pFirstPage.getContentData(channel_id);
     }
 
 
@@ -152,17 +160,17 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 
     }
 
-    @Override
-    public void setContent(GetDataEntity getDataEntity) {
-//        if (getDataEntity.datas!=null&&getDataEntity.datas.size()>0){
+    public void setData(GetDataEntity getDataEntity) {
+        //        if (getDataEntity.datas!=null&&getDataEntity.datas.size()>0){
 ////            mtv_empty.setVisibility(View.GONE);
 ////            rv_view.setVisibility(View.VISIBLE);
 //            mtv_empty.setVisibility(View.VISIBLE);
 //            rv_view.setVisibility(View.GONE);
-        if (getDataEntity!=null&&!isEmpty(getDataEntity.default_keyword))
-        FirstPageFrag.mtv_search.setText(getDataEntity.default_keyword);
+        if (getDataEntity != null && !isEmpty(getDataEntity.default_keyword))
+            FirstPageFrag.mtv_search.setText(getDataEntity.default_keyword);
         if (lay_refresh != null)
             lay_refresh.setRefreshing(false);
+        isRefresh = false;
         int size = 0;
         mDatass.clear();
         if (getDataEntity != null) {
@@ -181,7 +189,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         if (!isEmpty(mDatass) && !isEmpty(mDatass.get(mDatass.size() - 1).cates)) {
             cate_id = mDatass.get(mDatass.size() - 1).cates.get(0).id;
             sort_type = mDatass.get(mDatass.size() - 1).cates.get(0).sort_type;
-            pFirstPage.resetBaby(cate_id,sort_type);
+            pFirstPage.resetBaby(cate_id, sort_type);
         }
 
 //        }else {
@@ -195,6 +203,14 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 //            LogUtil.augusLogW("lll");
 //            firstPageAdapter.notifyDataSetChanged();
 //        }
+    }
+
+    @Override
+    public void setContent(GetDataEntity getDataEntity) {
+        if (!isFirst || Constant.getDataEntity == null || isRefresh)
+            setData(getDataEntity);
+        if (isFirst)
+        Constant.getDataEntity = getDataEntity;
     }
 
     @Override

@@ -11,15 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:ll_control_adapter="true"
-        android:visibility="gone"
-        app:ll_control_height="100">
+        android:minHeight="50dp"
+        android:visibility="gone">
 
         <!--图片活动未开始显示-->
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_special_pic"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:background="@color/share_text"
             android:scaleType="fitXY"
             android:visibility="gone" />
@@ -28,7 +27,8 @@
         <com.shunlian.app.widget.MyRelativeLayout
             android:id="@+id/mrlayout_special_preBgL"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
             android:layout_weight="0.75"
             android:background="@drawable/special_activity">
 
@@ -93,29 +93,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:ll_control_adapter="true"
-        android:visibility="gone"
-        app:ll_control_height="100">
+        android:minHeight="50dp"
+        android:visibility="gone">
 
         <com.shunlian.app.widget.MyRelativeLayout
             android:id="@+id/mrlayout_preBgL"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.78"
-            android:background="@color/pink_color">
+            android:layout_height="wrap_content"
+            android:layout_weight="0.74"
+            android:background="@color/pink_color"
+            android:minHeight="50dp">
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_rmb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:text="@string/rmb"
+                android:layout_alignBottom="@+id/mtv_pPrice"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:tv_control_adapter="true"
-                app:tv_margin_bottom="15"
-                app:tv_margin_left="23" />
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="7.5dp"/>
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_pPrice"
@@ -124,6 +123,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/mtv_rmb"
                 android:textColor="@color/white"
+                android:text="125.2"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -131,12 +131,11 @@
                 android:id="@+id/mtv_pmarketPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/mtv_pPrice"
                 android:textColor="@color/value_BF012A"
                 android:textSize="11sp"
-                android:layout_centerVertical="true"
-                app:tv_control_adapter="true"
-                app:tv_margin_left="30"/>
+                android:layout_marginLeft="15dp" />
 
             <!--<ProgressBar
                 android:id="@+id/seekbar_grow"
@@ -177,7 +176,8 @@
             android:id="@+id/mrlayout_preBgR"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.22"
+            android:minHeight="50dp"
+            android:layout_weight="0.26"
             android:background="@color/value_FEEBE7">
 
             <com.shunlian.app.widget.MyTextView
@@ -187,6 +187,7 @@
                 android:textColor="@color/pink_color"
                 android:layout_centerHorizontal="true"
                 android:textSize="12sp"
+                android:singleLine="true"
                 app:tv_control_adapter="true"
                 app:tv_margin_top="18"/>
 

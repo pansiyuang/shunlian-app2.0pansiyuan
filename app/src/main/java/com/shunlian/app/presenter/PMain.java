@@ -6,6 +6,8 @@ import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
+import com.shunlian.app.bean.GetDataEntity;
+import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.PunishEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -149,6 +151,35 @@ public class PMain extends BasePresenter<IMain> {
                 if (data != null) {
                     iView.setAD(data);
                 }
+            }
+        });
+    }
+
+    public void getMenuData(){
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+
+        Call<BaseEntity<GetMenuEntity>> baseEntityCall = getApiService().channelGetMenu(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GetMenuEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<GetMenuEntity> entity) {
+                super.onSuccess(entity);
+                iView.setTab(entity.data);
+            }
+        });
+
+    }
+
+    public void getContentData(String id){
+        Map<String, String> map = new HashMap<>();
+        map.put("id",id);
+        sortAndMD5(map);
+        Call<BaseEntity<GetDataEntity>> baseEntityCall = getApiService().channelGetData(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GetDataEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<GetDataEntity> entity) {
+                super.onSuccess(entity);
+                iView.setContent(entity.data);
             }
         });
     }

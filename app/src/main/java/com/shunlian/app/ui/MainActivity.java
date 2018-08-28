@@ -20,6 +20,8 @@ import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
+import com.shunlian.app.bean.GetDataEntity;
+import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
@@ -557,7 +559,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     finish();
-                } finally {
+                }catch (Exception e){
+                    finish();
+                }finally {
                 }
             }
             return true;
@@ -673,6 +677,16 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         CommondDialog commondDialog = new CommondDialog(this);
         commondDialog.parseCommond();
+    }
+
+    @Override
+    public void setContent(GetDataEntity data) {
+
+    }
+
+    @Override
+    public void setTab(GetMenuEntity data) {
+
     }
 
     @Override

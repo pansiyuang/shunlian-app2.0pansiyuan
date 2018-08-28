@@ -295,6 +295,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
          */
         @Override
         public void onClick(View v) {
+            if (getAdapterPosition() >= lists.size() || getAdapterPosition() < 0)return;
             CharSequence text = null;
             if (mOrderListener != null){
                 mOrderListener.onRefreshOrder(getAdapterPosition());

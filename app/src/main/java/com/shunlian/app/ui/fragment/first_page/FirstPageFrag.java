@@ -57,7 +57,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     //    @BindView(R.id.mAppbar)
     public static MyImageView miv_entry;
     public static AppBarLayout mAppbar;
-    public static boolean isHide=false;
+    public static boolean isHide = false;
     public static MyTextView mtv_search;
     public ArrayList<Fragment> fragments;
     @BindView(R.id.mll_message)
@@ -88,15 +88,16 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     private String logoType, logoId;
     private MessageCountManager messageCountManager;
     private MainActivity mainActivity;
+    private boolean isRefresh = false;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View rootView = inflater.inflate(R.layout.frag_first_page, container, false);
         mAppbar = (AppBarLayout) rootView.findViewById(R.id.mAppbar);
         miv_entry = (MyImageView) rootView.findViewById(R.id.miv_entry);
-        int value=TransformUtil.dip2px(baseActivity,80);
-        RelativeLayout.LayoutParams layoutParams= new RelativeLayout.LayoutParams(value,value);
-        layoutParams.setMargins(0,0,0,value);
+        int value = TransformUtil.dip2px(baseActivity, 80);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
+        layoutParams.setMargins(0, 0, 0, value);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         miv_entry.setLayoutParams(layoutParams);
@@ -197,7 +198,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             @Override
             public void onPageSelected(int arg0) {
                 mAppbar.setExpanded(true);
-                if (mainActivity!=null){
+                if (mainActivity != null) {
                     mainActivity.position = arg0;
                 }
 
@@ -225,6 +226,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 //        if (!BuildConfig.DEBUG){
 //            pFirstPage.getMenuData();
 //        }
+        if (Constant.getMenuData != null) {
+            setMenu(Constant.getMenuData);
+        }
         pFirstPage.getMenuData();
         mainActivity = (MainActivity) getActivity();
 //        if (mainActivity!=null&&mainActivity.adEntity!=null&&"1".equals(mainActivity.adEntity.suspensionShow)){
@@ -237,6 +241,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 .setText(getString(R.string.common_wangluozhuangkuang))
                 .setButtonText(getStringResouce(R.string.common_dianjichongshi))
                 .setOnClickListener((view) -> {
+                    isRefresh = true;
                     pFirstPage.getMenuData();
                 });
     }
@@ -249,7 +254,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_search)
     public void search() {
-        SearchGoodsActivity.startAct(baseActivity, getStringResouce(R.string.first_souni).equals(mtv_search.getText().toString())?"":mtv_search.getText().toString(), "sortFrag");
+        SearchGoodsActivity.startAct(baseActivity, getStringResouce(R.string.first_souni).equals(mtv_search.getText().toString()) ? "" : mtv_search.getText().toString(), "sortFrag");
     }
 
     @Override
@@ -264,25 +269,24 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 Common.goGoGo(getContext(), logoType, logoId);
                 break;
             case R.id.miv_entry:
-                if (isHide){
-                    int value=TransformUtil.dip2px(baseActivity,80);
-                    RelativeLayout.LayoutParams layoutParams= new RelativeLayout.LayoutParams(value,value);
-                    layoutParams.setMargins(0,0,0,value);
+                if (isHide) {
+                    int value = TransformUtil.dip2px(baseActivity, 80);
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
+                    layoutParams.setMargins(0, 0, 0, value);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     miv_entry.setLayoutParams(layoutParams);
-                    isHide=false;
-                }else {
-                    if (mainActivity!=null&&mainActivity.adEntity!=null)
-                    Common.goGoGo(baseActivity,mainActivity.adEntity.suspension.link.type,mainActivity.adEntity.suspension.link.item_id);
+                    isHide = false;
+                } else {
+                    if (mainActivity != null && mainActivity.adEntity != null)
+                        Common.goGoGo(baseActivity, mainActivity.adEntity.suspension.link.type, mainActivity.adEntity.suspension.link.item_id);
                 }
                 break;
         }
 
     }
 
-    @Override
-    public void setTab(GetMenuEntity getMenuEntiy) {
+    public void setMenu(GetMenuEntity getMenuEntiy) {
         if (getMenuEntiy == null) {
             return;
         }
@@ -307,6 +311,14 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 setTabsValue();
             }
         }
+    }
+
+    @Override
+    public void setTab(GetMenuEntity getMenuEntiy) {
+        if (Constant.getMenuData == null || isRefresh)
+            setMenu(getMenuEntiy);
+        isRefresh=false;
+        Constant.getMenuData = getMenuEntiy;
     }
 
     @Override

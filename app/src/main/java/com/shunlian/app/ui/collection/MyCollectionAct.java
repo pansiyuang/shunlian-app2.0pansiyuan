@@ -215,7 +215,8 @@ public class MyCollectionAct extends BaseActivity {
                     }
                 }
             }
-            ft.commit();
+//            ft.commit();
+            ft.commitAllowingStateLoss();
         }
     }
 
