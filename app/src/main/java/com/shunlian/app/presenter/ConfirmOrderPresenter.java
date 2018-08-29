@@ -153,6 +153,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             isSelectStoreVoucher = true;
         }
         iView.stageVoucher(data.user_stage_voucher,data.stage_voucher);
+        iView.goldenEggs(data.egg_tip,data.gold_egg,data.egg_reduce);
     }
 
     /**

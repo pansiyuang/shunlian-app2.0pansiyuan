@@ -80,6 +80,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @BindView(R.id.mtv_station)
     MyTextView mtv_station;
 
+    @BindView(R.id.rlayout_golden_eggs)
+    RelativeLayout rlayout_golden_eggs;
+
+    @BindView(R.id.mtv_golden_eggs)
+    MyTextView mtv_golden_eggs;
+
+    @BindView(R.id.miv_golden_eggs)
+    MyImageView miv_golden_eggs;
+
     private String mTotalPrice;
     private boolean isOrderBuy = false;//是否直接购买
     private String detail_address;
@@ -97,7 +106,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private ConfirmOrderEntity.Enabled mStageVoucherEntity;
     private String mStageVoucherId="";//平台优化券id
     private boolean isAnonymous;//是否匿名
+    private boolean isUserGoldenEggs;//是否使用金蛋
     private ObjectMapper mOM;
+    private int mEggReduce;
 
     public static void startAct(Context context,String cart_ids,String type){
         if (!Common.isAlreadyLogin()){
@@ -133,6 +144,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         miv_close.setOnClickListener(this);
         mllayout_discount.setOnClickListener(this);
         rlayout_anonymous.setOnClickListener(this);
+        rlayout_golden_eggs.setOnClickListener(this);
 
         nsv_view.setOnScrollChangeListener((MyNestedScrollView.OnScrollChangeListener)
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
@@ -231,16 +243,20 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private void calculateAmount(List<ConfirmOrderEntity.Enabled> enabled) {
         if (enabled == null)enabled = new ArrayList<>();
         float currentPrice = 0;
-        for (int i = 0; i < enabled.size(); i++) {
+        for (int i = 0; i < enabled.size(); i++) {//计算店铺小计
             String store_discount_price = enabled.get(i).store_discount_price;
             currentPrice += Float.parseFloat(isEmpty(store_discount_price)
                     ? enabled.get(i).sub_total : store_discount_price);
         }
         String totalPrice = null;
-        if (mStageVoucherEntity != null){
+        if (mStageVoucherEntity != null){//使用平台优惠券
             ConfirmOrderEntity.Voucher voucher = mStageVoucherEntity
                     .voucher.get(mStageVoucherEntity.selectVoucherId);
             currentPrice -= Float.parseFloat(voucher.denomination);
+        }
+
+        if (isUserGoldenEggs){//减去金蛋抵扣的钱
+            currentPrice -= mEggReduce;
         }
         if (currentPrice <= 0){
             totalPrice = "0.00";
@@ -288,6 +304,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             }
         }else {
             gone(view_line1,mllayout_discount);
+        }
+    }
+
+    @Override
+    public void goldenEggs(String golden_eggs_tip, String golden_eggs_count, String egg_reduce) {
+        mEggReduce = isEmpty(egg_reduce)?0:Integer.parseInt(egg_reduce);
+        if (!isEmpty(golden_eggs_tip)){
+            visible(rlayout_golden_eggs);
+            mtv_golden_eggs.setText(golden_eggs_tip);
         }
     }
 
@@ -380,7 +405,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 }
                 isAnonymous = !isAnonymous;
                 break;
-
+            case R.id.rlayout_golden_eggs:
+                if (!isUserGoldenEggs){
+                    miv_golden_eggs.setImageResource(R.mipmap.img_xuanze_h);
+                }else {
+                    miv_golden_eggs.setImageResource(R.mipmap.img_xuanze_n);
+                }
+                isUserGoldenEggs = !isUserGoldenEggs;
+                calculateAmount(enabled);//每次改变按钮状态都要重新计算金额
+                break;
         }
     }
 

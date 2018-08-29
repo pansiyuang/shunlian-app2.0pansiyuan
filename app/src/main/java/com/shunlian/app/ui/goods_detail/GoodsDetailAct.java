@@ -51,6 +51,7 @@ import com.shunlian.app.widget.FootprintDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.RollNumView;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -167,6 +168,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @BindView(R.id.mtv_want)
     MyTextView mtv_want;
+
+    @BindView(R.id.oget)
+    ObtainGoldenEggsTip oget;
 
     private GoodsDeatilFrag goodsDeatilFrag;
     private MyImageView myImageView;

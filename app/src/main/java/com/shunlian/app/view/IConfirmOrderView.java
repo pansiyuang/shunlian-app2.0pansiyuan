@@ -34,4 +34,12 @@ public interface IConfirmOrderView extends IView{
      * @param stage_voucher
      */
     void stageVoucher(String user_stage_voucher,List<ConfirmOrderEntity.Voucher> stage_voucher);
+
+    /**
+     *
+     * @param golden_eggs_tip
+     * @param golden_eggs_count
+     * @param egg_reduce 减多少钱
+     */
+    default void goldenEggs(String golden_eggs_tip,String golden_eggs_count,String egg_reduce){}
 }
