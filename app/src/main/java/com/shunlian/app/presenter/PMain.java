@@ -11,11 +11,13 @@ import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.PunishEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMain;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
@@ -58,6 +60,24 @@ public class PMain extends BasePresenter<IMain> {
                 if (data != null) {
                     iView.entryInfo(data);
                 }
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                JPushInterface.resumePush(Common.getApplicationContext());
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<CommonEntity> commonEntityBaseEntity) {
+                super.onErrorData(commonEntityBaseEntity);
+                JPushInterface.resumePush(Common.getApplicationContext());
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                JPushInterface.resumePush(Common.getApplicationContext());
             }
         });
     }

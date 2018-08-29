@@ -56,6 +56,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.service.InterentTools;
@@ -127,15 +128,22 @@ public class Common {
     }
 
     /**
-     * 判断mainactivity是否处于栈底
      *
-     * @return true在栈顶false不在栈底
+     *
+     * @return true栈顶栈底都是当前act，false不唯一
      */
-    public static boolean isBottomActivity(String className) {
-        ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        String name = manager.getRunningTasks(1).get(0).baseActivity.getClassName();
-        String mName = name.substring(name.lastIndexOf(".") + 1);
-        return mName.equals(className);
+
+    public static boolean isUniqueAct(String className) {
+        try {
+            ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+            String baseName = manager.getRunningTasks(1).get(0).baseActivity.getClassName();
+            String topName = manager.getRunningTasks(1).get(0).topActivity.getClassName();
+            String mBaseName = baseName.substring(baseName.lastIndexOf(".") + 1);
+            String mTopName = topName.substring(topName.lastIndexOf(".") + 1);
+            return (mTopName.equals(className)&&mBaseName.equals(className));
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     public static String transClassName(String toPage) {
@@ -157,6 +165,7 @@ public class Common {
             case "cart":
             case "home":
                 return "MainActivity";
+            case "myvoucherlist":
             case "voucherlist":
                 return "CouponListAct";
             case "login":
@@ -214,6 +223,8 @@ public class Common {
                 return "WXEntryActivity";
             case "submitlogisticsinfo":
                 return "SubmitLogisticsInfoAct";
+            case "voucher":
+                return "CouponMsgAct";
             default:
                 return "";
         }
@@ -279,10 +290,15 @@ public class Common {
                     GetCouponAct.startAct(context);
                 }
                 break;
-//            case "voucher":
-//                //todo
+            case "voucher":
+                if (TextUtils.isEmpty(token)) {
+                    Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
+                } else {
+                    CouponMsgAct.startAct(context,params[0]);
+                }
 //                Common.staticToast("优惠券");
-//                break;
+                break;
 //            case "gift":
 //                //todo
 //                Common.staticToast("买赠");
@@ -341,6 +357,7 @@ public class Common {
 //                //todo
 //                Common.staticToast("我的优惠券");
 //                break;
+            case "myvoucherlist":
             case "voucherlist":
                 if (TextUtils.isEmpty(token)) {
                     Common.goGoGo(context,"login");

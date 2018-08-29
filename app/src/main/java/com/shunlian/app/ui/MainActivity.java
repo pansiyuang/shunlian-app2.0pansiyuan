@@ -57,6 +57,7 @@ import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
+import cn.jpush.android.api.JPushInterface;
 
 public class MainActivity extends BaseActivity implements MessageCountManager.OnGetMessageListener, IMain {
     private static final String[] flags = {"mainPage", "myPlus", "discover", "shoppingcar", "personCenter"};
@@ -704,6 +705,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
         SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
         SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);
+        if ("0".equals(data.push_on)) {//接收推送，1是，0否
+            JPushInterface.stopPush(Common.getApplicationContext());
+        } else {
+            JPushInterface.resumePush(Common.getApplicationContext());
+        }
     }
 
     @Override
