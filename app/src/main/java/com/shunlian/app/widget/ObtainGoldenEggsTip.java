@@ -8,6 +8,11 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
@@ -160,5 +165,57 @@ public class ObtainGoldenEggsTip extends LinearLayout {
         if (eggsCount != null){
             eggsCount.setText(sequence);
         }
+    }
+
+    /**
+     * 默认3秒钟后隐藏
+     */
+    public void show(){
+        setVisibility(VISIBLE);
+        postDelayed(()->setVisibility(GONE),3000);
+    }
+
+    /**
+     *
+     * @param delayMillis
+     */
+    public void show(long delayMillis){
+        setVisibility(VISIBLE);
+        postDelayed(()->hideAnimation(),delayMillis);
+    }
+
+    private void hideAnimation(){
+        TranslateAnimation ta = new TranslateAnimation(Animation.RELATIVE_TO_SELF,
+                0,Animation.RELATIVE_TO_SELF,0,
+                Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,-0.4f);
+
+        AlphaAnimation aa = new AlphaAnimation(1,0);
+
+        AnimationSet set = new AnimationSet(true);
+        set.addAnimation(ta);
+        set.addAnimation(aa);
+        set.setDuration(350);
+        set.setFillAfter(true);
+        set.setFillBefore(false);
+        set.setInterpolator(new LinearInterpolator());
+
+        startAnimation(set);
+
+        set.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setVisibility(GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 }

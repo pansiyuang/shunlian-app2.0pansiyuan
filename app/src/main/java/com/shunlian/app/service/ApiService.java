@@ -2496,4 +2496,21 @@ public interface ApiService {
      */
     @POST("member/common/checkMobileCode")
     Call<BaseEntity<EmptyEntity>> checkMobileCode(@Body RequestBody body);
+
+    /**
+     * 分享成功回调
+     * @param body
+     * @return
+     */
+    @POST("share/addOnOk")
+    Call<BaseEntity<CommonEntity>> shareSuccessCall(@Body RequestBody body);
+
+    /**
+     * 浏览商品获得金蛋
+     * @param body
+     * @return
+     */
+    @POST("goods/getGold")
+    Call<BaseEntity<CommonEntity>> getGold(@Body RequestBody body);
+
 }

@@ -67,6 +67,8 @@ public class CommonEntity {
     public int focus;
     public int total;
 
+    public String gold_num;//金蛋数量
+
     @Override
     public String toString() {
         return "CommonEntity{" +
