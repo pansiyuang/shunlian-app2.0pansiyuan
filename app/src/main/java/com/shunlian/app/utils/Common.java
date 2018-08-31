@@ -652,6 +652,8 @@ public class Common {
     }
 
     public static void staticToast(String content) {
+        if (TextUtils.isEmpty(content))
+            return;
         if (toast == null) {
             View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
             mtv_toast = (MyTextView) v.findViewById(R.id.mtv_toast);
@@ -1125,6 +1127,8 @@ public class Common {
     }
 
     public static void initToast(Context context, String content, String desc, int imgSource) {
+        if (TextUtils.isEmpty(content)&&TextUtils.isEmpty(desc))
+            return;
         if (toasts == null) {
             View v = LayoutInflater.from(context).inflate(R.layout.toasts, null);
             mtv_toasts =  v.findViewById(R.id.mtv_toasts);

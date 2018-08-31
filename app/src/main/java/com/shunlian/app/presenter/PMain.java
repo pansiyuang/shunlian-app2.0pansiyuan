@@ -120,6 +120,60 @@ public class PMain extends BasePresenter<IMain> {
         });
     }
 
+    public void isShowNewPersonPrize() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().isShowNewPersonPrize(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null) {
+                    iView.isShowNew(data);
+                }
+            }
+        });
+    }
+
+    public void getPrizeByRegister() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getPrizeByRegister(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null&&!isEmpty(data.prize)&&Float.parseFloat(data.prize)>0) {
+                    iView.getPrize(data);
+                }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.showFailureView(0);
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<CommonEntity> commonEntityBaseEntity) {
+                super.onErrorData(commonEntityBaseEntity);
+                iView.showFailureView(0);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                iView.showFailureView(0);
+            }
+        });
+    }
+
     public void getDiscoveryUnreadCount() {
         Map<String, String> map = new HashMap<>();
 //        map.put("storeId", storeId);

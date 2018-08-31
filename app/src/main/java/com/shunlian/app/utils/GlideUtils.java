@@ -70,7 +70,12 @@ public class GlideUtils {
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
                 .into(imageView);
     }
-
+    public void loadLocal(Context context, ImageView imageView,int resource) {
+        if (imageView == null) return;
+        Glide.with(context)
+                .load(resource)
+                .into(imageView);
+    }
     public void loadImageZheng(Context context, ImageView imageView, String imgUrl) {
         if (imageView == null) return;
         Glide.with(context)

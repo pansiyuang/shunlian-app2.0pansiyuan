@@ -67,6 +67,12 @@ public class CommonEntity {
     public int focus;
     public int total;
 
+    //验证新人
+    public String show;
+    public String prize;
+    public String type;
+    public String item_id;
+
     @Override
     public String toString() {
         return "CommonEntity{" +

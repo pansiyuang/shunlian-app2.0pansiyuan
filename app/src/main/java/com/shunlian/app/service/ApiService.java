@@ -2245,6 +2245,22 @@ public interface ApiService {
     Call<BaseEntity<AdEntity>> splashScreen(@QueryMap Map<String, String> map);
 
     /**
+     * 验证新人
+     *
+     * @return
+     */
+    @GET("tasknewperson/isShowNewPersonPrize")
+    Call<BaseEntity<CommonEntity>> isShowNewPersonPrize(@QueryMap Map<String, String> map);
+
+    /**
+     * 首次注册抽奖
+     *
+     * @return
+     */
+    @GET("tasknewperson/getPrizeByRegister")
+    Call<BaseEntity<CommonEntity>> getPrizeByRegister(@QueryMap Map<String, String> map);
+
+    /**
      * 弹窗广告
      *
      * @return
