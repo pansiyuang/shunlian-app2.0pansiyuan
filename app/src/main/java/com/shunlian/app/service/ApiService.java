@@ -1086,6 +1086,24 @@ public interface ApiService {
     Call<BaseEntity<PersonalcenterEntity>> personalcenter(@QueryMap Map<String, String> map);
 
     /**
+     * 签到领金蛋
+     *
+     * @param map
+     * @return
+     */
+    @GET("task/signForGold")
+    Call<BaseEntity<SignEggEntity>> signEgg(@QueryMap Map<String, String> map);
+
+    /**
+     * 个人金蛋明细
+     *
+     * @param map
+     * @return
+     */
+    @GET("task/goldEggDetail")
+    Call<BaseEntity<EggDetailEntity>> eggDetail(@QueryMap Map<String, String> map);
+
+    /**
      * 足迹列表足迹批量删除
      *
      * @param map

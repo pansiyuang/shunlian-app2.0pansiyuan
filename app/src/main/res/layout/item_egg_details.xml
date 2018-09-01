@@ -1,0 +1,29 @@
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="32dp">
+    <com.shunlian.app.widget.NewTextView
+        android:textColor="@color/share_text"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ntv_time"
+        android:layout_centerVertical="true"/>
+
+    <com.shunlian.app.widget.NewTextView
+        android:textColor="@color/share_text"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ntv_desc"
+        android:layout_centerInParent="true"/>
+
+    <com.shunlian.app.widget.NewTextView
+        android:textColor="@color/share_text"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ntv_amount"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"/>
+
+</com.shunlian.app.widget.MyRelativeLayout>

@@ -794,6 +794,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.EggDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.core.SearchCouponAct"
             android:exported="false"
             android:screenOrientation="portrait" />
