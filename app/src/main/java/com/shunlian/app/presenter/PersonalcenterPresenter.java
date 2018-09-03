@@ -10,6 +10,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
+import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.ICategoryView;
@@ -39,6 +40,26 @@ public class PersonalcenterPresenter extends BasePresenter<IPersonalView> {
     @Override
     public void detachView() {
 
+    }
+
+    /**
+     *
+     * @param
+     */
+    public void signEgg(String data){
+        Map<String, String> map = new HashMap<>();
+        map.put("date",data);
+        sortAndMD5(map);
+        Call<BaseEntity<SignEggEntity>> baseEntityCall = getApiService().signEgg(map);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<SignEggEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<SignEggEntity> entity) {
+                super.onSuccess(entity);
+                SignEggEntity signEggEntity=entity.data;
+                iView.signEgg(signEggEntity);
+            }
+
+        });
     }
 
     /**

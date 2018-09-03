@@ -579,6 +579,16 @@
     <string name="qr_chakanxiaodianhuiyuan">查看小店会员 ></string>
 
 
+    <!--任务中心-->
+    <string name="mission_riqishijian">日期时间</string>
+    <string name="mission_zanwumingxi">暂无明细</string>
+    <string name="mission_huodong">活动</string>
+    <string name="mission_huodejindan">获得金蛋数量</string>
+    <string name="mission_qiandaochenggong">签到成功</string>
+    <string name="mission_jindanmingxi">金蛋明细</string>
+    <string name="mission_gongxininhuode">恭喜您获得%s枚金蛋</string>
+
+
     <!-- 我的小店 -->
     <string name="share_my_store">分享我的店</string>
     <string name="add_some_goods">还可以添加%s个商品</string>
