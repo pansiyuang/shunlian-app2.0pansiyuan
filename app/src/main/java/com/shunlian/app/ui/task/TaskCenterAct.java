@@ -24,7 +24,6 @@ import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.eventbus_bean.GoldEggsTaskEvent;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.EggDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -365,7 +364,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setTip(String question, String rule) {
-
+        qrUrl=question;
+        ruleUrl=rule;
     }
 
     @Override

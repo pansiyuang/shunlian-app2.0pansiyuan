@@ -33,7 +33,7 @@
                 android:layout_height="10dp"
                 android:layout_marginLeft="10dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/icon_login_logo" />
+                android:src="@mipmap/img_renwu_fenxiang_jindan" />
 
             <com.shunlian.app.widget.NewTextView
                 android:id="@+id/ntv_amount"
