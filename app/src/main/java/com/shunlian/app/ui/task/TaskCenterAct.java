@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.task;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
@@ -16,6 +17,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.EggDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -23,6 +25,7 @@ import com.shunlian.app.view.ITaskCenterView;
 import com.shunlian.app.widget.DowntimeLayout;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.MyWebView;
 import com.shunlian.app.widget.SignGoldEggsLayout;
 
 import java.util.List;
@@ -84,11 +87,15 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @BindView(R.id.dtime_layout)
     DowntimeLayout dtime_layout;
 
+    @BindView(R.id.miv_sign_rule)
+    MyImageView miv_sign_rule;
+
     int pick_color;
 
     int v48;
 
     private TaskCenterPresenter mPresenter;
+    private String ruleUrl,qrUrl;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, TaskCenterAct.class));
@@ -127,7 +134,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @OnClick(R.id.rlayout_golden_eggs)
     public void goldenEggsDetail() {
-
+        EggDetailAct.startAct(this);
     }
 
     /**
@@ -135,7 +142,44 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @OnClick(R.id.mtv_question)
     public void question() {
+        initDialogs(qrUrl,true);
+    }
 
+    /**
+     * 签到规则
+     */
+    @OnClick(R.id.miv_sign_rule)
+    public void rule() {
+        initDialogs(ruleUrl,false);
+    }
+
+    public void initDialogs(String url,boolean isQR) {
+//        if (Dialog dialog_ad == null) {
+        if (isEmpty(url))
+            return;
+        Dialog dialog_ad = new Dialog(this, R.style.popAd);
+        dialog_ad.setContentView(R.layout.dialog_rule);
+        MyImageView miv_close = (MyImageView) dialog_ad.findViewById(R.id.miv_close);
+        MyImageView miv_ad = (MyImageView) dialog_ad.findViewById(R.id.miv_ad);
+        MyWebView mwv_rule = (MyWebView) dialog_ad.findViewById(R.id.mwv_rule);
+        mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
+        mwv_rule.setMaxHeight(TransformUtil.dip2px(this,380));
+        mwv_rule.loadUrl(url);
+//        mwv_rule.loadData("ddddddfsdfsfsfsdfsfsdfd","text/html", "UTF-8");
+        if (isQR) {
+            miv_ad.setImageResource(R.mipmap.image_renwu_changjianwenti);
+        }else {
+            miv_ad.setImageResource(R.mipmap.image_renwu_qiandaoguize);
+        }
+        miv_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog_ad.dismiss();
+            }
+        });
+        dialog_ad.setCancelable(false);
+//        }
+        dialog_ad.show();
     }
 
     /**

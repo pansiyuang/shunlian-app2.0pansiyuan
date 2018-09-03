@@ -37,6 +37,7 @@ import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.sale_data.SaleDataAct;
 import com.shunlian.app.ui.sale_rank.SaleRankAct;
 import com.shunlian.app.ui.setting.SettingAct;
+import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
@@ -258,6 +259,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         isShowData = !isShowData;
         changeState();
         SharedPrefUtil.saveCacheSharedPrfBoolean(KEY, isShowData);
+        TaskCenterAct.startAct(baseActivity);
     }
 
     @Override
@@ -769,32 +771,6 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         initDialog(signEggEntity);
     }
 
-    public void initDialogs(String url,boolean isQR) {
-//        if (Dialog dialog_ad == null) {
-        Dialog dialog_ad = new Dialog(baseContext, R.style.popAd);
-        dialog_ad.setContentView(R.layout.dialog_rule);
-        MyImageView miv_close = (MyImageView) dialog_ad.findViewById(R.id.miv_close);
-        MyImageView miv_ad = (MyImageView) dialog_ad.findViewById(R.id.miv_ad);
-        MyWebView mwv_rule = (MyWebView) dialog_ad.findViewById(R.id.mwv_rule);
-        mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
-        mwv_rule.setMaxHeight(TransformUtil.dip2px(baseContext,380));
-        mwv_rule.loadUrl(url);
-//        mwv_rule.loadData("ddddddfsdfsfsfsdfsfsdfd","text/html", "UTF-8");
-        if (isQR) {
-            miv_ad.setImageResource(R.mipmap.image_renwu_changjianwenti);
-        }else {
-            miv_ad.setImageResource(R.mipmap.image_renwu_qiandaoguize);
-        }
-        miv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog_ad.dismiss();
-            }
-        });
-        dialog_ad.setCancelable(false);
-//        }
-        dialog_ad.show();
-    }
 
     public void initDialog(SignEggEntity data) {
 //        if (Dialog dialog_ad == null) {
@@ -876,8 +852,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 Common.goGoGo(baseActivity, personalcenterEntity.game_door.get(1).url.type, personalcenterEntity.game_door.get(1).url.item_id);
                 break;
             case R.id.mtv_chakanpaihang:
-                initDialogs("https://wx.shunliandongli.com/agreement/1",true);
-//                SaleRankAct.startAct(baseContext);
+//                initDialogs("https://wx.shunliandongli.com/agreement/1",true);
+                SaleRankAct.startAct(baseContext);
                 break;
             case R.id.mllayout_guanfangkefu:
                 HelpOneAct.startAct(baseContext);
@@ -955,13 +931,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 //会员订单
                 break;
             case R.id.mtv_chakan:
-                EggDetailAct.startAct(getContext());
+//                EggDetailAct.startAct(getContext());
 //                mainActivity.myPlusClick();//old
-//                if (Common.isPlus()) {
-//                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD), H5Act.MODE_SONIC);
-//                } else {
-//                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
-//                }
+                if (Common.isPlus()) {
+                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+                } else {
+                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+                }
                 //点击查看特权
                 break;
             case R.id.mtv_yaoqingma:
