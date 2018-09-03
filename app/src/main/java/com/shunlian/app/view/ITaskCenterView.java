@@ -62,4 +62,10 @@ public interface ITaskCenterView extends IView {
      * @param signEggEntity
      */
     void signEgg(SignEggEntity signEggEntity);
+
+    /**
+     * 限时领金蛋弹窗
+     * @param got_eggs
+     */
+    void showGoldEggsNum(String got_eggs);
 }

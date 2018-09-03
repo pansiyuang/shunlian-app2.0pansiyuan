@@ -322,17 +322,29 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             dtime_layout.startDownTimer();
             dtime_layout.setDownTimeComplete(() -> {
                 setGoldEggsAnim("data_hatch.json");
+                if(mPresenter != null)mPresenter.updateItem(0,"0");
             });
             dtime_layout.setOnClickListener(view -> {
                 if (dtime_layout != null) {
-                    if (dtime_layout.isClickable() && oget != null) {
+                    if (dtime_layout.isClickable() && mPresenter != null) {
                         //领取金蛋
-                        /*oget.setTopTextView("恭喜获得");
-                        oget.setEggsCount("+100");
-                        oget.show(4000);*/
+                        mPresenter.goldegglimit();
                     }
                 }
             });
+        }
+    }
+
+    /**
+     * 限时领金蛋弹窗
+     * @param num
+     */
+    public void showGoldEggsNum(String num){
+        if (oget != null) {
+            //领取金蛋
+            oget.setTopTextView("恭喜获得");
+            oget.setEggsCount(num);
+            oget.show(4000);
         }
     }
 

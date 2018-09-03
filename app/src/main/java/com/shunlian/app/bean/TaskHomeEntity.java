@@ -24,6 +24,8 @@ public class TaskHomeEntity {
     public String faq_url;
 
     public String rule_url;
+    public String got_eggs;
+    public String account_eggs;
 
     public List<SignDaysBean> sign_days;
 
