@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.TaskListEntity;
+import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -24,8 +26,11 @@ import butterknife.BindView;
 
 public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask> {
 
-    public TaskListAdapter(Context context, List<TaskListEntity.ItemTask> lists) {
+    private int mTtaskState;
+
+    public TaskListAdapter(Context context, List<TaskListEntity.ItemTask> lists, int current_task_state) {
         super(context, false, lists);
+        mTtaskState = current_task_state;
     }
 
     /**
@@ -59,7 +64,7 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
 
 
         if ("0".equals(itemTask.task_status)){//0 未完成；1已完成
-            if (position == 0) {
+            if (position == 0 || (position == 1 && mTtaskState == TaskCenterPresenter.NEW_USER_TASK)) {
                 visible(mHolder.mivObtainBg);
                 mHolder.mtvObtainTip.setText("点击领取");
                 mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
@@ -121,9 +126,16 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
         @BindView(R.id.mtv_eggs_count)
         MyTextView mtvEggsCount;
 
+        @BindView(R.id.llayout_right)
+        LinearLayout llayout_right;
+
         public TaskListHolder(View itemView) {
             super(itemView);
-
+            llayout_right.setOnClickListener(v -> {
+                TaskListEntity.ItemTask itemTask = lists.get(getAdapterPosition());
+                if (listener != null && "0".equals(itemTask.task_status))
+                    listener.onItemClick(v,getAdapterPosition());
+            });
         }
     }
 }

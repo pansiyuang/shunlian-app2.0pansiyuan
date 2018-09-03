@@ -124,10 +124,51 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 
     private void creatAdapter() {
         if (taskListAdapter == null) {
-            taskListAdapter = new TaskListAdapter(context, taskLists);
+            taskListAdapter = new TaskListAdapter(context, taskLists,current_task_state);
             iView.setAdapter(taskListAdapter);
+            taskListAdapter.setOnItemClickListener((view, position) -> {
+                if (current_task_state == NEW_USER_TASK){
+                    handlerNewUserTask(position);
+                }else {
+                    handlerDailyTask(position);
+                }
+            });
         }else {
             taskListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * 处理日常任务
+     * @param position
+     */
+    private void handlerDailyTask(int position) {
+        switch (position){
+            case 0://限时领金蛋
+                break;
+            case 1://抽奖
+                break;
+            case 2://逛商场捡金蛋
+                break;
+            case 3://分享赚金蛋
+                break;
+            case 4://晒收入赚金蛋
+                break;
+        }
+    }
+
+    /**
+     * 处理新手任务
+     * @param position
+     */
+    private void handlerNewUserTask(int position) {
+        switch (position){
+            case 0://注册猜红包
+                break;
+            case 1://邀请码得金蛋
+                break;
+            case 2://看视频得金蛋
+                break;
         }
     }
 
