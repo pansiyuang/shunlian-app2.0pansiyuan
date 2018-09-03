@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
+import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
@@ -35,10 +37,10 @@ import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5Frag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
+import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -46,8 +48,10 @@ import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.UpdateDialog;
 
 import java.io.IOException;
@@ -57,6 +61,7 @@ import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
+import cn.jpush.android.api.JPushInterface;
 
 public class MainActivity extends BaseActivity implements MessageCountManager.OnGetMessageListener, IMain {
     private static final String[] flags = {"mainPage", "myPlus", "discover", "shoppingcar", "personCenter"};
@@ -102,6 +107,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     TextView tv_person_center;
     @BindView(R.id.view_message)
     View view_message;
+    @BindView(R.id.miv_hint)
+    MyImageView miv_hint;
     //    private MainPageFrag mainPageFrag;
     private FirstPageFrag mainPageFrag;
     //    private MyPlusFrag myPlusFrag;
@@ -115,7 +122,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private int pageIndex;
     //    private String flag="default";
     private String flag;
-    private Dialog dialog_ad;
+    private Dialog dialog_ad, dialog_new;
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
@@ -123,6 +130,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
+    private MyLinearLayout mllayout_before,mllayout_after;
+    private NewTextView ntv_get,ntv_aOne,ntv_check,ntv_use;
+    private boolean isGetAward=false;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -144,9 +154,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (!isEmpty(flag) &&"nicefocusexperiencecirclematerial".contains(flag)){
-            flag="";
-        }else {
+        if (isGetAward){
+            pMain.getPrizeByRegister();
+            isGetAward=false;
+        }
+        if (!isEmpty(flag) && "nicefocusexperiencecirclematerial".contains(flag)) {
+            flag = "";
+        } else {
             initMessage();
         }
     }
@@ -168,8 +182,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
      */
     @Override
     protected void initData() {
+        if (SharedPrefUtil.getSharedUserBoolean("hide_first",false)){
+            miv_hint.setVisibility(View.GONE);
+        }else {
+            GlideUtils.getInstance().loadLocal(this, miv_hint, R.drawable.firsts_hint);
+            miv_hint.setVisibility(View.VISIBLE);
+        }
         pMain = new PMain(MainActivity.this, MainActivity.this);
         pMain.entryInfo();
+        pMain.isShowNewPersonPrize();
         initMessage();
         fragmentManager = getSupportFragmentManager();
         mainPageClick();
@@ -328,6 +349,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         shoppingCarClick();
                         break;
                     case R.id.ll_tab_person_center:
+                        miv_hint.setVisibility(View.GONE);
+                        SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
                         personCenterClick();
                         break;
                 }
@@ -559,9 +582,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     finish();
-                }catch (Exception e){
+                } catch (Exception e) {
                     finish();
-                }finally {
+                } finally {
                 }
             }
             return true;
@@ -660,6 +683,44 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         dialog_ad.show();
     }
 
+    public void initDialogs(String prize) {
+        if (dialog_new == null) {
+            dialog_new = new Dialog(this, R.style.popAd);
+            dialog_new.setContentView(R.layout.dialog_new);
+            MyImageView miv_close = (MyImageView) dialog_new.findViewById(R.id.miv_close);
+            NewTextView ntv_bThree = (NewTextView) dialog_new.findViewById(R.id.ntv_bThree);
+            ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_aOne);
+            ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
+            ntv_check = (NewTextView) dialog_new.findViewById(R.id.ntv_check);
+            ntv_use = (NewTextView) dialog_new.findViewById(R.id.ntv_use);
+            mllayout_before = (MyLinearLayout) dialog_new.findViewById(R.id.mllayout_before);
+            mllayout_after = (MyLinearLayout) dialog_new.findViewById(R.id.mllayout_after);
+            SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(String.format(getStringResouce(R.string.new_zuigaokede), prize), prize, 34);
+            ntv_bThree.setText(spannableStringBuilder);
+            miv_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog_new.dismiss();
+                }
+            });
+            ntv_get.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (Common.isAlreadyLogin()){
+                        pMain.getPrizeByRegister();
+                    }else {
+                        isGetAward=true;
+                        LoginEntryAct.startAct(getBaseContext());
+                    }
+
+                }
+            });
+
+            dialog_new.setCancelable(false);
+        }
+        dialog_new.show();
+    }
+
 
     @Override
     public void setAD(AdEntity data) {
@@ -704,6 +765,44 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
         SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
         SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);
+        if ("0".equals(data.push_on)) {//接收推送，1是，0否
+            JPushInterface.stopPush(Common.getApplicationContext());
+        } else {
+            JPushInterface.resumePush(Common.getApplicationContext());
+        }
+    }
+
+    @Override
+    public void isShowNew(CommonEntity data) {
+        if ("1".equals(data.show) && !isEmpty(data.prize)&&Float.parseFloat(data.prize)>0)
+            initDialogs(data.prize);
+    }
+
+    @Override
+    public void getPrize(CommonEntity data) {
+        if (dialog_new!=null){
+            mllayout_before.setVisibility(View.GONE);
+            mllayout_after.setVisibility(View.VISIBLE);
+            SpannableStringBuilder spannableStringBuilders = Common.changeTextSize(data.prize+getStringResouce(R.string.new_yuan) , getStringResouce(R.string.new_yuan), 24);
+            ntv_aOne.setText(spannableStringBuilders);
+            ntv_get.setVisibility(View.GONE);
+            ntv_use.setVisibility(View.VISIBLE);
+            ntv_check.setVisibility(View.VISIBLE);
+            ntv_use.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Common.goGoGo(getBaseContext(),data.type,data.item_id);
+                    dialog_new.dismiss();
+                }
+            });
+            ntv_check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CouponListAct.startAct(getBaseContext());
+                    dialog_new.dismiss();
+                }
+            });
+        }
     }
 
     @Override
@@ -726,7 +825,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (0==request_code&&dialog_new!=null)
+            dialog_new.dismiss();
     }
 
     @Override

@@ -28,7 +28,6 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -254,9 +253,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         if (byId != null) {
             TransformUtil.expandViewTouchDelegate(byId, 50, 50, 50, 50);
             byId.setOnClickListener(v ->  {
-                    if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.
+                    if (Constant.JPUSH!=null&&Common.isUniqueAct(Common.
                             transClassName(Constant.JPUSH.get(0)))){
                         MainActivity.startAct(getBaseContext(),"");
+                        Constant.JPUSH=null;
                     }
                     InputMethodManager imm = (InputMethodManager)
                             getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -544,24 +544,27 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){
+        if (keyCode == KeyEvent.KEYCODE_BACK&&Constant.JPUSH!=null&&Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))){
             MainActivity.startAct(getBaseContext(),"");
+            Constant.JPUSH=null;
         }
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public void finish() {
-        if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){
+        if (Constant.JPUSH!=null&&Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))){
             MainActivity.startAct(getBaseContext(),"");
+            Constant.JPUSH=null;
         }
         super.finish();
     }
 
     @Override
     public void onBackPressed() {
-        if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){
+        if (Constant.JPUSH!=null&&Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))){
             MainActivity.startAct(getBaseContext(),"");
+            Constant.JPUSH=null;
         }
         super.onBackPressed();
     }

@@ -11,11 +11,13 @@ import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.PunishEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMain;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
@@ -59,6 +61,24 @@ public class PMain extends BasePresenter<IMain> {
                     iView.entryInfo(data);
                 }
             }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                JPushInterface.resumePush(Common.getApplicationContext());
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<CommonEntity> commonEntityBaseEntity) {
+                super.onErrorData(commonEntityBaseEntity);
+                JPushInterface.resumePush(Common.getApplicationContext());
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                JPushInterface.resumePush(Common.getApplicationContext());
+            }
         });
     }
 
@@ -96,6 +116,60 @@ public class PMain extends BasePresenter<IMain> {
                 if (data != null) {
                     iView.setAD(data);
                 }
+            }
+        });
+    }
+
+    public void isShowNewPersonPrize() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().isShowNewPersonPrize(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null) {
+                    iView.isShowNew(data);
+                }
+            }
+        });
+    }
+
+    public void getPrizeByRegister() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getPrizeByRegister(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null&&!isEmpty(data.prize)&&Float.parseFloat(data.prize)>0) {
+                    iView.getPrize(data);
+                }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.showFailureView(0);
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<CommonEntity> commonEntityBaseEntity) {
+                super.onErrorData(commonEntityBaseEntity);
+                iView.showFailureView(0);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                iView.showFailureView(0);
             }
         });
     }

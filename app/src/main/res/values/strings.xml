@@ -784,6 +784,17 @@
     <string name="first_shaohougengxin">稍后更新</string>
     <string name="first_xialashuaxin">暂时没有数据，下拉刷新试试</string>
 
+
+    <!--新人专享-->
+    <string name="new_zuigaokede">最高可得%s元</string>
+    <string name="new_yuan">元</string>
+    <string name="new_xinrenzhuanxiang">新人专享权益</string>
+    <string name="new_huodefuli">- 获得福利 -</string>
+    <string name="new_dianjilingqu">点击领取</string>
+    <string name="new_gongxininhuode">- 恭喜您获得新人专享福利 -</string>
+    <string name="new_chakanyouhui">查看优惠券</string>
+    <string name="new_qushiyong">去使用</string>
+
     <!-- plus -->
     <string name="share_store_big_gif">分享开店大礼包</string>
     <string name="plus_vip_year_performance">%d年会员绩效</string>

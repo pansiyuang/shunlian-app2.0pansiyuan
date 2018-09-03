@@ -69,6 +69,12 @@ public class CommonEntity {
 
     public String gold_num;//金蛋数量
 
+    //验证新人
+    public String show;
+    public String prize;
+    public String type;
+    public String item_id;
+
     @Override
     public String toString() {
         return "CommonEntity{" +

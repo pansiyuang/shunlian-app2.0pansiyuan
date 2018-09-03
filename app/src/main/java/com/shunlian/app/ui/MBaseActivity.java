@@ -17,7 +17,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -62,8 +61,9 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
             byId.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Constant.JPUSH != null && Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))) {
+                    if (Constant.JPUSH != null && Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))) {
                         MainActivity.startAct(getBaseContext(), "");
+                        Constant.JPUSH=null;
                     }
                     InputMethodManager imm = (InputMethodManager)
                             getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -248,8 +248,9 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        if (Constant.JPUSH != null && Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))) {
+        if (Constant.JPUSH != null && Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))) {
             MainActivity.startAct(getBaseContext(), "");
+            Constant.JPUSH =null;
         }
         super.onBackPressed();
     }
