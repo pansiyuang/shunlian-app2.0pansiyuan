@@ -1,4 +1,4 @@
-package com.shunlian.app.ui;
+package com.shunlian.app.ui.task;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.EggDetailAdapter;
 import com.shunlian.app.bean.EggDetailEntity;
 import com.shunlian.app.presenter.PEggDetail;
+import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.view.IEggDetail;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;

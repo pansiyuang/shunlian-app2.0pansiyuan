@@ -794,7 +794,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.EggDetailAct"
+            android:name=".ui.task.EggDetailAct"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
