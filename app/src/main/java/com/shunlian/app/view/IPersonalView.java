@@ -1,7 +1,6 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.bean.PersonalcenterEntity;
-import com.shunlian.app.bean.SignEggEntity;
 
 
 /**
@@ -10,5 +9,4 @@ import com.shunlian.app.bean.SignEggEntity;
 
 public interface IPersonalView extends IView {
     void getApiData(PersonalcenterEntity personalcenterEntity);
-    void signEgg(SignEggEntity signEggEntity);
 }

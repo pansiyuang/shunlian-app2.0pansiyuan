@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.fragment;
 
-import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,13 +15,11 @@ import com.shunlian.app.adapter.HelpArticleAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
-import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.EggDetailAct;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
@@ -37,6 +34,7 @@ import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.sale_data.SaleDataAct;
 import com.shunlian.app.ui.sale_rank.SaleRankAct;
 import com.shunlian.app.ui.setting.SettingAct;
+import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -52,8 +50,6 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.MyWebView;
-import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedRingHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
@@ -766,41 +762,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     }
 
-    @Override
-    public void signEgg(SignEggEntity signEggEntity) {
-        initDialog(signEggEntity);
-    }
 
 
-    public void initDialog(SignEggEntity data) {
-//        if (Dialog dialog_ad == null) {
-        Dialog dialog_ad = new Dialog(baseContext, R.style.popAd);
-        dialog_ad.setContentView(R.layout.dialog_sign_egg);
-        NewTextView ntv_hint = (NewTextView) dialog_ad.findViewById(R.id.ntv_hint);
-        NewTextView ntv_sure = (NewTextView) dialog_ad.findViewById(R.id.ntv_sure);
-        if (!isEmpty(data.ad_pic_url)) {
-            MyImageView miv_ad = (MyImageView) dialog_ad.findViewById(R.id.miv_ad);
-            miv_ad.setVisibility(View.VISIBLE);
-            GlideUtils.getInstance().loadImage(baseContext, miv_ad, data.ad_pic_url);
-            miv_ad.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Common.goGoGo(baseContext, data.url.type, data.url.item_id);
-                    dialog_ad.dismiss();
-                }
-            });
-        }
-        ntv_sure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog_ad.dismiss();
-            }
-        });
-        ntv_hint.setText(String.format(getStringResouce(R.string.mission_gongxininhuode), data.gold_num));
-        dialog_ad.setCancelable(false);
-//        }
-        dialog_ad.show();
-    }
 
     private boolean equals(String avatar, String avatar1) {
         if (!isEmpty(avatar) && avatar.equals(avatar1)) {
@@ -919,8 +882,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 SaleDataAct.startAct(baseActivity);
                 break;
             case R.id.mtv_qiandao:
-                personalcenterPresenter.signEgg("08-31");
-//                SignInAct.startAct(baseContext);
+                SignInAct.startAct(baseContext);
                 break;
             case R.id.mllayout_huiyuanguanli:
                 H5Act.startAct(getContext(), managerUrl, H5Act.MODE_SONIC);

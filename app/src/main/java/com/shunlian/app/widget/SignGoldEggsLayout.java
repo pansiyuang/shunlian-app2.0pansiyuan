@@ -175,6 +175,13 @@ public class SignGoldEggsLayout extends LinearLayout {
         }
     }
 
+    public void signSuccess(){
+        if (!isEmpty(miv_sign_state) && miv_sign_state.size() == 3){
+            miv_sign_state.get(2).setImageResource(R.mipmap.icon_renwu_yiqiandao);
+            isCanSign = false;
+        }
+    }
+
 
     private void scaleAnim(ImageView view){
         ValueAnimator va = ValueAnimator.ofFloat(1.0f,0.96f,1.0f);

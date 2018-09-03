@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.adapter.TaskListAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.bean.TaskListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -130,5 +131,24 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         }
     }
 
+    /**
+     *
+     * @param
+     */
+    public void signEgg(String data){
+        Map<String, String> map = new HashMap<>();
+        map.put("date",data);
+        sortAndMD5(map);
+        Call<BaseEntity<SignEggEntity>> baseEntityCall = getApiService().signEgg(map);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<SignEggEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<SignEggEntity> entity) {
+                super.onSuccess(entity);
+                SignEggEntity signEggEntity=entity.data;
+                iView.signEgg(signEggEntity);
+            }
+
+        });
+    }
 
 }

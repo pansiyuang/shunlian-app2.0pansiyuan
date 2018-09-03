@@ -8,9 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EggDetailEntity;
-import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 
 import java.util.List;

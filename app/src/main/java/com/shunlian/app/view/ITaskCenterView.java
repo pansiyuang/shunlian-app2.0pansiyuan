@@ -1,6 +1,7 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 
 import java.util.List;
@@ -55,4 +56,10 @@ public interface ITaskCenterView extends IView {
      * 签到
      */
     void setSignData(List<TaskHomeEntity.SignDaysBean> list);
+
+    /**
+     * 签到成功
+     * @param signEggEntity
+     */
+    void signEgg(SignEggEntity signEggEntity);
 }
