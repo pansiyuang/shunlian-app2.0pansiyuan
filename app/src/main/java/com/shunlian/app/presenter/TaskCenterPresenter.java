@@ -29,6 +29,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 
     public int current_task_state = NEW_USER_TASK;//当前任务状态  默认新手任务
     private TaskListAdapter taskListAdapter;
+    private Call<BaseEntity<TaskHomeEntity>> homeCall;
+    private Call<BaseEntity<TaskListEntity>> taskListCall;
 
     public TaskCenterPresenter(Context context, ITaskCenterView iView) {
         super(context, iView);
@@ -50,6 +52,17 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     @Override
     public void detachView() {
 
+        if (homeCall != null && homeCall.isExecuted()){
+            homeCall.cancel();
+            homeCall = null;
+        }
+
+        if (taskListCall != null && taskListCall.isExecuted()){
+            taskListCall.cancel();
+            taskListCall = null;
+        }
+
+
     }
 
     /**
@@ -60,8 +73,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         Map<String,String> map = new HashMap<>();
         sortAndMD5(map);
 
-        Call<BaseEntity<TaskHomeEntity>> baseEntityCall = getApiService().taskHome(map);
-        getNetData(true,baseEntityCall,
+        homeCall = getApiService().taskHome(map);
+        getNetData(true, homeCall,
                 new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>(){
             @Override
             public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
@@ -83,9 +96,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     public void getTaskList(){
         Map<String,String> map = new HashMap<>();
         sortAndMD5(map);
-        Call<BaseEntity<TaskListEntity>>
-                baseEntityCall = getApiService().taskList(map);
-        getNetData(false,baseEntityCall,
+        taskListCall = getApiService().taskList(map);
+        getNetData(false, taskListCall,
                 new SimpleNetDataCallback<BaseEntity<TaskListEntity>>(){
             @Override
             public void onSuccess(BaseEntity<TaskListEntity> entity) {
@@ -117,4 +129,6 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
             taskListAdapter.notifyDataSetChanged();
         }
     }
+
+
 }

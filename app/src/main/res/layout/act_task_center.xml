@@ -338,4 +338,13 @@
     </android.support.v4.widget.NestedScrollView>
 
 
+    <com.shunlian.app.widget.ObtainGoldenEggsTip
+        android:id="@+id/oget"
+        android:layout_centerInParent="true"
+        android:minWidth="160dp"
+        android:minHeight="115dp"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>

@@ -15,12 +15,16 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.TaskHomeEntity;
+import com.shunlian.app.eventbus_bean.GoldEggsTaskEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -50,6 +54,9 @@ public class SignGoldEggsLayout extends LinearLayout {
     View view_line;
     private int gray;
     private int pink;
+    private List<TaskHomeEntity.SignDaysBean> mSignDaysBeans;
+    private boolean isCanSign;//是否可以签到
+    private String sign_date;
 
     public SignGoldEggsLayout(Context context) {
         this(context,null);
@@ -125,6 +132,7 @@ public class SignGoldEggsLayout extends LinearLayout {
     }
 
     public void setData(List<TaskHomeEntity.SignDaysBean> signDaysBeans){
+        mSignDaysBeans = signDaysBeans;
         if (!isEmpty(signDaysBeans)){
             for (int i = 0; i < signDaysBeans.size(); i++) {
                 if (i >= 7)break;
@@ -144,12 +152,26 @@ public class SignGoldEggsLayout extends LinearLayout {
                     }else if ("0".equals(bean.sign_status)){//可以签到
                         miv_sign_state.get(i).setImageResource(R.mipmap.btn_renwu_qiandao);
                         scaleAnim(miv_sign_state.get(i));
+                        if (i == 2){
+                            isCanSign = true;
+                            sign_date = bean.date;
+                        }
                     }else {//不能签到，或者错过签到
                         miv_sign_state.get(i).setImageResource(R.mipmap.icon_renwu_weiqiandao);
                         view_line.setBackgroundColor(i == 1 ? gray : pink);
                     }
                 }
             }
+        }
+    }
+
+    @OnClick(R.id.miv_sign_state3)
+    public void sign(){
+        if (isCanSign){
+            GoldEggsTaskEvent event = new GoldEggsTaskEvent();
+            event.isClickSign = true;
+            event.sign_date = sign_date;
+            EventBus.getDefault().post(event);
         }
     }
 
@@ -173,5 +195,6 @@ public class SignGoldEggsLayout extends LinearLayout {
         if (bind != null){
             bind.unbind();
         }
+        isCanSign = false;
     }
 }

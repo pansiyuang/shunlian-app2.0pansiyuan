@@ -14,6 +14,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.TaskHomeEntity;
+import com.shunlian.app.eventbus_bean.GoldEggsTaskEvent;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -23,7 +24,12 @@ import com.shunlian.app.view.ITaskCenterView;
 import com.shunlian.app.widget.DowntimeLayout;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.SignGoldEggsLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -84,6 +90,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @BindView(R.id.dtime_layout)
     DowntimeLayout dtime_layout;
 
+    @BindView(R.id.oget)
+    ObtainGoldenEggsTip oget;
+
     int pick_color;
 
     int v48;
@@ -110,6 +119,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     protected void initData() {
         setSignStyle();
+        EventBus.getDefault().register(this);
         mPresenter = new TaskCenterPresenter(this, this);
         setGoldEggsAnim("data.json");
 
@@ -250,6 +260,16 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             dtime_layout.setDownTimeComplete(() -> {
                 setGoldEggsAnim("data_hatch.json");
             });
+            dtime_layout.setOnClickListener(view->{
+                if (dtime_layout != null){
+                    if (dtime_layout.isClickable() && oget != null){
+                        //领取金蛋
+                        /*oget.setTopTextView("恭喜获得");
+                        oget.setEggsCount("+100");
+                        oget.show(4000);*/
+                    }
+                }
+            });
         }
     }
 
@@ -309,6 +329,13 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         sgel.setData(list);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void dispatchEvent(GoldEggsTaskEvent event){
+        if (event.isClickSign){//点击了签到
+
+        }
+    }
+
     @Override
     protected void onDestroy() {
         if (dtime_layout != null){
@@ -320,6 +347,6 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             mPresenter.detachView();
             mPresenter = null;
         }
-
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -44,6 +44,7 @@ public class DowntimeLayout extends View {
     private long mSeconds;
     private long mMaxProgress = 1;
     private float mProgresRatio;
+    public static final String RECEIVE = "领取金蛋";
     private DownTimeCompleteListener mListener;
 
     public DowntimeLayout(Context context) {
@@ -106,7 +107,7 @@ public class DowntimeLayout extends View {
         maxProgressH = measuredHeight - gap;
 
         if (currentProgressW >= maxProgressW) currentProgressW = maxProgressW;
-
+        if (RECEIVE.equals(text))currentProgressW = maxProgressW;
 
         //绘制进度
         progressRect.left = gap;
@@ -160,7 +161,7 @@ public class DowntimeLayout extends View {
             public void onFinish() {
                 LogUtil.zhLogW("=onFinish====text===="+text);
                 if ("00:00:01".equals(text)){
-                    text = "领取金蛋";
+                    text = RECEIVE;
                     invalidate();
                 }
                 /*mSeconds = 1;
@@ -178,7 +179,7 @@ public class DowntimeLayout extends View {
     public void startDownTimer() {
         if (mSeconds <= 1) {
             if ("00:00:01".equals(text)){
-                text = "领取金蛋";
+                text = RECEIVE;
                 invalidate();
             }
         } else {
@@ -225,6 +226,18 @@ public class DowntimeLayout extends View {
     public void setDownTimeComplete(DownTimeCompleteListener listener){
 
         mListener = listener;
+    }
+
+    /**
+     * 是否可以点击
+     * @return
+     */
+    public boolean isClickable(){
+        if (RECEIVE.equals(text)){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public interface DownTimeCompleteListener{
