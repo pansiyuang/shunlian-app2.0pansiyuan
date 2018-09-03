@@ -8,6 +8,7 @@ import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.bean.TaskListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ITaskCenterView;
 
 import java.util.ArrayList;
@@ -138,6 +139,15 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         }
     }
 
+    public void updateItem(int position,String state){
+        if (!isEmpty(taskLists) && taskListAdapter != null){
+            if (position >= taskLists.size() || position < 0)return;
+            TaskListEntity.ItemTask itemTask = taskLists.get(position);
+            itemTask.task_status = state;
+            taskListAdapter.notifyItemChanged(position,itemTask);
+        }
+    }
+
     /**
      * 处理日常任务
      * @param position
@@ -145,10 +155,12 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     private void handlerDailyTask(int position) {
         switch (position){
             case 0://限时领金蛋
+                goldegglimit();
                 break;
             case 1://抽奖
                 break;
-            case 2://逛商场捡金蛋
+            case 2://逛商场捡金蛋（去首页）
+                Common.goGoGo(context,"home");
                 break;
             case 3://分享赚金蛋
                 break;
@@ -189,6 +201,25 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                 iView.signEgg(signEggEntity);
             }
 
+        });
+    }
+
+    /**
+     * 限时领金蛋
+     */
+    public void goldegglimit(){
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<TaskHomeEntity>> baseEntityCall = getApiService().goldegglimit(map);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
+                super.onSuccess(entity);
+                TaskHomeEntity data = entity.data;
+                iView.obtainDownTime(data.gold_egg_second,data.gold_egg_total_second);
+                iView.showGoldEggsNum(data.got_eggs);
+                iView.setGoldEggsCount(data.account_eggs);
+            }
         });
     }
 

@@ -2563,4 +2563,11 @@ public interface ApiService {
     @GET("task/taskList")
     Call<BaseEntity<TaskListEntity>> taskList(@QueryMap Map<String,String> map);
 
+    /**
+     * 限时领金蛋
+     * @param map
+     * @return
+     */
+    @GET("goldegglimit/getlimitgoldegg")
+    Call<BaseEntity<TaskHomeEntity>> goldegglimit(@QueryMap Map<String,String> map);
 }

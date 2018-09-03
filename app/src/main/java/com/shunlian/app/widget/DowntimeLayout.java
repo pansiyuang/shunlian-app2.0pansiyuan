@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 
 /**
@@ -135,11 +134,11 @@ public class DowntimeLayout extends View {
     }
 
     public void setSecond(long second, long maxProgress) {
-        mSeconds = second;
-        mMaxProgress = maxProgress;
+//        mSeconds = second;
+//        mMaxProgress = maxProgress;
 
-        //mSeconds = 30;
-        //mMaxProgress = 30;
+        mSeconds = 10;
+        mMaxProgress = 10;
         if (mMaxProgress == 0)mMaxProgress = 1;
 
         mProgresRatio = (mMaxProgress - mSeconds) *1.0f / mMaxProgress;
@@ -150,6 +149,10 @@ public class DowntimeLayout extends View {
      * 创建倒计时
      */
     private void createCountDownTimer() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+            return;
+        }
         mCountDownTimer = new CountDownTimer(mSeconds * 1000, 1000) {
 
             @Override
@@ -159,13 +162,11 @@ public class DowntimeLayout extends View {
 
             @Override
             public void onFinish() {
-                LogUtil.zhLogW("=onFinish====text===="+text);
+                //LogUtil.zhLogW("=onFinish====text===="+text);
                 if ("00:00:01".equals(text)){
                     text = RECEIVE;
                     invalidate();
                 }
-                /*mSeconds = 1;
-                startDownTimer();*/
                 if (mListener != null){
                     mListener.onComplete();
                 }
@@ -190,8 +191,8 @@ public class DowntimeLayout extends View {
 
     private void updateProgress() {
         currentProgressW += (maxProgressW * 1.0f / mMaxProgress);
-        LogUtil.zhLogW(String.format("最大进度：%d    ; 当前进度：%f   ; 当前时间：%s",
-                maxProgressW,currentProgressW,text));
+        /*LogUtil.zhLogW(String.format("最大进度：%d    ; 当前进度：%f   ; 当前时间：%s",
+                maxProgressW,currentProgressW,text));*/
     }
 
     public void cancelDownTimer() {

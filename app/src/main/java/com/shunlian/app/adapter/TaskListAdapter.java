@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,10 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
         mHolder.mtvEggsCount.setText(itemTask.gold_num);
 
 
+        changeState(position, mHolder, itemTask);
+    }
+
+    private void changeState(int position, TaskListHolder mHolder, TaskListEntity.ItemTask itemTask) {
         if ("0".equals(itemTask.task_status)){//0 未完成；1已完成
             if (position == 0 || (position == 1 && mTtaskState == TaskCenterPresenter.NEW_USER_TASK)) {
                 visible(mHolder.mivObtainBg);
@@ -83,6 +88,16 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
         }
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
+        if (isEmpty(payloads)) {
+            super.onBindViewHolder(holder, position, payloads);
+        }else {
+            TaskListEntity.ItemTask itemTask = (TaskListEntity.ItemTask) payloads.get(0);
+            TaskListHolder mHolder = (TaskListHolder) holder;
+            changeState(position, mHolder, itemTask);
+        }
+    }
 
     private GradientDrawable getCompleteDrawable(){
         GradientDrawable drawable = new GradientDrawable();
