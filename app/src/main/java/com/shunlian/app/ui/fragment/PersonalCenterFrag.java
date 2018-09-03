@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.fragment;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +35,7 @@ import com.shunlian.app.ui.sale_data.SaleDataAct;
 import com.shunlian.app.ui.sale_rank.SaleRankAct;
 import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.ui.sign.SignInAct;
+import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
@@ -255,6 +255,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         isShowData = !isShowData;
         changeState();
         SharedPrefUtil.saveCacheSharedPrfBoolean(KEY, isShowData);
+        TaskCenterAct.startAct(baseActivity);
     }
 
     @Override

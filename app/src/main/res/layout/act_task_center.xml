@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFE884B">
+
+    <!--顶部树叶-->
+    <com.shunlian.app.widget.MyImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/image_renwu_shuye01" />
+
+    <!--底部树叶-->
+    <com.shunlian.app.widget.MyImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/image_renwu_shuye" />
+
+    <View
+        android:id="@+id/view_state"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/status_bar_height"
+        android:background="@color/transparent" />
+
+    <RelativeLayout
+        android:id="@+id/rlayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_below="@+id/view_state">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:padding="15dp"
+            android:src="@mipmap/icon_common_back_white" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="任务中心"
+            android:textColor="@color/white"
+            android:textSize="19sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_question"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:text="常见问题"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlayout_title"
+        android:layout_marginBottom="20dp"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--金蛋数量-->
+            <RelativeLayout
+                android:id="@+id/rlayout_golden_eggs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp">
+
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="金蛋数量"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_eggs_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mtv_count"
+                    android:layout_centerHorizontal="true"
+                    android:text="40000000"
+                    android:textColor="@color/white"
+                    android:textSize="32sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mtv_count"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@+id/mtv_eggs_count"
+                    android:text="去使用"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation_view"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:lottie_cacheStrategy="strong" />
+
+            <!--金蛋-->
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_golden_eggs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:minHeight="72dp"
+                android:visibility="gone" />
+
+            <!--倒计时-->
+            <com.shunlian.app.widget.DowntimeLayout
+                android:id="@+id/dtime_layout"
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal" />
+
+            <!--签到-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="21dp"
+                android:background="@drawable/rounded_rectangle_10px"
+                android:minHeight="180dp">
+
+                <!--签到天数-->
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_sign_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    app:cardElevation="5dp">
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_sign_state"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/rlayout_sign"
+                            android:layout_alignRight="@+id/rlayout_sign"
+                            android:gravity="center"
+                            android:minHeight="21dp"
+                            android:minWidth="60dp"
+                            android:text="已签到"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <RelativeLayout
+                            android:id="@+id/rlayout_sign"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/mtv_sign_state"
+                            android:minHeight="44dp"
+                            android:minWidth="60dp"
+                            android:paddingLeft="8dp">
+
+
+                            <com.shunlian.app.widget.MyTextView
+                                android:id="@+id/mtv_sign_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:text="0"
+                                android:textColor="@color/value_484848"
+                                android:textSize="30sp" />
+
+                            <com.shunlian.app.widget.MyTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@+id/mtv_sign_day"
+                                android:layout_marginBottom="5dp"
+                                android:layout_toRightOf="@+id/mtv_sign_day"
+                                android:text="天"
+                                android:textColor="@color/value_484848"
+                                android:textSize="10sp" />
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+                <!--签到规则-->
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_sign_rule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="14dp"
+                    android:src="@mipmap/btn_renwu_qiandaoguize" />
+
+                <!--日期-->
+                <com.shunlian.app.widget.SignGoldEggsLayout
+                    android:id="@+id/sgel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cv_sign_day"
+                    android:layout_marginBottom="14dp"
+                    android:layout_marginTop="10dp" />
+
+
+            </RelativeLayout>
+
+            <!--广告-->
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                android:minHeight="100dp" />
+
+            <!--任务列表-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="17dp"
+                android:background="@drawable/rounded_rectangle_10px"
+                android:orientation="vertical">
+
+                <!--导航-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal">
+
+                    <!--新手任务-->
+                    <LinearLayout
+                        android:id="@+id/llayout_new_task"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingTop="15dp">
+
+                        <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_new_task"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="新手任务"
+                            android:textColor="@color/pink_color"
+                            android:textSize="15sp" />
+
+                        <View
+                            android:id="@+id/view_new_task"
+                            android:layout_width="80dp"
+                            android:layout_height="3dp"
+                            android:layout_marginTop="12dp"
+                            android:background="@color/pink_color" />
+
+                    </LinearLayout>
+
+                    <!--日常任务-->
+                    <LinearLayout
+                        android:id="@+id/llayout_day_task"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingTop="15dp">
+
+                        <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_day_task"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="日常任务"
+                            android:textColor="@color/value_484848"
+                            android:textSize="15sp" />
+
+                        <View
+                            android:id="@+id/view_day_task"
+                            android:layout_width="80dp"
+                            android:layout_height="3dp"
+                            android:layout_marginTop="12dp"
+                            android:background="@color/pink_color"
+                            android:visibility="invisible" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#FFECECEC" />
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recy_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="15dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</RelativeLayout>

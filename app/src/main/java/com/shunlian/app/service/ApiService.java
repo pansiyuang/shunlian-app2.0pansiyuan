@@ -2513,4 +2513,19 @@ public interface ApiService {
     @POST("goods/getGold")
     Call<BaseEntity<CommonEntity>> getGold(@Body RequestBody body);
 
+    /**
+     * 任务首页
+     * @param map
+     * @return
+     */
+    @GET("task/home")
+    Call<BaseEntity<TaskHomeEntity>> taskHome(@QueryMap Map<String,String> map);
+
+    /**
+     *任务列表
+     * @param map
+     * @return
+     */
+    @GET("task/taskList")
+    Call<BaseEntity<TaskListEntity>> taskList(@QueryMap Map<String,String> map);
 }

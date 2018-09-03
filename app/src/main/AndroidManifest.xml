@@ -891,6 +891,9 @@
             android:name=".ui.discover.VideoPlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
+        <activity android:name=".ui.task.TaskCenterAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

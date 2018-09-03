@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--日期-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_date1"
+            style="@style/sign_gold_eggs" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_date2"
+            style="@style/sign_gold_eggs" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_date3"
+            style="@style/sign_gold_eggs" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_date4"
+            style="@style/sign_gold_eggs" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_date5"
+            style="@style/sign_gold_eggs" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_date6"
+            style="@style/sign_gold_eggs" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_date7"
+            style="@style/sign_gold_eggs" />
+
+
+    </LinearLayout>
+
+    <!--签到状态-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sign_state1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_renwu_yiqiandao" />
+
+        <View
+            android:id="@+id/view_line1"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:background="@color/pink_color" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sign_state2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_renwu_yiqiandao" />
+
+        <View
+            android:id="@+id/view_line2"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:background="@color/pink_color" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sign_state3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_renwu_yiqiandao" />
+
+        <View
+            android:id="@+id/view_line3"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:background="#EFEFEF" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sign_state4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_renwu_weiqiandao" />
+
+        <View
+            android:id="@+id/view_line4"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:background="#EFEFEF" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sign_state5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_renwu_weiqiandao" />
+
+        <View
+            android:id="@+id/view_line5"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:background="#EFEFEF" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sign_state6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_renwu_weiqiandao" />
+
+        <View
+            android:id="@+id/view_line6"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:background="#EFEFEF" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sign_state7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_renwu_weiqiandao" />
+
+    </LinearLayout>
+
+    <!--金蛋-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="7dp">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_eggs_count1"
+            style="@style/sign_gold_eggs_count"
+            android:visibility="invisible" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_eggs_count2"
+            style="@style/sign_gold_eggs_count"
+            android:visibility="invisible" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_eggs_count3"
+            style="@style/sign_gold_eggs_count"
+            android:visibility="invisible" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_eggs_count4"
+            style="@style/sign_gold_eggs_count" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_eggs_count5"
+            style="@style/sign_gold_eggs_count" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_eggs_count6"
+            style="@style/sign_gold_eggs_count" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_eggs_count7"
+            style="@style/sign_gold_eggs_count" />
+
+    </LinearLayout>
+
+
+</merge>
