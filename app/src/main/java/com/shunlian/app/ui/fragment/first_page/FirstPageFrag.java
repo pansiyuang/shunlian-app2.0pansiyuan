@@ -20,6 +20,7 @@ import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
@@ -248,8 +249,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_scan)
     public void scan() {
-        ZXingDemoAct.startAct(baseActivity, false, 0);
-//        MyPlusAct.startAct(baseActivity);
+//        ZXingDemoAct.startAct(baseActivity, false, 0);
+        LuckWheelPanActivity.startAct(baseActivity);
     }
 
     @OnClick(R.id.mllayout_search)

@@ -595,20 +595,19 @@ public interface ApiService {
     Call<BaseEntity<StoreLicenseEntity>> storeLicense(@Body RequestBody body);
 
 
-
     /**
      * 上传图片 单张图片+多个参数
      */
     @Multipart
     @POST("uploads/chatupload")
-    Call<BaseEntity<UploadPicEntity>> chatupload(@Part MultipartBody.Part[] parts,@QueryMap Map<String, String> maps);
+    Call<BaseEntity<UploadPicEntity>> chatupload(@Part MultipartBody.Part[] parts, @QueryMap Map<String, String> maps);
 
     /**
      * 上传图片 单张图片+多个参数
      */
     @Multipart
     @POST("uploads/uploadotherimage")
-    Call<BaseEntity<UploadPicEntity>> uploadPic(@Part MultipartBody.Part[] parts,@QueryMap Map<String, String> maps);
+    Call<BaseEntity<UploadPicEntity>> uploadPic(@Part MultipartBody.Part[] parts, @QueryMap Map<String, String> maps);
 
 
     /**
@@ -1606,7 +1605,7 @@ public interface ApiService {
     @POST("virtual/orderDetail")
     Call<BaseEntity<PhoneOrderDetailEntity>> virtualOrderDetail(@Body RequestBody body);
 
-     /**
+    /**
      * 支付成功查看订单详情
      *
      * @param body
@@ -2378,6 +2377,7 @@ public interface ApiService {
 
     /**
      * 扫二维码解析url
+     *
      * @return
      */
     @POST("share/parseUrlForApp")
@@ -2385,6 +2385,7 @@ public interface ApiService {
 
     /**
      * 分享信息
+     *
      * @param map
      * @return
      */
@@ -2393,6 +2394,7 @@ public interface ApiService {
 
     /**
      * 获取话费充值面额列表
+     *
      * @param body
      * @return
      */
@@ -2401,6 +2403,7 @@ public interface ApiService {
 
     /**
      * 手机充值
+     *
      * @param body
      * @return
      */
@@ -2427,6 +2430,7 @@ public interface ApiService {
 
     /**
      * 充值手机号列表
+     *
      * @param body
      * @return
      */
@@ -2435,6 +2439,7 @@ public interface ApiService {
 
     /**
      * 删除手机号
+     *
      * @param body
      * @return
      */
@@ -2443,6 +2448,7 @@ public interface ApiService {
 
     /**
      * 平台优惠券对应的可购买商品
+     *
      * @param map
      * @return
      */
@@ -2451,6 +2457,7 @@ public interface ApiService {
 
     /**
      * 店铺，或者指定部分商品
+     *
      * @param map
      * @return
      */
@@ -2459,6 +2466,7 @@ public interface ApiService {
 
     /**
      * 绑定导购员id
+     *
      * @param body
      * @return
      */
@@ -2467,6 +2475,7 @@ public interface ApiService {
 
     /**
      * 模拟微信登录
+     *
      * @param map
      * @return
      */
@@ -2475,6 +2484,7 @@ public interface ApiService {
 
     /**
      * 导购员详情
+     *
      * @param map
      * @return
      */
@@ -2483,6 +2493,7 @@ public interface ApiService {
 
     /**
      * 我还想要
+     *
      * @param map
      * @return
      */
@@ -2491,9 +2502,28 @@ public interface ApiService {
 
     /**
      * 验证短信验证码
+     *
      * @param body
      * @return
      */
     @POST("member/common/checkMobileCode")
     Call<BaseEntity<EmptyEntity>> checkMobileCode(@Body RequestBody body);
+
+    /**
+     * 大转盘界面
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/turnTable")
+    Call<BaseEntity<TurnTableEntity>> getTurnTable(@QueryMap Map<String, String> map);
+
+    /**
+     * 大转盘抽奖
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/luckDraw")
+    Call<BaseEntity<LuckDrawEntity>> luckDraw(@QueryMap Map<String, String> map);
 }
