@@ -155,6 +155,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                 CommonEntity data = entity.data;
                 if (data != null && !isEmpty(data.prize) && Float.parseFloat(data.prize) > 0) {
                     initDialogs(data);
+                    if (current_task_state==NEW_USER_TASK)
+                    updateItem(0,"1");
                 }
             }
         });
