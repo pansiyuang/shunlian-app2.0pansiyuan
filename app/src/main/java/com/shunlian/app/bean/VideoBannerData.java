@@ -7,4 +7,6 @@ package com.shunlian.app.bean;
 public class VideoBannerData {
 
     public int bannerPosition;//轮播位置
+
+    public boolean isShowNetTip;//是否提示网络
 }

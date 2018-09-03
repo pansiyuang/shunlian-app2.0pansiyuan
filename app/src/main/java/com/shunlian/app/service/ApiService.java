@@ -2530,4 +2530,36 @@ public interface ApiService {
      */
     @POST("member/common/checkMobileCode")
     Call<BaseEntity<EmptyEntity>> checkMobileCode(@Body RequestBody body);
+
+    /**
+     * 分享成功回调
+     * @param body
+     * @return
+     */
+    @POST("share/addOnOk")
+    Call<BaseEntity<CommonEntity>> shareSuccessCall(@Body RequestBody body);
+
+    /**
+     * 浏览商品获得金蛋
+     * @param body
+     * @return
+     */
+    @POST("goods/getGold")
+    Call<BaseEntity<CommonEntity>> getGold(@Body RequestBody body);
+
+    /**
+     * 任务首页
+     * @param map
+     * @return
+     */
+    @GET("task/home")
+    Call<BaseEntity<TaskHomeEntity>> taskHome(@QueryMap Map<String,String> map);
+
+    /**
+     *任务列表
+     * @param map
+     * @return
+     */
+    @GET("task/taskList")
+    Call<BaseEntity<TaskListEntity>> taskList(@QueryMap Map<String,String> map);
 }

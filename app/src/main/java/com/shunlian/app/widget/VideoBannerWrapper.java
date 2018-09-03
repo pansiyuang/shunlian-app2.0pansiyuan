@@ -247,6 +247,9 @@ public class VideoBannerWrapper extends RelativeLayout {
             return 0;
     }
 
+    public VideoBannerData getVideoBannerData() {
+        return mVideoBannerData;
+    }
 
     public void destroy(){
         if (mVP != null)mVP.destroy();

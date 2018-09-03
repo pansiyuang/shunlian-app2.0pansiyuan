@@ -63,6 +63,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     private int praisePosition;//点赞位置
     private ProbablyLikeAdapter mLikeAdapter;
     private Call<BaseEntity<EmptyEntity>> mGoodsWantCall;
+    private String goods_title;
+    private String mgoldSecond;
 
     public GoodsDetailPresenter(Context context, IGoodsDetailView iView, String goods_id) {
         super(context, iView);
@@ -86,6 +88,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 super.onSuccess(entity);
                 shareInfoParam = new ShareInfoParam();
                 GoodsDeatilEntity data = entity.data;
+                        goods_title = data.title;
                 //LogUtil.augusLogW("dfdfd---"+data.credit);
                 if (!TextUtils.isEmpty(data.credit)&&Integer.parseInt(data.credit)>0){
                     Common.staticToasts(context,String.format(getStringResouce(R.string.common_gongxinin),data.credit),R.mipmap.icon_jifen);
@@ -133,6 +136,11 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         iView.superiorProduct();
                     }else if ("2".equals(data.type)){
                         iView.groupBuy();
+                    }
+                    //停留获得金蛋 data.get_gold_second = "5";
+                    if (!isEmpty(data.get_gold_second)) {
+                        mgoldSecond = data.get_gold_second;
+                        iView.stayObtainEggs(Integer.parseInt(mgoldSecond));
                     }
                 }
             }
@@ -603,7 +611,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      */
     public void copyText(boolean isToast) {
         if (shareInfoParam == null)return;
-        Common.copyText(context,shareInfoParam.shareLink,shareInfoParam.desc,isToast);
+        String temp = "";
+        if (isToast)temp = shareInfoParam.desc;
+        else temp = goods_title;
+        Common.copyText(context,shareInfoParam.shareLink,temp,isToast);
     }
 
     /**
@@ -667,6 +678,27 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 Common.staticToast("已抢购~好物补货通知您！");
+            }
+        });
+    }
+
+    public void obtainGoldeneggs(){
+        Map<String,String> map = new HashMap<>();
+        map.put("goods_id",goods_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>>
+                goldCall = getAddCookieApiService().getGold(getRequestBody(map));
+
+        getNetData(goldCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                if (isEmpty(entity.data.gold_num) || "0".equals(entity.data.gold_num))return;
+                String title = "你已经停留%s秒";
+                String desc = "恭喜你获得%s金蛋";
+                Common.staticToasts(context,String.format(title,mgoldSecond),
+                        String.format(desc,entity.data.gold_num),R.mipmap.icon_common_duihao);
             }
         });
     }

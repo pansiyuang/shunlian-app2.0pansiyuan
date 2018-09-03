@@ -21,6 +21,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
+import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
@@ -272,7 +273,13 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     String code = sendAuthResp.code;
                     wxEntryPresenter.wxLogin(code);
                 }else {
-                    if (!isEmpty(Constant.SHARE_TYPE)){
+                    if (!isEmpty(Constant.SHARE_TYPE)&&Constant.SHARE_TYPE.contains("goods_")){//商品详情分享成功给金蛋
+                        String[] split = Constant.SHARE_TYPE.split("_");
+                        if (split.length >= 2)
+                            wxEntryPresenter.goodsShare(split[0],split[1]);
+                        else
+                            mYFinish();
+                    }else if (!isEmpty(Constant.SHARE_TYPE)){
                         wxEntryPresenter.notifyShare(Constant.SHARE_TYPE,Constant.SHARE_ID);
                     }else {
                         mYFinish();
@@ -375,6 +382,22 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     @Override
     public void notifyCallback(CommonEntity commonEntity) {
+        mYFinish();
+    }
+
+    @Override
+    public void golde_eggs(String format) {
+        if (!isEmpty(format) && !"0".equals(format)) {
+            ShareInfoEvent event = new ShareInfoEvent();
+            event.isShareSuccess = true;
+            event.eggs_count = format;
+            EventBus.getDefault().post(event);
+        }
+        mYFinish();
+    }
+
+    @Override
+    public void cloasePage() {
         mYFinish();
     }
 

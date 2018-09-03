@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="32dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_task_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/miv_icon"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/miv_icon"
+        android:text="限时领金蛋"
+        android:textColor="@color/value_484848"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_task_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mtv_task_name"
+        android:layout_below="@+id/mtv_task_name"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="2dp"
+        android:layout_toLeftOf="@+id/llayout_right"
+        android:text="按照时间节点，金蛋成熟领取金蛋"
+        android:textColor="@color/value_484848"
+        android:textSize="12sp" />
+
+
+    <LinearLayout
+        android:id="@+id/llayout_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/miv_icon"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/flayout_obtain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_obtain_bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/btn_renwu_lingqujindan" />
+
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_obtain_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="点击领取"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_renwu_dan01" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_eggs_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+100"
+                android:layout_marginLeft="2dp"
+                android:textColor="#767676"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
