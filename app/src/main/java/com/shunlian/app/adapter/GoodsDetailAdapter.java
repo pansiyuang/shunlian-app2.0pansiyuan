@@ -131,6 +131,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mRichText = detail.text;
         }
         videoBannerData = new VideoBannerData();
+        int netWorkStatus = NetworkUtils.getNetWorkStatus(context);
+        if (netWorkStatus != NetworkUtils.NETWORK_WIFI &&
+                netWorkStatus != NetworkUtils.NETWORK_CLASS_UNKNOWN){
+            videoBannerData.isShowNetTip = true;
+        }
     }
 
     @Override
