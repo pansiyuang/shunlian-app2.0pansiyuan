@@ -8,7 +8,8 @@
 
     <include layout="@layout/title_common_layout" />
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
+        android:id="@+id/myScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -65,7 +66,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/rounded_corner_stroke_d9_20px"
-                    android:descendantFocusability="blocksDescendants"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -103,16 +103,16 @@
                             android:textSize="9sp" />
                     </LinearLayout>
 
-                    <android.support.v7.widget.RecyclerView
+                    <com.shunlian.app.widget.MyRecyclerView
                         android:id="@+id/recycler_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/ll_top"
                         android:layout_marginTop="12dp"
                         android:overScrollMode="never"
-                        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+                        android:scrollbars="none"></com.shunlian.app.widget.MyRecyclerView>
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 </LinearLayout>

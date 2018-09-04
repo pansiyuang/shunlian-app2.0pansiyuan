@@ -19,7 +19,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:ellipsize="end"
         android:gravity="center"
+        android:singleLine="true"
         android:textColor="@color/value_49"
         android:textSize="9sp" />
 

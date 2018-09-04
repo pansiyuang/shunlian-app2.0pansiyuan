@@ -129,7 +129,7 @@ public class WheelSurfView extends RelativeLayout {
      * @param pisition 旋转最终的位置 注意 从1 开始 而且是逆时针递增
      */
     public void startRotate(int pisition) {
-        if (mWheelSurfPanView != null) {
+        if (mWheelSurfPanView != null && !mWheelSurfPanView.isRotating()) {
             mWheelSurfPanView.startRotate(pisition);
         }
     }

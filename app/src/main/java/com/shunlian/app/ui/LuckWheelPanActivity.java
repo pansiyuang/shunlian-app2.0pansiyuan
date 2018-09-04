@@ -1,6 +1,7 @@
 package com.shunlian.app.ui;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,11 +9,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -20,12 +19,13 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.TurnTableAdapter;
 import com.shunlian.app.bean.LuckDrawEntity;
 import com.shunlian.app.bean.TurnTableEntity;
+import com.shunlian.app.bean.TurnTablePopEntity;
 import com.shunlian.app.presenter.TurnTablePresenter;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ITurnTableView;
 import com.shunlian.app.widget.HttpDialog;
+import com.shunlian.app.widget.MyRecyclerView;
 import com.shunlian.app.widget.TurnTableDialog;
 import com.shunlian.app.widget.luckWheel.RotateListener;
 import com.shunlian.app.widget.luckWheel.WheelSurfView;
@@ -51,7 +51,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     TextView tv_title_right;
 
     @BindView(R.id.recycler_list)
-    RecyclerView recycler_list;
+    MyRecyclerView recycler_list;
 
     private TurnTablePresenter mPresenter;
     private int loadCount = 0;
@@ -61,6 +61,8 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     private int luckPosition = 0;
     private TurnTableAdapter mAdapter;
     private TurnTableDialog turnTableDialog;
+    private LuckDrawEntity currentLuckDraw;
+    private String currentTmtId;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, LuckWheelPanActivity.class);
@@ -89,16 +91,16 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         wheelPan.setRotateListener(new RotateListener() {
             @Override
             public void rotateEnd(int position, String des) {
-//                Toast.makeText(LuckWheelPanActivity.this, "结束了 位置：" + position + "   描述：" + des, Toast.LENGTH_SHORT).show();
                 if (turnTableDialog == null) {
-                    turnTableDialog = new TurnTableDialog(LuckWheelPanActivity.this);
+                    turnTableDialog = new TurnTableDialog(LuckWheelPanActivity.this, currentLuckDraw);
+                } else {
+                    turnTableDialog.setLuckDrawEntity(currentLuckDraw);
                 }
                 turnTableDialog.show();
             }
 
             @Override
             public void rotating(ValueAnimator valueAnimator) {
-
             }
 
             @Override
@@ -111,6 +113,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycler_list.setLayoutManager(linearLayoutManager);
         recycler_list.setNestedScrollingEnabled(false);
+        recycler_list.setHasFixedSize(false);
     }
 
     @Override
@@ -138,6 +141,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
     @Override
     public void getLuckDraw(LuckDrawEntity luckDrawEntity) {
+        currentLuckDraw = luckDrawEntity;
         String luckId;
         if (!isEmpty(luckDrawEntity.id)) {
             luckId = luckDrawEntity.id;
@@ -155,6 +159,27 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         }
     }
 
+    @Override
+    public void getTurnPop(TurnTablePopEntity turnTablePopEntity) {
+        if (0 == turnTablePopEntity.show) {
+            return;
+        }
+
+        currentTmtId = turnTablePopEntity.list.tmt_id;
+
+        if (turnTableDialog == null) {
+            turnTableDialog = new TurnTableDialog(LuckWheelPanActivity.this, turnTablePopEntity.show, turnTablePopEntity.list.meg, turnTablePopEntity.list.thumb);
+        } else {
+            turnTableDialog.setPopupData(turnTablePopEntity.show, turnTablePopEntity.list.meg, turnTablePopEntity.list.thumb);
+        }
+        turnTableDialog.show();
+    }
+
+    @Override
+    public void getShareImg(String shareImg) {
+
+    }
+
     public void addAllTurnTables(List<TurnTableEntity.Trophy> trophyList) {
         if (isEmpty(trophyList)) {
             return;
@@ -170,8 +195,8 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
                 new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        mListBitmap.add(resource);
-//                        mListBitmap.add(BitmapFactory.decodeResource(getResources(), R.mipmap.img_jindan));
+//                        mListBitmap.add(resource);
+                        mListBitmap.add(BitmapFactory.decodeResource(getResources(), R.mipmap.img_jindan));
                         if (loadCount >= trophyList.size()) {
                             setWheelPanData(trophyList);
                         } else {
@@ -217,11 +242,16 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         wheelPan.setConfig(build);
 
         httpDialog.dismiss();
+
+        mPresenter.luckDrawPopup();
     }
 
     public String getTrophyString(String s) {
         if (isEmpty(s))
             return "";
+        if (s.length() > 4) {
+            s = s.substring(0, 4);
+        }
         char[] strings = s.toCharArray();
         StringBuffer stringBuffer = new StringBuffer();
         for (int i = 0; i < strings.length; i++) {
@@ -232,5 +262,18 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             }
         }
         return stringBuffer.toString();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100 && Activity.RESULT_OK == resultCode) {
+            String addressId = data.getStringExtra("addressId");
+            if (currentLuckDraw != null) {
+                mPresenter.turntableAddAddress(addressId, currentLuckDraw.id);
+            } else if (!isEmpty(currentTmtId)) {
+                mPresenter.turntableAddAddress(addressId, currentTmtId);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

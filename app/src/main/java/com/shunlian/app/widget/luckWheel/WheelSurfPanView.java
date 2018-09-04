@@ -31,6 +31,9 @@ import java.util.List;
  */
 
 public class WheelSurfPanView extends View {
+
+    private boolean isRotating = false;
+
     private Context mContext;
     //记录视图的大小
     private int mWidth;
@@ -302,12 +305,14 @@ public class WheelSurfPanView extends View {
             //将动画的过程态回调给调用者
             if (rotateListener != null)
                 rotateListener.rotating(animation);
+            isRotating = true;
         });
         anim.setInterpolator(new FastOutSlowInInterpolator());
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                isRotating = false;
                 //当旋转结束的时候回调给调用者当前所选择的内容
                 if (rotateListener != null) {
                     if (mType == 1) {
@@ -491,6 +496,10 @@ public class WheelSurfPanView extends View {
 
         //重绘
         invalidate();
+    }
+
+    public boolean isRotating() {
+        return isRotating;
     }
 
     private float getScale() {

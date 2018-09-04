@@ -27,6 +27,8 @@ public class CommonEntity {
 
     public String telephone;//帮助中心电话
 
+    public String img; //大转盘获取分享图
+
     //获取提现账户
     public String account_name;
     public String account_number;
