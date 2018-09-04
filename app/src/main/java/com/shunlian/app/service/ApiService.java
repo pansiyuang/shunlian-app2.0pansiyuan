@@ -2570,4 +2570,12 @@ public interface ApiService {
      */
     @GET("goldegglimit/getlimitgoldegg")
     Call<BaseEntity<TaskHomeEntity>> goldegglimit(@QueryMap Map<String,String> map);
+
+    /**
+     * 邀请码领金蛋
+     * @param map
+     * @return
+     */
+    @GET("tasknewperson/getGoldByCode")
+    Call<BaseEntity<TaskHomeEntity>> getGoldByCode(@QueryMap Map<String,String> map);
 }

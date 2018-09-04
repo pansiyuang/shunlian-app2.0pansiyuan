@@ -22,6 +22,7 @@ public class TaskHomeEntity {
     public AdUrlBean ad_url;
 
     public String faq_url;
+    public String task_status;//0表示当前可以领取  1表示当前不能领取
 
     public String rule_url;
     public String got_eggs;

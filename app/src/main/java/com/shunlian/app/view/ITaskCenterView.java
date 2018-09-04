@@ -29,7 +29,7 @@ public interface ITaskCenterView extends IView {
      * @param second 倒计时秒数
      * @param maxProgress 最大进度
      */
-    void obtainDownTime(String second,String maxProgress);
+    void obtainDownTime(String second,String maxProgress,String task_status);
 
     /**
      * 广告图

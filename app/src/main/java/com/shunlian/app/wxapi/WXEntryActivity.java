@@ -272,16 +272,21 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     SendAuth.Resp sendAuthResp = (SendAuth.Resp) baseResp;// 用于分享时不要有这个，不能强转
                     String code = sendAuthResp.code;
                     wxEntryPresenter.wxLogin(code);
-                }else {
-                    if (!isEmpty(Constant.SHARE_TYPE)&&Constant.SHARE_TYPE.contains("goods_")){//商品详情分享成功给金蛋
-                        String[] split = Constant.SHARE_TYPE.split("_");
-                        if (split.length >= 2)
-                            wxEntryPresenter.goodsShare(split[0],split[1]);
-                        else
-                            mYFinish();
-                    }else if (!isEmpty(Constant.SHARE_TYPE)){
-                        wxEntryPresenter.notifyShare(Constant.SHARE_TYPE,Constant.SHARE_ID);
-                    }else {
+                } else {
+                    if (!isEmpty(Constant.SHARE_TYPE)) {
+                        if ("goods".equals(Constant.SHARE_TYPE)) {
+                            //用于分享领金蛋
+                            wxEntryPresenter.goodsShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
+                        } else if ("article".equals(Constant.SHARE_TYPE)) {
+                            //用于分享领金蛋
+                            wxEntryPresenter.goodsShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
+                            //用于分享统计
+                            wxEntryPresenter.notifyShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
+                        } else {
+                            //用于分享统计
+                            wxEntryPresenter.notifyShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
+                        }
+                    } else {
                         mYFinish();
                     }
                     Common.staticToast("分享成功");

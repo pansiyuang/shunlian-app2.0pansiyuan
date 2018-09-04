@@ -157,6 +157,11 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         EggDetailAct.startAct(this);
     }
 
+    @OnClick(R.id.miv_show_order)
+    public void showOrder(){
+        Common.staticToast("晒单");
+    }
+
     /**
      * 常见问题
      */
@@ -316,7 +321,23 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      * @param maxProgress 最大进度
      */
     @Override
-    public void obtainDownTime(String second, String maxProgress) {
+    public void obtainDownTime(String second, String maxProgress,String task_status) {
+        if ("0".equals(task_status)){
+            setGoldEggsAnim("eggs_hatch.json");
+            if (dtime_layout != null){
+                dtime_layout.setSecond(1,1);
+                dtime_layout.startDownTimer();
+                dtime_layout.setOnClickListener(view -> {
+                    if (dtime_layout != null) {
+                        if (dtime_layout.isClickable() && mPresenter != null) {
+                            //领取金蛋
+                            mPresenter.goldegglimit();
+                        }
+                    }
+                });
+            }
+            return;
+        }
         if (dtime_layout != null && !isEmpty(second) && !isEmpty(maxProgress)) {
             dtime_layout.setSecond(Long.parseLong(second), Long.parseLong(maxProgress));
             dtime_layout.startDownTimer();

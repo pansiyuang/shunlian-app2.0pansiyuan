@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.TaskListEntity;
-import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -27,11 +26,9 @@ import butterknife.BindView;
 
 public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask> {
 
-    private int mTtaskState;
 
-    public TaskListAdapter(Context context, List<TaskListEntity.ItemTask> lists, int current_task_state) {
+    public TaskListAdapter(Context context, List<TaskListEntity.ItemTask> lists) {
         super(context, false, lists);
-        mTtaskState = current_task_state;
     }
 
     /**
@@ -57,34 +54,45 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
         TaskListHolder mHolder = (TaskListHolder) holder;
 
         TaskListEntity.ItemTask itemTask = lists.get(position);
-        GlideUtils.getInstance().loadOverrideImage(context,mHolder.mivIcon,itemTask.icon_url,32,32);
+        GlideUtils.getInstance().loadOverrideImage(context, mHolder.mivIcon, itemTask.icon_url, 32, 32);
 
         mHolder.mtvTaskName.setText(itemTask.title);
         mHolder.mtvTaskTip.setText(itemTask.info);
-        mHolder.mtvEggsCount.setText(itemTask.gold_num);
+        if (isEmpty(itemTask.gold_num)){
+            gone(mHolder.mtvEggsCount);
+        }else {
+            mHolder.mtvEggsCount.setText(itemTask.gold_num);
+            visible(mHolder.mtvEggsCount);
+        }
 
 
         changeState(position, mHolder, itemTask);
     }
 
     private void changeState(int position, TaskListHolder mHolder, TaskListEntity.ItemTask itemTask) {
-        if ("0".equals(itemTask.task_status)){//0 未完成；1已完成
-            if (position == 0 || (position == 1 && mTtaskState == TaskCenterPresenter.NEW_USER_TASK)) {
-                visible(mHolder.mivObtainBg);
-                mHolder.mtvObtainTip.setText("点击领取");
+        try {
+            if ("0".equals(itemTask.task_status)) {//0 未完成；1已完成
+                if (TASK_TYPE.task_new_user_gift == TASK_TYPE.valueOf(itemTask.code)
+                        ||TASK_TYPE.task_new_user_invite == TASK_TYPE.valueOf(itemTask.code)
+                         || TASK_TYPE.task_daily_hour_gold == TASK_TYPE.valueOf(itemTask.code)) {
+                    visible(mHolder.mivObtainBg);
+                    mHolder.mtvObtainTip.setText("点击领取");
+                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
+                    mHolder.mtvObtainTip.setBackgroundDrawable(null);
+                } else {
+                    mHolder.mtvObtainTip.setText("去完成");
+                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.pink_color));
+                    mHolder.mtvObtainTip.setBackgroundDrawable(getNotCompleteDrawable());
+                    gone(mHolder.mivObtainBg);
+                }
+            } else {
+                mHolder.mtvObtainTip.setText("已完成");
                 mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
-                mHolder.mtvObtainTip.setBackgroundDrawable(null);
-            }else {
-                mHolder.mtvObtainTip.setText("去完成");
-                mHolder.mtvObtainTip.setTextColor(getColor(R.color.pink_color));
-                mHolder.mtvObtainTip.setBackgroundDrawable(getNotCompleteDrawable());
+                mHolder.mtvObtainTip.setBackgroundDrawable(getCompleteDrawable());
                 gone(mHolder.mivObtainBg);
             }
-        }else {
-            mHolder.mtvObtainTip.setText("已完成");
-            mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
-            mHolder.mtvObtainTip.setBackgroundDrawable(getCompleteDrawable());
-            gone(mHolder.mivObtainBg);
+        } catch (IllegalArgumentException e) {
+
         }
     }
 
@@ -92,29 +100,29 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
         if (isEmpty(payloads)) {
             super.onBindViewHolder(holder, position, payloads);
-        }else {
+        } else {
             TaskListEntity.ItemTask itemTask = (TaskListEntity.ItemTask) payloads.get(0);
             TaskListHolder mHolder = (TaskListHolder) holder;
             changeState(position, mHolder, itemTask);
         }
     }
 
-    private GradientDrawable getCompleteDrawable(){
+    private GradientDrawable getCompleteDrawable() {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(getColor(R.color.color_value_6c));
-        drawable.setCornerRadius(TransformUtil.dip2px(context,10));
+        drawable.setCornerRadius(TransformUtil.dip2px(context, 10));
         int i = TransformUtil.dip2px(context, 20);
-        drawable.setSize(i*3,i);
+        drawable.setSize(i * 3, i);
         return drawable;
     }
 
-    private GradientDrawable getNotCompleteDrawable(){
+    private GradientDrawable getNotCompleteDrawable() {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(getColor(R.color.white));
-        drawable.setCornerRadius(TransformUtil.dip2px(context,10));
+        drawable.setCornerRadius(TransformUtil.dip2px(context, 10));
         int i = TransformUtil.dip2px(context, 20);
-        drawable.setSize(i*3,i);
-        drawable.setStroke(TransformUtil.dip2px(context,1),getColor(R.color.pink_color));
+        drawable.setSize(i * 3, i);
+        drawable.setStroke(TransformUtil.dip2px(context, 1), getColor(R.color.pink_color));
         return drawable;
     }
 
@@ -149,8 +157,43 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
             llayout_right.setOnClickListener(v -> {
                 TaskListEntity.ItemTask itemTask = lists.get(getAdapterPosition());
                 if (listener != null && "0".equals(itemTask.task_status))
-                    listener.onItemClick(v,getAdapterPosition());
+                    listener.onItemClick(v, getAdapterPosition());
             });
         }
+    }
+
+    public enum TASK_TYPE {
+        /***
+         * 注册拆红包
+         */
+        task_new_user_gift,
+        /**
+         * 邀请码得金蛋
+         */
+        task_new_user_invite,
+        /**
+         * 看视频收金蛋
+         */
+        task_new_user_video,
+        /**
+         * 限时领金蛋
+         */
+        task_daily_hour_gold,
+        /**
+         * 周六金蛋抽奖
+         */
+        task_daily_lottery,
+        /**
+         * 逛商城捡金蛋
+         */
+        task_daily_goods_view,
+        /**
+         * //乐分享赚金蛋
+         */
+        task_daily_share,
+        /**
+         * 晒收入赚金蛋
+         */
+        task_daily_show_income
     }
 }

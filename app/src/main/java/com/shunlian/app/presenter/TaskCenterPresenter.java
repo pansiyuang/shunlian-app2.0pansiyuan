@@ -14,8 +14,6 @@ import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.bean.TaskListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.coupon.CouponListAct;
-import com.shunlian.app.ui.new_login_register.LoginEntryAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ITaskCenterView;
 import com.shunlian.app.widget.MyImageView;
@@ -92,7 +90,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                         super.onSuccess(entity);
                         TaskHomeEntity data = entity.data;
                         iView.setGoldEggsCount(data.gold_egg);
-                        iView.obtainDownTime(data.gold_egg_second, data.gold_egg_total_second);
+                        iView.obtainDownTime(data.gold_egg_second, data.gold_egg_total_second,data.task_status);
                         iView.setSignContinueNum(data.sign_continue_num);
                         iView.setPic(data.ad_pic_url, data.ad_url);
                         iView.setTip(data.faq_url, data.rule_url);
@@ -104,19 +102,14 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     public void initDialogs(CommonEntity data) {
         Dialog dialog_new = new Dialog(context, R.style.popAd);
         dialog_new.setContentView(R.layout.dialog_new);
-        MyImageView miv_close = (MyImageView) dialog_new.findViewById(R.id.miv_close);
-        NewTextView ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_aOne);
-        NewTextView ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
-        NewTextView ntv_check = (NewTextView) dialog_new.findViewById(R.id.ntv_check);
-        NewTextView ntv_use = (NewTextView) dialog_new.findViewById(R.id.ntv_use);
-        MyLinearLayout mllayout_before = (MyLinearLayout) dialog_new.findViewById(R.id.mllayout_before);
-        MyLinearLayout mllayout_after = (MyLinearLayout) dialog_new.findViewById(R.id.mllayout_after);
-        miv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog_new.dismiss();
-            }
-        });
+        MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
+        NewTextView ntv_aOne = dialog_new.findViewById(R.id.ntv_aOne);
+        NewTextView ntv_get = dialog_new.findViewById(R.id.ntv_get);
+        NewTextView ntv_check = dialog_new.findViewById(R.id.ntv_check);
+        NewTextView ntv_use = dialog_new.findViewById(R.id.ntv_use);
+        MyLinearLayout mllayout_before = dialog_new.findViewById(R.id.mllayout_before);
+        MyLinearLayout mllayout_after = dialog_new.findViewById(R.id.mllayout_after);
+        miv_close.setOnClickListener(view -> dialog_new.dismiss());
         mllayout_before.setVisibility(View.GONE);
         mllayout_after.setVisibility(View.VISIBLE);
         SpannableStringBuilder spannableStringBuilders = Common.changeTextSize(data.prize+getStringResouce(R.string.new_yuan) , getStringResouce(R.string.new_yuan), 24);
@@ -124,19 +117,13 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         ntv_get.setVisibility(View.GONE);
         ntv_use.setVisibility(View.VISIBLE);
         ntv_check.setVisibility(View.VISIBLE);
-        ntv_use.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Common.goGoGo(context,data.type,data.item_id);
-                dialog_new.dismiss();
-            }
+        ntv_use.setOnClickListener(view -> {
+            Common.goGoGo(context,data.type,data.item_id);
+            dialog_new.dismiss();
         });
-        ntv_check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CouponListAct.startAct(context);
-                dialog_new.dismiss();
-            }
+        ntv_check.setOnClickListener(view -> {
+            CouponListAct.startAct(context);
+            dialog_new.dismiss();
         });
         dialog_new.setCancelable(false);
         dialog_new.show();
@@ -195,13 +182,14 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 
     private void creatAdapter() {
         if (taskListAdapter == null) {
-            taskListAdapter = new TaskListAdapter(context, taskLists, current_task_state);
+            taskListAdapter = new TaskListAdapter(context, taskLists);
             iView.setAdapter(taskListAdapter);
             taskListAdapter.setOnItemClickListener((view, position) -> {
+                TaskListEntity.ItemTask itemTask = taskLists.get(position);
                 if (current_task_state == NEW_USER_TASK) {
-                    handlerNewUserTask(position);
+                    handlerNewUserTask(position,itemTask.code);
                 } else {
-                    handlerDailyTask(position);
+                    handlerDailyTask(position,itemTask.code);
                 }
             });
         } else {
@@ -222,21 +210,26 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      * 处理日常任务
      *
      * @param position
+     * @param code
      */
-    private void handlerDailyTask(int position) {
-        switch (position) {
-            case 0://限时领金蛋
-                goldegglimit();
-                break;
-            case 1://抽奖
-                break;
-            case 2://逛商场捡金蛋（去首页）
-                Common.goGoGo(context,"home");
-                break;
-            case 3://分享赚金蛋
-                break;
-            case 4://晒收入赚金蛋
-                break;
+    private void handlerDailyTask(int position, String code) {
+        try {
+            switch (TaskListAdapter.TASK_TYPE.valueOf(code)) {
+                case task_daily_hour_gold://限时领金蛋
+                    goldegglimit();
+                    break;
+                case task_daily_lottery://抽奖
+                    break;
+                case task_daily_goods_view://逛商场捡金蛋（去首页）
+                    Common.goGoGo(context, "home");
+                    break;
+                case task_daily_share://分享赚金蛋
+                    break;
+                case task_daily_show_income://晒收入赚金蛋
+                    break;
+            }
+        }catch (Exception e){
+
         }
     }
 
@@ -244,16 +237,22 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      * 处理新手任务
      *
      * @param position
+     * @param code
      */
-    private void handlerNewUserTask(int position) {
-        switch (position) {
-            case 0://注册猜红包
-                getPrizeByRegister();
-                break;
-            case 1://邀请码得金蛋
-                break;
-            case 2://看视频得金蛋
-                break;
+    private void handlerNewUserTask(int position, String code) {
+        try {
+            switch (TaskListAdapter.TASK_TYPE.valueOf(code)) {
+                case task_new_user_gift://注册猜红包
+                    getPrizeByRegister();
+                    break;
+                case task_new_user_invite://邀请码得金蛋
+                    getGoldByCode();
+                    break;
+                case task_new_user_video://看视频得金蛋
+                    break;
+            }
+        }catch (Exception e){
+
         }
     }
 
@@ -288,11 +287,27 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
             public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
                 super.onSuccess(entity);
                 TaskHomeEntity data = entity.data;
-                iView.obtainDownTime(data.gold_egg_second,data.gold_egg_total_second);
+                iView.obtainDownTime(data.gold_egg_second,data.gold_egg_total_second,"1");
                 iView.showGoldEggsNum(data.got_eggs);
                 iView.setGoldEggsCount(data.account_eggs);
                 if (current_task_state == DAILY_TASK)
                     updateItem(0,"1");
+            }
+        });
+    }
+
+
+    public void getGoldByCode(){
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<TaskHomeEntity>> baseEntityCall = getApiService().getGoldByCode(map);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
+                super.onSuccess(entity);
+                TaskHomeEntity data = entity.data;
+                iView.showGoldEggsNum(data.got_eggs);
+                iView.setGoldEggsCount(data.account_eggs);
             }
         });
     }

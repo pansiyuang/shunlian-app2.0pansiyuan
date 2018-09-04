@@ -364,6 +364,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 params.price = price.substring(1,price.length());
                 params.stage_voucher_id = mStageVoucherId;
                 params.anonymous = isAnonymous?"1":"0";//1匿名 0不匿名
+                params.use_egg = isUserGoldenEggs?"1":"0";//是否使用金蛋 1是 0否
 
                 String paramsStr = "";
                 try {
