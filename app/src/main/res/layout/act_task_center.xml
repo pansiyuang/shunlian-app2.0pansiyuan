@@ -78,9 +78,16 @@
             <RelativeLayout
                 android:id="@+id/rlayout_golden_eggs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp">
+                android:layout_height="wrap_content">
 
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_show_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_renwu_shaishouru"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="12dp"/>
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_count"
@@ -88,6 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:text="金蛋数量"
+                    android:layout_marginTop="38dp"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 

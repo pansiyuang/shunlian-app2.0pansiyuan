@@ -1205,7 +1205,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (goodsDetailPresenter != null) {
                     WXEntryActivity.startAct(this, "shareFriend",
                             goodsDetailPresenter.getShareInfoParam());
-                    Constant.SHARE_TYPE = "goods_"+goodsId;
+                    Constant.SHARE_TYPE = "goods";
+                    Constant.SHARE_ID = goodsId;
                 }
                 break;
         }

@@ -90,7 +90,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String stageVoucherId;
     /*********匿名购买**********/
     private String anonymous;
-
+    /*********使用金蛋*****************/
+    private String use_egg;
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -232,6 +233,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 //手机充值
                 mPhoneNumber = params.phoneNum;
                 mTopUpPrice = params.face_price;
+                use_egg = params.use_egg;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -454,7 +456,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 break;
             case "alipay":
                 if (!isEmpty(shop_goods)) {
-                    payListPresenter.orderCheckout(shop_goods,addressId,stageVoucherId,anonymous,pay_types.code);
+                    payListPresenter.orderCheckout(shop_goods,addressId,stageVoucherId,anonymous,use_egg,pay_types.code);
                 } else if (!isEmpty(orderId)) {
                     payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
                 }else if (!isEmpty(mPhoneNumber)){//手机充值
@@ -468,7 +470,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 break;
             case "unionpay":
                 if (!isEmpty(shop_goods)) {
-                    payListPresenter.orderCheckout(shop_goods, addressId,stageVoucherId,anonymous,pay_types.code);
+                    payListPresenter.orderCheckout(shop_goods, addressId,stageVoucherId,anonymous,use_egg,pay_types.code);
                 } else if (!isEmpty(orderId)) {
                     payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
                 }else if (!isEmpty(mPhoneNumber)){//手机充值
@@ -482,7 +484,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                                 getString(R.string.SelectRecommendAct_sure), (v) -> {
                                     if (!isEmpty(shop_goods)) {
                                         payListPresenter.orderCheckout(shop_goods,
-                                                addressId,stageVoucherId,anonymous,pay_types.code);
+                                                addressId,stageVoucherId,anonymous,use_egg,pay_types.code);
                                     }else if (!isEmpty(orderId)) {
                                         payListPresenter.fromOrderListGoPay(orderId,
                                                 pay_types.code);

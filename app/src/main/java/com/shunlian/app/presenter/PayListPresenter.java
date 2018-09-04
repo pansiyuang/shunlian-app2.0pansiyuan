@@ -68,15 +68,17 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
      * @param shop_goods
      * @param address_id
      * @param stage_voucher_id 平台优惠券
+     * @param use_egg 金蛋
      * @param paytype
      */
-    public void orderCheckout(String shop_goods, String address_id,String stage_voucher_id,
-                              String anonymous, String paytype) {
+    public void orderCheckout(String shop_goods, String address_id, String stage_voucher_id,
+                              String anonymous, String use_egg ,String paytype) {
         Map<String, String> map = new HashMap<>();
         map.put("shop_goods", shop_goods);
         map.put("address_id", address_id);
         map.put("stage_voucher_id", stage_voucher_id);
         map.put("anonymous", anonymous);
+        map.put("use_egg", use_egg);
         map.put("paytype", paytype);
         sortAndMD5(map);
         Call<BaseEntity<PayOrderEntity>>
