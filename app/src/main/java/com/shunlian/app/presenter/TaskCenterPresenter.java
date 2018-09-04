@@ -1,15 +1,26 @@
 package com.shunlian.app.presenter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.text.SpannableStringBuilder;
+import android.view.View;
 
+import com.shunlian.app.R;
 import com.shunlian.app.adapter.TaskListAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.bean.TaskListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.coupon.CouponListAct;
+import com.shunlian.app.ui.new_login_register.LoginEntryAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ITaskCenterView;
+import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.NewTextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,12 +35,10 @@ import retrofit2.Call;
 
 public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 
-    private List<TaskListEntity.ItemTask> taskLists = new ArrayList<>();
-
     public static final int NEW_USER_TASK = 1;//新手任务
     public static final int DAILY_TASK = 2;//日常任务
-
     public int current_task_state = NEW_USER_TASK;//当前任务状态  默认新手任务
+    private List<TaskListEntity.ItemTask> taskLists = new ArrayList<>();
     private TaskListAdapter taskListAdapter;
     private Call<BaseEntity<TaskHomeEntity>> homeCall;
     private Call<BaseEntity<TaskListEntity>> taskListCall;
@@ -59,7 +68,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
             homeCall = null;
         }
 
-        if (taskListCall != null && taskListCall.isExecuted()){
+        if (taskListCall != null && taskListCall.isExecuted()) {
             taskListCall.cancel();
             taskListCall = null;
         }
@@ -72,22 +81,83 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      */
     @Override
     public void initApi() {
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
         homeCall = getApiService().taskHome(map);
         getNetData(true, homeCall,
-                new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>(){
+                new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
+                    @Override
+                    public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
+                        super.onSuccess(entity);
+                        TaskHomeEntity data = entity.data;
+                        iView.setGoldEggsCount(data.gold_egg);
+                        iView.obtainDownTime(data.gold_egg_second, data.gold_egg_total_second);
+                        iView.setSignContinueNum(data.sign_continue_num);
+                        iView.setPic(data.ad_pic_url, data.ad_url);
+                        iView.setTip(data.faq_url, data.rule_url);
+                        iView.setSignData(data.sign_days);
+                    }
+                });
+    }
+
+    public void initDialogs(CommonEntity data) {
+        Dialog dialog_new = new Dialog(context, R.style.popAd);
+        dialog_new.setContentView(R.layout.dialog_new);
+        MyImageView miv_close = (MyImageView) dialog_new.findViewById(R.id.miv_close);
+        NewTextView ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_aOne);
+        NewTextView ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
+        NewTextView ntv_check = (NewTextView) dialog_new.findViewById(R.id.ntv_check);
+        NewTextView ntv_use = (NewTextView) dialog_new.findViewById(R.id.ntv_use);
+        MyLinearLayout mllayout_before = (MyLinearLayout) dialog_new.findViewById(R.id.mllayout_before);
+        MyLinearLayout mllayout_after = (MyLinearLayout) dialog_new.findViewById(R.id.mllayout_after);
+        miv_close.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
+            public void onClick(View view) {
+                dialog_new.dismiss();
+            }
+        });
+        mllayout_before.setVisibility(View.GONE);
+        mllayout_after.setVisibility(View.VISIBLE);
+        SpannableStringBuilder spannableStringBuilders = Common.changeTextSize(data.prize+getStringResouce(R.string.new_yuan) , getStringResouce(R.string.new_yuan), 24);
+        ntv_aOne.setText(spannableStringBuilders);
+        ntv_get.setVisibility(View.GONE);
+        ntv_use.setVisibility(View.VISIBLE);
+        ntv_check.setVisibility(View.VISIBLE);
+        ntv_use.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.goGoGo(context,data.type,data.item_id);
+                dialog_new.dismiss();
+            }
+        });
+        ntv_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CouponListAct.startAct(context);
+                dialog_new.dismiss();
+            }
+        });
+        dialog_new.setCancelable(false);
+        dialog_new.show();
+    }
+
+     private void getPrizeByRegister() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getPrizeByRegister(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                TaskHomeEntity data = entity.data;
-                iView.setGoldEggsCount(data.gold_egg);
-                iView.obtainDownTime(data.gold_egg_second,data.gold_egg_total_second);
-                iView.setSignContinueNum(data.sign_continue_num);
-                iView.setPic(data.ad_pic_url,data.ad_url);
-                iView.setTip(data.faq_url,data.rule_url);
-                iView.setSignData(data.sign_days);
+                CommonEntity data = entity.data;
+                if (data != null && !isEmpty(data.prize) && Float.parseFloat(data.prize) > 0) {
+                    initDialogs(data);
+                    if (current_task_state==NEW_USER_TASK)
+                    updateItem(0,"1");
+                }
             }
         });
     }
@@ -95,46 +165,46 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     /**
      * 获取任务列表
      */
-    public void getTaskList(){
-        Map<String,String> map = new HashMap<>();
+    public void getTaskList() {
+        Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
         taskListCall = getApiService().taskList(map);
         getNetData(false, taskListCall,
-                new SimpleNetDataCallback<BaseEntity<TaskListEntity>>(){
-            @Override
-            public void onSuccess(BaseEntity<TaskListEntity> entity) {
-                super.onSuccess(entity);
+                new SimpleNetDataCallback<BaseEntity<TaskListEntity>>() {
+                    @Override
+                    public void onSuccess(BaseEntity<TaskListEntity> entity) {
+                        super.onSuccess(entity);
 
-                TaskListEntity data = entity.data;
-                if (isEmpty(data.new_user_tasks)){
-                    current_task_state = DAILY_TASK;
-                    iView.closeNewUserList();
-                }
+                        TaskListEntity data = entity.data;
+                        if (isEmpty(data.new_user_tasks)) {
+                            current_task_state = DAILY_TASK;
+                            iView.closeNewUserList();
+                        }
 
-                taskLists.clear();
-                if (current_task_state == NEW_USER_TASK){
-                    taskLists.addAll(data.new_user_tasks);
-                }else {
-                    taskLists.addAll(data.daily_tasks);
-                }
+                        taskLists.clear();
+                        if (current_task_state == NEW_USER_TASK) {
+                            taskLists.addAll(data.new_user_tasks);
+                        } else {
+                            taskLists.addAll(data.daily_tasks);
+                        }
 
-                creatAdapter();
-            }
-        });
+                        creatAdapter();
+                    }
+                });
     }
 
     private void creatAdapter() {
         if (taskListAdapter == null) {
-            taskListAdapter = new TaskListAdapter(context, taskLists,current_task_state);
+            taskListAdapter = new TaskListAdapter(context, taskLists, current_task_state);
             iView.setAdapter(taskListAdapter);
             taskListAdapter.setOnItemClickListener((view, position) -> {
-                if (current_task_state == NEW_USER_TASK){
+                if (current_task_state == NEW_USER_TASK) {
                     handlerNewUserTask(position);
-                }else {
+                } else {
                     handlerDailyTask(position);
                 }
             });
-        }else {
+        } else {
             taskListAdapter.notifyDataSetChanged();
         }
     }
@@ -150,10 +220,11 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 
     /**
      * 处理日常任务
+     *
      * @param position
      */
     private void handlerDailyTask(int position) {
-        switch (position){
+        switch (position) {
             case 0://限时领金蛋
                 goldegglimit();
                 break;
@@ -171,11 +242,13 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 
     /**
      * 处理新手任务
+     *
      * @param position
      */
     private void handlerNewUserTask(int position) {
-        switch (position){
+        switch (position) {
             case 0://注册猜红包
+                getPrizeByRegister();
                 break;
             case 1://邀请码得金蛋
                 break;
@@ -185,19 +258,18 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     }
 
     /**
-     *
      * @param
      */
-    public void signEgg(String data){
+    public void signEgg(String data) {
         Map<String, String> map = new HashMap<>();
-        map.put("date",data);
+        map.put("date", data);
         sortAndMD5(map);
         Call<BaseEntity<SignEggEntity>> baseEntityCall = getApiService().signEgg(map);
         getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<SignEggEntity>>() {
             @Override
             public void onSuccess(BaseEntity<SignEggEntity> entity) {
                 super.onSuccess(entity);
-                SignEggEntity signEggEntity=entity.data;
+                SignEggEntity signEggEntity = entity.data;
                 iView.signEgg(signEggEntity);
             }
 
