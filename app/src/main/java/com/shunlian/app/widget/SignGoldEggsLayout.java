@@ -148,7 +148,8 @@ public class SignGoldEggsLayout extends LinearLayout {
 
                 if (i < 3){
                     if ("1".equals(bean.sign_status)){//已签到
-                        miv_sign_state.get(i).setImageResource(R.mipmap.icon_renwu_yiqiandao);
+                        miv_sign_state.get(i).setImageResource(i==2?
+                                R.mipmap.icon_renwu_yiqiandao_s:R.mipmap.icon_renwu_yiqiandao);
                     }else if ("0".equals(bean.sign_status)){//可以签到
                         miv_sign_state.get(i).setImageResource(R.mipmap.btn_renwu_qiandao);
                         scaleAnim(miv_sign_state.get(i));
@@ -177,7 +178,7 @@ public class SignGoldEggsLayout extends LinearLayout {
 
     public void signSuccess(){
         if (!isEmpty(miv_sign_state) && miv_sign_state.size() == 3){
-            miv_sign_state.get(2).setImageResource(R.mipmap.icon_renwu_yiqiandao);
+            miv_sign_state.get(2).setImageResource(R.mipmap.icon_renwu_yiqiandao_s);
             isCanSign = false;
         }
     }

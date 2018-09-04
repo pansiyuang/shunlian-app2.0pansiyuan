@@ -219,6 +219,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                 iView.obtainDownTime(data.gold_egg_second,data.gold_egg_total_second);
                 iView.showGoldEggsNum(data.got_eggs);
                 iView.setGoldEggsCount(data.account_eggs);
+                if (current_task_state == DAILY_TASK)
+                    updateItem(0,"1");
             }
         });
     }

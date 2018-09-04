@@ -138,7 +138,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         setSignStyle();
         EventBus.getDefault().register(this);
         mPresenter = new TaskCenterPresenter(this, this);
-        setGoldEggsAnim("data_not_hatch.json");
+        setGoldEggsAnim("eggs_not_hatch.json");
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyView.setLayoutManager(manager);
@@ -321,8 +321,10 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             dtime_layout.setSecond(Long.parseLong(second), Long.parseLong(maxProgress));
             dtime_layout.startDownTimer();
             dtime_layout.setDownTimeComplete(() -> {
-                setGoldEggsAnim("data_hatch.json");
-                if(mPresenter != null)mPresenter.updateItem(0,"0");
+                setGoldEggsAnim("eggs_hatch.json");
+                if(mPresenter != null &&
+                        mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
+                    mPresenter.updateItem(0,"0");
             });
             dtime_layout.setOnClickListener(view -> {
                 if (dtime_layout != null) {

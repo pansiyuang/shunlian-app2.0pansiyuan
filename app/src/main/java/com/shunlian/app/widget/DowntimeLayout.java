@@ -134,11 +134,11 @@ public class DowntimeLayout extends View {
     }
 
     public void setSecond(long second, long maxProgress) {
-//        mSeconds = second;
-//        mMaxProgress = maxProgress;
+        mSeconds = second;
+        mMaxProgress = maxProgress;
 
-        mSeconds = 10;
-        mMaxProgress = 10;
+        //mSeconds = 10;
+        //mMaxProgress = 10;
         if (mMaxProgress == 0)mMaxProgress = 1;
 
         mProgresRatio = (mMaxProgress - mSeconds) *1.0f / mMaxProgress;
