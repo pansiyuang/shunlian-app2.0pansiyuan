@@ -108,7 +108,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private boolean isAnonymous;//是否匿名
     private boolean isUserGoldenEggs;//是否使用金蛋
     private ObjectMapper mOM;
-    private int mEggReduce;
+    private float mEggReduce;
 
     public static void startAct(Context context,String cart_ids,String type){
         if (!Common.isAlreadyLogin()){
@@ -309,7 +309,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
 
     @Override
     public void goldenEggs(String golden_eggs_tip, String golden_eggs_count, String egg_reduce) {
-        mEggReduce = isEmpty(egg_reduce)?0:Integer.parseInt(egg_reduce);
+        mEggReduce = isEmpty(egg_reduce)?0:Float.parseFloat(egg_reduce);
         if (!isEmpty(golden_eggs_tip)){
             visible(rlayout_golden_eggs);
             mtv_golden_eggs.setText(golden_eggs_tip);
