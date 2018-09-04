@@ -109,6 +109,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private boolean isUserGoldenEggs;//是否使用金蛋
     private ObjectMapper mOM;
     private float mEggReduce;
+    public static final String EGGS_TIP = "不能少于1块钱";//金蛋减免提示
 
     public static void startAct(Context context,String cart_ids,String type){
         if (!Common.isAlreadyLogin()){
@@ -240,7 +241,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
      * 计算总额
      * @param enabled
      */
-    private void calculateAmount(List<ConfirmOrderEntity.Enabled> enabled) {
+    private float calculateAmount(List<ConfirmOrderEntity.Enabled> enabled) {
         if (enabled == null)enabled = new ArrayList<>();
         float currentPrice = 0;
         for (int i = 0; i < enabled.size(); i++) {//计算店铺小计
@@ -258,12 +259,19 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         if (isUserGoldenEggs){//减去金蛋抵扣的钱
             currentPrice -= mEggReduce;
         }
+
+        if (isUserGoldenEggs && currentPrice < 1){
+            //提示用户至少支付的钱数
+            Common.staticToast(EGGS_TIP);
+        }
+
         if (currentPrice <= 0){
             totalPrice = "0.00";
         }else {
             totalPrice = Common.formatFloat(currentPrice);
         }
         mtv_total_price.setText(Common.dotAfterSmall(getStringResouce(R.string.rmb)+totalPrice,11));
+        return currentPrice;
     }
 
     /**
@@ -349,6 +357,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                     recy_view.scrollToPosition(0);
                     return;
                 }
+
+                String price = mtv_total_price.getText().toString();
+                String price_num = price.substring(1,price.length());
+                if (isUserGoldenEggs && Float.parseFloat(price_num) < 1){
+                    //提示用户至少支付的钱数
+                    Common.staticToast(EGGS_TIP);
+                    return;
+                }
+
                 String shop_goods = null;
                 try {
                     shop_goods = mOM.writeValueAsString(mosaicParams());
@@ -356,12 +373,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                     e.printStackTrace();
                 }
                 //LogUtil.zhLogW("go_pay=============="+shop_goods);
-                String price = mtv_total_price.getText().toString();
 
                 BuyGoodsParams params = new BuyGoodsParams();
                 params.addressId = addressId;
                 params.shop_goods = shop_goods;
-                params.price = price.substring(1,price.length());
+                params.price = price_num;
                 params.stage_voucher_id = mStageVoucherId;
                 params.anonymous = isAnonymous?"1":"0";//1匿名 0不匿名
                 params.use_egg = isUserGoldenEggs?"1":"0";//是否使用金蛋 1是 0否
@@ -407,13 +423,17 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 isAnonymous = !isAnonymous;
                 break;
             case R.id.rlayout_golden_eggs:
-                if (!isUserGoldenEggs){
-                    miv_golden_eggs.setImageResource(R.mipmap.img_xuanze_h);
-                }else {
-                    miv_golden_eggs.setImageResource(R.mipmap.img_xuanze_n);
-                }
                 isUserGoldenEggs = !isUserGoldenEggs;
-                calculateAmount(enabled);//每次改变按钮状态都要重新计算金额
+                float p = calculateAmount(enabled);//每次改变按钮状态都要重新计算金额
+                if (p < 1){
+                    isUserGoldenEggs = false;
+                }else {
+                    if (isUserGoldenEggs){
+                        miv_golden_eggs.setImageResource(R.mipmap.img_xuanze_h);
+                    }else {
+                        miv_golden_eggs.setImageResource(R.mipmap.img_xuanze_n);
+                    }
+                }
                 break;
         }
     }
