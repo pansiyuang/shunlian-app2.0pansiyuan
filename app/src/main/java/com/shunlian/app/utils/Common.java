@@ -94,6 +94,7 @@ import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.ui.store.StoreAct;
+import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -225,6 +226,8 @@ public class Common {
                 return "SubmitLogisticsInfoAct";
             case "voucher":
                 return "CouponMsgAct";
+            case "taskSystems":
+                return "TaskCenterAct";
             default:
                 return "";
         }
@@ -238,6 +241,9 @@ public class Common {
             return;
         }
         switch (type) {
+            case "taskSystems":
+                TaskCenterAct.startAct(context);
+                break;
             case "HTMLShare":
                 if (!TextUtils.isEmpty(params[0])){
                     copyText(context,params[1],params[3],false);
