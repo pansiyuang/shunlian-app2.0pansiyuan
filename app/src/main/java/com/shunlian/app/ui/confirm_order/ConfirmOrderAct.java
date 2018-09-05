@@ -427,6 +427,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 float p = calculateAmount(enabled);//每次改变按钮状态都要重新计算金额
                 if (p < 1){
                     isUserGoldenEggs = false;
+                    miv_golden_eggs.setImageResource(R.mipmap.img_xuanze_n);
                 }else {
                     if (isUserGoldenEggs){
                         miv_golden_eggs.setImageResource(R.mipmap.img_xuanze_h);
