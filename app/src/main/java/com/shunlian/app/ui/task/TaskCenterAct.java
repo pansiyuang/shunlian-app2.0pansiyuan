@@ -327,7 +327,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             if (dtime_layout != null){
                 dtime_layout.setSecond(1,1);
                 dtime_layout.startDownTimer();
-                dtime_layout.setOnClickListener(view -> {
+                dtime_layout.setOnClickListener(() -> {
                     if (dtime_layout != null) {
                         if (dtime_layout.isClickable() && mPresenter != null) {
                             //领取金蛋
@@ -339,6 +339,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             return;
         }
         if (dtime_layout != null && !isEmpty(second) && !isEmpty(maxProgress)) {
+            setGoldEggsAnim("eggs_not_hatch.json");
             dtime_layout.setSecond(Long.parseLong(second), Long.parseLong(maxProgress));
             dtime_layout.startDownTimer();
             dtime_layout.setDownTimeComplete(() -> {
@@ -347,7 +348,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                         mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
                     mPresenter.updateItem(0,"0");
             });
-            dtime_layout.setOnClickListener(view -> {
+            dtime_layout.setOnClickListener(() -> {
                 if (dtime_layout != null) {
                     if (dtime_layout.isClickable() && mPresenter != null) {
                         //领取金蛋
