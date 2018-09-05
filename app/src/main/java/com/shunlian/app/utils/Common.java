@@ -104,7 +104,9 @@ import com.shunlian.app.wxapi.WXEntryPresenter;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -127,11 +127,20 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.mtv_title3)
     MyTextView mtv_title3;
 
+    @BindView(R.id.mtv_jindan)
+    MyTextView mtv_jindan;
+
+    @BindView(R.id.mtv_jindans)
+    MyTextView mtv_jindans;
+
     @BindView(R.id.view_message)
     View view_message;
 
     @BindView(R.id.mrlayout_youhuiquan)
     MyRelativeLayout mrlayout_youhuiquan;
+
+    @BindView(R.id.mrlayout_jindan)
+    MyRelativeLayout mrlayout_jindan;
 
     @BindView(R.id.mrlayout_cuxiao)
     MyRelativeLayout mrlayout_cuxiao;
@@ -282,6 +291,15 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         } else {
             mrlayout_youhuiquan.setVisibility(View.GONE);
         }
+
+        if (!TextUtils.isEmpty(orderdetailEntity.total_egg)) {
+            mtv_jindan.setText(String.format(getStringResouce(R.string.order_shiyongjindan),orderdetailEntity.total_egg_money));
+            mtv_jindans.setText("-" + getStringResouce(R.string.common_yuan) + orderdetailEntity.total_egg);
+            mrlayout_jindan.setVisibility(View.VISIBLE);
+        } else {
+            mrlayout_jindan.setVisibility(View.GONE);
+        }
+
         mtv_shifu.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.total_amount);
         if (TextUtils.isEmpty(orderdetailEntity.paytype)) {
             mtv_zhifufangshi.setVisibility(View.GONE);
