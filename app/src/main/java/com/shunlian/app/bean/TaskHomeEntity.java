@@ -29,6 +29,7 @@ public class TaskHomeEntity {
     public String account_eggs;
 
     public List<SignDaysBean> sign_days;
+    public String share_pic_url;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AdUrlBean {

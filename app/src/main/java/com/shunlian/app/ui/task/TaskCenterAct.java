@@ -5,8 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +22,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.eventbus_bean.GoldEggsTaskEvent;
+import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -40,6 +41,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -159,7 +161,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @OnClick(R.id.miv_show_order)
     public void showOrder(){
-        Common.staticToast("晒单");
+        if (mPresenter != null){
+            mPresenter.share();
+        }
     }
 
     /**
@@ -178,7 +182,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         initDialogs(ruleUrl, false);
     }
 
-    @OnClick(R.id.animation_view)
+    @OnClick({R.id.animation_view,R.id.miv_golden_eggs})
     public void goldEggs(){
         if (dtime_layout != null && !dtime_layout.isClickable()){
             miv_airbubble.setPivotX(0.0f);
@@ -206,7 +210,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     public void newTaskList() {
         if (mPresenter != null) {
             mPresenter.current_task_state = TaskCenterPresenter.NEW_USER_TASK;
-            mPresenter.getTaskList();
+            mPresenter.cacheTaskList();
             stateChange(1);
         }
     }
@@ -218,7 +222,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     public void dayTaskList() {
         if (mPresenter != null) {
             mPresenter.current_task_state = TaskCenterPresenter.DAILY_TASK;
-            mPresenter.getTaskList();
+            mPresenter.cacheTaskList();
             stateChange(2);
         }
     }
@@ -251,6 +255,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     }
 
     private void setGoldEggsAnim(String filename) {
+        AssetManager assets = null;
+        InputStream is = null;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 gone(miv_golden_eggs);
@@ -262,17 +268,21 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             } else {
                 visible(miv_golden_eggs);
                 gone(animation_view);
-                AssetManager assets = getAssets();
-                InputStream is = null;
+                assets = getAssets();
                 is = assets.open("eggs/img_1.png");
-                Bitmap bitmap = BitmapFactory.decodeStream(is);
-                miv_golden_eggs.setImageBitmap(bitmap);
-                bitmap.recycle();
-                is.close();
-                assets.close();
+                miv_golden_eggs.setImageBitmap(BitmapFactory.decodeStream(is));
             }
         }catch (Exception e){
 
+        }finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (assets != null)assets.close();
         }
     }
 
@@ -417,6 +427,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void closeNewUserList() {
         gone(llayoutNewTask);
+        llayoutDayTask.setEnabled(false);
+        mtvDayTask.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
     }
 
     /**
@@ -450,6 +462,15 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void shareSuccess(ShareInfoEvent event){
+        if (event.isShareSuccess && mPresenter != null){
+            oget.setEggsCount(event.eggs_count);
+            oget.show(4000);
+            if (mPresenter.current_task_state == TaskCenterPresenter.NEW_USER_TASK)
+                mPresenter.updateItem(mPresenter.getUpdatePosition(),"1");
+        }
+    }
 
     /*
     常见问题和签到明细弹窗
