@@ -132,6 +132,20 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         return R.layout.act_task_center;
     }
 
+    @Override
+    protected void initListener() {
+        super.initListener();
+        if (dtime_layout != null)
+        dtime_layout.setOnClickListener(() -> {
+            if (dtime_layout != null) {
+                if (dtime_layout.isClickable() && mPresenter != null) {
+                    //领取金蛋
+                    mPresenter.goldegglimit();
+                }
+            }
+        });
+    }
+
     /**
      * 初始化数据
      */
@@ -334,38 +348,24 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     public void obtainDownTime(String second, String maxProgress,String task_status) {
         if ("0".equals(task_status)){
             setGoldEggsAnim("eggs_hatch.json");
+            if (mPresenter != null)mPresenter.getTaskList();
             if (dtime_layout != null){
                 dtime_layout.setSecond(1,1);
                 dtime_layout.startDownTimer();
-                dtime_layout.setOnClickListener(() -> {
-                    if (dtime_layout != null) {
-                        if (dtime_layout.isClickable() && mPresenter != null) {
-                            //领取金蛋
-                            mPresenter.goldegglimit();
-                        }
-                    }
+            }
+        }else {
+            setGoldEggsAnim("eggs_not_hatch.json");
+            if (dtime_layout != null && !isEmpty(second) && !isEmpty(maxProgress)) {
+                dtime_layout.setSecond(Long.parseLong(second), Long.parseLong(maxProgress));
+                dtime_layout.startDownTimer();
+                dtime_layout.setDownTimeComplete(() -> {
+                    setGoldEggsAnim("eggs_hatch.json");
+                    if (mPresenter != null)mPresenter.getTaskList();
+                    if(mPresenter != null &&
+                            mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
+                        mPresenter.updateItem(0,"0");
                 });
             }
-            return;
-        }
-        if (dtime_layout != null && !isEmpty(second) && !isEmpty(maxProgress)) {
-            setGoldEggsAnim("eggs_not_hatch.json");
-            dtime_layout.setSecond(Long.parseLong(second), Long.parseLong(maxProgress));
-            dtime_layout.startDownTimer();
-            dtime_layout.setDownTimeComplete(() -> {
-                setGoldEggsAnim("eggs_hatch.json");
-                if(mPresenter != null &&
-                        mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
-                    mPresenter.updateItem(0,"0");
-            });
-            dtime_layout.setOnClickListener(() -> {
-                if (dtime_layout != null) {
-                    if (dtime_layout.isClickable() && mPresenter != null) {
-                        //领取金蛋
-                        mPresenter.goldegglimit();
-                    }
-                }
-            });
         }
     }
 

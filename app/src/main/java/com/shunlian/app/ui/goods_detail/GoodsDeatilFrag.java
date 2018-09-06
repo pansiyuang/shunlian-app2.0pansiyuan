@@ -49,7 +49,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private int screenWidth;
     private GoodsDetailAdapter goodsDetailAdapter;
     public int currentFirstItem;//当前第一个条目
-    private String goods_id;
+    //private String goods_id;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -164,7 +164,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
      */
     public void setGoodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
         gone(nei_empty);
-        goods_id = goodsDeatilEntity.id;
+        //goods_id = goodsDeatilEntity.id;
         manager = new LinearLayoutManager(baseActivity);
         recy_view_root.setLayoutManager(manager);
         recy_view_root.setNestedScrollingEnabled(false);
