@@ -794,6 +794,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.task.EggDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.core.SearchCouponAct"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -895,6 +899,9 @@
         <activity
             android:name=".ui.LuckWheelPanActivity"
             android:exported="false" />
+        <activity android:name=".ui.task.TaskCenterAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

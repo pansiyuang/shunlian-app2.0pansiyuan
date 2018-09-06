@@ -21,6 +21,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
+import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
@@ -271,10 +272,21 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     SendAuth.Resp sendAuthResp = (SendAuth.Resp) baseResp;// 用于分享时不要有这个，不能强转
                     String code = sendAuthResp.code;
                     wxEntryPresenter.wxLogin(code);
-                }else {
-                    if (!isEmpty(Constant.SHARE_TYPE)){
-                        wxEntryPresenter.notifyShare(Constant.SHARE_TYPE,Constant.SHARE_ID);
-                    }else {
+                } else {
+                    if (!isEmpty(Constant.SHARE_TYPE)) {
+                        if ("goods".equals(Constant.SHARE_TYPE)) {
+                            //用于分享领金蛋
+                            wxEntryPresenter.goodsShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
+                        } else if ("article".equals(Constant.SHARE_TYPE)) {
+                            //用于分享领金蛋
+                            wxEntryPresenter.goodsShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
+                            //用于分享统计
+                            wxEntryPresenter.notifyShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
+                        } else {
+                            //用于分享统计
+                            wxEntryPresenter.notifyShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
+                        }
+                    } else {
                         mYFinish();
                     }
                     Common.staticToast("分享成功");
@@ -375,6 +387,22 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     @Override
     public void notifyCallback(CommonEntity commonEntity) {
+        mYFinish();
+    }
+
+    @Override
+    public void golde_eggs(String format) {
+        if (!isEmpty(format) && !"0".equals(format)) {
+            ShareInfoEvent event = new ShareInfoEvent();
+            event.isShareSuccess = true;
+            event.eggs_count = format;
+            EventBus.getDefault().post(event);
+        }
+        mYFinish();
+    }
+
+    @Override
+    public void cloasePage() {
         mYFinish();
     }
 

@@ -595,19 +595,20 @@ public interface ApiService {
     Call<BaseEntity<StoreLicenseEntity>> storeLicense(@Body RequestBody body);
 
 
+
     /**
      * 上传图片 单张图片+多个参数
      */
     @Multipart
     @POST("uploads/chatupload")
-    Call<BaseEntity<UploadPicEntity>> chatupload(@Part MultipartBody.Part[] parts, @QueryMap Map<String, String> maps);
+    Call<BaseEntity<UploadPicEntity>> chatupload(@Part MultipartBody.Part[] parts,@QueryMap Map<String, String> maps);
 
     /**
      * 上传图片 单张图片+多个参数
      */
     @Multipart
     @POST("uploads/uploadotherimage")
-    Call<BaseEntity<UploadPicEntity>> uploadPic(@Part MultipartBody.Part[] parts, @QueryMap Map<String, String> maps);
+    Call<BaseEntity<UploadPicEntity>> uploadPic(@Part MultipartBody.Part[] parts,@QueryMap Map<String, String> maps);
 
 
     /**
@@ -1083,6 +1084,24 @@ public interface ApiService {
      */
     @GET("personalcenter/home")
     Call<BaseEntity<PersonalcenterEntity>> personalcenter(@QueryMap Map<String, String> map);
+
+    /**
+     * 签到领金蛋
+     *
+     * @param map
+     * @return
+     */
+    @GET("task/signForGold")
+    Call<BaseEntity<SignEggEntity>> signEgg(@QueryMap Map<String, String> map);
+
+    /**
+     * 个人金蛋明细
+     *
+     * @param map
+     * @return
+     */
+    @GET("task/goldEggDetail")
+    Call<BaseEntity<EggDetailEntity>> eggDetail(@QueryMap Map<String, String> map);
 
     /**
      * 足迹列表足迹批量删除
@@ -1605,7 +1624,7 @@ public interface ApiService {
     @POST("virtual/orderDetail")
     Call<BaseEntity<PhoneOrderDetailEntity>> virtualOrderDetail(@Body RequestBody body);
 
-    /**
+     /**
      * 支付成功查看订单详情
      *
      * @param body
@@ -2244,6 +2263,22 @@ public interface ApiService {
     Call<BaseEntity<AdEntity>> splashScreen(@QueryMap Map<String, String> map);
 
     /**
+     * 验证新人
+     *
+     * @return
+     */
+    @GET("tasknewperson/isShowNewPersonPrize")
+    Call<BaseEntity<CommonEntity>> isShowNewPersonPrize(@QueryMap Map<String, String> map);
+
+    /**
+     * 首次注册抽奖
+     *
+     * @return
+     */
+    @GET("tasknewperson/getPrizeByRegister")
+    Call<BaseEntity<CommonEntity>> getPrizeByRegister(@QueryMap Map<String, String> map);
+
+    /**
      * 弹窗广告
      *
      * @return
@@ -2377,7 +2412,6 @@ public interface ApiService {
 
     /**
      * 扫二维码解析url
-     *
      * @return
      */
     @POST("share/parseUrlForApp")
@@ -2385,7 +2419,6 @@ public interface ApiService {
 
     /**
      * 分享信息
-     *
      * @param map
      * @return
      */
@@ -2394,7 +2427,6 @@ public interface ApiService {
 
     /**
      * 获取话费充值面额列表
-     *
      * @param body
      * @return
      */
@@ -2403,7 +2435,6 @@ public interface ApiService {
 
     /**
      * 手机充值
-     *
      * @param body
      * @return
      */
@@ -2430,7 +2461,6 @@ public interface ApiService {
 
     /**
      * 充值手机号列表
-     *
      * @param body
      * @return
      */
@@ -2439,7 +2469,6 @@ public interface ApiService {
 
     /**
      * 删除手机号
-     *
      * @param body
      * @return
      */
@@ -2448,7 +2477,6 @@ public interface ApiService {
 
     /**
      * 平台优惠券对应的可购买商品
-     *
      * @param map
      * @return
      */
@@ -2457,7 +2485,6 @@ public interface ApiService {
 
     /**
      * 店铺，或者指定部分商品
-     *
      * @param map
      * @return
      */
@@ -2466,7 +2493,6 @@ public interface ApiService {
 
     /**
      * 绑定导购员id
-     *
      * @param body
      * @return
      */
@@ -2475,7 +2501,6 @@ public interface ApiService {
 
     /**
      * 模拟微信登录
-     *
      * @param map
      * @return
      */
@@ -2484,7 +2509,6 @@ public interface ApiService {
 
     /**
      * 导购员详情
-     *
      * @param map
      * @return
      */
@@ -2493,7 +2517,6 @@ public interface ApiService {
 
     /**
      * 我还想要
-     *
      * @param map
      * @return
      */
@@ -2502,7 +2525,6 @@ public interface ApiService {
 
     /**
      * 验证短信验证码
-     *
      * @param body
      * @return
      */
@@ -2554,4 +2576,52 @@ public interface ApiService {
      */
     @GET("turntable/shareImg")
     Call<BaseEntity<CommonEntity>> turntableShareImg(@QueryMap Map<String, String> map);
+
+    /**
+     * 分享成功回调
+     * @param body
+     * @return
+     */
+    @POST("share/addOnOk")
+    Call<BaseEntity<CommonEntity>> shareSuccessCall(@Body RequestBody body);
+
+    /**
+     * 浏览商品获得金蛋
+     * @param body
+     * @return
+     */
+    @POST("goods/getGold")
+    Call<BaseEntity<CommonEntity>> getGold(@Body RequestBody body);
+
+    /**
+     * 任务首页
+     * @param map
+     * @return
+     */
+    @GET("task/home")
+    Call<BaseEntity<TaskHomeEntity>> taskHome(@QueryMap Map<String,String> map);
+
+    /**
+     *任务列表
+     * @param map
+     * @return
+     */
+    @GET("task/taskList")
+    Call<BaseEntity<TaskListEntity>> taskList(@QueryMap Map<String,String> map);
+
+    /**
+     * 限时领金蛋
+     * @param map
+     * @return
+     */
+    @GET("goldegglimit/getlimitgoldegg")
+    Call<BaseEntity<TaskHomeEntity>> goldegglimit(@QueryMap Map<String,String> map);
+
+    /**
+     * 邀请码领金蛋
+     * @param map
+     * @return
+     */
+    @GET("tasknewperson/getGoldByCode")
+    Call<BaseEntity<TaskHomeEntity>> getGoldByCode(@QueryMap Map<String,String> map);
 }

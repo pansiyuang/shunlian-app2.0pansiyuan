@@ -85,4 +85,9 @@ public interface IGoodsDetailView extends IView {
      * 库存不足
      */
     void stockDeficiency(String stock);
+
+    /**
+     * 停留获得金蛋
+     */
+    default void stayObtainEggs(int time){}
 }

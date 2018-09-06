@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_bottoms"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_ad"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:scaleType="fitXY"
+        android:visibility="gone"/>
+
+    <com.shunlian.app.widget.NewTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:text="@string/mission_qiandaochenggong"
+        android:textColor="@color/pink_color"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <com.shunlian.app.widget.NewTextView
+        android:id="@+id/ntv_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/share_text"
+        android:textSize="16sp" />
+
+    <com.shunlian.app.widget.NewTextView
+        android:id="@+id/ntv_sure"
+        android:layout_width="124dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="14dp"
+        android:gravity="center"
+        android:text="@string/SelectRecommendAct_sure"
+        android:background="@drawable/rounded_corner_pink_48px"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</com.shunlian.app.widget.MyLinearLayout>

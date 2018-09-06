@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.bean.VideoBannerData;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -24,6 +24,8 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
+import com.shunlian.app.utils.NetworkUtils;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
 import com.shunlian.app.widget.MyImageView;
@@ -129,6 +131,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mRichText = detail.text;
         }
         videoBannerData = new VideoBannerData();
+        int netWorkStatus = NetworkUtils.getNetWorkStatus(context);
+        if (netWorkStatus != NetworkUtils.NETWORK_WIFI &&
+                netWorkStatus != NetworkUtils.NETWORK_CLASS_UNKNOWN){
+            videoBannerData.isShowNetTip = true;
+        }
     }
 
     @Override
@@ -566,7 +573,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private void handlerTitle(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TitleHolder) {
             final TitleHolder mHolder = (TitleHolder) holder;
-
+            if (SharedPrefUtil.getSharedUserBoolean("hide_goods",false)){
+                mHolder.miv_hint.setVisibility(View.GONE);
+            }else {
+                GlideUtils.getInstance().loadLocal(context,mHolder.miv_hint,R.drawable.goods_hint);
+                mHolder.miv_hint.setVisibility(View.VISIBLE);
+            }
             int pref_length = 0;
             String title = mGoodsEntity.title;
             String is_preferential = mGoodsEntity.is_preferential;
@@ -917,7 +929,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     entity.index = pos;
                     LookBigImgAct.startAct(context, entity);
                 });*/
-//                String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
+                //String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
                 mHolder.vbw.setBanner(mGoodsEntity.video,
                         mGoodsEntity.pics,
                         isEmpty(type)?0:Integer.parseInt(type),
@@ -1049,6 +1061,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
+
+        @BindView(R.id.miv_hint)
+        MyImageView miv_hint;
 
         @BindView(R.id.mtv_price)
         MyTextView mtv_price;
@@ -1198,6 +1213,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @OnClick({R.id.miv_share, R.id.mtv_share})
         public void share() {
+            miv_hint.setVisibility(View.GONE);
+            SharedPrefUtil.saveSharedUserBoolean("hide_goods",true);
             ((GoodsDetailAct) context).moreAnim();
         }
     }

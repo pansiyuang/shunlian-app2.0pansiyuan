@@ -56,6 +56,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.service.InterentTools;
@@ -93,6 +94,7 @@ import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.ui.store.StoreAct;
+import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -127,15 +129,22 @@ public class Common {
     }
 
     /**
-     * 判断mainactivity是否处于栈底
      *
-     * @return true在栈顶false不在栈底
+     *
+     * @return true栈顶栈底都是当前act，false不唯一
      */
-    public static boolean isBottomActivity(String className) {
-        ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        String name = manager.getRunningTasks(1).get(0).baseActivity.getClassName();
-        String mName = name.substring(name.lastIndexOf(".") + 1);
-        return mName.equals(className);
+
+    public static boolean isUniqueAct(String className) {
+        try {
+            ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+            String baseName = manager.getRunningTasks(1).get(0).baseActivity.getClassName();
+            String topName = manager.getRunningTasks(1).get(0).topActivity.getClassName();
+            String mBaseName = baseName.substring(baseName.lastIndexOf(".") + 1);
+            String mTopName = topName.substring(topName.lastIndexOf(".") + 1);
+            return (mTopName.equals(className)&&mBaseName.equals(className));
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     public static String transClassName(String toPage) {
@@ -157,6 +166,7 @@ public class Common {
             case "cart":
             case "home":
                 return "MainActivity";
+            case "myvoucherlist":
             case "voucherlist":
                 return "CouponListAct";
             case "login":
@@ -214,6 +224,10 @@ public class Common {
                 return "WXEntryActivity";
             case "submitlogisticsinfo":
                 return "SubmitLogisticsInfoAct";
+            case "voucher":
+                return "CouponMsgAct";
+            case "taskSystems":
+                return "TaskCenterAct";
             default:
                 return "";
         }
@@ -227,6 +241,9 @@ public class Common {
             return;
         }
         switch (type) {
+            case "taskSystems":
+                TaskCenterAct.startAct(context);
+                break;
             case "HTMLShare":
                 if (!TextUtils.isEmpty(params[0])){
                     copyText(context,params[1],params[3],false);
@@ -279,10 +296,15 @@ public class Common {
                     GetCouponAct.startAct(context);
                 }
                 break;
-//            case "voucher":
-//                //todo
+            case "voucher":
+                if (TextUtils.isEmpty(token)) {
+                    Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
+                } else {
+                    CouponMsgAct.startAct(context,params[0]);
+                }
 //                Common.staticToast("优惠券");
-//                break;
+                break;
 //            case "gift":
 //                //todo
 //                Common.staticToast("买赠");
@@ -341,6 +363,7 @@ public class Common {
 //                //todo
 //                Common.staticToast("我的优惠券");
 //                break;
+            case "myvoucherlist":
             case "voucherlist":
                 if (TextUtils.isEmpty(token)) {
                     Common.goGoGo(context,"login");
@@ -635,6 +658,8 @@ public class Common {
     }
 
     public static void staticToast(String content) {
+        if (TextUtils.isEmpty(content))
+            return;
         if (toast == null) {
             View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
             mtv_toast = (MyTextView) v.findViewById(R.id.mtv_toast);
@@ -1108,6 +1133,8 @@ public class Common {
     }
 
     public static void initToast(Context context, String content, String desc, int imgSource) {
+        if (TextUtils.isEmpty(content)&&TextUtils.isEmpty(desc))
+            return;
         if (toasts == null) {
             View v = LayoutInflater.from(context).inflate(R.layout.toasts, null);
             mtv_toasts =  v.findViewById(R.id.mtv_toasts);

@@ -270,4 +270,24 @@
         <item name="android:layout_marginBottom">1dp</item>
     </style>
 
+
+    <style name="sign_gold_eggs">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">#767676</item>
+        <item name="android:textSize">9sp</item>
+    </style>
+
+    <style name="sign_gold_eggs_count">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#767676</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:drawableRight">@mipmap/icon_renwu_dan01</item>
+        <item name="android:drawablePadding">1dp</item>
+        <item name="android:text">+10</item>
+    </style>
+
 </resources>

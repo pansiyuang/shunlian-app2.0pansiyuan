@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.fragment;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +35,7 @@ import com.shunlian.app.ui.sale_data.SaleDataAct;
 import com.shunlian.app.ui.sale_rank.SaleRankAct;
 import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.ui.sign.SignInAct;
+import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
@@ -50,6 +50,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedRingHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
@@ -227,7 +228,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private boolean isShowData = true;
     private PersonalcenterEntity personalcenterEntity;
     private PromptDialog promptDialog;
-//    private MainActivity mainActivity;
+    //    private MainActivity mainActivity;
     private String one, two, three, four;
     private int flag = 0;
     private String invite_code;
@@ -255,6 +256,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         isShowData = !isShowData;
         changeState();
         SharedPrefUtil.saveCacheSharedPrfBoolean(KEY, isShowData);
+        TaskCenterAct.startAct(baseActivity);
     }
 
     @Override
@@ -313,7 +315,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private void changeState() {
         miv_isShow_data.setImageResource(!isShowData ? R.mipmap.img_plus_guanbi_n : R.mipmap.img_guanbi_h);
         if (personalcenterEntity != null) {
-            mtv_yue.setText(!isShowData ? ASTERISK :formatNumber(personalcenterEntity.balance));
+            mtv_yue.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.balance));
             mtv_youhuiquan.setText(!isShowData ? ASTERISK : personalcenterEntity.coupon_num);
             mtv_donglizhishu.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.all_sl_income));
             mtv_xiaoshou.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.team_sales));
@@ -363,9 +365,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             return Common.changeTextSize(
                     "数据异常", "数据", 11);
         }*/
-        if (isEmpty(number))return new SpannableStringBuilder("");
+        if (isEmpty(number)) return new SpannableStringBuilder("");
         char[] chars = number.toCharArray();
-        return Common.changeTextSize(number, String.valueOf(chars[chars.length-1]), 11);
+        return Common.changeTextSize(number, String.valueOf(chars[chars.length - 1]), 11);
     }
 
     @Override
@@ -504,26 +506,26 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity = personalcenterEntity;
-        if (!isEmpty(personalcenterEntity.game_door)){
-            int picWidth = Common.getScreenWidth(baseActivity) - TransformUtil.dip2px(baseActivity,20);
-            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(picWidth,picWidth*100/360);
-            layoutParams.setMargins(0,TransformUtil.dip2px(baseActivity,10),0,0);
+        if (!isEmpty(personalcenterEntity.game_door)) {
+            int picWidth = Common.getScreenWidth(baseActivity) - TransformUtil.dip2px(baseActivity, 20);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(picWidth, picWidth * 100 / 360);
+            layoutParams.setMargins(0, TransformUtil.dip2px(baseActivity, 10), 0, 0);
             mllayout_entry.setLayoutParams(layoutParams);
-            if (personalcenterEntity.game_door.size()==2){
-                GlideUtils.getInstance().loadImageChang(baseActivity,miv_entryL,personalcenterEntity.game_door.get(0).thumb);
-                GlideUtils.getInstance().loadImageChang(baseActivity,miv_entryR,personalcenterEntity.game_door.get(1).thumb);
+            if (personalcenterEntity.game_door.size() == 2) {
+                GlideUtils.getInstance().loadImageChang(baseActivity, miv_entryL, personalcenterEntity.game_door.get(0).thumb);
+                GlideUtils.getInstance().loadImageChang(baseActivity, miv_entryR, personalcenterEntity.game_door.get(1).thumb);
                 miv_entryR.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 miv_entryR.setVisibility(View.GONE);
-                GlideUtils.getInstance().loadImageChang(baseActivity,miv_entryL,personalcenterEntity.game_door.get(0).thumb);
+                GlideUtils.getInstance().loadImageChang(baseActivity, miv_entryL, personalcenterEntity.game_door.get(0).thumb);
             }
-           mllayout_entry.setVisibility(View.VISIBLE);
-        }else {
+            mllayout_entry.setVisibility(View.VISIBLE);
+        } else {
             mllayout_entry.setVisibility(View.GONE);
         }
-        if (!isEmpty(personalcenterEntity.bcm_role)&&"1".equals(personalcenterEntity.bcm_role)){
+        if (!isEmpty(personalcenterEntity.bcm_role) && "1".equals(personalcenterEntity.bcm_role)) {
             miv_jingli.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             miv_jingli.setVisibility(View.GONE);
         }
         if (isEmpty(personalcenterEntity.note)) {
@@ -749,7 +751,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             helpArticleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    if (position<0)
+                    if (position < 0)
                         return;
                     HelpcenterIndexEntity.ArticleCategory questionCategory = personalcenterEntity.article.get(position);
                     HelpClassAct.startAct(getContext(), questionCategory.id);
@@ -760,6 +762,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         }
 
     }
+
+
+
 
     private boolean equals(String avatar, String avatar1) {
         if (!isEmpty(avatar) && avatar.equals(avatar1)) {
@@ -805,12 +810,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 MyOrderAct.startAct(baseContext, 1);
                 break;
             case R.id.miv_entryL:
-                Common.goGoGo(baseActivity,personalcenterEntity.game_door.get(0).url.type,personalcenterEntity.game_door.get(0).url.item_id);
+                Common.goGoGo(baseActivity, personalcenterEntity.game_door.get(0).url.type, personalcenterEntity.game_door.get(0).url.item_id);
                 break;
             case R.id.miv_entryR:
-                Common.goGoGo(baseActivity,personalcenterEntity.game_door.get(1).url.type,personalcenterEntity.game_door.get(1).url.item_id);
+                Common.goGoGo(baseActivity, personalcenterEntity.game_door.get(1).url.type, personalcenterEntity.game_door.get(1).url.item_id);
                 break;
             case R.id.mtv_chakanpaihang:
+//                initDialogs("https://wx.shunliandongli.com/agreement/1",true);
                 SaleRankAct.startAct(baseContext);
                 break;
             case R.id.mllayout_guanfangkefu:
@@ -850,13 +856,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 QrCodeAct.startAct(baseContext, managerUrl);
                 break;
             case R.id.mrlayout_zidingyi:
-                if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))){
+                if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
                     if (Common.isPlus()) {
                         MyLittleStoreActivity.startAct(getActivity());
                     } else {
                         initHintDialog();
                     }
-                }else {
+                } else {
                     MyLittleStoreActivity.startAct(getActivity());
                 }
                 break;
@@ -888,7 +894,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 //会员订单
                 break;
             case R.id.mtv_chakan:
-//                mainActivity.myPlusClick();
+//                EggDetailAct.startAct(getContext());
+//                mainActivity.myPlusClick();//old
                 if (Common.isPlus()) {
                     H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD), H5Act.MODE_SONIC);
                 } else {
@@ -897,7 +904,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 //点击查看特权
                 break;
             case R.id.mtv_yaoqingma:
-                Common.copyText(getActivity(),invite_code);
+                Common.copyText(getActivity(), invite_code);
                 //点击查看特权
                 break;
         }

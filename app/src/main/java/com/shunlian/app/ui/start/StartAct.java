@@ -291,6 +291,16 @@ public class StartAct extends MBaseActivity implements IMain {
     }
 
     @Override
+    public void isShowNew(CommonEntity data) {
+
+    }
+
+    @Override
+    public void getPrize(CommonEntity data) {
+
+    }
+
+    @Override
     public void setDiscoveryUnreadCount(CommonEntity data) {
 
     }

@@ -300,6 +300,16 @@ public class UpdateDialog implements IMain {
     }
 
     @Override
+    public void isShowNew(CommonEntity data) {
+
+    }
+
+    @Override
+    public void getPrize(CommonEntity data) {
+
+    }
+
+    @Override
     public void setDiscoveryUnreadCount(CommonEntity data) {
 
     }
