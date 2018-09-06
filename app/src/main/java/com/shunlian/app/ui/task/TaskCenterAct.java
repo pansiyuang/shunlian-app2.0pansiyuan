@@ -467,7 +467,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         if (event.isShareSuccess && mPresenter != null){
             oget.setEggsCount(event.eggs_count);
             oget.show(4000);
-            if (mPresenter.current_task_state == TaskCenterPresenter.NEW_USER_TASK)
+            if (mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
                 mPresenter.updateItem(mPresenter.getUpdatePosition(),"1");
         }
     }

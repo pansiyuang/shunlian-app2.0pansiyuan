@@ -322,7 +322,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         ShareInfoParam shareInfoParam = new ShareInfoParam();
         shareInfoParam.photo = share_pic_url;
         WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
-        Constant.SHARE_TYPE = "";
+        Constant.SHARE_TYPE = "income";
     }
 
     /**
@@ -341,6 +341,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     getGoldByCode();
                     break;
                 case task_new_user_video://看视频得金蛋
+                    if (taskLists.get(position)!= null && !isEmpty(taskLists.get(position).video_url)){
+                        Common.goGoGo(context,"url",taskLists.get(position).video_url);
+                    }
                     break;
             }
         }catch (Exception e){

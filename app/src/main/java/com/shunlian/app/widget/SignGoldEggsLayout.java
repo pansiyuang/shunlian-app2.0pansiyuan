@@ -139,7 +139,7 @@ public class SignGoldEggsLayout extends LinearLayout {
                 TaskHomeEntity.SignDaysBean bean = signDaysBeans.get(i);
                 mtv_date.get(i).setText(bean.date);
                 MyTextView textView = mtv_eggs_count.get(i);
-                if (!isEmpty(bean.gold_num)){
+                if (i > 2 && !isEmpty(bean.gold_num)){
                     visible(textView);
                     textView.setText(bean.gold_num);
                 }else {

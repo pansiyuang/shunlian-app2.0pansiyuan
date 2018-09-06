@@ -24,6 +24,7 @@ public class TaskListEntity {
         public String task_status;//0 未完成；1已完成
         public String icon_url;
         public String share_pic_url;
+        public String video_url;
         public Url url;
     }
 
