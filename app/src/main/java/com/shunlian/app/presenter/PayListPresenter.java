@@ -58,6 +58,11 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
             @Override
             public void onSuccess(BaseEntity<PayListEntity> entity) {
                 super.onSuccess(entity);
+                PayListEntity.PayTypes payTypes=new PayListEntity.PayTypes();
+                payTypes.code="newPay";
+                payTypes.pic="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536227491528&di=2a34e08d0226f7d80b53653d1d18d204&imgtype=0&src=http%3A%2F%2Fupload.chinamac.com%2F2014%2F1118%2F20141118084932103.jpg";
+                payTypes.name="银联测试";
+                entity.data.pay_method.add(payTypes);
                 iView.payList(entity.data.pay_method);
             }
         });
