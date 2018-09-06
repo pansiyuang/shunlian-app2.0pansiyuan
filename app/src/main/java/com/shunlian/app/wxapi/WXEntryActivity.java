@@ -171,6 +171,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
                 Common.staticToasts(getBaseContext(),
                         "分享失败", R.mipmap.icon_common_tanhao);
+                mYFinish();
             }
         });
     }

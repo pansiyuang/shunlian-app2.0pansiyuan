@@ -159,6 +159,7 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
                 if (listener != null && "0".equals(itemTask.task_status))
                     listener.onItemClick(v, getAdapterPosition());
             });
+            itemView.setOnClickListener(null);
         }
     }
 

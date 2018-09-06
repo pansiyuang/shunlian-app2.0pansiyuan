@@ -24,6 +24,8 @@ public class OrderdetailEntity {
     public String shipping_fee;
     public String promotion;
     public String voucher_amount;
+    public String total_egg;
+    public String total_egg_money;
     public String paytype;
     public String create_time;
     public String pay_time;

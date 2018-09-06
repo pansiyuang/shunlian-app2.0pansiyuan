@@ -80,9 +80,9 @@ public class StartAct extends MBaseActivity implements IMain {
                 Bitmap bitmap= BitmapFactory.decodeStream(is);
                 MyImageView miv_anim= (MyImageView) findViewById(R.id.miv_anim);
                 miv_anim.setImageBitmap(bitmap);
-                bitmap.recycle();
+//                bitmap.recycle();//回收会导致异常
                 is.close();
-                assets.close();
+//                assets.close();//回收会导致异常
             }
         }catch(Exception e){
             Log.w("splash","splash----crush");

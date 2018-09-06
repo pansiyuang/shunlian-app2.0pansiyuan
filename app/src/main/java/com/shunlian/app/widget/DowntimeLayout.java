@@ -11,9 +11,11 @@ import android.graphics.RectF;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.TransformUtil;
 
 /**
@@ -45,6 +47,7 @@ public class DowntimeLayout extends View {
     private float mProgresRatio;
     public static final String RECEIVE = "领取金蛋";
     private DownTimeCompleteListener mListener;
+    private OnClickListener mLi;
 
     public DowntimeLayout(Context context) {
         super(context);
@@ -163,10 +166,12 @@ public class DowntimeLayout extends View {
             @Override
             public void onFinish() {
                 //LogUtil.zhLogW("=onFinish====text===="+text);
-                if ("00:00:01".equals(text)){
+                /*if ("00:00:01".equals(text)){
                     text = RECEIVE;
                     invalidate();
-                }
+                }*/
+                text = RECEIVE;
+                invalidate();
                 if (mListener != null){
                     mListener.onComplete();
                 }
@@ -179,10 +184,12 @@ public class DowntimeLayout extends View {
      */
     public void startDownTimer() {
         if (mSeconds <= 1) {
-            if ("00:00:01".equals(text)){
+            /*if ("00:00:01".equals(text)){
                 text = RECEIVE;
                 invalidate();
-            }
+            }*/
+            text = RECEIVE;
+            invalidate();
         } else {
             createCountDownTimer();// 创建倒计时
             mCountDownTimer.start();
@@ -241,8 +248,32 @@ public class DowntimeLayout extends View {
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                if (!MyOnClickListener.isFastClick() && mLi != null){
+                    mLi.click();
+                }
+                break;
+        }
+        return true;
+    }
+
     public interface DownTimeCompleteListener{
        void onComplete();
+    }
+
+    public void setOnClickListener(OnClickListener listener){
+
+        mLi = listener;
+    }
+    public interface OnClickListener{
+        void click();
     }
 
     public void detachView() {
