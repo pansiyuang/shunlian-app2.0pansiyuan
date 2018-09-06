@@ -24,6 +24,14 @@
                 android:scaleType="centerCrop"
                 android:src="@mipmap/img_choujiang_dise" />
 
+            <TextSwitcher
+                android:id="@+id/text_switcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp"
+                android:background="@mipmap/img_dazhaunpan_dongxiao" />
+
             <com.shunlian.app.widget.luckWheel.WheelSurfView
                 android:id="@+id/wheelPan"
                 android:layout_width="300dp"

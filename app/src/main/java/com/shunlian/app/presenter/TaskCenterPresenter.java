@@ -13,6 +13,7 @@ import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.bean.TaskListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ITaskCenterView;
@@ -219,6 +220,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     goldegglimit();
                     break;
                 case task_daily_lottery://抽奖
+                    LuckWheelPanActivity.startAct(context);
                     break;
                 case task_daily_goods_view://逛商场捡金蛋（去首页）
                     Common.goGoGo(context, "home");

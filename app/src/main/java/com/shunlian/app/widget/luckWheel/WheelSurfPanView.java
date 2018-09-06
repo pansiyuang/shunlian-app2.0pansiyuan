@@ -16,12 +16,16 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.text.Layout;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -354,10 +358,10 @@ public class WheelSurfPanView extends View {
 
         //将测得的宽度保存起来
         mWidth = width;
-
+        LogUtil.httpLogW("mWidth:" + mWidth);
         mCenter = mWidth / 2;
         //绘制扇形的半径 减掉50是为了防止边界溢出  具体效果你自己注释掉-50自己测试
-        mRadius = mWidth / 2 - 50;
+        mRadius = mWidth / 2 - mWidth / 13;
 
         //MUST CALL THIS
         setMeasuredDimension(width, width);
@@ -389,7 +393,10 @@ public class WheelSurfPanView extends View {
                     //设置绘制时画笔的颜色
                     mPaint.setColor(mColors[i]);
                     //画一个扇形
-                    RectF rect = new RectF(mCenter - mRadius - 16, mCenter - mRadius - 16, mCenter + mRadius + 16, mCenter + mRadius + 16);
+                    RectF rect = new RectF(mCenter - mRadius - TransformUtil.dip2px(mContext, 6.5f),
+                            mCenter - mRadius - TransformUtil.dip2px(mContext, 6.5f),
+                            mCenter + mRadius + TransformUtil.dip2px(mContext, 6.5f), mCenter + mRadius +
+                            TransformUtil.dip2px(mContext, 6.5f));
                     canvas.drawArc(rect, startAngle, mAngle, true, mPaint);
                     mTextPaint.setColor(mTextColor);
                     drawText(startAngle, mRadius, mDeses[i], canvas);
@@ -409,8 +416,8 @@ public class WheelSurfPanView extends View {
 
     private void drawCircle(float startAngle, int width, int height, Canvas canvas) {
         float angle = (float) Math.toRadians(startAngle);
-        float x = (float) (width / 2 + (mRadius + 4 + mRadius / 12) * Math.cos(angle));
-        float y = (float) (height / 2 + ((mRadius + 4) + mRadius / 12) * Math.sin(angle));
+        float x = (float) (width / 2 + (mRadius + 4 + mRadius / 13) * Math.cos(angle));
+        float y = (float) (height / 2 + (mRadius + 4 + mRadius / 13) * Math.sin(angle));
         canvas.drawCircle(x, y, mCircleRadius, mCirclePaint);
     }
 
@@ -426,7 +433,7 @@ public class WheelSurfPanView extends View {
         //圆弧的垂直偏移
         float hOffset = (float) (Math.sin(mAngle / 2 / 180 * Math.PI) * radius) - textWidth / 2;
         //绘制文字
-        canvas.drawTextOnPath(string, circlePath, hOffset, mRadius / 2 / 6 + (mRadius / 3), mTextPaint);
+        canvas.drawTextOnPath(string, circlePath, hOffset, (mRadius / 3) + mWidth / 13, mTextPaint);
     }
 
     private void drawBitmap(float startAngle, int i, int width, int height, Canvas canvas) {
@@ -440,8 +447,8 @@ public class WheelSurfPanView extends View {
         float angle = (float) Math.toRadians(startAngle + mAngle / 2);
 
         //确定图片在圆弧中 中心点的位置
-        float x = (float) (width / 2 + ((mRadius - 16 - (imgWidth / 2)) + mRadius / 12) * Math.cos(angle));
-        float y = (float) (height / 2 + ((mRadius - 16 - (imgWidth / 2)) + mRadius / 12) * Math.sin(angle));
+        float x = (float) (width / 2 + ((mRadius - TransformUtil.dip2px(mContext, 16) - (imgWidth / 2)) + mRadius / 12) * Math.cos(angle));
+        float y = (float) (height / 2 + ((mRadius - TransformUtil.dip2px(mContext, 16) - (imgWidth / 2)) + mRadius / 12) * Math.sin(angle));
 
         // 确定绘制图片的位置
         RectF rect1 = new RectF(x - w / 2, y - h / 2, x + w / 2, y + h / 2);

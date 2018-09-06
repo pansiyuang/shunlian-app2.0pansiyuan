@@ -2,9 +2,6 @@ package com.shunlian.app.widget;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -13,11 +10,13 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LuckDrawEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.receive_adress.AddressListActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.luckWheel.RotateListener;
+import com.shunlian.app.wxapi.WXEntryActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +51,7 @@ public class TurnTableDialog extends Dialog {
 
     private Context mContext;
     private LuckDrawEntity myLuckDraw;
+    private OnShareCallBack callBack;
 
     public TurnTableDialog(Context context, LuckDrawEntity luckDrawEntity) {
         this(context, R.style.popAd);
@@ -116,7 +116,9 @@ public class TurnTableDialog extends Dialog {
             dismiss();
         });
         miv_share.setOnClickListener(v -> {
-
+            if (callBack != null) {
+                callBack.onShare();
+            }
         });
     }
 
@@ -181,5 +183,14 @@ public class TurnTableDialog extends Dialog {
 
     public void setPopupData(int showType, String content, String thumb) {
         setShowDialog(showType, content, thumb);
+    }
+
+    public void setCallBack(OnShareCallBack shareCallBack) {
+        callBack = shareCallBack;
+    }
+
+    public interface OnShareCallBack {
+
+        void onShare();
     }
 }
