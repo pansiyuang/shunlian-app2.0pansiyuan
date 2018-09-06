@@ -293,8 +293,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         }
 
         if (!TextUtils.isEmpty(orderdetailEntity.total_egg)) {
-            mtv_jindan.setText(String.format(getStringResouce(R.string.order_shiyongjindan),orderdetailEntity.total_egg_money));
-            mtv_jindans.setText("-" + getStringResouce(R.string.common_yuan) + orderdetailEntity.total_egg);
+            mtv_jindan.setText(String.format(getStringResouce(R.string.order_shiyongjindan),orderdetailEntity.total_egg));
+//            mtv_jindans.setText("-" + getStringResouce(R.string.common_yuan) + orderdetailEntity.total_egg_money);
+            mtv_jindans.setText(orderdetailEntity.total_egg_money);
             mrlayout_jindan.setVisibility(View.VISIBLE);
         } else {
             mrlayout_jindan.setVisibility(View.GONE);

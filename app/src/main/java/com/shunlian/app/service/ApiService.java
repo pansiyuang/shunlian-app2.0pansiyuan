@@ -2532,6 +2532,52 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> checkMobileCode(@Body RequestBody body);
 
     /**
+     * 大转盘界面
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/turnTable")
+    Call<BaseEntity<TurnTableEntity>> getTurnTable(@QueryMap Map<String, String> map);
+
+    /**
+     * 大转盘抽奖
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/luckDraw")
+    Call<BaseEntity<LuckDrawEntity>> luckDraw(@QueryMap Map<String, String> map);
+
+    /**
+     * 进入大转盘进的弹窗
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/popup")
+    Call<BaseEntity<TurnTablePopEntity>> turntablePopup(@QueryMap Map<String, String> map);
+
+    /**
+     * 添加奖品收货地址
+     *
+     * @param body
+     * @return
+     */
+    @POST("turntable/addAddress")
+    Call<BaseEntity<EmptyEntity>> turntableAddAddress(@Body RequestBody body);
+
+
+    /**
+     * 获取分享图
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/shareImg")
+    Call<BaseEntity<CommonEntity>> turntableShareImg(@QueryMap Map<String, String> map);
+
+    /**
      * 分享成功回调
      * @param body
      * @return

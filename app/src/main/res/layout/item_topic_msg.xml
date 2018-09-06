@@ -22,7 +22,7 @@
             android:layout_height="5dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="7dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:src="@mipmap/img_bangzhu_dian" />
 
         <TextView
