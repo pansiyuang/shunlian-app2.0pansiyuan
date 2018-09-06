@@ -23,5 +23,14 @@ public class TaskListEntity {
         public String gold_num;
         public String task_status;//0 未完成；1已完成
         public String icon_url;
+        public String share_pic_url;
+        public String video_url;
+        public Url url;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Url{
+        public String type;
+        public String item_id;
     }
 }

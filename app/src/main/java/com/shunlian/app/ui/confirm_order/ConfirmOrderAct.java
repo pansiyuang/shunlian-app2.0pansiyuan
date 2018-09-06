@@ -109,7 +109,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private boolean isUserGoldenEggs;//是否使用金蛋
     private ObjectMapper mOM;
     private float mEggReduce;
-    public static final String EGGS_TIP = "不能少于1块钱";//金蛋减免提示
+    public static final String EGGS_TIP = "订单支付金额必须大于1元";//金蛋减免提示
 
     public static void startAct(Context context,String cart_ids,String type){
         if (!Common.isAlreadyLogin()){

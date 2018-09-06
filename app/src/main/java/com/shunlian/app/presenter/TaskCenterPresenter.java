@@ -9,6 +9,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.TaskListAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.bean.TaskListEntity;
@@ -16,10 +17,12 @@ import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.ITaskCenterView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.NewTextView;
+import com.shunlian.app.wxapi.WXEntryActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,9 +41,17 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     public static final int DAILY_TASK = 2;//日常任务
     public int current_task_state = NEW_USER_TASK;//当前任务状态  默认新手任务
     private List<TaskListEntity.ItemTask> taskLists = new ArrayList<>();
+    private List<TaskListEntity.ItemTask> newUserTaskLists;//新手任务列表
+    private List<TaskListEntity.ItemTask> dailyTaskLists;//日常任务列表
     private TaskListAdapter taskListAdapter;
     private Call<BaseEntity<TaskHomeEntity>> homeCall;
     private Call<BaseEntity<TaskListEntity>> taskListCall;
+    private Call<BaseEntity<SignEggEntity>> signEggsCall;
+    private Call<BaseEntity<TaskHomeEntity>> goldegglimitCall;
+    private Call<BaseEntity<TaskHomeEntity>> byCodeCall;
+    private Call<BaseEntity<CommonEntity>> getPrizeByRegisterCall;
+    private String share_pic_url;
+    private int updatePosition;
 
     public TaskCenterPresenter(Context context, ITaskCenterView iView) {
         super(context, iView);
@@ -72,7 +83,42 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
             taskListCall = null;
         }
 
+        if (byCodeCall != null && byCodeCall.isExecuted()){
+            byCodeCall.cancel();
+            byCodeCall = null;
+        }
 
+        if (signEggsCall != null && signEggsCall.isExecuted()){
+            signEggsCall.cancel();
+            signEggsCall = null;
+        }
+
+        if (goldegglimitCall != null && goldegglimitCall.isExecuted()){
+            goldegglimitCall.cancel();
+            goldegglimitCall = null;
+        }
+
+        if (getPrizeByRegisterCall != null && getPrizeByRegisterCall.isExecuted()){
+            getPrizeByRegisterCall.cancel();
+            getPrizeByRegisterCall = null;
+        }
+
+        if (taskLists != null){
+            taskLists.clear();
+            taskLists = null;
+        }
+        if (newUserTaskLists != null){
+            newUserTaskLists.clear();
+            newUserTaskLists = null;
+        }
+        if (dailyTaskLists != null){
+            dailyTaskLists.clear();
+            dailyTaskLists = null;
+        }
+        if (taskListAdapter != null){
+            taskListAdapter.unbind();
+            taskListAdapter = null;
+        }
     }
 
     /**
@@ -90,6 +136,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
                         super.onSuccess(entity);
                         TaskHomeEntity data = entity.data;
+                        share_pic_url = data.share_pic_url;
                         iView.setGoldEggsCount(data.gold_egg);
                         iView.obtainDownTime(data.gold_egg_second, data.gold_egg_total_second,data.task_status);
                         iView.setSignContinueNum(data.sign_continue_num);
@@ -135,8 +182,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 //        map.put("storeId", storeId);
         sortAndMD5(map);
 
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getPrizeByRegister(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+         getPrizeByRegisterCall = getApiService().getPrizeByRegister(map);
+        getNetData(true, getPrizeByRegisterCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
@@ -167,18 +214,37 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                         if (isEmpty(data.new_user_tasks)) {
                             current_task_state = DAILY_TASK;
                             iView.closeNewUserList();
+                        }else {
+                            newUserTaskLists = new ArrayList<>();
+                            newUserTaskLists = data.new_user_tasks;
                         }
+
+                        dailyTaskLists = new ArrayList<>();
+                        dailyTaskLists = data.daily_tasks;
 
                         taskLists.clear();
                         if (current_task_state == NEW_USER_TASK) {
-                            taskLists.addAll(data.new_user_tasks);
+                            taskLists.addAll(newUserTaskLists);
                         } else {
-                            taskLists.addAll(data.daily_tasks);
+                            taskLists.addAll(dailyTaskLists);
                         }
 
                         creatAdapter();
                     }
                 });
+    }
+
+    public void cacheTaskList(){
+        taskLists.clear();
+        if (current_task_state == NEW_USER_TASK) {
+            taskLists.addAll(newUserTaskLists);
+        } else {
+            taskLists.addAll(dailyTaskLists);
+        }
+        if (isEmpty(taskLists)){
+            getTaskList();
+        }
+        creatAdapter();
     }
 
     private void creatAdapter() {
@@ -187,6 +253,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
             iView.setAdapter(taskListAdapter);
             taskListAdapter.setOnItemClickListener((view, position) -> {
                 TaskListEntity.ItemTask itemTask = taskLists.get(position);
+                updatePosition = position;
                 if (current_task_state == NEW_USER_TASK) {
                     handlerNewUserTask(position,itemTask.code);
                 } else {
@@ -196,6 +263,14 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         } else {
             taskListAdapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * 需要更新条目的位置
+     * @return
+     */
+    public int getUpdatePosition() {
+        return updatePosition;
     }
 
     public void updateItem(int position,String state){
@@ -226,13 +301,30 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     Common.goGoGo(context, "home");
                     break;
                 case task_daily_share://分享赚金蛋
+                    TaskListEntity.ItemTask itemTask = taskLists.get(position);
+                    TaskListEntity.Url url = itemTask.url;
+                    if (url != null){
+                        Common.goGoGo(context,url.type,url.item_id);
+                    }
                     break;
                 case task_daily_show_income://晒收入赚金蛋
+                    TaskListEntity.ItemTask task = taskLists.get(position);
+                    share_pic_url = task.share_pic_url;
+                    share();
                     break;
             }
         }catch (Exception e){
 
         }
+    }
+    /*
+    晒单分享
+     */
+    public void share() {
+        ShareInfoParam shareInfoParam = new ShareInfoParam();
+        shareInfoParam.photo = share_pic_url;
+        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+        Constant.SHARE_TYPE = "income";
     }
 
     /**
@@ -251,6 +343,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     getGoldByCode();
                     break;
                 case task_new_user_video://看视频得金蛋
+                    if (taskLists.get(position)!= null && !isEmpty(taskLists.get(position).video_url)){
+                        Common.goGoGo(context,"url",taskLists.get(position).video_url);
+                    }
                     break;
             }
         }catch (Exception e){
@@ -259,14 +354,15 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     }
 
     /**
+     * 签到
      * @param
      */
     public void signEgg(String data) {
         Map<String, String> map = new HashMap<>();
         map.put("date", data);
         sortAndMD5(map);
-        Call<BaseEntity<SignEggEntity>> baseEntityCall = getApiService().signEgg(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<SignEggEntity>>() {
+        signEggsCall = getApiService().signEgg(map);
+        getNetData(signEggsCall, new SimpleNetDataCallback<BaseEntity<SignEggEntity>>() {
             @Override
             public void onSuccess(BaseEntity<SignEggEntity> entity) {
                 super.onSuccess(entity);
@@ -283,8 +379,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     public void goldegglimit(){
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
-        Call<BaseEntity<TaskHomeEntity>> baseEntityCall = getApiService().goldegglimit(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
+        goldegglimitCall = getApiService().goldegglimit(map);
+        getNetData(goldegglimitCall, new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
             @Override
             public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
                 super.onSuccess(entity);
@@ -298,18 +394,22 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         });
     }
 
-
+    /**
+     * 邀请码得金蛋
+     */
     public void getGoldByCode(){
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
-        Call<BaseEntity<TaskHomeEntity>> baseEntityCall = getApiService().getGoldByCode(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
+        byCodeCall = getApiService().getGoldByCode(map);
+        getNetData(byCodeCall, new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
             @Override
             public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
                 super.onSuccess(entity);
                 TaskHomeEntity data = entity.data;
                 iView.showGoldEggsNum(data.got_eggs);
                 iView.setGoldEggsCount(data.account_eggs);
+                if (current_task_state == NEW_USER_TASK)
+                    updateItem(getUpdatePosition(),"1");
             }
         });
     }

@@ -138,6 +138,8 @@
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_golden_eggs"
                     android:layout_width="125dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginBottom="22dp"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:visibility="gone"/>

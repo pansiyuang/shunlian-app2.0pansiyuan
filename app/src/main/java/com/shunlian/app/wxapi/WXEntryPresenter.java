@@ -125,6 +125,7 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
     public void goodsShare(String type,String id){
         Map<String,String> map = new HashMap<>();
         map.put("type",type);
+        if (isEmpty(id))id = "";
         map.put("id",id);
         sortAndMD5(map);
 

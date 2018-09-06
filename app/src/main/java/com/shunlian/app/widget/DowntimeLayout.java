@@ -166,10 +166,6 @@ public class DowntimeLayout extends View {
             @Override
             public void onFinish() {
                 //LogUtil.zhLogW("=onFinish====text===="+text);
-                /*if ("00:00:01".equals(text)){
-                    text = RECEIVE;
-                    invalidate();
-                }*/
                 text = RECEIVE;
                 invalidate();
                 if (mListener != null){
@@ -184,10 +180,6 @@ public class DowntimeLayout extends View {
      */
     public void startDownTimer() {
         if (mSeconds <= 1) {
-            /*if ("00:00:01".equals(text)){
-                text = RECEIVE;
-                invalidate();
-            }*/
             text = RECEIVE;
             invalidate();
         } else {
