@@ -1650,7 +1650,7 @@ public interface ApiService {
      * @return
      */
     @GET("member/myprofit/receiveReward")
-    Call<BaseEntity<EmptyEntity>> receiveReward(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> receiveReward(@QueryMap Map<String, String> map);
 
     /**
      * 帮助首页

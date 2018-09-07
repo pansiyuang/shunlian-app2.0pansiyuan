@@ -256,7 +256,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         isShowData = !isShowData;
         changeState();
         SharedPrefUtil.saveCacheSharedPrfBoolean(KEY, isShowData);
-        TaskCenterAct.startAct(baseActivity);
+//        TaskCenterAct.startAct(baseActivity);
     }
 
     @Override

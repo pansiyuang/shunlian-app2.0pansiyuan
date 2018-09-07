@@ -57,26 +57,37 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
 
     public final static String ASTERISK = "****";
     public final static String KEY = "profit_isShow";
+
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
+
     @BindView(R.id.mrlayout_toolbar_more)
     MyRelativeLayout mrlayout_toolbar_more;
+
     @BindView(R.id.mtv_growth_value)
     MyTextView mtv_growth_value;
+
     @BindView(R.id.mtv_request_code)
     MyTextView mtv_request_code;
+
     @BindView(R.id.civ_head)
     MyImageView civ_head;
+
     @BindView(R.id.mtv_nickname)
     MyTextView mtv_nickname;
+
     @BindView(R.id.mtv_already_extract_m)
     MyTextView mtv_already_extract_m;
+
     @BindView(R.id.mtv_surplus_extract_m)
     MyTextView mtv_surplus_extract_m;
+
     @BindView(R.id.mtv_immediate_cash)
     MyTextView mtv_immediate_cash;
+
     @BindView(R.id.mtv_detail)
     MyTextView mtv_detail;
+
     @BindView(R.id.mtv_estimate_profit)
     MyTextView mtv_estimate_profit;
 
@@ -84,74 +95,109 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
 //    MyTextView mtv_meritocrat_profit;
     @BindView(R.id.mtv_today_profit)
     MyTextView mtv_today_profit;
+
     @BindView(R.id.mtv_month_profit)
     MyTextView mtv_month_profit;
+
     @BindView(R.id.chart_view)
     SplineChart06View chart_view;
+
     @BindView(R.id.mtv_week_reward)
     MyTextView mtv_week_reward;
+
     @BindView(R.id.mtv_month_reward)
     MyTextView mtv_month_reward;
+
     @BindView(R.id.miv_balance)
     MyImageView miv_balance;
+
     @BindView(R.id.llayout_assertionProfit)
     LinearLayout llayout_assertionProfit;
+
     @BindView(R.id.llayout_7day)
     LinearLayout llayout_7day;
+
     @BindView(R.id.llayout_30day)
     LinearLayout llayout_30day;
+
     @BindView(R.id.llayout_60day)
     LinearLayout llayout_60day;
+
     @BindView(R.id.mtv_30day)
     MyTextView mtv_30day;
+
     @BindView(R.id.line_30day)
     View line_30day;
+
     @BindView(R.id.mtv_7day)
     MyTextView mtv_7day;
+
     @BindView(R.id.line_7day)
     View line_7day;
+
     @BindView(R.id.mtv_60day)
     MyTextView mtv_60day;
+
     @BindView(R.id.line_60day)
     View line_60day;
+
     @BindView(R.id.miv_toolbar_help)
     MyImageView miv_toolbar_help;
+
     @BindView(R.id.miv_month)
     MyImageView miv_month;
+
     @BindView(R.id.miv_close)
     MyImageView miv_close;
+
     @BindView(R.id.miv_week)
     MyImageView miv_week;
+
     @BindView(R.id.llayout_week_reward)
     LinearLayout llayout_week_reward;
+
     @BindView(R.id.llayout_month_reward)
     LinearLayout llayout_month_reward;
+
     @BindView(R.id.rlayout_root)
     RelativeLayout rlayout_root;
+
     @BindView(R.id.llayout_appoint_sale)
     LinearLayout llayout_appoint_sale;
+
     @BindView(R.id.mtv_appoint_child_sale)
     MyTextView mtv_appoint_child_sale;
+
     @BindView(R.id.mtv_appoint_grand_child_sale)
     MyTextView mtv_appoint_grand_child_sale;
+
     @BindView(R.id.mtv_appoint_consume_child_sale)
     MyTextView mtv_appoint_consume_sale;
+
     @BindView(R.id.mtv_date)
     MyTextView mtv_date;
+
     @BindView(R.id.mtv_profitTip)
     MyTextView mtv_profitTip;
+
     @BindView(R.id.miv_isShow_data)
     MyImageView miv_isShow_data;
+
     @BindView(R.id.llayout_reward)
     LinearLayout llayout_reward;
+
     @BindView(R.id.miv_PhotoFrame)
     MyImageView miv_PhotoFrame;
+
     @BindView(R.id.miv_grade)
     MyImageView miv_grade;
+
     @BindView(R.id.llayout_order_profit)
     LinearLayout llayout_order_profit;
+
     @BindView(R.id.miv_order_profit)
     MyImageView miv_order_profit;
+
     @BindView(R.id.mtv_order_profit)
     MyTextView mtv_order_profit;
 
@@ -166,7 +212,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     private boolean isWeekAnimRuning = false;
     private boolean isMonthAnimRuning = false;
     private boolean isOrderAnimRuning = false;
-    private float availableProfit;//可提现金额
+    //private float availableProfit;//可提现金额
     private boolean isShowData = true;
     private MyProfitEntity.ProfitInfo mProfitInfo;
     private boolean isBack;
@@ -368,8 +414,8 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         weekReward = Float.parseFloat(isEmpty(profitInfo.week_reward) ? "0" : profitInfo.week_reward);
         monthReward = Float.parseFloat(isEmpty(profitInfo.month_reward) ? "0" : profitInfo.month_reward);
         orderProfit = Float.parseFloat(isEmpty(profitInfo.order_profit) ? "0" : profitInfo.order_profit);
-        availableProfit = Float.parseFloat(isEmpty(profitInfo.available_profit)
-                ? "0" : profitInfo.available_profit);
+        /*availableProfit = Float.parseFloat(isEmpty(profitInfo.available_profit)
+                ? "0" : profitInfo.available_profit);*/
 
         /*weekReward = 10;
         monthReward = 10;
@@ -419,23 +465,24 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
      * 领取月/周奖励
      *
      * @param type 1周补贴 2推广补贴
+     * @param available_profit
      */
     @Override
-    public void receiveReward(String type) {
+    public void receiveReward(String type, String available_profit) {
         if ("1".equals(type)) {
             isWeekAnimRuning = true;
             miv_week.setImageResource(R.mipmap.zhoubutie);
-            energySphereClick(miv_week, Color.parseColor("#FFBCCA"));
+            energySphereClick(miv_week, Color.parseColor("#FFBCCA"),available_profit);
             mtv_week_reward.setText("0.00");
         } else if ("2".equals(type)) {
             isMonthAnimRuning = true;
             miv_month.setImageResource(R.mipmap.tuiguangbutie);
-            energySphereClick(miv_month, Color.parseColor("#FEE8DD"));
+            energySphereClick(miv_month, Color.parseColor("#FEE8DD"),available_profit);
             mtv_month_reward.setText("0.00");
         } else {
             isOrderAnimRuning = true;
             miv_order_profit.setImageResource(R.mipmap.dingdan_n);
-            energySphereClick(miv_order_profit, Color.parseColor("#02CC91"));
+            energySphereClick(miv_order_profit, Color.parseColor("#02CC91"),available_profit);
             mtv_order_profit.setText("0.00");
         }
     }
@@ -556,7 +603,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     /*
     点击能力球动画
      */
-    private void energySphereClick(View view, int color) {
+    private void energySphereClick(View view, int color,String available_profit) {
         //添加view 并指定位置
         int[] week_pos = new int[2];
         view.getLocationOnScreen(week_pos);
@@ -617,18 +664,15 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                 alphaView(v);
                 if (view == miv_week) {
                     isWeekAnimRuning = false;
-                    availableProfit += weekReward;
-                    mtv_surplus_extract_m.setText("" + availableProfit);
+                    mtv_surplus_extract_m.setText(available_profit);
                     gone(llayout_week_reward);
                 } else if (view == miv_month) {
                     isMonthAnimRuning = false;
-                    availableProfit += monthReward;
-                    mtv_surplus_extract_m.setText("" + availableProfit);
+                    mtv_surplus_extract_m.setText(available_profit);
                     gone(llayout_month_reward);
                 } else if (view == miv_order_profit) {
                     isOrderAnimRuning = false;
-                    availableProfit += orderProfit;
-                    mtv_surplus_extract_m.setText("" + availableProfit);
+                    mtv_surplus_extract_m.setText(available_profit);
                     gone(llayout_order_profit);
                 }
                 if (llayout_week_reward.getVisibility() == View.GONE &&

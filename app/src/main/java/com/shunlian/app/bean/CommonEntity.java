@@ -70,6 +70,7 @@ public class CommonEntity {
     public int total;
 
     public String gold_num;//金蛋数量
+    public String available_profit;//我的收益，可提现金额
 
     //验证新人
     public String show;

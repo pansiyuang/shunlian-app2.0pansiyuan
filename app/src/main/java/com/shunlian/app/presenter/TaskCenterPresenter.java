@@ -215,12 +215,16 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                             current_task_state = DAILY_TASK;
                             iView.closeNewUserList();
                         }else {
-                            newUserTaskLists = new ArrayList<>();
-                            newUserTaskLists = data.new_user_tasks;
-                        }
+                            if (newUserTaskLists == null)
+                                newUserTaskLists = new ArrayList<>();
 
-                        dailyTaskLists = new ArrayList<>();
-                        dailyTaskLists = data.daily_tasks;
+                            newUserTaskLists.clear();
+                            newUserTaskLists.addAll(data.new_user_tasks);
+                        }
+                        if (dailyTaskLists == null)
+                            dailyTaskLists = new ArrayList<>();
+                        dailyTaskLists.clear();
+                        dailyTaskLists.addAll(data.daily_tasks);
 
                         taskLists.clear();
                         if (current_task_state == NEW_USER_TASK) {
