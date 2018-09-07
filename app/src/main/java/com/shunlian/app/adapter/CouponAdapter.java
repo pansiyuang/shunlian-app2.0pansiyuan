@@ -58,7 +58,7 @@ public class CouponAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MDa
             mHolder.mtv_yiqiang.setVisibility(View.VISIBLE);
             mHolder.seekbar_grow.setVisibility(View.VISIBLE);
             mHolder.mtv_yiling.setVisibility(View.INVISIBLE);
-//            mHolder.mtv_get.setBackgroundResource(R.drawable.bg_common_round_nobord);
+            mHolder.mtv_get.setBackgroundResource(R.drawable.bg_common_round_nobord);
             GradientDrawable copyBackground = (GradientDrawable) mHolder.mtv_get.getBackground();
             copyBackground.setColor(getColor(R.color.pink_color));//设置填充色
             mHolder.mtv_get.setText(getString(R.string.chat_lijilingqu));
