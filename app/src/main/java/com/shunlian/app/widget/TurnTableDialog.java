@@ -124,12 +124,13 @@ public class TurnTableDialog extends Dialog {
 
     public void setShowDialog(int type, String content, String thumb) {
         tv_content.setText(content);
+        miv_button.setTag(null);
+        miv_button.setImageResource(R.mipmap.img_choujiang_anniu_gouwu);
         switch (type) {
             case 1:
                 miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_gouwu);
                 miv_type.setVisibility(View.GONE);
                 miv_button.setVisibility(View.VISIBLE);
-                miv_button.setImageResource(R.mipmap.img_choujiang_anniu_gouwu);
                 miv_button.setTag("去购物");
                 miv_share.setVisibility(View.GONE);
                 miv_address.setVisibility(View.GONE);
@@ -148,6 +149,8 @@ public class TurnTableDialog extends Dialog {
     public void setDialogData(LuckDrawEntity luckDrawEntity) {
         //'奖品类型  1商品  2 优惠券  3金蛋',
         tv_content.setText(luckDrawEntity.meg);
+        miv_button.setTag(null);
+        miv_button.setImageResource(R.mipmap.img_choujiang_anniu_youhuiquan);
         switch (luckDrawEntity.trophy_type) {
             case 1:
                 miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_jiangpin);

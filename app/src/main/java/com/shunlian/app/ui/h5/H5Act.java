@@ -13,8 +13,6 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -79,6 +77,8 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
     @BindView(R.id.mtv_close)
     public MyTextView mtv_close;
+    @BindView(R.id.view_line)
+    public View view_line;
     @BindView(R.id.mar_title)
     public MarqueeTextView mar_title;
     @BindView(R.id.mtv_title)
@@ -87,6 +87,8 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public MyWebView mwv_h5;
     @BindView(R.id.rl_title_more)
     public RelativeLayout rl_title_more;
+    @BindView(R.id.rl_title)
+    public RelativeLayout rl_title;
     @BindView(R.id.tv_msg_count)
     public TextView tv_msg_count;
     @BindView(R.id.quick_actions)
@@ -102,7 +104,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     protected ObtainGoldenEggsTip oget;
 
     protected String h5Url = "", beforeUrl = "", member_id = "";
-    protected String title;
+    protected String title, flag;
     protected int mode;
     protected SonicSession sonicSession;
     //    protected HttpDialog httpDialog;
@@ -119,11 +121,26 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         Intent intentH5 = new Intent(context, H5Act.class);
         try {
             if (!TextUtils.isEmpty(url))
-                url=java.net.URLDecoder.decode(url);
+                url = java.net.URLDecoder.decode(url);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        intentH5.putExtra("url",url);
+        intentH5.putExtra("url", url);
+        intentH5.putExtra("mode", mode);
+        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intentH5);
+    }
+
+    public static void startAct(Context context, String url, int mode, String flag) {
+        Intent intentH5 = new Intent(context, H5Act.class);
+        try {
+            if (!TextUtils.isEmpty(url))
+                url = java.net.URLDecoder.decode(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        intentH5.putExtra("flag", flag);
+        intentH5.putExtra("url", url);
         intentH5.putExtra("mode", mode);
         intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intentH5);
@@ -202,14 +219,21 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     @Override
     protected void initData() {
         member_id = SharedPrefUtil.getSharedUserString("member_id", "");
+        mIntent = getIntent();
+        flag = mIntent.getStringExtra("flag");
+        if (!isEmpty(flag) && "noTitle".equals(flag)) {
+//            view_line.setVisibility(View.GONE);
+            rl_title.setVisibility(View.GONE);
+        }
         immersionBar.statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true)
                 .init();
-//        httpDialog = new HttpDialog(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        mIntent = getIntent();
+
+
+//        httpDialog = new HttpDialog(this);
         mode = mIntent.getIntExtra("mode", 0);
         h5Url = mIntent.getStringExtra("url");
         if (!isEmpty(h5Url))
@@ -329,7 +353,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 if (!isFinishing()) {
-                    if (!isEmpty(view.getTitle())){
+                    if (!isEmpty(view.getTitle())) {
                         title = view.getTitle();
                         setTitle();
                     }
@@ -445,8 +469,8 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             public void onReceivedTitle(WebView view, String titles) {
                 super.onReceivedTitle(view, titles);
                 if (!isFinishing()) {
-                    if (!isEmpty(titles)){
-                        title=titles;
+                    if (!isEmpty(titles)) {
+                        title = titles;
                         setTitle();
                     }
                 }
@@ -615,7 +639,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             return;
         }
         LogUtil.httpLogW("链接:" + url);
-        Common.urlToPage(H5Act.this,url);
+        Common.urlToPage(H5Act.this, url);
 //        if (url.startsWith("slmall://")) {
 //            String type = interceptBody(url);
 //            if (!TextUtils.isEmpty(type)) {
@@ -653,7 +677,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     /**
      * 截取商品id
      *
-     * @param url
+     * @param
      * @return
      */
 //    private String interceptId(String url) {
@@ -666,7 +690,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 //        }*/
 //        return s1;
 //    }
-
     @Override
     public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
 //        if (y > 2000) {
@@ -688,8 +711,8 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         //3.5s 加载 0->80 进度的加载 为了实现,特意调节长了事件
         mProgressbar.setCurProgress(80, 3500, () -> {
             //3.5s 加载 80->100 进度的加载
-            if (mProgressbar!=null)
-            mProgressbar.setCurProgress(100, 3500, () -> finishOperation(false));
+            if (mProgressbar != null)
+                mProgressbar.setCurProgress(100, 3500, () -> finishOperation(false));
         });
     }
 

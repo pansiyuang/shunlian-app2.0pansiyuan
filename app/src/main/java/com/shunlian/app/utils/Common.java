@@ -219,6 +219,7 @@ public class Common {
             case "invite":
                 return "QrCodeAct";
             case "url":
+            case "noTitleUrl":
                 return "H5Act";
             case "HTMLShare":
                 return "WXEntryActivity";
@@ -241,6 +242,12 @@ public class Common {
             return;
         }
         switch (type) {
+            case "popLastView":
+                ((Activity) context).finish();
+                break;
+            case "noTitleUrl":
+                H5Act.startAct(context, params[0], H5Act.MODE_SONIC,"noTitle");
+                break;
             case "taskSystems":
                 TaskCenterAct.startAct(context);
                 break;
@@ -1188,6 +1195,18 @@ public class Common {
         } else {
             return true;
         }
+    }
+
+    /**
+     * 判断字符是否是汉字
+     */
+    public static boolean isChineseCharacters(String s) {
+        if (TextUtils.isEmpty(s)) {
+            return false;
+        }
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(s);
+        return m.matches();
     }
 
     public static void urlToPage(Context context, String url) {

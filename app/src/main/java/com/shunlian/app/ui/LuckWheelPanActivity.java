@@ -30,6 +30,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.TurnTableEntity;
 import com.shunlian.app.bean.TurnTablePopEntity;
 import com.shunlian.app.presenter.TurnTablePresenter;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -74,6 +75,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     private HttpDialog httpDialog;
     private List<Bitmap> mListBitmap;
     private List<TurnTableEntity.Trophy> trophyList;
+    private List<TurnTableEntity.MyPrize> myPrizeList;
     private int luckPosition = 0;
     private TurnTableAdapter mAdapter;
     private TurnTableDialog turnTableDialog;
@@ -81,6 +83,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     private LuckDrawEntity currentLuckDraw;
     private String currentTmtId;
     private String currentRuleUrl;
+    private boolean isFirstLoad = true;
 
     private int index = 0;//textview上下滚动下标
     private Handler handler = new Handler();
@@ -121,6 +124,8 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
                 }
                 turnTableDialog.setCallBack(LuckWheelPanActivity.this);
                 turnTableDialog.show();
+
+                mPresenter.getTurnTableData();
             }
 
             @Override
@@ -133,6 +138,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             }
         });
         trophyList = new ArrayList<>();
+        myPrizeList = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycler_list.setLayoutManager(linearLayoutManager);
@@ -233,34 +239,40 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
     @Override
     public void getTurnData(TurnTableEntity turnTableEntity) {
-        currentRuleUrl = turnTableEntity.rule;
-        tv_title.setText(turnTableEntity.turnTable.title);
-        trophyList.clear();
-        trophyList.addAll(turnTableEntity.turnTable.list);
-        addAllTurnTables(trophyList);
+        if (isFirstLoad) {
+            currentRuleUrl = turnTableEntity.rule;
+            tv_title.setText(turnTableEntity.turnTable.title);
+            trophyList.clear();
+            trophyList.addAll(turnTableEntity.turnTable.list);
+            addAllTurnTables(trophyList);
 
-        if (!isEmpty(turnTableEntity.myPrize)) {
-            mAdapter = new TurnTableAdapter(this, turnTableEntity.myPrize);
-            recycler_list.setAdapter(mAdapter);
-        }
-
-        if (isEmpty(turnTableEntity.prizeScroll)) {
-            return;
-        }
-        mWarningTextList.addAll(turnTableEntity.prizeScroll);
-        if (mWarningTextList.size() == 1) {
-            text_switcher.setText(mWarningTextList.get(0));
-            index = 0;
-        }
-        if (mWarningTextList.size() > 1) {
-            handler.postDelayed(() -> {
+            if (isEmpty(turnTableEntity.prizeScroll)) {
+                return;
+            }
+            mWarningTextList.addAll(turnTableEntity.prizeScroll);
+            if (mWarningTextList.size() == 1) {
                 text_switcher.setText(mWarningTextList.get(0));
                 index = 0;
-            }, 1000);
-            text_switcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom));
-            text_switcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_top));
-            startFlipping();
+            }
+            if (mWarningTextList.size() > 1) {
+                handler.postDelayed(() -> {
+                    text_switcher.setText(mWarningTextList.get(0));
+                    index = 0;
+                }, 1000);
+                text_switcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom));
+                text_switcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_top));
+                startFlipping();
+            }
         }
+        myPrizeList.clear();
+        myPrizeList.addAll(turnTableEntity.myPrize);
+        if (mAdapter == null) {
+            mAdapter = new TurnTableAdapter(this, myPrizeList);
+            recycler_list.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+        isFirstLoad = false;
     }
 
     @Override
@@ -376,16 +388,17 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     public String getTrophyString(String s) {
         if (isEmpty(s))
             return "";
-        if (s.length() > 6) {
-            s = s.substring(0, 6);
-        }
+//        if (s.length() > 6) {
+//            s = s.substring(0, 6);
+//        }
         char[] strings = s.toCharArray();
         StringBuffer stringBuffer = new StringBuffer();
         for (int i = 0; i < strings.length; i++) {
             stringBuffer.append(strings[i]);
-
-            if (i != strings.length - 1) {
+            if (Common.isChineseCharacters(String.valueOf(strings[i]))) {
                 stringBuffer.append("    ");
+            } else {
+                stringBuffer.append("  ");
             }
         }
         return stringBuffer.toString();
