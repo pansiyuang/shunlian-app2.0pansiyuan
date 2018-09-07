@@ -27,6 +27,8 @@ public class CommonEntity {
 
     public String telephone;//帮助中心电话
 
+    public String img; //大转盘获取分享图
+
     //获取提现账户
     public String account_name;
     public String account_number;
@@ -66,6 +68,9 @@ public class CommonEntity {
     public int nice;
     public int focus;
     public int total;
+
+    public String gold_num;//金蛋数量
+    public String available_profit;//我的收益，可提现金额
 
     //验证新人
     public String show;

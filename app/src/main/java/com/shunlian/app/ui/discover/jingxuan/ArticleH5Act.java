@@ -13,6 +13,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
@@ -145,6 +146,14 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     public void loginRefresh(DefMessageEvent event) {
         if (event.loginSuccess && mPresent != null) {
             mPresent.getShareInfo(mPresent.article, articleId);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void shareSuccess(ShareInfoEvent event){
+        if (event.isShareSuccess){
+            oget.setEggsCount(event.eggs_count);
+            oget.show(4000);
         }
     }
 

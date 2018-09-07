@@ -23,6 +23,9 @@ public class ConfirmOrderEntity {
     public String total_reduce;//总减免
     public String pay_amount;//最终的价格（需要客户端减去选取的优惠券）
     public Address address;
+    public String gold_egg;//金蛋数量
+    public String egg_reduce;//减多少钱
+    public String egg_tip;//满多少金蛋减多少钱
 
     @Override
     public String toString() {

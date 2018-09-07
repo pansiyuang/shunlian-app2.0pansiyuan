@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -127,7 +128,8 @@ public class VideoBannerWrapper extends RelativeLayout {
             }
             @Override
             public void onPageSelected(int position) {
-                if (position > 0){
+                if (position > 0 && mVideoBannerData != null
+                        && !TextUtils.isEmpty(mVideoBannerData.video_path)){
                     mVP.pausePlay();
                 }
                 setCurrentBannerPosition(position);
@@ -183,6 +185,8 @@ public class VideoBannerWrapper extends RelativeLayout {
      */
     public void setBanner(String path, ArrayList<String> pics, int type, VideoBannerData videoBannerData) {
         mVideoBannerData = videoBannerData;
+        if (mVideoBannerData != null)
+        mVideoBannerData.video_path = path;
 
         if (pics.size() == 1){
             removeView(mAllDot);
@@ -199,9 +203,8 @@ public class VideoBannerWrapper extends RelativeLayout {
     }
 
     private void setLabelPic(int type) {
-        if (getChildCount() <= 0)return;
         ImageView imageView = new ImageView(getContext());
-        addView(imageView,1);
+        addView(imageView);
         LayoutParams layoutParams = (LayoutParams) imageView.getLayoutParams();
         int i = dp2px(50);
         layoutParams.width = i;
@@ -247,6 +250,9 @@ public class VideoBannerWrapper extends RelativeLayout {
             return 0;
     }
 
+    public VideoBannerData getVideoBannerData() {
+        return mVideoBannerData;
+    }
 
     public void destroy(){
         if (mVP != null)mVP.destroy();

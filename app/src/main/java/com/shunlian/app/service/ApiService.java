@@ -1086,6 +1086,24 @@ public interface ApiService {
     Call<BaseEntity<PersonalcenterEntity>> personalcenter(@QueryMap Map<String, String> map);
 
     /**
+     * 签到领金蛋
+     *
+     * @param map
+     * @return
+     */
+    @GET("task/signForGold")
+    Call<BaseEntity<SignEggEntity>> signEgg(@QueryMap Map<String, String> map);
+
+    /**
+     * 个人金蛋明细
+     *
+     * @param map
+     * @return
+     */
+    @GET("task/goldEggDetail")
+    Call<BaseEntity<EggDetailEntity>> eggDetail(@QueryMap Map<String, String> map);
+
+    /**
      * 足迹列表足迹批量删除
      *
      * @param map
@@ -1632,7 +1650,7 @@ public interface ApiService {
      * @return
      */
     @GET("member/myprofit/receiveReward")
-    Call<BaseEntity<EmptyEntity>> receiveReward(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> receiveReward(@QueryMap Map<String, String> map);
 
     /**
      * 帮助首页
@@ -2512,4 +2530,98 @@ public interface ApiService {
      */
     @POST("member/common/checkMobileCode")
     Call<BaseEntity<EmptyEntity>> checkMobileCode(@Body RequestBody body);
+
+    /**
+     * 大转盘界面
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/turnTable")
+    Call<BaseEntity<TurnTableEntity>> getTurnTable(@QueryMap Map<String, String> map);
+
+    /**
+     * 大转盘抽奖
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/luckDraw")
+    Call<BaseEntity<LuckDrawEntity>> luckDraw(@QueryMap Map<String, String> map);
+
+    /**
+     * 进入大转盘进的弹窗
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/popup")
+    Call<BaseEntity<TurnTablePopEntity>> turntablePopup(@QueryMap Map<String, String> map);
+
+    /**
+     * 添加奖品收货地址
+     *
+     * @param body
+     * @return
+     */
+    @POST("turntable/addAddress")
+    Call<BaseEntity<EmptyEntity>> turntableAddAddress(@Body RequestBody body);
+
+
+    /**
+     * 获取分享图
+     *
+     * @param map
+     * @return
+     */
+    @GET("turntable/shareImg")
+    Call<BaseEntity<CommonEntity>> turntableShareImg(@QueryMap Map<String, String> map);
+
+    /**
+     * 分享成功回调
+     * @param body
+     * @return
+     */
+    @POST("share/addOnOk")
+    Call<BaseEntity<CommonEntity>> shareSuccessCall(@Body RequestBody body);
+
+    /**
+     * 浏览商品获得金蛋
+     * @param body
+     * @return
+     */
+    @POST("goods/getGold")
+    Call<BaseEntity<CommonEntity>> getGold(@Body RequestBody body);
+
+    /**
+     * 任务首页
+     * @param map
+     * @return
+     */
+    @GET("task/home")
+    Call<BaseEntity<TaskHomeEntity>> taskHome(@QueryMap Map<String,String> map);
+
+    /**
+     *任务列表
+     * @param map
+     * @return
+     */
+    @GET("task/taskList")
+    Call<BaseEntity<TaskListEntity>> taskList(@QueryMap Map<String,String> map);
+
+    /**
+     * 限时领金蛋
+     * @param map
+     * @return
+     */
+    @GET("goldegglimit/getlimitgoldegg")
+    Call<BaseEntity<TaskHomeEntity>> goldegglimit(@QueryMap Map<String,String> map);
+
+    /**
+     * 邀请码领金蛋
+     * @param map
+     * @return
+     */
+    @GET("tasknewperson/getGoldByCode")
+    Call<BaseEntity<TaskHomeEntity>> getGoldByCode(@QueryMap Map<String,String> map);
 }

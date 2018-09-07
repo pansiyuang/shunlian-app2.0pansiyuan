@@ -47,7 +47,6 @@ import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.HttpDialog;
@@ -275,7 +274,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,
                                  INetDataCallback<BaseEntity<T>> callback, int emptyCode,
                                  int failureCode, boolean isLoading) {
-        if (code != Code.CODE_REFRESH_TOKEN_VALIDE) {
+        if (code != Code.CODE_REFRESH_TOKEN_VALIDE && code != Code.API_ERROR_NO_MESSAGE) {
             Common.staticToast(message);
         }
         switch (code) {

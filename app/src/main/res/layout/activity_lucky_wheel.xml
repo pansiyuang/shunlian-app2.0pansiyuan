@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:wheelSurfView="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_common_layout" />
+
+    <ScrollView
+        android:id="@+id/myScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_choujiang_dise" />
+
+            <TextSwitcher
+                android:id="@+id/text_switcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp"
+                android:background="@mipmap/img_dazhaunpan_dongxiao" />
+
+            <com.shunlian.app.widget.luckWheel.WheelSurfView
+                android:id="@+id/wheelPan"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="210dp"
+                wheelSurfView:huanImg="@mipmap/img_choujiang_dipan"
+                wheelSurfView:typenum="-1"></com.shunlian.app.widget.luckWheel.WheelSurfView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="195dp"
+                android:layout_below="@+id/wheelPan"
+                android:layout_marginBottom="24dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/rounded_corner_solid_white_16px"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="23.5dp"
+                android:paddingLeft="23.5dp"
+                android:paddingRight="23.5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/rounded_corner_solid_ebd9c0_20px"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="21dp"
+                    android:paddingRight="21dp"
+                    android:text="中奖纪录"
+                    android:textColor="@color/value_49"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/rounded_corner_stroke_d9_20px"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/ll_top"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="日期"
+                            android:textColor="@color/value_49"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="奖品"
+                            android:textColor="@color/value_49"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="快递单号"
+                            android:textColor="@color/value_49"
+                            android:textSize="9sp" />
+                    </LinearLayout>
+
+                    <com.shunlian.app.widget.MyRecyclerView
+                        android:id="@+id/recycler_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ll_top"
+                        android:layout_marginTop="12dp"
+                        android:overScrollMode="never"
+                        android:scrollbars="none"></com.shunlian.app.widget.MyRecyclerView>
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

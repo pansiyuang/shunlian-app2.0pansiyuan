@@ -46,6 +46,7 @@ import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.MyWebView;
+import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.WebViewProgressBar;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.tencent.sonic.sdk.SonicCacheInterceptor;
@@ -100,6 +101,10 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public MyImageView miv_close;
     @BindView(R.id.mProgressbar)
     public WebViewProgressBar mProgressbar;
+
+    @BindView(R.id.oget)
+    protected ObtainGoldenEggsTip oget;
+
     protected String h5Url = "", beforeUrl = "", member_id = "";
     protected String title,flag;
     protected int mode;

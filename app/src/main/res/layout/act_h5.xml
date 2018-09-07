@@ -134,4 +134,14 @@
         android:visibility="gone"
         android:layout_below="@+id/view_line"/>
 
+    <!--分享提示金蛋数量-->
+    <com.shunlian.app.widget.ObtainGoldenEggsTip
+        android:id="@+id/oget"
+        android:layout_centerInParent="true"
+        android:minWidth="160dp"
+        android:minHeight="115dp"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>

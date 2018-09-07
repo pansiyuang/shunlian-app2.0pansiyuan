@@ -206,6 +206,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         }else {
             mwv_h5.setVisibility(View.VISIBLE);
             mwv_h5.getSettings().setDefaultTextEncodingName("UTF-8");
+            mwv_h5.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
             //web_view.loadData(map.get("NEWS_CONTENT"), "text/html", "UTF-8") ; 有时会遇到乱码问题 具体好像与sdk有关系
             mwv_h5.loadDataWithBaseURL(null, solution.answer, "text/html", "UTF-8", null);
         }

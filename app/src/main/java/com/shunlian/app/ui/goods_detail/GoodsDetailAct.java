@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -33,6 +34,7 @@ import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
@@ -42,6 +44,7 @@ import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.QuickActions;
@@ -51,6 +54,7 @@ import com.shunlian.app.widget.FootprintDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.RollNumView;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -168,6 +172,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.mtv_want)
     MyTextView mtv_want;
 
+    @BindView(R.id.oget)
+    ObtainGoldenEggsTip oget;
+
     private GoodsDeatilFrag goodsDeatilFrag;
     private MyImageView myImageView;
     private GoodsDetailPresenter goodsDetailPresenter;
@@ -193,6 +200,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private ShareInfoParam mShareInfoParam;
     private float mStatusBarAlpha;
     private FragmentManager mFragmentManager;
+    private Handler mHandler;
+    private Runnable mGoldEggsDowntime;
 
     public static void startAct(Context context, String goodsId) {
         Intent intent = new Intent(context, GoodsDetailAct.class);
@@ -673,6 +682,25 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         goodsDetailPresenter.delFollowStore(store_id);
     }
 
+    /**
+     * 停留获得金蛋
+     * @param time
+     */
+    @Override
+    public void stayObtainEggs(int time) {
+        if (mHandler == null)
+            mHandler = new Handler();
+
+
+        mGoldEggsDowntime = () -> {
+            if (goodsDetailPresenter != null){
+                goodsDetailPresenter.obtainGoldeneggs();
+            }
+            mHandler.removeCallbacks(mGoldEggsDowntime);
+        };
+        mHandler.postDelayed(mGoldEggsDowntime,time*1000);
+    }
+
     @Override
     public void mOnClick(View v) {
         switch (v.getId()) {
@@ -1030,6 +1058,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             event.isPause = true;
             EventBus.getDefault().post(event);
         }
+        if (mHandler != null && mGoldEggsDowntime != null)
+        mHandler.removeCallbacks(mGoldEggsDowntime);
     }
 
     /**
@@ -1175,6 +1205,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (goodsDetailPresenter != null) {
                     WXEntryActivity.startAct(this, "shareFriend",
                             goodsDetailPresenter.getShareInfoParam());
+                    Constant.SHARE_TYPE = "goods";
+                    Constant.SHARE_ID = goodsId;
                 }
                 break;
         }
@@ -1225,6 +1257,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void loginRefresh(DefMessageEvent event) {
         if (event.loginSuccess && goodsDetailPresenter != null) {
             goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void shareSuccess(ShareInfoEvent event){
+        if (event.isShareSuccess){
+            oget.setEggsCount(event.eggs_count);
+            oget.show(4000);
         }
     }
 

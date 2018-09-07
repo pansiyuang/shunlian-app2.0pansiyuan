@@ -38,6 +38,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String credit;
     public String video;//视频地址
     public String type;// 普通商品0，优品1,团购商品2
+    public String get_gold_second;// 获取金蛋的停留时间
 
     public String is_preferential;//店铺优惠  没有值的时候为空字符串
     public String member_cart_count;//详情页用户购物车角标数字
@@ -1434,6 +1435,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.credit);
         dest.writeString(this.video);
         dest.writeString(this.type);
+        dest.writeString(this.get_gold_second);
         dest.writeString(this.is_preferential);
         dest.writeString(this.member_cart_count);
         dest.writeString(this.is_new);
@@ -1482,6 +1484,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.credit = in.readString();
         this.video = in.readString();
         this.type = in.readString();
+        this.get_gold_second = in.readString();
         this.is_preferential = in.readString();
         this.member_cart_count = in.readString();
         this.is_new = in.readString();

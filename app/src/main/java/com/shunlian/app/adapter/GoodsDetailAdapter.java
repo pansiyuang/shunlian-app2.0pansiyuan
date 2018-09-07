@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.bean.VideoBannerData;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -24,6 +24,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
@@ -130,6 +131,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mRichText = detail.text;
         }
         videoBannerData = new VideoBannerData();
+        int netWorkStatus = NetworkUtils.getNetWorkStatus(context);
+        if (netWorkStatus != NetworkUtils.NETWORK_WIFI &&
+                netWorkStatus != NetworkUtils.NETWORK_CLASS_UNKNOWN){
+            videoBannerData.isShowNetTip = true;
+        }
     }
 
     @Override
@@ -923,7 +929,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     entity.index = pos;
                     LookBigImgAct.startAct(context, entity);
                 });*/
-//                String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
+                //String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
                 mHolder.vbw.setBanner(mGoodsEntity.video,
                         mGoodsEntity.pics,
                         isEmpty(type)?0:Integer.parseInt(type),

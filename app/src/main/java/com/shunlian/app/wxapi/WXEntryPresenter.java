@@ -57,18 +57,21 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             public void onErrorData(BaseEntity<CommonEntity> commonEntityBaseEntity) {
                 Constant.SHARE_TYPE="";
                 super.onErrorData(commonEntityBaseEntity);
+                iView.cloasePage();
             }
 
             @Override
             public void onErrorCode(int code, String message) {
                 Constant.SHARE_TYPE="";
                 super.onErrorCode(code, message);
+                iView.cloasePage();
             }
 
             @Override
             public void onFailure() {
                 Constant.SHARE_TYPE="";
                 super.onFailure();
+                iView.cloasePage();
             }
         });
     }
@@ -97,6 +100,13 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
                 iView.onWXCallback(null);
+                iView.cloasePage();
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                iView.cloasePage();
             }
         });
     }
@@ -109,5 +119,41 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
     @Override
     public void detachView() {
 
+    }
+
+
+    public void goodsShare(String type,String id){
+        Map<String,String> map = new HashMap<>();
+        map.put("type",type);
+        if (isEmpty(id))id = "";
+        map.put("id",id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>>
+                baseEntityCall = getSaveCookieApiService().shareSuccessCall(getRequestBody(map));
+
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                String tip = "恭喜获得%s金蛋";
+                iView.golde_eggs(String.format(tip,entity.data.gold_num));
+                Constant.SHARE_TYPE="";
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Constant.SHARE_TYPE="";
+                iView.cloasePage();
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                Constant.SHARE_TYPE="";
+                iView.cloasePage();
+            }
+        });
     }
 }

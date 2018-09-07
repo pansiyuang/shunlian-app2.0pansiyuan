@@ -14,6 +14,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -60,11 +61,21 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
         }
         timeShowPosition.add(1);
         timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), dList.get(0));
+
+        String lastDate = mList.get(mList.size() - 1).date_normal;
+        int lastPosition = 0;
+        for (int i = 0; i < dList.size(); i++) {
+            if (lastDate.equals(dList.get(i).date)) {
+                lastPosition = i;
+            }
+        }
+
         for (int i = 0; i < dList.size(); i++) {//计算日期显示的位置
             FootprintEntity.DateInfo dateInfo = dList.get(i);
-            if (i + 1 != dList.size()) {
+            if (i + 1 != dList.size() && i <= lastPosition) {
                 int size = timeShowPosition.size() - 1;
-                timeShowPosition.add(timeShowPosition.get(size) + Integer.parseInt(dateInfo.counts) + 1);
+                int position = timeShowPosition.get(size) + Integer.parseInt(dateInfo.counts) + 1;
+                timeShowPosition.add(position);
                 timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), dList.get(i + 1));
             }
         }
@@ -95,7 +106,6 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
             default:
                 return super.onCreateViewHolder(parent, viewType);
         }
-
     }
 
     @Override
@@ -191,7 +201,7 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
             TimeHolder mHolder = (TimeHolder) holder;
             if (timeShowPosition.contains(position)) {
                 final FootprintEntity.DateInfo dateInfo = timeDatas.get(position);
-                if (dateInfo==null)
+                if (dateInfo == null)
                     return;
                 mHolder.tv_date.setText(dateInfo.date);
 
@@ -200,7 +210,6 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
                 } else {
                     mHolder.miv_select.setVisibility(View.GONE);
                 }
-
 
                 if (dateInfo.isSelect) {
                     mHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_h));

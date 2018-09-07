@@ -98,9 +98,9 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
                 super.onSuccess(entity);
                 isLoading = false;
                 FootprintEntity footprintEntity = entity.data;
-                iView.getMarkList(footprintEntity.mark_data, footprintEntity.date_info, currentPage, allPage);
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
+                iView.getMarkList(footprintEntity.mark_data, footprintEntity.date_info, currentPage, allPage);
                 currentPage++;
             }
 
