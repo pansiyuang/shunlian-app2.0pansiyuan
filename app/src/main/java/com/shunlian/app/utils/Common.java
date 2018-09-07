@@ -1190,6 +1190,18 @@ public class Common {
         }
     }
 
+    /**
+     * 判断字符是否是汉字
+     */
+    public static boolean isChineseCharacters(String s) {
+        if (TextUtils.isEmpty(s)) {
+            return false;
+        }
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(s);
+        return m.matches();
+    }
+
     public static void urlToPage(Context context, String url) {
         //LogUtil.httpLogW("链接:" + url);
         if (TextUtils.isEmpty(url))

@@ -30,6 +30,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.TurnTableEntity;
 import com.shunlian.app.bean.TurnTablePopEntity;
 import com.shunlian.app.presenter.TurnTablePresenter;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -376,16 +377,17 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     public String getTrophyString(String s) {
         if (isEmpty(s))
             return "";
-        if (s.length() > 6) {
-            s = s.substring(0, 6);
-        }
+//        if (s.length() > 6) {
+//            s = s.substring(0, 6);
+//        }
         char[] strings = s.toCharArray();
         StringBuffer stringBuffer = new StringBuffer();
         for (int i = 0; i < strings.length; i++) {
             stringBuffer.append(strings[i]);
-
-            if (i != strings.length - 1) {
+            if (Common.isChineseCharacters(String.valueOf(strings[i]))) {
                 stringBuffer.append("    ");
+            } else {
+                stringBuffer.append("  ");
             }
         }
         return stringBuffer.toString();

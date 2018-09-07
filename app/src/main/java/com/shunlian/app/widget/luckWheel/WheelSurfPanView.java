@@ -422,18 +422,57 @@ public class WheelSurfPanView extends View {
     }
 
     private void drawText(float startAngle, int radius, String string, Canvas canvas) {
-        //创建绘制路径
         Path circlePath = new Path();
         //范围也是整个圆盘
-        RectF rect = new RectF(mCenter - radius, mCenter - radius, mCenter + radius, mCenter + radius);
+        RectF rect = new RectF(mCenter - radius,
+                mCenter - radius,
+                mCenter + radius,
+                mCenter + radius);
+
         //给定扇形的范围
         circlePath.addArc(rect, startAngle, mAngle);
-        //圆弧的水平偏移
-        float textWidth = mTextPaint.measureText(string);
+
+        float realWidth = mTextPaint.measureText(string.replaceAll(" ", ""));
+        int vOffset = (mRadius / 3) + mWidth / 13;
+
         //圆弧的垂直偏移
-        float hOffset = (float) (Math.sin(mAngle / 2 / 180 * Math.PI) * radius) - textWidth / 2;
+        float circleWidth = (float) (mAngle * Math.PI * vOffset / 180);
+
         //绘制文字
-        canvas.drawTextOnPath(string, circlePath, hOffset, (mRadius / 3) + mWidth / 13, mTextPaint);
+        if (realWidth <= circleWidth) {
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawTextOnPath(string.trim(), circlePath, 0, (mRadius / 3) + mWidth / 13, mTextPaint);
+        } else {
+            int index = getMaxLength(circleWidth, string);
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            String strFirst = string.substring(0, index);
+            canvas.drawTextOnPath(strFirst.trim(), circlePath, 0, vOffset, mTextPaint);
+
+            Paint.FontMetrics forFontMetrics = mTextPaint.getFontMetrics();
+            int textHeight = (int) (forFontMetrics.descent - forFontMetrics.ascent);
+            String strSecond = string.substring(index, string.length());
+            canvas.drawTextOnPath(strSecond.trim(), circlePath, 0, (mRadius / 3) + mWidth / 13 + textHeight, mTextPaint);
+        }
+    }
+
+    /**
+     * 计算出文字限定宽度能画文字的最大距离
+     */
+
+    public int getMaxLength(float maxWidth, String content) {
+        StringBuffer stringBuffer = new StringBuffer();
+        char[] c = content.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            if (" ".equals(String.valueOf(c[i]))) {
+                continue;
+            }
+            stringBuffer.append(c[i]);
+            float width = mTextPaint.measureText(stringBuffer.toString());
+            if (width > maxWidth) {
+                return i - 1;
+            }
+        }
+        return 0;
     }
 
     private void drawBitmap(float startAngle, int i, int width, int height, Canvas canvas) {
