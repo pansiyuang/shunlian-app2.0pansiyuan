@@ -218,6 +218,7 @@ public class Common {
             case "invite":
                 return "QrCodeAct";
             case "url":
+            case "noTitleUrl":
                 return "H5Act";
             case "HTMLShare":
                 return "WXEntryActivity";
@@ -238,6 +239,12 @@ public class Common {
             return;
         }
         switch (type) {
+            case "popLastView":
+                ((Activity) context).finish();
+                break;
+            case "noTitleUrl":
+                H5Act.startAct(context, params[0], H5Act.MODE_SONIC,"noTitle");
+                break;
             case "HTMLShare":
                 if (!TextUtils.isEmpty(params[0])){
                     copyText(context,params[1],params[3],false);
