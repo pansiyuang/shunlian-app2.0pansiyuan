@@ -49,6 +49,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     private Call<BaseEntity<SignEggEntity>> signEggsCall;
     private Call<BaseEntity<TaskHomeEntity>> goldegglimitCall;
     private Call<BaseEntity<TaskHomeEntity>> byCodeCall;
+    private Call<BaseEntity<TaskHomeEntity>> videoCall;
     private Call<BaseEntity<CommonEntity>> getPrizeByRegisterCall;
     private String share_pic_url;
     private int updatePosition;
@@ -64,7 +65,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      */
     @Override
     public void attachView() {
-
+        initApi();
+        getTaskList();
     }
 
     /**
@@ -125,7 +127,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      * 处理网络请求
      */
     @Override
-    public void initApi() {
+    protected void initApi() {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
@@ -347,8 +349,12 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     getGoldByCode();
                     break;
                 case task_new_user_video://看视频得金蛋
-                    if (taskLists.get(position)!= null && !isEmpty(taskLists.get(position).video_url)){
-                        Common.goGoGo(context,"url",taskLists.get(position).video_url);
+                    if (Common.isPlus()){//plus用户直接领取金蛋
+                        getGoldByWatchVideo();
+                    }else {//非plus观看视频
+                        if (taskLists.get(position) != null && !isEmpty(taskLists.get(position).video_url)) {
+                            Common.goGoGo(context, "url", taskLists.get(position).video_url);
+                        }
                     }
                     break;
             }
@@ -406,6 +412,27 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         sortAndMD5(map);
         byCodeCall = getApiService().getGoldByCode(map);
         getNetData(byCodeCall, new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
+                super.onSuccess(entity);
+                TaskHomeEntity data = entity.data;
+                iView.showGoldEggsNum(data.got_eggs);
+                iView.setGoldEggsCount(data.account_eggs);
+                if (current_task_state == NEW_USER_TASK)
+                    updateItem(getUpdatePosition(),"1");
+            }
+        });
+    }
+
+
+    /**
+     * 看视频得金蛋
+     */
+    public void getGoldByWatchVideo(){
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+        videoCall = getApiService().getGoldByWatchVideo(map);
+        getNetData(videoCall, new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
             @Override
             public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
                 super.onSuccess(entity);

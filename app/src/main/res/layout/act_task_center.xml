@@ -106,6 +106,7 @@
                     android:layout_below="@+id/mtv_count"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/white"
+                    android:text="11000000"
                     android:textSize="32sp" />
 
                 <com.shunlian.app.widget.MyTextView
@@ -113,7 +114,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/mtv_count"
-                    android:layout_marginTop="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingRight="20dp"
                     android:layout_toRightOf="@+id/mtv_eggs_count"
                     android:text="去使用"
                     android:textColor="@color/white"

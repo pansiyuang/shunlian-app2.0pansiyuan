@@ -164,13 +164,26 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         v48 = getColorResouce(R.color.value_484848);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (mPresenter != null)mPresenter.attachView();
+    }
 
     /**
      * 金蛋明细
      */
-    @OnClick(R.id.rlayout_golden_eggs)
+    @OnClick(R.id.mtv_eggs_count)
     public void goldenEggsDetail() {
         EggDetailAct.startAct(this);
+    }
+
+    /**
+     * 使用金蛋去首页
+     */
+    @OnClick(R.id.mtv_user)
+    public void userEggs(){
+        Common.goGoGo(this,"home");
     }
 
     @OnClick(R.id.miv_show_order)
