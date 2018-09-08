@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,6 +50,8 @@ import com.shunlian.app.widget.MyImageView;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.unionpay.UPPayAssistEx;
+import com.unionpay.UPQuerySEPayInfoCallback;
+import com.unionpay.UPSEInfoResp;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -136,7 +139,11 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                         /*************************************************
                          * 步骤2：通过银联工具类启动支付插件
                          ************************************************/
-                        doStartUnionPayPlugin(PayListActivity.this, tn, mMode);
+                        if (isUnion){
+                            doStartUnionPayPlugin(PayListActivity.this, tn, mMode);
+                        }else {
+                            doStartPhonePayPlugin(PayListActivity.this, tn, mMode);
+                        }
                     }
                     break;
                 case SDK_PAY_FLAG:
@@ -172,6 +179,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 //    银联支付
     private ProgressDialog mLoadingDialog = null;
     private final String mMode = "01";
+    private  boolean isUnion ;
     private static final String TN_URL_01 = "http://101.231.204.84:8091/sim/getacptn";
     private static final int UNIONPAY_FLAG = 666;
     public static final int PLUGIN_NOT_INSTALLED = -1;
@@ -407,13 +415,36 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         msg.obj = tn;
         mHandler.sendMessage(msg);
     }
+    public void doStartPhonePayPlugin(Activity activity, String tn, String mode) {
+        UPPayAssistEx.getSEPayInfo(activity, new UPQuerySEPayInfoCallback() {
+            @Override
+            public void onResult(String seName, String seType, int cardNumbers, Bundle reserved) {
+                LogUtil.augusLogW("1111paytest---"+seName);
+                if (!isEmpty(seType)){
+                    UPPayAssistEx.startSEPay(activity,null,null,tn,mode,seType);
+                    LogUtil.augusLogW("555paytest---"+seType);
+                }else {
+                    Common.staticToast("启动失败...");
+                }
+            }
+
+            @Override
+            public void onError(String seName, String seType, String errorCode, String errorDesc) {
+                Common.staticToast(errorDesc);
+                LogUtil.augusLogW("222paytest---"+seType);
+                LogUtil.augusLogW("333paytest---"+errorCode);
+                LogUtil.augusLogW("444paytest---"+errorDesc);
+            }
+        });
+
+    }
 
     public void doStartUnionPayPlugin(Activity activity, String tn, String mode) {
         // mMode参数解释：
         // 0 - 启动银联正式环境
         // 1 - 连接银联测试环境
-        int ret = UPPayAssistEx.startPay(this, null, null, tn, mode);
-        if (ret == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
+        int ret = UPPayAssistEx.startPay(activity, null, null, tn, mode);
+        if (PLUGIN_NEED_UPGRADE ==ret  || PLUGIN_NOT_INSTALLED ==ret ) {
             // 需要重新安装控件
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -521,6 +552,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         }
         switch (currentPayType) {
             case "newPay":
+                unionPay();
+                break;
+            case "phonePay":
                 unionPay();
                 break;
             case "pay_url":
@@ -644,7 +678,12 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private void submitOrder(final PayListEntity.PayTypes pay_types) {
         currentPayType = pay_types.code;
         switch (pay_types.code) {
+            case "phonePay":
+                isUnion=false;
+                unionPay();
+                break;
             case "newPay":
+                isUnion=true;
                 unionPay();
 //                if (!isEmpty(shop_goods)) {
 //                    payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, pay_types.code);
