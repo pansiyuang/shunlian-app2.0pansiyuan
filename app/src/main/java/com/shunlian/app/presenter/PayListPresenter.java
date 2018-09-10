@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -20,10 +21,12 @@ import retrofit2.Call;
 public class PayListPresenter extends BasePresenter<IPayListView> {
 
     private boolean mIsPLUS;
+    private String type = "";
 
-    public PayListPresenter(Context context, IPayListView iView, boolean isPLUS) {
+    public PayListPresenter(Context context, IPayListView iView, boolean isPLUS, String seType) {
         super(context, iView);
         mIsPLUS = isPLUS;
+        type = seType;
         initApi();
     }
 
@@ -52,23 +55,38 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
         if (mIsPLUS) {//获取plus支付列表
             map.put("order_type", "product");
         }
+        map.put("union_mobile_pay", type);
         sortAndMD5(map);
         Call<BaseEntity<PayListEntity>> methodlist = getApiService().methodlist(map);
         getNetData(methodlist, new SimpleNetDataCallback<BaseEntity<PayListEntity>>() {
             @Override
             public void onSuccess(BaseEntity<PayListEntity> entity) {
                 super.onSuccess(entity);
-                PayListEntity.PayTypes payTypes=new PayListEntity.PayTypes();
-                PayListEntity.PayTypes payType=new PayListEntity.PayTypes();
-                payTypes.code="newPay";
-                payTypes.pic="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536227491528&di=2a34e08d0226f7d80b53653d1d18d204&imgtype=0&src=http%3A%2F%2Fupload.chinamac.com%2F2014%2F1118%2F20141118084932103.jpg";
-                payTypes.name="银联测试";
-                payType.code="phonePay";
-                payType.pic="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536227491528&di=2a34e08d0226f7d80b53653d1d18d204&imgtype=0&src=http%3A%2F%2Fupload.chinamac.com%2F2014%2F1118%2F20141118084932103.jpg";
-                payType.name="手机支付";
-                entity.data.pay_method.add(payTypes);
-                entity.data.pay_method.add(payType);
                 iView.payList(entity.data.pay_method);
+            }
+        });
+    }
+
+    public void payVerify(String url) {
+        Call<BaseEntity<EmptyEntity>> methodlist = getApiService().payVerify(url);
+        getNetData(methodlist, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.paySuccessCall();
+            }
+
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.payFailCall();
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                iView.payFailCall();
             }
         });
     }
@@ -82,7 +100,7 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
      * @param paytype
      */
     public void orderCheckout(String shop_goods, String address_id, String stage_voucher_id,
-                              String anonymous, String use_egg ,String paytype) {
+                              String anonymous, String use_egg, String paytype) {
         Map<String, String> map = new HashMap<>();
         map.put("shop_goods", shop_goods);
         map.put("address_id", address_id);
@@ -96,18 +114,18 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
 
         getNetData(true, baseEntityCall,
                 new SimpleNetDataCallback<BaseEntity<PayOrderEntity>>() {
-            @Override
-            public void onSuccess(BaseEntity<PayOrderEntity> entity) {
-                super.onSuccess(entity);
-                iView.payOrder(entity.data);
-            }
+                    @Override
+                    public void onSuccess(BaseEntity<PayOrderEntity> entity) {
+                        super.onSuccess(entity);
+                        iView.payOrder(entity.data);
+                    }
 
-            @Override
-            public void onErrorData(BaseEntity<PayOrderEntity> payOrderEntityBaseEntity) {
-                super.onErrorData(payOrderEntityBaseEntity);
-                iView.payOrderFail(payOrderEntityBaseEntity.data);
-            }
-        });
+                    @Override
+                    public void onErrorData(BaseEntity<PayOrderEntity> payOrderEntityBaseEntity) {
+                        super.onErrorData(payOrderEntityBaseEntity);
+                        iView.payOrderFail(payOrderEntityBaseEntity.data);
+                    }
+                });
     }
 
     /**
@@ -177,15 +195,16 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
 
     /**
      * 手机充值
+     *
      * @param phoneNumber
      * @param topUpPrice
      * @param paytype
      */
-    public void phoneTopUp(String phoneNumber,String topUpPrice,String paytype){
-        Map<String,String> map = new HashMap<>();
-        map.put("number",phoneNumber);
-        map.put("face_price",topUpPrice);
-        map.put("paytype",paytype);
+    public void phoneTopUp(String phoneNumber, String topUpPrice, String paytype) {
+        Map<String, String> map = new HashMap<>();
+        map.put("number", phoneNumber);
+        map.put("face_price", topUpPrice);
+        map.put("paytype", paytype);
         sortAndMD5(map);
 
         Call<BaseEntity<PayOrderEntity>> phoneTopUpCall = getAddCookieApiService()

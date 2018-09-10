@@ -69,7 +69,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/7.
  */
 
-public class PayListActivity extends BaseActivity implements View.OnClickListener, IPayListView ,Runnable{
+public class PayListActivity extends BaseActivity implements View.OnClickListener, IPayListView {
 
 
     public static final int FINISH_ACT_WHAT = 100;//finish act
@@ -92,8 +92,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String price;
     private String shop_goods;
     private String addressId;
-    private String currentPayType;//当前支付方式
+    private String currentPayType="";//当前支付方式
     private String pay_sn;
+    private boolean isPLUS=false;
     /****plus id****/
     private String mProductId;
     private String mSkuId;
@@ -118,9 +119,6 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case UNIONPAY_FLAG:
-                    if (mLoadingDialog.isShowing()) {
-                        mLoadingDialog.dismiss();
-                    }
                     String tn = "";
                     if (msg.obj == null || ((String) msg.obj).length() == 0) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(PayListActivity.this);
@@ -140,9 +138,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                          * 步骤2：通过银联工具类启动支付插件
                          ************************************************/
                         if (isUnion){
-                            doStartUnionPayPlugin(PayListActivity.this, tn, mMode);
+                            doStartUnionPayPlugin(PayListActivity.this, tn, "00");
                         }else {
-                            doStartPhonePayPlugin(PayListActivity.this, tn, mMode);
+                            doStartPhonePayPlugin(PayListActivity.this, tn, "00");
                         }
                     }
                     break;
@@ -177,10 +175,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     };
 
 //    银联支付
-    private ProgressDialog mLoadingDialog = null;
-    private final String mMode = "01";
+    private String seType="";
+    private String unionUrl="";
     private  boolean isUnion ;
-    private static final String TN_URL_01 = "http://101.231.204.84:8091/sim/getacptn";
     private static final int UNIONPAY_FLAG = 666;
     public static final int PLUGIN_NOT_INSTALLED = -1;
     public static final int PLUGIN_NEED_UPGRADE = 2;
@@ -260,10 +257,19 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         String paramsStr = intent.getStringExtra("params");
         parseParams(paramsStr);
 
-        boolean isPLUS = false;
         if (!isEmpty(mProductId)) isPLUS = true;
-        payListPresenter = new PayListPresenter(this, this, isPLUS);
+        UPPayAssistEx.getSEPayInfo(activity, new UPQuerySEPayInfoCallback() {
+            @Override
+            public void onResult(String seName, String seTypes, int cardNumbers, Bundle reserved) {
+                seType=seTypes;
+                payListPresenter = new PayListPresenter(PayListActivity.this,PayListActivity. this, isPLUS,seType);
+            }
 
+            @Override
+            public void onError(String seName, String seType, String errorCode, String errorDesc) {
+                payListPresenter = new PayListPresenter(PayListActivity.this,PayListActivity. this, isPLUS,"");
+            }
+        });
         wxapi = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
         wxapi.registerApp(Constant.WX_APP_ID);// 注册到微信列表
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -373,72 +379,18 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         });
     }
 
-    public void unionPay() {
-        mLoadingDialog = ProgressDialog.show(this, // context
-                "", // title
-                "正在努力的获取tn中,请稍候...", // message
-                true); // 进度是否是不确定的，这只和创建进度条有关
 
-        /*************************************************
-         * 步骤1：从网络开始,获取交易流水号即TN
-         ************************************************/
-        new Thread(PayListActivity.this).start();
-    }
-
-    @Override
-    public void run() {
-        String tn = null;
-        InputStream is;
-        try {
-
-            String url = TN_URL_01;
-
-            URL myURL = new URL(url);
-            URLConnection ucon = myURL.openConnection();
-            ucon.setConnectTimeout(120000);
-            is = ucon.getInputStream();
-            int i = -1;
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            while ((i = is.read()) != -1) {
-                baos.write(i);
-            }
-
-            tn = baos.toString();
-            is.close();
-            baos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public void unionPay(String tn) {
         Message msg = mHandler.obtainMessage();
         msg.what = UNIONPAY_FLAG;
         msg.obj = tn;
         mHandler.sendMessage(msg);
     }
+
+
     public void doStartPhonePayPlugin(Activity activity, String tn, String mode) {
-        UPPayAssistEx.getSEPayInfo(activity, new UPQuerySEPayInfoCallback() {
-            @Override
-            public void onResult(String seName, String seType, int cardNumbers, Bundle reserved) {
-                LogUtil.augusLogW("1111paytest---"+seName);
-                if (!isEmpty(seType)){
-                    UPPayAssistEx.startSEPay(activity,null,null,tn,mode,seType);
-                    LogUtil.augusLogW("555paytest---"+seType);
-                }else {
-                    Common.staticToast("启动失败...");
-                }
-            }
-
-            @Override
-            public void onError(String seName, String seType, String errorCode, String errorDesc) {
-                Common.staticToast(errorDesc);
-                LogUtil.augusLogW("222paytest---"+seType);
-                LogUtil.augusLogW("333paytest---"+errorCode);
-                LogUtil.augusLogW("444paytest---"+errorDesc);
-            }
-        });
-
+        UPPayAssistEx.startSEPay(activity, null, null, tn, mode,seType);
     }
-
     public void doStartUnionPayPlugin(Activity activity, String tn, String mode) {
         // mMode参数解释：
         // 0 - 启动银联正式环境
@@ -485,50 +437,56 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         /*
          * 支付控件返回字符串:success、fail、cancel 分别代表支付成功，支付失败，支付取消
          */
-        String str = data.getExtras().getString("pay_result");
+        String str="";
+        if (data.getExtras()!=null&&!isEmpty(data.getExtras().getString("pay_result")))
+         str= data.getExtras().getString("pay_result");
         if (str.equalsIgnoreCase("success")) {
 
             // 如果想对结果数据验签，可使用下面这段代码，但建议不验签，直接去商户后台查询交易结果
             // result_data结构见c）result_data参数说明
-            if (data.hasExtra("result_data")) {
-                String result = data.getExtras().getString("result_data");
-                try {
-                    JSONObject resultJson = new JSONObject(result);
-                    String sign = resultJson.getString("sign");
-                    String dataOrg = resultJson.getString("data");
-                    // 此处的verify建议送去商户后台做验签
-                    // 如要放在手机端验，则代码必须支持更新证书
-                    boolean ret = verify(dataOrg, sign, mMode);
-                    if (ret) {
-                        // 验签成功，显示支付结果
-                        msg = "支付成功！";
-                    } else {
-                        // 验签失败
-                        msg = "支付失败！";
-                    }
-                } catch (JSONException e) {
-                }
-            }
+//            if (data.hasExtra("result_data")) {
+//                String result = data.getExtras().getString("result_data");
+//                try {
+//                    JSONObject resultJson = new JSONObject(result);
+//                    String sign = resultJson.getString("sign");
+//                    String dataOrg = resultJson.getString("data");
+//                    // 此处的verify建议送去商户后台做验签
+//                    // 如要放在手机端验，则代码必须支持更新证书
+//                    boolean ret = verify(dataOrg, sign, mMode);
+//                    if (ret) {
+//                        // 验签成功，显示支付结果
+//                        msg = "支付成功！";
+//                    } else {
+//                        // 验签失败
+//                        msg = "支付失败！";
+//                    }
+//                } catch (JSONException e) {
+//                }
+//            }
             // 结果result_data为成功时，去商户后台查询一下再展示成功
-            msg = "支付成功！";
+//            msg = "支付成功！";
+            payListPresenter.payVerify(unionUrl);
+//            payListPresenter.payVerify("http://pay.v2.shunliandongli.com/unionpay/query?pay_sn=18091057097548690T6");
         } else if (str.equalsIgnoreCase("fail")) {
-            msg = "支付失败！";
+//            msg = "支付失败！";
+            payFail();
         } else if (str.equalsIgnoreCase("cancel")) {
-            msg = "用户取消了支付";
+            payFail();
+//            msg = "用户取消了支付";
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("支付结果通知");
-        builder.setMessage(msg);
-        builder.setInverseBackgroundForced(true);
-        // builder.setCustomTitle();
-        builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.create().show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("支付结果通知");
+//        builder.setMessage(msg);
+//        builder.setInverseBackgroundForced(true);
+//        // builder.setCustomTitle();
+//        builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        builder.create().show();
     }
     private boolean verify(String msg, String sign64, String mode) {
         // 此处的verify，商户需送去商户后台做验签
@@ -550,13 +508,13 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             paySuccess();
             return;
         }
+        if (currentPayType.contains("unionpay")&&entity.unionpay!=null){
+            isUnion = !currentPayType.equals("unionpay_" + seType);
+            unionUrl=entity.unionpay.query_url;
+            unionPay(entity.unionpay.tn);
+            return;
+        }
         switch (currentPayType) {
-            case "newPay":
-                unionPay();
-                break;
-            case "phonePay":
-                unionPay();
-                break;
             case "pay_url":
                 callbackH5Pay(entity.pay_url, false);
                 break;
@@ -565,10 +523,10 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 break;
             case "wechat":
                 break;
-            case "unionpay":
-                callbackH5Pay(entity.unionpay, true);
+//            case "unionpay":
+//                callbackH5Pay(entity.unionpay, true);
 //                callbackH5Pay("http://pay-test.shunliandongli.com/app_jump_test.php");
-                break;
+//                break;
             case "credit":
                 paySuccess();
                 break;
@@ -583,6 +541,16 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void payOrderFail(PayOrderEntity entity) {
         this.order_id = entity.order_id;
+        payFail();
+    }
+
+    @Override
+    public void paySuccessCall() {
+        paySuccess();
+    }
+
+    @Override
+    public void payFailCall() {
         payFail();
     }
 
@@ -675,49 +643,37 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         h5_pay.loadUrl(unionpay, setWebviewHeader());
     }
 
+    public void payCommon(String code){
+        if (!isEmpty(shop_goods)) {
+            payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, code);
+        } else if (!isEmpty(orderId)) {
+            payListPresenter.fromOrderListGoPay(orderId, code);
+        } else if (!isEmpty(mPhoneNumber)) {//手机充值
+            payListPresenter.phoneTopUp(mPhoneNumber, mTopUpPrice, code);
+        }
+    }
     private void submitOrder(final PayListEntity.PayTypes pay_types) {
-        currentPayType = pay_types.code;
+        if (pay_types!=null&&!isEmpty(pay_types.code)){
+            currentPayType = pay_types.code;
+        }else {
+            Common.staticToast("参数有误，请稍后再试...");
+            return;
+        }
+        if (currentPayType.contains("unionpay")){
+            payCommon(pay_types.code);
+            return;
+        }
         switch (pay_types.code) {
-            case "phonePay":
-                isUnion=false;
-                unionPay();
-                break;
-            case "newPay":
-                isUnion=true;
-                unionPay();
-//                if (!isEmpty(shop_goods)) {
-//                    payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, pay_types.code);
-//                } else if (!isEmpty(orderId)) {
-//                    payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
-//                } else if (!isEmpty(mPhoneNumber)) {//手机充值
-//                    payListPresenter.phoneTopUp(mPhoneNumber, mTopUpPrice, pay_types.code);
-//                }
-                break;
             case "pay_url":
                 payListPresenter.submitPLUSOrder(mProductId, mSkuId, addressId, pay_types.code);
                 break;
             case "alipay":
-                if (!isEmpty(shop_goods)) {
-                    payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, pay_types.code);
-                } else if (!isEmpty(orderId)) {
-                    payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
-                } else if (!isEmpty(mPhoneNumber)) {//手机充值
-                    payListPresenter.phoneTopUp(mPhoneNumber, mTopUpPrice, pay_types.code);
-                }
+                payCommon(pay_types.code);
 //                else if (!isEmpty(mProductId)){
 //                    payListPresenter.submitPLUSOrder(mProductId,mSkuId,addressId,pay_types.code);
 //                }
                 break;
             case "wechat":
-                break;
-            case "unionpay":
-                if (!isEmpty(shop_goods)) {
-                    payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, pay_types.code);
-                } else if (!isEmpty(orderId)) {
-                    payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
-                } else if (!isEmpty(mPhoneNumber)) {//手机充值
-                    payListPresenter.phoneTopUp(mPhoneNumber, mTopUpPrice, pay_types.code);
-                }
                 break;
             case "credit":
                 final PromptDialog promptDialog = new PromptDialog(this);

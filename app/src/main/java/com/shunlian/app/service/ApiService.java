@@ -157,6 +157,15 @@ public interface ApiService {
      * 2.0正式接口
      */
 
+
+    /**
+     *银联支付成功验证
+     * @param url
+     * @return
+     */
+    @GET
+    Call<BaseEntity<EmptyEntity>> payVerify(@Url String url);
+
     /**
      * 选择推荐人
      *
