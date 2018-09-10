@@ -137,7 +137,13 @@ public class SignGoldEggsLayout extends LinearLayout {
             for (int i = 0; i < signDaysBeans.size(); i++) {
                 if (i >= 7)break;
                 TaskHomeEntity.SignDaysBean bean = signDaysBeans.get(i);
+
                 mtv_date.get(i).setText(bean.date);
+                if (i == 2){
+                    mtv_date.get(i).setText("今日");
+                    mtv_date.get(i).setTextColor(pink);
+                }
+
                 MyTextView textView = mtv_eggs_count.get(i);
                 if (i > 2 && !isEmpty(bean.gold_num)){
                     visible(textView);
