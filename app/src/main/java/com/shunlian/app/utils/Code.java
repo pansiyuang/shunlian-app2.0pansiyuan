@@ -56,5 +56,5 @@ public class Code {
     /**
      * 接口请求错误，但是不需要提示错误信息
      */
-    public static final int API_ERROR_NO_MESSAGE = -4040;
+    public static final int API_ERROR_NO_MESSAGE = 4040;
 }

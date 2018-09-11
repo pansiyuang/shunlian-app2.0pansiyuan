@@ -2624,4 +2624,10 @@ public interface ApiService {
      */
     @GET("tasknewperson/getGoldByCode")
     Call<BaseEntity<TaskHomeEntity>> getGoldByCode(@QueryMap Map<String,String> map);
+
+    /**
+     * 看视频领金蛋
+     */
+    @GET("tasknewperson/getGoldByWatchVideo")
+    Call<BaseEntity<TaskHomeEntity>> getGoldByWatchVideo(@QueryMap Map<String,String> map);
 }

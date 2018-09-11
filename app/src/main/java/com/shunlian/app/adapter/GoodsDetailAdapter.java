@@ -452,41 +452,40 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     mRect = new Rect();
                 }
                 strLengthMeasure.delete(0, strLengthMeasure.length());
-                for (int i = 0; i < vouchers.size(); i++) {
-                    if (i > 2)break;
-                    GoodsDeatilEntity.Voucher voucher = vouchers.get(i);
-                    MyTextView textView = new MyTextView(context);
-                    textView.setTextSize(11);
-                    textView.setMaxLines(1);
-                    textView.setEllipsize(TextUtils.TruncateAt.END);
-                    textView.setTextColor(getResources().getColor(R.color.value_FC2F57));
-                    textView.setBackgroundResource(R.drawable.edge_frame_r3);
-                    GradientDrawable background = (GradientDrawable) textView.getBackground();
-                    background.setColor(Color.WHITE);
-                    int padding = TransformUtil.dip2px(context, 4);
-                    textView.setPadding(padding, padding, padding, padding);
-                    if (Float.parseFloat(voucher.use_condition) == 0) {
-                        textView.setText(voucher.denomination.concat("元无门槛优惠券"));
-                    } else {
-                        textView.setText(getString(R.string.pull)+voucher.use_condition
-                                .concat(getString(R.string.reduce))+voucher.denomination);
-                    }
-                    mHolder.mll_Coupon.addView(textView);
-                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
-                    layoutParams.leftMargin = TransformUtil.dip2px(context, 5.5f);
-                    textView.setLayoutParams(layoutParams);
+                mHolder.mll_Coupon.post(()->{
+                    for (int i = 0; i < vouchers.size(); i++) {
+                        if (i > 2)break;
+                        GoodsDeatilEntity.Voucher voucher = vouchers.get(i);
+                        MyTextView textView = new MyTextView(context);
+                        textView.setTextSize(11);
+                        textView.setMaxLines(1);
+                        textView.setEllipsize(TextUtils.TruncateAt.END);
+                        textView.setTextColor(getResources().getColor(R.color.value_FC2F57));
+                        textView.setBackgroundResource(R.drawable.edge_frame_r3);
+                        GradientDrawable background = (GradientDrawable) textView.getBackground();
+                        background.setColor(Color.WHITE);
+                        int padding = TransformUtil.dip2px(context, 4);
+                        textView.setPadding(padding, padding, padding, padding);
+                        if (Float.parseFloat(voucher.use_condition) == 0) {
+                            textView.setText(voucher.denomination.concat("元无门槛优惠券"));
+                        } else {
+                            textView.setText(getString(R.string.pull)+voucher.use_condition
+                                    .concat(getString(R.string.reduce))+voucher.denomination);
+                        }
+                        mHolder.mll_Coupon.addView(textView);
+                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
+                        layoutParams.leftMargin = TransformUtil.dip2px(context, 5.5f);
+                        textView.setLayoutParams(layoutParams);
 
-                    //长度兼容
-                    strLengthMeasure.append(textView.getText());
-                    textView.getPaint().getTextBounds(strLengthMeasure.toString(),
-                            0,strLengthMeasure.length(),mRect);
-                    //strLengthMeasure.length() > 22
-                    if ((mRect.right+100) > mDeviceWidth) {
-                        mHolder.mll_Coupon.removeViewAt(mHolder.mll_Coupon.getChildCount() - 1);
-                        break;
+                        //长度兼容
+                        strLengthMeasure.append(textView.getText());
+                        float v = textView.getPaint().measureText(strLengthMeasure.toString());
+                        if (v > mHolder.mll_Coupon.getMeasuredWidth()) {
+                            mHolder.mll_Coupon.removeViewAt(mHolder.mll_Coupon.getChildCount() - 1);
+                            break;
+                        }
                     }
-                }
-
+                });
             } else {
                 gone(mHolder.view_coupon,mHolder.mll_ling_Coupon);
             }
