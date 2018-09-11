@@ -146,7 +146,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         recycler_list.setHasFixedSize(false);
 
         tv_title_right.setOnClickListener(v -> {
-            initDialogs(currentRuleUrl, false);
+            initDialogs(currentRuleUrl);
         });
 
         setTextSwitcher();
@@ -162,7 +162,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
     }
 
-    public void initDialogs(String url, boolean isQR) {
+    public void initDialogs(String url) {
         if (dialog_ad == null) {
             if (isEmpty(url))
                 return;
@@ -174,12 +174,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
             mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
             mwv_rule.loadUrl(url);
-//        mwv_rule.loadData("ddddddfsdfsfsfsdfsfsdfd","text/html", "UTF-8");
-            if (isQR) {
-                miv_ad.setImageResource(R.mipmap.image_renwu_changjianwenti);
-            } else {
-                miv_ad.setImageResource(R.mipmap.image_renwu_qiandaoguize);
-            }
+            miv_ad.setImageResource(R.mipmap.image_renwu_dazhuanpan);
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
             dialog_ad.setCancelable(false);
         }
