@@ -261,8 +261,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         }
 
         if (isUserGoldenEggs && currentPrice < 1){
-            //提示用户至少支付的钱数
-            Common.staticToast(EGGS_TIP);
+            Common.staticToast(EGGS_TIP);//提示用户至少支付的钱数
         }
 
         if (currentPrice <= 0){
@@ -427,6 +426,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 float p = calculateAmount(enabled);//每次改变按钮状态都要重新计算金额
                 if (p < 1){
                     isUserGoldenEggs = false;
+                    calculateAmount(enabled);
                     miv_golden_eggs.setImageResource(R.mipmap.img_xuanze_n);
                 }else {
                     if (isUserGoldenEggs){
