@@ -137,6 +137,7 @@ public class DowntimeLayout extends View {
     }
 
     public void setSecond(long second, long maxProgress) {
+        //LogUtil.zhLogW(maxProgress+"==maxProgress========second=="+second);
         mSeconds = second;
         mMaxProgress = maxProgress;
 
@@ -152,10 +153,6 @@ public class DowntimeLayout extends View {
      * 创建倒计时
      */
     private void createCountDownTimer() {
-        if (mCountDownTimer != null) {
-            mCountDownTimer.cancel();
-            return;
-        }
         mCountDownTimer = new CountDownTimer(mSeconds * 1000, 1000) {
 
             @Override

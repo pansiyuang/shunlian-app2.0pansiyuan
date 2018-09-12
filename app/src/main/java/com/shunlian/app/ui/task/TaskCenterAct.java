@@ -557,6 +557,14 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (dtime_layout != null){
+            dtime_layout.cancelDownTimer();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         if (dtime_layout != null) {
             dtime_layout.detachView();
