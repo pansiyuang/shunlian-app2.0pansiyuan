@@ -404,7 +404,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         if (requestCode == 100 && Activity.RESULT_OK == resultCode) {
             String addressId = data.getStringExtra("addressId");
             if (currentLuckDraw != null) {
-                mPresenter.turntableAddAddress(addressId, currentLuckDraw.id);
+                mPresenter.turntableAddAddress(addressId, currentLuckDraw.tmt_id);
             } else if (!isEmpty(currentTmtId)) {
                 mPresenter.turntableAddAddress(addressId, currentTmtId);
             }
