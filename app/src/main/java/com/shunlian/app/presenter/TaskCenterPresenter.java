@@ -308,7 +308,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     break;
                 case task_daily_share://分享赚金蛋
                     TaskListEntity.ItemTask itemTask = taskLists.get(position);
-                    TaskListEntity.Url url = itemTask.url;
+                    TaskListEntity.Url url = itemTask.ad_url;
                     if (url != null){
                         Common.goGoGo(context,url.type,url.item_id);
                     }
@@ -327,10 +327,14 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     晒单分享
      */
     public void share() {
-        ShareInfoParam shareInfoParam = new ShareInfoParam();
-        shareInfoParam.photo = share_pic_url;
-        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
-        Constant.SHARE_TYPE = "income";
+        if (isEmpty(share_pic_url)){
+            Common.staticToast("晒单活动已关闭，请下次再来");
+        }else {
+            ShareInfoParam shareInfoParam = new ShareInfoParam();
+            shareInfoParam.photo = share_pic_url;
+            WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+            Constant.SHARE_TYPE = "income";
+        }
     }
 
     /**

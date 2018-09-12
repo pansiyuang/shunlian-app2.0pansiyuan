@@ -25,7 +25,7 @@ public class TaskListEntity {
         public String icon_url;
         public String share_pic_url;
         public String video_url;
-        public Url url;
+        public Url ad_url;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
