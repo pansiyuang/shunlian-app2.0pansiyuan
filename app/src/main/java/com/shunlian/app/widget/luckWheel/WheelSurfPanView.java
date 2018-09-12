@@ -446,15 +446,15 @@ public class WheelSurfPanView extends View {
             String strFirst = string.substring(0, index);
             canvas.drawTextOnPath(strFirst.trim(), circlePath, 0, vOffset, mTextPaint);
 
+            LogUtil.httpLogW("第一行文字:" + strFirst);
             Paint.FontMetrics forFontMetrics = mTextPaint.getFontMetrics();
             int textHeight = (int) (forFontMetrics.descent - forFontMetrics.ascent);
 
             //第二圈圆弧的垂直偏移
             float secondCircleWidth = (float) (mAngle * Math.PI * (vOffset - textHeight) / 180);
             String strSecond = string.substring(index, string.length());
-
+            LogUtil.httpLogW("第二行文字:" + strSecond);
             String newContent = getSecondString(secondCircleWidth, strSecond);
-
             canvas.drawTextOnPath(newContent.trim(), circlePath, 0, vOffset + textHeight, mTextPaint);
         }
     }
@@ -474,6 +474,8 @@ public class WheelSurfPanView extends View {
             float width = mTextPaint.measureText(stringBuffer.toString());
             if (width > maxWidth) {
                 return i - 1;
+            } else {
+                return i;
             }
         }
         return 0;
@@ -488,7 +490,7 @@ public class WheelSurfPanView extends View {
         if (width > maxWidth) {
             return content.substring(0, index - 2) + ellipsis;
         } else {
-            return newContent + ellipsis;
+            return newContent;
         }
     }
 
