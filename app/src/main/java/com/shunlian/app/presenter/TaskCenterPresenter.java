@@ -308,7 +308,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     break;
                 case task_daily_share://分享赚金蛋
                     TaskListEntity.ItemTask itemTask = taskLists.get(position);
-                    TaskListEntity.Url url = itemTask.url;
+                    TaskListEntity.Url url = itemTask.ad_url;
                     if (url != null){
                         Common.goGoGo(context,url.type,url.item_id);
                     }
