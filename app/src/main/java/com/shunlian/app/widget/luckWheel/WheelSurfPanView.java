@@ -298,12 +298,10 @@ public class WheelSurfPanView extends View {
         //最低圈数是mMinTimes圈
         int newAngle = (int) (360 * mMinTimes + (pos - 1) * mAngle + currAngle - (lastPosition == 0 ? 0 : ((lastPosition - 1) * mAngle)));
         //计算目前的角度划过的扇形份数
-        int num = (int) ((newAngle - currAngle) / mAngle);
         ObjectAnimator anim = ObjectAnimator.ofFloat(WheelSurfPanView.this, "rotation", currAngle, newAngle);
         currAngle = newAngle;
         lastPosition = pos;
         // 动画的持续时间，执行多久？
-//        anim.setDuration(num * mVarTime);
         anim.setDuration(10 * 1000);
         anim.addUpdateListener(animation -> {
             //将动画的过程态回调给调用者
@@ -435,23 +433,29 @@ public class WheelSurfPanView extends View {
         float realWidth = mTextPaint.measureText(string.replaceAll(" ", ""));
         int vOffset = (mRadius / 3) + mWidth / 13;
 
-        //圆弧的垂直偏移
-        float circleWidth = (float) (mAngle * Math.PI * vOffset / 180);
+        //第一圈圆弧的垂直偏移
+        float firstCircleWidth = (float) (mAngle * Math.PI * vOffset / 180);
 
         //绘制文字
-        if (realWidth <= circleWidth) {
+        if (realWidth <= firstCircleWidth) {
             mTextPaint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawTextOnPath(string.trim(), circlePath, 0, (mRadius / 3) + mWidth / 13, mTextPaint);
+            canvas.drawTextOnPath(string.trim(), circlePath, 0, vOffset, mTextPaint);
         } else {
-            int index = getMaxLength(circleWidth, string);
+            int index = getMaxLength(firstCircleWidth, string);
             mTextPaint.setTextAlign(Paint.Align.CENTER);
             String strFirst = string.substring(0, index);
             canvas.drawTextOnPath(strFirst.trim(), circlePath, 0, vOffset, mTextPaint);
 
             Paint.FontMetrics forFontMetrics = mTextPaint.getFontMetrics();
             int textHeight = (int) (forFontMetrics.descent - forFontMetrics.ascent);
+
+            //第二圈圆弧的垂直偏移
+            float secondCircleWidth = (float) (mAngle * Math.PI * (vOffset - textHeight) / 180);
             String strSecond = string.substring(index, string.length());
-            canvas.drawTextOnPath(strSecond.trim(), circlePath, 0, (mRadius / 3) + mWidth / 13 + textHeight, mTextPaint);
+
+            String newContent = getSecondString(secondCircleWidth, strSecond);
+
+            canvas.drawTextOnPath(newContent.trim(), circlePath, 0, vOffset + textHeight, mTextPaint);
         }
     }
 
@@ -473,6 +477,19 @@ public class WheelSurfPanView extends View {
             }
         }
         return 0;
+    }
+
+    //设置第二行文字
+    public String getSecondString(float maxWidth, String content) {
+        String ellipsis = "  .  .  .";
+        int index = getMaxLength(maxWidth, content);
+        String newContent = content.substring(0, index - 1) + ellipsis;
+        float width = mTextPaint.measureText(newContent.toString());
+        if (width > maxWidth) {
+            return content.substring(0, index - 2) + ellipsis;
+        } else {
+            return newContent + ellipsis;
+        }
     }
 
     private void drawBitmap(float startAngle, int i, int width, int height, Canvas canvas) {

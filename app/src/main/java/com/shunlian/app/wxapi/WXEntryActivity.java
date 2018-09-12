@@ -291,7 +291,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     } else {
                         mYFinish();
                     }
-                    Common.staticToast("分享成功");
+//                    Common.staticToast("分享成功");
                 }
                 SharedPrefUtil.saveCacheSharedPrf("wx_flag","");
                 break;
