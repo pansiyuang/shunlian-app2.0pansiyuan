@@ -474,11 +474,9 @@ public class WheelSurfPanView extends View {
             float width = mTextPaint.measureText(stringBuffer.toString());
             if (width > maxWidth) {
                 return i - 1;
-            } else {
-                return i;
             }
         }
-        return 0;
+        return content.length();
     }
 
     //设置第二行文字
