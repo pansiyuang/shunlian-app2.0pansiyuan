@@ -261,12 +261,19 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         UPPayAssistEx.getSEPayInfo(activity, new UPQuerySEPayInfoCallback() {
             @Override
             public void onResult(String seName, String seTypes, int cardNumbers, Bundle reserved) {
+                LogUtil.augusLogW("androidPayName---"+seName);
+                LogUtil.augusLogW("androidPayType---"+seTypes);
+                LogUtil.augusLogW("androidPayNum---"+cardNumbers);
                 seType=seTypes;
                 payListPresenter = new PayListPresenter(PayListActivity.this,PayListActivity. this, isPLUS,seType);
             }
 
             @Override
             public void onError(String seName, String seType, String errorCode, String errorDesc) {
+                LogUtil.augusLogW("androidPayName---"+seName);
+                LogUtil.augusLogW("androidPayType---"+seType);
+                LogUtil.augusLogW("androidPayCode---"+errorCode);
+                LogUtil.augusLogW("androidPayDesc---"+errorDesc);
                 payListPresenter = new PayListPresenter(PayListActivity.this,PayListActivity. this, isPLUS,"");
             }
         });
