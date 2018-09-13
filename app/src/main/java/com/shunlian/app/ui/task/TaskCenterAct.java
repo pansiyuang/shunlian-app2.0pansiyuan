@@ -483,7 +483,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void shareSuccess(ShareInfoEvent event) {
-        if (event.isShareSuccess && mPresenter != null
+        if (oget != null && event.isShareSuccess && mPresenter != null
                 &&Common.isForeground(this,getClass().getName())) {
             oget.setEggsCount(event.eggs_count);
             oget.show(4000);
