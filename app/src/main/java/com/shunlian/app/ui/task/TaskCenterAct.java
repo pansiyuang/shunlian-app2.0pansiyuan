@@ -27,6 +27,7 @@ import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ITaskCenterView;
@@ -45,6 +46,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -119,6 +122,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     private TaskCenterPresenter mPresenter;
     private Dialog dialog_rule, dialog_qr;
     private String mAdUrl;
+    private int mDeviceWidth;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, TaskCenterAct.class));
@@ -164,6 +168,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
         pick_color = getColorResouce(R.color.pink_color);
         v48 = getColorResouce(R.color.value_484848);
+
+        mDeviceWidth = DeviceInfoUtil.getDeviceWidth(this);
     }
 
     @Override
@@ -346,6 +352,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setGoldEggsCount(String count) {
+        if (mtv_eggs_count != null)
         mtv_eggs_count.setText(count);
     }
 
@@ -356,6 +363,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setSignContinueNum(String num) {
+        if (mtvSignDay != null)
         mtvSignDay.setText(num);
     }
 
@@ -402,6 +410,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
+    private String re = "(w=|h=)(\\d+)";
+    private Pattern p = Pattern.compile(re);
     /**
      * 广告图
      *
@@ -413,8 +423,28 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         if (URLUtil.isNetworkUrl(url)) {
             if (url.equals(mAdUrl))return;
             visible(mivPic);
-            GlideUtils.getInstance().loadCornerImage(this, mivPic, url,
-                    TransformUtil.dip2px(this, 2.5f));
+
+            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url)) {
+                Matcher m = p.matcher(url);
+                int w = 0;
+                int h = 0;
+                if (m.find()) {
+                    w = Integer.parseInt(m.group(2));
+                } else {
+                    w = 720;
+                }
+                if (m.find()) {
+                    h = Integer.parseInt(m.group(2));
+                } else {
+                    h = 200;
+                }
+                //LogUtil.zhLogW("===w="+w+"  h="+h);
+                int i = (int) (mDeviceWidth * h * 1.0f / w);
+                GlideUtils.getInstance()
+                        .loadCornerImageSize(this, mivPic, url,
+                                TransformUtil.dip2px(this, 2.5f), mDeviceWidth, i);
+            }
+
             mivPic.setOnClickListener(v -> {
                 if (urlBean != null) {
                     Common.goGoGo(this, urlBean.type, urlBean.item_id);
@@ -449,7 +479,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void closeNewUserList() {
         gone(llayoutNewTask);
+        if (llayoutDayTask != null)
         llayoutDayTask.setEnabled(false);
+        if (mtvDayTask != null)
         mtvDayTask.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
     }
 

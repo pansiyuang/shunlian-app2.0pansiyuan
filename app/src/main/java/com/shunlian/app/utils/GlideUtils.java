@@ -237,6 +237,27 @@ public class GlideUtils {
                 .into(imageView);
     }
 
+    /**
+     * 加载圆角图片
+     *可控大小
+     * @param context
+     * @param imageView
+     * @param imgUrl
+     */
+    public void loadCornerImageSize(Context context, ImageView imageView, String imgUrl,
+                                    int radius,int width,int height) {
+        if (imageView == null) return;
+        Glide.with(context)
+                .load(imgUrl)
+                .crossFade()
+                .placeholder(R.mipmap.img_guige_moren)
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .override(width,height)
+                .bitmapTransform(new CenterCrop(context),
+                        new GlideRoundTransform(context, radius))
+                .into(imageView);
+    }
 
     public void loadCircleAvar(Context context, ImageView imageView, String imgUrl) {
         if (imageView == null) return;
