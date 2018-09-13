@@ -352,6 +352,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setGoldEggsCount(String count) {
+        if (mtv_eggs_count != null)
         mtv_eggs_count.setText(count);
     }
 
@@ -362,6 +363,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setSignContinueNum(String num) {
+        if (mtvSignDay != null)
         mtvSignDay.setText(num);
     }
 
@@ -477,7 +479,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void closeNewUserList() {
         gone(llayoutNewTask);
+        if (llayoutDayTask != null)
         llayoutDayTask.setEnabled(false);
+        if (mtvDayTask != null)
         mtvDayTask.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
     }
 
