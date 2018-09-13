@@ -334,23 +334,42 @@ public class H5X5Act extends BaseActivity implements MyWebView.ScrollListener {
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     protected void initWebView() {
+//        WebSettings webSetting = mwv_h5.getSettings();
+//        webSetting.setJavaScriptEnabled(true);
+//        webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
+//        webSetting.setAllowFileAccess(true);
+//        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+//        webSetting.setSupportZoom(true);
+//        webSetting.setBuiltInZoomControls(true);
+//        webSetting.setUseWideViewPort(true);
+//        webSetting.setSupportMultipleWindows(true);
+//        // webSetting.setLoadWithOverviewMode(true);
+//        webSetting.setAppCacheEnabled(true);
+//        // webSetting.setDatabaseEnabled(true);
+//        webSetting.setDomStorageEnabled(true);
+//        webSetting.setGeolocationEnabled(true);
+//        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
+//        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+//        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+//        // webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
+//        webSetting.setCacheMode(WebSettings.LOAD_NO_CACHE);
+
         WebSettings webSetting = mwv_h5.getSettings();
         webSetting.setAppCacheMaxSize(5 * 1024 * 1024);
-        webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
-//        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
-//        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
         webSetting.setLayoutAlgorithm(LayoutAlgorithm.NARROW_COLUMNS);
         webSetting.setAppCacheEnabled(true);
         webSetting.setAllowFileAccess(true);
-        //开启DOM缓存，关闭的话H5自身的一些操作是无效的
+//        开启DOM缓存，关闭的话H5自身的一些操作是无效的
         webSetting.setDomStorageEnabled(true);
+        webSetting.setUseWideViewPort(true);
+
+        webSetting.setLoadWithOverviewMode(true);
         webSetting.setAllowContentAccess(true);
         webSetting.setDatabaseEnabled(true);
         webSetting.setSavePassword(false);
         webSetting.setSaveFormData(false);
-        webSetting.setUseWideViewPort(true);
-        webSetting.setLoadWithOverviewMode(true);
+        webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
 
         mwv_h5.setWebViewClient(new WebViewClient() {
 
@@ -546,8 +565,10 @@ public class H5X5Act extends BaseActivity implements MyWebView.ScrollListener {
 //            }
 //        });
         addCookie();
-        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
-                .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
+//        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
+//                .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
+//        如果 app 需要自定义 UA，建议采取在 SDK 默认UA 后追加 app UA 的方式
+        webSetting.setUserAgentString(webSetting.getUserAgentString() + SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
     }
 
     @Override
