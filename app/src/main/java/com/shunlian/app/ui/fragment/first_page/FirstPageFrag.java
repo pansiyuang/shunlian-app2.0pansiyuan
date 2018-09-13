@@ -23,6 +23,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -249,7 +250,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_scan)
     public void scan() {
-        ZXingDemoAct.startAct(baseActivity, false, 0);
+        H5X5Act.startAct(baseContext,"http://soft.imtt.qq.com/browser/tes/feedback.html",H5X5Act.MODE_SONIC);
+//        ZXingDemoAct.startAct(baseActivity, false, 0);
     }
 
     @OnClick(R.id.mllayout_search)
