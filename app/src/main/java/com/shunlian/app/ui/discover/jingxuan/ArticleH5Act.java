@@ -151,7 +151,8 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void shareSuccess(ShareInfoEvent event){
-        if (event.isShareSuccess){
+        if (oget != null && event.isShareSuccess
+                &&Common.isForeground(this,getClass().getName())){
             oget.setEggsCount(event.eggs_count);
             oget.show(4000);
         }

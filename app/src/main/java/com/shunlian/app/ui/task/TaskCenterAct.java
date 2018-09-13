@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.webkit.URLUtil;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -117,6 +118,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     private TaskCenterPresenter mPresenter;
     private Dialog dialog_rule, dialog_qr;
+    private String mAdUrl;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, TaskCenterAct.class));
@@ -406,7 +408,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setPic(String url, TaskHomeEntity.AdUrlBean urlBean) {
-        if (!isEmpty(url)) {
+        if (URLUtil.isNetworkUrl(url)) {
+            if (url.equals(mAdUrl))return;
             visible(mivPic);
             GlideUtils.getInstance().loadCornerImage(this, mivPic, url,
                     TransformUtil.dip2px(this, 2.5f));
@@ -418,6 +421,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         } else {
             gone(mivPic);
         }
+        mAdUrl = url;
     }
 
     /**
@@ -479,7 +483,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void shareSuccess(ShareInfoEvent event) {
-        if (event.isShareSuccess && mPresenter != null) {
+        if (oget != null && event.isShareSuccess && mPresenter != null
+                &&Common.isForeground(this,getClass().getName())) {
             oget.setEggsCount(event.eggs_count);
             oget.show(4000);
             if (mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
