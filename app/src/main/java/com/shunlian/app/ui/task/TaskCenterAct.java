@@ -215,7 +215,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @OnClick({R.id.animation_view, R.id.miv_golden_eggs})
     public void goldEggs() {
-        if (dtime_layout != null && !dtime_layout.isClickable()) {
+        if (dtime_layout != null && !dtime_layout.isClickable()&&miv_airbubble != null) {
             miv_airbubble.setPivotX(0.0f);
             miv_airbubble.setPivotY(miv_airbubble.getMeasuredHeight());
             ValueAnimator va = ValueAnimator.ofFloat(0.0f, 1.0f,//0.5秒
@@ -226,9 +226,11 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             va.setInterpolator(new LinearInterpolator());
             va.addUpdateListener(animation -> {
                 float value = (float) animation.getAnimatedValue();
-                miv_airbubble.setAlpha(value);
-                miv_airbubble.setScaleX(value);
-                miv_airbubble.setScaleY(value);
+                if (miv_airbubble != null) {
+                    miv_airbubble.setAlpha(value);
+                    miv_airbubble.setScaleX(value);
+                    miv_airbubble.setScaleY(value);
+                }
             });
             va.start();
         }
