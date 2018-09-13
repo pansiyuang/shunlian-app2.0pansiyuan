@@ -53,9 +53,11 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     private Call<BaseEntity<CommonEntity>> getPrizeByRegisterCall;
     private String share_pic_url;
     private int updatePosition;
+    private boolean isShowLoading;//是否显示加载动画
 
     public TaskCenterPresenter(Context context, ITaskCenterView iView) {
         super(context, iView);
+        isShowLoading = true;
         initApi();
         getTaskList();
     }
@@ -65,6 +67,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      */
     @Override
     public void attachView() {
+        isShowLoading = false;
         initApi();
         getTaskList();
     }
@@ -132,7 +135,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         sortAndMD5(map);
 
         homeCall = getApiService().taskHome(map);
-        getNetData(true, homeCall,
+        getNetData(isShowLoading, homeCall,
                 new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
                     @Override
                     public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
