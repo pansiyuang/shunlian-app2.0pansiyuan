@@ -148,6 +148,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                         iView.setPic(data.ad_pic_url, data.ad_url);
                         iView.setTip(data.faq_url, data.rule_url);
                         iView.setSignData(data.sign_days);
+                        //LogUtil.zhLogW("TaskHomeEntity:>>>>"+data.toString());
                     }
                 });
     }
