@@ -136,8 +136,7 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                String tip = "恭喜获得%s金蛋";
-                iView.golde_eggs(String.format(tip,entity.data.gold_num));
+                iView.golde_eggs(entity.data.gold_num);
                 Constant.SHARE_TYPE="";
             }
 

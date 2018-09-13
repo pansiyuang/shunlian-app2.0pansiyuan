@@ -1261,7 +1261,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void shareSuccess(ShareInfoEvent event){
-        if (event.isShareSuccess){
+        if (event.isShareSuccess&&Common.isForeground(this,getClass().getName())){
             oget.setEggsCount(event.eggs_count);
             oget.show(4000);
         }
