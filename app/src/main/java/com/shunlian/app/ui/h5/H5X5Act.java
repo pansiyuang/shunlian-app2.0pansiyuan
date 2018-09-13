@@ -69,7 +69,7 @@ import butterknife.BindView;
 
 //import com.tencent.smtt.sdk.QbSdk;
 import com.tencent.smtt.sdk.WebSettings;
-//import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;
+import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
@@ -340,6 +340,7 @@ public class H5X5Act extends BaseActivity implements MyWebView.ScrollListener {
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
 //        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
+        webSetting.setLayoutAlgorithm(LayoutAlgorithm.NARROW_COLUMNS);
         webSetting.setAppCacheEnabled(true);
         webSetting.setAllowFileAccess(true);
         //开启DOM缓存，关闭的话H5自身的一些操作是无效的
