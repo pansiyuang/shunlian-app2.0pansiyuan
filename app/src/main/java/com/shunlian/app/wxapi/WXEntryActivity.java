@@ -404,12 +404,16 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             event.eggs_count = String.format(tip,eggs);
             EventBus.getDefault().post(event);
         }
-        mYFinish();
+        cloasePage();
     }
 
     @Override
     public void cloasePage() {
-        mYFinish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+            finishAndRemoveTask();
+        }else {
+            finish();
+        }
     }
 
     private class MyHandler extends Handler {

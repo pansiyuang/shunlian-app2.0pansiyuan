@@ -54,7 +54,7 @@ public class SignGoldEggsLayout extends LinearLayout {
     View view_line;
     private int gray;
     private int pink;
-    private List<TaskHomeEntity.SignDaysBean> mSignDaysBeans;
+    //private List<TaskHomeEntity.SignDaysBean> mSignDaysBeans;
     private boolean isCanSign;//是否可以签到
     private String sign_date;
 
@@ -132,7 +132,7 @@ public class SignGoldEggsLayout extends LinearLayout {
     }
 
     public void setData(List<TaskHomeEntity.SignDaysBean> signDaysBeans){
-        mSignDaysBeans = signDaysBeans;
+        //mSignDaysBeans = signDaysBeans;
         if (!isEmpty(signDaysBeans)){
             for (int i = 0; i < signDaysBeans.size(); i++) {
                 if (i >= 7)break;
@@ -198,8 +198,10 @@ public class SignGoldEggsLayout extends LinearLayout {
         va.setInterpolator(new LinearInterpolator());
         va.addUpdateListener(animation -> {
             float value = (float) animation.getAnimatedValue();
-            view.setScaleX(value);
-            view.setScaleY(value);
+            if (view != null) {
+                view.setScaleX(value);
+                view.setScaleY(value);
+            }
         });
         va.start();
     }
