@@ -242,8 +242,12 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             addAllTurnTables(trophyList);
 
             if (isEmpty(turnTableEntity.prizeScroll)) {
+                text_switcher.setVisibility(View.GONE);
                 return;
+            }else{
+                text_switcher.setVisibility(View.VISIBLE);
             }
+            mWarningTextList.clear();
             mWarningTextList.addAll(turnTableEntity.prizeScroll);
             if (mWarningTextList.size() == 1) {
                 text_switcher.setText(mWarningTextList.get(0));
