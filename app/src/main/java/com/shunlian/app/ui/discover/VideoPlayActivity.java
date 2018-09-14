@@ -173,7 +173,7 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
             dialog_operate = new Dialog(this, R.style.popAd);
             dialog_operate.setContentView(R.layout.dialog_operate);
             RecyclerView rv_operate = (RecyclerView) dialog_operate.findViewById(R.id.rv_operate);
-            rv_operate.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
+            rv_operate.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false));
             rv_operate.addItemDecoration(new MVerticalItemDecoration(this, 0.5f, 0, 0, getColorResouce(R.color.bg_gray_two)));
             OperateAdapter operateAdapter = new OperateAdapter(this, itemList);
             rv_operate.setAdapter(operateAdapter);

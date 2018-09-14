@@ -111,7 +111,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)
@@ -233,7 +233,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         if (hotPushAdapter==null){
             mtv_title.setText(data.name);
             mtv_desc.setText(data.content);
-            GlideUtils.getInstance().loadImage(getBaseContext(),miv_bg,data.pic);
+            GlideUtils.getInstance().loadImage(baseAct,miv_bg,data.pic);
             downTime_firsts.cancelDownTimer();
             downTime_firsts.setTimeTextColor(getColorResouce(R.color.white));
             downTime_firsts.setDownTime(Long.parseLong(data.count_down));
@@ -245,19 +245,19 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
                 }
             });
             downTime_firsts.startDownTimer();
-            hotPushAdapter=new HotPushAdapter(getBaseContext(),mData);
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(getBaseContext(), 2);
+            hotPushAdapter=new HotPushAdapter(baseAct,mData);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(baseAct, 2);
             rv_list.setLayoutManager(gridLayoutManager);
             rv_list.setAdapter(hotPushAdapter);
             rv_list.setNestedScrollingEnabled(false);
             hotPushAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Common.goGoGo(getBaseContext(),data.datas.get(position).url.type,data.datas.get(position).url.item_id);
+                    Common.goGoGo(baseAct,data.datas.get(position).url.type,data.datas.get(position).url.item_id);
                 }
             });
             //在CoordinatorLayout中使用添加分割线失效
-//            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(getBaseContext(), 5), false);
+//            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(baseAct, 5), false);
 //            rv_category.addItemDecoration(gridSpacingItemDecoration);
         }else {
             hotPushAdapter.notifyDataSetChanged();

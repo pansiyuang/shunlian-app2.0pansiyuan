@@ -251,7 +251,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         expand_shoppingcar.setOnGroupClickListener((expandableListView, view, i, l) -> true);
 
         if (!isEmpty(mCarEntity.disabled)) {
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseContext);
             footerHolderView.recycle_disable.setNestedScrollingEnabled(false);
             footerHolderView.recycle_disable.setLayoutManager(linearLayoutManager);
             footerHolderView.recycle_disable.setAdapter(new DisabledGoodsAdapter(baseContext, false, mCarEntity.disabled));

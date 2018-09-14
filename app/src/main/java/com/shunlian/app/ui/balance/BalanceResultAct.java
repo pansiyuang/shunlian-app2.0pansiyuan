@@ -66,9 +66,9 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
             case R.id.mtv_finish:
             case R.id.miv_close:
                 if (Constant.ISBALANCE&&data != null){
-                    BalanceXQAct.startAct(getBaseContext(), data,true);
+                    BalanceXQAct.startAct(baseAct, data,true);
                 }else {
-                    MyProfitAct.startAct(getBaseContext(),true);
+                    MyProfitAct.startAct(baseAct,true);
                 }
                 finish();
                 break;
@@ -84,9 +84,9 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
     @Override
     public void onBackPressed() {
         if (Constant.ISBALANCE){
-            BalanceXQAct.startAct(getBaseContext(), data,true);
+            BalanceXQAct.startAct(baseAct, data,true);
         }else {
-            MyProfitAct.startAct(getBaseContext(),true);
+            MyProfitAct.startAct(baseAct,true);
         }
         super.onBackPressed();
     }

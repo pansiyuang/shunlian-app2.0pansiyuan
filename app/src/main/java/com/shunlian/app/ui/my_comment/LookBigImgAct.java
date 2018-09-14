@@ -174,7 +174,7 @@ public class LookBigImgAct extends BaseActivity{
                 dialog_operate = new Dialog(activity, R.style.popAd);
                 dialog_operate.setContentView(R.layout.dialog_operate);
                 RecyclerView rv_operate = (RecyclerView) dialog_operate.findViewById(R.id.rv_operate);
-                rv_operate.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
+                rv_operate.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false));
                 rv_operate.addItemDecoration(new MVerticalItemDecoration(activity, 0.5f, 0, 0, getColorResouce(R.color.bg_gray_two)));
                 OperateAdapter operateAdapter = new OperateAdapter(activity, entity.items);
                 rv_operate.setAdapter(operateAdapter);

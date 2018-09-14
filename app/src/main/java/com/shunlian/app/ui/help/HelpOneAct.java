@@ -191,7 +191,7 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         rv_qOne.setNestedScrollingEnabled(false);
         helpQoneAdapter.setOnItemClickListener((view, position) -> {
             HelpcenterIndexEntity.QuestionCategory questionCategory = helpcenterIndexEntity.questionCategory.get(position);
-            HelpTwoAct.startAct(getBaseContext(), questionCategory.id, questionCategory.name);
+            HelpTwoAct.startAct(baseAct, questionCategory.id, questionCategory.name);
         });
         rv_article.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rv_article.addItemDecoration(new MHorItemDecoration(this, 5, 10, 10));
@@ -199,7 +199,7 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         rv_article.setAdapter(helpArticleAdapter);
         helpArticleAdapter.setOnItemClickListener((view, position) -> {
             HelpcenterIndexEntity.ArticleCategory questionCategory = helpcenterIndexEntity.articleCategory.get(position);
-            HelpClassAct.startAct(getBaseContext(), questionCategory.id);
+            HelpClassAct.startAct(baseAct, questionCategory.id);
         });
         rv_qTwo.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         HelpQtwoAdapter helpQtwoAdapter = new HelpQtwoAdapter(this, false, helpcenterIndexEntity.questionCommon);
@@ -208,7 +208,7 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         rv_qTwo.addItemDecoration(new MVerticalItemDecoration(this, 0.5f, 0, 0, getColorResouce(R.color.value_EFEEEE)));
         helpQtwoAdapter.setOnItemClickListener((view, position) -> {
             HelpcenterIndexEntity.QuestionCommon common = helpcenterIndexEntity.questionCommon.get(position);
-            HelpSolutionAct.startAct(getBaseContext(), common.id);
+            HelpSolutionAct.startAct(baseAct, common.id);
         });
     }
 

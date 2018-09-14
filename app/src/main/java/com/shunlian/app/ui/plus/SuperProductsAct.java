@@ -86,7 +86,7 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView,
             mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Common.goGoGo(getBaseContext(),mData.get(position).url.type,mData.get(position).url.item_id);
+                    Common.goGoGo(baseAct,mData.get(position).url.type,mData.get(position).url.item_id);
                 }
             });
         }

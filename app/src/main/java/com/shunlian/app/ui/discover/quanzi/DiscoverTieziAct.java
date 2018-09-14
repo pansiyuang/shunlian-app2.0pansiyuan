@@ -114,7 +114,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)
@@ -251,15 +251,15 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             mtv_title.setText(data.topicDetail.title);
             mtv_titles.setText(data.topicDetail.title);
             mtv_desc.setText(data.topicDetail.content);
-            GlideUtils.getInstance().loadImage(getBaseContext(), miv_photo, data.topicDetail.img);
-            newAdapter = new DiscoverHotAdapter(getBaseContext(), true, mdatas, this);
-            linearLayoutManager = new LinearLayoutManager(getBaseContext());
+            GlideUtils.getInstance().loadImage(baseAct, miv_photo, data.topicDetail.img);
+            newAdapter = new DiscoverHotAdapter(baseAct, true, mdatas, this);
+            linearLayoutManager = new LinearLayoutManager(baseAct);
 
             rv_new.setLayoutManager(linearLayoutManager);
             rv_new.setNestedScrollingEnabled(false);
             rv_new.setAdapter(newAdapter);
-            DiscoverHotAdapter hotAdapter = new DiscoverHotAdapter(getBaseContext(), false, data.hot_inv, this);
-            LinearLayoutManager mlinearLayoutManager = new LinearLayoutManager(getBaseContext());
+            DiscoverHotAdapter hotAdapter = new DiscoverHotAdapter(baseAct, false, data.hot_inv, this);
+            LinearLayoutManager mlinearLayoutManager = new LinearLayoutManager(baseAct);
             rv_hot.setLayoutManager(mlinearLayoutManager);
             rv_hot.setNestedScrollingEnabled(false);
             rv_hot.setAdapter(hotAdapter);

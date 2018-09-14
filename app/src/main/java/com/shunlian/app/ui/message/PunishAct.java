@@ -120,7 +120,7 @@ public class PunishAct extends BaseActivity implements IPunishView, MessageCount
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
                 if (quick_actions != null)
