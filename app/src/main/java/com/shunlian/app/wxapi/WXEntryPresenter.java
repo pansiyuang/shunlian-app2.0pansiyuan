@@ -57,6 +57,7 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             public void onErrorData(BaseEntity<CommonEntity> commonEntityBaseEntity) {
                 Constant.SHARE_TYPE="";
                 super.onErrorData(commonEntityBaseEntity);
+                if (iView!=null)
                 iView.cloasePage();
             }
 
@@ -64,6 +65,7 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             public void onErrorCode(int code, String message) {
                 Constant.SHARE_TYPE="";
                 super.onErrorCode(code, message);
+                if (iView!=null)
                 iView.cloasePage();
             }
 
@@ -71,6 +73,7 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             public void onFailure() {
                 Constant.SHARE_TYPE="";
                 super.onFailure();
+                if (iView!=null)
                 iView.cloasePage();
             }
         });
@@ -93,19 +96,22 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             @Override
             public void onSuccess(BaseEntity<WXLoginEntity> entity) {
                 super.onSuccess(entity);
+                if (iView!=null)
                 iView.onWXCallback(entity);
             }
 
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                iView.onWXCallback(null);
-                iView.cloasePage();
+                if (iView!=null) {
+                    iView.onWXCallback(null);
+                }
             }
 
             @Override
             public void onFailure() {
                 super.onFailure();
+                if (iView!=null)
                 iView.cloasePage();
             }
         });
@@ -136,6 +142,7 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
+                if (iView!=null)
                 iView.golde_eggs(entity.data.gold_num);
                 Constant.SHARE_TYPE="";
             }
@@ -144,6 +151,7 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
                 Constant.SHARE_TYPE="";
+                if (iView!=null)
                 iView.cloasePage();
             }
 
@@ -151,6 +159,7 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             public void onFailure() {
                 super.onFailure();
                 Constant.SHARE_TYPE="";
+                if (iView!=null)
                 iView.cloasePage();
             }
         });
