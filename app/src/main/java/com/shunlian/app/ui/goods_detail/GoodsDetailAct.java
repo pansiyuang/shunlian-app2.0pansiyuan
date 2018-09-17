@@ -688,6 +688,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void stayObtainEggs(int time) {
+        if (!Common.isAlreadyLogin())return;
         if (mHandler == null)
             mHandler = new Handler();
 
