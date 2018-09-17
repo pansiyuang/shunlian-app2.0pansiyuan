@@ -209,7 +209,7 @@ public class GlideUtils {
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
-                .placeholder(R.mipmap.img_guige_moren)
+                .placeholder(R.mipmap.img_default_common)
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
@@ -250,7 +250,7 @@ public class GlideUtils {
         Glide.with(context)
                 .load(imgUrl)
                 .crossFade()
-                .placeholder(R.mipmap.img_guige_moren)
+                .placeholder(R.mipmap.img_default_common)
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
                 .override(width,height)
@@ -340,7 +340,7 @@ public class GlideUtils {
 //                .error(R.mipmap.error)
 //                .placeholder(R.mipmap.error)
                 .crossFade()
-                .placeholder(R.mipmap.img_guige_moren)
+                .placeholder(R.mipmap.img_default_common)
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
                 .bitmapTransform(new CenterCrop(context),
@@ -501,7 +501,7 @@ public class GlideUtils {
         Glide.with(context)
                 .load(imgUrl)
                 .asBitmap()
-                .placeholder(R.mipmap.img_guige_moren)
+                .placeholder(R.mipmap.img_default_common)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -625,7 +625,7 @@ public class GlideUtils {
                 //.error(R.mipmap.error)
                 .placeholder(R.mipmap.img_default_find_circletopic)
                 .crossFade()
-                .placeholder(R.mipmap.img_guige_moren)
+                .placeholder(R.mipmap.img_default_common)
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
                 .bitmapTransform(isCorp?new CenterCrop(context):new FitCenter(context),

@@ -728,6 +728,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if ("1".equals(data.suspensionShow) && mainPageFrag != null) {
             FirstPageFrag.miv_entry.setVisibility(View.VISIBLE);
             GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, data.suspension.image);
+//            GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, "http://i.imgur.com/GP1m9.png");//apng图片不支持
 //            GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, "https://upload-images.jianshu.io/upload_images/2625875-9a044086b7de0a45.gif");
         } else {
             FirstPageFrag.miv_entry.setVisibility(View.GONE);
