@@ -54,7 +54,7 @@ public class SignGoldEggsLayout extends LinearLayout {
     View view_line;
     private int gray;
     private int pink;
-    private List<TaskHomeEntity.SignDaysBean> mSignDaysBeans;
+    //private List<TaskHomeEntity.SignDaysBean> mSignDaysBeans;
     private boolean isCanSign;//是否可以签到
     private String sign_date;
 
@@ -132,14 +132,20 @@ public class SignGoldEggsLayout extends LinearLayout {
     }
 
     public void setData(List<TaskHomeEntity.SignDaysBean> signDaysBeans){
-        mSignDaysBeans = signDaysBeans;
+        //mSignDaysBeans = signDaysBeans;
         if (!isEmpty(signDaysBeans)){
             for (int i = 0; i < signDaysBeans.size(); i++) {
                 if (i >= 7)break;
                 TaskHomeEntity.SignDaysBean bean = signDaysBeans.get(i);
+
                 mtv_date.get(i).setText(bean.date);
+                if (i == 2){
+                    mtv_date.get(i).setText("今日");
+                    mtv_date.get(i).setTextColor(pink);
+                }
+
                 MyTextView textView = mtv_eggs_count.get(i);
-                if (!isEmpty(bean.gold_num)){
+                if (i > 2 && !isEmpty(bean.gold_num)){
                     visible(textView);
                     textView.setText(bean.gold_num);
                 }else {
@@ -192,8 +198,10 @@ public class SignGoldEggsLayout extends LinearLayout {
         va.setInterpolator(new LinearInterpolator());
         va.addUpdateListener(animation -> {
             float value = (float) animation.getAnimatedValue();
-            view.setScaleX(value);
-            view.setScaleY(value);
+            if (view != null) {
+                view.setScaleX(value);
+                view.setScaleY(value);
+            }
         });
         va.start();
     }

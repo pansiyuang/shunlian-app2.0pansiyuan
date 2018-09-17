@@ -192,7 +192,7 @@ public class CouponMsgAct extends BaseActivity implements IAssignVoucherView {
             rv_coupon.setAdapter(couponGoodsAdapter);
             rv_coupon.setNestedScrollingEnabled(false);
             couponGoodsAdapter.setOnItemClickListener((view, position) ->
-                    GoodsDetailAct.startAct(getBaseContext(), voucherEntity.goods_list.get(position).goods_id));
+                    GoodsDetailAct.startAct(baseAct, voucherEntity.goods_list.get(position).goods_id));
         } else {
             couponGoodsAdapter.notifyDataSetChanged();
         }

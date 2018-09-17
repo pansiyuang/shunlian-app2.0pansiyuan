@@ -219,6 +219,7 @@ public class Common {
             case "invite":
                 return "QrCodeAct";
             case "url":
+            case "noTitleUrl":
                 return "H5Act";
             case "HTMLShare":
                 return "WXEntryActivity";
@@ -241,6 +242,12 @@ public class Common {
             return;
         }
         switch (type) {
+            case "popLastView":
+                ((Activity) context).finish();
+                break;
+            case "noTitleUrl":
+                H5Act.startAct(context, params[0], H5Act.MODE_SONIC,"noTitle");
+                break;
             case "taskSystems":
                 TaskCenterAct.startAct(context);
                 break;
@@ -964,20 +971,24 @@ public class Common {
     public static String getDomain(String url) {
         if (TextUtils.isEmpty(url))
             return "";
-        String result = "";
-        int j = 0, startIndex = 0, endIndex = 0;
-        for (int i = 0; i < url.length(); i++) {
-            if (url.charAt(i) == '/') {
-                j++;
-                if (j == 2)
-                    startIndex = i;
-                else if (j == 3)
-                    endIndex = i;
-            }
+        try {
+            String result = "";
+            int j = 0, startIndex = 0, endIndex = 0;
+            for (int i = 0; i < url.length(); i++) {
+                if (url.charAt(i) == '/') {
+                    j++;
+                    if (j == 2)
+                        startIndex = i;
+                    else if (j == 3)
+                        endIndex = i;
+                }
 
+            }
+            result = url.substring(startIndex + 1, endIndex);
+            return result;
+        } catch (Exception e) {
+            return "";
         }
-        result = url.substring(startIndex + 1, endIndex);
-        return result;
     }
 
     /**
@@ -1190,6 +1201,18 @@ public class Common {
         }
     }
 
+    /**
+     * 判断字符是否是汉字
+     */
+    public static boolean isChineseCharacters(String s) {
+        if (TextUtils.isEmpty(s)) {
+            return false;
+        }
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(s);
+        return m.matches();
+    }
+
     public static void urlToPage(Context context, String url) {
         //LogUtil.httpLogW("链接:" + url);
         if (TextUtils.isEmpty(url))
@@ -1286,4 +1309,27 @@ public class Common {
     }
 
 
+    /**
+     * 判断某个Activity 界面是否在前台
+     * @param context
+     * @param className 某个界面名称 getClass().getName()
+     * @return
+     */
+    public static boolean  isForeground(Context context, String className) {
+        if (context == null || TextUtils.isEmpty(className)) {
+            return false;
+        }
+
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
+        if (list != null && list.size() > 0) {
+            ComponentName cpn = list.get(0).topActivity;
+            if (className.equals(cpn.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
 }

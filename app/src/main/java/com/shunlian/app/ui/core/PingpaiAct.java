@@ -94,7 +94,7 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)
@@ -208,7 +208,7 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
                     kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                         @Override
                         public void onItemClick(int position) {
-                            Common.goGoGo(getBaseContext(), corePingEntity.banner.get(position).type, corePingEntity.banner.get(position).item_id);
+                            Common.goGoGo(baseAct, corePingEntity.banner.get(position).type, corePingEntity.banner.get(position).item_id);
                         }
                     });
                 }
@@ -225,13 +225,13 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
         }
         pingList = corePingEntity.brand_list;
         rv_list.setNestedScrollingEnabled(false);
-        rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
+        rv_list.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false));
         pinpaiAdapter = new PinpaiAdapter(this, true, corePingEntity.brand_list);
         rv_list.setAdapter(pinpaiAdapter);
         pinpaiAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                PingpaiListAct.startAct(getBaseContext(), corePingEntity.brand_list.get(position).id);
+                PingpaiListAct.startAct(baseAct, corePingEntity.brand_list.get(position).id);
             }
         });
     }

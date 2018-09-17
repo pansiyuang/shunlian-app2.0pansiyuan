@@ -1659,7 +1659,7 @@ public interface ApiService {
      * @return
      */
     @GET("member/myprofit/receiveReward")
-    Call<BaseEntity<EmptyEntity>> receiveReward(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> receiveReward(@QueryMap Map<String, String> map);
 
     /**
      * 帮助首页
@@ -2633,4 +2633,10 @@ public interface ApiService {
      */
     @GET("tasknewperson/getGoldByCode")
     Call<BaseEntity<TaskHomeEntity>> getGoldByCode(@QueryMap Map<String,String> map);
+
+    /**
+     * 看视频领金蛋
+     */
+    @GET("tasknewperson/getGoldByWatchVideo")
+    Call<BaseEntity<TaskHomeEntity>> getGoldByWatchVideo(@QueryMap Map<String,String> map);
 }

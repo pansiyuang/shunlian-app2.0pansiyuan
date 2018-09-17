@@ -54,15 +54,16 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
         TaskListHolder mHolder = (TaskListHolder) holder;
 
         TaskListEntity.ItemTask itemTask = lists.get(position);
-        GlideUtils.getInstance().loadOverrideImage(context, mHolder.mivIcon, itemTask.icon_url, 32, 32);
+        GlideUtils.getInstance().loadOverrideImage(context,
+                mHolder.mivIcon, itemTask.icon_url, 32, 32);
 
         mHolder.mtvTaskName.setText(itemTask.title);
         mHolder.mtvTaskTip.setText(itemTask.info);
         if (isEmpty(itemTask.gold_num)){
-            gone(mHolder.mtvEggsCount);
+            gone(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
         }else {
             mHolder.mtvEggsCount.setText(itemTask.gold_num);
-            visible(mHolder.mtvEggsCount);
+            visible(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
         }
 
 
@@ -151,6 +152,9 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
 
         @BindView(R.id.llayout_right)
         LinearLayout llayout_right;
+
+        @BindView(R.id.llayout_eggs_count)
+        LinearLayout llayout_eggs_count;
 
         public TaskListHolder(View itemView) {
             super(itemView);

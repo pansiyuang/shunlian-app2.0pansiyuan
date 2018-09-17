@@ -16,12 +16,16 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.text.Layout;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -294,12 +298,10 @@ public class WheelSurfPanView extends View {
         //最低圈数是mMinTimes圈
         int newAngle = (int) (360 * mMinTimes + (pos - 1) * mAngle + currAngle - (lastPosition == 0 ? 0 : ((lastPosition - 1) * mAngle)));
         //计算目前的角度划过的扇形份数
-        int num = (int) ((newAngle - currAngle) / mAngle);
         ObjectAnimator anim = ObjectAnimator.ofFloat(WheelSurfPanView.this, "rotation", currAngle, newAngle);
         currAngle = newAngle;
         lastPosition = pos;
         // 动画的持续时间，执行多久？
-//        anim.setDuration(num * mVarTime);
         anim.setDuration(10 * 1000);
         anim.addUpdateListener(animation -> {
             //将动画的过程态回调给调用者
@@ -354,10 +356,10 @@ public class WheelSurfPanView extends View {
 
         //将测得的宽度保存起来
         mWidth = width;
-
+        LogUtil.httpLogW("mWidth:" + mWidth);
         mCenter = mWidth / 2;
         //绘制扇形的半径 减掉50是为了防止边界溢出  具体效果你自己注释掉-50自己测试
-        mRadius = mWidth / 2 - 50;
+        mRadius = mWidth / 2 - mWidth / 13;
 
         //MUST CALL THIS
         setMeasuredDimension(width, width);
@@ -389,7 +391,10 @@ public class WheelSurfPanView extends View {
                     //设置绘制时画笔的颜色
                     mPaint.setColor(mColors[i]);
                     //画一个扇形
-                    RectF rect = new RectF(mCenter - mRadius - 16, mCenter - mRadius - 16, mCenter + mRadius + 16, mCenter + mRadius + 16);
+                    RectF rect = new RectF(mCenter - mRadius - TransformUtil.dip2px(mContext, 6.5f),
+                            mCenter - mRadius - TransformUtil.dip2px(mContext, 6.5f),
+                            mCenter + mRadius + TransformUtil.dip2px(mContext, 6.5f), mCenter + mRadius +
+                            TransformUtil.dip2px(mContext, 6.5f));
                     canvas.drawArc(rect, startAngle, mAngle, true, mPaint);
                     mTextPaint.setColor(mTextColor);
                     drawText(startAngle, mRadius, mDeses[i], canvas);
@@ -409,24 +414,82 @@ public class WheelSurfPanView extends View {
 
     private void drawCircle(float startAngle, int width, int height, Canvas canvas) {
         float angle = (float) Math.toRadians(startAngle);
-        float x = (float) (width / 2 + (mRadius + 4 + mRadius / 12) * Math.cos(angle));
-        float y = (float) (height / 2 + ((mRadius + 4) + mRadius / 12) * Math.sin(angle));
+        float x = (float) (width / 2 + (mRadius + 4 + mRadius / 13) * Math.cos(angle));
+        float y = (float) (height / 2 + (mRadius + 4 + mRadius / 13) * Math.sin(angle));
         canvas.drawCircle(x, y, mCircleRadius, mCirclePaint);
     }
 
     private void drawText(float startAngle, int radius, String string, Canvas canvas) {
-        //创建绘制路径
         Path circlePath = new Path();
         //范围也是整个圆盘
-        RectF rect = new RectF(mCenter - radius, mCenter - radius, mCenter + radius, mCenter + radius);
+        RectF rect = new RectF(mCenter - radius,
+                mCenter - radius,
+                mCenter + radius,
+                mCenter + radius);
+
         //给定扇形的范围
         circlePath.addArc(rect, startAngle, mAngle);
-        //圆弧的水平偏移
-        float textWidth = mTextPaint.measureText(string);
-        //圆弧的垂直偏移
-        float hOffset = (float) (Math.sin(mAngle / 2 / 180 * Math.PI) * radius) - textWidth / 2;
+
+        float realWidth = mTextPaint.measureText(string.replaceAll(" ", ""));
+        int vOffset = (mRadius / 3) + mWidth / 13;
+
+        //第一圈圆弧的垂直偏移
+        float firstCircleWidth = (float) (mAngle * Math.PI * vOffset / 180);
+
         //绘制文字
-        canvas.drawTextOnPath(string, circlePath, hOffset, mRadius / 2 / 6 + (mRadius / 3), mTextPaint);
+        if (realWidth <= firstCircleWidth) {
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawTextOnPath(string.trim(), circlePath, 0, vOffset, mTextPaint);
+        } else {
+            int index = getMaxLength(firstCircleWidth, string);
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            String strFirst = string.substring(0, index);
+            canvas.drawTextOnPath(strFirst.trim(), circlePath, 0, vOffset, mTextPaint);
+
+            LogUtil.httpLogW("第一行文字:" + strFirst);
+            Paint.FontMetrics forFontMetrics = mTextPaint.getFontMetrics();
+            int textHeight = (int) (forFontMetrics.descent - forFontMetrics.ascent);
+
+            //第二圈圆弧的垂直偏移
+            float secondCircleWidth = (float) (mAngle * Math.PI * (vOffset - textHeight) / 180);
+            String strSecond = string.substring(index, string.length());
+            LogUtil.httpLogW("第二行文字:" + strSecond);
+            String newContent = getSecondString(secondCircleWidth, strSecond);
+            canvas.drawTextOnPath(newContent.trim(), circlePath, 0, vOffset + textHeight, mTextPaint);
+        }
+    }
+
+    /**
+     * 计算出文字限定宽度能画文字的最大距离
+     */
+
+    public int getMaxLength(float maxWidth, String content) {
+        StringBuffer stringBuffer = new StringBuffer();
+        char[] c = content.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            if (" ".equals(String.valueOf(c[i]))) {
+                continue;
+            }
+            stringBuffer.append(c[i]);
+            float width = mTextPaint.measureText(stringBuffer.toString());
+            if (width > maxWidth) {
+                return i - 1;
+            }
+        }
+        return content.length();
+    }
+
+    //设置第二行文字
+    public String getSecondString(float maxWidth, String content) {
+        String ellipsis = "  .  .  .";
+        int index = getMaxLength(maxWidth, content);
+        String newContent = content.substring(0, index - 1) + ellipsis;
+        float width = mTextPaint.measureText(newContent.toString());
+        if (width > maxWidth) {
+            return content.substring(0, index - 2) + ellipsis;
+        } else {
+            return newContent;
+        }
     }
 
     private void drawBitmap(float startAngle, int i, int width, int height, Canvas canvas) {
@@ -440,8 +503,8 @@ public class WheelSurfPanView extends View {
         float angle = (float) Math.toRadians(startAngle + mAngle / 2);
 
         //确定图片在圆弧中 中心点的位置
-        float x = (float) (width / 2 + ((mRadius - 16 - (imgWidth / 2)) + mRadius / 12) * Math.cos(angle));
-        float y = (float) (height / 2 + ((mRadius - 16 - (imgWidth / 2)) + mRadius / 12) * Math.sin(angle));
+        float x = (float) (width / 2 + ((mRadius - TransformUtil.dip2px(mContext, 16) - (imgWidth / 2)) + mRadius / 12) * Math.cos(angle));
+        float y = (float) (height / 2 + ((mRadius - TransformUtil.dip2px(mContext, 16) - (imgWidth / 2)) + mRadius / 12) * Math.sin(angle));
 
         // 确定绘制图片的位置
         RectF rect1 = new RectF(x - w / 2, y - h / 2, x + w / 2, y + h / 2);

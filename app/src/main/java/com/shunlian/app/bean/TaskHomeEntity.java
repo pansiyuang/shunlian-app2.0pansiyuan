@@ -29,11 +29,39 @@ public class TaskHomeEntity {
     public String account_eggs;
 
     public List<SignDaysBean> sign_days;
+    public String share_pic_url;
+
+    @Override
+    public String toString() {
+        return "TaskHomeEntity{" +
+                "gold_egg='" + gold_egg + '\'' +
+                ", gold_egg_second='" + gold_egg_second + '\'' +
+                ", gold_egg_total_second='" + gold_egg_total_second + '\'' +
+                ", sign_continue_num='" + sign_continue_num + '\'' +
+                ", ad_pic_url='" + ad_pic_url + '\'' +
+                ", ad_url=" + ad_url +
+                ", faq_url='" + faq_url + '\'' +
+                ", task_status='" + task_status + '\'' +
+                ", rule_url='" + rule_url + '\'' +
+                ", got_eggs='" + got_eggs + '\'' +
+                ", account_eggs='" + account_eggs + '\'' +
+                ", sign_days=" + sign_days +
+                ", share_pic_url='" + share_pic_url + '\'' +
+                '}';
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AdUrlBean {
         public String type;
         public String item_id;
+
+        @Override
+        public String toString() {
+            return "AdUrlBean{" +
+                    "type='" + type + '\'' +
+                    ", item_id='" + item_id + '\'' +
+                    '}';
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -43,5 +71,13 @@ public class TaskHomeEntity {
         public String sign_status;
         public String gold_num;
 
+        @Override
+        public String toString() {
+            return "SignDaysBean{" +
+                    "date='" + date + '\'' +
+                    ", sign_status='" + sign_status + '\'' +
+                    ", gold_num='" + gold_num + '\'' +
+                    '}';
+        }
     }
 }

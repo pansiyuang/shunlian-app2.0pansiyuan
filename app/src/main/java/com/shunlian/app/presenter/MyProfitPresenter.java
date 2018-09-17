@@ -3,7 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.MyProfitEntity;
 import com.shunlian.app.bean.SalesChartEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -25,7 +25,7 @@ public class MyProfitPresenter extends BasePresenter<IMyProfitView> {
     public final String _60day = "60";
     private Call<BaseEntity<MyProfitEntity>> generalprofit;
     private Call<BaseEntity<SalesChartEntity>> profitCharts;
-    private Call<BaseEntity<EmptyEntity>> receiveReward;
+    private Call<BaseEntity<CommonEntity>> receiveReward;
 
     public MyProfitPresenter(Context context, IMyProfitView iView) {
         super(context, iView);
@@ -101,11 +101,11 @@ public class MyProfitPresenter extends BasePresenter<IMyProfitView> {
 
         receiveReward = getApiService().receiveReward(map);
         getNetData(true, receiveReward,new
-                SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+                SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.receiveReward(type);
+                iView.receiveReward(type,entity.data.available_profit);
             }
         });
     }

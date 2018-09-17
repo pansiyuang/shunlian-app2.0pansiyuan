@@ -1,5 +1,6 @@
 package com.shunlian.app.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -33,6 +34,7 @@ import butterknife.Unbinder;
 public abstract class MBaseActivity extends FragmentActivity implements View.OnClickListener{
     private Unbinder unbinder;
     private Resources resources;
+    protected Activity baseAct;
 
     /**
      * Called when the activity is first created.
@@ -41,6 +43,7 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        baseAct=this;
         resources = getResources();
         unbinder = ButterKnife.bind(this);
         finishAct();
@@ -62,7 +65,7 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
                 @Override
                 public void onClick(View v) {
                     if (Constant.JPUSH != null && Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))) {
-                        MainActivity.startAct(getBaseContext(), "");
+                        MainActivity.startAct(baseAct, "");
                         Constant.JPUSH=null;
                     }
                     InputMethodManager imm = (InputMethodManager)
@@ -249,7 +252,7 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
     @Override
     public void onBackPressed() {
         if (Constant.JPUSH != null && Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))) {
-            MainActivity.startAct(getBaseContext(), "");
+            MainActivity.startAct(baseAct, "");
             Constant.JPUSH =null;
         }
         super.onBackPressed();

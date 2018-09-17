@@ -80,15 +80,15 @@ public class PhoneRecordAct extends BaseActivity implements IPhoneRecord {
         } else if (phoneRecordAdapter == null) {
             visible(rv_charge);
             gone(nei_empty);
-            phoneRecordAdapter = new PhoneRecordAdapter(getBaseContext(), mdatas);
-            linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
+            phoneRecordAdapter = new PhoneRecordAdapter(baseAct, mdatas);
+            linearLayoutManager = new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false);
             rv_charge.setLayoutManager(linearLayoutManager);
             rv_charge.setAdapter(phoneRecordAdapter);
-            rv_charge.addItemDecoration(new MVerticalItemDecoration(getBaseContext(), 10, 15, 0));
+            rv_charge.addItemDecoration(new MVerticalItemDecoration(baseAct, 10, 15, 0));
             phoneRecordAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    PhoneOrderDetailAct.startAct(getBaseContext(), mdatas.get(position).id);
+                    PhoneOrderDetailAct.startAct(baseAct, mdatas.get(position).id);
                 }
             });
         } else {

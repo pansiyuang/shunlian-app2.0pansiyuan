@@ -30,8 +30,9 @@ public interface IMyProfitView extends IView {
     /**
      * 领取月/周奖励
      * @param type 1周奖励 2月奖励
+     * @param available_profit
      */
-    void receiveReward(String type);
+    void receiveReward(String type, String available_profit);
 
     /**
      * 收益说明

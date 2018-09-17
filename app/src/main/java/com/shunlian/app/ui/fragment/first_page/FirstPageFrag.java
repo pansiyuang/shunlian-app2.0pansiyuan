@@ -249,8 +249,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_scan)
     public void scan() {
-//        ZXingDemoAct.startAct(baseActivity, false, 0);
-        LuckWheelPanActivity.startAct(baseActivity);
+        ZXingDemoAct.startAct(baseActivity, false, 0);
     }
 
     @OnClick(R.id.mllayout_search)

@@ -375,7 +375,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void myPlusClick() {
         isFirst = false;
 //        if (!Common.isAlreadyLogin() || !Common.isPlus()) {
-//            H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
+//            H5Act.startAct(baseAct, Constant.PLUS_ADD, H5Act.MODE_SONIC);
 //            return;
 //        }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -411,7 +411,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //    public void myPlusClick() {
 //        isFirst = false;
 //        if (!Common.isAlreadyLogin() || !Common.isPlus()) {
-//            H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
+//            H5Act.startAct(baseAct, Constant.PLUS_ADD, H5Act.MODE_SONIC);
 //            return;
 //        }
 //        //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -664,7 +664,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             dialog_ad.setContentView(R.layout.dialog_ad);
             MyImageView miv_close = (MyImageView) dialog_ad.findViewById(R.id.miv_close);
             MyImageView miv_photo = (MyImageView) dialog_ad.findViewById(R.id.miv_photo);
-            GlideUtils.getInstance().loadImage(getBaseContext(), miv_photo, data.list.ad_img);
+            GlideUtils.getInstance().loadImage(baseAct, miv_photo, data.list.ad_img);
             miv_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -674,7 +674,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             miv_photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Common.goGoGo(getBaseContext(), data.list.link.type, data.list.link.item_id);
+                    Common.goGoGo(baseAct, data.list.link.type, data.list.link.item_id);
                     dialog_ad.dismiss();
                 }
             });
@@ -710,7 +710,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         pMain.getPrizeByRegister();
                     }else {
                         isGetAward=true;
-                        LoginEntryAct.startAct(getBaseContext());
+                        LoginEntryAct.startAct(baseAct);
                     }
 
                 }
@@ -791,14 +791,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             ntv_use.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Common.goGoGo(getBaseContext(),data.type,data.item_id);
+                    Common.goGoGo(baseAct,data.type,data.item_id);
                     dialog_new.dismiss();
                 }
             });
             ntv_check.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    CouponListAct.startAct(getBaseContext());
+                    CouponListAct.startAct(baseAct);
                     dialog_new.dismiss();
                 }
             });

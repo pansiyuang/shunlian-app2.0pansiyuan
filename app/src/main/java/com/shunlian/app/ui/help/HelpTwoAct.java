@@ -249,7 +249,7 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
             helpQCateAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    HelpSolutionAct.startAct(getBaseContext(), questions.get(position).id);
+                    HelpSolutionAct.startAct(baseAct, questions.get(position).id);
                 }
             });
         } else {

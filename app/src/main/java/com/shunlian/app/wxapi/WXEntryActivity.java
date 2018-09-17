@@ -169,7 +169,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
             @Override
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                Common.staticToasts(getBaseContext(),
+                Common.staticToasts(baseAct,
                         "分享失败", R.mipmap.icon_common_tanhao);
                 mYFinish();
             }
@@ -275,7 +275,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     wxEntryPresenter.wxLogin(code);
                 } else {
                     if (!isEmpty(Constant.SHARE_TYPE)) {
-                        if ("goods".equals(Constant.SHARE_TYPE)) {
+                        if ("goods".equals(Constant.SHARE_TYPE)
+                                || "income".equals(Constant.SHARE_TYPE)) {
                             //用于分享领金蛋
                             wxEntryPresenter.goodsShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
                         } else if ("article".equals(Constant.SHARE_TYPE)) {
@@ -290,18 +291,21 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     } else {
                         mYFinish();
                     }
-                    Common.staticToast("分享成功");
+//                    Common.staticToast("分享成功");
                 }
                 SharedPrefUtil.saveCacheSharedPrf("wx_flag","");
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
                 result = R.string.errcode_cancel;
+                Constant.SHARE_TYPE = "";
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
                 result = R.string.errcode_deny;
+                Constant.SHARE_TYPE = "";
                 break;
             default:
                 result = R.string.errcode_unknown;
+                Constant.SHARE_TYPE = "";
                 break;
         }
 
@@ -392,19 +396,24 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     @Override
-    public void golde_eggs(String format) {
-        if (!isEmpty(format) && !"0".equals(format)) {
+    public void golde_eggs(String eggs) {
+        if (!isEmpty(eggs) && !"0".equals(eggs)) {
+            String tip = "恭喜获得%s金蛋";
             ShareInfoEvent event = new ShareInfoEvent();
             event.isShareSuccess = true;
-            event.eggs_count = format;
+            event.eggs_count = String.format(tip,eggs);
             EventBus.getDefault().post(event);
         }
-        mYFinish();
+        cloasePage();
     }
 
     @Override
     public void cloasePage() {
-        mYFinish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+            finishAndRemoveTask();
+        }else {
+            finish();
+        }
     }
 
     private class MyHandler extends Handler {

@@ -208,8 +208,8 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
             linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             helpClasAdapter = new HelpClasAdapter(this, false, articles);
             helpClasAdapter.setOnItemClickListener((view, position) -> {
-//                    H5Act.startAct(getBaseContext(),articles.get(position).h5_link,H5Act.MODE_SONIC);
-                ClassDetailAct.startAct(getBaseContext(),
+//                    H5Act.startAct(baseAct,articles.get(position).h5_link,H5Act.MODE_SONIC);
+                ClassDetailAct.startAct(baseAct,
                         articles.get(position).h5_link,
                         articles.get(position).id,
                         H5Act.MODE_SONIC);

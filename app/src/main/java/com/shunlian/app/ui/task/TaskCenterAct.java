@@ -5,14 +5,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.webkit.URLUtil;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -22,9 +23,11 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.eventbus_bean.GoldEggsTaskEvent;
+import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ITaskCenterView;
@@ -40,8 +43,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -114,7 +120,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     int v48;
 
     private TaskCenterPresenter mPresenter;
-    private String ruleUrl, qrUrl;
+    private Dialog dialog_rule, dialog_qr;
+    private String mAdUrl;
+    private int mDeviceWidth;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, TaskCenterAct.class));
@@ -128,6 +136,20 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     protected int getLayoutId() {
         return R.layout.act_task_center;
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        if (dtime_layout != null)
+            dtime_layout.setOnClickListener(() -> {
+                if (dtime_layout != null) {
+                    if (dtime_layout.isClickable() && mPresenter != null) {
+                        //领取金蛋
+                        mPresenter.goldegglimit();
+                    }
+                }
+            });
     }
 
     /**
@@ -146,20 +168,37 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
         pick_color = getColorResouce(R.color.pink_color);
         v48 = getColorResouce(R.color.value_484848);
+
+        mDeviceWidth = DeviceInfoUtil.getDeviceWidth(this);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (mPresenter != null) mPresenter.attachView();
+    }
 
     /**
      * 金蛋明细
      */
-    @OnClick(R.id.rlayout_golden_eggs)
+    @OnClick(R.id.mtv_eggs_count)
     public void goldenEggsDetail() {
         EggDetailAct.startAct(this);
     }
 
+    /**
+     * 使用金蛋去首页
+     */
+    @OnClick(R.id.mtv_user)
+    public void userEggs() {
+        Common.goGoGo(this, "home");
+    }
+
     @OnClick(R.id.miv_show_order)
-    public void showOrder(){
-        Common.staticToast("晒单");
+    public void showOrder() {
+        if (mPresenter != null) {
+            mPresenter.share();
+        }
     }
 
     /**
@@ -167,7 +206,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @OnClick(R.id.mtv_question)
     public void question() {
-        initDialogs(qrUrl, true);
+        if (dialog_qr != null)
+            dialog_qr.show();
     }
 
     /**
@@ -175,25 +215,28 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @OnClick(R.id.miv_sign_rule)
     public void rule() {
-        initDialogs(ruleUrl, false);
+        if (dialog_rule != null)
+            dialog_rule.show();
     }
 
-    @OnClick(R.id.animation_view)
-    public void goldEggs(){
-        if (dtime_layout != null && !dtime_layout.isClickable()){
+    @OnClick({R.id.animation_view, R.id.miv_golden_eggs})
+    public void goldEggs() {
+        if (dtime_layout != null && !dtime_layout.isClickable()&&miv_airbubble != null) {
             miv_airbubble.setPivotX(0.0f);
             miv_airbubble.setPivotY(miv_airbubble.getMeasuredHeight());
-            ValueAnimator va = ValueAnimator.ofFloat(0.0f,1.0f,//0.5秒
-                    1.0f,1.0f,1.0f,1.0f,//1秒
-                    1.0f,1.0f,1.0f,1.0f,//1秒
-                    1.0f,0.0f);//0.5秒
+            ValueAnimator va = ValueAnimator.ofFloat(0.0f, 1.0f,//0.5秒
+                    1.0f, 1.0f, 1.0f, 1.0f,//1秒
+                    1.0f, 1.0f, 1.0f, 1.0f,//1秒
+                    1.0f, 0.0f);//0.5秒
             va.setDuration(3000);
             va.setInterpolator(new LinearInterpolator());
             va.addUpdateListener(animation -> {
                 float value = (float) animation.getAnimatedValue();
-                miv_airbubble.setAlpha(value);
-                miv_airbubble.setScaleX(value);
-                miv_airbubble.setScaleY(value);
+                if (miv_airbubble != null) {
+                    miv_airbubble.setAlpha(value);
+                    miv_airbubble.setScaleX(value);
+                    miv_airbubble.setScaleY(value);
+                }
             });
             va.start();
         }
@@ -206,7 +249,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     public void newTaskList() {
         if (mPresenter != null) {
             mPresenter.current_task_state = TaskCenterPresenter.NEW_USER_TASK;
-            mPresenter.getTaskList();
+            mPresenter.cacheTaskList();
             stateChange(1);
         }
     }
@@ -218,7 +261,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     public void dayTaskList() {
         if (mPresenter != null) {
             mPresenter.current_task_state = TaskCenterPresenter.DAILY_TASK;
-            mPresenter.getTaskList();
+            mPresenter.cacheTaskList();
             stateChange(2);
         }
     }
@@ -251,6 +294,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     }
 
     private void setGoldEggsAnim(String filename) {
+        AssetManager assets = null;
+        InputStream is = null;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 gone(miv_golden_eggs);
@@ -262,17 +307,21 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             } else {
                 visible(miv_golden_eggs);
                 gone(animation_view);
-                AssetManager assets = getAssets();
-                InputStream is = null;
+                assets = getAssets();
                 is = assets.open("eggs/img_1.png");
-                Bitmap bitmap = BitmapFactory.decodeStream(is);
-                miv_golden_eggs.setImageBitmap(bitmap);
-                bitmap.recycle();
-                is.close();
-                assets.close();
+                miv_golden_eggs.setImageBitmap(BitmapFactory.decodeStream(is));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (assets != null) assets.close();
         }
     }
 
@@ -303,6 +352,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setGoldEggsCount(String count) {
+        if (mtv_eggs_count != null)
         mtv_eggs_count.setText(count);
     }
 
@@ -313,6 +363,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setSignContinueNum(String num) {
+        if (mtvSignDay != null)
         mtvSignDay.setText(num);
     }
 
@@ -321,49 +372,36 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      * @param maxProgress 最大进度
      */
     @Override
-    public void obtainDownTime(String second, String maxProgress,String task_status) {
-        if ("0".equals(task_status)){
+    public void obtainDownTime(String second, String maxProgress, String task_status) {
+        if ("0".equals(task_status)) {
             setGoldEggsAnim("eggs_hatch.json");
-            if (dtime_layout != null){
-                dtime_layout.setSecond(1,1);
+            if (mPresenter != null) mPresenter.getTaskList();
+            if (dtime_layout != null) {
+                dtime_layout.setSecond(1, 1);
                 dtime_layout.startDownTimer();
-                dtime_layout.setOnClickListener(() -> {
-                    if (dtime_layout != null) {
-                        if (dtime_layout.isClickable() && mPresenter != null) {
-                            //领取金蛋
-                            mPresenter.goldegglimit();
-                        }
-                    }
+            }
+        } else {
+            setGoldEggsAnim("eggs_not_hatch.json");
+            if (dtime_layout != null && !isEmpty(second) && !isEmpty(maxProgress)) {
+                dtime_layout.setSecond(Long.parseLong(second), Long.parseLong(maxProgress));
+                dtime_layout.startDownTimer();
+                dtime_layout.setDownTimeComplete(() -> {
+                    setGoldEggsAnim("eggs_hatch.json");
+                    if (mPresenter != null) mPresenter.getTaskList();
+                    if (mPresenter != null &&
+                            mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
+                        mPresenter.updateItem(0, "0");
                 });
             }
-            return;
-        }
-        if (dtime_layout != null && !isEmpty(second) && !isEmpty(maxProgress)) {
-            setGoldEggsAnim("eggs_not_hatch.json");
-            dtime_layout.setSecond(Long.parseLong(second), Long.parseLong(maxProgress));
-            dtime_layout.startDownTimer();
-            dtime_layout.setDownTimeComplete(() -> {
-                setGoldEggsAnim("eggs_hatch.json");
-                if(mPresenter != null &&
-                        mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
-                    mPresenter.updateItem(0,"0");
-            });
-            dtime_layout.setOnClickListener(() -> {
-                if (dtime_layout != null) {
-                    if (dtime_layout.isClickable() && mPresenter != null) {
-                        //领取金蛋
-                        mPresenter.goldegglimit();
-                    }
-                }
-            });
         }
     }
 
     /**
      * 限时领金蛋弹窗
+     *
      * @param num
      */
-    public void showGoldEggsNum(String num){
+    public void showGoldEggsNum(String num) {
         if (oget != null) {
             //领取金蛋
             oget.setTopTextView("恭喜获得");
@@ -372,6 +410,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
+    private String re = "(w=|h=)(\\d+)";
+    private Pattern p = Pattern.compile(re);
     /**
      * 广告图
      *
@@ -380,10 +420,31 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setPic(String url, TaskHomeEntity.AdUrlBean urlBean) {
-        if (!isEmpty(url)) {
+        if (URLUtil.isNetworkUrl(url)) {
+            if (url.equals(mAdUrl))return;
             visible(mivPic);
-            GlideUtils.getInstance().loadCornerImage(this, mivPic, url,
-                    TransformUtil.dip2px(this, 2.5f));
+
+            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url)) {
+                Matcher m = p.matcher(url);
+                int w = 0;
+                int h = 0;
+                if (m.find()) {
+                    w = Integer.parseInt(m.group(2));
+                } else {
+                    w = 720;
+                }
+                if (m.find()) {
+                    h = Integer.parseInt(m.group(2));
+                } else {
+                    h = 200;
+                }
+                //LogUtil.zhLogW("===w="+w+"  h="+h);
+                int i = (int) (mDeviceWidth * h * 1.0f / w);
+                GlideUtils.getInstance()
+                        .loadCornerImageSize(this, mivPic, url,
+                                TransformUtil.dip2px(this, 2.5f), mDeviceWidth, i);
+            }
+
             mivPic.setOnClickListener(v -> {
                 if (urlBean != null) {
                     Common.goGoGo(this, urlBean.type, urlBean.item_id);
@@ -392,6 +453,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         } else {
             gone(mivPic);
         }
+        mAdUrl = url;
     }
 
     /**
@@ -400,8 +462,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setTip(String question, String rule) {
-        qrUrl=question;
-        ruleUrl=rule;
+        initQRDialog(question);
+        initRuleDialog(rule);
     }
 
     @Override
@@ -417,6 +479,10 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void closeNewUserList() {
         gone(llayoutNewTask);
+        if (llayoutDayTask != null)
+        llayoutDayTask.setEnabled(false);
+        if (mtvDayTask != null)
+        mtvDayTask.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
     }
 
     /**
@@ -436,11 +502,10 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void signEgg(SignEggEntity signEggEntity) {
         initDialog(signEggEntity);
-        if (mtv_eggs_count != null)mtv_eggs_count.setText(signEggEntity.gold_egg);
-        if (mtvSignDay != null)mtvSignDay.setText(signEggEntity.sign_continue_num);
-        if (sgel != null)sgel.signSuccess();
+        if (mtv_eggs_count != null) mtv_eggs_count.setText(signEggEntity.gold_egg);
+        if (mtvSignDay != null) mtvSignDay.setText(signEggEntity.sign_continue_num);
+        if (sgel != null) sgel.signSuccess();
     }
-
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -450,36 +515,62 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void shareSuccess(ShareInfoEvent event) {
+        if (oget != null && event.isShareSuccess && mPresenter != null
+                &&Common.isForeground(this,getClass().getName())) {
+            oget.setEggsCount(event.eggs_count);
+            oget.show(4000);
+            if (mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
+                mPresenter.updateItem(mPresenter.getUpdatePosition(), "1");
+        }
+    }
 
     /*
-    常见问题和签到明细弹窗
+    常见问题弹窗
      */
-    public void initDialogs(String url, boolean isQR) {
-//        if (Dialog dialog_ad == null) {
+    public void initQRDialog(String url) {
         if (isEmpty(url))
             return;
-        Dialog dialog_ad = new Dialog(this, R.style.popAd);
-        dialog_ad.setContentView(R.layout.dialog_rule);
-        MyImageView miv_close = dialog_ad.findViewById(R.id.miv_close);
-        MyImageView miv_ad = dialog_ad.findViewById(R.id.miv_ad);
-        MyWebView mwv_rule = dialog_ad.findViewById(R.id.mwv_rule);
+        dialog_qr = new Dialog(this, R.style.popAd);
+        dialog_qr.setContentView(R.layout.dialog_rule);
+        MyImageView miv_close = dialog_qr.findViewById(R.id.miv_close);
+        MyImageView miv_ad = dialog_qr.findViewById(R.id.miv_ad);
+        MyWebView mwv_rule = dialog_qr.findViewById(R.id.mwv_rule);
         mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
         mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
         mwv_rule.loadUrl(url);
 //        mwv_rule.loadData("ddddddfsdfsfsfsdfsfsdfd","text/html", "UTF-8");
-        if (isQR) {
-            miv_ad.setImageResource(R.mipmap.image_renwu_changjianwenti);
-        } else {
-            miv_ad.setImageResource(R.mipmap.image_renwu_qiandaoguize);
-        }
-        miv_close.setOnClickListener(view -> dialog_ad.dismiss());
-        dialog_ad.setCancelable(false);
-//        }
-        dialog_ad.show();
+
+        miv_ad.setImageResource(R.mipmap.image_renwu_changjianwenti);
+        miv_close.setOnClickListener(view -> dialog_qr.dismiss());
+        dialog_qr.setCancelable(false);
+    }
+
+    /*
+    签到规则弹窗
+     */
+    public void initRuleDialog(String url) {
+        if (isEmpty(url))
+            return;
+        dialog_rule = new Dialog(this, R.style.popAd);
+        dialog_rule.setContentView(R.layout.dialog_rule);
+        MyImageView miv_close = dialog_rule.findViewById(R.id.miv_close);
+        MyImageView miv_ad = dialog_rule.findViewById(R.id.miv_ad);
+        MyWebView mwv_rule = dialog_rule.findViewById(R.id.mwv_rule);
+        mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
+        mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+        mwv_rule.loadUrl(url);
+//        mwv_rule.loadData("ddddddfsdfsfsfsdfsfsdfd","text/html", "UTF-8");
+
+        miv_ad.setImageResource(R.mipmap.image_renwu_qiandaoguize);
+        miv_close.setOnClickListener(view -> dialog_rule.dismiss());
+        dialog_rule.setCancelable(false);
     }
 
     /**
      * 签到成功弹窗
+     *
      * @param data
      */
     public void initDialog(SignEggEntity data) {
@@ -503,6 +594,15 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 //        }
         dialog_ad.show();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (dtime_layout != null){
+            dtime_layout.cancelDownTimer();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         if (dtime_layout != null) {

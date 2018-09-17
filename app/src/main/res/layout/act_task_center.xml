@@ -113,7 +113,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/mtv_count"
-                    android:layout_marginTop="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingRight="20dp"
                     android:layout_toRightOf="@+id/mtv_eggs_count"
                     android:text="去使用"
                     android:textColor="@color/white"
@@ -138,6 +139,8 @@
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_golden_eggs"
                     android:layout_width="125dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginBottom="22dp"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:visibility="gone"/>
@@ -264,8 +267,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_marginTop="16dp"
-                android:adjustViewBounds="true"
-                android:minHeight="100dp" />
+                android:adjustViewBounds="true"/>
 
             <!--任务列表-->
             <LinearLayout

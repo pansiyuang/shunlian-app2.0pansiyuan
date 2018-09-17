@@ -82,7 +82,7 @@ public class AmountDetailAct extends BaseActivity implements View.OnClickListene
         mtv_desc.setText(amountDetailEntities.get(0).name);
         mtv_count.setText(amountDetailEntities.get(0).value);
         amountDetailEntities.remove(0);
-        rv_content.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
-        rv_content.setAdapter(new AmountDetailAdapter(getBaseContext(), false, amountDetailEntities));
+        rv_content.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false));
+        rv_content.setAdapter(new AmountDetailAdapter(baseAct, false, amountDetailEntities));
     }
 }

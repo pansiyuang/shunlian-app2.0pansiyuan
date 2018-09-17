@@ -132,7 +132,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)
@@ -182,7 +182,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
                     kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                         @Override
                         public void onItemClick(int position) {
-                            Common.goGoGo(getBaseContext(), coreNewEntity.banner_list.get(position).type, coreNewEntity.banner_list.get(position).item_id);
+                            Common.goGoGo(baseAct, coreNewEntity.banner_list.get(position).type, coreNewEntity.banner_list.get(position).item_id);
                         }
                     });
                 }
@@ -191,14 +191,14 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
             kanner.setVisibility(View.GONE);
         }
         if (coreNewEntity.hot_goods!=null&&coreNewEntity.hot_goods.size()>0){
-            AishangHorizonAdapter aishangHorizonAdapter = new AishangHorizonAdapter(getBaseContext(), false, coreNewEntity.hot_goods);
-            rv_goods.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
+            AishangHorizonAdapter aishangHorizonAdapter = new AishangHorizonAdapter(baseAct, false, coreNewEntity.hot_goods);
+            rv_goods.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.HORIZONTAL, false));
             rv_goods.setAdapter(aishangHorizonAdapter);
-            rv_goods.addItemDecoration(new MHorItemDecoration(getBaseContext(), 10, 10, 10));
+            rv_goods.addItemDecoration(new MHorItemDecoration(baseAct, 10, 10, 10));
             aishangHorizonAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    GoodsDetailAct.startAct(getBaseContext(), coreNewEntity.hot_goods.get(position).id);
+                    GoodsDetailAct.startAct(baseAct, coreNewEntity.hot_goods.get(position).id);
                 }
             });
             view_rexiao.setVisibility(View.VISIBLE);
@@ -210,7 +210,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
             rv_goods.setVisibility(View.GONE);
         }
 
-        CoreNewMenuAdapter coreNewMenuAdapter = new CoreNewMenuAdapter(getBaseContext(), false, coreNewEntity.cate_name);
+        CoreNewMenuAdapter coreNewMenuAdapter = new CoreNewMenuAdapter(baseAct, false, coreNewEntity.cate_name);
         cate_id = coreNewEntity.cate_name.get(0).cate_id;
         cate_name = coreNewEntity.cate_name.get(0).cate_name;
         pAishang.resetBaby("new", cate_id);
@@ -228,7 +228,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
             }
         });
         rv_categoryMenu.setAdapter(coreNewMenuAdapter);
-        rv_categoryMenu.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
+        rv_categoryMenu.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.HORIZONTAL, false));
 
     }
 
@@ -253,17 +253,17 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
         }
         if (aiMoreAdapter == null) {
             aiMoreAdapter = new AiMoreAdapter(this, mData);
-            gridLayoutManager = new GridLayoutManager(getBaseContext(), 2);
+            gridLayoutManager = new GridLayoutManager(baseAct, 2);
             rv_category.setLayoutManager(gridLayoutManager);
             rv_category.setAdapter(aiMoreAdapter);
             aiMoreAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    GoodsDetailAct.startAct(getBaseContext(), mData.get(position).id);
+                    GoodsDetailAct.startAct(baseAct, mData.get(position).id);
                 }
             });
             //在CoordinatorLayout中使用添加分割线失效
-//            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(getBaseContext(), 5), false);
+//            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(baseAct, 5), false);
 //            rv_category.addItemDecoration(gridSpacingItemDecoration);
         } else {
             aiMoreAdapter.notifyDataSetChanged();

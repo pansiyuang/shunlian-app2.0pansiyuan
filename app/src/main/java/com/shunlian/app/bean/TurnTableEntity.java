@@ -10,6 +10,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TurnTableEntity {
+    public String rule;
     public List<String> prizeScroll;
     public TurnTable turnTable;
     public List<MyPrize> myPrize;
