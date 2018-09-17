@@ -219,7 +219,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
             @Override
             public void onItemClick(View view, int position) {
                 HelpcenterSolutionEntity.Question question = solution.about.get(position);
-                HelpSolutionAct.startAct(getBaseContext(), question.id);
+                HelpSolutionAct.startAct(baseAct, question.id);
                 finish();
             }
         });
@@ -314,7 +314,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     @Override
     public void callFeedback() {
         dialog_feedback.dismiss();
-        Common.staticToasts(getBaseContext(), getStringResouce(R.string.help_xiexiefankui), R.mipmap.icon_common_duihao);
+        Common.staticToasts(baseAct, getStringResouce(R.string.help_xiexiefankui), R.mipmap.icon_common_duihao);
     }
 
     @Override

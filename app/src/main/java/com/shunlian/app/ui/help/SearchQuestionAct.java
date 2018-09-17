@@ -157,7 +157,7 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
             searchQAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    HelpSolutionAct.startAct(getBaseContext(), contents.get(position).id);
+                    HelpSolutionAct.startAct(baseAct, contents.get(position).id);
                 }
             });
         }

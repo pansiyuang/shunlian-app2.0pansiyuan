@@ -75,7 +75,7 @@ public class StoreSortAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)
@@ -173,7 +173,7 @@ public class StoreSortAct extends BaseActivity implements View.OnClickListener, 
                 keyword = children.name;
             }
             if (getIntent().getBooleanExtra("isStore", false)) {
-                StoreSearchAct.startAct(getBaseContext(), storeId,"",childId,keyword);
+                StoreSearchAct.startAct(baseAct, storeId,"",childId,keyword);
             } else {
                 Intent intent = new Intent();
                 intent.putExtra("parentSrc", parentId);

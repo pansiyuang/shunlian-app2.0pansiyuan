@@ -1,5 +1,6 @@
 package com.shunlian.app.ui;
 
+import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -87,6 +88,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     private SlideBackLayout mSlideBackLayout;
     private OnSlideListenerAdapter mSlideBackListener;
     protected CommondDialog commondDialog;
+    protected Activity baseAct;
 
 
     @Override
@@ -117,7 +119,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 e.printStackTrace();
             }
         }*/
-
+        baseAct=this;
         immersionBar = ImmersionBar.with(this);
         immersionBar.init();
         setContentView(getLayoutId());
@@ -255,7 +257,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             byId.setOnClickListener(v ->  {
                     if (Constant.JPUSH!=null&&Common.isUniqueAct(Common.
                             transClassName(Constant.JPUSH.get(0)))){
-                        MainActivity.startAct(getBaseContext(),"");
+                        MainActivity.startAct(baseAct,"");
                         Constant.JPUSH=null;
                     }
                     InputMethodManager imm = (InputMethodManager)
@@ -545,7 +547,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK&&Constant.JPUSH!=null&&Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))){
-            MainActivity.startAct(getBaseContext(),"");
+            MainActivity.startAct(baseAct,"");
             Constant.JPUSH=null;
         }
         return super.onKeyDown(keyCode, event);
@@ -554,7 +556,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     public void finish() {
         if (Constant.JPUSH!=null&&Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))){
-            MainActivity.startAct(getBaseContext(),"");
+            MainActivity.startAct(baseAct,"");
             Constant.JPUSH=null;
         }
         super.finish();
@@ -563,7 +565,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onBackPressed() {
         if (Constant.JPUSH!=null&&Common.isUniqueAct(Common.transClassName(Constant.JPUSH.get(0)))){
-            MainActivity.startAct(getBaseContext(),"");
+            MainActivity.startAct(baseAct,"");
             Constant.JPUSH=null;
         }
         super.onBackPressed();

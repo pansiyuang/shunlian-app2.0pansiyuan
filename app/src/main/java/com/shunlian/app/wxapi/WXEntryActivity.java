@@ -169,7 +169,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
             @Override
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                Common.staticToasts(getBaseContext(),
+                Common.staticToasts(baseAct,
                         "分享失败", R.mipmap.icon_common_tanhao);
                 mYFinish();
             }

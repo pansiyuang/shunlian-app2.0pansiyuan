@@ -269,9 +269,9 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
             avars = new ArrayList<>();
             num = Integer.parseInt(data.commentcounts);
             avars.addAll(data.inv_info.five_member_likes);
-            avarAdapter = new TieziAvarAdapter(getBaseContext(), false, avars);
-            rv_avar.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
-            rv_avar.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(getBaseContext(), -12)));
+            avarAdapter = new TieziAvarAdapter(baseAct, false, avars);
+            rv_avar.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.HORIZONTAL, false));
+            rv_avar.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(baseAct, -12)));
             rv_avar.setAdapter(avarAdapter);
 //            if (data.inv_info != null && data.inv_info.img != null) {
 //                kanner_tiezi.layoutRes=R.layout.layout_kanner_rectangle_indicator;
@@ -284,7 +284,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 //                });
 //
 //            }
-            GlideUtils.getInstance().loadCircleImage(getBaseContext(), miv_avar, data.inv_info.author_info.avatar);
+            GlideUtils.getInstance().loadCircleImage(baseAct, miv_avar, data.inv_info.author_info.avatar);
             mtv_name.setText(data.inv_info.author_info.nickname);
             mtv_time.setText(data.inv_info.create_time);
             mtv_like.setText(data.inv_info.likes);
@@ -299,7 +299,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
             }
             mtv_desc.setText(data.inv_info.content);
             commentAdapter = new TieziCommentAdapter(this, circle_id, inv_id, true, mdatas);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseAct);
             rv_remark.setLayoutManager(linearLayoutManager);
             rv_remark.setNestedScrollingEnabled(false);
             rv_remark.addItemDecoration(new VerticalItemDecoration(28, 0, 0));
