@@ -47,10 +47,10 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
                 super.onSuccess(entity);
                 CommonEntity data = entity.data;
                 if (data != null) {
-                    Constant.SHARE_TYPE="";
                     if (iView!=null)
                     iView.notifyCallback(data);
                 }
+                Constant.SHARE_TYPE="";
             }
 
             @Override
@@ -142,9 +142,8 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                if (iView!=null)
-                iView.golde_eggs(entity.data.gold_num);
-                Constant.SHARE_TYPE="";
+                if (iView!=null) iView.golde_eggs(entity.data.gold_num);
+                else Constant.SHARE_TYPE="";
             }
 
             @Override
