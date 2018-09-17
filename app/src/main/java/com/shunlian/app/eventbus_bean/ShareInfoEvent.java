@@ -8,4 +8,5 @@ public class ShareInfoEvent {
 
     public boolean isShareSuccess;//是否分享成功
     public String eggs_count;//金蛋数量
+    public String type;//分享类型
 }

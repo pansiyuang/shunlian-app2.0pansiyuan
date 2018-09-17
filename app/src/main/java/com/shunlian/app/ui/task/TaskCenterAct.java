@@ -518,7 +518,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void shareSuccess(ShareInfoEvent event) {
         if (oget != null && event.isShareSuccess && mPresenter != null
-                &&Common.isForeground(this,getClass().getName())) {
+                && "income".equals(event.type)) {
             oget.setEggsCount(event.eggs_count);
             oget.show(4000);
             if (mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
