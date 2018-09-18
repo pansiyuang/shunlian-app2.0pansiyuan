@@ -346,6 +346,10 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     map.put("content", "");
                 }
 
+                if (currentType == CREAT_COMMENT) {
+                    map.put("anonymous", String.valueOf(releaseCommentEntity.anonymous));
+                }
+
                 if (!isEmpty(releaseCommentEntity.imgs)) {
                     StringBuffer stringBuffer;
                     if (TextUtils.isEmpty(releaseCommentEntity.picString)) {
@@ -381,6 +385,11 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     @Override
     public void OnCommentLevel(String level, int position) {
         commentList.get(position).starLevel = level;
+    }
+
+    @Override
+    public void OnCommentAnonymous(int anonymous, int position) {
+        commentList.get(position).anonymous = anonymous;
     }
 
     @Override
