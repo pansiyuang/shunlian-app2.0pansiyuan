@@ -26,10 +26,11 @@ public class DayDayMenuAdapter extends BaseRecyclerAdapter<ActivityListEntity.Me
     private List<ActivityListEntity.Menu> datas;
     public int selectPosition=0;
 
-    public DayDayMenuAdapter(Context context, boolean isShowFooter, List<ActivityListEntity.Menu> datas) {
+    public DayDayMenuAdapter(Context context, boolean isShowFooter, List<ActivityListEntity.Menu> datas,int selectPosition) {
         super(context, isShowFooter, datas);
         this.context = context;
         this.datas = datas;
+        this.selectPosition=selectPosition;
     }
 
     @Override
