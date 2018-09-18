@@ -559,7 +559,7 @@ public class GlideUtils {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 BitmapUtil.saveImageToAlbumn(context, resource);
-                Common.staticToasts(context, "保存成功", R.mipmap.icon_common_duihao);
+                Common.staticToasts(context, "已保存到手机相册", R.mipmap.icon_common_duihao);
             }
 
             @Override

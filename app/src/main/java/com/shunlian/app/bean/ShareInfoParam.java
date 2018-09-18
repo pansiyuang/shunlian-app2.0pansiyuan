@@ -14,6 +14,7 @@ public class ShareInfoParam implements Serializable {
     @JsonProperty("share_url")
     public String shareLink;
     public String title;
+    public String special_img_url;//专题页图文分享图片
     @JsonProperty("content")
     public String desc;
     @JsonProperty("pic")

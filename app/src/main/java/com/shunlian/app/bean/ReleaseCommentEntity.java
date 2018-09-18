@@ -26,6 +26,7 @@ public class ReleaseCommentEntity implements Serializable {
     public String starLevel;
     public List<ImageEntity> imgs;
     public String picString;
+    public int anonymous;
 
     public ReleaseCommentEntity() {
     }
