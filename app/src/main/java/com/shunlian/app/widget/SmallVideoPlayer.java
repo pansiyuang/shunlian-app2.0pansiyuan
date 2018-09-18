@@ -1012,6 +1012,10 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
 
     public void downLoadVideo(String fileName) {
+        Message obtain1 = Message.obtain();
+        obtain1.obj = "开始下载";
+        obtain1.what = 100;
+        mHandler.sendMessage(obtain1);
         try {
             URL url = new URL(currentUrl);
             // 打开连接
