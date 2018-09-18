@@ -141,6 +141,12 @@ public class CreatCommentAdapter extends BaseAdapter {
         } else if (commentType == CREAT_COMMENT) {
             ll_comment_score.setVisibility(View.VISIBLE);
             layout_anonymous.setVisibility(View.VISIBLE);
+
+            if (data.anonymous == 0) {
+                miv_select.setImageResource(R.mipmap.img_niming_n);
+            } else {
+                miv_select.setImageResource(R.mipmap.img_niming_h);
+            }
         } else if (commentType == CHANGE_COMMENT) {
             ll_comment_middle.setEnabled(false);
             ll_comment_low.setEnabled(false);
