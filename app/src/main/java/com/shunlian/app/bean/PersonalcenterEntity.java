@@ -82,6 +82,7 @@ public class PersonalcenterEntity {
         public static class Url {
             public String type;
             public String item_id;
+            public String msg;
         }
     }
 
