@@ -28,7 +28,7 @@
         android:background="@drawable/jz_bottom_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/iv_play_control"
@@ -70,6 +70,14 @@
             android:layout_marginRight="14dp"
             android:text="00:00"
             android:textColor="#ffffff" />
+
+        <ImageView
+            android:id="@+id/iv_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_shiping_xiazai"
+            android:visibility="gone"
+            android:padding="15dp"/>
 
         <TextView
             android:id="@+id/clarity"

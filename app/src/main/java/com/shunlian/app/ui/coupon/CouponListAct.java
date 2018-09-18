@@ -71,7 +71,7 @@ public class CouponListAct extends BaseActivity implements ICouponListView{
 
     public static void startAct(Context context){
         Intent intent=new Intent(context,CouponListAct.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
     /**

@@ -169,7 +169,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
             @Override
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                Common.staticToasts(getBaseContext(),
+                Common.staticToasts(baseAct,
                         "分享失败", R.mipmap.icon_common_tanhao);
                 mYFinish();
             }
@@ -401,9 +401,11 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String tip = "恭喜获得%s金蛋";
             ShareInfoEvent event = new ShareInfoEvent();
             event.isShareSuccess = true;
+            event.type = Constant.SHARE_TYPE;
             event.eggs_count = String.format(tip,eggs);
             EventBus.getDefault().post(event);
         }
+        Constant.SHARE_TYPE="";
         cloasePage();
     }
 

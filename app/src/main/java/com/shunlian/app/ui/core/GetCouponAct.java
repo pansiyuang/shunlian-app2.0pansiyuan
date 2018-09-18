@@ -90,7 +90,7 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)
@@ -151,7 +151,7 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
         super.onClick(view);
         switch (view.getId()) {
             case R.id.miv_search:
-                SearchCouponAct.startAct(getBaseContext());
+                SearchCouponAct.startAct(baseAct);
                 break;
             case R.id.mtv_zuixin:
                 if (rv_dianpu.getScrollState() == 0) {
@@ -211,7 +211,7 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     public void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total) {
         if (couponsAdapter == null) {
             couponsAdapter = new CouponsAdapter(this, true, mData, pGetCoupon);
-            linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
+            linearLayoutManager = new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false);
             rv_dianpu.setLayoutManager(linearLayoutManager);
             rv_dianpu.setAdapter(couponsAdapter);
         } else {

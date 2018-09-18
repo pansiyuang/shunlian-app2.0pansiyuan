@@ -75,10 +75,10 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.mtv_count:
                 if (data != null)
-                    BalanceXQAct.startAct(getBaseContext(), data,false);
+                    BalanceXQAct.startAct(baseAct, data,false);
                 break;
             case R.id.mtv_yueminxi:
-                BalanceDetailAct.startAct(getBaseContext());
+                BalanceDetailAct.startAct(baseAct);
                 break;
             case R.id.mrlayout_zhifushezhi:
                 if (data!=null)

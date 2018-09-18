@@ -971,20 +971,24 @@ public class Common {
     public static String getDomain(String url) {
         if (TextUtils.isEmpty(url))
             return "";
-        String result = "";
-        int j = 0, startIndex = 0, endIndex = 0;
-        for (int i = 0; i < url.length(); i++) {
-            if (url.charAt(i) == '/') {
-                j++;
-                if (j == 2)
-                    startIndex = i;
-                else if (j == 3)
-                    endIndex = i;
-            }
+        try {
+            String result = "";
+            int j = 0, startIndex = 0, endIndex = 0;
+            for (int i = 0; i < url.length(); i++) {
+                if (url.charAt(i) == '/') {
+                    j++;
+                    if (j == 2)
+                        startIndex = i;
+                    else if (j == 3)
+                        endIndex = i;
+                }
 
+            }
+            result = url.substring(startIndex + 1, endIndex);
+            return result;
+        } catch (Exception e) {
+            return "";
         }
-        result = url.substring(startIndex + 1, endIndex);
-        return result;
     }
 
     /**

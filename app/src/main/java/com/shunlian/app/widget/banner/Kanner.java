@@ -31,7 +31,7 @@ public class Kanner extends BaseBanner<String, Kanner> {
         ImageView iv = new ImageView(context);
         iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
         int deviceWidth = DeviceInfoUtil.getDeviceWidth(context);
-        GlideUtils.getInstance().loadOverrideImage(getContext(),iv,list.get(position),deviceWidth,deviceWidth);
+        GlideUtils.getInstance().loadOverrideImage(context,iv,list.get(position),deviceWidth,deviceWidth);
         container.addView(iv, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         return container;
     }

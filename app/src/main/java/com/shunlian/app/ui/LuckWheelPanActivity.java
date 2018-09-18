@@ -235,6 +235,8 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
     @Override
     public void getTurnData(TurnTableEntity turnTableEntity) {
+        if (tv_title==null)
+            return;
         if (isFirstLoad) {
             currentRuleUrl = turnTableEntity.rule;
             initDialogs(currentRuleUrl);

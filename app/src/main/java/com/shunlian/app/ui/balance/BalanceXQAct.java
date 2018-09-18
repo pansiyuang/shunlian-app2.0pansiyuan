@@ -107,7 +107,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mtv_yueminxi:
-                BalanceDetailAct.startAct(getBaseContext());
+                BalanceDetailAct.startAct(baseAct);
                 break;
             case R.id.mtv_tixian:
                 if (!Constant.ISBALANCE&&Float.parseFloat(balanceInfoEntity.balance)<Float.parseFloat(balanceInfoEntity.withdraw_limit)){
@@ -124,7 +124,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.miv_close:
                 if (isBack)
-                    BalanceMainAct.startAct(getBaseContext(), true);
+                    BalanceMainAct.startAct(baseAct, true);
                 finish();
                 break;
         }
@@ -133,7 +133,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onBackPressed() {
         if (isBack)
-            BalanceMainAct.startAct(getBaseContext(), true);
+            BalanceMainAct.startAct(baseAct, true);
         super.onBackPressed();
     }
 
@@ -145,9 +145,9 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View view) {
                 if (balanceInfoEntity.is_set_password){
-                    BalancePaySetTwoAct.startAct(getBaseContext(), "", "bindPay", "",true,false);
+                    BalancePaySetTwoAct.startAct(baseAct, "", "bindPay", "",true,false);
                 }else {
-                    BalancePaySetOneAct.startAct(getBaseContext(),false,false);
+                    BalancePaySetOneAct.startAct(baseAct,false,false);
                 }
                 promptDialog.dismiss();
             }
@@ -228,7 +228,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                BalanceVerifyPhoneAct.startAct(getBaseContext(),false,false,true);
+                BalanceVerifyPhoneAct.startAct(baseAct,false,false,true);
             }
         }).show();
     }

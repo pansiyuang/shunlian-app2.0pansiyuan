@@ -118,14 +118,14 @@ public class BalanceDetailAct extends BaseActivity implements View.OnClickListen
             }else {
                 isShowFooter=false;
             }
-            balanceDetailAdapter = new BalanceDetailAdapter(getBaseContext(), isShowFooter, balanceList);
-            linearLayoutManager = new LinearLayoutManager(getBaseContext());
+            balanceDetailAdapter = new BalanceDetailAdapter(baseAct, isShowFooter, balanceList);
+            linearLayoutManager = new LinearLayoutManager(baseAct);
             rv_detai.setLayoutManager(linearLayoutManager);
             rv_detai.setAdapter(balanceDetailAdapter);
             balanceDetailAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    AmountDetailAct.startAct(getBaseContext(),balanceList.get(position).id
+                    AmountDetailAct.startAct(baseAct,balanceList.get(position).id
                     );
                 }
             });
@@ -151,14 +151,14 @@ public class BalanceDetailAct extends BaseActivity implements View.OnClickListen
             }else {
                 isShowFooter=false;
             }
-            withdrawDetailAdapter = new WithdrawDetailAdapter(getBaseContext(), isShowFooter, records);
-            linearLayoutManager = new LinearLayoutManager(getBaseContext());
+            withdrawDetailAdapter = new WithdrawDetailAdapter(baseAct, isShowFooter, records);
+            linearLayoutManager = new LinearLayoutManager(baseAct);
             rv_detai.setLayoutManager(linearLayoutManager);
             rv_detai.setAdapter(withdrawDetailAdapter);
             withdrawDetailAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    AmountDetailAct.startAct(getBaseContext(),records.get(position).id
+                    AmountDetailAct.startAct(baseAct,records.get(position).id
                     );
                 }
             });

@@ -49,7 +49,7 @@ public class AlipayDetailAct extends BaseActivity implements View.OnClickListene
         }, getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BalancePaySetTwoAct.startAct(getBaseContext(),"","unbind","",false,true);
+                BalancePaySetTwoAct.startAct(baseAct,"","unbind","",false,true);
                 promptDialog.dismiss();
             }
         }).show();
@@ -94,8 +94,8 @@ public class AlipayDetailAct extends BaseActivity implements View.OnClickListene
     @Override
     public void setApiData(GetRealInfoEntity getRealInfoEntity) {
         mtv_account.setText(String.format(getStringResouce(R.string.balance_zhifubao), getRealInfoEntity.account_number));
-        rv_content.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
-        rv_content.setAdapter(new AlipayDetailAdapter(getBaseContext(), false, getRealInfoEntity.limit_memo));
+        rv_content.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false));
+        rv_content.setAdapter(new AlipayDetailAdapter(baseAct, false, getRealInfoEntity.limit_memo));
         rv_content.addItemDecoration(new MVerticalItemDecoration(this, 0.5f, 0, 0));
     }
 }

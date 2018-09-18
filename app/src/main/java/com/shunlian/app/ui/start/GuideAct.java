@@ -112,7 +112,7 @@
 //
 //        @Override
 //        public Object instantiateItem(ViewGroup container, int position) {
-//            MyImageView imageView = new MyImageView(getBaseContext());
+//            MyImageView imageView = new MyImageView(baseAct);
 //            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 //            imageView.setImageResource(mGuideLists[position]);
 //            container.addView(imageView);
@@ -154,7 +154,7 @@
 //
 //                    @Override
 //                    public void onClick(View v) {
-//                        MainActivity.startAct(getBaseContext(),"");
+//                        MainActivity.startAct(baseAct,"");
 //                        finish();
 //                    }
 //                });

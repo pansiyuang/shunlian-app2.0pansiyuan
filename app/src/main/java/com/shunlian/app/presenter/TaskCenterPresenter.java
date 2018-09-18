@@ -246,9 +246,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 
     public void cacheTaskList(){
         taskLists.clear();
-        if (current_task_state == NEW_USER_TASK) {
+        if (current_task_state == NEW_USER_TASK&&!isEmpty(newUserTaskLists)) {
             taskLists.addAll(newUserTaskLists);
-        } else {
+        } else if (!isEmpty(dailyTaskLists)){
             taskLists.addAll(dailyTaskLists);
         }
         if (isEmpty(taskLists)){

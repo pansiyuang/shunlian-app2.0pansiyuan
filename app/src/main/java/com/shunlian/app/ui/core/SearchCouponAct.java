@@ -142,11 +142,11 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
             visible(rv_search);
         }
         if (couponsAdapter == null) {
-            couponsAdapter = new CouponsAdapter(getBaseContext(), true, mData, pGetCoupon);
-            linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
+            couponsAdapter = new CouponsAdapter(baseAct, true, mData, pGetCoupon);
+            linearLayoutManager = new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false);
             rv_search.setLayoutManager(linearLayoutManager);
             rv_search.setAdapter(couponsAdapter);
-            rv_search.addItemDecoration(new MVerticalItemDecoration(getBaseContext(), 10, 10, 0));
+            rv_search.addItemDecoration(new MVerticalItemDecoration(baseAct, 10, 10, 0));
         } else {
             couponsAdapter.notifyDataSetChanged();
         }
