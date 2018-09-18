@@ -30,7 +30,7 @@
                 android:layout_centerVertical="true"
                 android:textColor="@color/new_text"
                 android:textSize="14sp"
-                android:layout_toRightOf="@id/miv_pay_pic"/>
+                android:layout_marginLeft="55dp"/>
 
             <com.shunlian.app.widget.MyImageView
                 android:layout_width="wrap_content"
