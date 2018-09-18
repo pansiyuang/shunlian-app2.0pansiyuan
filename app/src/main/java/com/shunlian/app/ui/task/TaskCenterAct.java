@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.task;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -125,7 +126,10 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     private int mDeviceWidth;
 
     public static void startAct(Context context) {
-        context.startActivity(new Intent(context, TaskCenterAct.class));
+        Intent intent = new Intent(context, TaskCenterAct.class);
+        if (!(context instanceof Activity))
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     /**
