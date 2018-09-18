@@ -18,5 +18,7 @@ public class PayListEntity {
         public String code;
         public String name;
         public String pic;
+        public String desc;
+        public String style;
     }
 }

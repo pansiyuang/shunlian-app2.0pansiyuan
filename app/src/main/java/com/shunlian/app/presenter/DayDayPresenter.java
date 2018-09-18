@@ -50,6 +50,41 @@ public class DayDayPresenter extends BasePresenter<DayDayView> {
         initApiData(id, babyPage, count);
     }
 
+    public void initMenu(String id,int page,int pageSize) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("page", String.valueOf(page));
+        map.put("page_size", String.valueOf(pageSize));
+        sortAndMD5(map);
+        Call<BaseEntity<ActivityListEntity>> baseEntityCall = getApiService().activityList(map);
+
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ActivityListEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<ActivityListEntity> entity) {
+                super.onSuccess(entity);
+                if (entity!=null&&entity.data!=null&&!isEmpty(entity.data.menu)){
+                    iView.initMenu(entity.data.menu);
+                }else {
+                    isLoading = false;
+                    iView.showDataEmptyView(1);
+                }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                isLoading = false;
+                iView.showDataEmptyView(1);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
+                iView.showDataEmptyView(1);
+            }
+        });
+    }
     public void initApiData(String id,int page,int pageSize) {
         Map<String, String> map = new HashMap<>();
         map.put("id", id);

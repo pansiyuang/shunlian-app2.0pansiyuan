@@ -29,6 +29,7 @@ public class ActivityListEntity {
         public String id;
         public String time;
         public String content;
+        public String checked;
 
         @Override
         public String toString() {

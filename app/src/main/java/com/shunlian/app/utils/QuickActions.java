@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -47,7 +46,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -64,9 +62,6 @@ import butterknife.Unbinder;
  */
 
 public class QuickActions extends RelativeLayout implements View.OnClickListener {
-
-    private Context mContext;
-    private View mActionView;
 
     //消息
     @BindView(R.id.mrlayout_message)
@@ -94,14 +89,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     //帮助中心
     @BindView(R.id.mllayout_help)
     MyLinearLayout mllayout_help;
-
     @BindView(R.id.mllayout_content)
     LinearLayout mllayout_content;
-
     @BindViews({R.id.view_search, R.id.view_firstPage, R.id.view_PersonalCenter
             , R.id.view_car, R.id.view_feedback, R.id.view_help, R.id.view_share})
     List<View> view_line;
-
+    private Context mContext;
+    private View mActionView;
     private String dirName;
     private Unbinder bind;
     private int topMargin;
@@ -426,7 +420,47 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     public void special() {
 //        tag="special";
         setShowItem(1, 2, 3, 6, 7, 8);
-        shareStyle1Dialog();
+        shareSpecialDialog();
+    }
+
+    /**
+     * 只能分享微信和复制链接
+     */
+    public void shareSpecialDialog() {
+        mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
+                .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
+                .addMenuItem(new PopMenuItem("图文分享", getResources().getDrawable(R.mipmap.img_tuwenfenxiang)))
+                .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
+                .setOnItemClickListener(new PopMenuItemCallback() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                mllayout_content.setVisibility(VISIBLE);
+                                WXEntryActivity.startAct(getContext(),
+                                        "shareFriend", mShareInfoParam);
+                                hide();
+                                break;
+                            case 1:
+                                mllayout_content.setVisibility(VISIBLE);
+                                GlideUtils.getInstance().savePicture(getContext(), mShareInfoParam.special_img_url);
+                                hide();
+                                break;
+                            case 2:
+                                mllayout_content.setVisibility(VISIBLE);
+                                copyText(true);
+                                hide();
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onClickClose(View view) {
+                        mllayout_content.setVisibility(VISIBLE);
+                        hide();
+                    }
+
+                }).build();
     }
 
     /**
@@ -1034,7 +1068,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
 
     public void copyText(boolean isToast) {
-        LogUtil.httpLogW("title:" + mShareInfoParam.title+"   desc:"+mShareInfoParam.desc);
+        LogUtil.httpLogW("title:" + mShareInfoParam.title + "   desc:" + mShareInfoParam.desc);
         Common.copyText(getContext(), mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, isToast);
     }
 
