@@ -164,6 +164,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
                         dayDayMenuAdapter.selectPosition = position;
                         dayDayMenuAdapter.notifyDataSetChanged();
                         dayListAdapter = null;
+                        if (position<activityListEntity.menu.size())
                         id = activityListEntity.menu.get(position).id;
                         dayDayPresenter.resetBaby(id);
                     }

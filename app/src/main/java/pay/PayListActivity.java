@@ -258,7 +258,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         parseParams(paramsStr);
 
         if (!isEmpty(mProductId)) isPLUS = true;
-        UPPayAssistEx.getSEPayInfo(activity, new UPQuerySEPayInfoCallback() {
+        UPPayAssistEx.getSEPayInfo(this, new UPQuerySEPayInfoCallback() {
             @Override
             public void onResult(String seName, String seTypes, int cardNumbers, Bundle reserved) {
                 LogUtil.augusLogW("androidPayName---"+seName);
