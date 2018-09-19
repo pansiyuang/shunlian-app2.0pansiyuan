@@ -169,16 +169,20 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     }
 
     public static void goOnPlayOnPause() {
-        if (JZVideoPlayerManager.getCurrentJzvd() != null) {
-            JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
-            if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
-                    jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
-                    jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
-                //releaseAllVideos();
-            } else {
-                jzvd.onStatePause();
-                JZMediaManager.pause();
+        try {
+            if (JZVideoPlayerManager.getCurrentJzvd() != null) {
+                JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
+                if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
+                    //releaseAllVideos();
+                } else {
+                    jzvd.onStatePause();
+                    JZMediaManager.pause();
+                }
             }
+        }catch (Exception e){
+
         }
     }
 
