@@ -63,6 +63,7 @@
         android:resizeableActivity="true"
         android:supportsPictureInPicture="true"
         android:largeHeap="true"
+        android:hardwareAccelerated="true"
         android:theme="@style/AppTheme">
 
         <!--银联支付-->
