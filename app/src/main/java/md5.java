@@ -13,7 +13,8 @@ public class md5 {
     public static void main(String[] args) {
         try {
             String fileMD5 = getFileMD5(
-                    "C:\\Users\\Administrator\\Desktop\\APK\\app-release_legu_signed_zipalign.apk");
+//                    "C:\\Users\\Administrator\\Desktop\\APK\\app-release_legu_signed_zipalign.apk");
+                    "C:\\Users\\Administrator\\Desktop\\APK\\Android_2.3.1.2.apk");
 //                    "C:\\Users\\Administrator\\Desktop\\APK\\app-release_legu_ShunLianPower_signed_zipalign.apk");
             System.out.println("md5:"+fileMD5);
             // TODO: 2017/6/10 0010 1f6c334c01a63d94062fa42778b1be38
