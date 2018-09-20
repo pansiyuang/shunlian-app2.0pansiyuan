@@ -481,12 +481,16 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      * 关闭新手任务列表
      */
     @Override
-    public void closeNewUserList() {
-        gone(llayoutNewTask);
-        if (llayoutDayTask != null)
-        llayoutDayTask.setEnabled(false);
-        if (mtvDayTask != null)
-        mtvDayTask.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+    public void closeNewUserList(boolean isClose) {
+        if (isClose) {
+            gone(llayoutNewTask);
+            if (llayoutDayTask != null)
+                llayoutDayTask.setEnabled(false);
+            if (mtvDayTask != null)
+                mtvDayTask.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        }else {
+            visible(llayoutNewTask);
+        }
     }
 
     /**
