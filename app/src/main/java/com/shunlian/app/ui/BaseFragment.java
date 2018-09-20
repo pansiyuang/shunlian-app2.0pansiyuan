@@ -66,6 +66,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         return layoutId;
     }
 
+//    public  Context getContext(){
+//        return baseActivity;
+//    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

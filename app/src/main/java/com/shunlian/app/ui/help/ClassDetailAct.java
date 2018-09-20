@@ -59,7 +59,7 @@ public class ClassDetailAct extends H5Act implements IClassDetailView, MessageCo
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)

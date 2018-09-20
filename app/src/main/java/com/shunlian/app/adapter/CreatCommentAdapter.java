@@ -12,12 +12,14 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.ArrayList;
@@ -87,11 +89,13 @@ public class CreatCommentAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         MyImageView miv_comment_icon;
+        MyImageView miv_select;
         TextView tv_comment_title;
         TextView tv_comment_price;
         LinearLayout ll_comment_high;
         LinearLayout ll_comment_middle;
         LinearLayout ll_comment_low;
+        RelativeLayout layout_anonymous;
         final MyImageView miv_comment_high;
         final MyImageView miv_comment_middle;
         final MyImageView miv_comment_low;
@@ -106,12 +110,14 @@ public class CreatCommentAdapter extends BaseAdapter {
         ll_comment_middle = (LinearLayout) convertView.findViewById(R.id.ll_comment_middle);
         ll_comment_low = (LinearLayout) convertView.findViewById(R.id.ll_comment_low);
         miv_comment_icon = (MyImageView) convertView.findViewById(R.id.miv_comment_icon);
+        miv_select = (MyImageView) convertView.findViewById(R.id.miv_select);
         miv_comment_high = (MyImageView) convertView.findViewById(R.id.miv_comment_high);
         miv_comment_middle = (MyImageView) convertView.findViewById(R.id.miv_comment_middle);
         miv_comment_low = (MyImageView) convertView.findViewById(R.id.miv_comment_low);
         recycler_comment = (GridView) convertView.findViewById(R.id.recycler_comment);
         edt_comment = (EditText) convertView.findViewById(R.id.edt_comment);
         ll_comment_score = (LinearLayout) convertView.findViewById(R.id.ll_comment_score);
+        layout_anonymous = convertView.findViewById(R.id.layout_anonymous);
 
         final ReleaseCommentEntity data = lists.get(position);
         GlideUtils.getInstance().loadImage(mContext, miv_comment_icon, data.pic);
@@ -131,12 +137,21 @@ public class CreatCommentAdapter extends BaseAdapter {
 
         if (commentType == APPEND_COMMENT) {
             ll_comment_score.setVisibility(View.GONE);
+            layout_anonymous.setVisibility(View.GONE);
         } else if (commentType == CREAT_COMMENT) {
             ll_comment_score.setVisibility(View.VISIBLE);
+            layout_anonymous.setVisibility(View.VISIBLE);
+
+            if (data.anonymous == 0) {
+                miv_select.setImageResource(R.mipmap.img_niming_n);
+            } else {
+                miv_select.setImageResource(R.mipmap.img_niming_h);
+            }
         } else if (commentType == CHANGE_COMMENT) {
             ll_comment_middle.setEnabled(false);
             ll_comment_low.setEnabled(false);
             ll_comment_score.setVisibility(View.VISIBLE);
+            layout_anonymous.setVisibility(View.GONE);
         }
 
         edt_comment.setText(data.content);
@@ -216,6 +231,22 @@ public class CreatCommentAdapter extends BaseAdapter {
             }
             return false;
         });
+
+        //返回键扩大点击范围
+        int i = TransformUtil.dip2px(mContext, 20);
+        TransformUtil.expandViewTouchDelegate(miv_select, i, i, i, i);
+
+        miv_select.setOnClickListener(v -> {
+            if (0 == data.anonymous) {
+                miv_select.setImageResource(R.mipmap.img_niming_h);
+                data.anonymous = 1;
+            } else {
+                miv_select.setImageResource(R.mipmap.img_niming_n);
+                data.anonymous = 0;
+            }
+            mCallBack.OnCommentAnonymous(data.anonymous, position);
+        });
+
         return convertView;
     }
 
@@ -227,5 +258,7 @@ public class CreatCommentAdapter extends BaseAdapter {
         void OnComment(String content, int position);
 
         void OnCommentLevel(String level, int position);
+
+        void OnCommentAnonymous(int anonymous, int position);
     }
 }

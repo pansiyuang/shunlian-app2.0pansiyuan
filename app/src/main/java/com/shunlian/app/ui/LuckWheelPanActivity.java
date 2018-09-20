@@ -146,7 +146,9 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         recycler_list.setHasFixedSize(false);
 
         tv_title_right.setOnClickListener(v -> {
-            initDialogs(currentRuleUrl);
+            if (dialog_ad != null) {
+                dialog_ad.show();
+            }
         });
 
         setTextSwitcher();
@@ -178,7 +180,6 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
             dialog_ad.setCancelable(false);
         }
-        dialog_ad.show();
     }
 
     public void setTextSwitcher() {
@@ -234,16 +235,23 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
     @Override
     public void getTurnData(TurnTableEntity turnTableEntity) {
+        if (tv_title==null)
+            return;
         if (isFirstLoad) {
             currentRuleUrl = turnTableEntity.rule;
+            initDialogs(currentRuleUrl);
             tv_title.setText(turnTableEntity.turnTable.title);
             trophyList.clear();
             trophyList.addAll(turnTableEntity.turnTable.list);
             addAllTurnTables(trophyList);
 
             if (isEmpty(turnTableEntity.prizeScroll)) {
+                text_switcher.setVisibility(View.GONE);
                 return;
+            } else {
+                text_switcher.setVisibility(View.VISIBLE);
             }
+            mWarningTextList.clear();
             mWarningTextList.addAll(turnTableEntity.prizeScroll);
             if (mWarningTextList.size() == 1) {
                 text_switcher.setText(mWarningTextList.get(0));

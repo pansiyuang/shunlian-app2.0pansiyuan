@@ -11,16 +11,22 @@ public class PayOrderEntity {
     public String alipay;
     public String pay_sn;
     public String order_id;
-    public String unionpay;
     public String paytype;
     public String zero_pay;
     public String pay_url;
 
     public XiaoXiaopay xiaoxiaopay;
+    public Unionpay unionpay;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class XiaoXiaopay{
         public String signValue;
         public String nonceStr;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Unionpay{
+        public String tn;
+        public String query_url;
     }
 }

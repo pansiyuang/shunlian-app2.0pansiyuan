@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -101,8 +102,6 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
         mPresenter = new ChosenPresenter(this, this);
 
         EventBus.getDefault().register(this);
-        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
-        LogUtil.httpLogW("dirName:" + dirName);
         currentArticle = (ArticleEntity.Article) getIntent().getSerializableExtra("article");
         imgList = new ArrayList<>();
         if (!isEmpty(getIntent().getStringExtra("videoUrl"))) {
@@ -173,7 +172,7 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
             dialog_operate = new Dialog(this, R.style.popAd);
             dialog_operate.setContentView(R.layout.dialog_operate);
             RecyclerView rv_operate = (RecyclerView) dialog_operate.findViewById(R.id.rv_operate);
-            rv_operate.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
+            rv_operate.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false));
             rv_operate.addItemDecoration(new MVerticalItemDecoration(this, 0.5f, 0, 0, getColorResouce(R.color.bg_gray_two)));
             OperateAdapter operateAdapter = new OperateAdapter(this, itemList);
             rv_operate.setAdapter(operateAdapter);
@@ -203,10 +202,14 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
     }
 
     public void readToDownLoad() {
+        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()+"/Camera";
         File file = new File(dirName);
         // 文件夹不存在时创建
         if (!file.exists()) {
-            file.mkdir();
+            dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
+            file = new File(dirName);
+            if (!file.exists())
+                file.mkdirs();
         }
         // 下载后的文件名
         int i = currentUrl.lastIndexOf("/"); // 取的最后一个斜杠后的字符串为名

@@ -52,6 +52,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     private DayListAdapter dayListAdapter;
     private LinearLayoutManager linearLayoutManager;
     private String id;
+    private int initPosition=0;
     private MessageCountManager messageCountManager;
 
     public static void startAct(Context context) {
@@ -92,7 +93,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     }
 
     @OnClick(R.id.rl_more)
-    public void more(){
+    public void more() {
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.activity();
     }
@@ -112,11 +113,11 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
 
     @Override
     protected void onResume() {
-        if(messageCountManager.isLoad()){
+        if (messageCountManager.isLoad()) {
             String s = messageCountManager.setTextCount(mtv_msg_count);
             if (quick_actions != null)
                 quick_actions.setMessageCount(s);
-        }else{
+        } else {
             messageCountManager.initData();
         }
         super.onResume();
@@ -129,12 +130,13 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
             quick_actions.setMessageCount(s);
     }
 
-    public void minitData(){
-        dayDayMenuAdapter=null;
-        dayListAdapter=null;
+    public void minitData() {
+        dayDayMenuAdapter = null;
+        dayListAdapter = null;
         dayDayPresenter = new DayDayPresenter(this, this);
-        dayDayPresenter.initApiData("",1,20);
+        dayDayPresenter.initMenu("", 1, 20);
     }
+
     @Override
     public void showFailureView(int rquest_code) {
 
@@ -149,18 +151,21 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     @Override
     public void getApiData(final ActivityListEntity activityListEntity, int allPage, final int page, final List<ActivityListEntity.MData.Good.MList> list) {
         if (dayDayMenuAdapter == null) {
-            dayDayMenuAdapter = new DayDayMenuAdapter(this, false, activityListEntity.menu);
-            LinearLayoutManager newManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            dayDayMenuAdapter = new DayDayMenuAdapter(this, false, activityListEntity.menu,initPosition);
+            LinearLayoutManager newManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
             rv_menu.setLayoutManager(newManager);
             rv_menu.setAdapter(dayDayMenuAdapter);
+            rv_menu.scrollToPosition(initPosition-1);
+//            rv_menu.smoothScrollToPosition(initPosition-1);//无效
             dayDayMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    if (dayDayMenuAdapter!=null&&rv_list.getScrollState()==0){
+                    if (dayDayMenuAdapter != null && rv_list.getScrollState() == 0) {
                         dayDayMenuAdapter.selectPosition = position;
                         dayDayMenuAdapter.notifyDataSetChanged();
-                        dayListAdapter=null;
-                        id=activityListEntity.menu.get(position).id;
+                        dayListAdapter = null;
+                        if (position<activityListEntity.menu.size())
+                        id = activityListEntity.menu.get(position).id;
                         dayDayPresenter.resetBaby(id);
                     }
                 }
@@ -168,6 +173,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
         } else {
             dayDayMenuAdapter.notifyDataSetChanged();
         }
+
         if (isEmpty(list)) {
             visible(nei_empty);
             gone(rv_list);
@@ -176,8 +182,8 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
             visible(rv_list);
         }
         if (dayListAdapter == null) {
-            dayListAdapter = new DayListAdapter(this, true, list,dayDayPresenter, activityListEntity);
-            dayListAdapter.id=id;
+            dayListAdapter = new DayListAdapter(this, true, list, dayDayPresenter, activityListEntity);
+            dayListAdapter.id = id;
             linearLayoutManager = new LinearLayoutManager(this);
             rv_list.setLayoutManager(linearLayoutManager);
             rv_list.setAdapter(dayListAdapter);
@@ -185,15 +191,15 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
                 @Override
                 public void onItemClick(View view, int position) {
 //                    activityListEntity.from;//踩点
-                    GoodsDetailAct.startAct(DayDayAct.this,list.get(position).goods_id);
+                    GoodsDetailAct.startAct(DayDayAct.this, list.get(position).goods_id);
                 }
             });
         } else {
-            dayListAdapter.title=activityListEntity.datas.title;
-            dayListAdapter.isStart=activityListEntity.datas.sale;
-            dayListAdapter.content=activityListEntity.datas.content;
-            dayListAdapter.time=activityListEntity.datas.time;
-            dayListAdapter.from=activityListEntity.from;
+            dayListAdapter.title = activityListEntity.datas.title;
+            dayListAdapter.isStart = activityListEntity.datas.sale;
+            dayListAdapter.content = activityListEntity.datas.content;
+            dayListAdapter.time = activityListEntity.datas.time;
+            dayListAdapter.from = activityListEntity.from;
             dayListAdapter.notifyDataSetChanged();
         }
         dayListAdapter.setPageLoading(page, allPage);
@@ -203,6 +209,21 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     public void activityState(int position) {
         dayListAdapter.notifyItemChanged(position);
     }
+
+    @Override
+    public void initMenu(List<ActivityListEntity.Menu> menus) {
+        for (int i = 0; i < menus.size(); i++) {
+            if ("1".equals(menus.get(i).checked)) {
+//            if (i==3) {
+                dayDayPresenter.initApiData(menus.get(i).id, 1, 20);
+                initPosition=i;
+                return;
+            }else if (i>=menus.size()-1){
+                dayDayPresenter.initApiData("", 1, 20);
+            }
+        }
+    }
+
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {

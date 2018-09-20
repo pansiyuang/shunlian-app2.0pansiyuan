@@ -88,11 +88,11 @@ public class EggDetailAct extends BaseActivity implements IEggDetail {
         } else if (eggDetailAdapter == null) {
             visible(rv_detail);
             gone(nei_empty);
-            eggDetailAdapter = new EggDetailAdapter(getBaseContext(), false, list);
-            linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
+            eggDetailAdapter = new EggDetailAdapter(baseAct, false, list);
+            linearLayoutManager = new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false);
             rv_detail.setLayoutManager(linearLayoutManager);
             rv_detail.setAdapter(eggDetailAdapter);
-            rv_detail.addItemDecoration(new MVerticalItemDecoration(getBaseContext(), 22, 0, 22));
+            rv_detail.addItemDecoration(new MVerticalItemDecoration(baseAct, 22, 0, 22));
         } else {
             eggDetailAdapter.notifyDataSetChanged();
         }

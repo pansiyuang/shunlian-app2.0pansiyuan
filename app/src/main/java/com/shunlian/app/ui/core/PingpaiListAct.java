@@ -116,7 +116,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 quick_actions.setMessageCount(s);
@@ -338,16 +338,16 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
             downTime_firsts.startDownTimer();
             mtv_title.setText(corePingEntity.brand.title);
             mtv_desc.setText(corePingEntity.brand.content);
-            GlideUtils.getInstance().loadImage(getBaseContext(),miv_photo,corePingEntity.brand.bg_img);
-            GlideUtils.getInstance().loadImage(getBaseContext(),miv_avar,corePingEntity.brand.logo);
-            pingListAdapter=new PingListAdapter(getBaseContext(),mDatas);
-            rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false));
+            GlideUtils.getInstance().loadImage(baseAct,miv_photo,corePingEntity.brand.bg_img);
+            GlideUtils.getInstance().loadImage(baseAct,miv_avar,corePingEntity.brand.logo);
+            pingListAdapter=new PingListAdapter(baseAct,mDatas);
+            rv_list.setLayoutManager(new LinearLayoutManager(baseAct,LinearLayoutManager.VERTICAL,false));
             rv_list.setNestedScrollingEnabled(false);
             rv_list.setAdapter(pingListAdapter);
             pingListAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    GoodsDetailAct.startAct(getBaseContext(),mDatas.get(position).id);
+                    GoodsDetailAct.startAct(baseAct,mDatas.get(position).id);
                 }
             });
         }else {

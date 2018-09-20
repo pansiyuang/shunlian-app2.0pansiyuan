@@ -67,10 +67,10 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
         DetailOrderRecordHolder mHolder = (DetailOrderRecordHolder) holder;
         DetailOrderRecordEntity.Item item = lists.get(position);
         if ("1".equals(item.anonymous)) {//匿名购买
-            gone(mHolder.view_line,mHolder.view_line1,
-                    mHolder.recy_view,mHolder.mtv_order_time,
+            gone(mHolder.view_line,
+                    mHolder.recy_view,
                     mHolder.mtv_buy,mHolder.mtv_order_state);
-            visible(mHolder.mtv_forecast_earnings);
+            visible(mHolder.mtv_forecast_earnings,mHolder.view_line1,mHolder.mtv_order_time);
 
 //            String offered = "天天测试";
             String offered = item.big_label;
@@ -90,7 +90,7 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
 
             mHolder.mtv_order.setText("订单号：" + item.order_sn);
             mHolder.mtv_order_state.setText(item.status_desc);
-            mHolder.mtv_order_time.setText("下单日期：" + item.order_time);
+            //mHolder.mtv_order_time.setText("下单日期：" + item.order_time);
             GoodsItemAdapter goodsItemAdapter = new GoodsItemAdapter(context, item.order_goods);
             if (adapterList != null)adapterList.add(goodsItemAdapter);
             mHolder.recy_view.setAdapter(goodsItemAdapter);
@@ -106,6 +106,7 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
                 buyDrawable.setColor(getColor(R.color.pink_color));
             }
         }
+        mHolder.mtv_order_time.setText("下单日期：" + item.order_time);
     }
 
     @Override
@@ -191,7 +192,6 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
             DetailOrderRecordEntity.OrderGoods item = lists.get(position);
             GlideUtils.getInstance().loadImage(context,mHolder.miv_goods_pic,item.thumb);
             mHolder.mtv_order_source.setText(item.child_type);
-//            mHolder.mtv_goods_title.setText(item.title);
             mHolder.mtv_goods_attr.setText(item.sku);
             mHolder.mtv_goods_count.setText("x"+item.qty);
             mHolder.mtv_goods_price.setText(getString(R.string.rmb)+item.price);

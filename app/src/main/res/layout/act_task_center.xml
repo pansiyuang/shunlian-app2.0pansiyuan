@@ -267,8 +267,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_marginTop="16dp"
-                android:adjustViewBounds="true"
-                android:minHeight="100dp" />
+                android:adjustViewBounds="true"/>
 
             <!--任务列表-->
             <LinearLayout
@@ -295,6 +294,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:visibility="gone"
                         android:orientation="vertical"
                         android:paddingTop="15dp">
 

@@ -688,6 +688,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void stayObtainEggs(int time) {
+        if (!Common.isAlreadyLogin())return;
         if (mHandler == null)
             mHandler = new Handler();
 
@@ -1261,7 +1262,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void shareSuccess(ShareInfoEvent event){
-        if (event.isShareSuccess){
+        if (oget != null && event.isShareSuccess && "goods".equals(event.type)){
             oget.setEggsCount(event.eggs_count);
             oget.show(4000);
         }

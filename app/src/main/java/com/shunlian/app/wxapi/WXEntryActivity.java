@@ -169,7 +169,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
             @Override
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                Common.staticToasts(getBaseContext(),
+                Common.staticToasts(baseAct,
                         "分享失败", R.mipmap.icon_common_tanhao);
                 mYFinish();
             }
@@ -396,19 +396,26 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     @Override
-    public void golde_eggs(String format) {
-        if (!isEmpty(format) && !"0".equals(format)) {
+    public void golde_eggs(String eggs) {
+        if (!isEmpty(eggs) && !"0".equals(eggs)) {
+            String tip = "恭喜获得%s金蛋";
             ShareInfoEvent event = new ShareInfoEvent();
             event.isShareSuccess = true;
-            event.eggs_count = format;
+            event.type = Constant.SHARE_TYPE;
+            event.eggs_count = String.format(tip,eggs);
             EventBus.getDefault().post(event);
         }
-        mYFinish();
+        Constant.SHARE_TYPE="";
+        cloasePage();
     }
 
     @Override
     public void cloasePage() {
-        mYFinish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+            finishAndRemoveTask();
+        }else {
+            finish();
+        }
     }
 
     private class MyHandler extends Handler {

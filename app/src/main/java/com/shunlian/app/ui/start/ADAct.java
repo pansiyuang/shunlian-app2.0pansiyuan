@@ -51,7 +51,7 @@ public class ADAct extends MBaseActivity {
     @Override
     protected void initData() {
         adEntity = (AdEntity) getIntent().getSerializableExtra("adEntity");
-        GlideUtils.getInstance().loadImage(getBaseContext(), miv_ad, adEntity.list.ad_img);
+        GlideUtils.getInstance().loadImage(baseAct, miv_ad, adEntity.list.ad_img);
         initTimer();
     }
 
@@ -79,7 +79,7 @@ public class ADAct extends MBaseActivity {
             public void run() {
                 if (!isCancel){
                     timeAnim.cancel();
-                    MainActivity.startAct(getBaseContext(), "");
+                    MainActivity.startAct(baseAct, "");
                     finish();
                 }
             }
@@ -100,7 +100,7 @@ public class ADAct extends MBaseActivity {
             case R.id.mtv_count:
                 isCancel=true;
                 timeAnim.cancel();
-                MainActivity.startAct(getBaseContext(), "");
+                MainActivity.startAct(baseAct, "");
                 finish();
                 break;
             case R.id.miv_ad:
@@ -110,8 +110,8 @@ public class ADAct extends MBaseActivity {
                 Constant.JPUSH.add(adEntity.list.link.type);
                 Constant.JPUSH.add(adEntity.list.link.item_id);
                 Constant.JPUSH.add("");
-                Common.goGoGo(getBaseContext(), adEntity.list.link.type, adEntity.list.link.item_id);
-//                Common.goGoGo(getBaseContext(), "url", "https://wx.shunliandongli.com/special/145");
+                Common.goGoGo(baseAct, adEntity.list.link.type, adEntity.list.link.item_id);
+//                Common.goGoGo(baseAct, "url", "https://wx.shunliandongli.com/special/145");
                 finish();
                 break;
         }

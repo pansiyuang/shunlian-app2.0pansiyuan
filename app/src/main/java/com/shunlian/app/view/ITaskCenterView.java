@@ -50,7 +50,7 @@ public interface ITaskCenterView extends IView {
     /**
      * 关闭新手任务列表
      */
-    void closeNewUserList();
+    void closeNewUserList(boolean isClose);
 
     /**
      * 签到

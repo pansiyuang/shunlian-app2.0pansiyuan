@@ -70,7 +70,7 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
                 WXEntryActivity.startAct(this, "shareFriend", shareInfoParam);
                 break;
             case R.id.mllayout_fenxiangerweima:
-                GlideUtils.getInstance().savePicture(getBaseContext(), codeUrl);
+                GlideUtils.getInstance().savePicture(baseAct, codeUrl);
                 break;
         }
     }

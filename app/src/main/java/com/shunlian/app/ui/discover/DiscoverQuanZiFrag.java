@@ -74,8 +74,8 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
 
     @Override
     protected void initData() {
-        pDiscoverQuanzi = new PDiscoverQuanzi(getContext(), this);
-        NestedSlHeader header = new NestedSlHeader(getContext());
+        pDiscoverQuanzi = new PDiscoverQuanzi(baseContext, this);
+        NestedSlHeader header = new NestedSlHeader(baseContext);
         lay_refresh.setRefreshHeaderView(header);
 
         nei_empty.setImageResource(R.mipmap.img_empty_faxian).setText(getString(R.string.discover_weifaxianxin));
@@ -153,7 +153,7 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
                             kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                                 @Override
                                 public void onItemClick(int position) {
-                                    DiscoverTieziAct.startAct(getContext(), data.banner.get(position).id);
+                                    DiscoverTieziAct.startAct(baseContext, data.banner.get(position).id);
                                 }
                             });
                         }
@@ -166,15 +166,15 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
                 } else {
                     visible(mtv_zuixin, rv_new);
                     if (newAdapter == null) {
-                        newAdapter = new DiscoverNewAdapter(getContext(), true, mdatas);
-                        linearLayoutManager = new LinearLayoutManager(getContext());
+                        newAdapter = new DiscoverNewAdapter(baseContext, true, mdatas);
+                        linearLayoutManager = new LinearLayoutManager(baseContext);
                         rv_new.setLayoutManager(linearLayoutManager);
                         rv_new.setNestedScrollingEnabled(false);
                         rv_new.setAdapter(newAdapter);
                         newAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                DiscoverTieziAct.startAct(getContext(), mdatas.get(position).id);
+                                DiscoverTieziAct.startAct(baseContext, mdatas.get(position).id);
                             }
                         });
                     } else {

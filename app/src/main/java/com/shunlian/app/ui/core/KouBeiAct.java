@@ -92,7 +92,7 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)
@@ -208,7 +208,7 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
                     kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                         @Override
                         public void onItemClick(int position) {
-                            Common.goGoGo(getBaseContext(), coreHotEntity.banner_list.get(position).type, coreHotEntity.banner_list.get(position).item_id);
+                            Common.goGoGo(baseAct, coreHotEntity.banner_list.get(position).type, coreHotEntity.banner_list.get(position).item_id);
                         }
                     });
                 }
@@ -216,7 +216,7 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
         }else {
             kanner.setVisibility(View.GONE);
         }
-        CoreHotMenuAdapter coreHotMenuAdapter = new CoreHotMenuAdapter(getBaseContext(), false, coreHotEntity.cate_name);
+        CoreHotMenuAdapter coreHotMenuAdapter = new CoreHotMenuAdapter(baseAct, false, coreHotEntity.cate_name);
         cate_id=coreHotEntity.cate_name.get(0).cate_id;
         pAishang.resetBaby("hot",cate_id);
         coreHotMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -230,9 +230,9 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
                 }
             }
         });
-        rv_categoryMenu.addItemDecoration(new MHorItemDecoration(getBaseContext(),25,15,15));
+        rv_categoryMenu.addItemDecoration(new MHorItemDecoration(baseAct,25,15,15));
         rv_categoryMenu.setAdapter(coreHotMenuAdapter);
-        rv_categoryMenu.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
+        rv_categoryMenu.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.HORIZONTAL, false));
     }
 
     @Override
@@ -245,14 +245,14 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
             visible(rv_category);
         }
         if (koubeiAdapter==null){
-            koubeiAdapter=new KoubeiAdapter(getBaseContext(),true,mData);
-            linearLayoutManager=new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false);
+            koubeiAdapter=new KoubeiAdapter(baseAct,true,mData);
+            linearLayoutManager=new LinearLayoutManager(baseAct,LinearLayoutManager.VERTICAL,false);
             rv_category.setLayoutManager(linearLayoutManager);
             rv_category.setAdapter(koubeiAdapter);
             koubeiAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    GoodsDetailAct.startAct(getBaseContext(),mData.get(position).id);
+                    GoodsDetailAct.startAct(baseAct,mData.get(position).id);
                 }
             });
         }else {

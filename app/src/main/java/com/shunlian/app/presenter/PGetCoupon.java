@@ -79,6 +79,7 @@ public class PGetCoupon extends BasePresenter<IGetCoupon> {
         }
         Map<String, String> map = new HashMap<>();
         map.put("voucher_id", voucherId);
+        map.put("is_centre", "1");//领券中心传1，其他不传或0（默认）
         sortAndMD5(map);
         Call<BaseEntity<GoodsDeatilEntity.Voucher>> baseEntityCall = getApiService().getVoucher(getRequestBody(map));
         getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity.Voucher>>() {

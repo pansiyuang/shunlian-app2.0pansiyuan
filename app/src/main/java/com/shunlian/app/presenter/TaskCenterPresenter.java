@@ -53,9 +53,11 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     private Call<BaseEntity<CommonEntity>> getPrizeByRegisterCall;
     private String share_pic_url;
     private int updatePosition;
+    private boolean isShowLoading;//是否显示加载动画
 
     public TaskCenterPresenter(Context context, ITaskCenterView iView) {
         super(context, iView);
+        isShowLoading = true;
         initApi();
         getTaskList();
     }
@@ -65,6 +67,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      */
     @Override
     public void attachView() {
+        isShowLoading = false;
         initApi();
         getTaskList();
     }
@@ -132,7 +135,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         sortAndMD5(map);
 
         homeCall = getApiService().taskHome(map);
-        getNetData(true, homeCall,
+        getNetData(isShowLoading, homeCall,
                 new SimpleNetDataCallback<BaseEntity<TaskHomeEntity>>() {
                     @Override
                     public void onSuccess(BaseEntity<TaskHomeEntity> entity) {
@@ -145,6 +148,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                         iView.setPic(data.ad_pic_url, data.ad_url);
                         iView.setTip(data.faq_url, data.rule_url);
                         iView.setSignData(data.sign_days);
+                        //LogUtil.zhLogW("TaskHomeEntity:>>>>"+data.toString());
                     }
                 });
     }
@@ -215,8 +219,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                         TaskListEntity data = entity.data;
                         if (isEmpty(data.new_user_tasks)) {
                             current_task_state = DAILY_TASK;
-                            iView.closeNewUserList();
+                            iView.closeNewUserList(true);
                         }else {
+                            iView.closeNewUserList(false);
                             if (newUserTaskLists == null)
                                 newUserTaskLists = new ArrayList<>();
 
@@ -242,9 +247,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 
     public void cacheTaskList(){
         taskLists.clear();
-        if (current_task_state == NEW_USER_TASK) {
+        if (current_task_state == NEW_USER_TASK&&!isEmpty(newUserTaskLists)) {
             taskLists.addAll(newUserTaskLists);
-        } else {
+        } else if (!isEmpty(dailyTaskLists)){
             taskLists.addAll(dailyTaskLists);
         }
         if (isEmpty(taskLists)){

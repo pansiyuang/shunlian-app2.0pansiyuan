@@ -7,9 +7,14 @@ package com.shunlian.app.widget;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,12 +32,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.mylibrary.ImmersionBar;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -78,12 +93,12 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     public SmallVideoPlayer(Context context) {
         super(context);
-        LogUtil.zhLogW("=====SmallVideoPlayer==1========");
+        //LogUtil.zhLogW("=====SmallVideoPlayer==1========");
     }
 
     public SmallVideoPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LogUtil.zhLogW("=====SmallVideoPlayer==2========");
+        //LogUtil.zhLogW("=====SmallVideoPlayer==2========");
     }
 
     @Override
@@ -109,6 +124,8 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         //是否开启音量
         voiceControl = findViewById(R.id.iv_voice);
         findViewById(R.id.iv_more).setVisibility(GONE);
+        ImageView iv_download = findViewById(R.id.iv_download);
+        iv_download.setVisibility(VISIBLE);
 
         thumbImageView.setOnClickListener(this);
         backButton.setOnClickListener(this);
@@ -119,7 +136,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         backPlayButton.setOnClickListener(this);
         closeVideo.setOnClickListener(this);
         voiceControl.setOnClickListener(this);
-        LogUtil.zhLogW("=====init==========");
+        iv_download.setOnClickListener(this);
     }
 
     @Override
@@ -129,7 +146,16 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             int initialVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
             SharedPrefUtil.saveCacheSharedPrfLong("video_volume",initialVolume);
         }
-        LogUtil.zhLogW("=====startVideo==========");
+        //LogUtil.zhLogW("=====startVideo==========");
+        Object[] dataSource = JZMediaManager.getDataSource();
+        if (dataSource != null && dataSource.length > 0){
+            Object data = dataSource[0];
+            if (data instanceof LinkedHashMap){
+                LinkedHashMap map = (LinkedHashMap) data;
+                if (map.get(URL_KEY_DEFAULT) instanceof String)
+                currentUrl = (String) map.get(URL_KEY_DEFAULT);
+            }
+        }
     }
 
     public static void goOnPlayOnResume() {
@@ -143,16 +169,20 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     }
 
     public static void goOnPlayOnPause() {
-        if (JZVideoPlayerManager.getCurrentJzvd() != null) {
-            JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
-            if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
-                    jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
-                    jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
-                //releaseAllVideos();
-            } else {
-                jzvd.onStatePause();
-                JZMediaManager.pause();
+        try {
+            if (JZVideoPlayerManager.getCurrentJzvd() != null) {
+                JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
+                if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
+                    //releaseAllVideos();
+                } else {
+                    jzvd.onStatePause();
+                    JZMediaManager.pause();
+                }
             }
+        }catch (Exception e){
+
         }
     }
 
@@ -209,7 +239,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             JZVideoPlayerManager.setFirstFloor(this);
             backPress();
         }
-        LogUtil.zhLogW("=====setUp==========");
+        //LogUtil.zhLogW("=====setUp==========");
     }
 
     public void changeStartButtonSize(int size) {
@@ -230,14 +260,14 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     public void onStateNormal() {
         super.onStateNormal();
         changeUiToNormal();
-        LogUtil.zhLogW("=====onStateNormal==========");
+        //LogUtil.zhLogW("=====onStateNormal==========");
     }
 
     @Override
     public void onStatePreparing() {
         super.onStatePreparing();
         changeUiToPreparing();
-        LogUtil.zhLogW("=====onStatePreparing==========");
+        //LogUtil.zhLogW("=====onStatePreparing==========");
     }
 
     @Override
@@ -251,7 +281,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     public void onStatePlaying() {
         super.onStatePlaying();
         changeUiToPlayingClear();
-        LogUtil.zhLogW("=====onStatePlaying==========");
+        //LogUtil.zhLogW("=====onStatePlaying==========");
     }
 
     @Override
@@ -259,14 +289,14 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         super.onStatePause();
         changeUiToPauseShow();
         cancelDismissControlViewTimer();
-        LogUtil.zhLogW("=====onStatePause==========");
+        //LogUtil.zhLogW("=====onStatePause==========");
     }
 
     @Override
     public void onStateError() {
         super.onStateError();
         changeUiToError();
-        LogUtil.zhLogW("=====onStateError==========");
+        //LogUtil.zhLogW("=====onStateError==========");
     }
 
     @Override
@@ -275,13 +305,13 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         changeUiToComplete();
         cancelDismissControlViewTimer();
         bottomProgressBar.setProgress(100);
-        LogUtil.zhLogW("=====onStateAutoComplete==========");
+        //LogUtil.zhLogW("=====onStateAutoComplete==========");
     }
 
 
     public void startWindowFullscreen() {
-        LogUtil.zhLogW("=====startWindowFullscreen==========");
-        Log.i(TAG, "startWindowFullscreen " + " [" + this.hashCode() + "] ");
+        //LogUtil.zhLogW("=====startWindowFullscreen==========");
+        //Log.i(TAG, "startWindowFullscreen " + " [" + this.hashCode() + "] ");
         hideSupportActionBar(getContext());
 
         ViewGroup vp = (JZUtils.scanForActivity(getContext()))//.getWindow().getDecorView();
@@ -317,7 +347,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     }
 
     public void startWindowTiny() {
-        Log.i(TAG, "startWindowTiny " + " [" + this.hashCode() + "] ");
+        //Log.i(TAG, "startWindowTiny " + " [" + this.hashCode() + "] ");
         onEvent(JZUserAction.ON_ENTER_TINYSCREEN);
         if (currentState == CURRENT_STATE_NORMAL || currentState == CURRENT_STATE_ERROR || currentState == CURRENT_STATE_AUTO_COMPLETE)
             return;
@@ -438,13 +468,13 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         }else if (i == R.id.iv_play_control || i == R.id.start){
             playerControl();
         }else if (i == cn.jzvd.R.id.fullscreen) {
-            Log.i(TAG, "onClick fullscreen [" + this.hashCode() + "] ");
+            //Log.i(TAG, "onClick fullscreen [" + this.hashCode() + "] ");
             if (currentState == CURRENT_STATE_AUTO_COMPLETE) return;
             if (currentScreen == SCREEN_WINDOW_FULLSCREEN) {
                 //quit fullscreen
                 backPress();
             } else {
-                Log.d(TAG, "toFullscreenActivity [" + this.hashCode() + "] ");
+                //Log.d(TAG, "toFullscreenActivity [" + this.hashCode() + "] ");
                 onEvent(JZUserAction.ON_ENTER_FULLSCREEN);
                 startWindowFullscreen();
             }
@@ -453,6 +483,8 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         }else if (i == cn.jzvd.R.id.iv_voice){
             voiceControl.setVisibility(GONE);
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,0,0);
+        }else if (i == cn.jzvd.R.id.iv_download){
+            readToDownLoad();
         }
     }
 
@@ -477,7 +509,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     @Override
     protected void playerControl() {
-        Log.i(TAG, "onClick start [" + this.hashCode() + "] ");
+        //Log.i(TAG, "onClick start [" + this.hashCode() + "] ");
         if (dataSourceObjects == null || JZUtils.getCurrentFromDataSource(dataSourceObjects, currentUrlMapIndex) == null) {
             Toast.makeText(getContext(), getResources().getString(cn.jzvd.R.string.no_url), Toast.LENGTH_SHORT).show();
             return;
@@ -493,7 +525,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             onEvent(JZUserAction.ON_CLICK_START_ICON);//开始的事件应该在播放之后，此处特殊
         } else if (currentState == CURRENT_STATE_PLAYING) {
             onEvent(JZUserAction.ON_CLICK_PAUSE);
-            Log.d(TAG, "pauseVideo [" + this.hashCode() + "] ");
+            //Log.d(TAG, "pauseVideo [" + this.hashCode() + "] ");
             JZMediaManager.pause();
             onStatePause();
         } else if (currentState == CURRENT_STATE_PAUSE) {
@@ -897,7 +929,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             int video_volume = (int) SharedPrefUtil.getCacheSharedPrfLong("video_volume", 0);
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,video_volume,0);
         }
-        LogUtil.zhLogW("=====onAutoCompletion==========");
+        //LogUtil.zhLogW("=====onAutoCompletion==========");
     }
 
     @Override
@@ -907,7 +939,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         if (clarityPopWindow != null) {
             clarityPopWindow.dismiss();
         }
-        LogUtil.zhLogW("=====onCompletion==========");
+        //LogUtil.zhLogW("=====onCompletion==========");
     }
 
     public void dissmissControlView() {
@@ -937,7 +969,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             JZMediaManager.savedSurfaceTexture.release();
         JZMediaManager.textureView = null;
         JZMediaManager.savedSurfaceTexture = null;
-        LogUtil.zhLogW("=====release==========");
+        //LogUtil.zhLogW("=====release==========");
     }
 
     public class DismissControlViewTimerTask extends TimerTask {
@@ -947,4 +979,93 @@ public class SmallVideoPlayer extends JZVideoPlayer {
             dissmissControlView();
         }
     }
+
+    public String dirName;
+    public String currentUrl;
+    String fileName = "";
+
+    public void readToDownLoad() {
+        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                .getAbsolutePath()+"/Camera";
+        File file = new File(dirName);
+        // 文件夹不存在时创建
+        if (!file.exists()) {
+            dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                    .getAbsolutePath();
+            file = new File(dirName);
+            if (!file.exists())
+            file.mkdirs();
+        }
+        // 下载后的文件名
+
+        if (!TextUtils.isEmpty(currentUrl)) {
+            int i = currentUrl.lastIndexOf("/"); // 取的最后一个斜杠后的字符串为名
+            fileName = dirName + currentUrl.substring(i, currentUrl.length());
+        }else {
+            fileName = dirName+ "/shunlian"+System.currentTimeMillis()+".mp4";
+        }
+        LogUtil.httpLogW("文件名:" + fileName);
+        File file1 = new File(fileName);
+        if (file1.exists()) {
+            Common.staticToast("已下载过该视频,请勿重复下载!");
+        } else {
+            new Thread(() -> downLoadVideo(fileName)).start();
+        }
+    }
+
+
+
+    public void downLoadVideo(String fileName) {
+        Message obtain1 = Message.obtain();
+        obtain1.obj = "开始下载";
+        obtain1.what = 100;
+        mHandler.sendMessage(obtain1);
+        try {
+            URL url = new URL(currentUrl);
+            // 打开连接
+            URLConnection conn = url.openConnection();
+            // 打开输入流
+            InputStream is = conn.getInputStream();
+            // 创建字节流
+            byte[] bs = new byte[1024];
+            int len;
+            OutputStream os = new FileOutputStream(fileName);
+            // 写数据
+            while ((len = is.read(bs)) != -1) {
+                os.write(bs, 0, len);
+            }
+            // 完成后关闭流
+            saveVideoFile(fileName);
+            os.close();
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Message obtain = Message.obtain();
+            obtain.obj = "下载失败";
+            obtain.what = 100;
+            mHandler.sendMessage(obtain);
+        }
+    }
+
+    public void saveVideoFile(String fileDir) {
+        //strDir视频路径
+        Uri localUri = Uri.parse("file://" + fileDir);
+        Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
+        getContext().sendBroadcast(localIntent);
+        EventBus.getDefault().post("");
+        Message obtain = Message.obtain();
+        obtain.obj = "下载成功";
+        obtain.what = 100;
+        mHandler.sendMessage(obtain);
+    }
+
+    public Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 100){
+                Common.staticToast((String) msg.obj);
+            }
+        }
+    };
 }
