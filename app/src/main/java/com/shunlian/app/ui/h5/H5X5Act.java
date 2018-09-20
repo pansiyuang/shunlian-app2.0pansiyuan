@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -17,13 +16,7 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
-import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceResponse;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,11 +33,18 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.WebViewProgressBar;
+import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.tencent.sonic.sdk.SonicCacheInterceptor;
 import com.tencent.sonic.sdk.SonicConfig;
 import com.tencent.sonic.sdk.SonicConstants;
@@ -53,8 +53,10 @@ import com.tencent.sonic.sdk.SonicSession;
 import com.tencent.sonic.sdk.SonicSessionConfig;
 import com.tencent.sonic.sdk.SonicSessionConnection;
 import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
-import com.tencent.smtt.sdk.WebSettings;
-import com.tencent.smtt.sdk.WebViewClient;
+import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.CookieManager;
+
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -317,7 +319,8 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     protected void initWebView() {
         WebSettings webSetting = mwv_h5.getSettings();
-        webSetting.setAppCacheMaxSize(5 * 1024 * 1024);
+//        webSetting.setAppCacheMaxSize(5 * 1024 * 1024);
+        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
         webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
@@ -333,182 +336,194 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
 
-//        mwv_h5.setWebViewClient(new WebViewClient() {
-//
-//            @Override
-//            public void onPageStarted(WebView webView, String s, Bitmap bitmap) {
-//                super.onPageStarted(webView, s, bitmap);
-//
-//            }
-//
-//            @Override
-//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-//                super.onPageStarted(view, url, favicon);
-//                LogUtil.zhLogW("=onPageStarted=======" + url);
-////                if (!isFinishing() && httpDialog != null) {
-////                    httpDialog.show();
-////                }
-//                if (mwv_h5 != null) {
-//                    mwv_h5.setVisibility(View.VISIBLE);
+        //x5新增
+        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSetting.setSupportZoom(true);
+        webSetting.setBuiltInZoomControls(true);
+        webSetting.setSupportMultipleWindows(false);
+        webSetting.setGeolocationEnabled(true);
+        webSetting.setDatabasePath(this.getDir("databases", 0).getPath());
+        webSetting.setGeolocationDatabasePath(this.getDir("geolocation", 0)
+                .getPath());
+        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+        // webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        // webSetting.setPreFectch(true);
+        //x5新增
+
+        mwv_h5.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageStarted(WebView webView, String url, Bitmap bitmap) {
+                super.onPageStarted(webView, url, bitmap);
+                LogUtil.zhLogW("=onPageStarted=======" + url);
+//                if (!isFinishing() && httpDialog != null) {
+//                    httpDialog.show();
 //                }
-//            }
-//
-//            @Override
-//            public void onPageFinished(WebView view, String url) {
-//                super.onPageFinished(view, url);
-//                if (!isFinishing()) {
-//                    if (!isEmpty(view.getTitle())) {
-//                        title = view.getTitle();
-//                        setTitle();
-//                    }
-////                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
-////                    httpDialog.dismiss();
-////                }
-//                    if (sonicSession != null) {
-//                        sonicSession.getSessionClient().pageFinish(url);
-//                    }
+                if (mwv_h5 != null) {
+                    mwv_h5.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if (!isFinishing()) {
+                    if (!isEmpty(view.getTitle())) {
+                        title = view.getTitle();
+                        setTitle();
+                    }
+//                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
+//                    httpDialog.dismiss();
 //                }
-//            }
-//
-//            @Override
-//            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-//                LogUtil.zhLogW("=error=======" + error.getPrimaryError());
-//                handler.proceed();//接受证书
-////                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
-////                    httpDialog.dismiss();
-////                }
-//            }
-//
-//            @Override
-//            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-//                if (mwv_h5 != null) {
-//                    mwv_h5.setVisibility(View.GONE);
-//                    Common.staticToast("网络连接错误，请稍后再试");
-//                    errorOperation();
+                    if (sonicSession != null) {
+                        sonicSession.getSessionClient().pageFinish(url);
+                    }
+                }
+            }
+
+            @Override
+            public void onReceivedSslError(WebView webView, SslErrorHandler handler, SslError error) {
+                super.onReceivedSslError(webView, handler, error);
+                LogUtil.zhLogW("=error=======" + error.getPrimaryError());
+                handler.proceed();//接受证书
+//                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
+//                    httpDialog.dismiss();
 //                }
-////                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
-////                    httpDialog.dismiss();
-////                }
-//            }
-//
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                LogUtil.httpLogW("========h5Url==========" + url);
-//                if (url.startsWith("alipay")) {
-////                    Log.i("shouldOverrideUrlLoading", "处理自定义scheme");
-//                    try {
-//                        // 以下固定写法
-//                        final Intent intent = new Intent(Intent.ACTION_VIEW,
-//                                Uri.parse(url));
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-//                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                        startActivity(intent);
-//                    } catch (Exception e) {
-//                        // 防止没有安装的情况
-//                        Common.staticToast(getStringResouce(R.string.common_zhifubaohint));
-//                        return super.shouldOverrideUrlLoading(view, url);
-//                    }
-//                    return true;
-//                } else if (url.startsWith("weixin://")) {
-//                    try {
-//                        // 以下固定写法
-//                        final Intent intent = new Intent(Intent.ACTION_VIEW,
-//                                Uri.parse(url));
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-//                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                        startActivity(intent);
-//                    } catch (Exception e) {
-//                        // 防止没有安装的情况
-//                        Common.staticToast(getStringResouce(R.string.common_weixinhint));
-//                        return super.shouldOverrideUrlLoading(view, url);
-//                    }
-//                    return true;
-//                } else if (url.contains("slmall://")) {
-//                    analysisUrl(url);
-//                    return true;
-//                } else {
-//                    return super.shouldOverrideUrlLoading(view, url);
+            }
+
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                if (mwv_h5 != null) {
+                    mwv_h5.setVisibility(View.GONE);
+                    Common.staticToast("网络连接错误，请稍后再试");
+                    errorOperation();
+                }
+//                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
+//                    httpDialog.dismiss();
 //                }
-//            }
-//
-//
-//            @Override
-//            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-//                if (sonicSession != null) {
-//                    return (WebResourceResponse) sonicSession.getSessionClient().requestResource(url);
-//                }
-//                return super.shouldInterceptRequest(view, url);
-//            }
-//
-//
-//        });
-//        mwv_h5.setWebChromeClient(new WebChromeClient() {
-//            @Override
-//            public void onProgressChanged(WebView view, int newProgress) {
-//                super.onProgressChanged(view, newProgress);
-//                //如果没有网络直接跳出方法
-//                if (!NetworkUtils.isNetworkAvailable(H5X5Act.this)) {
-//                    return;
-//                }
-//                //如果进度条隐藏则让它显示
-//                if (mProgressbar != null && View.VISIBLE == mProgressbar.getVisibility() && isContinue == false) {
-//                    mProgressbar.setVisibility(View.VISIBLE);
-//                    //大于80的进度的时候,放慢速度加载,否则交给自己加载
-//                    if (newProgress >= 80) {
-//                        //拦截webView自己的处理方式
-//                        if (isContinue) {
-//                            return;
-//                        }
-//                        mProgressbar.setCurProgress(100, 3000, () -> {
-//                            finishOperation(true);
-//                        });
-//                        isContinue = true;
-//                    } else {
-//                        mProgressbar.setNormalProgress(newProgress);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onReceivedTitle(WebView view, String titles) {
-//                super.onReceivedTitle(view, titles);
-//                if (!isFinishing()) {
-//                    if (!isEmpty(titles)) {
-//                        title = titles;
-//                        setTitle();
-//                    }
-//                }
-//            }
-//
-//            // For Android < 3.0
-//            public void openFileChooser(ValueCallback<Uri> valueCallback) {
-//                uploadMessage = valueCallback;
-//                openImageChooserActivity();
-//            }
-//
-//            // For Android  >= 3.0
-//            public void openFileChooser(ValueCallback valueCallback, String acceptType) {
-//                uploadMessage = valueCallback;
-//                openImageChooserActivity();
-//            }
-//
-//            //For Android  >= 4.1
-//            public void openFileChooser(ValueCallback<Uri> valueCallback, String acceptType, String capture) {
-//                uploadMessage = valueCallback;
-//                openImageChooserActivity();
-//            }
-//
-//            // For Android >= 5.0
-//            @Override
-//            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
-//                                             WebChromeClient.FileChooserParams fileChooserParams) {
-//                uploadMessageAboveL = filePathCallback;
-//                openImageChooserActivity();
-//                return true;
-//            }
-//        });
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                LogUtil.httpLogW("========h5Url==========" + url);
+                if (url.startsWith("alipay")) {
+//                    Log.i("shouldOverrideUrlLoading", "处理自定义scheme");
+                    try {
+                        // 以下固定写法
+                        final Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(url));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        // 防止没有安装的情况
+                        Common.staticToast(getStringResouce(R.string.common_zhifubaohint));
+                        return super.shouldOverrideUrlLoading(view, url);
+                    }
+                    return true;
+                } else if (url.startsWith("weixin://")) {
+                    try {
+                        // 以下固定写法
+                        final Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(url));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        // 防止没有安装的情况
+                        Common.staticToast(getStringResouce(R.string.common_weixinhint));
+                        return super.shouldOverrideUrlLoading(view, url);
+                    }
+                    return true;
+                } else if (url.contains("slmall://")) {
+                    analysisUrl(url);
+                    return true;
+                } else {
+                    return super.shouldOverrideUrlLoading(view, url);
+                }
+            }
+
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                if (sonicSession != null) {
+                    return (WebResourceResponse) sonicSession.getSessionClient().requestResource(url);
+                }
+                return super.shouldInterceptRequest(view, url);
+            }
+
+
+        });
+
+        mwv_h5.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                //如果没有网络直接跳出方法
+                if (!NetworkUtils.isNetworkAvailable(H5X5Act.this)) {
+                    return;
+                }
+                //如果进度条隐藏则让它显示
+                if (mProgressbar != null && View.VISIBLE == mProgressbar.getVisibility() && isContinue == false) {
+                    mProgressbar.setVisibility(View.VISIBLE);
+                    //大于80的进度的时候,放慢速度加载,否则交给自己加载
+                    if (newProgress >= 80) {
+                        //拦截webView自己的处理方式
+                        if (isContinue) {
+                            return;
+                        }
+                        mProgressbar.setCurProgress(100, 3000, () -> {
+                            finishOperation(true);
+                        });
+                        isContinue = true;
+                    } else {
+                        mProgressbar.setNormalProgress(newProgress);
+                    }
+                }
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String titles) {
+                super.onReceivedTitle(view, titles);
+                if (!isFinishing()) {
+                    if (!isEmpty(titles)) {
+                        title = titles;
+                        setTitle();
+                    }
+                }
+            }
+
+            // For Android < 3.0
+            public void openFileChooser(ValueCallback<Uri> valueCallback) {
+                uploadMessage = valueCallback;
+                openImageChooserActivity();
+            }
+
+            // For Android  >= 3.0
+            public void openFileChooser(ValueCallback valueCallback, String acceptType) {
+                uploadMessage = valueCallback;
+                openImageChooserActivity();
+            }
+
+            //For Android  >= 4.1
+            public void openFileChooser(ValueCallback<Uri> valueCallback, String acceptType, String capture) {
+                uploadMessage = valueCallback;
+                openImageChooserActivity();
+            }
+
+            // For Android >= 5.0
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                uploadMessageAboveL = filePathCallback;
+                openImageChooserActivity();
+                return true;
+
+            }
+
+        });
         addCookie();
-        mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString()+" "+SharedPrefUtil
+        mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString() + " " + SharedPrefUtil
 //        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
                 .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
     }

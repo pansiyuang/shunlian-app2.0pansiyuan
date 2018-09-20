@@ -67,7 +67,6 @@
         android:supportsRtl="true"
         android:resizeableActivity="true"
         android:supportsPictureInPicture="true"
-        android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:hardwareAccelerated="true"
         android:theme="@style/AppTheme">
