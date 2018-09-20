@@ -278,7 +278,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     miv_entry.setLayoutParams(layoutParams);
                     isHide = false;
                 } else {
-                    if (mainActivity != null && mainActivity.adEntity != null)
+                    if (mainActivity != null && mainActivity.adEntity != null&&mainActivity.adEntity.suspension!=null&&mainActivity.adEntity.suspension.link!=null)
                         Common.goGoGo(baseActivity, mainActivity.adEntity.suspension.link.type, mainActivity.adEntity.suspension.link.item_id);
                 }
                 break;

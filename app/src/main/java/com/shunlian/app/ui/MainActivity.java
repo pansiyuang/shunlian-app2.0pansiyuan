@@ -331,6 +331,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                             cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
                             if (cateGoryFrag.rv_view != null) {
                                 cateGoryFrag.rv_view.scrollToPosition(0);
+//                                cateGoryFrag.rv_view.smoothScrollToPosition(0);
                                 FirstPageFrag.mAppbar.setExpanded(true);
                             }
                         } else {
