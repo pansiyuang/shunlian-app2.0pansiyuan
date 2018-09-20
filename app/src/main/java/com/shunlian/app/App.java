@@ -9,9 +9,9 @@ import android.support.multidex.MultiDex;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SwitchHostUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
-import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -88,6 +88,8 @@ public class App extends Application {
         // 调试时，将第三个参数改为true
         Bugly.init(this, Constant.BUGLY_ID, BuildConfig.DEBUG);
         CrashReport.initCrashReport(getApplicationContext(), Constant.BUGLY_ID, BuildConfig.DEBUG);
+        String member_id = SharedPrefUtil.getSharedUserString("member_id","");
+        CrashReport.setUserId(member_id);
         //bugly动态设置会被manifest中的设置所覆盖
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
         PackageManager packageManager = getPackageManager();
