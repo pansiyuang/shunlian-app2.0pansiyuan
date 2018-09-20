@@ -504,7 +504,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             }
         });
         addCookie();
-        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
+        mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString()+" "+SharedPrefUtil
                 .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
     }
 
