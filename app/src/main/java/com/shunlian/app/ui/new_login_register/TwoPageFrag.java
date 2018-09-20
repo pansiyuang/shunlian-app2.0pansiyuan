@@ -27,6 +27,7 @@ import com.shunlian.app.view.IRegisterAndBindView;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.VerificationCodeInput;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -314,6 +315,7 @@ public class TwoPageFrag extends BaseFragment implements IRegisterAndBindView{
         SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
+        CrashReport.setUserId(content.member_id);
         if (content.tag!=null)
             SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));
         JpushUtil.setJPushAlias();
