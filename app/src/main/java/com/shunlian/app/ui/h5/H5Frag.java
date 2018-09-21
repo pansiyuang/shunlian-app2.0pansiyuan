@@ -286,7 +286,8 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     protected void initWebView() {
         WebSettings webSetting = mwv_h5.getSettings();
-        webSetting.setAppCacheMaxSize(5 * 1024 * 1024);
+//        webSetting.setAppCacheMaxSize(5 * 1024 * 1024);
+        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
         webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");

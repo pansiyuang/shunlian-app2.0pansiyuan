@@ -287,7 +287,8 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     protected void initWebView() {
         WebSettings webSetting = mwv_h5.getSettings();
-        webSetting.setAppCacheMaxSize(5 * 1024 * 1024);
+//        webSetting.setAppCacheMaxSize(5 * 1024 * 1024);
+        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
         webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
@@ -302,6 +303,21 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
         webSetting.setSaveFormData(false);
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
+
+        //x5新增
+        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSetting.setSupportZoom(true);
+        webSetting.setBuiltInZoomControls(true);
+        webSetting.setSupportMultipleWindows(false);
+        webSetting.setGeolocationEnabled(true);
+        webSetting.setDatabasePath(baseContext.getDir("databases", 0).getPath());
+        webSetting.setGeolocationDatabasePath(baseContext.getDir("geolocation", 0)
+                .getPath());
+        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+        // webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        // webSetting.setPreFectch(true);
+        //x5新增
 
         mwv_h5.setWebViewClient(new WebViewClient() {
 
@@ -637,7 +653,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
     /**
      * 截取商品id
      *
-     * @param url
+    * @param url
      * @return
      */
 //    private String interceptId(String url) {
