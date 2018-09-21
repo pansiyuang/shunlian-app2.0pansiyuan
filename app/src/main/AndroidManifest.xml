@@ -54,6 +54,11 @@
         android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
         android:value="GlideModule" />-->
 
+    <!--TBS（x5内核）-->
+    <uses-permission android:name="android.permission.READ_SETTINGS" />
+
+    <!--TBS（x5内核）-->
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -443,6 +448,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.h5.H5Act"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ui.h5.H5X5Act"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
