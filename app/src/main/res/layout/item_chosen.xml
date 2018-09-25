@@ -87,7 +87,7 @@
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_big_icon"
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/img_default_find_articlelist2" />

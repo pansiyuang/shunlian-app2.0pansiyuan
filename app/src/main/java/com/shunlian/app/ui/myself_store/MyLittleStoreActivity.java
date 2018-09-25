@@ -22,6 +22,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonStoreView;
@@ -324,7 +325,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     public void delGoods() {
         stringBuffer.setLength(0);
         for (int i = 0; i < selectList.size(); i++) {
-            stringBuffer.append(goodsList.get(i).goods_id);
+            stringBuffer.append(selectList.get(i));
             if (i != selectList.size() - 1) {
                 stringBuffer.append(",");
             }

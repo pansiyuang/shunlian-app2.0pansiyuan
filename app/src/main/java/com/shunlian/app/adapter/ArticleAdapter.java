@@ -24,6 +24,7 @@ import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.utils.BitmapUtil;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -198,8 +199,11 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 gone(articleViewHolder.recycler_nine);
                 gone(articleViewHolder.rl_video);
 
+                int screenWidth = DeviceInfoUtil.getDeviceWidth(context) - TransformUtil.dip2px(context, 20);
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) articleViewHolder.miv_big_icon.getLayoutParams();
                 layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                double height = screenWidth / 710d * 350;
+                layoutParams.height = (int) Math.round(height);
                 articleViewHolder.miv_big_icon.setLayoutParams(layoutParams);
                 GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, a.thumb);
 
