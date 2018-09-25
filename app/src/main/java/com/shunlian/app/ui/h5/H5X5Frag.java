@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,16 +18,7 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
-import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,6 +37,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.MyWebView;
 import com.shunlian.app.widget.WebViewProgressBar;
+import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.mylibrary.ImmersionBar;
 import com.tencent.sonic.sdk.SonicCacheInterceptor;
@@ -57,6 +48,16 @@ import com.tencent.sonic.sdk.SonicSession;
 import com.tencent.sonic.sdk.SonicSessionConfig;
 import com.tencent.sonic.sdk.SonicSessionConnection;
 import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
+import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.CookieManager;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -75,7 +76,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by Administrator on 2017/12/26.
  */
 
-public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollListener {
+public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollListener {
     public static final int MODE_DEFAULT = 0;//默认模式，没有缓存
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
@@ -85,7 +86,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     @BindView(R.id.mtv_title)
     public MyTextView mtv_title;
     @BindView(R.id.mwv_h5)
-    public MyWebView mwv_h5;
+    public X5WebView mwv_h5;
     @BindView(R.id.rl_title_more)
     public RelativeLayout rl_title_more;
     @BindView(R.id.tv_msg_count)
@@ -112,7 +113,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     protected ValueCallback<Uri[]> uploadMessageAboveL;
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
-    SonicSessionClientImpl sonicSessionClient = null;
+    SonicSessionClientImplX sonicSessionClient = null;
     private boolean isContinue = false, isSecond = false;
 
     public static BaseFragment getInstance(String h5Url, int mode) {
@@ -141,7 +142,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.act_h5, container, false);
+        View view = inflater.inflate(R.layout.act_h5x, container, false);
         bind = ButterKnife.bind(this, view);
         return view;
     }
@@ -243,7 +244,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             // create sonic session and run sonic flow
             sonicSession = SonicEngine.getInstance().createSession(h5Url, sessionConfigBuilder.build());
             if (null != sonicSession) {
-                sonicSession.bindClient(sonicSessionClient = new SonicSessionClientImpl());
+                sonicSession.bindClient(sonicSessionClient = new SonicSessionClientImplX());
             } else {
                 // this only happen when a same sonic session is already running,
                 // u can comment following codes to feedback as a default mode.
@@ -302,6 +303,21 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         webSetting.setSaveFormData(false);
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
+
+        //x5新增
+        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSetting.setSupportZoom(true);
+        webSetting.setBuiltInZoomControls(true);
+        webSetting.setSupportMultipleWindows(false);
+        webSetting.setGeolocationEnabled(true);
+        webSetting.setDatabasePath(baseContext.getDir("databases", 0).getPath());
+        webSetting.setGeolocationDatabasePath(baseContext.getDir("geolocation", 0)
+                .getPath());
+        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+        // webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        // webSetting.setPreFectch(true);
+        //x5新增
 
         mwv_h5.setWebViewClient(new WebViewClient() {
 
@@ -637,7 +653,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     /**
      * 截取商品id
      *
-     * @param url
+    * @param url
      * @return
      */
 //    private String interceptId(String url) {

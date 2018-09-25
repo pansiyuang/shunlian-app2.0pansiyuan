@@ -810,10 +810,18 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 MyOrderAct.startAct(baseContext, 1);
                 break;
             case R.id.miv_entryL:
-                Common.goGoGo(baseActivity, personalcenterEntity.game_door.get(0).url.type, personalcenterEntity.game_door.get(0).url.item_id);
+                if (!isEmpty(personalcenterEntity.game_door.get(0).url.msg)){
+                    Common.staticToast(personalcenterEntity.game_door.get(0).url.msg);
+                }else {
+                    Common.goGoGo(baseActivity, personalcenterEntity.game_door.get(0).url.type, personalcenterEntity.game_door.get(0).url.item_id);
+                }
                 break;
             case R.id.miv_entryR:
-                Common.goGoGo(baseActivity, personalcenterEntity.game_door.get(1).url.type, personalcenterEntity.game_door.get(1).url.item_id);
+                if (!isEmpty(personalcenterEntity.game_door.get(1).url.msg)){
+                    Common.staticToast(personalcenterEntity.game_door.get(1).url.msg);
+                }else {
+                    Common.goGoGo(baseActivity, personalcenterEntity.game_door.get(1).url.type, personalcenterEntity.game_door.get(1).url.item_id);
+                }
                 break;
             case R.id.mtv_chakanpaihang:
 //                initDialogs("https://wx.shunliandongli.com/agreement/1",true);

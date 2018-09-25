@@ -35,6 +35,9 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
+import com.tencent.bugly.crashreport.CrashReport;
+
+import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -441,8 +444,10 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
         SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
-
+        CrashReport.setUserId(content.member_id);
         EasyWebsocketClient.getInstance(baseActivity).initChat(); //初始化聊天
+//        if (content.tag!=null)
+//            SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));
         JpushUtil.setJPushAlias();
 
         if (!"1".equals(content.is_tag)){

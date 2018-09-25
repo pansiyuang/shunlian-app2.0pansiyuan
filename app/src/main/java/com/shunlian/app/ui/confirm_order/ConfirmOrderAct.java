@@ -316,7 +316,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
 
     @Override
     public void goldenEggs(String golden_eggs_tip, String golden_eggs_count, String egg_reduce) {
-        mEggReduce = isEmpty(egg_reduce)?0:Float.parseFloat(egg_reduce);
+        try {
+            mEggReduce = isEmpty(egg_reduce)?0:Float.parseFloat(egg_reduce);
+        }catch (Exception e){
+            mEggReduce = 0;
+        }
         if (!isEmpty(golden_eggs_tip)){
             visible(rlayout_golden_eggs);
             mtv_golden_eggs.setText(golden_eggs_tip);

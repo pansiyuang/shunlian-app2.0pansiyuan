@@ -23,6 +23,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -249,6 +250,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_scan)
     public void scan() {
+//        H5X5Act.startAct(baseContext,"http://soft.imtt.qq.com/browser/tes/feedback.html",H5X5Act.MODE_SONIC);
+//        H5X5Act.startAct(baseContext,"https://plus.mengtianvip.com/plus",H5X5Act.MODE_SONIC);
         ZXingDemoAct.startAct(baseActivity, false, 0);
     }
 
@@ -278,7 +281,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     miv_entry.setLayoutParams(layoutParams);
                     isHide = false;
                 } else {
-                    if (mainActivity != null && mainActivity.adEntity != null)
+                    if (mainActivity != null && mainActivity.adEntity != null&&mainActivity.adEntity.suspension!=null&&mainActivity.adEntity.suspension.link!=null)
                         Common.goGoGo(baseActivity, mainActivity.adEntity.suspension.link.type, mainActivity.adEntity.suspension.link.item_id);
                 }
                 break;

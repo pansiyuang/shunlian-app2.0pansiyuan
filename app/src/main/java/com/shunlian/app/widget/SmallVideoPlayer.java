@@ -169,16 +169,20 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     }
 
     public static void goOnPlayOnPause() {
-        if (JZVideoPlayerManager.getCurrentJzvd() != null) {
-            JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
-            if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
-                    jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
-                    jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
-                //releaseAllVideos();
-            } else {
-                jzvd.onStatePause();
-                JZMediaManager.pause();
+        try {
+            if (JZVideoPlayerManager.getCurrentJzvd() != null) {
+                JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
+                if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
+                    //releaseAllVideos();
+                } else {
+                    jzvd.onStatePause();
+                    JZMediaManager.pause();
+                }
             }
+        }catch (Exception e){
+
         }
     }
 
@@ -1012,6 +1016,10 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
 
     public void downLoadVideo(String fileName) {
+        Message obtain1 = Message.obtain();
+        obtain1.obj = "开始下载";
+        obtain1.what = 100;
+        mHandler.sendMessage(obtain1);
         try {
             URL url = new URL(currentUrl);
             // 打开连接

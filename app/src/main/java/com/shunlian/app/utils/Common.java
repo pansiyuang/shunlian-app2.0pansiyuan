@@ -835,7 +835,9 @@ public class Common {
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
-        int i = source.indexOf(changeStr);
+        int i=-1;
+        if (!TextUtils.isEmpty(changeStr))
+            i = source.indexOf(changeStr);
         if (i == -1) {
             return ssb;
         } else {
@@ -860,7 +862,9 @@ public class Common {
         ssb.append(source);
         if (TextUtils.isEmpty(changeStr))
             return ssb;
-        int i = source.indexOf(changeStr);
+        int i=-1;
+        if (!TextUtils.isEmpty(changeStr))
+            i = source.indexOf(changeStr);
         if (i == -1) {
             return ssb;
         } else {
@@ -888,7 +892,9 @@ public class Common {
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
-        int i = source.indexOf(changeStr);
+        int i=-1;
+        if (!TextUtils.isEmpty(changeStr))
+        i = source.indexOf(changeStr);
         if (i == -1) {
             return ssb;
         } else {
@@ -939,7 +945,9 @@ public class Common {
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
-        int i = source.indexOf(changeStr);
+        int i=-1;
+        if (!TextUtils.isEmpty(changeStr))
+            i = source.indexOf(changeStr);
         if (i == -1) {
             return ssb;
         } else {

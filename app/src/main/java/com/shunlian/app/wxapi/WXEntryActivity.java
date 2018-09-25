@@ -33,6 +33,7 @@ import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.mylibrary.OSUtils;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -366,6 +367,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
         SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
+        CrashReport.setUserId(wxLoginEntity.member_id);
         if (wxLoginEntity.tag != null)
             SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(wxLoginEntity.tag));
         JpushUtil.setJPushAlias();

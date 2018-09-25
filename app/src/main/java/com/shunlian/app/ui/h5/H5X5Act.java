@@ -8,34 +8,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
-import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.H5CallEntity;
-import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -45,10 +33,18 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.MyWebView;
+import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.WebViewProgressBar;
+import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
-import com.shunlian.mylibrary.ImmersionBar;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.tencent.sonic.sdk.SonicCacheInterceptor;
 import com.tencent.sonic.sdk.SonicConfig;
 import com.tencent.sonic.sdk.SonicConstants;
@@ -57,6 +53,9 @@ import com.tencent.sonic.sdk.SonicSession;
 import com.tencent.sonic.sdk.SonicSessionConfig;
 import com.tencent.sonic.sdk.SonicSessionConnection;
 import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
+import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.CookieManager;
+
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -67,67 +66,94 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Administrator on 2017/12/26.
  */
 
-public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollListener {
+public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
     public static final int MODE_DEFAULT = 0;//默认模式，没有缓存
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
+    @BindView(R.id.mtv_close)
+    public MyTextView mtv_close;
+    @BindView(R.id.view_line)
+    public View view_line;
     @BindView(R.id.mar_title)
     public MarqueeTextView mar_title;
     @BindView(R.id.mtv_title)
     public MyTextView mtv_title;
     @BindView(R.id.mwv_h5)
-    public MyWebView mwv_h5;
+    public X5WebView mwv_h5;
     @BindView(R.id.rl_title_more)
     public RelativeLayout rl_title_more;
+    @BindView(R.id.rl_title)
+    public RelativeLayout rl_title;
     @BindView(R.id.tv_msg_count)
     public TextView tv_msg_count;
     @BindView(R.id.quick_actions)
     public QuickActions quick_actions;
     @BindView(R.id.miv_favorite)
     public MyImageView miv_favorite;
-    @BindView(R.id.mProgressbar)
-    public WebViewProgressBar mProgressbar;
     @BindView(R.id.miv_close)
     public MyImageView miv_close;
-    @BindView(R.id.mtv_close)
-    public MyTextView mtv_close;
-    @BindView(R.id.view_line)
-    public View view_line;
-    public Activity activity;
-    public String h5Url = "", beforeUrl = "", member_id = "";
-    protected String title;
+    @BindView(R.id.mProgressbar)
+    public WebViewProgressBar mProgressbar;
+
+    @BindView(R.id.oget)
+    protected ObtainGoldenEggsTip oget;
+
+    protected String h5Url = "", beforeUrl = "", member_id = "";
+    protected String title, flag;
     protected int mode;
     protected SonicSession sonicSession;
     //    protected HttpDialog httpDialog;
     protected ValueCallback<Uri> uploadMessage;
     protected ValueCallback<Uri[]> uploadMessageAboveL;
+    protected Intent mIntent;
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
-    SonicSessionClientImpl sonicSessionClient = null;
-    private boolean isContinue = false, isSecond = false;
 
-    public static BaseFragment getInstance(String h5Url, int mode) {
-        H5PlusFrag fragment = new H5PlusFrag();
-        Bundle args = new Bundle();
+    SonicSessionClientImplX sonicSessionClient = null;
+    private boolean isContinue = false;
+
+    public static void startAct(Context context, String url, int mode) {
+        Intent intentH5 = new Intent(context, H5X5Act.class);
         try {
-            if (!TextUtils.isEmpty(h5Url))
-                h5Url = java.net.URLDecoder.decode(h5Url);
+            if (!TextUtils.isEmpty(url))
+                url = java.net.URLDecoder.decode(url);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        args.putSerializable("h5Url", h5Url);
-        args.putSerializable("mode", mode);
-        fragment.setArguments(args);
-        return fragment;
+        intentH5.putExtra("url", url);
+        intentH5.putExtra("mode", mode);
+        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intentH5);
+    }
+
+    public static void startAct(Context context, String url, int mode, String flag) {
+        Intent intentH5 = new Intent(context, H5X5Act.class);
+        try {
+            if (!TextUtils.isEmpty(url))
+                url = java.net.URLDecoder.decode(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        intentH5.putExtra("flag", flag);
+        intentH5.putExtra("url", url);
+        intentH5.putExtra("mode", mode);
+        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intentH5);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && mwv_h5.canGoBack()) {
+            mwv_h5.goBack();// 返回前一个页面
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**
@@ -140,28 +166,30 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     }
 
     @Override
-    protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.act_h5, container, false);
-        bind = ButterKnife.bind(this, view);
-        return view;
+    protected void initListener() {
+        super.initListener();
+        mtv_close.setOnClickListener(this);
+        miv_close.setOnClickListener(this);
     }
 
     @Override
-    public void mOnClick(View view) {
-        super.mOnClick(view);
+    public void onClick(View view) {
+        super.onClick(view);
         switch (view.getId()) {
+            case R.id.mtv_close:
+                finish();
+                break;
             case R.id.miv_close:
                 if (mwv_h5.canGoBack()) {
                     mwv_h5.goBack();// 返回前一个页面
-                    return;
+                } else {
+                    finish();
                 }
-                onBack();
                 break;
+//            case R.id.layout_backtToUp:
+//                h5_mwb.scrollTo(0, 0);
+//                break;
         }
-    }
-
-    public void onBack() {
-
     }
 
     private void setTitle() {
@@ -176,11 +204,14 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         }
     }
 
-
+    /**
+     * 布局id
+     *
+     * @return
+     */
     @Override
-    protected void initListener() {
-        super.initListener();
-        miv_close.setOnClickListener(this);
+    protected int getLayoutId() {
+        return R.layout.act_h5x;
     }
 
     /**
@@ -189,21 +220,23 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     @Override
     protected void initData() {
         member_id = SharedPrefUtil.getSharedUserString("member_id", "");
-        ImmersionBar.with(this).fitsSystemWindows(true)
-                .statusBarColor(R.color.white)
-                .statusBarDarkFont(true, 0.2f)
-                .init();
-        mtv_close.setVisibility(View.GONE);
-        view_line.setVisibility(View.GONE);
-//        httpDialog = new HttpDialog(this);
-        activity = getActivity();
-        if (activity != null)
-            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
-                    WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        if (getArguments() != null) {
-            h5Url = (String) getArguments().getSerializable("h5Url");
-            mode = (int) getArguments().getSerializable("mode");
+        mIntent = getIntent();
+        flag = mIntent.getStringExtra("flag");
+        if (!isEmpty(flag) && "noTitle".equals(flag)) {
+//            view_line.setVisibility(View.GONE);
+            rl_title.setVisibility(View.GONE);
         }
+        immersionBar.statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .keyboardEnable(true)
+                .init();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+
+//        httpDialog = new HttpDialog(this);
+        mode = mIntent.getIntExtra("mode", 0);
+        h5Url = mIntent.getStringExtra("url");
         if (!isEmpty(h5Url))
             beforeUrl = h5Url;
         if (!isEmpty(h5Url)) {
@@ -215,7 +248,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 
     public void initSonic() {
         if (!SonicEngine.isGetInstanceAllowed()) {
-            SonicEngine.createInstance(new SonicRuntimeImpl(activity), new SonicConfig.Builder().build());
+            SonicEngine.createInstance(new SonicRuntimeImpl(getApplication()), new SonicConfig.Builder().build());
         }
 
         // if it's sonic mode , startup sonic session at first time
@@ -235,7 +268,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
                 sessionConfigBuilder.setConnectionInterceptor(new SonicSessionConnectionInterceptor() {
                     @Override
                     public SonicSessionConnection getConnection(SonicSession session, Intent intent) {
-                        return new OfflinePkgSessionConnection(activity, session, intent);
+                        return new OfflinePkgSessionConnection(H5X5Act.this, session, intent);
                     }
                 });
             }
@@ -243,7 +276,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             // create sonic session and run sonic flow
             sonicSession = SonicEngine.getInstance().createSession(h5Url, sessionConfigBuilder.build());
             if (null != sonicSession) {
-                sonicSession.bindClient(sonicSessionClient = new SonicSessionClientImpl());
+                sonicSession.bindClient(sonicSessionClient = new SonicSessionClientImplX());
             } else {
                 // this only happen when a same sonic session is already running,
                 // u can comment following codes to feedback as a default mode.
@@ -303,11 +336,26 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
 
+        //x5新增
+        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSetting.setSupportZoom(true);
+        webSetting.setBuiltInZoomControls(true);
+        webSetting.setSupportMultipleWindows(false);
+        webSetting.setGeolocationEnabled(true);
+        webSetting.setDatabasePath(this.getDir("databases", 0).getPath());
+        webSetting.setGeolocationDatabasePath(this.getDir("geolocation", 0)
+                .getPath());
+        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+        // webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        // webSetting.setPreFectch(true);
+        //x5新增
+
         mwv_h5.setWebViewClient(new WebViewClient() {
 
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
+            public void onPageStarted(WebView webView, String url, Bitmap bitmap) {
+                super.onPageStarted(webView, url, bitmap);
                 LogUtil.zhLogW("=onPageStarted=======" + url);
 //                if (!isFinishing() && httpDialog != null) {
 //                    httpDialog.show();
@@ -320,7 +368,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (!activity.isFinishing()) {
+                if (!isFinishing()) {
                     if (!isEmpty(view.getTitle())) {
                         title = view.getTitle();
                         setTitle();
@@ -335,13 +383,15 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             }
 
             @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            public void onReceivedSslError(WebView webView, SslErrorHandler handler, SslError error) {
+                super.onReceivedSslError(webView, handler, error);
                 LogUtil.zhLogW("=error=======" + error.getPrimaryError());
                 handler.proceed();//接受证书
 //                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
 //                    httpDialog.dismiss();
 //                }
             }
+
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -392,10 +442,6 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
                     return true;
                 } else {
                     return super.shouldOverrideUrlLoading(view, url);
-//                    1、 默认返回：return super.shouldOverrideUrlLoading(view, url); 这个返回的方法会调用父类方法，
-// 也就是跳转至手机浏览器，平时写webview一般都在方法里面写 webView.loadUrl(url);  然后把这个返回值改成下面的false。 搜索
-//                    2、返回: return true;  webview处理url是根据程序来执行的。
-//                    3、返回: return false; webview处理url是在webview内部执行。
                 }
             }
 
@@ -409,12 +455,13 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 
 
         });
+
         mwv_h5.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
                 //如果没有网络直接跳出方法
-                if (!NetworkUtils.isNetworkAvailable(activity)) {
+                if (!NetworkUtils.isNetworkAvailable(H5X5Act.this)) {
                     return;
                 }
                 //如果进度条隐藏则让它显示
@@ -439,13 +486,12 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             @Override
             public void onReceivedTitle(WebView view, String titles) {
                 super.onReceivedTitle(view, titles);
-                if (activity != null && !activity.isFinishing()) {
+                if (!isFinishing()) {
                     if (!isEmpty(titles)) {
                         title = titles;
                         setTitle();
                     }
                 }
-
             }
 
             // For Android < 3.0
@@ -468,12 +514,13 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 
             // For Android >= 5.0
             @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
-                                             FileChooserParams fileChooserParams) {
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
                 uploadMessageAboveL = filePathCallback;
                 openImageChooserActivity();
                 return true;
+
             }
+
         });
         addCookie();
         mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString() + " " + SharedPrefUtil
@@ -482,13 +529,11 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     }
 
     @Override
-    public void onStart() {
-        if (!isHidden()) {
-            reFresh();
-            isSecond = true;
-        }
-        super.onStart();
+    protected void onRestart() {
+        reFresh();
+        super.onRestart();
     }
+
 
     public void reFresh() {
         if (!beforeUrl.equals(h5Url) && !isEmpty(h5Url)) {
@@ -497,7 +542,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 //            loadUrl();
             mwv_h5.loadUrl(h5Url, setWebviewHeader());
             beforeUrl = h5Url;
-        } else if (isSecond) {
+        } else {
             addCookie();
             if (!member_id.equals(SharedPrefUtil.getSharedUserString("member_id", "")))
                 mwv_h5.reload();
@@ -510,9 +555,8 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         String token = SharedPrefUtil.getSharedUserString("token", "");
         String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
 
-
-        CookieSyncManager.createInstance(activity);
-//        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(activity);
+        CookieSyncManager.createInstance(this);
+//        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
@@ -531,9 +575,8 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         //end
     }
 
-
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILE_CHOOSER_RESULT_CODE) {
             if (null == uploadMessage && null == uploadMessageAboveL) return;
@@ -559,7 +602,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         if (requestCode != FILE_CHOOSER_RESULT_CODE || uploadMessageAboveL == null)
             return;
         Uri[] results = null;
-        if (resultCode == RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             if (intent != null) {
                 String dataString = intent.getDataString();
                 ClipData clipData = intent.getClipData();
@@ -579,7 +622,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
         if (null != sonicSession) {
@@ -590,9 +633,25 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             sonicSessionClient.destroy();
             sonicSessionClient = null;
         }
+
+//        if (mwv_h5 != null) { //webView在xml中使用会出现内存泄漏
+//            // 如果先调用destroy()方法，则会命中if (isDestroyed()) return;这一行代码，需要先onDetachedFromWindow()，再
+//            // destory()
+//            ViewParent parent = mwv_h5.getParent();
+//            if (parent != null) {
+//                ((ViewGroup) parent).removeView(mwv_h5);
+//            }
+//
+//            mwv_h5.stopLoading();
+//            // 退出时调用此方法，移除绑定的服务，否则某些特定系统会报错
+//            mwv_h5.getSettings().setJavaScriptEnabled(false);
+//            mwv_h5.clearHistory();
+//            mwv_h5.clearView();
+//            mwv_h5.removeAllViews();
+//            mwv_h5.destroy();
+//        }
         super.onDestroy();
     }
-
 
     private void analysisUrl(String url) {
         if (url.equals(h5Url)) {
@@ -600,17 +659,18 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             return;
         }
         LogUtil.httpLogW("链接:" + url);
-        Common.urlToPage(activity, url);
+        Common.urlToPage(H5X5Act.this, url);
 //        if (url.startsWith("slmall://")) {
 //            String type = interceptBody(url);
 //            if (!TextUtils.isEmpty(type)) {
 //                String id = "";
 //                String id1 = "";
+//
 //                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
 //                    id = interceptId(url);
 //                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
 //                    id1 = interceptId(url);
-//                Common.goGoGo(activity, type, id, id1);
+//                Common.goGoGo(H5X5Act.this, type, id, id1);
 //            }
 //        }
     }
@@ -637,7 +697,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     /**
      * 截取商品id
      *
-     * @param url
+     * @param
      * @return
      */
 //    private String interceptId(String url) {
@@ -700,7 +760,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
      * 隐藏加载对话框
      */
     private void hideProgressWithAnim() {
-        AnimationSet animation = getDismissAnim(activity);
+        AnimationSet animation = getDismissAnim(H5X5Act.this);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {

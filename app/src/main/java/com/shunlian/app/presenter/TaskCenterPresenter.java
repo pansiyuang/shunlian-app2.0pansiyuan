@@ -219,8 +219,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                         TaskListEntity data = entity.data;
                         if (isEmpty(data.new_user_tasks)) {
                             current_task_state = DAILY_TASK;
-                            iView.closeNewUserList();
+                            iView.closeNewUserList(true);
                         }else {
+                            iView.closeNewUserList(false);
                             if (newUserTaskLists == null)
                                 newUserTaskLists = new ArrayList<>();
 

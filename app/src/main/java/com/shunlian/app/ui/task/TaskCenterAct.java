@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -19,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.SignEggEntity;
@@ -27,6 +30,7 @@ import com.shunlian.app.eventbus_bean.GoldEggsTaskEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -123,7 +127,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     private TaskCenterPresenter mPresenter;
     private Dialog dialog_rule, dialog_qr;
     private String mAdUrl;
-    private int mDeviceWidth;
+    private int mPicWidth;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, TaskCenterAct.class);
@@ -173,7 +177,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         pick_color = getColorResouce(R.color.pink_color);
         v48 = getColorResouce(R.color.value_484848);
 
-        mDeviceWidth = DeviceInfoUtil.getDeviceWidth(this);
+        mPicWidth = DeviceInfoUtil.getDeviceWidth(this)
+                - TransformUtil.dip2px(this,24);
     }
 
     @Override
@@ -435,18 +440,26 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                 if (m.find()) {
                     w = Integer.parseInt(m.group(2));
                 } else {
-                    w = 720;
+                    w = 672;
                 }
                 if (m.find()) {
                     h = Integer.parseInt(m.group(2));
                 } else {
                     h = 200;
                 }
-                //LogUtil.zhLogW("===w="+w+"  h="+h);
-                int i = (int) (mDeviceWidth * h * 1.0f / w);
-                GlideUtils.getInstance()
-                        .loadCornerImageSize(this, mivPic, url,
-                                TransformUtil.dip2px(this, 2.5f), mDeviceWidth, i);
+
+                int i = (int) (mPicWidth * h * 1.0f / w);
+                int radius = TransformUtil.dip2px(this, 5f);
+                GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        Bitmap source = BitmapUtil.scaleBitmap(resource, mPicWidth, i);
+                        if (source != null) {
+                            Bitmap bitmap = BitmapUtil.roundCropBitmap(source, radius);
+                            mivPic.setImageBitmap(bitmap);
+                        }
+                    }
+                });
             }
 
             mivPic.setOnClickListener(v -> {
@@ -481,12 +494,16 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      * 关闭新手任务列表
      */
     @Override
-    public void closeNewUserList() {
-        gone(llayoutNewTask);
-        if (llayoutDayTask != null)
-        llayoutDayTask.setEnabled(false);
-        if (mtvDayTask != null)
-        mtvDayTask.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+    public void closeNewUserList(boolean isClose) {
+        if (isClose) {
+            gone(llayoutNewTask);
+            if (llayoutDayTask != null)
+                llayoutDayTask.setEnabled(false);
+            if (mtvDayTask != null)
+                mtvDayTask.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        }else {
+            visible(llayoutNewTask);
+        }
     }
 
     /**
