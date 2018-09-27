@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
@@ -59,6 +61,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
@@ -134,6 +137,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private NewTextView ntv_get,ntv_aOne,ntv_check,ntv_use;
     private boolean isGetAward=false;
 
+    @BindView(R.id.ntv_uuid)
+    NewTextView ntv_uuid;
+
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("flag", flag);
@@ -188,6 +194,18 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             GlideUtils.getInstance().loadLocal(this, miv_hint, R.drawable.firsts_hint);
             miv_hint.setVisibility(View.VISIBLE);
         }
+
+        if (BuildConfig.DEBUG) {
+            ntv_uuid.setVisibility(View.VISIBLE);
+            ntv_uuid.setText("uuid:\n"+ UUID.nameUUIDFromBytes(Build.SERIAL.getBytes()).toString().toUpperCase());
+            ntv_uuid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Common.copyText(baseAct,UUID.nameUUIDFromBytes(Build.SERIAL.getBytes()).toString().toUpperCase());
+                }
+            });
+        }
+
         pMain = new PMain(MainActivity.this, MainActivity.this);
         pMain.entryInfo();
         pMain.isShowNewPersonPrize();
