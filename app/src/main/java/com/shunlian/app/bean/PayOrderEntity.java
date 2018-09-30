@@ -1,6 +1,7 @@
 package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Administrator on 2018/1/2.
@@ -17,6 +18,7 @@ public class PayOrderEntity {
 
     public XiaoXiaopay xiaoxiaopay;
     public Unionpay unionpay;
+    public WXChatPayEntity wechat;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class XiaoXiaopay{
@@ -28,5 +30,17 @@ public class PayOrderEntity {
     public static class Unionpay{
         public String tn;
         public String query_url;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class WXChatPayEntity {
+        public String sign;
+        public String timestamp;
+        public String noncestr;
+        public String partnerid;
+        public String prepayid;
+        @JsonProperty(value = "package")
+        public String packageX;
+        public String appid;
     }
 }

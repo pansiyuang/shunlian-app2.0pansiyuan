@@ -3,7 +3,6 @@ package pay;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -47,20 +45,19 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IPayListView;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.unionpay.UPPayAssistEx;
 import com.unionpay.UPQuerySEPayInfoCallback;
-import com.unionpay.UPSEInfoResp;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 
 import butterknife.BindView;
@@ -281,6 +278,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         wxapi.registerApp(Constant.WX_APP_ID);// 注册到微信列表
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_pay.setLayoutManager(manager);
+        EventBus.getDefault().register(this);
     }
 
     /*
@@ -411,22 +409,13 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             builder.setMessage("完成购买需要安装银联支付控件，是否安装？");
 
             builder.setNegativeButton("确定",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            UPPayAssistEx.installUPPayPlugin(PayListActivity.this);
-                            dialog.dismiss();
-                        }
+                    (dialog, which) -> {
+                        UPPayAssistEx.installUPPayPlugin(PayListActivity.this);
+                        dialog.dismiss();
                     });
 
             builder.setPositiveButton("取消",
-                    new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
+                    (dialog, which) -> dialog.dismiss());
             builder.create().show();
 
         }
@@ -529,6 +518,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 alipay(entity.alipay);
                 break;
             case "wechat":
+                tunedUpWechatPay(entity);
                 break;
 //            case "unionpay":
 //                callbackH5Pay(entity.unionpay, true);
@@ -538,6 +528,50 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 paySuccess();
                 break;
         }
+    }
+
+    /**
+     * 拉起微信支付
+     * @param entity
+     */
+    private void tunedUpWechatPay(PayOrderEntity entity) {
+        PayOrderEntity.WXChatPayEntity wechat = entity.wechat;
+        IWXAPI wxgApi = WXAPIFactory.createWXAPI(this, null);
+        wxgApi.registerApp(wechat.appid);
+
+        PayReq request = new PayReq();
+        request.appId = wechat.appid;
+        request.partnerId = wechat.partnerid;
+        request.prepayId= wechat.prepayid;
+        request.packageValue = wechat.packageX;
+        request.nonceStr= wechat.noncestr;
+        request.timeStamp= wechat.timestamp;
+        request.sign= wechat.sign;
+        wxgApi.sendReq(request);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResp(BaseResp baseResp) {
+        if(baseResp.getType()== ConstantsAPI.COMMAND_PAY_BY_WX){
+            if (baseResp.errCode == 0){//成功
+                paySuccess();
+            }else if (baseResp.errCode == -1){
+                //可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等。
+                payFail();
+            }else if (baseResp.errCode == -2){
+                //无需处理。发生场景：用户不支付了，点击取消，返回APP。
+
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (payListPresenter != null){
+            payListPresenter.detachView();
+        }
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -681,6 +715,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 //                }
                 break;
             case "wechat":
+                payCommon(pay_types.code);
                 break;
             case "credit":
                 final PromptDialog promptDialog = new PromptDialog(this);
