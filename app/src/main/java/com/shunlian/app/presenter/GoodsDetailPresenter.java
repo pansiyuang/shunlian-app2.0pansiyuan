@@ -118,7 +118,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     shareInfoParam.img = data.pics.get(0);
                     shareInfoParam.goodsPrice = data.price;
                     shareInfoParam.desc = data.introduction;
-                    shareInfoParam.downloadPic = data.pics;
+                    //不下载商品主图
+                    //shareInfoParam.downloadPic = data.pics;
                     shareInfoParam.goods_id = goods_id;
                     if (data.user_info != null){
                         shareInfoParam.shareLink = data.user_info.share_url;
@@ -614,7 +615,11 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         String temp = "";
         if (isToast)temp = shareInfoParam.desc;
         else temp = goods_title;
-        Common.copyText(context,shareInfoParam.shareLink,temp,isToast);
+        if (!isToast){
+            Common.copyText(context,"",temp,isToast);
+        }else {
+            Common.copyText(context,shareInfoParam.shareLink,temp,isToast);
+        }
     }
 
     /**
