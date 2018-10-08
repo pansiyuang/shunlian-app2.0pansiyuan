@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 
@@ -48,7 +47,7 @@ public class NetworkBroadcast extends BroadcastReceiver {
                     String networkState = SharedPrefUtil
                             .getCacheSharedPrf(networkKey, WIFI);
                     if (!mobileNetwork.equals(networkState)) {
-                        Common.staticToast(networkTip);
+                        //Common.staticToast(networkTip);
                         SharedPrefUtil.saveCacheSharedPrf(networkKey,mobileNetwork);
                     }
                     break;

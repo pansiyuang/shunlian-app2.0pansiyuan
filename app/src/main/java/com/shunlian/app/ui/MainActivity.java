@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             miv_hint.setVisibility(View.VISIBLE);
         }
 
-        if (BuildConfig.DEBUG) {
+        if (false) {
             ntv_uuid.setVisibility(View.VISIBLE);
             ntv_uuid.setText("uuid:\n"+ UUID.nameUUIDFromBytes(Build.SERIAL.getBytes()).toString().toUpperCase());
             ntv_uuid.setOnClickListener(new View.OnClickListener() {
