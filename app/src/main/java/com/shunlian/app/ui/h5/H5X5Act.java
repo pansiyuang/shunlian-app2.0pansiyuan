@@ -440,8 +440,14 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
                 } else if (url.contains("slmall://")) {
                     analysisUrl(url);
                     return true;
+//                }else  if(Build.VERSION.SDK_INT<26) {
+//                    view.loadUrl(url);
+//                    return true;
+//                }
+//                return false;
                 } else {
                     return super.shouldOverrideUrlLoading(view, url);
+//                    return false;
                 }
             }
 

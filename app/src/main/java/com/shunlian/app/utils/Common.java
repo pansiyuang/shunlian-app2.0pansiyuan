@@ -79,6 +79,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.h5.H5SpecialAct;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
@@ -445,7 +446,9 @@ public class Common {
                 H5SpecialAct.startAct(context, url, H5Act.MODE_SONIC);
                 break;
             case "url":
-                H5Act.startAct(context, params[0], H5Act.MODE_SONIC);
+//                LogUtil.augusLogW("uiui-"+params[0]);
+//                H5Act.startAct(context, params[0], H5Act.MODE_SONIC);
+                H5X5Act.startAct(context, params[0], H5X5Act.MODE_SONIC);
                 break;
             case "slyoupin"://顺联优品
                 SuperProductsAct.startAct(context);

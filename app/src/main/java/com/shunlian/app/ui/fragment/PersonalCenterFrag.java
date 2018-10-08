@@ -24,6 +24,7 @@ import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
@@ -39,6 +40,7 @@ import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
@@ -399,6 +401,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mtv_chakanpaihang.setOnClickListener(this);
         mrlayout_yaoqing.setOnClickListener(this);
         mtv_chakan.setOnClickListener(this);
+        mrlayout_plus.setOnClickListener(this);
         mrlayout_zidingyi.setOnClickListener(this);
         mrlayout_yaoqing.setOnClickListener(this);
         mllayout_yue.setOnClickListener(this);
@@ -901,13 +904,18 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 H5Act.startAct(getContext(), orderUrl, H5Act.MODE_SONIC);
                 //会员订单
                 break;
-            case R.id.mtv_chakan:
+//            case R.id.mtv_chakan:
+            case R.id.mrlayout_plus:
 //                EggDetailAct.startAct(getContext());
 //                mainActivity.myPlusClick();//old
                 if (Common.isPlus()) {
-                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+//                    LogUtil.augusLogW("uiui-"+SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD));
+                    H5X5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+//                    H5X5Act.startAct(baseContext, "https://www.baidu.com", H5Act.MODE_SONIC);
                 } else {
-                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+//                    LogUtil.augusLogW("uiui-"+SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD));
+                    H5X5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+//                    H5X5Act.startAct(baseContext, "https://www.baidu.com", H5Act.MODE_SONIC);
                 }
                 //点击查看特权
                 break;
