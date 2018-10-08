@@ -24,6 +24,7 @@ import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
@@ -905,9 +906,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //                EggDetailAct.startAct(getContext());
 //                mainActivity.myPlusClick();//old
                 if (Common.isPlus()) {
-                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+                    H5X5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+//                    H5X5Act.startAct(baseContext, "https://www.baidu.com", H5Act.MODE_SONIC);
                 } else {
-                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+                    H5X5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+//                    H5X5Act.startAct(baseContext, "https://www.baidu.com", H5Act.MODE_SONIC);
                 }
                 //点击查看特权
                 break;
