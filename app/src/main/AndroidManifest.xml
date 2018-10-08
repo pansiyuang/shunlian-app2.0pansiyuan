@@ -934,6 +934,10 @@
         <activity android:name=".ui.task.TaskCenterAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:theme="@style/wx"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
