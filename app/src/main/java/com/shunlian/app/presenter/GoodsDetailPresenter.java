@@ -614,8 +614,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         String temp = "";
         if (isToast)temp = shareInfoParam.desc;
         else temp = goods_title;
-//        Common.copyText(context,shareInfoParam.shareLink,temp,isToast);
-        Common.copyText(context,"",temp,isToast);
+        Common.copyText(context,shareInfoParam.shareLink,temp,isToast);
+//        Common.copyText(context,"",temp,isToast);
     }
 
     /**
