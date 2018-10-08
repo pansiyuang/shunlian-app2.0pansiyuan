@@ -1,12 +1,12 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
@@ -56,27 +56,40 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         PayListEntity.PayTypes payTypes = lists.get(position);
         if (!isEmpty(payTypes.desc)){
             mHolder.ntv_desc.setText(payTypes.desc);
-            mHolder.ntv_desc.setVisibility(View.VISIBLE);
+            visible(mHolder.ntv_desc);
         }else {
-            mHolder.ntv_desc.setVisibility(View.GONE);
+            gone(mHolder.ntv_desc);
         }
         if ("1".equals(payTypes.style)&&!isEmpty(payTypes.name)){
             mHolder.mtv_pay_name.setText(payTypes.name);
-            mHolder.mtv_pay_name.setVisibility(View.VISIBLE);
+            visible(mHolder.mtv_pay_name);
+        }else if ("3".equals(payTypes.style)&&!isEmpty(payTypes.name)){
+            mHolder.mtv_pay_name.setText(payTypes.name);
+            visible(mHolder.mtv_pay_name,mHolder.miv_pic_end);
+            setWH(payTypes.end_pic,mHolder.miv_pic_end,145);
+            GlideUtils.getInstance().loadImage(context,mHolder.miv_pic_end,payTypes.end_pic);
         }else {
-            mHolder.mtv_pay_name.setVisibility(View.GONE);
+            gone(mHolder.mtv_pay_name);
         }
 
-        if (!isEmpty(payTypes.pic)&&!isEmpty(Common.getURLParameterValue(payTypes.pic, "w"))&&!isEmpty(Common.getURLParameterValue(payTypes.pic, "h"))){
-            int picHeight=TransformUtil.dip2px(context,20);
-            int picWidth= Integer.valueOf(Common.getURLParameterValue(payTypes.pic, "w"))*picHeight/Integer.valueOf(Common.getURLParameterValue(payTypes.pic, "h"));
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(picWidth,picHeight);
-            params.setMargins(TransformUtil.dip2px(context,10),0,TransformUtil.dip2px(context,26),0);
-            mHolder.miv_pay_pic.setLayoutParams(params);
-            mHolder.miv_pay_pic.setScaleType(ImageView.ScaleType.FIT_XY);
+        if (!isEmpty(payTypes.pic)&&!isEmpty(Common.getURLParameterValue(payTypes.pic, "w"))
+                &&!isEmpty(Common.getURLParameterValue(payTypes.pic, "h"))){
+            setWH(payTypes.pic,mHolder.miv_pay_pic,10);
         }
 
         GlideUtils.getInstance().loadImage(context,mHolder.miv_pay_pic,payTypes.pic);
+    }
+
+    @NonNull
+    private void setWH(String url,MyImageView imageView,int marginLeft) {
+        int picHeight= TransformUtil.dip2px(context,20);
+        int picWidth= Integer.valueOf(Common.getURLParameterValue(url, "w"))
+                *picHeight/Integer.valueOf(Common.getURLParameterValue(url, "h"));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(picWidth,picHeight);
+        params.setMargins(TransformUtil.dip2px(context,marginLeft),
+                0,0,0);
+        imageView.setLayoutParams(params);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
     }
 
     public class PayListHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -89,6 +102,10 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
 
         @BindView(R.id.miv_pay_pic)
         MyImageView miv_pay_pic;
+
+        @BindView(R.id.miv_pic_end)
+        MyImageView miv_pic_end;
+
         public PayListHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);

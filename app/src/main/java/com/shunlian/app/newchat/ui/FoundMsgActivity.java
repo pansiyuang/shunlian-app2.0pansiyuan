@@ -143,27 +143,26 @@ public class FoundMsgActivity extends BaseActivity implements ViewPager.OnPageCh
             tv_comment_count.setText(Common.formatBadgeNumber(commentCount));
         }
 
-        if (isEmpty(Common.formatBadgeNumber(topicCount))) {
+        isShowTopicCount();
+
+        line_topic.setBackgroundColor(getColorResouce(R.color.pink_color));
+        line_comment.setBackgroundColor(getColorResouce(R.color.light_gray_two));
+    }
+
+    private void isShowTopicCount() {
+        /*if (isEmpty(Common.formatBadgeNumber(topicCount))) {
             tv_topic_count.setVisibility(View.GONE);
         } else {
             tv_topic_count.setVisibility(View.VISIBLE);
             tv_topic_count.setText(Common.formatBadgeNumber(topicCount));
-        }
-
-        line_topic.setBackgroundColor(getColorResouce(R.color.pink_color));
-        line_comment.setBackgroundColor(getColorResouce(R.color.light_gray_two));
+        }*/
     }
 
     private void commentClick() {
         tv_topic_title.setSelected(false);
         tv_comment_title.setSelected(true);
 
-        if (isEmpty(Common.formatBadgeNumber(topicCount))) {
-            tv_topic_count.setVisibility(View.GONE);
-        } else {
-            tv_topic_count.setVisibility(View.VISIBLE);
-            tv_topic_count.setText(Common.formatBadgeNumber(topicCount));
-        }
+        isShowTopicCount();
 
         if (isEmpty(Common.formatBadgeNumber(commentCount))) {
             tv_comment_count.setVisibility(View.GONE);

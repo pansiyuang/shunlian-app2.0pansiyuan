@@ -14,7 +14,6 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.CustomViewPager;
 import com.shunlian.app.widget.MyImageView;
 
@@ -137,12 +136,7 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         tv_sys_title.setSelected(true);
         tv_store_title.setSelected(false);
 
-        if (isEmpty(Common.formatBadgeNumber(sysCount))) {
-            tv_sys_count.setVisibility(View.GONE);
-        } else {
-            tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
-            tv_sys_count.setVisibility(View.VISIBLE);
-        }
+        isShowSysCount();
 
         if (isEmpty(Common.formatBadgeNumber(storeCount))) {
             tv_store_count.setVisibility(View.GONE);
@@ -153,6 +147,18 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
 
         line_sys.setBackgroundColor(getColorResouce(R.color.pink_color));
         line_store.setBackgroundColor(getColorResouce(R.color.light_gray_two));
+    }
+
+    /**
+     * 是否显示系统消息
+     */
+    private void isShowSysCount() {
+        /*if (isEmpty(Common.formatBadgeNumber(sysCount))) {
+            tv_sys_count.setVisibility(View.GONE);
+        } else {
+            tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
+            tv_sys_count.setVisibility(View.VISIBLE);
+        }*/
     }
 
     private void StoreClick() {
@@ -166,12 +172,7 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
             tv_store_count.setVisibility(View.VISIBLE);
         }
 
-        if (isEmpty(Common.formatBadgeNumber(sysCount))) {
-            tv_sys_count.setVisibility(View.GONE);
-        } else {
-            tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
-            tv_sys_count.setVisibility(View.VISIBLE);
-        }
+        isShowSysCount();
 
         line_sys.setBackgroundColor(getColorResouce(R.color.light_gray_two));
         line_store.setBackgroundColor(getColorResouce(R.color.pink_color));
@@ -219,12 +220,7 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         try {
             sysCount = messageCountEntity.sys_msg;
             storeCount = messageCountEntity.store_msg;
-            if (isEmpty(Common.formatBadgeNumber(sysCount))) {
-                tv_sys_count.setVisibility(View.GONE);
-            } else {
-                tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
-                tv_sys_count.setVisibility(View.VISIBLE);
-            }
+            isShowSysCount();
 
             if (isEmpty(Common.formatBadgeNumber(storeCount))) {
                 tv_store_count.setVisibility(View.GONE);
@@ -244,7 +240,6 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
 
     public void updateMsgCount() {
         sysCount++;
-        tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
-        tv_sys_count.setVisibility(View.VISIBLE);
+        isShowSysCount();
     }
 }

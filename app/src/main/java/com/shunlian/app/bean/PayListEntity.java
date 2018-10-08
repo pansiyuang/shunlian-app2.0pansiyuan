@@ -20,5 +20,6 @@ public class PayListEntity {
         public String pic;
         public String desc;
         public String style;
+        public String end_pic;
     }
 }
