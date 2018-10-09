@@ -24,6 +24,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
@@ -130,12 +131,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mRichText = detail.text;
         }
         videoBannerData = new VideoBannerData();
-        //视频播放去掉网络提示
-        /*int netWorkStatus = NetworkUtils.getNetWorkStatus(context);
+        int netWorkStatus = NetworkUtils.getNetWorkStatus(context);
         if (netWorkStatus != NetworkUtils.NETWORK_WIFI &&
                 netWorkStatus != NetworkUtils.NETWORK_CLASS_UNKNOWN){
             videoBannerData.isShowNetTip = true;
-        }*/
+        }
     }
 
     @Override
