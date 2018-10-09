@@ -40,6 +40,8 @@ import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.tencent.smtt.export.external.interfaces.SslError;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
+import com.tencent.smtt.sdk.CookieManager;
+import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
@@ -53,9 +55,6 @@ import com.tencent.sonic.sdk.SonicSession;
 import com.tencent.sonic.sdk.SonicSessionConfig;
 import com.tencent.sonic.sdk.SonicSessionConnection;
 import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
-import com.tencent.smtt.sdk.CookieSyncManager;
-import com.tencent.smtt.sdk.CookieManager;
-
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -454,7 +453,11 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
                 if (sonicSession != null) {
-                    return (WebResourceResponse) sonicSession.getSessionClient().requestResource(url);
+                    try {
+                        return (WebResourceResponse) sonicSession.getSessionClient().requestResource(url);
+                    }catch (Exception e){
+                        return super.shouldInterceptRequest(view, url);
+                    }
                 }
                 return super.shouldInterceptRequest(view, url);
             }

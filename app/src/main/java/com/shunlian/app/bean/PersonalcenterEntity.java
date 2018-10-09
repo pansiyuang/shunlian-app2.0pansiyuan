@@ -83,6 +83,7 @@ public class PersonalcenterEntity {
             public String type;
             public String item_id;
             public String msg;
+            public String button;
         }
     }
 
