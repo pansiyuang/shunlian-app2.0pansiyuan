@@ -984,7 +984,7 @@ public class Common {
             return "";
         try {
             String result = "";
-            int j = 0, startIndex = 0, endIndex = 0;
+            int j = 0, startIndex = 0, endIndex = url.length();
             for (int i = 0; i < url.length(); i++) {
                 if (url.charAt(i) == '/') {
                     j++;

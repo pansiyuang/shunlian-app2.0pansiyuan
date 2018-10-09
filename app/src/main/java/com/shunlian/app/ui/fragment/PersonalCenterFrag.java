@@ -1,13 +1,19 @@
 package com.shunlian.app.ui.fragment;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -400,7 +406,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         miv_shezhi.setOnClickListener(this);
         mtv_chakanpaihang.setOnClickListener(this);
         mrlayout_yaoqing.setOnClickListener(this);
-        mtv_chakan.setOnClickListener(this);
+//        mtv_chakan.setOnClickListener(this);
         mrlayout_plus.setOnClickListener(this);
         mrlayout_zidingyi.setOnClickListener(this);
         mrlayout_yaoqing.setOnClickListener(this);
@@ -804,6 +810,27 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //        }, 500, percent / 10);
 //    }
 
+    public void initDialog(PersonalcenterEntity.Game.Url url) {
+        Dialog dialog_hint = new Dialog(baseContext, R.style.Mydialog);
+        dialog_hint.setContentView(R.layout.dialog_hint_single);
+        MyTextView mtv_sure = (MyTextView) dialog_hint.findViewById(R.id.mtv_sure);
+        MyTextView mtv_hint = (MyTextView) dialog_hint.findViewById(R.id.mtv_hint);
+        MyLinearLayout mllayout_root = (MyLinearLayout) dialog_hint.findViewById(R.id.mllayout_root);
+        mtv_hint.setText(url.msg);
+        mtv_sure.setText(url.button);
+
+        int width=Common.getScreenWidth(baseActivity)*300/360;
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mllayout_root.setLayoutParams(params);
+        mtv_sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.goGoGo(baseActivity, url.type,url.item_id);
+                dialog_hint.dismiss();
+            }
+        });
+        dialog_hint.show();
+    }
 
     @Override
     public void mOnClick(View view) {
@@ -814,14 +841,14 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.miv_entryL:
                 if (!isEmpty(personalcenterEntity.game_door.get(0).url.msg)){
-                    Common.staticToast(personalcenterEntity.game_door.get(0).url.msg);
+                    initDialog(personalcenterEntity.game_door.get(0).url);
                 }else {
                     Common.goGoGo(baseActivity, personalcenterEntity.game_door.get(0).url.type, personalcenterEntity.game_door.get(0).url.item_id);
                 }
                 break;
             case R.id.miv_entryR:
                 if (!isEmpty(personalcenterEntity.game_door.get(1).url.msg)){
-                    Common.staticToast(personalcenterEntity.game_door.get(1).url.msg);
+                    initDialog(personalcenterEntity.game_door.get(1).url);
                 }else {
                     Common.goGoGo(baseActivity, personalcenterEntity.game_door.get(1).url.type, personalcenterEntity.game_door.get(1).url.item_id);
                 }
