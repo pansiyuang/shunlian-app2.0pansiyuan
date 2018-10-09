@@ -29,7 +29,7 @@
                 android:layout_centerVertical="true"
                 android:textColor="@color/new_text"
                 android:textSize="14sp"
-                android:layout_marginLeft="55dp"/>
+                android:layout_marginLeft="65dp"/>
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_pic_end"
