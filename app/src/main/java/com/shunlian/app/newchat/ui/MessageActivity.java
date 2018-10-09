@@ -153,12 +153,12 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
      * 是否显示系统消息
      */
     private void isShowSysCount() {
-        /*if (isEmpty(Common.formatBadgeNumber(sysCount))) {
+        if (isEmpty(Common.formatBadgeNumber(sysCount))) {
             tv_sys_count.setVisibility(View.GONE);
         } else {
             tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
             tv_sys_count.setVisibility(View.VISIBLE);
-        }*/
+        }
     }
 
     private void StoreClick() {
