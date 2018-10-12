@@ -15,7 +15,16 @@
         android:textColor="@color/share_text"
         android:textSize="14sp" />
 
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_logo"
+        android:layout_width="24dp"
+        android:layout_height="14dp"
+        android:paddingLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:scaleType="fitXY"/>
     <com.shunlian.app.widget.MyTextView
+        android:layout_toLeftOf="@id/miv_logo"
         android:id="@+id/mtv_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
