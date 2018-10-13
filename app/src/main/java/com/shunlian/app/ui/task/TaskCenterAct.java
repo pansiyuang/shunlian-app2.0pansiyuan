@@ -120,6 +120,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @BindView(R.id.miv_airbubble)
     MyImageView miv_airbubble;
 
+    @BindView(R.id.mtv_user)
+    MyTextView mtv_user;
+
     int pick_color;
 
     int v48;
@@ -179,6 +182,13 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
         mPicWidth = DeviceInfoUtil.getDeviceWidth(this)
                 - TransformUtil.dip2px(this,24);
+
+        GradientDrawable gd = new GradientDrawable();
+        int i = TransformUtil.dip2px(this, 1);
+        gd.setStroke(i,getColorResouce(R.color.white_ash));
+        gd.setCornerRadius(i*10);
+        gd.setColor(getColorResouce(R.color.transparent));
+        mtv_user.setBackgroundDrawable(gd);
     }
 
     @Override

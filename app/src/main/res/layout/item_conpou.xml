@@ -16,6 +16,12 @@
         app:rl_control_adapter="true"
         app:rl_control_height="155">
 
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"/>
+
         <!--面额-->
         <com.shunlian.app.widget.MyRelativeLayout
             android:id="@+id/mrlayout_price"
@@ -28,8 +34,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="18dp"
-                android:layout_marginTop="28dp"
                 android:text="@string/rmb"
+                android:layout_alignBaseline="@+id/mtv_price"
                 android:textColor="@color/pink_color"
                 android:textSize="13sp" />
 
