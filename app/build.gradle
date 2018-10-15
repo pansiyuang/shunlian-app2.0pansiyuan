@@ -27,10 +27,10 @@ android {
         multiDexEnabled true
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 26
-        versionName "2.3.2"
+        versionCode 27
+        versionName "2.3.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.ShunLianPower
+        signingConfig signingConfigs.ShunLianPowe  r
 
         //bugly
         ndk {
@@ -142,5 +142,5 @@ bugly {
     appId = '1400008795' // 注册时分配的App ID
     appKey = '8fd19263-5cbe-45ff-be6c-000be537123f' // 注册时分配的App Key5+‘’
     appPackage='com.shunlian.app'
-    appVersion='2.3.1'
+    appVersion='2.3.3'
 }
