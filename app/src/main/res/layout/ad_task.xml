@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
 
-    <com.shunlian.app.widget.MyImageView
+    <ImageView
         android:id="@+id/miv_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

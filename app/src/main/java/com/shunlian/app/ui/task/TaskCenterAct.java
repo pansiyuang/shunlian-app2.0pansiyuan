@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.webkit.URLUtil;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -649,7 +650,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         layoutParams.height = DeviceInfoUtil.getDeviceHeight(this);
         ll_root.setLayoutParams(layoutParams);
         MyImageView miv_close = dialog_ad.findViewById(R.id.miv_close);
-        MyImageView miv_pic = dialog_ad.findViewById(R.id.miv_pic);
+        ImageView miv_pic = dialog_ad.findViewById(R.id.miv_pic);
         if (URLUtil.isNetworkUrl(url)) {
             if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url)) {
                 Matcher m = p.matcher(url);
