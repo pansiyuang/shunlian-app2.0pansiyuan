@@ -18,8 +18,8 @@
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="34dp"
             android:adjustViewBounds="true"/>
 
         <!--面额-->

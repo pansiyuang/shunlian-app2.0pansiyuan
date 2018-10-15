@@ -14,6 +14,7 @@ import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.webkit.URLUtil;
 import android.widget.LinearLayout;
@@ -34,6 +35,7 @@ import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ITaskCenterView;
 import com.shunlian.app.widget.DowntimeLayout;
@@ -131,6 +133,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     private Dialog dialog_rule, dialog_qr;
     private String mAdUrl;
     private int mPicWidth;
+    public static final String TASK_AD_KEY = "task_ad_key";
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, TaskCenterAct.class);
@@ -429,6 +432,16 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
+    @Override
+    public void popAd(String url, TaskHomeEntity.AdUrlBean pop_ad_url) {
+        if (isEmpty(url))return;
+        String cache_url = SharedPrefUtil.getCacheSharedPrf(TASK_AD_KEY, "");
+        if (!cache_url.equals(url)){
+            adDialog(url,pop_ad_url);
+            SharedPrefUtil.saveCacheSharedPrf(TASK_AD_KEY,url);
+        }
+    }
+
     private String re = "(w=|h=)(\\d+)";
     private Pattern p = Pattern.compile(re);
     /**
@@ -623,6 +636,63 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         ntv_hint.setText(String.format(getStringResouce(R.string.mission_gongxininhuode), data.gold_num));
         dialog_ad.setCancelable(false);
 //        }
+        dialog_ad.show();
+    }
+
+
+    public void adDialog(String url, TaskHomeEntity.AdUrlBean urlBean) {
+        Dialog dialog_ad = new Dialog(this, R.style.popAd);
+        dialog_ad.setContentView(R.layout.ad_task);
+        LinearLayout ll_root = dialog_ad.findViewById(R.id.ll_root);
+        ViewGroup.LayoutParams layoutParams = ll_root.getLayoutParams();
+        layoutParams.width = DeviceInfoUtil.getDeviceWidth(this);
+        layoutParams.height = DeviceInfoUtil.getDeviceHeight(this);
+        ll_root.setLayoutParams(layoutParams);
+        MyImageView miv_close = dialog_ad.findViewById(R.id.miv_close);
+        MyImageView miv_pic = dialog_ad.findViewById(R.id.miv_pic);
+        if (URLUtil.isNetworkUrl(url)) {
+            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url)) {
+                Matcher m = p.matcher(url);
+                int w = 0;
+                int h = 0;
+                if (m.find()) {
+                    w = Integer.parseInt(m.group(2));
+                } else {
+                    w = 480;
+                }
+                if (m.find()) {
+                    h = Integer.parseInt(m.group(2));
+                } else {
+                    h = 640;
+                }
+
+                int r_w = DeviceInfoUtil.getDeviceWidth(this)
+                        - TransformUtil.dip2px(this, 120);
+                int i = (int) (r_w * h * 1.0f / w);
+                GlideUtils.getInstance().loadOverrideImage(this, miv_pic, url,r_w,i);
+
+                /*int radius = TransformUtil.dip2px(this, 4f);
+                GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        Bitmap source = BitmapUtil.scaleBitmap(resource, r_w, i);
+                        if (source != null) {
+                            Bitmap bitmap = BitmapUtil.roundCropBitmap(source, radius);
+                            miv_pic.setImageBitmap(bitmap);
+                        }
+                    }
+                });*/
+            }
+        }
+
+        miv_pic.setOnClickListener(v -> {
+            if (dialog_ad != null)dialog_ad.dismiss();
+            if (urlBean != null) {
+                Common.goGoGo(this, urlBean.type, urlBean.item_id);
+            }
+        });
+        miv_close.setOnClickListener(view -> dialog_ad.dismiss());
+        dialog_ad.setCancelable(false);
         dialog_ad.show();
     }
 
