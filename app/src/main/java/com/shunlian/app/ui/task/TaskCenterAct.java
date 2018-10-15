@@ -437,8 +437,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     public void popAd(String url, TaskHomeEntity.AdUrlBean pop_ad_url) {
         if (isEmpty(url))return;
         String cache_url = SharedPrefUtil.getCacheSharedPrf(TASK_AD_KEY, "");
-        if (!cache_url.equals(url)){
             adDialog(url,pop_ad_url);
+        if (!cache_url.equals(url)){
             SharedPrefUtil.saveCacheSharedPrf(TASK_AD_KEY,url);
         }
     }
@@ -659,16 +659,15 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                 if (m.find()) {
                     w = Integer.parseInt(m.group(2));
                 } else {
-                    w = 480;
+                    w = 600;
                 }
                 if (m.find()) {
                     h = Integer.parseInt(m.group(2));
                 } else {
-                    h = 640;
+                    h = 690;
                 }
 
-                int r_w = DeviceInfoUtil.getDeviceWidth(this)
-                        - TransformUtil.dip2px(this, 120);
+                int r_w = TransformUtil.countRealWidth(this, 600);
                 int i = (int) (r_w * h * 1.0f / w);
                 GlideUtils.getInstance().loadOverrideImage(this, miv_pic, url,r_w,i);
 
