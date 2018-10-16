@@ -179,6 +179,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                     nineHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                                         @Override
                                         public void onItemClick(int position) {
+                                            if (data.datass.get(position).url!=null)
                                             Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
                                         }
                                     });
@@ -196,7 +197,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         } else if (Common.isColor(data.bg_color)) {
                             twoHolder.rv_nav.setBackgroundColor(Color.parseColor(data.bg_color));
                         }
-                        if (twoHolder.firstNavyAdapter==null){
+//                        if (twoHolder.firstNavyAdapter==null){
                             twoHolder.firstNavyAdapter=new FirstNavyAdapter(context,false,data.datass,data.text_color);
                             twoHolder.rv_nav.setLayoutManager(new GridLayoutManager(context,data.datass.size()>5?5:data.datass.size()));
                             twoHolder.rv_nav.setNestedScrollingEnabled(false);
@@ -207,9 +208,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                     Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
                                 }
                             });
-                        }else {
-                            twoHolder.firstNavyAdapter.notifyDataSetChanged();
-                        }
+//                        }else {
+//                            twoHolder.firstNavyAdapter.notifyDataSetChanged();
+                        //recycle中的recycle在不能保证该模块只出现一次的情况下尽量不要复用，否则会有数据重复的问题
+//                        }
 //                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav1, data.datass.get(0).thumb, R.mipmap.img_default_home_nav);
 //                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav2, data.datass.get(1).thumb, R.mipmap.img_default_home_nav);
 //                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav3, data.datass.get(2).thumb, R.mipmap.img_default_home_nav);
@@ -572,7 +574,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                             }
                         });
-                        if (sixHolder.firstHorizonAdapter == null) {
+//                        if (sixHolder.firstHorizonAdapter == null) {
                             sixHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, false);
                             sixHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                             sixHolder.rv_goods.setAdapter(sixHolder.firstHorizonAdapter);
@@ -584,8 +586,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                     GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
                                 }
                             });
-                        }
-                        sixHolder.firstHorizonAdapter.notifyDataSetChanged();
+//                        }
+//                        sixHolder.firstHorizonAdapter.notifyDataSetChanged();
                         sixHolder.rv_goods.setFocusable(false);
                     }
                     break;
@@ -593,7 +595,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if (holder instanceof SevenHolder) {
                         SevenHolder sevenHolder = (SevenHolder) holder;
                         GetDataEntity.MData data = lists.get(position);
-                        if (sevenHolder.firstHorizonAdapter == null) {
+//                        if (sevenHolder.firstHorizonAdapter == null) {
                             sevenHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, true);
                             sevenHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                             sevenHolder.rv_goods.setAdapter(sevenHolder.firstHorizonAdapter);
@@ -605,8 +607,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                     GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
                                 }
                             });
-                        }
-                        sevenHolder.firstHorizonAdapter.notifyDataSetChanged();
+//                        }
+//                        sevenHolder.firstHorizonAdapter.notifyDataSetChanged();
                         sevenHolder.rv_goods.setFocusable(false);
                     }
                     break;
@@ -614,7 +616,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if (holder instanceof EightHolder) {
                         EightHolder eightHolder = (EightHolder) holder;
                         List<GetDataEntity.MData.Cate> data = lists.get(position).cates;
-                        if (eightHolder.firstCategoryMenuAdapter == null) {
+//                        if (eightHolder.firstCategoryMenuAdapter == null) {
 //                        cateGoryFrag.cate_id = data.get(0).id;
 //                        cateGoryFrag.pFirstPage.resetBaby(cateGoryFrag.cate_id);
                             eightHolder.firstCategoryMenuAdapter = new FirstCategoryMenuAdapter(context, false, data, isFirst);
@@ -635,9 +637,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             });
                             eightHolder.rv_categoryMenu.setAdapter(eightHolder.firstCategoryMenuAdapter);
                             eightHolder.rv_categoryMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                        } else {
-                            eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
-                        }
+//                        } else {
+//                            eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
+//                        }
                         if (isFirst) {
                             eightHolder.mtv_meiri.setVisibility(View.GONE);
                             eightHolder.rv_categoryMenu.setBackgroundColor(getColor(R.color.white));

@@ -122,6 +122,7 @@
 
     <!--优惠券-->
     <string name="coupon_youxiaoqi">有效期：</string>
+    <string name="coupon_lingquanzhongxin">领券中心</string>
 
     <!--店铺-->
     <string name="store_search">搜索店铺内商品</string>
