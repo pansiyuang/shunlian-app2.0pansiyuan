@@ -205,6 +205,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     twoHolder.firstNavyAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
+                            if (data.datass.get(position).url!=null)
                             Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
                         }
                     });
@@ -283,6 +284,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_one.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(0).url!=null)
                                         Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
@@ -298,12 +300,14 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_twol.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(0).url!=null)
                                         Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_twor.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(1).url!=null)
                                         Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
                                     }
                                 });
@@ -320,18 +324,21 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_threel.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(0).url!=null)
                                         Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_threem.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(1).url!=null)
                                         Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_threer.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(2).url!=null)
                                         Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
                                     }
                                 });
@@ -349,24 +356,28 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_four1.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(0).url!=null)
                                         Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_four2.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(1).url!=null)
                                         Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_four3.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(2).url!=null)
                                         Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_four4.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(3).url!=null)
                                         Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id, data.datass.get(3).url.channe_id);
                                     }
                                 });
@@ -383,18 +394,21 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_fivel.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(0).url!=null)
                                         Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_fivet.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(1).url!=null)
                                         Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_fiveb.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if (data.datass.get(2).url!=null)
                                         Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
                                     }
                                 });
@@ -530,7 +544,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 mShareInfoParam.shareLink = data.share.share_url;
                                 shareStyle2Dialog();
                             } else {
-
+                                if (data.url!=null)
                                 cateGoryFrag.getShareInfo(data.url.type, data.url.item_id);
                             }
                         }
@@ -538,6 +552,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if (data.url!=null)
                             Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                         }
                     });
@@ -571,6 +586,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if (data.url!=null)
                             Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                         }
                     });
