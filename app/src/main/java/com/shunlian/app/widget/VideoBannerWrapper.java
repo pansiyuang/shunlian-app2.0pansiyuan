@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.VideoBannerData;
 import com.shunlian.app.eventbus_bean.GoodsDetroyEvent;
+import com.shunlian.app.utils.GlideUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -183,7 +184,7 @@ public class VideoBannerWrapper extends RelativeLayout {
      * @param pics 轮播图片地址
      * @param type 类型 1优品 2 团购
      */
-    public void setBanner(String path, ArrayList<String> pics, int type, VideoBannerData videoBannerData) {
+    public void setBanner(String path, ArrayList<String> pics, String act,int type, VideoBannerData videoBannerData) {
         mVideoBannerData = videoBannerData;
         if (mVideoBannerData != null)
         mVideoBannerData.video_path = path;
@@ -199,7 +200,25 @@ public class VideoBannerWrapper extends RelativeLayout {
             mVP.setBanner(path,pics,this);
             mVP.setCurrentItem(getCurrentBannerPosition());
         }
+        setActPic(act);
         setLabelPic(type);
+    }
+
+    private void setActPic(String url) {
+        if (TextUtils.isEmpty(url))
+            return;
+        ImageView imageView = new ImageView(getContext());
+        addView(imageView);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        LayoutParams layoutParams = (LayoutParams) imageView.getLayoutParams();
+        int width = dp2px(75);
+        int height = dp2px(60);
+        int i = dp2px(50);
+        layoutParams.width = width;
+        layoutParams.height = height;
+        layoutParams.topMargin = dp2px(70);
+        layoutParams.leftMargin = i / 5;
+        GlideUtils.getInstance().loadImageChang(getContext(),imageView,url);
     }
 
     private void setLabelPic(int type) {
