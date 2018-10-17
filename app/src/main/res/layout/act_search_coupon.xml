@@ -48,8 +48,6 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         android:scrollbars="none"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:background="@color/value_F7F7F7"/>
 
     <com.shunlian.app.widget.empty.NetAndEmptyInterface

@@ -2,6 +2,8 @@ package com.shunlian.app.ui.core;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CouponAdapter;
 import com.shunlian.app.adapter.CouponsAdapter;
+import com.shunlian.app.adapter.NewCouponListAdapter;
+import com.shunlian.app.adapter.NewCouponsAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -17,10 +21,17 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PGetCoupon;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGetCoupon;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,6 +51,18 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.mtv_remen)
     MyTextView mtv_remen;
 
+    @BindView(R.id.view_remen)
+    View view_remen;
+
+    @BindView(R.id.view_zuixin)
+    View view_zuixin;
+
+    @BindView(R.id.mllayout_remen)
+    MyLinearLayout mllayout_remen;
+
+    @BindView(R.id.mllayout_zuixin)
+    MyLinearLayout mllayout_zuixin;
+
     @BindView(R.id.mtv_zuixin)
     MyTextView mtv_zuixin;
 
@@ -49,8 +72,14 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.rv_dianpu)
     RecyclerView rv_dianpu;
 
+    @BindView(R.id.msv_out)
+    MyScrollView msv_out;
+
     @BindView(R.id.miv_search)
     MyImageView miv_search;
+
+    @BindView(R.id.miv_logo)
+    MyImageView miv_logo;
 
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
@@ -61,12 +90,18 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
 
+    @BindView(R.id.ntv_pintai)
+    NewTextView ntv_pintai;
+
+    @BindView(R.id.ntv_dianpu)
+    NewTextView ntv_dianpu;
+
     private MessageCountManager messageCountManager;
 
     private PGetCoupon pGetCoupon;
-    private CouponsAdapter couponsAdapter;
-    private CouponAdapter couponAdapter;
-    private LinearLayoutManager linearLayoutManager;
+    private NewCouponsAdapter couponsAdapter;
+    private NewCouponListAdapter couponAdapter;
+    private GridLayoutManager gridLayoutManager;
     private String type = "All";
     private List<VouchercenterplEntity.MData> mDatas;
 
@@ -78,7 +113,7 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
 
     @Override
     protected int getLayoutId() {
-        return R.layout.act_get_coupon;
+        return R.layout.act_get_coupon_new;
     }
 
     @OnClick(R.id.rl_more)
@@ -129,17 +164,27 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     protected void initListener() {
         super.initListener();
         miv_search.setOnClickListener(this);
-        mtv_remen.setOnClickListener(this);
-        mtv_zuixin.setOnClickListener(this);
-        rv_dianpu.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mllayout_remen.setOnClickListener(this);
+        mllayout_zuixin.setOnClickListener(this);
+//        rv_dianpu.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                if (linearLayoutManager != null) {
+//                    int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
+//                    if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
+//                        if (pGetCoupon != null) {
+//                            pGetCoupon.refreshBaby(type, "");
+//                        }
+//                    }
+//                }
+//            }
+//        });
+        msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (linearLayoutManager != null) {
-                    int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
-                        if (pGetCoupon != null) {
-                            pGetCoupon.refreshBaby(type, "");
-                        }
+            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
+                if (isScrollBottom){
+                    if (pGetCoupon != null) {
+                        pGetCoupon.refreshBaby(type, "");
                     }
                 }
             }
@@ -153,19 +198,23 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
             case R.id.miv_search:
                 SearchCouponAct.startAct(baseAct);
                 break;
-            case R.id.mtv_zuixin:
+            case R.id.mllayout_zuixin:
                 if (rv_dianpu.getScrollState() == 0) {
                     type = "NEW";
-                    mtv_zuixin.setBackgroundResource(R.drawable.bg_hot_top);
-                    mtv_remen.setBackgroundResource(R.drawable.bg_new_top);
+                    mtv_zuixin.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                    mtv_remen.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+                    view_zuixin.setVisibility(View.VISIBLE);
+                    view_remen.setVisibility(View.INVISIBLE);
                     pGetCoupon.resetBaby(type, "");
                 }
                 break;
-            case R.id.mtv_remen:
+            case R.id.mllayout_remen:
                 if (rv_dianpu.getScrollState() == 0) {
                     type = "All";
-                    mtv_remen.setBackgroundResource(R.drawable.bg_hot_top);
-                    mtv_zuixin.setBackgroundResource(R.drawable.bg_new_top);
+                    mtv_remen.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                    mtv_zuixin.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+                    view_remen.setVisibility(View.VISIBLE);
+                    view_zuixin.setVisibility(View.INVISIBLE);
                     pGetCoupon.resetBaby(type, "");
                 }
                 break;
@@ -174,7 +223,7 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
+        setStatusBarColor(R.color.pink_color);
         setStatusBarFontDark();
         EventBus.getDefault().register(this);
         pGetCoupon = new PGetCoupon(this, this);
@@ -198,22 +247,35 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void setpingData(VouchercenterplEntity vouchercenterplEntity) {
+        if (!isEmpty(vouchercenterplEntity.banner)){
+            GlideUtils.getInstance().loadImageChang(baseAct,miv_logo,vouchercenterplEntity.banner);
+        }
+        if (isEmpty(vouchercenterplEntity.seller_voucher)){
+            ntv_pintai.setVisibility(View.GONE);
+            return;
+        }
         mDatas = new ArrayList<>();
         mDatas.addAll(vouchercenterplEntity.seller_voucher);
         rv_pingtai.setNestedScrollingEnabled(false);
-        couponAdapter = new CouponAdapter(this, false, mDatas, pGetCoupon);
+        couponAdapter = new NewCouponListAdapter(this, mDatas, pGetCoupon);
         rv_pingtai.setAdapter(couponAdapter);
+        rv_pingtai.setNestedScrollingEnabled(false);
         rv_pingtai.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 //        rv_pingtai.addItemDecoration(new MVerticalItemDecoration(this,10,0,0));
     }
 
     @Override
     public void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total) {
+        if (isEmpty(mData)){
+            ntv_dianpu.setVisibility(View.GONE);
+            return;
+        }
         if (couponsAdapter == null) {
-            couponsAdapter = new CouponsAdapter(this, true, mData, pGetCoupon);
-            linearLayoutManager = new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false);
-            rv_dianpu.setLayoutManager(linearLayoutManager);
+            couponsAdapter = new NewCouponsAdapter(this, true, mData, pGetCoupon);
+            gridLayoutManager = new GridLayoutManager(baseAct,2, LinearLayoutManager.VERTICAL, false);
+            rv_dianpu.setLayoutManager(gridLayoutManager);
             rv_dianpu.setAdapter(couponsAdapter);
+            rv_dianpu.setNestedScrollingEnabled(false);
         } else {
             couponsAdapter.notifyDataSetChanged();
         }

@@ -113,6 +113,7 @@ public class PGetCoupon extends BasePresenter<IGetCoupon> {
         map.put("page_size", String.valueOf(pageSize));
         map.put("type", type);
         map.put("keyword", keyword);
+        map.put("new", "1");
         sortAndMD5(map);
 
         Call<BaseEntity<VouchercenterplEntity>> baseEntityCall = getApiService().vouchercenter(map);
