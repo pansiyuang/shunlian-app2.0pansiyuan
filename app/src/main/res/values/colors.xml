@@ -51,6 +51,9 @@
     <color name="light_orange">#f2ac30</color>
     <color name="light_orange2">#FFB635</color>
     <color name="light_orange3">#f4ed9b</color>
+    <color name="value_F28D27">#F28D27</color>
+    <color name="value_FDEEDF">#FDEEDF</color>
+    <color name="value_FEF9F4">#FEF9F4</color>
     <color name="deep_red">#ae1a1a</color>
     <color name="tab_bar">#f81c05</color>
     <color name="activty_flash">#BE0339</color>

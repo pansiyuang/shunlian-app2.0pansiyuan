@@ -288,6 +288,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.core.NewGetCouponAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.more_credit.PhonePaySuccessAct"
             android:exported="false"
             android:screenOrientation="portrait" />

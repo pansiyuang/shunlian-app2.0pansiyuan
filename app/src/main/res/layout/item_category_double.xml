@@ -24,6 +24,11 @@
             android:scaleType="centerCrop"
             android:src="@mipmap/img_yishouwan_xiao"
             android:visibility="gone" />
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_act"
+            android:layout_width="12dp"
+            android:layout_height="10dp"
+            android:scaleType="fitXY"/>
     </RelativeLayout>
 
     <com.shunlian.app.widget.MyImageView
