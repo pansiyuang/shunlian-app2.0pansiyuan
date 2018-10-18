@@ -206,6 +206,8 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
                     view_zuixin.setVisibility(View.VISIBLE);
                     view_remen.setVisibility(View.INVISIBLE);
                     pGetCoupon.resetBaby(type, "");
+                    ntv_pintai.setVisibility(View.GONE);
+                    rv_pingtai.setVisibility(View.GONE);
                 }
                 break;
             case R.id.mllayout_remen:
@@ -216,6 +218,8 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
                     view_remen.setVisibility(View.VISIBLE);
                     view_zuixin.setVisibility(View.INVISIBLE);
                     pGetCoupon.resetBaby(type, "");
+                    ntv_pintai.setVisibility(View.VISIBLE);
+                    rv_pingtai.setVisibility(View.VISIBLE);
                 }
                 break;
         }
