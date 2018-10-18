@@ -2639,4 +2639,12 @@ public interface ApiService {
      */
     @GET("tasknewperson/getGoldByWatchVideo")
     Call<BaseEntity<TaskHomeEntity>> getGoldByWatchVideo(@QueryMap Map<String,String> map);
+
+    /**
+     * 获取附近位置
+     * @param body
+     * @return
+     */
+    @POST("discovery/publish/getRelatedPlaces")
+    Call<BaseEntity<NearAddrEntity>> getRelatedPlaces(@Body RequestBody body);
 }

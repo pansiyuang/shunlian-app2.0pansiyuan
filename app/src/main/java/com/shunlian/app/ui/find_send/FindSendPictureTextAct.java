@@ -10,6 +10,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by zhanghe on 2018/10/12.
@@ -26,6 +27,9 @@ public class FindSendPictureTextAct extends BaseActivity {
 
     @BindView(R.id.mtv_toolbar_right)
     MyTextView mtvToolbarRight;
+
+    @BindView(R.id.mtv_address)
+    MyTextView mtv_address;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, FindSendPictureTextAct.class);
@@ -48,6 +52,15 @@ public class FindSendPictureTextAct extends BaseActivity {
         visible(mtvToolbarRight);
         mtvToolbarRight.setText("发布");
         mtvToolbarRight.setTextColor(getColorResouce(R.color.pink_color));
+
+        mtvToolbarTitle.setOnClickListener(v -> SelectPicVideoAct.startAct(FindSendPictureTextAct.this));
     }
 
+    /**
+     * 添加位置
+     */
+    @OnClick(R.id.rlayout_address)
+    public void appendAddress(){
+
+    }
 }

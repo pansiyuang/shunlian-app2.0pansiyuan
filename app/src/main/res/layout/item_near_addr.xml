@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="28dp"
+        android:layout_marginRight="4dp"
+        android:layout_toLeftOf="@+id/miv_dot"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="星耀城二期"
+            android:textColor="@color/value_343434"
+            android:textSize="15sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_addr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:singleLine="true"
+            android:text="星耀城二期(丹枫路南50米)"
+            android:textColor="@color/color_value_6c" />
+
+    </LinearLayout>
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="12dp"
+        android:src="@mipmap/icon_address"
+        android:visibility="gone" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="12dp"
+        android:background="#ECECEC" />
+
+</RelativeLayout>

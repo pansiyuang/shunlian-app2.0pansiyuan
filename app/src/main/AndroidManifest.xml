@@ -941,6 +941,12 @@
         <activity android:name=".ui.find_send.FindSendPictureTextAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.SelectPicVideoAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.NearAddressAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
