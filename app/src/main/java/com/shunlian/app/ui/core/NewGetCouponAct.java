@@ -268,7 +268,8 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     public void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total) {
         if (isEmpty(mData)){
             ntv_dianpu.setVisibility(View.GONE);
-            return;
+        }else {
+            ntv_dianpu.setVisibility(View.VISIBLE);
         }
         if (couponsAdapter == null) {
             couponsAdapter = new NewCouponsAdapter(this, true, mData, pGetCoupon);
