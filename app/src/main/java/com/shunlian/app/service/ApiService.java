@@ -2639,4 +2639,22 @@ public interface ApiService {
      */
     @GET("tasknewperson/getGoldByWatchVideo")
     Call<BaseEntity<TaskHomeEntity>> getGoldByWatchVideo(@QueryMap Map<String,String> map);
+
+    /**
+     * 精选列表
+     */
+    @GET("discovery/blogfront/hotblogs")
+    Call<BaseEntity<HotBlogsEntity>> hotblogs(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注列表
+     */
+    @GET("discovery/blogfront/getmyfocusblogs")
+    Call<BaseEntity<HotBlogsEntity>> focusblogs(@QueryMap Map<String, String> map);
+
+    /**
+     * 活动列表
+     */
+    @GET("discovery/blogfront/getActivitys")
+    Call<BaseEntity<EmptyEntity>> getActivitys(@QueryMap Map<String, String> map);
 }

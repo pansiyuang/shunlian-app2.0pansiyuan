@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProductDetailEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.flowlayout.FlowLayout;
 import com.shunlian.app.widget.flowlayout.TagAdapter;
 import com.shunlian.app.widget.flowlayout.TagFlowLayout;
@@ -56,8 +60,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     Button btn_minus;
     @BindView(R.id.btn_add)
     Button btn_add;
-    @BindView(R.id.tv_number)
-    TextView tv_number;
+    @BindView(R.id.edt_number)
+    EditText edt_number;
     @BindView(R.id.tv_param)
     TextView tv_param;
     @BindView(R.id.btn_complete)
@@ -141,7 +145,41 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
                 (LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
         recycler_param.setLayoutParams(params);
-        tv_number.setText(String.valueOf(currentCount));
+        edt_number.setText(String.valueOf(currentCount));
+        edt_number.setSelection(String.valueOf(currentCount).length());
+        edt_number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    if (currentGoodsType == 2) {
+                        edt_number.setText(String.valueOf(limit_min_buy));
+                        edt_number.setSelection(String.valueOf(limit_min_buy).length());
+                        currentCount = limit_min_buy;
+                        Common.staticToast(String.format(mContext.getString(R.string.goods_tuangoushangping), String.valueOf(limit_min_buy)));
+                    } else {
+                        edt_number.setText("1");
+                        edt_number.setSelection("1".length());
+                        currentCount = 1;
+                    }
+                } else {
+                    int count = Integer.valueOf(s.toString());
+                    if (count > totalStock) {
+                        currentCount = totalStock;
+                        edt_number.setText(String.valueOf(totalStock));
+                        edt_number.setSelection(String.valueOf(totalStock).length());
+                    }
+                }
+            }
+        });
     }
 
     public void setParam(GoodsDeatilEntity goods) {
@@ -215,7 +253,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         }
         if (totalStock == 0) {
             currentCount = 0;
-            tv_number.setText(String.valueOf(0));
+            edt_number.setText(String.valueOf(0));
+            edt_number.setSelection(String.valueOf(0).length());
         }
     }
 
@@ -252,13 +291,13 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                     Common.staticToast("您选择的数量超出库存");
                     currentCount = totalStock;
                 }
-                tv_number.setText(String.valueOf(currentCount));
+                edt_number.setText(String.valueOf(currentCount));
+                edt_number.setSelection(String.valueOf(currentCount).length());
                 break;
             case R.id.btn_minus:
                 if (totalStock == 0) {
                     return;
                 }
-
                 if (currentGoodsType == 2) {
                     if (currentCount > limit_min_buy) {
 //                        currentCount--;
@@ -278,7 +317,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                     }
                     currentCount--;
                 }
-                tv_number.setText(String.valueOf(currentCount));
+                edt_number.setText(String.valueOf(currentCount));
+                edt_number.setSelection(String.valueOf(currentCount).length());
                 break;
             case R.id.btn_complete:
                 if (currentCount == 0) {
@@ -372,7 +412,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
     public interface OnSelectCallBack {
         void onSelectComplete(GoodsDeatilEntity.Sku sku, int count);
-        default void closeDialog(){}
+
+        default void closeDialog() {
+        }
     }
 
     public class ParamItemAdapter extends RecyclerView.Adapter<ParamItemAdapter.ViewHolder> {
@@ -437,7 +479,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                                     } else {
                                         currentCount = limit_min_buy;
                                     }
-                                    tv_number.setText(String.valueOf(currentCount));
+                                    edt_number.setText(String.valueOf(currentCount));
+                                    edt_number.setSelection(String.valueOf(currentCount).length());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

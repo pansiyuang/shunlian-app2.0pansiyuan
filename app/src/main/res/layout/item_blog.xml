@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="16dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:scaleType="centerCrop" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_v"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_alignBottom="@+id/miv_icon"
+            android:layout_alignRight="@+id/miv_icon"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/icon_v"
+            android:visibility="gone" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8.5dp"
+            android:layout_toRightOf="@+id/miv_icon"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="格奥尔格·卢卡奇"
+                android:textColor="@color/value_343434"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="2小时前"
+                android:textColor="@color/text_gray2"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_attention"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/rounded_corner_stroke_pink_20px"
+            android:gravity="center"
+            android:text="关注"
+            android:textColor="@color/pink_color"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/rounded_corner_solid_007aff_20px"
+        android:paddingLeft="7.5dp"
+        android:paddingRight="7.5dp"
+        android:text="我的话题"
+        android:textColor="@color/value_007AFF"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63sp"
+        android:layout_marginRight="27dp"
+        android:layout_marginTop="12dp"
+        android:lineSpacingExtra="10dp"
+        android:text="进行味道别#表情#无黑截面进行味道别无面#表情#进行味道别无黑截面进行味道别无黑截面进面#表情#进行味道别无黑面#表情#进行味道别面#表情..."
+        android:textColor="@color/value_484848"
+        android:textSize="15sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="12dp"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:visibility="gone"></android.support.v7.widget.RecyclerView>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_big_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="12dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rl_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_play"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/icon_video_01" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="9dp"
+        android:text="位置#杭州江陵路星耀城#观光体验店"
+        android:textSize="10sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="13dp"
+        android:background="@color/value_f5"
+        android:padding="8dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_goods_icon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="12dp"
+            android:layout_toLeftOf="@+id/tv_share_count"
+            android:layout_toRightOf="@+id/miv_goods_icon"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_goods_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="此处显示商品名称此处显示"
+                android:textColor="@color/value_343434"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_goods_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="￥888"
+                android:textColor="@color/value_343434"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_share_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="5dp"
+            android:drawableTop="@mipmap/icon_more_fenxiang"
+            android:text="8888"
+            android:textSize="10sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:id="@+id/tv_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@mipmap/icon_faxian_xaizai"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="4809"
+            android:textColor="@color/value_343434"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tv_zan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="35dp"
+            android:layout_toRightOf="@+id/tv_download"
+            android:drawableLeft="@mipmap/icon_faxian_zan"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="899"
+            android:textColor="@color/value_343434"
+            android:textSize="10sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="25dp"
+            android:src="@mipmap/icon_shoucang" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/value_ECECEC" />
+</LinearLayout>
