@@ -71,7 +71,8 @@
                     android:id="@+id/mtv_coupon_class"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/new_text"
                     android:textSize="15sp" />
 
@@ -80,6 +81,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:layout_toRightOf="@+id/mtv_coupon_class"
                     android:textColor="@color/pink_color"
                     android:textSize="10sp" />
@@ -102,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="26dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginRight="12dp"
                 android:background="@drawable/use_coupon"
                 android:gravity="center"
@@ -148,6 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="@string/coupon_shunliandongli"
             android:textColor="@color/value_555555"
             android:layout_marginRight="25dp"
             android:textSize="10sp" />

@@ -211,11 +211,9 @@ public class VideoBannerWrapper extends RelativeLayout {
         addView(imageView);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         LayoutParams layoutParams = (LayoutParams) imageView.getLayoutParams();
-        int width = dp2px(75);
-        int height = dp2px(60);
         int i = dp2px(50);
-        layoutParams.width = width;
-        layoutParams.height = height;
+        layoutParams.width = i;
+        layoutParams.height = i;
         layoutParams.topMargin = dp2px(70);
         layoutParams.leftMargin = i / 5;
         GlideUtils.getInstance().loadImageChang(getContext(),imageView,url);

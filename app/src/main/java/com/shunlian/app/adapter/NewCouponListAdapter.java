@@ -64,11 +64,11 @@ public class NewCouponListAdapter extends BaseRecyclerAdapter<VouchercenterplEnt
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         CouponListHolder mHolder = (CouponListHolder) holder;
         VouchercenterplEntity.MData voucherList = lists.get(position);
-        mHolder.mtv_rule.setText(voucherList.title);
+//        mHolder.mtv_rule.setText(voucherList.title);
 
         mHolder.mtv_price.setText(voucherList.denomination);
         mHolder.mtv_full_cut.setText(voucherList.use_condition);
-        mHolder.mtv_coupon_class.setText(getString(R.string.coupon_pintaiyouhui));
+        mHolder.mtv_coupon_class.setText(voucherList.title);
         mHolder.mtv_coupon_time.setText("有效期：" + voucherList.valid_date);
 
         /*String goods_scope = voucherList.goods_scope;
