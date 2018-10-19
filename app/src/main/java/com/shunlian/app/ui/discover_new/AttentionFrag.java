@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.AttentionAdapter;
 import com.shunlian.app.adapter.HotBlogAdapter;
+import com.shunlian.app.adapter.TieziAvarAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.AttentionPresenter;
-import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.HorizonItemDecoration;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IAttentionView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -32,16 +34,20 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
+    @BindView(R.id.recycler_icons)
+    RecyclerView recycler_icons;
+
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
-
-    @BindView(R.id.nei_empty)
-    NetAndEmptyInterface nei_empty;
 
     private AttentionPresenter mPresenter;
     private HotBlogAdapter hotBlogAdapter;
     private List<HotBlogsEntity.Blog> blogList;
     private LinearLayoutManager manager;
+    private List<String> memberIcon;
+    private AttentionAdapter attentionAdapter;
+    private TieziAvarAdapter tieziAvarAdapter;
+    private List<HotBlogsEntity.RecomandFocus> recomandFocusList;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -61,13 +67,11 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView {
         recycler_list.setNestedScrollingEnabled(false);
 
         blogList = new ArrayList<>();
+        memberIcon = new ArrayList<>();
+        recomandFocusList = new ArrayList<>();
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
-
-        nei_empty.setImageResource(R.mipmap.image_cg)
-                .setText("你还没有关注任何人")
-                .setButtonText(null);
 
         mPresenter = new AttentionPresenter(getActivity(), this);
         mPresenter.getFocusblogs(true);
@@ -101,25 +105,42 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView {
     public void getFocusblogs(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage) {
         if (currentPage == 1) {
             blogList.clear();
-
-            LogUtil.httpLogW("getFocusblogs:" + hotBlogsEntity.list.size());
-            if (isEmpty(hotBlogsEntity.list)) {
-                nei_empty.setVisibility(View.VISIBLE);
-                recycler_list.setVisibility(View.GONE);
+            memberIcon.clear();
+            if (!isEmpty(hotBlogsEntity.expert_list)) {
+                memberIcon.addAll(hotBlogsEntity.expert_list);
+                if (tieziAvarAdapter == null) {
+                    tieziAvarAdapter = new TieziAvarAdapter(getActivity(), false, memberIcon);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    recycler_icons.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(getActivity(), -9)));
+                    recycler_icons.setLayoutManager(linearLayoutManager);
+                    recycler_icons.setAdapter(tieziAvarAdapter);
+                }
+                recycler_icons.setVisibility(View.VISIBLE);
             } else {
-                nei_empty.setVisibility(View.GONE);
-                recycler_list.setVisibility(View.VISIBLE);
+                recycler_icons.setVisibility(View.GONE);
             }
+
+            recomandFocusList.clear();
+            recomandFocusList.addAll(hotBlogsEntity.recomand_focus_list);
         }
-        if (isEmpty(hotBlogsEntity.list)) {
+        if (!isEmpty(hotBlogsEntity.list)) {
             blogList.addAll(hotBlogsEntity.list);
         }
-        if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity());
-            recycler_list.setAdapter(hotBlogAdapter);
+
+        if (isEmpty(blogList) && currentPage == 1) { //没有关注的用户并且当前是第一次获取数据
+            if (attentionAdapter == null) {
+                attentionAdapter = new AttentionAdapter(getActivity(), recomandFocusList);
+                recycler_list.setAdapter(attentionAdapter);
+            }
+        } else {
+            if (hotBlogAdapter == null) {
+                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList);
+                recycler_list.setAdapter(hotBlogAdapter);
+            }
+            hotBlogAdapter.setPageLoading(currentPage, totalPage);
+            hotBlogAdapter.notifyDataSetChanged();
         }
-        hotBlogAdapter.setPageLoading(currentPage, totalPage);
-        hotBlogAdapter.notifyDataSetChanged();
     }
 
     /**

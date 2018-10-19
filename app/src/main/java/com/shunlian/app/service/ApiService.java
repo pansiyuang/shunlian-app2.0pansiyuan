@@ -2656,5 +2656,11 @@ public interface ApiService {
      * 活动列表
      */
     @GET("discovery/blogfront/getActivitys")
-    Call<BaseEntity<EmptyEntity>> getActivitys(@QueryMap Map<String, String> map);
+    Call<BaseEntity<DiscoverActivityEntity>> getActivitys(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注/取消关注
+     */
+    @GET("discovery/discoveryuser/focusUser")
+    Call<BaseEntity<EmptyEntity>> focusUser(@QueryMap Map<String, String> map);
 }

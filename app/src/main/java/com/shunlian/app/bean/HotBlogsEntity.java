@@ -13,6 +13,8 @@ public class HotBlogsEntity {
     public Pager pager;
     public List<Blog> list;
     public List<Ad> ad_list;
+    public List<String> expert_list;
+    public List<RecomandFocus> recomand_focus_list;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Pager {
@@ -58,5 +60,16 @@ public class HotBlogsEntity {
         public String type;
         public String item_id;
         public String item_type;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class RecomandFocus {
+        public String member_id;
+        public String avatar;
+        public String nickname;
+        public String signature;
+        public String follow_num;
+        public String blog_num;
+        public int focus_status;
     }
 }

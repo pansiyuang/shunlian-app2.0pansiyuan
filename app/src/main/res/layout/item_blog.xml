@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:FolderTextView="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -82,7 +83,7 @@
         android:textColor="@color/value_007AFF"
         android:textSize="14sp" />
 
-    <TextView
+    <com.shunlian.app.widget.FolderTextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -90,9 +91,9 @@
         android:layout_marginRight="27dp"
         android:layout_marginTop="12dp"
         android:lineSpacingExtra="10dp"
-        android:text="进行味道别#表情#无黑截面进行味道别无面#表情#进行味道别无黑截面进行味道别无黑截面进面#表情#进行味道别无黑面#表情#进行味道别面#表情..."
         android:textColor="@color/value_484848"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        FolderTextView:foldLine="4" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_list"
@@ -252,4 +253,32 @@
         android:layout_height="0.5dp"
         android:layout_marginTop="16dp"
         android:background="@color/value_ECECEC" />
+
+    <RelativeLayout
+        android:id="@+id/rl_attention"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white_ash"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="17dp"
+            android:text="大家都在关注他们"
+            android:textColor="@color/value_343434"
+            android:textSize="15dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recylcer_attention"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv1"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="13dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 </LinearLayout>

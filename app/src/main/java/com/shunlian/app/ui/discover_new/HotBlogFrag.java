@@ -36,7 +36,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView {
+public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack {
 
     @BindView(R.id.myKanner)
     MyKanner myKanner;
@@ -145,8 +145,23 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView {
         if (hotBlogAdapter == null) {
             hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity());
             recycler_list.setAdapter(hotBlogAdapter);
+            hotBlogAdapter.setAdapterCallBack(this);
         }
         hotBlogAdapter.setPageLoading(currentPage, totalPage);
+        hotBlogAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void focusUser(int isFocus, String memberId) {
+        for (HotBlogsEntity.Blog blog : blogList) {
+            if (memberId.equals(blog.member_id)) {
+                if (blog.is_focus == 0) {
+                    blog.is_focus = 1;
+                } else {
+                    blog.is_focus = 0;
+                }
+            }
+        }
         hotBlogAdapter.notifyDataSetChanged();
     }
 
@@ -168,5 +183,10 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView {
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    public void toFocusUser(int isFocus, String memberId) {
+        hotBlogPresenter.focusUser(isFocus, memberId);
     }
 }

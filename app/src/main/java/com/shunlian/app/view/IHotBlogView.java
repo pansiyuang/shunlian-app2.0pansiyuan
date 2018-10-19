@@ -10,6 +10,8 @@ public interface IHotBlogView extends IView {
 
     void getBlogList(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage);
 
+    void focusUser(int isFocus,String memberId);
+
     /**
      * 刷新完成
      */

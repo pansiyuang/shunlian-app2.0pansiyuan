@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -27,10 +30,19 @@ import butterknife.BindView;
 
 public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
     private Activity mActivity;
+    private List<HotBlogsEntity.RecomandFocus> recomandFocusList;
+    private AttentionMemberAdapter attentionMemberAdapter;
+    private OnAdapterCallBack mCallBack;
 
     public HotBlogAdapter(Context context, List<HotBlogsEntity.Blog> lists, Activity activity) {
         super(context, true, lists);
         this.mActivity = activity;
+    }
+
+    public HotBlogAdapter(Context context, List<HotBlogsEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list) {
+        super(context, true, lists);
+        this.mActivity = activity;
+        this.recomandFocusList = list;
     }
 
     @Override
@@ -94,6 +106,43 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 }
                 blogViewHolder.rl_video.setVisibility(View.VISIBLE);
             }
+
+            if (blog.is_focus == 1) {//已经关注
+                blogViewHolder.tv_attention.setBackgroundDrawable(null);
+                blogViewHolder.tv_attention.setText("已关注");
+                blogViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+            } else {
+                blogViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
+                blogViewHolder.tv_attention.setText("关注");
+                blogViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+            }
+
+            blogViewHolder.tv_attention.setOnClickListener(v -> {
+                if (mCallBack != null) {
+                    mCallBack.toFocusUser(blog.is_focus, blog.member_id);
+                }
+            });
+
+            if (position == 0) {
+                showAttentionList(recomandFocusList, holder);
+            } else {
+                blogViewHolder.rl_attention.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void showAttentionList(List<HotBlogsEntity.RecomandFocus> list, RecyclerView.ViewHolder holder) {
+        BlogViewHolder blogViewHolder = (BlogViewHolder) holder;
+        if (isEmpty(list)) {
+            blogViewHolder.rl_attention.setVisibility(View.GONE);
+        } else {
+            LogUtil.httpLogW("显示关注列表:" + list.size());
+            attentionMemberAdapter = new AttentionMemberAdapter(context, list);
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            blogViewHolder.recylcer_attention.setLayoutManager(manager);
+            blogViewHolder.recylcer_attention.setAdapter(attentionMemberAdapter);
+            blogViewHolder.rl_attention.setVisibility(View.VISIBLE);
         }
     }
 
@@ -114,7 +163,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         TextView tv_tag;
 
         @BindView(R.id.tv_content)
-        TextView tv_content;
+        FolderTextView tv_content;
 
         @BindView(R.id.recycler_list)
         RecyclerView recycler_list;
@@ -155,8 +204,22 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         @BindView(R.id.miv_v)
         MyImageView miv_v;
 
+        @BindView(R.id.rl_attention)
+        RelativeLayout rl_attention;
+
+        @BindView(R.id.recylcer_attention)
+        RecyclerView recylcer_attention;
+
         public BlogViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public void setAdapterCallBack(OnAdapterCallBack callBack) {
+        this.mCallBack = callBack;
+    }
+
+    public interface OnAdapterCallBack {
+        void toFocusUser(int isFocus, String memberId);
     }
 }

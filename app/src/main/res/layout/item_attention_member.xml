@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="12dp"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="用户昵称"
+        android:textColor="@color/value_343434"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_attention_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="200+万人关注"
+        android:textColor="@color/text_gray2"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_blogs_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="4848篇内容"
+        android:textColor="@color/text_gray2"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_attention"
+        android:layout_width="120dp"
+        android:layout_height="27dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/rounded_corner_stroke_pink_56px"
+        android:gravity="center"
+        android:text="关注"
+        android:textColor="@color/pink_color"
+        android:textSize="15sp" />
+</LinearLayout>

@@ -22,7 +22,18 @@
             android:textColor="@color/value_484848"
             android:textSize="15sp" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_icons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="9dp"
+            android:layout_toLeftOf="@+id/miv_arrow"
+            android:overScrollMode="never"
+            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+
         <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -44,12 +55,4 @@
             android:overScrollMode="never"
             android:scrollbars="none" />
     </com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>
-
-    <com.shunlian.app.widget.empty.NetAndEmptyInterface
-        android:id="@+id/nei_empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_title"
-        android:layout_margin="16dp"
-        android:visibility="gone" />
 </LinearLayout>
