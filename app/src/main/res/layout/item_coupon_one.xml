@@ -81,7 +81,6 @@
                 android:layout_marginRight="10dp"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:layout_toLeftOf="@id/mtv_use_coupon"
                 android:textColor="@color/pink_color"
                 android:textSize="10sp" />
 

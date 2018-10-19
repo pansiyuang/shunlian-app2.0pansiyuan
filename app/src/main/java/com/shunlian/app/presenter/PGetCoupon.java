@@ -27,7 +27,7 @@ import retrofit2.Call;
  */
 
 public class PGetCoupon extends BasePresenter<IGetCoupon> {
-    private int pageSize=20;
+    private int pageSize=10;
     private int babyPage = 1;//当前页数
     private int babyAllPage = 0;
     private boolean babyIsLoading;
@@ -88,6 +88,30 @@ public class PGetCoupon extends BasePresenter<IGetCoupon> {
                 super.onSuccess(entity);
                 Common.staticToast(context.getResources().getString(R.string.get_success));
                 iView.getCouponCallBack(isCommon,position,entity.data.is_get);
+            }
+        });
+
+    }
+    /**
+     * 领取优惠券
+     *
+     * @param voucherId
+     */
+    public void getVouchers(String voucherId,int position,int positions) {
+        if (Common.loginPrompt()) {
+            return;
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("voucher_id", voucherId);
+        map.put("is_centre", "1");//领券中心传1，其他不传或0（默认）
+        sortAndMD5(map);
+        Call<BaseEntity<GoodsDeatilEntity.Voucher>> baseEntityCall = getApiService().getVoucher(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity.Voucher>>() {
+            @Override
+            public void onSuccess(BaseEntity<GoodsDeatilEntity.Voucher> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(context.getResources().getString(R.string.get_success));
+                iView.getCouponCallBacks(position,entity.data.is_get,positions);
             }
         });
 

@@ -95,7 +95,7 @@ public class NewCouponListAdapter extends BaseRecyclerAdapter<VouchercenterplEnt
                 }
             });
         } else {
-            mHolder.mtv_use_coupon.setText(getString(R.string.coupon_lijishiyong));
+            mHolder.mtv_use_coupon.setText(getString(R.string.first_mashangshiyong));
             mHolder.mtv_use_coupon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

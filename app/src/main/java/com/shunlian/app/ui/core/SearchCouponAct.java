@@ -145,7 +145,7 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
         }
         if (couponsAdapter == null) {
             couponsAdapter = new NewCouponsAdapter(baseAct, true, mData, pGetCoupon);
-            gridLayoutManager = new GridLayoutManager(baseAct,2, LinearLayoutManager.VERTICAL, false);
+            gridLayoutManager = new GridLayoutManager(baseAct,1, LinearLayoutManager.VERTICAL, false);
             rv_search.setLayoutManager(gridLayoutManager);
             rv_search.setAdapter(couponsAdapter);
 //            rv_search.addItemDecoration(new MVerticalItemDecoration(baseAct, 10, 10, 0));
@@ -159,6 +159,14 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
     public void getCouponCallBack(boolean isCommon, int position, String isGet) {
         if ("1".equals(isGet)){
             pGetCoupon.mDatas.get(position).if_get = "1";
+            couponsAdapter.notifyItemChanged(position);
+        }
+    }
+
+    @Override
+    public void getCouponCallBacks(int position, String isGet, int positions) {
+        if ("1".equals(isGet)) {
+            pGetCoupon.mDatas.get(position).goods_data.get(positions).if_get = "1";
             couponsAdapter.notifyItemChanged(position);
         }
     }

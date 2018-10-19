@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.CouponAdapter;
-import com.shunlian.app.adapter.CouponsAdapter;
 import com.shunlian.app.adapter.NewCouponListAdapter;
 import com.shunlian.app.adapter.NewCouponsAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
@@ -22,10 +20,7 @@ import com.shunlian.app.presenter.PGetCoupon;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.QuickActions;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGetCoupon;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -182,7 +177,7 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
         msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
-                if (isScrollBottom){
+                if (isScrollBottom) {
                     if (pGetCoupon != null) {
                         pGetCoupon.refreshBaby(type, "");
                     }
@@ -251,10 +246,10 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void setpingData(VouchercenterplEntity vouchercenterplEntity) {
-        if (!isEmpty(vouchercenterplEntity.banner)){
-            GlideUtils.getInstance().loadImageChang(baseAct,miv_logo,vouchercenterplEntity.banner);
+        if (!isEmpty(vouchercenterplEntity.banner)) {
+            GlideUtils.getInstance().loadImageChang(baseAct, miv_logo, vouchercenterplEntity.banner);
         }
-        if (isEmpty(vouchercenterplEntity.seller_voucher)){
+        if (isEmpty(vouchercenterplEntity.seller_voucher)) {
             ntv_pintai.setVisibility(View.GONE);
             return;
         }
@@ -270,14 +265,14 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total) {
-        if (isEmpty(mData)){
+        if (isEmpty(mData)) {
             ntv_dianpu.setVisibility(View.GONE);
-        }else {
+        } else {
             ntv_dianpu.setVisibility(View.VISIBLE);
         }
         if (couponsAdapter == null) {
             couponsAdapter = new NewCouponsAdapter(this, true, mData, pGetCoupon);
-            gridLayoutManager = new GridLayoutManager(baseAct,2, LinearLayoutManager.VERTICAL, false);
+            gridLayoutManager = new GridLayoutManager(baseAct, 1, LinearLayoutManager.VERTICAL, false);
             rv_dianpu.setLayoutManager(gridLayoutManager);
             rv_dianpu.setAdapter(couponsAdapter);
             rv_dianpu.setNestedScrollingEnabled(false);
@@ -292,9 +287,10 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     public void OnLoadFail() {
 
     }
+
     @Override
     public void getCouponCallBack(boolean isCommon, int position, String isGet) {
-        if ("1".equals(isGet)){
+        if ("1".equals(isGet)) {
             if (isCommon) {
                 mDatas.get(position).if_get = "1";
                 couponAdapter.notifyItemChanged(position);
@@ -302,6 +298,14 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
                 pGetCoupon.mDatas.get(position).if_get = "1";
                 couponsAdapter.notifyItemChanged(position);
             }
+        }
+    }
+
+    @Override
+    public void getCouponCallBacks(int position, String isGet, int positions) {
+        if ("1".equals(isGet)) {
+            pGetCoupon.mDatas.get(position).goods_data.get(positions).if_get = "1";
+            couponsAdapter.notifyItemChanged(position);
         }
     }
 

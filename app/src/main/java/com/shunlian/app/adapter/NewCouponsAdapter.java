@@ -17,6 +17,7 @@ import android.widget.SeekBar;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.presenter.PGetCoupon;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -44,24 +45,24 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
         super(context, isShowFooter, lists);
         this.pGetCoupon=pGetCoupon;
     }
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            final GridLayoutManager manager = (GridLayoutManager) layoutManager;
-            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    int type = getItemViewType(position);
-                    if (2==type){
-                        return manager.getSpanCount();
-                    }else {
-                        return isBottoms(position) ? manager.getSpanCount() : 1;
-                    }
-                }
-            });
-        }
-    }
+//    @Override
+//    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+//        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+//        if (layoutManager instanceof GridLayoutManager) {
+//            final GridLayoutManager manager = (GridLayoutManager) layoutManager;
+//            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//                @Override
+//                public int getSpanSize(int position) {
+//                    int type = getItemViewType(position);
+//                    if (2==type){
+//                        return manager.getSpanCount();
+//                    }else {
+//                        return isBottoms(position) ? manager.getSpanCount() : 1;
+//                    }
+//                }
+//            });
+//        }
+//    }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
@@ -117,7 +118,7 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
                             }
                         });
                     } else {
-                        mHolder.mtv_use_coupon.setText(getString(R.string.coupon_lijishiyong));
+                        mHolder.mtv_use_coupon.setText(getString(R.string.first_mashangshiyong));
                         mHolder.mtv_use_coupon.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -135,6 +136,12 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
                         int picWidth=Common.getScreenWidth((Activity) context)- TransformUtil.dip2px(context,134);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth / 3, picWidth / 3);
                         mHolder.miv_img.setLayoutParams(params);
+                        mHolder.miv_img.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                GoodsDetailAct.startAct(context,data.goods_data.get(0).goods_id);
+                            }
+                        });
                         mHolder.ntv_desc.setText(data.goods_data.get(0).goods_title);
                         mHolder.ntv_price0.setText(getString(R.string.common_yuan)+data.goods_data.get(0).goods_price);
                         GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_img,data.goods_data.get(0).goods_thumb);
@@ -150,7 +157,13 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
                                 mHolder.ntv_desc1.setText(data.goods_data.get(1).goods_title);
                                 mHolder.ntv_price1.setText(getString(R.string.common_yuan)+data.goods_data.get(1).goods_price);
                                 GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_img1,data.goods_data.get(1).goods_thumb);
-                               break;
+                                mHolder.miv_img1.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        GoodsDetailAct.startAct(context,data.goods_data.get(1).goods_id);
+                                    }
+                                });
+                                break;
                             case 3:
                                 mHolder.mllayout_two.setVisibility(View.VISIBLE);
                                 mHolder.mllayout_one.setVisibility(View.VISIBLE);
@@ -162,6 +175,18 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
                                 mHolder.ntv_desc2.setText(data.goods_data.get(2).goods_title);
                                 mHolder.ntv_price2.setText(getString(R.string.common_yuan)+data.goods_data.get(2).goods_price);
                                 GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_img2,data.goods_data.get(2).goods_thumb);
+                                mHolder.miv_img1.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        GoodsDetailAct.startAct(context,data.goods_data.get(1).goods_id);
+                                    }
+                                });
+                                mHolder.miv_img2.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        GoodsDetailAct.startAct(context,data.goods_data.get(2).goods_id);
+                                    }
+                                });
                                 break;
                         }
                     }else {
@@ -183,21 +208,21 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
                         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.goods_data.get(0).denomination
                                 , data.goods_data.get(0).denomination, 14);
                         mHolder.ntv_price.setText(spannableStringBuilder);
-                        mHolder.ntv_condition.setText(data.use_condition);
+                        mHolder.ntv_condition.setText(data.goods_data.get(0).use_condition);
                         mHolder.ntv_price0.setText(getString(R.string.common_yuan)+data.goods_data.get(0).goods_price);
                         mHolder.ntv_pricem.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
                         mHolder.ntv_pricem.setText(getString(R.string.common_yuan)+data.goods_data.get(0).goods_market_price);
                         GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_img,data.goods_data.get(0).goods_thumb);
-                        if ("0".equals(data.if_get)) {
+                        if ("0".equals(data.goods_data.get(0).if_get)) {
                             mHolder.mtv_use_coupon.setText(getString(R.string.chat_lijilingqu));
                             mHolder.mtv_use_coupon.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    pGetCoupon.getVoucher(data.goods_data.get(0).id,false,position);
+                                    pGetCoupon.getVouchers(data.goods_data.get(0).id,position,0);
                                 }
                             });
                         } else {
-                            mHolder.mtv_use_coupon.setText(getString(R.string.coupon_lijishiyong));
+                            mHolder.mtv_use_coupon.setText(getString(R.string.first_mashangshiyong));
                             mHolder.mtv_use_coupon.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -211,6 +236,55 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
                         }else {
                             mHolder.miv_tag.setVisibility(View.VISIBLE);
                             GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_tag,data.goods_data.get(0).tag);
+                        }
+                        mHolder.miv_img.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                GoodsDetailAct.startAct(context,data.goods_data.get(0).goods_id);
+                            }
+                        });
+                        if (data.goods_data.size()==2){
+                            mHolder.miv_img1.setLayoutParams(params);
+                            mHolder.ntv_desc1.setText(data.goods_data.get(1).goods_title);
+                            mHolder.ntv_title1.setText(data.goods_data.get(1).title);
+                            SpannableStringBuilder spannableStringBuilder1 = Common.changeTextSize(getString(R.string.common_yuan) + data.goods_data.get(1).denomination
+                                    , data.goods_data.get(1).denomination, 14);
+                            mHolder.ntv_price1.setText(spannableStringBuilder1);
+                            mHolder.ntv_condition1.setText(data.goods_data.get(1).use_condition);
+                            mHolder.ntv_price01.setText(getString(R.string.common_yuan)+data.goods_data.get(1).goods_price);
+                            mHolder.ntv_pricem1.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
+                            mHolder.ntv_pricem1.setText(getString(R.string.common_yuan)+data.goods_data.get(1).goods_market_price);
+                            GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_img1,data.goods_data.get(1).goods_thumb);
+                            if ("0".equals(data.goods_data.get(1).if_get)) {
+                                mHolder.mtv_use_coupon1.setText(getString(R.string.chat_lijilingqu));
+                                mHolder.mtv_use_coupon1.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        pGetCoupon.getVouchers(data.goods_data.get(1).id,position,1);
+                                    }
+                                });
+                            } else {
+                                mHolder.mtv_use_coupon1.setText(getString(R.string.first_mashangshiyong));
+                                mHolder.mtv_use_coupon1.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+//                    StoreAct.startAct(context,data.store_id);
+                                        Common.goGoGo(context,data.goods_data.get(1).jump_type,data.goods_data.get(1).lazy_id);
+                                    }
+                                });
+                            }
+                            if (isEmpty(data.goods_data.get(1).tag)){
+                                mHolder.miv_tag1.setVisibility(View.GONE);
+                            }else {
+                                mHolder.miv_tag1.setVisibility(View.VISIBLE);
+                                GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_tag1,data.goods_data.get(1).tag);
+                            }
+                            mHolder.miv_img1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    GoodsDetailAct.startAct(context,data.goods_data.get(1).goods_id);
+                                }
+                            });
                         }
                     }else {
                         mHolder.mllayout_root.setVisibility(View.GONE);
@@ -313,8 +387,41 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
         @BindView(R.id.ntv_pricem)
         NewTextView ntv_pricem;
 
+        @BindView(R.id.ntv_price1)
+        NewTextView ntv_price1;
+
+        @BindView(R.id.ntv_condition1)
+        NewTextView ntv_condition1;
+
+        @BindView(R.id.ntv_title1)
+        NewTextView ntv_title1;
+
+        @BindView(R.id.mtv_use_coupon1)
+        MyTextView mtv_use_coupon1;
+
+        @BindView(R.id.miv_img1)
+        MyImageView miv_img1;
+
+        @BindView(R.id.miv_tag1)
+        MyImageView miv_tag1;
+
+        @BindView(R.id.ntv_desc1)
+        NewTextView ntv_desc1;
+
+        @BindView(R.id.ntv_price01)
+        NewTextView ntv_price01;
+
+        @BindView(R.id.ntv_pricem1)
+        NewTextView ntv_pricem1;
+
         @BindView(R.id.mllayout_root)
         MyLinearLayout mllayout_root;
+
+        @BindView(R.id.mllayout_right)
+        MyLinearLayout mllayout_right;
+
+        @BindView(R.id.mllayout_left)
+        MyLinearLayout mllayout_left;
 
         public ThreeHolder(View itemView) {
             super(itemView);

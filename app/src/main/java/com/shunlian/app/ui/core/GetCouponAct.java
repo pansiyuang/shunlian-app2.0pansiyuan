@@ -238,4 +238,12 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
         }
     }
 
+    @Override
+    public void getCouponCallBacks(int position, String isGet, int positions) {
+        if ("1".equals(isGet)) {
+            pGetCoupon.mDatas.get(position).goods_data.get(positions).if_get = "1";
+            couponsAdapter.notifyItemChanged(position);
+        }
+    }
+
 }
