@@ -20,7 +20,7 @@
             android:drawableLeft="@mipmap/icon_common_search_gray"
             android:drawablePadding="6.5dp"
             android:gravity="center_vertical"
-            android:hint="@string/search_goods"
+            android:hint="@string/coupon_sousuoyouhuiquan"
             android:imeOptions="actionSearch"
             android:paddingLeft="10dp"
             android:singleLine="true"
