@@ -6,6 +6,8 @@
 
 
     <RelativeLayout
+        android:id="@+id/rlayout_root"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="44dp">
 
@@ -17,25 +19,27 @@
             android:padding="15dp"
             android:src="@mipmap/btn_huafei_back" />
 
-
+<!---->
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/btnAlbum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="相册"
+            android:gravity="center"
+            android:drawablePadding="8dp"
+            android:drawableRight="@drawable/select_album"
             android:textColor="@color/value_484848"
             android:textSize="19sp"
             android:textStyle="bold" />
 
         <com.shunlian.app.widget.MyTextView
-            android:id="@+id/tv_send"
+            android:id="@+id/tv_complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:text="完成(0/9)"
             android:textColor="@color/value_484848"
             android:textSize="15sp" />
 
@@ -47,17 +51,12 @@
         android:background="#ECECEC" />
 
 
-    <GridView
-        android:id="@+id/grid"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:numColumns="4"
-        android:clipToPadding="false"
-        android:horizontalSpacing="4dp"
-        android:paddingBottom="?android:attr/actionBarSize"
-        android:verticalSpacing="4dp" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 
     <View
@@ -74,27 +73,36 @@
 
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_album"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawablePadding="6dp"
+            android:drawableTop="@drawable/sele_album"
             android:gravity="center"
             android:text="相册"
             android:textColor="@color/pink_color"
             android:textSize="10sp" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_camera"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawablePadding="6dp"
+            android:drawableTop="@drawable/sele_camera"
             android:gravity="center"
             android:text="拍照"
             android:textColor="@color/value_484848"
             android:textSize="10sp" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_video"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawablePadding="6dp"
+            android:drawableTop="@drawable/sele_video"
             android:gravity="center"
             android:text="拍视频"
             android:textColor="@color/value_484848"

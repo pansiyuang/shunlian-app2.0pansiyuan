@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="48dp">
+    android:minHeight="49dp">
 
 
     <LinearLayout
@@ -31,7 +31,8 @@
             android:layout_marginTop="5dp"
             android:singleLine="true"
             android:text="星耀城二期(丹枫路南50米)"
-            android:textColor="@color/color_value_6c" />
+            android:textColor="@color/text_gray2"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -44,7 +45,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="12dp"
         android:src="@mipmap/icon_address"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
 
     <View

@@ -947,6 +947,12 @@
         <activity android:name=".ui.find_send.NearAddressAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.AddTopicAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.SelectGoodsAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

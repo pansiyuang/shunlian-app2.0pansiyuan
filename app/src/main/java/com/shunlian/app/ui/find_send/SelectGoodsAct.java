@@ -4,35 +4,39 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.presenter.NearAddressPresenter;
+import com.shunlian.app.presenter.SelectGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IView;
+import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
 
 /**
- * Created by zhanghe on 2018/10/17.
- * 附近位置
+ * Created by zhanghe on 2018/10/18.
  */
 
-public class NearAddressAct extends BaseActivity implements IView{
-
+public class SelectGoodsAct extends BaseActivity implements IView{
     @BindView(R.id.ed_edit)
     EditText edEdit;
 
+    @BindView(R.id.mtv_clear)
+    MyTextView mtvClear;
+
     @BindView(R.id.recy_view)
     RecyclerView recyView;
-    private NearAddressPresenter presenter;
+    private LinearLayoutManager manager;
+    private SelectGoodsPresenter presenter;
 
     public static void startAct(Activity activity,int code){
-        activity.startActivityForResult(new Intent(activity,NearAddressAct.class),code);
+        activity.startActivityForResult(new Intent(activity,SelectGoodsAct.class),code);
     }
+
     /**
      * 布局id
      *
@@ -40,20 +44,23 @@ public class NearAddressAct extends BaseActivity implements IView{
      */
     @Override
     protected int getLayoutId() {
-        return R.layout.act_near_address;
+        return R.layout.act_select_goodsv2;
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        edEdit.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                Common.hideKeyboard(edEdit);
-                if (presenter != null){
-                    presenter.getNearAddr(edEdit.getText().toString());
+        recyView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null && presenter != null) {
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()) {
+                        presenter.onRefresh();
+                    }
                 }
             }
-            return false;
         });
     }
 
@@ -64,10 +71,11 @@ public class NearAddressAct extends BaseActivity implements IView{
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager = new LinearLayoutManager(this);
         recyView.setLayoutManager(manager);
-
-        presenter = new NearAddressPresenter(this,this);
+        int i = TransformUtil.dip2px(this, 12);
+        recyView.addItemDecoration(new MVerticalItemDecoration(this,i,0,0));
+        presenter = new SelectGoodsPresenter(this,this);
     }
 
     /**

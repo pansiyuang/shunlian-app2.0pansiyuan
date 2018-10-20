@@ -20,6 +20,8 @@ import butterknife.BindView;
 
 public class NearAddrAdapter extends BaseRecyclerAdapter<NearAddrEntity.NearAddr> {
 
+    public int item_id = -1;
+
     public NearAddrAdapter(Context context,List<NearAddrEntity.NearAddr> lists) {
         super(context, false, lists);
     }
@@ -47,7 +49,17 @@ public class NearAddrAdapter extends BaseRecyclerAdapter<NearAddrEntity.NearAddr
         NearAddrHolder mHolder = (NearAddrHolder) holder;
         NearAddrEntity.NearAddr nearAddr = lists.get(position);
         mHolder.mtv_name.setText(nearAddr.name);
-        mHolder.mtv_addr.setText(nearAddr.addr);
+        if (isEmpty(nearAddr.addr)){
+            gone(mHolder.mtv_addr);
+        }else {
+            visible(mHolder.mtv_addr);
+            mHolder.mtv_addr.setText(nearAddr.addr);
+        }
+        if (item_id == position){
+            visible(mHolder.miv_dot);
+        }else {
+            mHolder.miv_dot.setVisibility(View.INVISIBLE);
+        }
     }
 
     public class NearAddrHolder extends BaseRecyclerViewHolder{
@@ -63,6 +75,10 @@ public class NearAddrAdapter extends BaseRecyclerAdapter<NearAddrEntity.NearAddr
 
         public NearAddrHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(v -> {
+                if (listener != null)
+                    listener.onItemClick(v,getAdapterPosition());
+            });
         }
     }
 }

@@ -2647,4 +2647,12 @@ public interface ApiService {
      */
     @POST("discovery/publish/getRelatedPlaces")
     Call<BaseEntity<NearAddrEntity>> getRelatedPlaces(@Body RequestBody body);
+
+    /**
+     * 获取话题
+     * @param map
+     * @return
+     */
+    @GET("discovery/blogfront/getActivitys")
+    Call<BaseEntity<TopicEntity>>  getActivitys(@QueryMap Map<String,String> map);
 }
