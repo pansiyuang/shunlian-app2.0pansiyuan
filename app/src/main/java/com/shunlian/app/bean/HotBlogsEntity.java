@@ -40,11 +40,13 @@ public class HotBlogsEntity {
         public String activity_title;
         public String place;
         public List<GoodsDeatilEntity.Goods> related_goods;
-        public String praise_num;
-        public String down_num;
-        public String share_num;
+        public int praise_num;
+        public int down_num;
+        public int share_num;
+        public int is_praise;
         public int is_focus;
         public String time_desc;
+        public int total_share_num;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -2663,4 +2663,22 @@ public interface ApiService {
      */
     @GET("discovery/discoveryuser/focusUser")
     Call<BaseEntity<EmptyEntity>> focusUser(@QueryMap Map<String, String> map);
+
+    /**
+     * 文章点赞
+     */
+    @GET("discovery/discoveryuser/praise")
+    Call<BaseEntity<EmptyEntity>> praiseBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 周达人榜
+     */
+    @GET("discovery/blogfront/weekExportTopList")
+    Call<BaseEntity<WeekExpertEntity>> weekExpertList(@QueryMap Map<String, String> map);
+
+    /**
+     * 周达人榜
+     */
+    @GET("discovery/blogfront/hotExpertTopList")
+    Call<BaseEntity<HotBlogsEntity>> hotExpertTopList(@QueryMap Map<String, String> map);
 }

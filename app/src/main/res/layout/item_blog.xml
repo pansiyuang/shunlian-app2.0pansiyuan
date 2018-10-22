@@ -202,7 +202,8 @@
             android:layout_centerVertical="true"
             android:layout_marginTop="5dp"
             android:drawableTop="@mipmap/icon_more_fenxiang"
-            android:text="8888"
+            android:gravity="center"
+            android:text="8"
             android:textSize="10sp" />
     </RelativeLayout>
 
@@ -276,9 +277,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv1"
-            android:layout_marginLeft="4dp"
             android:layout_marginTop="13dp"
             android:overScrollMode="never"
+            android:paddingLeft="16dp"
             android:scrollbars="none"></android.support.v7.widget.RecyclerView>
     </RelativeLayout>
 </LinearLayout>

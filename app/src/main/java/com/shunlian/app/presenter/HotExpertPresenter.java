@@ -5,9 +5,10 @@ import android.content.Context;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.WeekExpertEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.view.IAttentionView;
+import com.shunlian.app.view.IHotExpertView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,14 +16,12 @@ import java.util.Map;
 import retrofit2.Call;
 
 /**
- * Created by Administrator on 2018/10/17.
+ * Created by Administrator on 2018/10/22.
  */
 
-public class AttentionPresenter extends BasePresenter<IAttentionView> {
-    public static final int PAGE_SIZE = 10;
-    public String currentKeyword;
+public class HotExpertPresenter extends BasePresenter<IHotExpertView> {
 
-    public AttentionPresenter(Context context, IAttentionView iView) {
+    public HotExpertPresenter(Context context, IHotExpertView iView) {
         super(context, iView);
     }
 
@@ -41,54 +40,31 @@ public class AttentionPresenter extends BasePresenter<IAttentionView> {
 
     }
 
-    public void initPage() {
-        currentPage = 1;
-    }
-
-    public void getFocusblogs(boolean isFirst) {
-        getFocusblogs(isFirst, "");
-    }
-
-    public void getFocusblogs(boolean isFirst, String keyword) {
-        currentKeyword = keyword;
+    public void getHotExpertList() {
         Map<String, String> map = new HashMap<>();
-        if (!isEmpty(keyword)) {
-            map.put("key_word", keyword);
-        }
-        map.put("page", String.valueOf(currentPage));
-        map.put("page_size", String.valueOf(PAGE_SIZE));
         sortAndMD5(map);
 
-        Call<BaseEntity<HotBlogsEntity>> baseEntityCall = getApiService().focusblogs(map);
-        getNetData(isFirst, baseEntityCall, new SimpleNetDataCallback<BaseEntity<HotBlogsEntity>>() {
+        Call<BaseEntity<HotBlogsEntity>> baseEntityCall = getAddCookieApiService().hotExpertTopList(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<HotBlogsEntity>>() {
             @Override
             public void onSuccess(BaseEntity<HotBlogsEntity> entity) {
                 super.onSuccess(entity);
                 HotBlogsEntity hotBlogsEntity = entity.data;
-                isLoading = false;
-                iView.getFocusblogs(hotBlogsEntity, hotBlogsEntity.pager.page, hotBlogsEntity.pager.total_page);
-                currentPage = hotBlogsEntity.pager.page;
-                allPage = hotBlogsEntity.pager.total_page;
-                if (currentPage == 1) {
-                    iView.refreshFinish();
-                }
-                currentPage++;
+                iView.getHotExpertList(hotBlogsEntity.list);
             }
 
             @Override
             public void onFailure() {
-                isLoading = false;
                 super.onFailure();
             }
 
             @Override
             public void onErrorCode(int code, String message) {
-                isLoading = false;
                 super.onErrorCode(code, message);
+                Common.staticToast(message);
             }
         });
     }
-
 
     //1关注，2取消关注
     public void focusUser(int type, String memberId) {
@@ -148,16 +124,5 @@ public class AttentionPresenter extends BasePresenter<IAttentionView> {
                 Common.staticToast(message);
             }
         });
-    }
-
-    @Override
-    public void onRefresh() {
-        super.onRefresh();
-        if (!isLoading) {
-            isLoading = true;
-            if (currentPage <= allPage) {
-                getFocusblogs(false, currentKeyword);
-            }
-        }
     }
 }
