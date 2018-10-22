@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;

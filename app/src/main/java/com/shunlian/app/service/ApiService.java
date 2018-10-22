@@ -2655,4 +2655,11 @@ public interface ApiService {
      */
     @GET("discovery/blogfront/getActivitys")
     Call<BaseEntity<TopicEntity>>  getActivitys(@QueryMap Map<String,String> map);
+
+    /**
+     * 发表博客
+     * @return
+     */
+    @POST("discovery/publish/publish")
+    Call<BaseEntity<CommonEntity>> pubishBlog(@Body RequestBody body);
 }

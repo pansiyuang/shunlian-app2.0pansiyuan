@@ -56,6 +56,7 @@ public class LoaderLocalImgVideoAdapter extends BaseRecyclerAdapter<ImageVideo> 
         ImageVideo imageVideo = lists.get(position);
         if (imageVideo.videoDuration != 0) {
             if (isEmpty(imageVideo.coverPath)) {
+                //LogUtil.zhLogW("=======coverBitmap======="+imageVideo.coverBitmap);
                 mHolder.image.setImageBitmap(imageVideo.coverBitmap);
             }else {
                 GlideUtils.getInstance().loadOverrideImage(context,
@@ -131,6 +132,12 @@ public class LoaderLocalImgVideoAdapter extends BaseRecyclerAdapter<ImageVideo> 
                 if (mSelectionListener != null){
                     mSelectionListener.selection(getAdapterPosition(),
                             lists.get(getAdapterPosition()).isSelect);
+                }
+            });
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null){
+                    listener.onItemClick(v,getAdapterPosition());
                 }
             });
         }

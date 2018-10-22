@@ -37,7 +37,7 @@
         android:layout_marginBottom="2dp"
         android:layout_marginLeft="10dp"
         android:visibility="gone"
-        android:drawableLeft="@mipmap/icon_login_eyes_n"
+        android:drawableLeft="@mipmap/icon_video01_nor"
         android:drawablePadding="5dp"
         android:text="00:15"
         android:textColor="@color/white"

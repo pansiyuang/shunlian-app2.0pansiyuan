@@ -39,6 +39,7 @@ public class AddTopicPresenter extends BasePresenter {
             TopicEntity.ItemBean itemBean = itemBeans.get(msg.what);
             Intent intent = new Intent();
             intent.putExtra("title",itemBean.title);
+            intent.putExtra("id",itemBean.id);
             ((Activity)context).setResult(Activity.RESULT_OK,intent);
             ((Activity)context).finish();
         }

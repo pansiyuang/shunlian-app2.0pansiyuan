@@ -20,16 +20,17 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:background="@color/white_ash"
-                android:gravity="center"
+                android:gravity="left|top"
                 android:minHeight="116dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
-                android:text="快说说你的心得吧..."
+                android:hint="快说说你的心得吧..."
                 android:textColor="#767676"
                 android:textSize="17sp" />
 
@@ -43,19 +44,11 @@
                 android:textColor="@color/value_343434"
                 android:textSize="19sp" />
 
-            <GridView
-                android:id="@+id/gv_proof"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recy_pics"
+                android:padding="12dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="13dp"
-                android:horizontalSpacing="4dp"
-                android:numColumns="5"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="12dp"
-                android:background="@color/white"
-                android:verticalSpacing="4dp"/>
+                android:layout_height="match_parent"/>
 
             <View
                 android:layout_width="match_parent"
