@@ -10,7 +10,7 @@ import com.shunlian.app.bean.GetQrCardEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PQrCode;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IQrCode;
@@ -62,7 +62,7 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mtv_chakanxiaodian:
-                H5Act.startAct(this, getIntent().getStringExtra("managerUrl"), H5Act.MODE_SONIC);
+                H5X5Act.startAct(this, getIntent().getStringExtra("managerUrl"), H5X5Act.MODE_SONIC);
                 break;
             case R.id.mllayout_yaoqingweixin:
                 ShareInfoParam shareInfoParam = new ShareInfoParam();

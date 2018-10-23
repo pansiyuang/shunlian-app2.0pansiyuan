@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
@@ -37,8 +36,8 @@ import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
-import com.shunlian.app.ui.h5.H5Frag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
+import com.shunlian.app.ui.h5.H5X5Frag;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -407,7 +406,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (h5PlusFrag == null) {
             h5PlusFrag = (H5PlusFrag) fragmentMap.get(flags[1]);
             if (h5PlusFrag == null) {
-                h5PlusFrag = (H5PlusFrag) H5PlusFrag.getInstance(url, H5Frag.MODE_SONIC);
+                h5PlusFrag = (H5PlusFrag) H5PlusFrag.getInstance(url, H5X5Frag.MODE_SONIC);
                 fragmentMap.put(flags[1], h5PlusFrag);
             }
         } else {

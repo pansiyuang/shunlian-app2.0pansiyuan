@@ -19,7 +19,7 @@ import com.shunlian.app.bean.PlusMemberEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.ShareBigGifPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -438,7 +438,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
 
         if (baseInfo.role < 1) {
             SharedPrefUtil.saveSharedUserString("plus_role", String.valueOf(baseInfo.role));
-            H5Act.startAct(baseActivity, Constant.PLUS_ADD, H5Act.MODE_SONIC);
+            H5X5Act.startAct(baseActivity, Constant.PLUS_ADD, H5X5Act.MODE_SONIC);
         }
         if (baseInfo.role >= 2) {  //销售主管及以上身份才显示数据和表格
             rl_tab_one.setVisibility(View.VISIBLE);

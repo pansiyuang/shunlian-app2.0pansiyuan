@@ -20,7 +20,7 @@ import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.eventbus_bean.SelectMemberID;
 import com.shunlian.app.presenter.SelectRecommendPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -194,7 +194,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
        switch (v.getId()){
            case R.id.tv_help://帮助
                if (!isEmpty(mHelpUrl)){
-                   H5Act.startAct(this,mHelpUrl,H5Act.MODE_SONIC);
+                   H5X5Act.startAct(this,mHelpUrl,H5X5Act.MODE_SONIC);
                }
                break;
            case R.id.miv_cancale:
