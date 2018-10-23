@@ -4,16 +4,12 @@ import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.SpannableStringBuilder;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -29,7 +25,6 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
@@ -492,7 +487,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+                H5X5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
             }
         }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
             @Override
@@ -921,11 +916,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 SignInAct.startAct(baseContext);
                 break;
             case R.id.mllayout_huiyuanguanli:
-                H5Act.startAct(getContext(), managerUrl, H5Act.MODE_SONIC);
+                H5X5Act.startAct(getContext(), managerUrl, H5X5Act.MODE_SONIC);
                 //会员管理
                 break;
             case R.id.mllayout_huiyuandingdan:
-                H5Act.startAct(getContext(), orderUrl, H5Act.MODE_SONIC);
+                H5X5Act.startAct(getContext(), orderUrl, H5X5Act.MODE_SONIC);
                 //会员订单
                 break;
 //            case R.id.mtv_chakan:

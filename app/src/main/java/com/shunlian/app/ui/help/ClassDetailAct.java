@@ -6,11 +6,10 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
-import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ClassDetailPresenter;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IClassDetailView;
 
@@ -22,7 +21,7 @@ import org.greenrobot.eventbus.ThreadMode;
  * Created by Administrator on 2018/5/4.
  */
 
-public class ClassDetailAct extends H5Act implements IClassDetailView, MessageCountManager.OnGetMessageListener {
+public class ClassDetailAct extends H5X5Act implements IClassDetailView, MessageCountManager.OnGetMessageListener {
 
 
     private ClassDetailPresenter mPresenter;

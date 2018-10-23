@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.ThreadMode;
  * Created by Administrator on 2017/12/26.
  */
 
-public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.OnGetMessageListener {
+public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManager.OnGetMessageListener {
 
     private ShareInfoParam shareInfoParam;
     private MessageCountManager messageCountManager;
@@ -43,6 +43,7 @@ public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.
     protected void jsCallback(H5CallEntity h5CallEntity) {
 
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         String s = messageCountManager.setTextCount(tv_msg_count);
@@ -92,7 +93,7 @@ public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.
         if (!isEmpty(h5Url)) {
             visible(rl_title_more);
             if (h5Url.startsWith(InterentTools.H5_HOST + "special")) {
-                ph5 = new PH5(this,this);
+                ph5 = new PH5(this, this);
                 specialId = h5Url.substring(h5Url.indexOf("special/") + "special/".length());
                 ph5.getShareInfo(specialId);
             } else if (h5Url.startsWith(InterentTools.H5_HOST + "activity")) {
@@ -106,9 +107,9 @@ public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void loginRefresh(DefMessageEvent event){
-        if (event.loginSuccess && ph5 != null){
-            ph5.getShareInfo(ph5.special,specialId);
+    public void loginRefresh(DefMessageEvent event) {
+        if (event.loginSuccess && ph5 != null) {
+            ph5.getShareInfo(ph5.special, specialId);
         }
     }
 
@@ -125,20 +126,20 @@ public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.
 
     @Override
     public void setShareInfo(ShareEntity shareEntity) {
-        if (rl_title_more!=null){
+        if (rl_title_more != null) {
             visible(rl_title_more);
             rl_title_more.setOnClickListener(v -> {
                 quick_actions.setVisibility(View.VISIBLE);
-                if (shareEntity!=null&&shareEntity.share!=null){
-                    shareInfoParam=new ShareInfoParam();
-                    shareInfoParam.desc=shareEntity.share.content;
-                    shareInfoParam.title=shareEntity.share.title;
-                    shareInfoParam.img=shareEntity.share.pic;
-                    shareInfoParam.shareLink=shareEntity.share.share_url;
-                    shareInfoParam.special_img_url=shareEntity.share.url;
+                if (shareEntity != null && shareEntity.share != null) {
+                    shareInfoParam = new ShareInfoParam();
+                    shareInfoParam.desc = shareEntity.share.content;
+                    shareInfoParam.title = shareEntity.share.title;
+                    shareInfoParam.img = shareEntity.share.pic;
+                    shareInfoParam.shareLink = shareEntity.share.share_url;
+                    shareInfoParam.special_img_url = shareEntity.share.url;
                     quick_actions.special();
                     quick_actions.shareInfo(shareInfoParam);
-                }else {
+                } else {
                     quick_actions.order();
                 }
             });

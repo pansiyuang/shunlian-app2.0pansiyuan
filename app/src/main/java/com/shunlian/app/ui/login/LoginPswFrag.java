@@ -19,13 +19,11 @@ import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -239,8 +237,8 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     @OnClick(R.id.llayout_clause)
     public void showClause(){
-        H5Act.startAct(baseActivity, InterentTools.H5_HOST
-                +LoginAct.TERMS_OF_SERVICE,H5Act.MODE_SONIC);
+        H5X5Act.startAct(baseActivity, InterentTools.H5_HOST
+                +LoginAct.TERMS_OF_SERVICE,H5X5Act.MODE_SONIC);
     }
 
     @Override

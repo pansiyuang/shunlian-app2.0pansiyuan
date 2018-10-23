@@ -77,7 +77,6 @@ import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.fragment.SortAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpOneAct;
@@ -247,7 +246,7 @@ public class Common {
                 ((Activity) context).finish();
                 break;
             case "noTitleUrl":
-                H5Act.startAct(context, params[0], H5Act.MODE_SONIC,"noTitle");
+                H5X5Act.startAct(context, params[0], H5X5Act.MODE_SONIC,"noTitle");
                 break;
             case "taskSystems":
                 TaskCenterAct.startAct(context);
@@ -443,7 +442,7 @@ public class Common {
             case "special":
                 String url = InterentTools.H5_HOST + "special/" + params[0];
 //                String url = InterentTools.H5_HOST + "special/127";
-                H5SpecialAct.startAct(context, url, H5Act.MODE_SONIC);
+                H5SpecialAct.startAct(context, url, H5X5Act.MODE_SONIC);
                 break;
             case "url":
 //                LogUtil.augusLogW("uiui-"+params[0]);
