@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_toRightOf="@+id/miv_tab_discover"
+                android:layout_alignParentRight="true"
                 android:background="@drawable/rounded_corner_pink_100"
                 android:gravity="center"
                 android:minWidth="16dp"
