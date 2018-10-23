@@ -5,16 +5,27 @@
     android:clipChildren="false"
     android:orientation="vertical">
 
+
     <com.shunlian.app.widget.MyFrameLayout
         android:id="@+id/fl_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layout_bottom" />
+        android:layout_above="@id/layout_bottom"/>
+
+    <include
+        android:id="@+id/layout_bottom"
+        layout="@layout/layout_main_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:clipChildren="false"
+        />
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_hint"
         android:layout_width="90dp"
         android:layout_height="30dp"
+        android:layout_marginBottom="-6dp"
         android:layout_above="@id/layout_bottom"
         android:layout_alignParentRight="true" />
 
@@ -29,11 +40,4 @@
         android:textSize="18sp"
         android:visibility="gone" />
 
-    <include
-        android:id="@+id/layout_bottom"
-        layout="@layout/layout_main_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:clipChildren="false" />
 </RelativeLayout>
