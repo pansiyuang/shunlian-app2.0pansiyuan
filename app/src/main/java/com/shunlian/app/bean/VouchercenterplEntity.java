@@ -16,6 +16,8 @@ public class VouchercenterplEntity {
     public String page_size;
     public String total_page;
     public String banner;
+    public String width;
+    public String height;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class MData {

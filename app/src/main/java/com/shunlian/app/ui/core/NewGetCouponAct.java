@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
@@ -20,6 +21,7 @@ import com.shunlian.app.presenter.PGetCoupon;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IGetCoupon;
 import com.shunlian.app.widget.MyImageView;
@@ -247,6 +249,19 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     @Override
     public void setpingData(VouchercenterplEntity vouchercenterplEntity) {
         if (!isEmpty(vouchercenterplEntity.banner)) {
+            int width;
+            int height;
+            int screenWidth = Common.getScreenWidth(baseAct);
+            try {
+                width = Integer.parseInt(vouchercenterplEntity.width);
+                height = Integer.parseInt(vouchercenterplEntity.height);
+            } catch (Exception e) {
+                width = 750;
+                height = 200;
+                LogUtil.augusLogW(vouchercenterplEntity.width + "---h：" + vouchercenterplEntity.height);
+            }
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(screenWidth, ((screenWidth * height) / width));
+            miv_logo.setLayoutParams(params);
             GlideUtils.getInstance().loadImageChang(baseAct, miv_logo, vouchercenterplEntity.banner);
         }
         if (isEmpty(vouchercenterplEntity.seller_voucher)) {
