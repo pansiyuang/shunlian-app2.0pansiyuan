@@ -215,7 +215,6 @@
     <color name="value_f9f9f9">#f9f9f9</color>
 
 
-
     <!--帮助中心-->
     <color name="value_555555">#555555</color>
     <color name="value_F7F7F7">#F7F7F7</color>
@@ -264,6 +263,13 @@
     <color name="value_d9">#d9d9d9</color>
     <color name="value_ebd9c0">#EBD9C0</color>
     <color name="value_BB913E">#BB913E</color>
+
+    <!--新版发现-->
+    <color name="value_343434">#343434</color>
+    <color name="value_007AFF">#007AFF</color>
+    <color name="value_3673FB">#3673FB</color>
+    <color name="value_C0BABA">#C0BABA</color>
+    <color name="value_2D2D2D">#2D2D2D</color>
 </resources>
 
 

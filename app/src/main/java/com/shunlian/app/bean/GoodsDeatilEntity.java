@@ -904,6 +904,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String reduced;
         public String limit_min_buy;//团购商品最少购买数
         public String big_label;//团购商品最少购买数
+        public int share_num;
 
         public Goods() {
         }
@@ -961,6 +962,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.reduced);
             dest.writeString(this.limit_min_buy);
             dest.writeString(this.big_label);
+            dest.writeInt(this.share_num);
         }
 
         protected Goods(Parcel in) {
@@ -1010,6 +1012,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.reduced = in.readString();
             this.limit_min_buy = in.readString();
             this.big_label = in.readString();
+            this.share_num = in.readInt();
         }
 
         public static final Creator<Goods> CREATOR = new Creator<Goods>() {
