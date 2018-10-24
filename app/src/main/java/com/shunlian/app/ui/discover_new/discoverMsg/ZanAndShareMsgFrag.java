@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover_new;
+package com.shunlian.app.ui.discover_new.discoverMsg;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -7,17 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.adapter.DiscoverActivityAdapter;
-import com.shunlian.app.bean.DiscoverActivityEntity;
-import com.shunlian.app.presenter.ActivityPresenter;
-import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.adapter.ZanShareMsgAdapter;
+import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ZanShareEntity;
+import com.shunlian.app.presenter.ZanSharePresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
-import com.shunlian.app.view.IActivityView;
-import com.shunlian.app.view.IView;
+import com.shunlian.app.view.IZanShareView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
-import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,28 +24,28 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * Created by Administrator on 2018/10/15.
+ * Created by Administrator on 2018/10/22.
  */
 
-public class ActivityFrag extends BaseLazyFragment implements IView, IActivityView {
+public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareView {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.lay_refresh)
-    NestedRefreshLoadMoreLayout lay_refresh;
+    @BindView(R.id.refreshview)
+    SlRefreshView refreshview;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
-    private ActivityPresenter mPresenter;
+    private ZanSharePresenter mPresenter;
     private LinearLayoutManager manager;
-    private DiscoverActivityAdapter mAdapter;
-    private List<DiscoverActivityEntity.Activity> activityList;
+    private List<ZanShareEntity.Msg> msgList;
+    private ZanShareMsgAdapter mAdapter;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.activity_frag, null, false);
+        View view = inflater.inflate(R.layout.frag_zan_share, null, false);
         return view;
     }
 
@@ -56,9 +55,19 @@ public class ActivityFrag extends BaseLazyFragment implements IView, IActivityVi
 
     @Override
     protected void initListener() {
-        lay_refresh.setOnRefreshListener(() -> {
-            mPresenter.initPage();
-            mPresenter.getActivities(true);
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mPresenter != null) {
+                    mPresenter.initPage();
+                    mPresenter.getZanShareList(true);
+                }
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
         });
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -77,20 +86,20 @@ public class ActivityFrag extends BaseLazyFragment implements IView, IActivityVi
         super.initListener();
     }
 
-
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-        NestedSlHeader header = new NestedSlHeader(getContext());
-        lay_refresh.setRefreshHeaderView(header);
-        recycler_list.setNestedScrollingEnabled(false);
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
 
-        mPresenter = new ActivityPresenter(getActivity(), this);
-        mPresenter.getActivities(true, "", "1");
-        activityList = new ArrayList<>();
+        msgList = new ArrayList<>();
+        mPresenter = new ZanSharePresenter(getActivity(), this);
+        mPresenter.getZanShareList(true);
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common)
+                .setText("还没有关注你的粉丝哟")
+                .setButtonText(null);
     }
 
     @Override
@@ -104,31 +113,28 @@ public class ActivityFrag extends BaseLazyFragment implements IView, IActivityVi
     }
 
     @Override
-    public void getActivities(DiscoverActivityEntity activityEntity, int page, int totalPage) {
+    public void getMsgList(List<ZanShareEntity.Msg> list, int page, int totalPage) {
+        refreshview.stopRefresh(true);
         if (page == 1) {
-            activityList.clear();
+            msgList.clear();
         }
-        if (!isEmpty(activityEntity.list)) {
-            activityList.addAll(activityEntity.list);
+        if (!isEmpty(list)) {
+            msgList.addAll(list);
         }
+
+        if (page == 1 && isEmpty(msgList)) {
+            nei_empty.setVisibility(View.VISIBLE);
+            recycler_list.setVisibility(View.GONE);
+        } else {
+            nei_empty.setVisibility(View.GONE);
+            recycler_list.setVisibility(View.VISIBLE);
+        }
+
         if (mAdapter == null) {
-            mAdapter = new DiscoverActivityAdapter(getActivity(), activityList);
+            mAdapter = new ZanShareMsgAdapter(getActivity(), msgList);
             recycler_list.setAdapter(mAdapter);
-            mAdapter.setOnItemClickListener((view, position) -> {
-                ActivityDetailActivity.startAct(getActivity(), activityList.get(position).id);
-            });
         }
         mAdapter.setPageLoading(page, totalPage);
         mAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * 刷新完成
-     */
-    @Override
-    public void refreshFinish() {
-        if (lay_refresh != null) {
-            lay_refresh.setRefreshing(false);
-        }
     }
 }

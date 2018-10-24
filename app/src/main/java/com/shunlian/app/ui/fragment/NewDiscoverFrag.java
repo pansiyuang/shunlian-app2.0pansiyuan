@@ -12,9 +12,15 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.discover_new.ActivityFrag;
+import com.shunlian.app.ui.discover_new.DiscoverSearchActivity;
 import com.shunlian.app.ui.discover_new.HotBlogFrag;
 import com.shunlian.app.ui.discover_new.AttentionFrag;
+import com.shunlian.app.ui.discover_new.MyFansActivity;
+import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.lang.reflect.Field;
@@ -32,14 +38,21 @@ public class NewDiscoverFrag extends BaseFragment {
     @BindView(R.id.tab_layout)
     TabLayout tab_layout;
 
+    @BindView(R.id.miv_icon)
+    MyImageView miv_icon;
+
     @BindView(R.id.view_pager)
     ViewPager view_pager;
+
+    @BindView(R.id.miv_search)
+    MyImageView miv_search;
 
     private String[] titles = {"关注", "精选", "活动"};
     private List<BaseFragment> goodsFrags;
     private AttentionFrag attentionFrag;
     private HotBlogFrag hotBlogFrag;
     private ActivityFrag activityFrag;
+    private String avatar;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -60,6 +73,19 @@ public class NewDiscoverFrag extends BaseFragment {
         initFrags();
         tab_layout.setupWithViewPager(view_pager);
         reflex(tab_layout);
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        miv_icon.setOnClickListener(v -> {
+            if (!isEmpty(avatar)) {
+                MyFansActivity.startAct(getActivity());
+            }
+        });
+        miv_search.setOnClickListener(v -> {
+            DiscoverSearchActivity.startActivity(getActivity());
+        });
     }
 
     public void initFrags() {
@@ -106,5 +132,15 @@ public class NewDiscoverFrag extends BaseFragment {
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            avatar = SharedPrefUtil.getSharedUserString("personal_avatar", "");
+            LogUtil.httpLogW("avatar:" + avatar);
+            GlideUtils.getInstance().loadCircleAvar(baseContext, miv_icon, avatar);
+        }
+        super.onHiddenChanged(hidden);
     }
 }

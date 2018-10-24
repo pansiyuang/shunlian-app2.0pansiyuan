@@ -942,9 +942,29 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover_new.VideoGoodPlayActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false" />
+            android:name=".ui.discover_new.MyPageActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.MyFansActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.ActivityDetailActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.DiscoverMsgActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.DiscoverSearchActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.DiscoverSearchResultActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

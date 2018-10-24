@@ -1,22 +1,18 @@
 package com.shunlian.app.ui.discover_new;
 
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotExpertAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.HotExpertPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IHotExpertView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +83,9 @@ public class HotExpertFrag extends BaseLazyFragment implements IHotExpertView, H
             if (memberId.equals(blog.member_id)) {
                 if (blog.is_focus == 0) {
                     blog.is_focus = 1;
+                    blog.fans_num++;
                 } else {
+                    blog.fans_num--;
                     blog.is_focus = 0;
                 }
             }
