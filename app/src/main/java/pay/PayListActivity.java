@@ -375,6 +375,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     @Override
     public void payList(final List<PayListEntity.PayTypes> payTypes) {
+        if (recy_pay==null)
+            return;
         PayListAdapter adapter = new PayListAdapter(this, false, payTypes);
         recy_pay.setAdapter(adapter);
 

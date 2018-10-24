@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -13,7 +12,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.presenter.PBalancePaySetOne;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.IBalancePaySetOne;
@@ -72,7 +71,7 @@ public class AlipayAddAct extends BaseActivity implements View.OnClickListener, 
                 pBalancePaySetOne.getCode();
                 break;
             case R.id.mtv_xieyi:
-                H5Act.startAct(this,Constant.ZHIFUBAOURL,H5Act.MODE_SONIC);
+                H5X5Act.startAct(this,Constant.ZHIFUBAOURL,H5X5Act.MODE_SONIC);
                 break;
             case R.id.mtv_next:
                 String account_name=et_shengfengzheng.getText().toString();

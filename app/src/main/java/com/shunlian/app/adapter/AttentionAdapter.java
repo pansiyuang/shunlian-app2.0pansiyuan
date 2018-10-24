@@ -15,6 +15,7 @@ import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 
 /**
@@ -24,6 +25,7 @@ import butterknife.BindView;
 public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.RecomandFocus> {
 
     public static final int HEAD_LAYOUT = 10001;
+    private OnFocusListener onFocusListener;
 
     public AttentionAdapter(Context context, List<HotBlogsEntity.RecomandFocus> lists) {
         super(context, false, lists);
@@ -70,6 +72,11 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
 
     public void handleEmpty(RecyclerView.ViewHolder holder) {
         EmptyViewHolder emptyViewHolder = (EmptyViewHolder) holder;
+        if (isEmpty(lists)) {
+            emptyViewHolder.tv_attention_title.setVisibility(View.GONE);
+        } else {
+            emptyViewHolder.tv_attention_title.setVisibility(View.VISIBLE);
+        }
     }
 
     public void handlerItem(RecyclerView.ViewHolder holder, int position) {
@@ -78,6 +85,22 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
         GlideUtils.getInstance().loadCircleImage(context, attentionViewholder.miv_icon, recomandFocus.avatar);
         attentionViewholder.tv_name.setText(recomandFocus.nickname);
         attentionViewholder.tv_content.setText(recomandFocus.signature);
+
+        attentionViewholder.tv_attention.setOnClickListener(v -> {
+            if (onFocusListener != null) {
+                onFocusListener.onFocus(recomandFocus.focus_status, recomandFocus.member_id);
+            }
+        });
+
+        if (recomandFocus.focus_status == 1) {//已经关注
+            attentionViewholder.tv_attention.setBackgroundDrawable(null);
+            attentionViewholder.tv_attention.setText("已关注");
+            attentionViewholder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+        } else {
+            attentionViewholder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
+            attentionViewholder.tv_attention.setText("关注");
+            attentionViewholder.tv_attention.setTextColor(getColor(R.color.pink_color));
+        }
     }
 
     public class AttentionViewholder extends BaseRecyclerViewHolder {
@@ -101,8 +124,20 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
 
     public class EmptyViewHolder extends BaseRecyclerViewHolder {
 
+        @BindView(R.id.tv_attention_title)
+        TextView tv_attention_title;
+
         public EmptyViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public void setOnFocusListener(OnFocusListener listener) {
+        this.onFocusListener = listener;
+    }
+
+    public interface OnFocusListener {
+
+        void onFocus(int isFocus, String memberId);
     }
 }

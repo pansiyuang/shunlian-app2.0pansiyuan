@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mllayout_root"
+    android:background="@color/transparent">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_unbind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/img_tixian_yindao"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_hint"
+        android:layout_width="278dp"
+        android:layout_height="wrap_content"
+        android:text="@string/balance_dianjijiechu"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="22dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/miv_unbind"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_sure"
+        android:layout_width="130dp"
+        android:layout_height="36dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_transparent_border"
+        android:text="@string/balance_wozhidaole"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="68dp"
+        android:layout_below="@id/mtv_hint"/>
+</com.shunlian.app.widget.MyRelativeLayout>

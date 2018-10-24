@@ -2,6 +2,8 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -80,14 +82,15 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
             blogViewHolder.tv_tag.setText(blog.activity_title);
             blogViewHolder.tv_content.setText(blog.text);
             blogViewHolder.tv_address.setText(blog.place);
-            blogViewHolder.tv_download.setText(blog.down_num);
-            blogViewHolder.tv_zan.setText(blog.praise_num);
+            blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
+            blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
 
             if (!isEmpty(blog.related_goods)) {
                 GoodsDeatilEntity.Goods goods = blog.related_goods.get(0);
                 GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_goods_icon, goods.thumb);
                 blogViewHolder.tv_goods_name.setText(goods.title);
-                blogViewHolder.tv_goods_price.setText(R.string.common_yuan + goods.price);
+                blogViewHolder.tv_goods_price.setText(getString(R.string.common_yuan) + goods.price);
+                blogViewHolder.tv_share_count.setText(String.valueOf(goods.share_num));
             }
             if (blog.type == 1) {
                 BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, null, blog.pics, mActivity
@@ -117,9 +120,23 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
             }
 
+            if (blog.is_praise == 1) {
+                blogViewHolder.tv_zan.setClickable(false);
+                setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
+            } else {
+                blogViewHolder.tv_zan.setClickable(true);
+                setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
+            }
+
             blogViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
                     mCallBack.toFocusUser(blog.is_focus, blog.member_id);
+                }
+            });
+
+            blogViewHolder.tv_zan.setOnClickListener(v -> {
+                if (mCallBack != null) {
+                    mCallBack.toPraiseBlog(blog.id);
                 }
             });
 
@@ -129,6 +146,13 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 blogViewHolder.rl_attention.setVisibility(View.GONE);
             }
         }
+    }
+
+    public void setPraiseImg(TextView textView, @DrawableRes int drawableRes) {
+        Drawable drawable = context.getResources().getDrawable(drawableRes);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());// 设置边界
+        // param 左上右下
+        textView.setCompoundDrawables(drawable, null, null, null);
     }
 
     public void showAttentionList(List<HotBlogsEntity.RecomandFocus> list, RecyclerView.ViewHolder holder) {
@@ -143,6 +167,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
             blogViewHolder.recylcer_attention.setLayoutManager(manager);
             blogViewHolder.recylcer_attention.setAdapter(attentionMemberAdapter);
             blogViewHolder.rl_attention.setVisibility(View.VISIBLE);
+            attentionMemberAdapter.setOnFocusListener((isFocus, memberId) -> {
+                if (mCallBack != null) {
+                    mCallBack.toFocusMember(isFocus, memberId);
+                }
+            });
+        }
+    }
+
+    public void MemberAdapterNotifyDataSetChanged() {
+        if (attentionMemberAdapter != null) {
+            attentionMemberAdapter.notifyDataSetChanged();
         }
     }
 
@@ -221,5 +256,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
 
     public interface OnAdapterCallBack {
         void toFocusUser(int isFocus, String memberId);
+
+        void toFocusMember(int isFocus, String memberId);
+
+        void toPraiseBlog(String blogId);
     }
 }

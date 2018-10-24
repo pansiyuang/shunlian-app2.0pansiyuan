@@ -40,6 +40,7 @@ public class CommonEntity {
     public String free_amount_des;
     public String key;
     public String error;
+    public String dialog_text;
 
     public String mobile;//手机号
     public String qr_img_for_app_down;//下载app

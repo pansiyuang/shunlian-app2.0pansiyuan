@@ -9,7 +9,7 @@ import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.presenter.PBalanceMain;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.IBalanceMain;
 import com.shunlian.app.widget.MyImageView;
@@ -45,9 +45,9 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
 
     private PBalanceMain pBalanceMain;
     private BalanceInfoEntity data;
-    private boolean isBack,isBalance=false;
+    private boolean isBack, isBalance = false;
 
-    public static void startAct(Context context,boolean isBack) {
+    public static void startAct(Context context, boolean isBack) {
         Intent intent = new Intent(context, BalanceMainAct.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("isBack", isBack);
@@ -70,27 +70,27 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.miv_close:
                 if (isBack)
-                MainActivity.startAct(this,"personCenter");
+                    MainActivity.startAct(this, "personCenter");
                 finish();
                 break;
             case R.id.mtv_count:
                 if (data != null)
-                    BalanceXQAct.startAct(baseAct, data,false);
+                    BalanceXQAct.startAct(baseAct, data, false);
                 break;
             case R.id.mtv_yueminxi:
                 BalanceDetailAct.startAct(baseAct);
                 break;
             case R.id.mrlayout_zhifushezhi:
-                if (data!=null)
-                BalancePaySetAct.startAct(this,data.is_set_password,false);
+                if (data != null)
+                    BalancePaySetAct.startAct(this, data.is_set_password, false);
                 break;
             case R.id.mrlayout_tixiandao:
-                if (data!=null)
-                AlipayMyAct.startAct(this,data.havePayAccount,!data.is_set_password,false,data.account_number);
+                if (data != null)
+                    AlipayMyAct.startAct(this, data.havePayAccount, !data.is_set_password, false, data.account_number);
                 break;
             case R.id.mrlayout_licai:
-                if (data!=null)
-                H5Act.startAct(this,data.profit_help_url,H5Act.MODE_SONIC);
+                if (data != null)
+                    H5X5Act.startAct(this, data.profit_help_url, H5X5Act.MODE_SONIC);
                 break;
         }
     }
@@ -110,13 +110,13 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        isBack=getIntent().getBooleanExtra("isBack", false);
-        isBalance=Constant.ISBALANCE;
-        if (isBalance){
+        isBack = getIntent().getBooleanExtra("isBack", false);
+        isBalance = Constant.ISBALANCE;
+        if (isBalance) {
             mtv_title.setText(getStringResouce(R.string.balance_yue));
             mtv_yueminxi.setVisibility(View.VISIBLE);
             mtv_keyong.setText(getStringResouce(R.string.balance_keyong));
-        }else {
+        } else {
             mtv_title.setText(getStringResouce(R.string.balance_shouyitixian));
             mtv_yueminxi.setVisibility(View.GONE);
             mtv_keyong.setText(getStringResouce(R.string.balance_keyongshouyi));
@@ -136,15 +136,15 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void setApiData(BalanceInfoEntity data) {
-        this.data=data;
+        this.data = data;
         mtv_count.setText(data.balance);
-        Constant.MOBILE=data.mobile;
+        Constant.MOBILE = data.mobile;
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         if (isBack)
-        MainActivity.startAct(this,"personCenter");
+            MainActivity.startAct(this, "personCenter");
     }
 }

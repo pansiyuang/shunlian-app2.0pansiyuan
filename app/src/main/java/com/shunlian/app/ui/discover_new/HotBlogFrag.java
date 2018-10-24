@@ -189,4 +189,13 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     public void toFocusUser(int isFocus, String memberId) {
         hotBlogPresenter.focusUser(isFocus, memberId);
     }
+
+    @Override
+    public void toFocusMember(int isFocus, String memberId) {
+    }
+
+    @Override
+    public void toPraiseBlog(String blogId) {
+
+    }
 }

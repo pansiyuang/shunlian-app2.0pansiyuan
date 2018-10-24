@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AttentionAdapter;
@@ -16,7 +17,6 @@ import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.HorizonItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IAttentionView;
-import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 
@@ -29,13 +29,16 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class AttentionFrag extends BaseLazyFragment implements IAttentionView {
+public class AttentionFrag extends BaseLazyFragment implements IAttentionView, HotBlogAdapter.OnAdapterCallBack, AttentionAdapter.OnFocusListener {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
     @BindView(R.id.recycler_icons)
     RecyclerView recycler_icons;
+
+    @BindView(R.id.rl_expert_rank)
+    RelativeLayout rl_expert_rank;
 
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
@@ -48,6 +51,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView {
     private AttentionAdapter attentionAdapter;
     private TieziAvarAdapter tieziAvarAdapter;
     private List<HotBlogsEntity.RecomandFocus> recomandFocusList;
+    private int focusType; //0 关注blog列表用户,1关注推荐关注用户,2,关注空页面推荐关注用户
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -98,6 +102,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView {
                 }
             }
         });
+        rl_expert_rank.setOnClickListener(v -> HotExpertRankActivity.startActivity(getActivity()));
         super.initListener();
     }
 
@@ -131,16 +136,64 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView {
         if (isEmpty(blogList) && currentPage == 1) { //没有关注的用户并且当前是第一次获取数据
             if (attentionAdapter == null) {
                 attentionAdapter = new AttentionAdapter(getActivity(), recomandFocusList);
-                recycler_list.setAdapter(attentionAdapter);
+                attentionAdapter.setOnFocusListener(this);
             }
+            recycler_list.setAdapter(attentionAdapter);
         } else {
             if (hotBlogAdapter == null) {
                 hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList);
-                recycler_list.setAdapter(hotBlogAdapter);
+                hotBlogAdapter.setAdapterCallBack(this);
             }
+            recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setPageLoading(currentPage, totalPage);
             hotBlogAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void focusUser(int isFocus, String memberId) {
+        switch (focusType) {
+            case 0:
+                for (HotBlogsEntity.Blog blog : blogList) {
+                    if (memberId.equals(blog.member_id)) {
+                        if (blog.is_focus == 0) {
+                            blog.is_focus = 1;
+                        } else {
+                            blog.is_focus = 0;
+                        }
+                    }
+                }
+                hotBlogAdapter.notifyDataSetChanged();
+                break;
+            case 1:
+            case 2:
+                for (HotBlogsEntity.RecomandFocus recomandFocus : recomandFocusList) {
+                    if (memberId.equals(recomandFocus.member_id)) {
+                        if (recomandFocus.focus_status == 0) {
+                            recomandFocus.focus_status = 1;
+                        } else {
+                            recomandFocus.focus_status = 0;
+                        }
+                    }
+                    hotBlogAdapter.MemberAdapterNotifyDataSetChanged();
+                    if (attentionAdapter == null) {
+                        return;
+                    }
+                    attentionAdapter.notifyDataSetChanged();
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void praiseBlog(String blogId) {
+        for (HotBlogsEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.is_praise = 1;
+                blog.praise_num++;
+            }
+        }
+        hotBlogAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -162,5 +215,28 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView {
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    public void toFocusUser(int isFocus, String memberId) {
+        focusType = 0;
+        mPresenter.focusUser(isFocus, memberId);
+    }
+
+    @Override
+    public void toFocusMember(int isFocus, String memberId) {
+        focusType = 1;
+        mPresenter.focusUser(isFocus, memberId);
+    }
+
+    @Override
+    public void toPraiseBlog(String blogId) {
+        mPresenter.praiseBlos(blogId);
+    }
+
+    @Override
+    public void onFocus(int isFocus, String memberId) {
+        focusType = 2;
+        mPresenter.focusUser(isFocus, memberId);
     }
 }

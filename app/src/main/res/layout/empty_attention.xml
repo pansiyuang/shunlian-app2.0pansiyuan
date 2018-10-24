@@ -32,6 +32,7 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/tv_attention_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
