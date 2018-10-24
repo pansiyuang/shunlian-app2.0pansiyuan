@@ -927,7 +927,10 @@
             android:name=".ui.discover.VideoPlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
-
+        <activity
+            android:name=".ui.discover.VideoGoodPlayActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
         <activity
             android:name=".ui.LuckWheelPanActivity"
             android:exported="false" />
