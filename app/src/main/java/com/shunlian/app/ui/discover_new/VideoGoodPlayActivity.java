@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
@@ -51,7 +52,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/7/23.
  */
 
-public class VideoGoodPlayActivity extends BaseActivity implements IChosenView {
+public class VideoGoodPlayActivity extends BaseActivity implements IChosenView ,GoodVideoPlayer.updateParseAttent{
 
     @BindView(R.id.customVideoPlayer)
     GoodVideoPlayer customVideoPlayer;
@@ -348,4 +349,20 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView {
                 }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
         promptDialog.show();
     }
+
+    @Override
+    public void updateParse(boolean isParse, TextView tv_dainzan) {
+
+    }
+
+    @Override
+    public void updateAttent(boolean isAttent,TextView tv_attent) {
+
+    }
+
+    public interface updateParseAttentSuccess{
+        void updateParseState(boolean isParse);
+        void updateAttentState(boolean isAttent);
+    }
+
 }

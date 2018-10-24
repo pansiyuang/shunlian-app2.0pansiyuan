@@ -50,8 +50,8 @@ public class HotBlogsEntity {
         public int down_num;
         public int fans_num;
         public int share_num;
-        public int is_praise;
-        public int is_focus;
+        public int is_praise;//点赞 1：已点赞
+        public int is_focus;//关注1：已关注
         public String time_desc;
         public int total_share_num;
         public int is_self;

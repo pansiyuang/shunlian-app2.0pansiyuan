@@ -65,7 +65,7 @@ import cn.jzvd.JZUtils;
 import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerManager;
 
-public class GoodVideoPlayer extends JZVideoPlayer {
+public class GoodVideoPlayer extends JZVideoPlayer  {
 
     protected static Timer DISMISS_CONTROL_VIEW_TIMER;
 
@@ -111,6 +111,7 @@ public class GoodVideoPlayer extends JZVideoPlayer {
     private ImageView img_goods_icon;
     private TextView tv_goods_name,tv_goods_price,tv_old_price;
 
+    private HotBlogsEntity.Blog blog;
     public GoodVideoPlayer(Context context) {
         super(context);
         //LogUtil.zhLogW("=====SmallVideoPlayer==1========");
@@ -177,6 +178,12 @@ public class GoodVideoPlayer extends JZVideoPlayer {
      * 设置商品用户信息信息
      */
     public void setGoodUserInfo(HotBlogsEntity.Blog blog){
+           this.blog = blog;
+           if(blog.is_praise==1) {//已点赞
+
+            }else{
+
+            }
             tv_dianzan.setText(blog.praise_num+"");
             tv_share.setText(blog.share_num+"");
             tv_down.setText(blog.down_num+"");
@@ -194,7 +201,7 @@ public class GoodVideoPlayer extends JZVideoPlayer {
                         image_user_head.setImageResource(R.mipmap.img_set_defaulthead);
                     }
                 });
-           tv_user_attent.setText(blog.is_self==0?"关注":"取消关注");
+           tv_user_attent.setText(blog.is_focus==0?"关注":"取消关注");
            if(blog.related_goods!=null&&blog.related_goods.size()>0) {
                GlideUtils.getInstance().loadCornerImage(getContext(), img_goods_icon, blog.related_goods.get(0).thumb, 4);
                if(blog.related_goods.get(0).title!=null)
@@ -1150,4 +1157,13 @@ public class GoodVideoPlayer extends JZVideoPlayer {
             }
         }
     };
+
+    /**
+     * 点赞，和关注更新
+     */
+    public interface updateParseAttent{
+        void updateParse(boolean isParse,TextView tv_dainzan);
+        void updateAttent(boolean isAttent,TextView tv_attent);
+    }
+
 }
