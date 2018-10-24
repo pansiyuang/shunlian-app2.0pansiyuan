@@ -2677,8 +2677,44 @@ public interface ApiService {
     Call<BaseEntity<WeekExpertEntity>> weekExpertList(@QueryMap Map<String, String> map);
 
     /**
-     * 周达人榜
+     * 精选达人榜
      */
     @GET("discovery/blogfront/hotExpertTopList")
     Call<BaseEntity<HotBlogsEntity>> hotExpertTopList(@QueryMap Map<String, String> map);
+
+    /**
+     * 收藏列表/自己发表的文章
+     */
+    @GET("discovery/discoveryuser/getblogs")
+    Call<BaseEntity<HotBlogsEntity>> getblogs(@QueryMap Map<String, String> map);
+
+    /**
+     * 我的粉丝列表
+     */
+    @GET("discovery/discoveryuser/fansList")
+    Call<BaseEntity<FansEntity>> fansList(@QueryMap Map<String, String> map);
+
+    /**
+     * 活动详情
+     */
+    @GET("discovery/blogfront/getactivitydetail")
+    Call<BaseEntity<HotBlogsEntity>> getActivityDetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 点赞与分享
+     */
+    @GET("discovery/message/praisesharelist")
+    Call<BaseEntity<ZanShareEntity>> getPraiseShareList(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注消息
+     */
+    @GET("discovery/message/attention")
+    Call<BaseEntity<EmptyEntity>> getAttentionMsg(@QueryMap Map<String, String> map);
+
+    /**
+     * 搜索关键词
+     */
+    @GET("discovery/discoveryuser/getHotSearch")
+    Call<BaseEntity<EmptyEntity>> getHotSearch(@QueryMap Map<String, String> map);
 }

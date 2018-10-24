@@ -52,7 +52,7 @@ public class DiscoverActivityAdapter extends BaseRecyclerAdapter<DiscoverActivit
         }
     }
 
-    public class ActivityViewHolder extends BaseRecyclerViewHolder {
+    public class ActivityViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
@@ -68,6 +68,15 @@ public class DiscoverActivityAdapter extends BaseRecyclerAdapter<DiscoverActivit
 
         public ActivityViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            super.onClick(view);
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition());
+            }
         }
     }
 }

@@ -9,16 +9,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.MyImageView;
 
@@ -93,7 +96,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 blogViewHolder.tv_share_count.setText(String.valueOf(goods.share_num));
             }
             if (blog.type == 1) {
-                BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, null, blog.pics, mActivity
+                int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
+                BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, new SinglePicAdapter(context, blog.pics, 4, recyclerWidth), blog.pics, mActivity
                         , 0, 0, 63, 12, 16, 0, 4, 0);
                 blogViewHolder.rl_video.setVisibility(View.GONE);
             } else {
@@ -128,6 +132,12 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
             }
 
+            if (blog.is_self == 0) {
+                blogViewHolder.miv_more.setVisibility(View.GONE);
+            } else {
+                blogViewHolder.miv_more.setVisibility(View.VISIBLE);
+            }
+
             blogViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
                     mCallBack.toFocusUser(blog.is_focus, blog.member_id);
@@ -145,6 +155,16 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
             } else {
                 blogViewHolder.rl_attention.setVisibility(View.GONE);
             }
+
+            blogViewHolder.ll_member.setOnClickListener(v -> {
+                MyPageActivity.startAct(context, blog.member_id);
+            });
+            blogViewHolder.miv_big_icon.setOnClickListener(v -> {
+                MyPageActivity.startAct(context, blog.member_id);
+            });
+            blogViewHolder.miv_more.setOnClickListener(v -> {
+
+            });
         }
     }
 
@@ -160,7 +180,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         if (isEmpty(list)) {
             blogViewHolder.rl_attention.setVisibility(View.GONE);
         } else {
-            LogUtil.httpLogW("显示关注列表:" + list.size());
             attentionMemberAdapter = new AttentionMemberAdapter(context, list);
             LinearLayoutManager manager = new LinearLayoutManager(context);
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -184,6 +203,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
     public class BlogViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.ll_member)
+        LinearLayout ll_member;
 
         @BindView(R.id.tv_name)
         TextView tv_name;

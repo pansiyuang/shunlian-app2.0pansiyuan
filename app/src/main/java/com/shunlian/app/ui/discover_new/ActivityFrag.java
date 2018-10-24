@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverActivityAdapter;
 import com.shunlian.app.bean.DiscoverActivityEntity;
 import com.shunlian.app.presenter.ActivityPresenter;
@@ -113,6 +114,9 @@ public class ActivityFrag extends BaseLazyFragment implements IView, IActivityVi
         if (mAdapter == null) {
             mAdapter = new DiscoverActivityAdapter(getActivity(), activityList);
             recycler_list.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener((view, position) -> {
+                ActivityDetailActivity.startAct(getActivity(), activityList.get(position).id);
+            });
         }
         mAdapter.setPageLoading(page, totalPage);
         mAdapter.notifyDataSetChanged();

@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,13 +10,15 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
-import com.shunlian.app.presenter.HotBlogPresenter;
+import com.shunlian.app.presenter.CommonBlogPresenter;
+import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
-import com.shunlian.app.view.IHotBlogView;
-import com.shunlian.app.widget.banner.MyKanner;
+import com.shunlian.app.view.ICommonBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,33 +26,39 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * Created by Administrator on 2018/10/15.
+ * Created by Administrator on 2018/10/22.
  */
 
-public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack {
-
-    @BindView(R.id.myKanner)
-    MyKanner myKanner;
+public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView, HotBlogAdapter.OnAdapterCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.lay_refresh)
-    NestedRefreshLoadMoreLayout lay_refresh;
+    @BindView(R.id.refreshview)
+    SlRefreshView refreshview;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
-    private HotBlogPresenter hotBlogPresenter;
+    private CommonBlogPresenter mPresenter;
+    private String currentFrom, currentType, currentMemberId;
     private HotBlogAdapter hotBlogAdapter;
     private List<HotBlogsEntity.Blog> blogList;
-    private List<String> banners;
     private LinearLayoutManager manager;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.hotblog_frag, null, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.frag_common_blog, null, false);
         return view;
+    }
+
+    public static BaseFragment getInstance(String comFrom, String memberId) {
+        CommonBlogFrag commonBlogFrag = new CommonBlogFrag();
+        Bundle bundle = new Bundle();
+        bundle.putString("from", comFrom);
+        bundle.putString("member_id", memberId);
+        commonBlogFrag.setArguments(bundle);
+        return commonBlogFrag;
     }
 
     @Override
@@ -59,29 +68,47 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-        NestedSlHeader header = new NestedSlHeader(getContext());
-        lay_refresh.setRefreshHeaderView(header);
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
         recycler_list.setNestedScrollingEnabled(false);
 
-        blogList = new ArrayList<>();
-        hotBlogPresenter = new HotBlogPresenter(getActivity(), this);
-        hotBlogPresenter.getHotBlogList(true);
+        currentMemberId = getArguments().getString("member_id");
+        currentFrom = getArguments().getString("from");
 
-        banners = new ArrayList<>();
+        if ("我的".equals(currentFrom)) {
+            currentType = "2";
+        } else if ("收藏".equals(currentFrom)) {
+            currentType = "3";
+        }
+
+        mPresenter = new CommonBlogPresenter(getActivity(), this);
+        mPresenter.getBlogList(true, currentMemberId, currentType);
+
+        blogList = new ArrayList<>();
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
 
-        nei_empty.setImageResource(R.mipmap.img_empty_common)
-                .setText("暂时没有用户发布精选文章")
+        nei_empty.setImageResource(R.mipmap.img_empty_faxian)
+                .setText("空空如也，还没有分享过内容")
                 .setButtonText(null);
     }
 
     @Override
     protected void initListener() {
-        lay_refresh.setOnRefreshListener(() -> {
-            hotBlogPresenter.initPage();
-            hotBlogPresenter.getHotBlogList(true);
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mPresenter != null) {
+                    mPresenter.initPage();
+                    mPresenter.getBlogList(true, currentMemberId, currentType);
+                }
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
         });
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -90,8 +117,8 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
                 if (manager != null) {
                     int lastPosition = manager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == manager.getItemCount()) {
-                        if (hotBlogPresenter != null) {
-                            hotBlogPresenter.onRefresh();
+                        if (mPresenter != null) {
+                            mPresenter.onRefresh();
                         }
                     }
                 }
@@ -100,26 +127,11 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         super.initListener();
     }
 
-    public void initBanner(List<HotBlogsEntity.Ad> ad_list) {
-        banners.clear();
-        for (HotBlogsEntity.Ad ad : ad_list) {
-            banners.add(ad.ad_img);
-        }
-        myKanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
-        myKanner.setBanner(banners);
-        myKanner.setOnItemClickL(position -> {
-//                    Common.goGoGo(baseAct, coreHotEntity.banner_list.get(position).type, coreHotEntity.banner_list.get(position).item_id);
-        });
-    }
-
     @Override
-    public void getBlogList(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage) {
+    public void getFocusblogs(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage) {
+        refreshview.stopRefresh(true);
         if (currentPage == 1) {
             blogList.clear();
-
-            if (!isEmpty(hotBlogsEntity.ad_list)) {
-                initBanner(hotBlogsEntity.ad_list);
-            }
 
             if (isEmpty(hotBlogsEntity.list)) {
                 nei_empty.setVisibility(View.VISIBLE);
@@ -127,6 +139,10 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
             } else {
                 nei_empty.setVisibility(View.GONE);
                 recycler_list.setVisibility(View.VISIBLE);
+            }
+
+            if (getActivity() instanceof MyPageActivity) {
+                ((MyPageActivity) getActivity()).initInfo(hotBlogsEntity.member_info, hotBlogsEntity.discovery_info);
             }
         }
         if (!isEmpty(hotBlogsEntity.list)) {
@@ -155,29 +171,28 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         hotBlogAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * 刷新完成
-     */
     @Override
-    public void refreshFinish() {
-        if (lay_refresh != null) {
-            lay_refresh.setRefreshing(false);
+    public void praiseBlog(String blogId) {
+        for (HotBlogsEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.is_praise = 1;
+                blog.praise_num++;
+            }
         }
+        hotBlogAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showFailureView(int request_code) {
-
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
-
     }
 
     @Override
     public void toFocusUser(int isFocus, String memberId) {
-        hotBlogPresenter.focusUser(isFocus, memberId);
+        mPresenter.focusUser(isFocus, memberId);
     }
 
     @Override
@@ -186,6 +201,6 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Override
     public void toPraiseBlog(String blogId) {
-
+        mPresenter.praiseBlos(blogId);
     }
 }
