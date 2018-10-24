@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover;
+package com.shunlian.app.ui.discover_new;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -90,7 +90,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_video_play;
+        return R.layout.activity_goods_video_play;
     }
 
     @Override
