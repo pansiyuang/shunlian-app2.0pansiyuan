@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -29,8 +30,11 @@ public class DiscoverSearchActivity extends BaseActivity implements IDiscoverSea
     @BindView(R.id.tv_search)
     TextView tv_search;
 
+    @BindView(R.id.rl_recently)
+    RelativeLayout rl_recently;
+
     private DiscoverSearchPresenter mPresenter;
-    public String currentKeyword;
+    private String currentKeyword;
     private String historyContent;
 
     public static void startActivity(Context context) {
@@ -71,6 +75,15 @@ public class DiscoverSearchActivity extends BaseActivity implements IDiscoverSea
         mPresenter.getHotSearch();
 
         historyContent = SharedPrefUtil.getCacheSharedPrf("discover_search_history", "");
+    }
+
+    public void setHistoryData(String content) {
+        if (isEmpty(historyContent)) {
+            rl_recently.setVisibility(View.GONE);
+        } else {
+            String[] tags = content.split("_");
+            rl_recently.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

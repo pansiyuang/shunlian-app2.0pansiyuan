@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IDiscoverSearchView;
@@ -42,13 +43,13 @@ public class DiscoverSearchPresenter extends BasePresenter<IDiscoverSearchView> 
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().getHotSearch(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        Call<BaseEntity<TagEntity>> baseEntityCall = getAddCookieApiService().getHotSearch(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<TagEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<TagEntity> entity) {
                 super.onSuccess(entity);
-            }
 
+            }
             @Override
             public void onFailure() {
                 super.onFailure();

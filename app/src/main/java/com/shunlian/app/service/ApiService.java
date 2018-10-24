@@ -2716,5 +2716,5 @@ public interface ApiService {
      * 搜索关键词
      */
     @GET("discovery/discoveryuser/getHotSearch")
-    Call<BaseEntity<EmptyEntity>> getHotSearch(@QueryMap Map<String, String> map);
+    Call<BaseEntity<TagEntity>> getHotSearch(@QueryMap Map<String, String> map);
 }
