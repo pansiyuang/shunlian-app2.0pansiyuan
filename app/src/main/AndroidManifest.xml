@@ -928,10 +928,6 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
         <activity
-            android:name=".ui.discover.VideoGoodPlayActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false" />
-        <activity
             android:name=".ui.LuckWheelPanActivity"
             android:exported="false" />
         <activity android:name=".ui.task.TaskCenterAct"
@@ -945,6 +941,10 @@
             android:name=".ui.discover_new.HotExpertRankActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.VideoGoodPlayActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
     </application>
 
 </manifest>
