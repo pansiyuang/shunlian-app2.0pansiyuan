@@ -16,7 +16,9 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover.VideoPlayActivity;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
+import com.shunlian.app.ui.discover_new.VideoGoodPlayActivity;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -164,6 +166,10 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
             });
             blogViewHolder.miv_more.setOnClickListener(v -> {
 
+            });
+
+            blogViewHolder.rl_video.setOnClickListener(v -> {
+                VideoGoodPlayActivity.startActivity(context,blog);
             });
         }
     }

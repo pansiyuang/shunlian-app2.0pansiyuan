@@ -14,6 +14,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.OperateAdapter;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
@@ -72,6 +73,12 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView {
     public static void startActivity(Context context, ArticleEntity.Article article) {
         Intent intent = new Intent(context, VideoGoodPlayActivity.class);
         intent.putExtra("article", article);
+        context.startActivity(intent);
+    }
+
+    public static void startActivity(Context context, HotBlogsEntity.Blog blog) {
+        Intent intent = new Intent(context, VideoGoodPlayActivity.class);
+        intent.putExtra("blog", blog);
         context.startActivity(intent);
     }
 
