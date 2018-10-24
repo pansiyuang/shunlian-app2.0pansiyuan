@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SaveAlbumDialog;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.CustomVideoPlayer;
+import com.shunlian.app.widget.GoodVideoPlayer;
 import com.shunlian.app.widget.HttpDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,7 +54,7 @@ import butterknife.BindView;
 public class VideoGoodPlayActivity extends BaseActivity implements IChosenView {
 
     @BindView(R.id.customVideoPlayer)
-    CustomVideoPlayer customVideoPlayer;
+    GoodVideoPlayer customVideoPlayer;
 
     @BindView(R.id.ll_rootView)
     RelativeLayout ll_rootView;
@@ -124,9 +126,10 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView {
         if (!isEmpty(currentPlaceHold)) {
             GlideUtils.getInstance().loadImage(this, customVideoPlayer.thumbImageView, currentPlaceHold);
         }
-        customVideoPlayer.setUp(currentUrl, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
+        customVideoPlayer.setUp("http://jzvd.nathen.cn/c494b340ff704015bb6682ffde3cd302/64929c369124497593205a4190d7d128-5287d2089db37e62345123a1be272f8b.mp4", CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
         customVideoPlayer.startVideo();
-
+//        customVideoPlayer.setAllControlsVisiblity(View.VISIBLE, View.INVISIBLE, View.VISIBLE,
+//                View.INVISIBLE, View.INVISIBLE, View.INVISIBLE, View.VISIBLE);
         httpDialog = new HttpDialog(this);
     }
 

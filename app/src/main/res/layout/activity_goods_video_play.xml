@@ -6,127 +6,37 @@
     android:background="#000000"
     android:orientation="vertical">
 
-    <com.shunlian.app.widget.CustomVideoPlayer
+    <com.shunlian.app.widget.GoodVideoPlayer
         android:id="@+id/customVideoPlayer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"/>
-
-    <LinearLayout
-        android:layout_width="50dp"
-        android:orientation="vertical"
-        android:gravity="center_vertical|right"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
         android:layout_height="match_parent">
 
+        <!--非wifi网络提示-->
         <LinearLayout
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/icon_dianzan_good"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_marginTop="5dp"
-                android:text=""
-                android:textSize="10sp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:orientation="vertical">
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/icon_xiazai"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_marginTop="5dp"
-                android:text=""
-                android:textSize="10sp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:orientation="vertical">
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/icon_fenxiang"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_marginTop="5dp"
-                android:text=""
-                android:textSize="10sp"/>
-        </LinearLayout>
-        
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:gravity="center_vertical"
-        android:layout_alignParentBottom="true">
-
-        <com.shunlian.app.widget.circle.CircleImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@mipmap/img_default_common"
-            android:layout_centerVertical="true"
-        >
-        </com.shunlian.app.widget.circle.CircleImageView>
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/ll_wifi_state"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/white"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="40dp"
-            android:text="ces"
-            android:textSize="14sp"/>
+            android:background="#A6000000"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/deep_red"
-            android:paddingLeft="10dp"
-            android:paddingTop="2dp"
-            android:layout_centerVertical="true"
-            android:paddingBottom="2dp"
-            android:paddingRight="10dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/rounded_rectangle_stroke_22px"
-            android:layout_alignParentRight="true"
-            android:text="关注"
-            android:textSize="14sp"/>
-    </RelativeLayout>
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您正在使用非wifi，播放将消耗您的流量"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
 
-    <include layout="@layout/item_video_good"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="60dp"
-      ></include>
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_continue_to_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:src="@mipmap/img_xiangqing_jixubofang" />
+
+        </LinearLayout>
+
+    </com.shunlian.app.widget.GoodVideoPlayer>
 </RelativeLayout>
