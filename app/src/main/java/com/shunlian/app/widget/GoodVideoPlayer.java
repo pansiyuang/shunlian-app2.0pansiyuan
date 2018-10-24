@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Environment;
@@ -31,8 +33,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -128,6 +134,7 @@ public class GoodVideoPlayer extends JZVideoPlayer {
         tv_user_name= findViewById(cn.jzvd.R.id.tv_user_name);
         tv_user_attent= findViewById(cn.jzvd.R.id.tv_user_attent);
         img_goods_icon= findViewById(cn.jzvd.R.id.img_goods_icon);
+        tv_goods_name= findViewById(cn.jzvd.R.id.tv_goods_name);
         tv_goods_price= findViewById(cn.jzvd.R.id.tv_goods_price);
         tv_old_price= findViewById(cn.jzvd.R.id.tv_old_price);
 
@@ -166,6 +173,42 @@ public class GoodVideoPlayer extends JZVideoPlayer {
         iv_download.setOnClickListener(this);
     }
 
+    /**
+     * 设置商品用户信息信息
+     */
+    public void setGoodUserInfo(HotBlogsEntity.Blog blog){
+            tv_dianzan.setText(blog.praise_num+"");
+            tv_share.setText(blog.share_num+"");
+            tv_down.setText(blog.down_num+"");
+            tv_user_name.setText(blog.nickname+"");
+             GlideUtils.getInstance().loadBitmapSync(getContext(), blog.avatar,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        image_user_head.setImageBitmap(resource);
+                    }
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        image_user_head.setImageResource(R.mipmap.img_set_defaulthead);
+                    }
+                });
+           tv_user_attent.setText(blog.is_self==0?"关注":"取消关注");
+           if(blog.related_goods!=null&&blog.related_goods.size()>0) {
+               GlideUtils.getInstance().loadCornerImage(getContext(), img_goods_icon, blog.related_goods.get(0).thumb, 4);
+               if(blog.related_goods.get(0).title!=null)
+               tv_goods_name.setText(blog.related_goods.get(0).title);
+               if(blog.related_goods.get(0).price!=null)
+               tv_goods_price.setText("¥"+blog.related_goods.get(0).price);
+               if(blog.related_goods.get(0).old_price!=null) {
+                   tv_old_price.setText("¥" + blog.related_goods.get(0).old_price);
+               }else{
+                   tv_old_price.setText("");
+               }
+           }
+
+    }
     @Override
     public void startVideo() {
         super.startVideo();
@@ -470,7 +513,7 @@ public class GoodVideoPlayer extends JZVideoPlayer {
         } else if (i == cn.jzvd.R.id.surface_container) {
             startDismissControlViewTimer();
         } else if (i == cn.jzvd.R.id.back) {
-            topContainer.setVisibility(GONE);
+            topContainer.setVisibility(VISIBLE);
             backPress(); //暂时去掉该功能
         } else if (i == cn.jzvd.R.id.back_tiny) {
             backPress();
@@ -788,7 +831,7 @@ public class GoodVideoPlayer extends JZVideoPlayer {
 
     public void setAllControlsVisiblity(int topCon, int bottomCon, int startBtn, int loadingPro,
                                         int thumbImg, int bottomPro, int retryLayout) {
-        topContainer.setVisibility(topCon);
+        topContainer.setVisibility(VISIBLE);
         bottomContainer.setVisibility(bottomCon);
         startButton.setVisibility(startBtn);
         loadingProgressBar.setVisibility(loadingPro);
@@ -988,7 +1031,7 @@ public class GoodVideoPlayer extends JZVideoPlayer {
                 line_good_info.setVisibility(View.VISIBLE);
                 relt_bottom_user.setVisibility(View.VISIBLE);
                 include_good.setVisibility(View.VISIBLE);
-                topContainer.setVisibility(View.GONE);
+                topContainer.setVisibility(View.VISIBLE);
                 startButton.setVisibility(View.INVISIBLE);
                 if (clarityPopWindow != null) {
                     clarityPopWindow.dismiss();

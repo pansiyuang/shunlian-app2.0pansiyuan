@@ -96,7 +96,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView {
     private ArrayList<String> imgList;
     private ChosenPresenter mPresenter;
     private SaveAlbumDialog saveAlbumDialog;
-
+    private  HotBlogsEntity.Blog blog;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_goods_video_play;
@@ -110,6 +110,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView {
 
         EventBus.getDefault().register(this);
         currentArticle = (ArticleEntity.Article) getIntent().getSerializableExtra("article");
+        blog = getIntent().getParcelableExtra("blog");
         imgList = new ArrayList<>();
         if (!isEmpty(getIntent().getStringExtra("videoUrl"))) {
             currentUrl = getIntent().getStringExtra("videoUrl");
@@ -125,6 +126,9 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView {
 
         if (!isEmpty(currentPlaceHold)) {
             GlideUtils.getInstance().loadImage(this, customVideoPlayer.thumbImageView, currentPlaceHold);
+        }
+        if(blog!=null) {
+            customVideoPlayer.setGoodUserInfo(blog);
         }
         customVideoPlayer.setUp("http://jzvd.nathen.cn/c494b340ff704015bb6682ffde3cd302/64929c369124497593205a4190d7d128-5287d2089db37e62345123a1be272f8b.mp4", CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
         customVideoPlayer.startVideo();
