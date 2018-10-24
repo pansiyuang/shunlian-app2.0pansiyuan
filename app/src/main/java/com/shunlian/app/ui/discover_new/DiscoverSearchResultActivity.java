@@ -2,11 +2,12 @@ package com.shunlian.app.ui.discover_new;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,9 +15,9 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.widget.MyImageView;
-import com.shunlian.mylibrary.ImmersionBar;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -25,65 +26,55 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * Created by Administrator on 2018/10/19.
+ * Created by Administrator on 2018/10/23.
  */
 
-public class HotExpertRankActivity extends BaseActivity {
+public class DiscoverSearchResultActivity extends BaseActivity {
 
-    @BindView(R.id.miv_close)
-    MyImageView miv_close;
+    @BindView(R.id.tv_cancel)
+    TextView tv_cancel;
 
     @BindView(R.id.tab_layout)
     TabLayout tab_layout;
 
     @BindView(R.id.viewpager)
-    ViewPager viewpager;
+    ViewPager viewPager;
 
-    private String[] titles = {"精选达人", "每周达人榜"};
-    private List<BaseFragment> goodsFrags;
-    private HotExpertFrag hotExpertFrag;
-    private WeekExpertRankFrag weekExpertRankFrag;
+    public String[] titles = {"文章", "活动", "达人"};
+    public List<BaseFragment> baseFragmentList;
+    public String currentKeyword;
 
-    public static void startActivity(Context context) {
-        Intent intent = new Intent(context, HotExpertRankActivity.class);
+    public static void startActivity(Context context, String keyword) {
+        Intent intent = new Intent(context, DiscoverSearchResultActivity.class);
+        intent.putExtra("keyword", keyword);
         context.startActivity(intent);
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.act_hot_expert_rank;
+        return R.layout.act_discover_search_result;
     }
 
     @Override
     protected void initData() {
-        ImmersionBar.with(this).fitsSystemWindows(true)
-                .statusBarColor(R.color.white)
-                .statusBarDarkFont(true, 0.2f)
-                .init();
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
+
+        currentKeyword = getIntent().getStringExtra("keyword");
 
         for (String tab : titles) {
             tab_layout.addTab(tab_layout.newTab().setText(tab));
         }
         initFrags();
-        tab_layout.setupWithViewPager(viewpager);
+        tab_layout.setupWithViewPager(viewPager);
         reflex(tab_layout);
     }
 
-    @Override
-    protected void initListener() {
-        miv_close.setOnClickListener(v -> finish());
-        super.initListener();
-    }
-
     public void initFrags() {
-        goodsFrags = new ArrayList<>();
-        hotExpertFrag = new HotExpertFrag();
-        weekExpertRankFrag = new WeekExpertRankFrag();
+        baseFragmentList = new ArrayList<>();
 
-        goodsFrags.add(hotExpertFrag);
-        goodsFrags.add(weekExpertRankFrag);
-        viewpager.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titles));
-        viewpager.setOffscreenPageLimit(goodsFrags.size());
+        viewPager.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), baseFragmentList, titles));
+        viewPager.setOffscreenPageLimit(baseFragmentList.size());
     }
 
     public void reflex(final TabLayout tabLayout) {

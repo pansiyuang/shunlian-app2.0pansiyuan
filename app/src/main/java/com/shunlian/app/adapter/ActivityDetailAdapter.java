@@ -6,48 +6,56 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.DiscoverActivityEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.HorizonItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.MyImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
 /**
- * Created by Administrator on 2018/10/17.
+ * Created by Administrator on 2018/10/23.
  */
 
-public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
-    private Activity mActivity;
-    private List<HotBlogsEntity.RecomandFocus> recomandFocusList;
-    private AttentionMemberAdapter attentionMemberAdapter;
+public class ActivityDetailAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
+    public static final int LAYOUT_TOP = 10003;
     private OnAdapterCallBack mCallBack;
+    private HotBlogsEntity.Detail mDetail;
+    private TieziAvarAdapter tieziAvarAdapter;
 
-    public HotBlogAdapter(Context context, List<HotBlogsEntity.Blog> lists, Activity activity) {
+    public ActivityDetailAdapter(Context context, List<HotBlogsEntity.Blog> lists, HotBlogsEntity.Detail detail) {
         super(context, true, lists);
-        this.mActivity = activity;
+        this.mDetail = detail;
     }
 
-    public HotBlogAdapter(Context context, List<HotBlogsEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list) {
-        super(context, true, lists);
-        this.mActivity = activity;
-        this.recomandFocusList = list;
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case LAYOUT_TOP:
+                return new DetailTopViewHolder(LayoutInflater.from(context).inflate(R.layout.layout_activity_detail_top, parent, false));
+            default:
+                return super.onCreateViewHolder(parent, viewType);
+        }
     }
 
     @Override
@@ -56,10 +64,25 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
     }
 
     @Override
+    public int getItemCount() {
+        return super.getItemCount() + 1;
+    }
+
+    @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof BlogViewHolder) {
-            HotBlogsEntity.Blog blog = lists.get(position);
-            BlogViewHolder blogViewHolder = (BlogViewHolder) holder;
+        if (getItemViewType(position) == LAYOUT_TOP) {
+            handleTop(holder);
+        } else {
+            if (!isEmpty(lists)) {
+                handleItem(holder, position);
+            }
+        }
+    }
+
+    private void handleItem(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof HotBlogAdapter.BlogViewHolder) {
+            HotBlogsEntity.Blog blog = lists.get(position - 1);
+            HotBlogAdapter.BlogViewHolder blogViewHolder = (HotBlogAdapter.BlogViewHolder) holder;
             GlideUtils.getInstance().loadCircleImage(context, blogViewHolder.miv_icon, blog.avatar);
             blogViewHolder.tv_name.setText(blog.nickname);
             blogViewHolder.tv_time.setText(blog.time_desc);
@@ -97,7 +120,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
             }
             if (blog.type == 1) {
                 int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
-                BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, new SinglePicAdapter(context, blog.pics, 4, recyclerWidth), blog.pics, mActivity
+                BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, new SinglePicAdapter(context, blog.pics, 4, recyclerWidth), blog.pics, (Activity) context
                         , 0, 0, 63, 12, 16, 0, 4, 0);
                 blogViewHolder.rl_video.setVisibility(View.GONE);
             } else {
@@ -150,12 +173,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 }
             });
 
-            if (position == 0) {
-                showAttentionList(recomandFocusList, holder);
-            } else {
-                blogViewHolder.rl_attention.setVisibility(View.GONE);
-            }
-
             blogViewHolder.ll_member.setOnClickListener(v -> {
                 MyPageActivity.startAct(context, blog.member_id);
             });
@@ -165,6 +182,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
             blogViewHolder.miv_more.setOnClickListener(v -> {
 
             });
+
+            blogViewHolder.rl_attention.setVisibility(View.GONE);
         }
     }
 
@@ -175,28 +194,74 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         textView.setCompoundDrawables(drawable, null, null, null);
     }
 
-    public void showAttentionList(List<HotBlogsEntity.RecomandFocus> list, RecyclerView.ViewHolder holder) {
-        BlogViewHolder blogViewHolder = (BlogViewHolder) holder;
-        if (isEmpty(list)) {
-            blogViewHolder.rl_attention.setVisibility(View.GONE);
-        } else {
-            attentionMemberAdapter = new AttentionMemberAdapter(context, list);
-            LinearLayoutManager manager = new LinearLayoutManager(context);
-            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            blogViewHolder.recylcer_attention.setLayoutManager(manager);
-            blogViewHolder.recylcer_attention.setAdapter(attentionMemberAdapter);
-            blogViewHolder.rl_attention.setVisibility(View.VISIBLE);
-            attentionMemberAdapter.setOnFocusListener((isFocus, memberId) -> {
+    private void handleTop(RecyclerView.ViewHolder holder) {
+        if (holder instanceof DetailTopViewHolder) {
+            DetailTopViewHolder detailTopViewHolder = (DetailTopViewHolder) holder;
+            GlideUtils.getInstance().loadImage(context, detailTopViewHolder.miv_icon, mDetail.thumb);
+            detailTopViewHolder.tv_title.setText(mDetail.title);
+            detailTopViewHolder.tv_activity_content.setText(mDetail.content);
+            detailTopViewHolder.tv_join_count.setText(mDetail.refer_member_num + "人在参与");
+
+            ViewTreeObserver vto = detailTopViewHolder.rl_rootView.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(() -> {
+                int height = detailTopViewHolder.rl_rootView.getHeight();
+
                 if (mCallBack != null) {
-                    mCallBack.toFocusMember(isFocus, memberId);
+                    mCallBack.OnTopSize(height);
                 }
             });
+
+            if (!isEmpty(mDetail.members)) {
+                List<String> pics = new ArrayList<>();
+                for (DiscoverActivityEntity.Member member : mDetail.members) {
+                    pics.add(member.avatar);
+                }
+                if (tieziAvarAdapter == null) {
+                    tieziAvarAdapter = new TieziAvarAdapter(context, pics, TransformUtil.dip2px(context, 20));
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                    linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    detailTopViewHolder.recycler_list.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(context, -8)));
+                    detailTopViewHolder.recycler_list.setLayoutManager(linearLayoutManager);
+                    detailTopViewHolder.recycler_list.setAdapter(tieziAvarAdapter);
+                }
+                detailTopViewHolder.recycler_list.setVisibility(View.VISIBLE);
+            } else {
+                detailTopViewHolder.recycler_list.setVisibility(View.GONE);
+            }
         }
     }
 
-    public void MemberAdapterNotifyDataSetChanged() {
-        if (attentionMemberAdapter != null) {
-            attentionMemberAdapter.notifyDataSetChanged();
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return LAYOUT_TOP;
+        }
+        return super.getItemViewType(position);
+    }
+
+
+    public class DetailTopViewHolder extends BaseRecyclerAdapter.BaseRecyclerViewHolder {
+
+        @BindView(R.id.rl_rootView)
+        RelativeLayout rl_rootView;
+
+        @BindView(R.id.miv_icon)
+        MyImageView miv_icon;
+
+        @BindView(R.id.tv_title)
+        TextView tv_title;
+
+        @BindView(R.id.recycler_list)
+        RecyclerView recycler_list;
+
+        @BindView(R.id.tv_join_count)
+        TextView tv_join_count;
+
+        @BindView(R.id.tv_activity_content)
+        TextView tv_activity_content;
+
+        public DetailTopViewHolder(View itemView) {
+            super(itemView);
         }
     }
 
@@ -279,8 +344,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
     public interface OnAdapterCallBack {
         void toFocusUser(int isFocus, String memberId);
 
-        void toFocusMember(int isFocus, String memberId);
-
         void toPraiseBlog(String blogId);
+
+        void OnTopSize(int height);
     }
 }

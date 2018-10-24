@@ -15,6 +15,9 @@ public class HotBlogsEntity {
     public List<Ad> ad_list;
     public List<String> expert_list;
     public List<RecomandFocus> recomand_focus_list;
+    public DiscoveryInfo discovery_info;
+    public MemberInfo member_info;
+    public Detail detail;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Pager {
@@ -42,11 +45,13 @@ public class HotBlogsEntity {
         public List<GoodsDeatilEntity.Goods> related_goods;
         public int praise_num;
         public int down_num;
+        public int fans_num;
         public int share_num;
         public int is_praise;
         public int is_focus;
         public String time_desc;
         public int total_share_num;
+        public int is_self;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -73,5 +78,40 @@ public class HotBlogsEntity {
         public String follow_num;
         public String blog_num;
         public int focus_status;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class DiscoveryInfo {
+        public String fans_num;
+        public String praise_num;
+        public String down_num;
+        public String focus_num;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class MemberInfo {
+        public String member_id;
+        public String avatar;
+        public String nickname;
+        public String signature;
+        public int is_self;
+        public int is_focus;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Detail {
+        public String id;
+        public String title;
+        public String content;
+        public String thumb;
+        public String author_name;
+        public String author_user;
+        public String count;
+        public int status;
+        public String refer_member_num;
+        public String refer_num;
+        public String add_time;
+        public String update_time;
+        public List<DiscoverActivityEntity.Member> members;
     }
 }
