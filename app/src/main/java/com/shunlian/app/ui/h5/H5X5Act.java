@@ -355,6 +355,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             @Override
             public void onPageStarted(WebView webView, String url, Bitmap bitmap) {
                 super.onPageStarted(webView, url, bitmap);
+                addCookie(url);
                 LogUtil.zhLogW("=onPageStarted=======" + url);
 //                if (!isFinishing() && httpDialog != null) {
 //                    httpDialog.show();
@@ -367,6 +368,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                addCookie(url);
                 if (!isFinishing()) {
                     if (!isEmpty(view.getTitle())) {
                         title = view.getTitle();
@@ -445,7 +447,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 //                }
 //                return false;
                 } else {
-                    if (!Common.getDomain(h5Url).equals(Common.getDomain(url)))
+//                    if (!Common.getDomain(h5Url).equals(Common.getDomain(url)))
                         addCookie(url);
                     return super.shouldOverrideUrlLoading(view, url);
 //                    return false;
@@ -566,7 +568,6 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         String token = SharedPrefUtil.getSharedUserString("token", "");
         String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
 
-        LogUtil.augusLogW("ddd---"+url);
         CookieSyncManager.createInstance(this);
 //        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
