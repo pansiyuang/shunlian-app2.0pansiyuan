@@ -20,7 +20,10 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
+import com.shunlian.app.presenter.HotBlogPresenter;
+import com.shunlian.app.presenter.HotVideoBlogPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -29,6 +32,8 @@ import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SaveAlbumDialog;
 import com.shunlian.app.view.IChosenView;
+import com.shunlian.app.view.IHotBlogView;
+import com.shunlian.app.view.IHotVideoBlogView;
 import com.shunlian.app.widget.CustomVideoPlayer;
 import com.shunlian.app.widget.GoodVideoPlayer;
 import com.shunlian.app.widget.HttpDialog;
@@ -52,7 +57,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/7/23.
  */
 
-public class VideoGoodPlayActivity extends BaseActivity implements IChosenView ,GoodVideoPlayer.updateParseAttent{
+public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlayer.updateParseAttent,IHotVideoBlogView {
 
     @BindView(R.id.customVideoPlayer)
     GoodVideoPlayer customVideoPlayer;
@@ -60,44 +65,15 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView ,
     @BindView(R.id.ll_rootView)
     RelativeLayout ll_rootView;
 
-    public static void startActivity(Context context, String videoUrl) {
-        Intent intent = new Intent(context, VideoGoodPlayActivity.class);
-        intent.putExtra("videoUrl", videoUrl);
-        context.startActivity(intent);
-    }
-
-    public static void startActivity(Context context, String videoUrl, String placeHold) {
-        Intent intent = new Intent(context, VideoGoodPlayActivity.class);
-        intent.putExtra("videoUrl", videoUrl);
-        intent.putExtra("placehold", placeHold);
-        context.startActivity(intent);
-    }
-
-    public static void startActivity(Context context, ArticleEntity.Article article) {
-        Intent intent = new Intent(context, VideoGoodPlayActivity.class);
-        intent.putExtra("article", article);
-        context.startActivity(intent);
-    }
-
     public static void startActivity(Context context, HotBlogsEntity.Blog blog) {
         Intent intent = new Intent(context, VideoGoodPlayActivity.class);
         intent.putExtra("blog", blog);
         context.startActivity(intent);
     }
-
-    public List<String> itemList;
-    public String currentUrl;
-    public String currentPlaceHold;
     public HttpDialog httpDialog;
-    private Dialog dialog_operate;
-    public String dirName;
-    private PromptDialog promptDialog;
-    private ArticleEntity.Article currentArticle;
-    private boolean isShare;
-    private ArrayList<String> imgList;
-    private ChosenPresenter mPresenter;
-    private SaveAlbumDialog saveAlbumDialog;
     private  HotBlogsEntity.Blog blog;
+
+    private HotVideoBlogPresenter hotBlogPresenter;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_goods_video_play;
@@ -107,34 +83,15 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView ,
     protected void initData() {
         setHideStatusAndNavigation();
 
-        mPresenter = new ChosenPresenter(this, this);
-
+        hotBlogPresenter = new HotVideoBlogPresenter(this, this);
         EventBus.getDefault().register(this);
-        currentArticle = (ArticleEntity.Article) getIntent().getSerializableExtra("article");
         blog = getIntent().getParcelableExtra("blog");
-        imgList = new ArrayList<>();
-        if (!isEmpty(getIntent().getStringExtra("videoUrl"))) {
-            currentUrl = getIntent().getStringExtra("videoUrl");
-        } else if (currentArticle != null) {
-            currentUrl = currentArticle.video_url;
-            currentPlaceHold = currentArticle.thumb;
-            imgList.add(currentArticle.thumb);
-        }
-        if (!isEmpty(getIntent().getStringExtra("placehold"))) {
-            currentPlaceHold = getIntent().getStringExtra("placehold");
-            imgList.add(currentPlaceHold);
-        }
 
-        if (!isEmpty(currentPlaceHold)) {
-            GlideUtils.getInstance().loadImage(this, customVideoPlayer.thumbImageView, currentPlaceHold);
+        if(blog!=null){
+            customVideoPlayer.setGoodUserInfo(blog,this);
         }
-        if(blog!=null) {
-            customVideoPlayer.setGoodUserInfo(blog);
-        }
-        customVideoPlayer.setUp("http://jzvd.nathen.cn/c494b340ff704015bb6682ffde3cd302/64929c369124497593205a4190d7d128-5287d2089db37e62345123a1be272f8b.mp4", CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
+        customVideoPlayer.setUp(blog.video, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
         customVideoPlayer.startVideo();
-//        customVideoPlayer.setAllControlsVisiblity(View.VISIBLE, View.INVISIBLE, View.VISIBLE,
-//                View.INVISIBLE, View.INVISIBLE, View.INVISIBLE, View.VISIBLE);
         httpDialog = new HttpDialog(this);
     }
 
@@ -163,7 +120,6 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView ,
                 finish();
                 break;
             case VideoPlayEvent.MoreAction:
-                initDialog();
                 break;
             case VideoPlayEvent.CompleteAction:
                 setHideStatusAndNavigation();
@@ -171,122 +127,13 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView ,
         }
     }
 
-    public void initDialog() {
-        if (itemList == null) {
-            itemList = new ArrayList<>();
-            itemList.add("保存视频");
-            if (!isEmpty(imgList)) {
-                itemList.add("图文分享");
-            }
-            itemList.add("取消");
-        }
-
-        if (dialog_operate == null) {
-            dialog_operate = new Dialog(this, R.style.popAd);
-            dialog_operate.setContentView(R.layout.dialog_operate);
-            RecyclerView rv_operate = (RecyclerView) dialog_operate.findViewById(R.id.rv_operate);
-            rv_operate.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false));
-            rv_operate.addItemDecoration(new MVerticalItemDecoration(this, 0.5f, 0, 0, getColorResouce(R.color.bg_gray_two)));
-            OperateAdapter operateAdapter = new OperateAdapter(this, itemList);
-            rv_operate.setAdapter(operateAdapter);
-            operateAdapter.setOnItemClickListener((view, position) -> {
-                if (!NetworkUtils.isNetworkAvailable(this)) {
-                    Common.staticToast("网络不可用");
-                    return;
-                }
-                switch (itemList.get(position)) {
-                    case "保存视频":
-                        isShare = false;
-                        readToDownLoad();
-                        break;
-                    case "图文分享":
-                        if (!Common.isAlreadyLogin()) {
-                            Common.goGoGo(this, "login");
-                        } else {
-                            isShare = true;
-                            readToDownLoad();
-                            break;
-                        }
-                }
-                dialog_operate.dismiss();
-            });
-        }
-        dialog_operate.show();
-    }
-
-    public void readToDownLoad() {
-        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()+"/Camera";
-        File file = new File(dirName);
-        // 文件夹不存在时创建
-        if (!file.exists()) {
-            dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
-            file = new File(dirName);
-            if (!file.exists())
-                file.mkdirs();
-        }
-        // 下载后的文件名
-        int i = currentUrl.lastIndexOf("/"); // 取的最后一个斜杠后的字符串为名
-        String fileName = dirName + currentUrl.substring(i, currentUrl.length());
-        LogUtil.httpLogW("文件名:" + fileName);
-        File file1 = new File(fileName);
-        if (file1.exists()) {
-            if (isShare) {
-                shareArticle();
-            } else {
-                Toast.makeText(this, "已下载过该视频,请勿重复下载!", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            if (!httpDialog.isShowing()) {
-                httpDialog.show();
-            }
-            new Thread(() -> downLoadVideo(fileName)).start();
-        }
-    }
-
-    public void downLoadVideo(String fileName) {
-        try {
-            URL url = new URL(currentUrl);
-            // 打开连接
-            URLConnection conn = url.openConnection();
-            // 打开输入流
-            InputStream is = conn.getInputStream();
-            // 创建字节流
-            byte[] bs = new byte[1024];
-            int len;
-            OutputStream os = new FileOutputStream(fileName);
-            // 写数据
-            while ((len = is.read(bs)) != -1) {
-                os.write(bs, 0, len);
-            }
-            // 完成后关闭流
-            saveVideoFile(fileName);
-            os.close();
-            is.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveVideoFile(String fileDir) {
-        //strDir视频路径
-        Uri localUri = Uri.parse("file://" + fileDir);
-        Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
-        sendBroadcast(localIntent);
-        if (isShare) {
-            shareArticle();
-        } else {
-            runOnUiThread(() -> {
-                if (httpDialog.isShowing()) {
-                    httpDialog.dismiss();
-                }
-                Common.staticToast("视频已保存,请在手机相册中查看");
-            });
-        }
-    }
-
     public void shareArticle() {
-        if (mPresenter != null) {
-            mPresenter.getShareInfo(mPresenter.nice, currentArticle.id);
+        if (!Common.isAlreadyLogin()) {
+//            if(blog!=null&&blog.related_goods!=null&&blog.related_goods.size()>0) {
+//                Common.goGoGo(this, "HTMLShare", "2","http://www.baidu.com", blog.related_goods.get(0).title,"",blog.related_goods.get(0).thumb);
+//            }
+        } else {
+//            isShare = true;
         }
     }
 
@@ -297,72 +144,66 @@ public class VideoGoodPlayActivity extends BaseActivity implements IChosenView ,
         super.onDestroy();
     }
 
-    @Override
-    public void getNiceList(ArticleEntity articleEntity, int currentPage, int totalPage) {
 
+    @Override
+    public void focusUser(int isFocus, String memberId) {
+        blog.is_focus = isFocus==0?1:0;
+        customVideoPlayer.setAttentStateView();
     }
 
     @Override
-    public void likeArticle(String articleId) {
-
+    public void parseBlog(int isAttent, String memberId) {
+        blog.is_praise = isAttent;
+        blog.praise_num =blog.praise_num+1;
+        customVideoPlayer.setParseStateView();
     }
 
     @Override
-    public void unLikeArticle(String articleId) {
-
-    }
-
-    @Override
-    public void getOtherTopics(List<ArticleEntity.Topic> topic_list) {
-
-    }
-
-    @Override
-    public void refreshFinish() {
-
+    public void downCountSuccess() {
+        blog.down_num =blog.down_num+1;
+        customVideoPlayer.setDownLoadSuccess();
     }
 
     @Override
     public void showFailureView(int request_code) {
-
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
-
     }
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        Common.copyText(VideoGoodPlayActivity.this, baseEntity.data.shareLink, currentArticle.title, false);
-        if (httpDialog.isShowing()) {
-            httpDialog.dismiss();
-        }
-        Common.copyText(this, baseEntity.data.shareLink, currentArticle.title, false);
-        if (promptDialog == null) {
-            promptDialog = new PromptDialog(this);
-        }
-        promptDialog.setSureAndCancleListener(getResources().getString(R.string.discover_articlevideo),
-                getResources().getString(R.string.discover_articleurl), "", getResources().getString(R.string.discover_quweixinfenxiang), v -> {
-                    Common.openWeiXin(VideoGoodPlayActivity.this, "article", currentArticle.id);
-                    promptDialog.dismiss();
-                }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
-        promptDialog.show();
     }
 
     @Override
-    public void updateParse(boolean isParse, TextView tv_dainzan) {
-
+    public void updateParse(boolean isParse) {
+        //取消点赞和点赞(点赞目前不能取消)
+        hotBlogPresenter.praiseBlos(blog.id);
     }
 
     @Override
-    public void updateAttent(boolean isAttent,TextView tv_attent) {
-
+    public void updateAttent(boolean isAttent) {
+        //取消关注和关注
+        hotBlogPresenter.focusUser(isAttent?1:0,blog.member_id);
     }
 
-    public interface updateParseAttentSuccess{
-        void updateParseState(boolean isParse);
-        void updateAttentState(boolean isAttent);
+    @Override
+    public void downVideo() {
+        //上传下载成功
+        hotBlogPresenter.downCount(blog.id);
+    }
+
+    @Override
+    public void shareBolg() {
+        //分享
+        shareArticle();
+    }
+
+    @Override
+    public void startGoodInfo() {
+        if(blog!=null&&blog.related_goods!=null&&blog.related_goods.size()>0)
+        GoodsDetailAct.startAct(this, blog.related_goods.get(0).goods_id);
     }
 
 }
