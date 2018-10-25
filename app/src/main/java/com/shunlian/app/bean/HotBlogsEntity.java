@@ -170,8 +170,8 @@ public class HotBlogsEntity {
         public String avatar;
         public String nickname;
         public String signature;
-        public int is_self;
         public int is_focus;
+        public int is_fans;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

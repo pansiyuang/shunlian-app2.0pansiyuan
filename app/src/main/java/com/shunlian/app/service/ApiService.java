@@ -2674,7 +2674,7 @@ public interface ApiService {
      * 周达人榜
      */
     @GET("discovery/blogfront/weekExportTopList")
-    Call<BaseEntity<WeekExpertEntity>> weekExpertList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<ExpertEntity>> weekExpertList(@QueryMap Map<String, String> map);
 
     /**
      * 精选达人榜
@@ -2710,11 +2710,29 @@ public interface ApiService {
      * 关注消息
      */
     @GET("discovery/message/attention")
-    Call<BaseEntity<EmptyEntity>> getAttentionMsg(@QueryMap Map<String, String> map);
+    Call<BaseEntity<AttentionMsgEntity>> getAttentionMsg(@QueryMap Map<String, String> map);
+
+    /**
+     * 下载消息
+     */
+    @GET("discovery/message/download")
+    Call<BaseEntity<ZanShareEntity>> getDownloadMsg(@QueryMap Map<String, String> map);
+
+    /**
+     * 通知消息
+     */
+    @GET("discovery/message/notice")
+    Call<BaseEntity<NoticeMsgEntity>> getNoticeMsg(@QueryMap Map<String, String> map);
 
     /**
      * 搜索关键词
      */
     @GET("discovery/discoveryuser/getHotSearch")
     Call<BaseEntity<TagEntity>> getHotSearch(@QueryMap Map<String, String> map);
+
+    /**
+     * 搜索达人
+     */
+    @GET("discovery/blogfront/searchExpert")
+    Call<BaseEntity<ExpertEntity>> searchExpert(@QueryMap Map<String, String> map);
 }

@@ -958,11 +958,11 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover_new.DiscoverSearchActivity"
+            android:name=".ui.discover_new.search.DiscoverSearchActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover_new.DiscoverSearchResultActivity"
+            android:name=".ui.discover_new.search.DiscoverSearchResultActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity

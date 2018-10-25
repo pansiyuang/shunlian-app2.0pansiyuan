@@ -12,10 +12,10 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.discover_new.ActivityFrag;
-import com.shunlian.app.ui.discover_new.DiscoverSearchActivity;
 import com.shunlian.app.ui.discover_new.HotBlogFrag;
 import com.shunlian.app.ui.discover_new.AttentionFrag;
 import com.shunlian.app.ui.discover_new.MyFansActivity;
+import com.shunlian.app.ui.discover_new.search.DiscoverSearchActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -73,6 +73,8 @@ public class NewDiscoverFrag extends BaseFragment {
         initFrags();
         tab_layout.setupWithViewPager(view_pager);
         reflex(tab_layout);
+
+        view_pager.setCurrentItem(1);
     }
 
     @Override

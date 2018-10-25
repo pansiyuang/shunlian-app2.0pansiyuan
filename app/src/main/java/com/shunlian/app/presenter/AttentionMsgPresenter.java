@@ -2,10 +2,12 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
+import com.shunlian.app.bean.AttentionMsgEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IAttentionMsgView;
 
 import java.util.HashMap;
@@ -50,17 +52,17 @@ public class AttentionMsgPresenter extends BasePresenter<IAttentionMsgView> {
         map.put("page_size", String.valueOf(PAGE_SIZE));
         sortAndMD5(map);
 
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().getAttentionMsg(map);
-        getNetData(isFirst, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        Call<BaseEntity<AttentionMsgEntity>> baseEntityCall = getApiService().getAttentionMsg(map);
+        getNetData(isFirst, baseEntityCall, new SimpleNetDataCallback<BaseEntity<AttentionMsgEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<AttentionMsgEntity> entity) {
                 super.onSuccess(entity);
-//                EmptyEntity hotBlogsEntity = entity.data;
-//                isLoading = false;
-//                iView.getFocusblogs(hotBlogsEntity, hotBlogsEntity.pager.page, hotBlogsEntity.pager.total_page);
-//                currentPage = hotBlogsEntity.pager.page;
-//                allPage = hotBlogsEntity.pager.total_page;
-//                currentPage++;
+                AttentionMsgEntity attentionMsgEntity = entity.data;
+                isLoading = false;
+                iView.getAttentionMsgList(attentionMsgEntity.list, attentionMsgEntity.page, attentionMsgEntity.total_page);
+                currentPage = attentionMsgEntity.page;
+                allPage = attentionMsgEntity.total_page;
+                currentPage++;
             }
 
             @Override
@@ -73,6 +75,39 @@ public class AttentionMsgPresenter extends BasePresenter<IAttentionMsgView> {
             public void onErrorCode(int code, String message) {
                 isLoading = false;
                 super.onErrorCode(code, message);
+            }
+        });
+    }
+
+    //1关注，2取消关注
+    public void focusUser(int type, String memberId) {
+        Map<String, String> map = new HashMap<>();
+        if (type == 0) {
+            map.put("type", "1");
+        } else {
+            map.put("type", "2");
+        }
+        map.put("member_id", memberId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().focusUser(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.focusUser(type, memberId);
+                Common.staticToast(entity.message);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToast(message);
             }
         });
     }

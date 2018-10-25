@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.shunlian.app.widget.banner.MyKanner
-        android:id="@+id/myKanner"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_margin="16dp"
-        app:bb_delay="3"
-        app:bb_period="3"
-        app:bb_scale="0.5"></com.shunlian.app.widget.banner.MyKanner>
-
     <com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout
         android:id="@+id/lay_refresh"
+        app:mode="follow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_ash"
-        app:mode="follow">
+        android:background="@color/white_ash">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_list"

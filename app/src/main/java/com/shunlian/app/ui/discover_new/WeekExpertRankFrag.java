@@ -8,8 +8,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.WeekExpertAdapter;
-import com.shunlian.app.bean.HotBlogsEntity;
-import com.shunlian.app.bean.WeekExpertEntity;
+import com.shunlian.app.bean.ExpertEntity;
 import com.shunlian.app.presenter.WeekExpertPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.view.IWeekExpertView;
@@ -29,7 +28,7 @@ public class WeekExpertRankFrag extends BaseLazyFragment implements IWeekExpertV
     RecyclerView recycler_list;
 
     private WeekExpertPresenter mPresenter;
-    private List<WeekExpertEntity.Expert> experts;
+    private List<ExpertEntity.Expert> experts;
     private WeekExpertAdapter weekExpertAdapter;
 
     @Override
@@ -53,7 +52,7 @@ public class WeekExpertRankFrag extends BaseLazyFragment implements IWeekExpertV
     }
 
     @Override
-    public void expertList(List<WeekExpertEntity.Expert> expertList) {
+    public void expertList(List<ExpertEntity.Expert> expertList) {
         if (!isEmpty(expertList)) {
             experts.addAll(expertList);
         }
@@ -69,7 +68,7 @@ public class WeekExpertRankFrag extends BaseLazyFragment implements IWeekExpertV
 
     @Override
     public void focusUser(int isFocus, String memberId) {
-        for (WeekExpertEntity.Expert expert : experts) {
+        for (ExpertEntity.Expert expert : experts) {
             if (memberId.equals(expert.member_id)) {
                 if (expert.focus_status == 0) {
                     expert.focus_status = 1;

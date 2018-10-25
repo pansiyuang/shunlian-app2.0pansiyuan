@@ -38,8 +38,21 @@ public class ZanShareMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
             ZanViewHolder zanViewHolder = (ZanViewHolder) holder;
             ZanShareEntity.Msg msg = lists.get(position);
             GlideUtils.getInstance().loadCircleImage(context, zanViewHolder.miv_icon, msg.avatar);
+            GlideUtils.getInstance().loadImage(context, zanViewHolder.miv_goods_icon, msg.blog.pic);
             zanViewHolder.tv_nickname.setText(msg.nickname);
             zanViewHolder.tv_date.setText(msg.create_time);
+            if (msg.type == 119) {//点赞
+                zanViewHolder.miv_status.setImageResource(R.mipmap.icon_faxian_dainzan_hong);
+                zanViewHolder.tv_content.setText("点赞了这条心得");
+            } else if (msg.type == 120) {//分享
+                zanViewHolder.miv_status.setImageResource(R.mipmap.icon_home_share);
+                zanViewHolder.tv_content.setText("分享了这条心得");
+            }
+            if (msg.blog.media == 2) {//视频
+                zanViewHolder.miv_video.setVisibility(View.VISIBLE);
+            } else {
+                zanViewHolder.miv_video.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -47,6 +60,9 @@ public class ZanShareMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_video)
+        MyImageView miv_video;
 
         @BindView(R.id.tv_nickname)
         TextView tv_nickname;

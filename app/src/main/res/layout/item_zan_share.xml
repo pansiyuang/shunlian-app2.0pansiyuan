@@ -53,8 +53,8 @@
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:scaleType="centerCrop"
             android:src="@mipmap/icon_faxian_dainzan_hong" />
 
@@ -76,19 +76,38 @@
         android:layout_marginTop="7.5dp"
         android:background="@color/white_ash"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingRight="20dp">
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_goods_icon"
-            android:layout_width="33dp"
-            android:layout_height="32dp"
-            android:scaleType="centerCrop" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_goods_icon"
+                android:layout_width="33dp"
+                android:layout_height="32dp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_faxian_dianzan_shipin"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_goods_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="辣的哈哈打电话考爱自己哦傲娇啊家具家电"
             android:textColor="@color/new_gray"
             android:textSize="12sp" />
