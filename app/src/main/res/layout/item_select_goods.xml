@@ -21,8 +21,8 @@
         android:layout_alignTop="@+id/miv_pic"
         android:layout_marginLeft="7dp"
         android:layout_marginTop="7dp"
-        android:maxLines="2"
         android:layout_toRightOf="@+id/miv_pic"
+        android:maxLines="2"
         android:textColor="@color/value_484848"
         android:textSize="15sp" />
 
@@ -39,6 +39,7 @@
 
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/mtv_price"
@@ -51,5 +52,18 @@
         android:text="添加"
         android:textColor="@color/pink_color"
         android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_del"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_title"
+        android:layout_alignParentRight="true"
+        android:paddingTop="8dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="12dp"
+        android:visibility="gone"
+        android:src="@mipmap/icon_common_search_delet" />
 
 </RelativeLayout>

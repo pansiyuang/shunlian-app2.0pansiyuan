@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -21,9 +22,13 @@ import butterknife.BindView;
 
 public class SelectGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
+    private boolean isShowAdd = true;
 
     public SelectGoodsAdapter(Context context,boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
         super(context, isShowFooter, lists);
+        if (context instanceof FindSendPictureTextAct){
+            isShowAdd = false;
+        }
     }
 
     /**
@@ -51,6 +56,14 @@ public class SelectGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         GlideUtils.getInstance().loadOverrideImage(context,mHolder.mivPic,goods.thumb,132,132);
         mHolder.mtvTitle.setText(goods.title);
         mHolder.mtvPrice.setText("￥"+goods.price);
+
+        if (isShowAdd){
+            visible(mHolder.mtv_add);
+            gone(mHolder.miv_del);
+        }else {
+            visible(mHolder.miv_del);
+            gone(mHolder.mtv_add);
+        }
     }
 
 
@@ -64,12 +77,23 @@ public class SelectGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         @BindView(R.id.mtv_price)
         MyTextView mtvPrice;
 
+        @BindView(R.id.mtv_add)
+        MyTextView mtv_add;
+
+        @BindView(R.id.miv_del)
+        MyImageView miv_del;
+
         public SelectGoodsHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(v -> {
                 if (listener != null){
                     listener.onItemClick(v,getAdapterPosition());
                 }
+            });
+
+            miv_del.setOnClickListener(v -> {
+                lists.remove(getAdapterPosition());
+                notifyItemChanged(getAdapterPosition());
             });
         }
     }

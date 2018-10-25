@@ -3,10 +3,11 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BlogDraftEntity;
 import com.shunlian.app.bean.CommonEntity;
-import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.photopick.ImageVideo;
 import com.shunlian.app.view.ISelectPicVideoView;
 
 import java.io.File;
@@ -28,6 +29,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
 
     public FindSendPicPresenter(Context context, ISelectPicVideoView iView) {
         super(context, iView);
+        initApi();
     }
 
     /**
@@ -50,11 +52,21 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
      * 处理网络请求
      */
     @Override
-    protected void initApi() {
+    public void initApi() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<BlogDraftEntity>> entityCall = getApiService().getDraft(map);
+        getNetData(true,entityCall,new SimpleNetDataCallback<BaseEntity<BlogDraftEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<BlogDraftEntity> entity) {
+                super.onSuccess(entity);
+                iView.resetDraft(entity.data);
+            }
+        });
 
     }
 
-    public void uploadPic(List<ImageEntity> filePath, final String uploadPath) {
+    public void uploadPic(List<ImageVideo> filePath, final String uploadPath) {
         if (isEmpty(filePath)) {
             return;
         }
@@ -82,6 +94,24 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
                     iView.uploadImg(uploadPicEntity);
                 }
                 iView.setRefundPics(uploadPicEntity.relativePath, false);
+            }
+        });
+    }
+
+
+    public void uploadVideo(String videoPath){
+        File file = new File(videoPath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("video/*"), file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().uploadVideo(part);
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                String url = entity.data.name;
+                iView.uploadViodeSuccess(url,videoPath);
             }
         });
     }
@@ -122,4 +152,6 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
             }
         });
     }
+
+
 }

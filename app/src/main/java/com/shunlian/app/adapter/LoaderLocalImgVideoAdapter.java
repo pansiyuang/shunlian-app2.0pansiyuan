@@ -55,21 +55,23 @@ public class LoaderLocalImgVideoAdapter extends BaseRecyclerAdapter<ImageVideo> 
         LoaderLocalImgVideoHolder mHolder = (LoaderLocalImgVideoHolder) holder;
         ImageVideo imageVideo = lists.get(position);
         if (imageVideo.videoDuration != 0) {
+            gone(mHolder.checkmark);
             if (isEmpty(imageVideo.coverPath)) {
-                //LogUtil.zhLogW("=======coverBitmap======="+imageVideo.coverBitmap);
                 mHolder.image.setImageBitmap(imageVideo.coverBitmap);
             }else {
                 GlideUtils.getInstance().loadOverrideImage(context,
                         mHolder.image, imageVideo.coverPath, 176, 176);
             }
-            gone(mHolder.mtv_video_duration);
             visible(mHolder.mtv_video_duration);
             String second = String.valueOf(imageVideo.videoDuration / 1000);
             if (second.length() == 1) {
                 second = "0" + second;
             }
+            /*LogUtil.zhLogW(String.format("条目位置：%s  文件名:%s  时间：%s  格式化时间:%s",position+"",
+                    imageVideo.name,imageVideo.videoDuration+"",second));*/
             mHolder.mtv_video_duration.setText(String.format("00:%s", second));
         } else {
+            visible(mHolder.checkmark);
             GlideUtils.getInstance().loadOverrideImage(context,
                     mHolder.image, imageVideo.path, 176, 176);
             gone(mHolder.mtv_video_duration);

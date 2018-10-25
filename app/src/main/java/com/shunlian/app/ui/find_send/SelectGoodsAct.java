@@ -13,7 +13,6 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IView;
-import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
 
@@ -22,11 +21,9 @@ import butterknife.BindView;
  */
 
 public class SelectGoodsAct extends BaseActivity implements IView{
+
     @BindView(R.id.ed_edit)
     EditText edEdit;
-
-    @BindView(R.id.mtv_clear)
-    MyTextView mtvClear;
 
     @BindView(R.id.recy_view)
     RecyclerView recyView;

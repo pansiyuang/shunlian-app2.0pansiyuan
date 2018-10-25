@@ -8,25 +8,31 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.view.KeyEvent;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SelectGoodsAdapter;
 import com.shunlian.app.adapter.SingleImgAdapterV2;
+import com.shunlian.app.bean.BlogDraftEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.UploadPicEntity;
+import com.shunlian.app.photopick.ImageVideo;
 import com.shunlian.app.presenter.FindSendPicPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISelectPicVideoView;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -67,15 +73,19 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @BindView(R.id.edit)
     EditText edit;
 
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
     private List<GoodsDeatilEntity.Goods> goodsLists;
     private SelectGoodsAdapter adapter;
     private SingleImgAdapterV2 singleImgAdapter;
-    private List<ImageEntity> imgList = new ArrayList();
+    private ArrayList<ImageVideo> imgList = new ArrayList();
     private int index;
     private FindSendPicPresenter presenter;
     /********打开选择图片activity的请求码**********/
     public static final int SELECT_PIC_REQUESTCODE = 800;
     private String topic_id;
+    private String mVideoUrl;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, FindSendPictureTextAct.class);
@@ -117,6 +127,15 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         recy_pics.setAdapter(singleImgAdapter);
 
         presenter = new FindSendPicPresenter(this,this);
+
+        singleImgAdapter.setOnItemClickListener((view, position) -> {
+            EventBus.getDefault().postSticky(imgList);
+            BrowseImageVideoAct.BuildConfig config1 = new BrowseImageVideoAct.BuildConfig();
+            config1.position = position;
+            config1.isShowImageVideo = true;
+            config1.isShowSelect = false;
+            BrowseImageVideoAct.startAct(this,config1,BrowseImageVideoAct.REQUEST_CODE);
+        });
     }
 
     @Override
@@ -134,6 +153,36 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                     }
                 }
             });
+        }
+
+        miv_close.setOnClickListener(v -> saveDraft());
+    }
+
+    private void saveDraft(){
+
+        if ((edit != null&&!isEmpty(edit.getText().toString())) || !isEmpty(imgList)){
+            final PromptDialog promptDialog = new PromptDialog(this);
+            promptDialog.setTvSureBGColor(Color.WHITE);
+            promptDialog.setTvSureColor(R.color.pink_color);
+            promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
+                    .setSureAndCancleListener("是否保留草稿内容？",
+                            "保留", v -> send("1"),
+                            "不保留", v -> {
+                                promptDialog.dismiss();
+                                finish();
+                            }).show();
+            return;
+        }
+        finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            saveDraft();
+            return true;
+        }else {
+            return super.onKeyDown(keyCode, event);
         }
     }
 
@@ -166,6 +215,14 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     @OnClick(R.id.mtv_toolbar_right)
     public void sendBlog(){
+        send("0");
+    }
+
+    /**
+     * 1表示保存为草稿 0否 默认为0
+     * @param draft
+     */
+    private void send(String draft) {
         String edit = this.edit.getText().toString();
         if (isEmpty(edit)){
             Common.staticToast("心得不能为空");
@@ -178,15 +235,15 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         String address = mtv_address.getText().toString();
 
         if (presenter != null){
-            presenter.publish(edit,pics,"",topic_id,address,goodsid,"0");
+            presenter.publish(edit,pics,mVideoUrl,topic_id,address,goodsid,draft);
         }
     }
 
     private String getpicsPath(){
         if (!isEmpty(imgList)){
             StringBuilder sb = new StringBuilder();
-            for (ImageEntity e:imgList) {
-                sb.append(e.imgUrl);
+            for (ImageVideo e:imgList) {
+                sb.append(e.url);
                 sb.append(",");
             }
             return sb.toString().substring(0,sb.length()-1);
@@ -231,9 +288,17 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             }
         }else if (requestCode == SELECT_PIC_REQUESTCODE && resultCode == Activity.RESULT_OK){
             ArrayList<String> picturePaths = data.getStringArrayListExtra(SelectPicVideoAct.EXTRA_RESULT);
-            index = 0;
-            //LogUtil.zhLogW("===picturePaths======"+ picturePaths);
-            compressImgs(index, picturePaths);
+            if (!isEmpty(picturePaths)){
+                String path = picturePaths.get(0);
+                if (!isEmpty(path) && path.toLowerCase().endsWith(".mp4")){
+                    if (presenter != null){
+                        presenter.uploadVideo(path);
+                    }
+                }else {
+                    index = 0;
+                    compressImgs(index, picturePaths);
+                }
+            }
         }
     }
 
@@ -248,7 +313,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             @Override
             public void onSuccess(File file) {
                 LogUtil.httpLogW("onSuccess:" + file.length());
-                ImageEntity imageEntity = new ImageEntity(list.get(index));
+                ImageVideo imageEntity = new ImageVideo();
+                imageEntity.path = list.get(index);
                 imageEntity.file = file;
                 imgList.add(imageEntity);
                 index++;
@@ -279,8 +345,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         }
         if (isShow){
             for (String picturePath : pics) {
-                ImageEntity imageEntity = new ImageEntity();
-                imageEntity.imgUrl = picturePath;
+                ImageVideo imageEntity = new ImageVideo();
+                imageEntity.url = picturePath;
                 imgList.add(imageEntity);
             }
             singleImgAdapter.notifyDataSetChanged();
@@ -290,10 +356,27 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @Override
     public void uploadImg(UploadPicEntity picEntity) {
         for (int i = 0; i < picEntity.relativePath.size(); i++) {
-            imgList.get(i).imgUrl = picEntity.relativePath.get(i);
+            imgList.get(i).url = picEntity.relativePath.get(i);
         }
         if (singleImgAdapter != null)
         singleImgAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 上传视频成功
+     *
+     * @param url 服务端视频地址
+     */
+    @Override
+    public void uploadViodeSuccess(String url,String local_path) {
+        mVideoUrl = url;
+        if (singleImgAdapter != null) {
+            ImageVideo entity = new ImageVideo();
+            entity.path = local_path;
+            entity.url = url;
+            imgList.add(entity);
+            singleImgAdapter.notifyDataSetChanged();
+        }
     }
 
     /**
@@ -302,6 +385,54 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @Override
     public void publishSuccess() {
         finish();
+    }
+
+    /**
+     * 显示草稿
+     *
+     * @param entity
+     */
+    @Override
+    public void resetDraft(BlogDraftEntity entity) {
+        if (edit != null && !isEmpty(entity.text)){
+            edit.setText(entity.text);
+        }
+
+        if (mtv_topic != null && !isEmpty(entity.activity_title)){
+            mtv_topic.setText(entity.activity_title);
+            topic_id = entity.activity_id;
+        }
+
+        if (mtv_address != null && !isEmpty(entity.place)){
+            mtv_address.setText(entity.place);
+        }
+        if (!isEmpty(entity.goods_infos)) {
+            if (goodsLists == null) {
+                goodsLists = new ArrayList<>();
+            }
+            goodsLists.addAll(entity.goods_infos);
+            if (adapter == null) {
+                adapter = new SelectGoodsAdapter(this,false, goodsLists);
+                recy_view.setAdapter(adapter);
+            } else {
+                adapter.notifyDataSetChanged();
+            }
+        }
+
+        if (!isEmpty(entity.video)){
+            ImageVideo imageVideo = new ImageVideo();
+            imageVideo.path = entity.video;
+            imageVideo.coverPath = entity.video_thumb;
+            imgList.add(imageVideo);
+            singleImgAdapter.notifyDataSetChanged();
+        }else if (!isEmpty(entity.pics)){
+            for (String url:entity.pics) {
+                ImageVideo imageVideo = new ImageVideo();
+                imageVideo.url = url;
+                imgList.add(imageVideo);
+            }
+            singleImgAdapter.notifyDataSetChanged();
+        }
     }
 
     /**

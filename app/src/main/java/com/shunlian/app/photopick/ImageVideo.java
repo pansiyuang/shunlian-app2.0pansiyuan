@@ -3,6 +3,8 @@ package com.shunlian.app.photopick;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
+import java.io.File;
+
 /**
  * Created by zhanghe on 2018/10/19.
  */
@@ -19,6 +21,12 @@ public class ImageVideo implements Comparable<ImageVideo>{
     /***视频封面**/
     public Bitmap coverBitmap;
     public String coverPath;
+
+    public File file;
+    /**
+     * 服务端url
+     */
+    public String url;
 
     @Override
     public String toString() {
