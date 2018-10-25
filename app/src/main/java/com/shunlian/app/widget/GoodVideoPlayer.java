@@ -38,7 +38,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.HotBlogsEntity;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -168,7 +167,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         ImageView iv_download = findViewById(R.id.iv_download);
         iv_download.setVisibility(GONE);
 
-        line_good_info.setOnClickListener(this);
+        include_good.setOnClickListener(this);
         thumbImageView.setOnClickListener(this);
         backButton.setOnClickListener(this);
         tinyBackImageView.setOnClickListener(this);
@@ -227,9 +226,9 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
      */
     public void setParseStateView(){
         if(blog.is_praise==1) {//已点赞
-            image_dianzai_state.setImageResource(R.mipmap.icon_found_xiangqing_zan_h);
+            image_dianzai_state.setImageResource(R.mipmap.icon_dianzan_sel);
         }else{
-            image_dianzai_state.setImageResource(R.drawable.icon_dianzan_good);
+            image_dianzai_state.setImageResource(R.mipmap.icon_dianzan_good);
         }
         tv_dianzan.setText(blog.praise_num+"");
     }
@@ -605,7 +604,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             readToDownLoad();
         }else if(i==R.id.tv_user_attent){
             parseAttent.updateAttent(blog.is_focus==1);
-        }else if(i==R.id.line_good_info){
+        }else if(i==R.id.include_good){
             parseAttent.startGoodInfo();
         }
     }
@@ -1117,6 +1116,19 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     String fileName = "";
 
     public void readToDownLoad() {
+       boolean checkState = checkDownLoadFileExists();
+        if (checkState) {
+            Common.staticToast("已下载过该视频,请勿重复下载!");
+        } else {
+            new Thread(() -> downLoadVideo(fileName)).start();
+        }
+    }
+
+    /**
+     * 检查下载的文件是否存在
+     * @return
+     */
+    public boolean checkDownLoadFileExists(){
         dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
                 .getAbsolutePath()+"/Camera";
         File file = new File(dirName);
@@ -1126,7 +1138,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
                     .getAbsolutePath();
             file = new File(dirName);
             if (!file.exists())
-            file.mkdirs();
+                file.mkdirs();
         }
         // 下载后的文件名
 
@@ -1139,12 +1151,11 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         LogUtil.httpLogW("文件名:" + fileName);
         File file1 = new File(fileName);
         if (file1.exists()) {
-            Common.staticToast("已下载过该视频,请勿重复下载!");
-        } else {
-            new Thread(() -> downLoadVideo(fileName)).start();
+            return true;
         }
-    }
 
+        return false;
+    }
 
 
     public void downLoadVideo(String fileName) {

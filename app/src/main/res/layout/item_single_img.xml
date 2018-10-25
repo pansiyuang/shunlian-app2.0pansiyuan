@@ -11,6 +11,8 @@
         android:scaleType="centerCrop"
         android:src="@mipmap/img_tupian" />
 
+
+
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_max"
         android:layout_width="wrap_content"
@@ -37,4 +39,18 @@
         android:layout_height="2dp"
         android:layout_alignParentBottom="true"
         android:visibility="gone" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_video_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone"
+        android:drawableLeft="@mipmap/icon_video01_nor"
+        android:drawablePadding="5dp"
+        android:text="00:15"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
 </RelativeLayout>

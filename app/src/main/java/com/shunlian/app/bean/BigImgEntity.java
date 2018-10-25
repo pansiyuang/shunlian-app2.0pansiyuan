@@ -17,7 +17,6 @@ public class BigImgEntity implements Parcelable {
     public String id;
     public ArrayList<String> items;
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -26,11 +25,11 @@ public class BigImgEntity implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringList(this.itemList);
-        dest.writeStringList(this.items);
         dest.writeInt(this.index);
         dest.writeString(this.desc);
         dest.writeString(this.content);
         dest.writeString(this.id);
+        dest.writeStringList(this.items);
     }
 
     public BigImgEntity() {
@@ -38,11 +37,11 @@ public class BigImgEntity implements Parcelable {
 
     protected BigImgEntity(Parcel in) {
         this.itemList = in.createStringArrayList();
-        this.items = in.createStringArrayList();
         this.index = in.readInt();
         this.desc = in.readString();
         this.content = in.readString();
         this.id = in.readString();
+        this.items = in.createStringArrayList();
     }
 
     public static final Parcelable.Creator<BigImgEntity> CREATOR = new Parcelable.Creator<BigImgEntity>() {

@@ -79,6 +79,8 @@ public class CommonEntity {
     public String type;
     public String item_id;
 
+    public String name;
+
     @Override
     public String toString() {
         return "CommonEntity{" +

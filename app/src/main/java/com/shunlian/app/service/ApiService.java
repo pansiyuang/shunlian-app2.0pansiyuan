@@ -23,14 +23,8 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.*;
-import com.shunlian.app.newchat.entity.ChatGoodsEntity;
-import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.entity.HistoryEntity;
-import com.shunlian.app.newchat.entity.ReplysetEntity;
-import com.shunlian.app.newchat.entity.ServiceEntity;
-import com.shunlian.app.newchat.entity.StoreMessageEntity;
-import com.shunlian.app.newchat.entity.StoreMsgEntity;
-import com.shunlian.app.newchat.entity.SystemMessageEntity;
+import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.newchat.entity.*;
 
 import java.util.List;
 import java.util.Map;
@@ -2639,6 +2633,45 @@ public interface ApiService {
      */
     @GET("tasknewperson/getGoldByWatchVideo")
     Call<BaseEntity<TaskHomeEntity>> getGoldByWatchVideo(@QueryMap Map<String,String> map);
+
+    /**
+     * 获取附近位置
+     * @param body
+     * @return
+     */
+    @POST("discovery/publish/getRelatedPlaces")
+    Call<BaseEntity<NearAddrEntity>> getRelatedPlaces(@Body RequestBody body);
+
+    /**
+     * 获取话题
+     * @param map
+     * @return
+     */
+    @GET("discovery/blogfront/getActivitys")
+    Call<BaseEntity<TopicEntity>>  getTopics(@QueryMap Map<String,String> map);
+
+    /**
+     * 发表博客
+     * @return
+     */
+    @POST("discovery/publish/publish")
+    Call<BaseEntity<CommonEntity>> pubishBlog(@Body RequestBody body);
+
+    /**
+     * 上传视频
+     * @param parts
+     * @return
+     */
+    @Multipart
+    @POST("uploads/uploadVideo")
+    Call<BaseEntity<CommonEntity>> uploadVideo(@Part MultipartBody.Part parts);
+
+    /**
+     *获取草稿
+     * @return
+     */
+    @GET("discovery/publish/getdraft")
+    Call<BaseEntity<BlogDraftEntity>> getDraft(@QueryMap Map<String,String> map);
 
     /**
      * 精选列表
