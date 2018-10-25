@@ -2717,4 +2717,10 @@ public interface ApiService {
      */
     @GET("discovery/discoveryuser/getHotSearch")
     Call<BaseEntity<TagEntity>> getHotSearch(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注/取消关注
+     */
+    @GET("/discovery/discoveryuser/downcount")
+    Call<BaseEntity<EmptyEntity>> downCount(@QueryMap Map<String, String> map);
 }
