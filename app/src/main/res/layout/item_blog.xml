@@ -151,6 +151,7 @@
         android:textSize="10sp" />
 
     <RelativeLayout
+        android:id="@+id/rlayout_goods"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="63dp"
