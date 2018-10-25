@@ -86,6 +86,9 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         EventBus.getDefault().register(this);
         blog = getIntent().getParcelableExtra("blog");
 
+        if(blog!=null){
+            customVideoPlayer.setGoodUserInfo(blog,this);
+        }
         customVideoPlayer.setUp(blog.video, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
         customVideoPlayer.startVideo();
         httpDialog = new HttpDialog(this);
