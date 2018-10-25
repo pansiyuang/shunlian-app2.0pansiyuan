@@ -86,9 +86,14 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     public static final int SELECT_PIC_REQUESTCODE = 800;
     private String topic_id;
     private String mVideoUrl;
+    /***
+     * 最大心得字数
+     */
+    private int MAX_TEXT_COUNT = 300;
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context,boolean isWhiteList) {
         Intent intent = new Intent(context, FindSendPictureTextAct.class);
+        intent.putExtra("isWhiteList",isWhiteList);
         if (!(context instanceof Activity))
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -103,6 +108,12 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        boolean isWhiteList = getIntent().getBooleanExtra("isWhiteList", false);
+        if (isWhiteList){
+            MAX_TEXT_COUNT = 800;
+        }
+
         mtvToolbarTitle.setText("发布图文");
         gone(mrlayoutToolbarMore);
         visible(mtvToolbarRight);
@@ -146,9 +157,9 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                 @Override
                 public void afterTextChanged(Editable s) {
                     super.afterTextChanged(s);
-                    if (s.length() > 800){
-                        edit.setText(s.subSequence(0,800));
-                        edit.setSelection(800);
+                    if (s.length() > MAX_TEXT_COUNT){
+                        edit.setText(s.subSequence(0,MAX_TEXT_COUNT));
+                        edit.setSelection(MAX_TEXT_COUNT);
                         Common.staticToast("字数不能超过800");
                     }
                 }
