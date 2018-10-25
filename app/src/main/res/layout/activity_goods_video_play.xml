@@ -3,87 +3,40 @@
     android:id="@+id/ll_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#000000"
     android:orientation="vertical">
 
-    <com.shunlian.app.widget.CustomVideoPlayer
+    <com.shunlian.app.widget.GoodVideoPlayer
         android:id="@+id/customVideoPlayer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"/>
-
-    <LinearLayout
-        android:layout_width="50dp"
-        android:orientation="vertical"
-        android:gravity="center_vertical|right"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
         android:layout_height="match_parent">
 
+        <!--非wifi网络提示-->
         <LinearLayout
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/ll_wifi_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#A6000000"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/icon_dianzan_good"/>
-            <TextView
+            <com.shunlian.app.widget.MyTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="您正在使用非wifi，播放将消耗您的流量"
                 android:textColor="@color/white"
-                android:layout_marginTop="5dp"
-                android:text=""
-                android:textSize="10sp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:orientation="vertical">
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/icon_xiazai"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_marginTop="5dp"
-                android:text=""
-                android:textSize="10sp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:orientation="vertical">
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/icon_fenxiang"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_marginTop="5dp"
-                android:text=""
-                android:textSize="10sp"/>
-        </LinearLayout>
-        
-    </LinearLayout>
+                android:textSize="13sp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-       >
-    </RelativeLayout>
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_continue_to_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:src="@mipmap/img_xiangqing_jixubofang" />
+
+        </LinearLayout>
+
+    </com.shunlian.app.widget.GoodVideoPlayer>
 </RelativeLayout>

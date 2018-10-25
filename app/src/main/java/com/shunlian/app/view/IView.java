@@ -22,6 +22,7 @@ package com.shunlian.app.view;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 
@@ -47,4 +48,6 @@ public interface IView {
      * @param baseEntity
      */
     default void shareInfo(BaseEntity<ShareInfoParam> baseEntity){}
+
+    default void setAdapter(BaseRecyclerAdapter adapter){}
 }
