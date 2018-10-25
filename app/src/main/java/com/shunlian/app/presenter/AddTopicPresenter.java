@@ -98,7 +98,7 @@ public class AddTopicPresenter extends BasePresenter {
         map.put("page_size",page_size);
         sortAndMD5(map);
 
-        Call<BaseEntity<TopicEntity>> activitys = getApiService().getActivitys(map);
+        Call<BaseEntity<TopicEntity>> activitys = getApiService().getTopics(map);
         getNetData(isLoad,activitys,new SimpleNetDataCallback<BaseEntity<TopicEntity>>(){
             @Override
             public void onSuccess(BaseEntity<TopicEntity> entity) {
