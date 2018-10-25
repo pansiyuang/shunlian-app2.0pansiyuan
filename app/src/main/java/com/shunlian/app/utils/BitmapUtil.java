@@ -256,7 +256,7 @@ public class BitmapUtil {
                 rv_pics.setLayoutParams(param);
                 rv_pics.setNestedScrollingEnabled(false);
                 if (rv_pics.getItemDecorationCount()==0)
-                    rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(activity, 9), false));
+                    rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(activity, gap), false));
                 rv_pics.setAdapter(picAdapter);
 //                } else {
 //                    picAdapter = new SinglePicAdapter(activity, false, imgs);

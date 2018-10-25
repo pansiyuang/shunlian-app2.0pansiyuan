@@ -2,17 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/white">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/my_gray_seven" />
+    android:layout_alignParentBottom="true"
+    android:background="@android:color/transparent"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clipChildren="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -27,18 +26,18 @@
                 android:id="@+id/miv_tab_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/tab_1_n"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                android:background="@mipmap/tab_1_n" />
 
             <TextView
                 android:id="@+id/tv_tab_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="6dp"
                 android:text="@string/main_page"
-                android:layout_marginBottom="4dp"
                 android:textColor="@color/tab_text_n"
-                android:textSize="9sp"/>
+                android:textSize="9sp" />
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_first"
@@ -46,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:src="@mipmap/img_chook_01"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -61,16 +60,16 @@
                 android:id="@+id/miv_tab_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/tab_2_n"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                android:background="@mipmap/tab_2_n" />
 
             <TextView
                 android:id="@+id/tv_tab_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="6dp"
                 android:text="@string/sort"
-                android:layout_marginBottom="4dp"
                 android:textColor="@color/tab_text_n"
                 android:textSize="9sp" />
         </LinearLayout>
@@ -80,52 +79,52 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:clipChildren="false"
             android:orientation="vertical">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_tab_discover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/tab_3_n"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="-12dp"
+                android:background="@mipmap/tab_03" />
 
             <TextView
                 android:id="@+id/tv_tab_discover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/discover_center"
+                android:layout_below="@id/miv_tab_discover"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="4dp"
+                android:text="@string/discover_center"
                 android:textColor="@color/tab_text_n"
-                android:textSize="9sp"
-                android:layout_below="@id/miv_tab_discover"/>
+                android:textSize="9sp" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_message_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/miv_tab_discover"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentRight="true"
                 android:background="@drawable/rounded_corner_pink_100"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
                 android:gravity="center"
                 android:minWidth="16dp"
-                android:visibility="gone"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
                 android:textColor="@color/white"
                 android:textSize="8.5sp"
-                android:layout_marginTop="5dp" />
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/view_message"
                 android:layout_width="6dp"
                 android:layout_height="6dp"
-                android:background="@drawable/rounded_corner_pink_100"
-                android:visibility="gone"
-                android:layout_marginTop="5dp"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="22dp"
-                android:layout_alignParentRight="true"/>
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_corner_pink_100"
+                android:visibility="gone" />
         </com.shunlian.app.widget.MyRelativeLayout>
 
         <LinearLayout
@@ -147,9 +146,9 @@
                 android:id="@+id/tv_shopping_car"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="6dp"
                 android:text="@string/shopping_car"
-                android:layout_marginBottom="4dp"
                 android:textColor="@color/tab_text_n"
                 android:textSize="9sp" />
         </LinearLayout>
@@ -173,9 +172,9 @@
                 android:id="@+id/tv_person_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="6dp"
                 android:text="@string/person_center"
-                android:layout_marginBottom="4dp"
                 android:textColor="@color/tab_text_n"
                 android:textSize="9sp" />
         </LinearLayout>

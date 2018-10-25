@@ -18,6 +18,9 @@ public class AmountDetailEntity {
     public static class Content {
         public String name;
         public String value;
+        public String is_click;
+        public String image;
+        public String dialog_text;
     }
 
 }

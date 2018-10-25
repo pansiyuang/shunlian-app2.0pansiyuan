@@ -2648,7 +2648,7 @@ public interface ApiService {
      * @return
      */
     @GET("discovery/blogfront/getActivitys")
-    Call<BaseEntity<TopicEntity>>  getActivitys(@QueryMap Map<String,String> map);
+    Call<BaseEntity<TopicEntity>>  getTopics(@QueryMap Map<String,String> map);
 
     /**
      * 发表博客
@@ -2672,4 +2672,82 @@ public interface ApiService {
      */
     @GET("discovery/publish/getdraft")
     Call<BaseEntity<BlogDraftEntity>> getDraft(@QueryMap Map<String,String> map);
+
+    /**
+     * 精选列表
+     */
+    @GET("discovery/blogfront/hotblogs")
+    Call<BaseEntity<HotBlogsEntity>> hotblogs(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注列表
+     */
+    @GET("discovery/blogfront/getmyfocusblogs")
+    Call<BaseEntity<HotBlogsEntity>> focusblogs(@QueryMap Map<String, String> map);
+
+    /**
+     * 活动列表
+     */
+    @GET("discovery/blogfront/getActivitys")
+    Call<BaseEntity<DiscoverActivityEntity>> getActivitys(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注/取消关注
+     */
+    @GET("discovery/discoveryuser/focusUser")
+    Call<BaseEntity<EmptyEntity>> focusUser(@QueryMap Map<String, String> map);
+
+    /**
+     * 文章点赞
+     */
+    @GET("discovery/discoveryuser/praise")
+    Call<BaseEntity<EmptyEntity>> praiseBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 周达人榜
+     */
+    @GET("discovery/blogfront/weekExportTopList")
+    Call<BaseEntity<WeekExpertEntity>> weekExpertList(@QueryMap Map<String, String> map);
+
+    /**
+     * 精选达人榜
+     */
+    @GET("discovery/blogfront/hotExpertTopList")
+    Call<BaseEntity<HotBlogsEntity>> hotExpertTopList(@QueryMap Map<String, String> map);
+
+    /**
+     * 收藏列表/自己发表的文章
+     */
+    @GET("discovery/discoveryuser/getblogs")
+    Call<BaseEntity<HotBlogsEntity>> getblogs(@QueryMap Map<String, String> map);
+
+    /**
+     * 我的粉丝列表
+     */
+    @GET("discovery/discoveryuser/fansList")
+    Call<BaseEntity<FansEntity>> fansList(@QueryMap Map<String, String> map);
+
+    /**
+     * 活动详情
+     */
+    @GET("discovery/blogfront/getactivitydetail")
+    Call<BaseEntity<HotBlogsEntity>> getActivityDetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 点赞与分享
+     */
+    @GET("discovery/message/praisesharelist")
+    Call<BaseEntity<ZanShareEntity>> getPraiseShareList(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注消息
+     */
+    @GET("discovery/message/attention")
+    Call<BaseEntity<EmptyEntity>> getAttentionMsg(@QueryMap Map<String, String> map);
+
+    /**
+     * 搜索关键词
+     */
+    @GET("discovery/discoveryuser/getHotSearch")
+    Call<BaseEntity<TagEntity>> getHotSearch(@QueryMap Map<String, String> map);
 }

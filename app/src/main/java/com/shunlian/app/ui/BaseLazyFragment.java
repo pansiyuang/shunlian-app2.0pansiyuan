@@ -3,6 +3,9 @@ package com.shunlian.app.ui;
 import android.os.Bundle;
 import android.view.View;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  *
  * Fragment基类，封装了懒加载的实现
@@ -19,7 +22,7 @@ public abstract class BaseLazyFragment extends BaseFragment {
     private boolean isReuseView;
     private boolean isFirstVisible;
     private View rootView;
-
+    protected Unbinder bind;
 
     //setUserVisibleHint()在Fragment创建时会先被调用一次，传入isVisibleToUser = false
     //如果当前Fragment可见，那么setUserVisibleHint()会再次被调用一次，传入isVisibleToUser = true
@@ -59,6 +62,7 @@ public abstract class BaseLazyFragment extends BaseFragment {
         //如果setUserVisibleHint()在rootView创建前调用时，那么
         //就等到rootView创建完后才回调onFragmentVisibleChange(true)
         //保证onFragmentVisibleChange()的回调发生在rootView创建完成之后，以便支持ui操作
+        bind = ButterKnife.bind(this, view);
         if (rootView == null) {
             rootView = view;
             if (getUserVisibleHint()) {
@@ -76,6 +80,9 @@ public abstract class BaseLazyFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (bind != null) {
+            bind.unbind();
+        }
     }
 
     @Override

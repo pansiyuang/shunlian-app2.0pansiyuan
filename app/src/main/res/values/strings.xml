@@ -679,6 +679,8 @@
 
     <!--余额-->
     <string name="balance_yue">余额</string>
+    <string name="balance_wozhidaole">我知道了</string>
+    <string name="balance_dianjijiechu">“点击解除当前支付宝账号重新更换新的账号”</string>
     <string name="balance_zanwutixian">暂无提现明细</string>
     <string name="balance_tixianchenggong">提现成功</string>
     <string name="balance_shibaiyuanyin">失败原因</string>
@@ -729,6 +731,9 @@
     <string name="balance_tixianjieguo">提现结果</string>
     <string name="balance_tixianshengqing">提现申请成功</string>
     <string name="balance_tixianshibai">提现失败</string>
+    <string name="balance_fanhui">返回</string>
+    <string name="balance_jiebangzhanghu">解绑账户</string>
+    <string name="balance_chakanyuanyin">查看原因</string>
     <string name="balance_zhaohuimima">找回密码</string>
     <string name="balance_wangjimima">忘记密码</string>
     <string name="balance_chongxinshuru">重新输入</string>

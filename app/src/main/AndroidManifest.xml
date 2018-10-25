@@ -447,11 +447,11 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.h5.H5Act"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--<activity-->
+            <!--android:name=".ui.h5.H5Act"-->
+            <!--android:exported="false"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:windowSoftInputMode="stateAlwaysHidden" />-->
         <activity
             android:name=".ui.h5.H5X5Act"
             android:exported="false"
@@ -928,7 +928,6 @@
             android:name=".ui.discover.VideoPlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".ui.LuckWheelPanActivity"
             android:exported="false" />
@@ -957,6 +956,39 @@
         <activity android:name=".ui.find_send.BrowseImageVideoAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.HotExpertRankActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.MyPageActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.MyFansActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.ActivityDetailActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.DiscoverMsgActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.DiscoverSearchActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.DiscoverSearchResultActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.VideoGoodPlayActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

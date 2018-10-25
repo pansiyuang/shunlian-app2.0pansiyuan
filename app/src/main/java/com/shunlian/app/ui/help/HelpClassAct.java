@@ -2,7 +2,6 @@ package com.shunlian.app.ui.help;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,14 +19,11 @@ import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PHelpTwo;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MVerticalItemDecoration;
-import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpTwoView;
-import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -212,7 +208,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
                 ClassDetailAct.startAct(baseAct,
                         articles.get(position).h5_link,
                         articles.get(position).id,
-                        H5Act.MODE_SONIC);
+                        H5X5Act.MODE_SONIC);
             });
             rv_qCate.setLayoutManager(linearLayoutManager);
             rv_qCate.addItemDecoration(new MVerticalItemDecoration(this, 1, 0, 0, getColorResouce(R.color.value_EFEEEE)));

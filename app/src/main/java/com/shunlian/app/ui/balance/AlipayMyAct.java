@@ -65,7 +65,7 @@ public class AlipayMyAct extends BaseActivity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.mrlayout_zhifubao:
-                AlipayDetailAct.startAct(this);
+                AlipayDetailAct.startAct(this,false);
                 break;
             case R.id.mtv_tianjiazhi:
                 if (needPaySet){

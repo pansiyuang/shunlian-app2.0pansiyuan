@@ -2,15 +2,13 @@ package com.shunlian.app.ui.new_login_register;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.shunlian.app.R;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.MyTextView;
@@ -84,8 +82,8 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     @OnClick(R.id.llayout_login_agreement)
     public void loginAgreement(){
-        H5Act.startAct(this, InterentTools.H5_HOST
-                + TERMS_OF_SERVICE,H5Act.MODE_SONIC);
+        H5X5Act.startAct(this, InterentTools.H5_HOST
+                + TERMS_OF_SERVICE,H5X5Act.MODE_SONIC);
     }
 
     /**

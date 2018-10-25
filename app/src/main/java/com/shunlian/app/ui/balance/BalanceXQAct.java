@@ -236,7 +236,8 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void tiXianCallback(CommonEntity data, int code, String message) {
         if (data != null) {
-            BalanceResultAct.startAct(this, data.amount, data.account, data.account_type,data.error);
+            BalanceResultAct.startAct(this, data.amount, data.account,data.account_type,
+                    data.error,data.dialog_text);
         } else {
             String right,left;
             gpv_customUi.clearPassword();

@@ -1,0 +1,17 @@
+package com.shunlian.app.view;
+
+import com.shunlian.app.bean.HotBlogsEntity;
+
+import java.util.List;
+
+/**
+ * Created by Administrator on 2018/10/23.
+ */
+
+public interface IActivityDetailView extends IView {
+    void getActivityDetail(List<HotBlogsEntity.Blog> blogList, HotBlogsEntity.Detail detail, int page, int totalPage);
+
+    void focusUser(int isFocus,String memberId);
+
+    void praiseBlog(String blogId);
+}

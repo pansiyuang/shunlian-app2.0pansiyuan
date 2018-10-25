@@ -259,6 +259,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             }
             if (mWarningTextList.size() > 1) {
                 handler.postDelayed(() -> {
+                    if (text_switcher!=null)
                     text_switcher.setText(mWarningTextList.get(0));
                     index = 0;
                 }, 1000);

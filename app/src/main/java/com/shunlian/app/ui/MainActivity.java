@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
@@ -32,13 +31,14 @@ import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
+import com.shunlian.app.ui.fragment.NewDiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
-import com.shunlian.app.ui.h5.H5Frag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
+import com.shunlian.app.ui.h5.H5X5Frag;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -117,7 +117,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private MyPlusFrag myPlusFrag;
     private SortFrag sortFrag;
     private H5PlusFrag h5PlusFrag;
-    private DiscoverFrag discoverFrag;
+//    private DiscoverFrag discoverFrag;
+    private NewDiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
     private PersonalCenterFrag personalCenterFrag;
     private long mExitTime;
@@ -177,7 +178,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             view_message.setVisibility(View.GONE);
         } else {
             if (discoverFrag != null)
-                discoverFrag.initMessage(null);
+//                discoverFrag.initMessage(null);
             mtv_message_count.setVisibility(View.GONE);
             view_message.setVisibility(View.VISIBLE);
         }
@@ -407,7 +408,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (h5PlusFrag == null) {
             h5PlusFrag = (H5PlusFrag) fragmentMap.get(flags[1]);
             if (h5PlusFrag == null) {
-                h5PlusFrag = (H5PlusFrag) H5PlusFrag.getInstance(url, H5Frag.MODE_SONIC);
+                h5PlusFrag = (H5PlusFrag) H5PlusFrag.getInstance(url, H5X5Frag.MODE_SONIC);
                 fragmentMap.put(flags[1], h5PlusFrag);
             }
         } else {
@@ -471,21 +472,21 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         isFirst = false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (discoverFrag == null) {
-            discoverFrag = (DiscoverFrag) fragmentMap.get(flags[2]);
+            discoverFrag = (NewDiscoverFrag) fragmentMap.get(flags[2]);
             if (discoverFrag == null) {
-                discoverFrag = new DiscoverFrag();
+                discoverFrag = new NewDiscoverFrag();
                 Bundle bundle = new Bundle();
                 bundle.putString("flag", flag);
                 discoverFrag.setArguments(bundle);
                 fragmentMap.put(flags[2], discoverFrag);
             }
         } else {
-            discoverFrag.setArgument(flag);
-            if (Common.isAlreadyLogin()) {
-                discoverFrag.initMessage(data);
-            } else {
-                discoverFrag.initMessage(null);
-            }
+//            discoverFrag.setArgument(flag);
+//            if (Common.isAlreadyLogin()) {
+//                discoverFrag.initMessage(data);
+//            } else {
+//                discoverFrag.initMessage(null);
+//            }
         }
         switchContent(discoverFrag);
         pageIndex = 2;
@@ -547,7 +548,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
         tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_n));
+        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
         tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
 
         miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_n));
@@ -574,7 +575,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 2:
-                miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_h));
+                miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
                 tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 3:
@@ -839,7 +840,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             }
         }
         if (discoverFrag != null) {
-            discoverFrag.initMessage(data);
+//            discoverFrag.initMessage(data);
         }
     }
 

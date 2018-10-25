@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.refresh.turkey.SlRefreshView
+        android:id="@+id/refreshview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_title">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+        <com.shunlian.app.widget.empty.NetAndEmptyInterface
+            android:id="@+id/nei_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </com.shunlian.app.widget.refresh.turkey.SlRefreshView>
+</LinearLayout>
