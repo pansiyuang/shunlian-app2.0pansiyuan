@@ -150,7 +150,7 @@ public class BrowseImageVideoAct extends BaseActivity {
         maxCount = mConfig.max_count;
         selectLists = mConfig.selectLists;
         isShowSelect = mConfig.isShowSelect;
-        LogUtil.zhLogW(mConfig.position+"=selectLists========"+selectLists.size());
+        //LogUtil.zhLogW(mConfig.position+"=selectLists========"+selectLists.size());
         if (!mConfig.isShowImageVideo) {
             editLists = new ArrayList<>();
             String path = mImageVideos.get(mConfig.position).path;
@@ -275,12 +275,17 @@ public class BrowseImageVideoAct extends BaseActivity {
 
             try {
                 ImageVideo imageVideo = list.get(position);
+                LogUtil.zhLogW("====imageVideo===="+imageVideo.toString());
                 url = imageVideo.path;
                 if (isMP4Path(url)) {
                     checkmark.setVisibility(View.GONE);
-                    mRetriever.setDataSource(url);
-                    Bitmap frameAtTime = mRetriever.getFrameAtTime();
-                    imageView.setImageBitmap(frameAtTime);
+                    if (!isEmpty(imageVideo.coverPath)) {
+                        GlideUtils.getInstance().loadImage(baseAct,imageView,imageVideo.coverPath);
+                    }else {
+                        mRetriever.setDataSource(url);
+                        Bitmap frameAtTime = mRetriever.getFrameAtTime();
+                        imageView.setImageBitmap(frameAtTime);
+                    }
                     visible(miv_play);
                 } else {
                     if (isShowSelect) {

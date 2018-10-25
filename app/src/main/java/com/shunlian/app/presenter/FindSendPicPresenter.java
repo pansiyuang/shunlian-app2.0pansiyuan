@@ -93,7 +93,6 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
                 if (uploadPicEntity != null) {
                     iView.uploadImg(uploadPicEntity);
                 }
-                iView.setRefundPics(uploadPicEntity.relativePath, false);
             }
         });
     }
