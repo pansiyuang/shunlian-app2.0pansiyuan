@@ -317,6 +317,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/image_dianzai_state"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
@@ -327,7 +328,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#ffffff"
                 android:layout_marginTop="5dp"
-                android:text="aaaa"
+                android:text=""
                 android:textSize="10sp"/>
         </LinearLayout>
         <LinearLayout
