@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.discover_new;
 
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,24 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.AddGoodsAdapter;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
-import com.shunlian.app.presenter.GoodsListPresenter;
 import com.shunlian.app.presenter.HotBlogPresenter;
-import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
-import com.shunlian.app.ui.myself_store.AddStoreGoodsAct;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IHotBlogView;
-import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
-import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;

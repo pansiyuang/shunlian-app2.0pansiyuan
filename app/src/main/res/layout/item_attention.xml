@@ -22,10 +22,12 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="12dp"
         android:layout_toLeftOf="@+id/tv_attention"
         android:layout_toRightOf="@+id/miv_icon"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView

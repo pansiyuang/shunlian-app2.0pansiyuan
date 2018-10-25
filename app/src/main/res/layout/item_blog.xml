@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:paddingTop="16dp">
 
@@ -31,6 +33,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_member"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -99,8 +102,6 @@
         android:id="@+id/recycler_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="63dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="12dp"
         android:overScrollMode="never"
         android:scrollbars="none"
@@ -246,7 +247,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="25dp"
-            android:src="@mipmap/icon_shoucang" />
+            android:src="@mipmap/icon_shoucang"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <View

@@ -2,10 +2,13 @@ package com.shunlian.app.ui.discover_new;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
@@ -15,6 +18,7 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,8 +66,7 @@ public class HotExpertRankActivity extends BaseActivity {
         }
         initFrags();
         tab_layout.setupWithViewPager(viewpager);
-
-        setTabLayoutLine(tab_layout, TransformUtil.dip2px(this, 30));
+        reflex(tab_layout);
     }
 
     @Override
@@ -83,22 +86,34 @@ public class HotExpertRankActivity extends BaseActivity {
         viewpager.setOffscreenPageLimit(goodsFrags.size());
     }
 
-    public void setTabLayoutLine(final TabLayout tabLayout, int lineWidth) {
-        //了解源码得知 线的宽度是根据 tabView的宽度来设置的
+    public void reflex(final TabLayout tabLayout) {
         tabLayout.post(() -> {
-            //拿到tabLayout的mTabStrip属性
-            LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
-            int dp10 = TransformUtil.dip2px(tabLayout.getContext(), 10);
-            for (int i = 0; i < mTabStrip.getChildCount(); i++) {
-                View tabView = mTabStrip.getChildAt(i);
-                tabView.setPadding(0, 0, 0, 0);
-                //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
-                params.width = lineWidth;
-                params.leftMargin = dp10;
-                params.rightMargin = dp10;
-                tabView.setLayoutParams(params);
-                tabView.invalidate();
+            try {
+                LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
+                int dp10 = TransformUtil.dip2px(tabLayout.getContext(), 12.5f);
+                for (int i = 0; i < mTabStrip.getChildCount(); i++) {
+                    View tabView = mTabStrip.getChildAt(i);
+                    Field mTextViewField = tabView.getClass().getDeclaredField("mTextView");
+                    mTextViewField.setAccessible(true);
+                    TextView mTextView = (TextView) mTextViewField.get(tabView);
+                    tabView.setPadding(0, 0, 0, 0);
+                    int width = 0;
+                    width = mTextView.getWidth();
+                    if (width == 0) {
+                        mTextView.measure(0, 0);
+                        width = mTextView.getMeasuredWidth();
+                    }
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                    params.width = width;
+                    params.leftMargin = dp10;
+                    params.rightMargin = dp10;
+                    tabView.setLayoutParams(params);
+                    tabView.invalidate();
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
         });
     }

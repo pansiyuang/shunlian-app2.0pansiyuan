@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_common_layout" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@color/white"
+        android:paddingBottom="4dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_zan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="24dp">
+
+            <TextView
+                android:id="@+id/tv_zan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="点赞/分享"
+                android:textColor="@color/pink_color"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/view_zan"
+                android:layout_width="30dp"
+                android:layout_height="2dp"
+                android:layout_below="@+id/tv_zan"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp"
+                android:background="@color/pink_color"
+                android:visibility="visible" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_zan_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_zan"
+                android:src="@mipmap/img_bangzhu_dian"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_attention"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="24dp">
+
+            <TextView
+                android:id="@+id/tv_attention"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="关注"
+                android:textColor="@color/value_484848"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/view_attention"
+                android:layout_width="30dp"
+                android:layout_height="2dp"
+                android:layout_below="@+id/tv_attention"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp"
+                android:background="@color/pink_color"
+                android:visibility="invisible" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_attention_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_attention"
+                android:src="@mipmap/img_bangzhu_dian"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_download"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingTop="24dp">
+
+            <TextView
+                android:id="@+id/tv_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="下载"
+                android:textColor="@color/value_484848"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/view_download"
+                android:layout_width="30dp"
+                android:layout_height="2dp"
+                android:layout_below="@+id/tv_download"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp"
+                android:background="@color/pink_color"
+                android:visibility="invisible" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_download_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_download"
+                android:src="@mipmap/img_bangzhu_dian"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_notice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="24dp">
+
+            <TextView
+                android:id="@+id/tv_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="通知"
+                android:textColor="@color/value_484848"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/view_notice"
+                android:layout_width="30dp"
+                android:layout_height="2dp"
+                android:layout_below="@+id/tv_notice"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp"
+                android:background="@color/pink_color"
+                android:visibility="invisible" />
+
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_notice_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_notice"
+                android:src="@mipmap/img_bangzhu_dian"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/value_ECECEC" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
