@@ -318,16 +318,16 @@
 
             <ImageView
                 android:id="@+id/image_dianzai_state"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:layout_gravity="center"
-                android:src="@drawable/icon_dianzan_good"/>
+                />
             <TextView
                 android:id="@+id/tv_dianzan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ffffff"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:text=""
                 android:textSize="10sp"/>
         </LinearLayout>
@@ -339,8 +339,8 @@
             android:id="@+id/line_down"
             android:orientation="vertical">
             <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:layout_gravity="center"
                 android:src="@drawable/icon_xiazai"/>
             <TextView
@@ -348,7 +348,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ffffff"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:text=""
                 android:textSize="10sp"/>
         </LinearLayout>
@@ -360,8 +360,8 @@
             android:id="@+id/line_share"
             android:orientation="vertical">
             <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:layout_gravity="center"
                 android:src="@drawable/icon_fenxiang"/>
             <TextView
@@ -369,7 +369,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ffffff"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:text=""
                 android:textSize="10sp"/>
         </LinearLayout>

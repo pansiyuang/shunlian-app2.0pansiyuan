@@ -197,7 +197,11 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     @Override
     public void shareBolg() {
         //分享
-        shareArticle();
+        if(customVideoPlayer.checkDownLoadFileExists()) {
+            shareArticle();
+        }else{
+            Common.staticToast("视频未下载，请先下载视频再分享！");
+        }
     }
 
     @Override
