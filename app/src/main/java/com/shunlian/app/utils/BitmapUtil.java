@@ -584,4 +584,15 @@ public class BitmapUtil {
         canvas.drawRoundRect(rectF, radius, radius, paint);
         return result;
     }
+
+    /**
+     *
+     * @param bm
+     * @return
+     */
+    public static byte[] Bitmap2Bytes(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
 }

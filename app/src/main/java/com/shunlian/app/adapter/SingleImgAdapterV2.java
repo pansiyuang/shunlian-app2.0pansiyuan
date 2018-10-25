@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
@@ -116,9 +117,17 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
                         second = "0" + second;
                     }
                     viewHolder.mtv_video_duration.setText(String.format("00:%s", second));
-                    mRetriever.setDataSource(imgPath);
-                    Bitmap frameAtTime = mRetriever.getFrameAtTime();
-                    viewHolder.miv_img.setImageBitmap(frameAtTime);
+                    if (URLUtil.isNetworkUrl(imgPath)){
+                        GlideUtils.getInstance().loadImage(context,viewHolder.miv_img,imageEntity.coverPath);
+                    }else {
+                        try {
+                            mRetriever.setDataSource(imgPath);
+                            Bitmap frameAtTime = mRetriever.getFrameAtTime();
+                            viewHolder.miv_img.setImageBitmap(frameAtTime);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
                 }else {
                     gone(viewHolder.mtv_video_duration);
                     GlideUtils.getInstance().loadFileImageWithView(context, new File(imgPath), viewHolder.miv_img);

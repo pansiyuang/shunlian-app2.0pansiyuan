@@ -162,7 +162,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
             });
 
         if (BuildConfig.DEBUG){
-            rlayoutSign.setOnClickListener(v -> FindSendPictureTextAct.startAct(this));
+            rlayoutSign.setOnClickListener(v -> FindSendPictureTextAct.startAct(this,false));
         }
     }
 

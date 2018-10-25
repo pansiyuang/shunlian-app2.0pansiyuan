@@ -3,7 +3,9 @@ package com.shunlian.app.ui.find_send;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +22,7 @@ import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.photopick.ImageVideo;
 import com.shunlian.app.presenter.FindSendPicPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.LogUtil;
@@ -90,6 +93,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      * 最大心得字数
      */
     private int MAX_TEXT_COUNT = 300;
+    private String mVideoThumb;
 
     public static void startAct(Context context,boolean isWhiteList) {
         Intent intent = new Intent(context, FindSendPictureTextAct.class);
@@ -122,8 +126,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
-        int i = TransformUtil.dip2px(this, 0.5f);
-        recy_view.addItemDecoration(new MVerticalItemDecoration(this,i,
+        recy_view.addItemDecoration(new MVerticalItemDecoration(this,0.5f,
                 0,0, Color.parseColor("#ECECEC")));
 
         /****上传图片***/
@@ -174,6 +177,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if ((edit != null&&!isEmpty(edit.getText().toString())) || !isEmpty(imgList)){
             final PromptDialog promptDialog = new PromptDialog(this);
             promptDialog.setTvSureBGColor(Color.WHITE);
+            promptDialog.setCancelable(true);
             promptDialog.setTvSureColor(R.color.pink_color);
             promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
                     .setSureAndCancleListener("是否保留草稿内容？",
@@ -246,7 +250,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         String address = mtv_address.getText().toString();
 
         if (presenter != null){
-            presenter.publish(edit,pics,mVideoUrl,topic_id,address,goodsid,draft);
+            presenter.publish(edit,pics,mVideoUrl,mVideoThumb,topic_id,address,goodsid,draft);
         }
     }
 
@@ -254,12 +258,26 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if (!isEmpty(imgList)){
             StringBuilder sb = new StringBuilder();
             for (ImageVideo e:imgList) {
-                sb.append(e.url);
-                sb.append(",");
+                if (!isMP4Path(e.url)) {
+                    sb.append(e.url);
+                    sb.append(",");
+                }
             }
-            return sb.toString().substring(0,sb.length()-1);
+            if (sb.length() > 1) {
+                return sb.toString().substring(0, sb.length() - 1);
+            }
         }
         return "";
+    }
+
+    /**
+     * 判断是否是MP4文件路径
+     * @param path
+     * @return
+     */
+    private boolean isMP4Path(String path){
+        if (isEmpty(path))return false;
+        else return path.toLowerCase().endsWith(".mp4");
     }
 
     private String getGoodsid(){
@@ -301,8 +319,12 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             ArrayList<String> picturePaths = data.getStringArrayListExtra(SelectPicVideoAct.EXTRA_RESULT);
             if (!isEmpty(picturePaths)){
                 String path = picturePaths.get(0);
-                if (!isEmpty(path) && path.toLowerCase().endsWith(".mp4")){
+                if (!isEmpty(path) && isMP4Path(path)){
                     if (presenter != null){
+                        MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+                        mRetriever.setDataSource(path);
+                        Bitmap bitmap = mRetriever.getFrameAtTime();
+                        presenter.uploadVideoThumb(BitmapUtil.Bitmap2Bytes(bitmap));
                         presenter.uploadVideo(path);
                     }
                 }else {
@@ -431,6 +453,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         }
 
         if (!isEmpty(entity.video)){
+            mVideoThumb = entity.video_thumb;
+            mVideoUrl = entity.video;
             ImageVideo imageVideo = new ImageVideo();
             imageVideo.path = entity.video;
             imageVideo.coverPath = entity.video_thumb;
@@ -444,6 +468,16 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             }
             singleImgAdapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * 视频封面地址
+     *
+     * @param s
+     */
+    @Override
+    public void videoThumb(String s) {
+        mVideoThumb = s;
     }
 
     /**

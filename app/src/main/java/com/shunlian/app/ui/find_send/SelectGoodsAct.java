@@ -11,7 +11,6 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.presenter.SelectGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.MVerticalItemDecoration;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IView;
 
 import butterknife.BindView;
@@ -70,8 +69,7 @@ public class SelectGoodsAct extends BaseActivity implements IView{
         setStatusBarFontDark();
         manager = new LinearLayoutManager(this);
         recyView.setLayoutManager(manager);
-        int i = TransformUtil.dip2px(this, 12);
-        recyView.addItemDecoration(new MVerticalItemDecoration(this,i,0,0));
+        recyView.addItemDecoration(new MVerticalItemDecoration(this,12,0,0));
         presenter = new SelectGoodsPresenter(this,this);
     }
 

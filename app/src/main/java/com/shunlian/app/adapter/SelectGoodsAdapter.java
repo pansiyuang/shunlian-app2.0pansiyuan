@@ -92,8 +92,10 @@ public class SelectGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             });
 
             miv_del.setOnClickListener(v -> {
-                lists.remove(getAdapterPosition());
-                notifyItemChanged(getAdapterPosition());
+                if (!isEmpty(lists)) {
+                    lists.remove(getAdapterPosition());
+                    notifyDataSetChanged();
+                }
             });
         }
     }
