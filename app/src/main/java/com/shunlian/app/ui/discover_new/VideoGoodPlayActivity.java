@@ -23,6 +23,7 @@ import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.presenter.HotVideoBlogPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -86,6 +87,9 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         EventBus.getDefault().register(this);
         blog = getIntent().getParcelableExtra("blog");
 
+        if(blog!=null){
+            customVideoPlayer.setGoodUserInfo(blog,this);
+        }
         customVideoPlayer.setUp(blog.video, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
         customVideoPlayer.startVideo();
         httpDialog = new HttpDialog(this);
@@ -143,12 +147,21 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
 
     @Override
     public void focusUser(int isFocus, String memberId) {
-        blog.is_focus = isFocus;
+        blog.is_focus = isFocus==0?1:0;
         customVideoPlayer.setAttentStateView();
     }
 
     @Override
     public void parseBlog(int isAttent, String memberId) {
+        blog.is_praise = isAttent;
+        blog.praise_num =blog.praise_num+1;
+        customVideoPlayer.setParseStateView();
+    }
+
+    @Override
+    public void downCountSuccess() {
+        blog.down_num =blog.down_num+1;
+        customVideoPlayer.setDownLoadSuccess();
     }
 
     @Override
@@ -165,7 +178,8 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
 
     @Override
     public void updateParse(boolean isParse) {
-        //取消点赞和点赞
+        //取消点赞和点赞(点赞目前不能取消)
+        hotBlogPresenter.praiseBlos(blog.id);
     }
 
     @Override
@@ -177,12 +191,19 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     @Override
     public void downVideo() {
         //上传下载成功
+        hotBlogPresenter.downCount(blog.id);
     }
 
     @Override
     public void shareBolg() {
         //分享
         shareArticle();
+    }
+
+    @Override
+    public void startGoodInfo() {
+        if(blog!=null&&blog.related_goods!=null&&blog.related_goods.size()>0)
+        GoodsDetailAct.startAct(this, blog.related_goods.get(0).goods_id);
     }
 
 }

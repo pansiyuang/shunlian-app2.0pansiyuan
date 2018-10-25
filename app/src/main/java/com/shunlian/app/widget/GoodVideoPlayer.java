@@ -38,6 +38,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -141,7 +142,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         tv_goods_name= findViewById(cn.jzvd.R.id.tv_goods_name);
         tv_goods_price= findViewById(cn.jzvd.R.id.tv_goods_price);
         tv_old_price= findViewById(cn.jzvd.R.id.tv_old_price);
-
+        tv_user_attent.setOnClickListener(this);
         line_dianzan.setOnClickListener(this);
         line_down.setOnClickListener(this);
         line_share.setOnClickListener(this);
@@ -167,6 +168,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         ImageView iv_download = findViewById(R.id.iv_download);
         iv_download.setVisibility(GONE);
 
+        line_good_info.setOnClickListener(this);
         thumbImageView.setOnClickListener(this);
         backButton.setOnClickListener(this);
         tinyBackImageView.setOnClickListener(this);
@@ -183,12 +185,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     public void setGoodUserInfo(HotBlogsEntity.Blog blog,updateParseAttent parseAttent){
            this.blog = blog;
            this.parseAttent = parseAttent;
-           if(blog.is_praise==1) {//已点赞
-               image_dianzai_state.setImageResource(R.mipmap.icon_found_xiangqing_zan_h);
-            }else{
-               image_dianzai_state.setImageResource(R.drawable.icon_dianzan_good);
-            }
-            tv_dianzan.setText(blog.praise_num+"");
+             setParseStateView();
             tv_share.setText(blog.share_num+"");
             tv_down.setText(blog.down_num+"");
             tv_user_name.setText(blog.nickname+"");
@@ -208,7 +205,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
              if(blog.is_self==1){
                  tv_user_attent.setVisibility(GONE);
              }else {
-                 tv_user_attent.setText(blog.is_focus == 0 ? "关注" : "已关注");
+                 setAttentStateView();
              }
            if(blog.related_goods!=null&&blog.related_goods.size()>0) {
                GlideUtils.getInstance().loadCornerImage(getContext(), img_goods_icon, blog.related_goods.get(0).thumb, 4);
@@ -242,6 +239,15 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
      */
     public void setAttentStateView(){
         tv_user_attent.setText(blog.is_focus==0?"关注":"已关注");
+        tv_user_attent.setTextColor(blog.is_focus==0?getResources().getColor(R.color.deep_red):getResources().getColor(R.color.value_878B8A));
+        tv_user_attent.setBackgroundResource(blog.is_focus==0?R.drawable.rounded_rectangle_stroke_22px:R.drawable.rounded_rectangle_gray_22px);
+    }
+
+    /**
+     * 设置下载成功回调
+     */
+    public void setDownLoadSuccess(){
+        tv_down.setText(blog.down_num+"");
     }
 
     @Override
@@ -590,13 +596,17 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         }else if (i == cn.jzvd.R.id.iv_download){
             readToDownLoad();
         }else if(i==R.id.line_dianzan){
-            parseAttent.updateParse(blog.is_praise==1);
+            if(blog.is_praise==0) {
+                parseAttent.updateParse(blog.is_praise == 1);
+            }
         }else if(i==R.id.line_share){
             parseAttent.shareBolg();
         }else if(i==R.id.line_down){
             readToDownLoad();
         }else if(i==R.id.tv_user_attent){
             parseAttent.updateAttent(blog.is_focus==1);
+        }else if(i==R.id.line_good_info){
+            parseAttent.startGoodInfo();
         }
     }
 
@@ -1203,6 +1213,8 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         void downVideo();
         /**分享内容成功回调*/
         void shareBolg();
+        /**进入商品详情页面*/
+        void startGoodInfo();
     }
 
 }
