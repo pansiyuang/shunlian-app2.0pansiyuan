@@ -137,8 +137,8 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
                 BigImgEntity entity = new BigImgEntity();
                 entity.itemList = mPics;
                 entity.index = position;
-                NewLookBigImgAct.startAct(mContext,entity);
-//                LookBigImgAct.startAct(mContext, entity);
+//                NewLookBigImgAct.startAct(mContext,entity);
+                LookBigImgAct.startAct(mContext, entity);
             });
         }
         container.addView(view);

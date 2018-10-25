@@ -42,7 +42,6 @@ import butterknife.BindView;
  */
 
 public class NewLookBigImgAct extends BaseActivity{
-
     @BindView(R.id.leftNo)
     MyTextView leftNo;
     @BindView(R.id.rightNo)
