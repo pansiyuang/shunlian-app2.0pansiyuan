@@ -2707,7 +2707,7 @@ public interface ApiService {
      * 周达人榜
      */
     @GET("discovery/blogfront/weekExportTopList")
-    Call<BaseEntity<WeekExpertEntity>> weekExpertList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<ExpertEntity>> weekExpertList(@QueryMap Map<String, String> map);
 
     /**
      * 精选达人榜
@@ -2725,7 +2725,25 @@ public interface ApiService {
      * 我的粉丝列表
      */
     @GET("discovery/discoveryuser/fansList")
-    Call<BaseEntity<FansEntity>> fansList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<MemberEntity>> fansList(@QueryMap Map<String, String> map);
+
+    /**
+     * TA的粉丝列表
+     */
+    @GET("discovery/blogfront/fansList")
+    Call<BaseEntity<MemberEntity>> taFansList(@QueryMap Map<String, String> map);
+
+    /**
+     * 我的关注列表
+     */
+    @GET("discovery/discoveryuser/focusList")
+    Call<BaseEntity<MemberEntity>> focusList(@QueryMap Map<String, String> map);
+
+    /**
+     * TA的关注列表
+     */
+    @GET("discovery/blogfront/focusList")
+    Call<BaseEntity<MemberEntity>> taFocusList(@QueryMap Map<String, String> map);
 
     /**
      * 活动详情
@@ -2743,7 +2761,19 @@ public interface ApiService {
      * 关注消息
      */
     @GET("discovery/message/attention")
-    Call<BaseEntity<EmptyEntity>> getAttentionMsg(@QueryMap Map<String, String> map);
+    Call<BaseEntity<AttentionMsgEntity>> getAttentionMsg(@QueryMap Map<String, String> map);
+
+    /**
+     * 下载消息
+     */
+    @GET("discovery/message/download")
+    Call<BaseEntity<ZanShareEntity>> getDownloadMsg(@QueryMap Map<String, String> map);
+
+    /**
+     * 通知消息
+     */
+    @GET("discovery/message/notice")
+    Call<BaseEntity<NoticeMsgEntity>> getNoticeMsg(@QueryMap Map<String, String> map);
 
     /**
      * 搜索关键词
@@ -2756,4 +2786,10 @@ public interface ApiService {
      */
     @GET("/discovery/discoveryuser/downcount")
     Call<BaseEntity<EmptyEntity>> downCount(@QueryMap Map<String, String> map);
+
+    /**
+     * 搜索达人
+     */
+    @GET("discovery/blogfront/searchExpert")
+    Call<BaseEntity<ExpertEntity>> searchExpert(@QueryMap Map<String, String> map);
 }

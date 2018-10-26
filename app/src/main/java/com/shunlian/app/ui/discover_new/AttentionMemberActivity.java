@@ -8,15 +8,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.MyFansAdapter;
-import com.shunlian.app.bean.FansEntity;
-import com.shunlian.app.presenter.FansPresenter;
+import com.shunlian.app.adapter.MemberListAdapter;
+import com.shunlian.app.bean.MemberEntity;
+import com.shunlian.app.presenter.AttentionMemberPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.view.IFansView;
+import com.shunlian.app.view.IAttentionMemberView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
-import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +23,10 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * Created by Administrator on 2018/10/23.
+ * Created by Administrator on 2018/10/22.
  */
 
-public class MyFansActivity extends BaseActivity implements IFansView, MyFansAdapter.OnAdapterCallBack {
+public class AttentionMemberActivity extends BaseActivity implements IAttentionMemberView, MemberListAdapter.OnAdapterCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -41,44 +40,61 @@ public class MyFansActivity extends BaseActivity implements IFansView, MyFansAda
     @BindView(R.id.tv_title)
     TextView tv_title;
 
-    private FansPresenter mPresenter;
+    private AttentionMemberPresenter mPresenter;
     private LinearLayoutManager manager;
-    private List<FansEntity.Fans> fansList;
-    private MyFansAdapter mAdapter;
+    private List<MemberEntity.Member> memberList;
+    private MemberListAdapter mAdapter;
+    private String currentMemberId;
+
+    public static void startAct(Context context) {
+        Intent intent = new Intent(context, AttentionMemberActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void startAct(Context context, String memberId) {
+        Intent intent = new Intent(context, AttentionMemberActivity.class);
+        intent.putExtra("member_id", memberId);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getLayoutId() {
         return R.layout.act_my_fans;
     }
 
-    public static void startAct(Context context) {
-        Intent intent = new Intent(context, MyFansActivity.class);
-        context.startActivity(intent);
-    }
-
     @Override
     protected void initData() {
-        ImmersionBar.with(this).fitsSystemWindows(true)
-                .statusBarColor(R.color.white)
-                .statusBarDarkFont(true, 0.2f)
-                .init();
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
 
-        tv_title.setText("我的粉丝");
+        currentMemberId = getIntent().getStringExtra("member_id");
+
+        mPresenter = new AttentionMemberPresenter(this, this);
+
+        if (isEmpty(currentMemberId)) {
+            tv_title.setText("我的关注");
+            nei_empty.setImageResource(R.mipmap.img_empty_common)
+                    .setText("你还没有关注的人哟")
+                    .setButtonText(null);
+
+            mPresenter.getAttentionList(true);
+        } else {
+            tv_title.setText("Ta的关注");
+            nei_empty.setImageResource(R.mipmap.img_empty_common)
+                    .setText("Ta还没有还没有关注的人哟")
+                    .setButtonText(null);
+
+            mPresenter.getTaAttentionList(true, currentMemberId);
+        }
 
         refreshview.setCanRefresh(true);
         refreshview.setCanLoad(false);
         recycler_list.setNestedScrollingEnabled(false);
 
-        mPresenter = new FansPresenter(this, this);
-        mPresenter.getFansList(true);
-
         manager = new LinearLayoutManager(this);
         recycler_list.setLayoutManager(manager);
-        fansList = new ArrayList<>();
+        memberList = new ArrayList<>();
 
-        nei_empty.setImageResource(R.mipmap.img_empty_common)
-                .setText("还没有关注你的粉丝哟")
-                .setButtonText(null);
     }
 
     @Override
@@ -88,7 +104,11 @@ public class MyFansActivity extends BaseActivity implements IFansView, MyFansAda
             public void onRefresh() {
                 if (mPresenter != null) {
                     mPresenter.initPage();
-                    mPresenter.getFansList(true);
+                    if (isEmpty(currentMemberId)) {
+                        mPresenter.getAttentionList(true);
+                    } else {
+                        mPresenter.getTaAttentionList(true, currentMemberId);
+                    }
                 }
             }
 
@@ -115,16 +135,16 @@ public class MyFansActivity extends BaseActivity implements IFansView, MyFansAda
     }
 
     @Override
-    public void getFansList(List<FansEntity.Fans> list, int page, int totalPage) {
+    public void getAttentionList(List<MemberEntity.Member> list, int page, int totalPage) {
         refreshview.stopRefresh(true);
         if (page == 1) {
-            fansList.clear();
+            memberList.clear();
         }
         if (!isEmpty(list)) {
-            fansList.addAll(list);
+            memberList.addAll(list);
         }
 
-        if (page == 1 && isEmpty(fansList)) {
+        if (page == 1 && isEmpty(memberList)) {
             nei_empty.setVisibility(View.VISIBLE);
             recycler_list.setVisibility(View.GONE);
         } else {
@@ -133,7 +153,7 @@ public class MyFansActivity extends BaseActivity implements IFansView, MyFansAda
         }
 
         if (mAdapter == null) {
-            mAdapter = new MyFansAdapter(this, fansList);
+            mAdapter = new MemberListAdapter(this, memberList);
             recycler_list.setAdapter(mAdapter);
             mAdapter.setAdapterCallBack(this);
         }
@@ -143,12 +163,12 @@ public class MyFansActivity extends BaseActivity implements IFansView, MyFansAda
 
     @Override
     public void focusUser(int isFocus, String memberId) {
-        for (FansEntity.Fans fans : fansList) {
-            if (memberId.equals(fans.member_id)) {
-                if (fans.focus_status == 0) {
-                    fans.focus_status = 1;
+        for (MemberEntity.Member member : memberList) {
+            if (memberId.equals(member.member_id)) {
+                if (member.focus_status == 0) {
+                    member.focus_status = 1;
                 } else {
-                    fans.focus_status = 0;
+                    member.focus_status = 0;
                 }
             }
         }

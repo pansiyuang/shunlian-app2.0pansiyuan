@@ -603,6 +603,9 @@
 
     <!-- 发现 -->
     <string name="discover_faxian">发现</string>
+    <string name="discover_fenxiangdetuijian">分享的推荐商品</string>
+    <string name="discover_shengchengerweimatuwen">生成二维码图文</string>
+    <string name="discover_erweimatuwen">二维码图文</string>
     <string name="discover_dongtaixiangqing">动态详情</string>
     <string name="discover_wolaishuo">我来说两句</string>
     <string name="article">文章</string>

@@ -284,6 +284,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".widget.NewLookBigImgAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.more_credit.PhoneRecordAct"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -966,7 +971,11 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover_new.MyFansActivity"
+            android:name=".ui.discover_new.FansListActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.AttentionMemberActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
@@ -978,11 +987,11 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover_new.DiscoverSearchActivity"
+            android:name=".ui.discover_new.search.DiscoverSearchActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover_new.DiscoverSearchResultActivity"
+            android:name=".ui.discover_new.search.DiscoverSearchResultActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity

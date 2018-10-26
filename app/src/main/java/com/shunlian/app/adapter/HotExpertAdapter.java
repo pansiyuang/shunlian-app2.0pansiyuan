@@ -43,7 +43,7 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         if (holder instanceof HotExpertViewHolder) {
             HotExpertViewHolder hotExpertViewHolder = (HotExpertViewHolder) holder;
             HotBlogsEntity.Blog blog = lists.get(position);
-            GlideUtils.getInstance().loadCircleImage(context, hotExpertViewHolder.miv_icon, blog.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, hotExpertViewHolder.miv_icon, blog.avatar);
             hotExpertViewHolder.tv_nickname.setText(blog.nickname);
             hotExpertViewHolder.tv_fans.setText(String.valueOf(blog.fans_num));
             hotExpertViewHolder.tv_download.setText(String.valueOf(blog.down_num));

@@ -38,7 +38,7 @@ public class AttentionMemberAdapter extends BaseRecyclerAdapter<HotBlogsEntity.R
         if (holder instanceof MemberViewHolder) {
             MemberViewHolder memberViewHolder = (MemberViewHolder) holder;
             HotBlogsEntity.RecomandFocus recomandFocus = lists.get(position);
-            GlideUtils.getInstance().loadCircleImage(context, memberViewHolder.miv_icon, recomandFocus.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, memberViewHolder.miv_icon, recomandFocus.avatar);
             memberViewHolder.tv_nickname.setText(recomandFocus.nickname);
             memberViewHolder.tv_attention_count.setText(recomandFocus.follow_num + "人关注");
             memberViewHolder.tv_blogs_count.setText(recomandFocus.blog_num + "篇内容");

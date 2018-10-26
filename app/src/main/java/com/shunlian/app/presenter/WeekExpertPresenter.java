@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
-import com.shunlian.app.bean.WeekExpertEntity;
+import com.shunlian.app.bean.ExpertEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IWeekExpertView;
@@ -43,13 +43,13 @@ public class WeekExpertPresenter extends BasePresenter<IWeekExpertView> {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
-        Call<BaseEntity<WeekExpertEntity>> baseEntityCall = getAddCookieApiService().weekExpertList(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<WeekExpertEntity>>() {
+        Call<BaseEntity<ExpertEntity>> baseEntityCall = getAddCookieApiService().weekExpertList(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ExpertEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<WeekExpertEntity> entity) {
+            public void onSuccess(BaseEntity<ExpertEntity> entity) {
                 super.onSuccess(entity);
-                WeekExpertEntity weekExpertEntity = entity.data;
-                iView.expertList(weekExpertEntity.list);
+                ExpertEntity expertEntity = entity.data;
+                iView.expertList(expertEntity.list);
             }
 
             @Override

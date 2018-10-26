@@ -14,8 +14,8 @@
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_icon"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:scaleType="centerCrop" />
 

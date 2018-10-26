@@ -24,23 +24,26 @@
             android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/tv_cancel"
+            android:layout_toLeftOf="@+id/tv_search"
             android:layout_toRightOf="@+id/miv_close"
             android:background="@drawable/rounded_corner_solid_f7_56px"
             android:gravity="center_vertical"
+            android:hint="搜索发现 文章 活动 达人"
+            android:imeOptions="actionSearch"
             android:paddingLeft="17dp"
             android:paddingRight="10dp"
+            android:singleLine="true"
             android:textColor="@color/value_484848"
             android:textColorHint="@color/color_value_6c"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/tv_cancel"
+            android:id="@+id/tv_search"
             android:layout_width="67dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:text="@string/errcode_cancel" />
+            android:text="@string/search" />
     </RelativeLayout>
 
     <View
@@ -48,17 +51,24 @@
         android:layout_height="0.5dp"
         android:background="@color/value_ECECEC" />
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:tabGravity="center"
-        app:tabIndicatorColor="@color/pink_color"
-        app:tabIndicatorHeight="2dp"
-        app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/pink_color"
-        app:tabTextColor="@color/value_484848"></android.support.design.widget.TabLayout>
+        android:gravity="center">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:tabGravity="center"
+            app:tabIndicatorColor="@color/pink_color"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/pink_color"
+            app:tabTextColor="@color/value_484848"></android.support.design.widget.TabLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

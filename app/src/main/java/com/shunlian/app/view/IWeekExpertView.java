@@ -1,6 +1,6 @@
 package com.shunlian.app.view;
 
-import com.shunlian.app.bean.WeekExpertEntity;
+import com.shunlian.app.bean.ExpertEntity;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface IWeekExpertView extends IView {
 
-    void expertList(List<WeekExpertEntity.Expert> expertList);
+    void expertList(List<ExpertEntity.Expert> expertList);
 
     void focusUser(int isFocus, String memberId);
 }
