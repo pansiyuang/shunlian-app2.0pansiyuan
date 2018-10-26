@@ -9,7 +9,6 @@ import com.shunlian.app.adapter.SelectGoodsAdapter;
 import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IView;
@@ -30,7 +29,6 @@ public class SelectGoodsPresenter extends BasePresenter {
     private final String page_size = "20";
     private List<GoodsDeatilEntity.Goods> goodsLists = new ArrayList<>();
     private SelectGoodsAdapter adapter;
-    private GoodsSearchParam mGoodsSearchParam;
     private String mKeyword;
 
     public SelectGoodsPresenter(Context context, IView iView) {
@@ -51,7 +49,17 @@ public class SelectGoodsPresenter extends BasePresenter {
      */
     @Override
     public void detachView() {
-
+        if (goodsLists != null){
+            goodsLists.clear();
+            goodsLists = null;
+        }
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
+        currentPage = 1;
+        allPage = 1;
+        mKeyword = null;
     }
 
     /**

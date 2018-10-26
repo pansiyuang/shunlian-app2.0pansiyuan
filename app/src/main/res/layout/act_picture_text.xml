@@ -22,12 +22,11 @@
             <EditText
                 android:id="@+id/edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="116dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:background="@color/white_ash"
                 android:gravity="left|top"
-                android:minHeight="116dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
                 android:hint="快说说你的心得吧..."

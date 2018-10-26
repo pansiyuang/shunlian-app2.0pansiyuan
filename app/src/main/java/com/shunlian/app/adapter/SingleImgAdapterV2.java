@@ -22,7 +22,6 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,18 +54,6 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
         }
     }
 
-    public List<String> toStringArray() {
-        List<String> result = new ArrayList<>();
-        for (ImageVideo imageEntity : lists) {
-            if (!TextUtils.isEmpty(imageEntity.path)) {
-                result.add(imageEntity.path);
-            } else if (!TextUtils.isEmpty(imageEntity.url)) {
-                result.add(imageEntity.url);
-            }
-        }
-        return result;
-    }
-
     /**
      * 判断是否是MP4文件路径
      * @param path
@@ -75,6 +62,15 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
     private boolean isMP4Path(String path){
         if (isEmpty(path))return false;
         else return path.toLowerCase().endsWith(".mp4");
+    }
+
+    public void destory(){
+        if(mRetriever != null){
+            mRetriever.release();
+        }
+        if (mConfig != null){
+            mConfig = null;
+        }
     }
 
     /**
@@ -107,7 +103,7 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
             String imgPath = imageEntity.path;
             String imgUrl = imageEntity.url;
             if (!TextUtils.isEmpty(imgPath)) {
-                if (imgPath.toLowerCase().endsWith(".mp4")){
+                if (isMP4Path(imgPath)){
                     visible(viewHolder.mtv_video_duration);
                     String second = String.valueOf(imageEntity.videoDuration / 1000);
                     if ("0".equals(second)){

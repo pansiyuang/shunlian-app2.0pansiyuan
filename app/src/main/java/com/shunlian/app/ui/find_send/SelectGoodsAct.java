@@ -88,6 +88,15 @@ public class SelectGoodsAct extends BaseActivity implements IView{
         presenter = new SelectGoodsPresenter(this,this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+            presenter = null;
+        }
+    }
+
     /**
      * 显示网络请求失败的界面
      *

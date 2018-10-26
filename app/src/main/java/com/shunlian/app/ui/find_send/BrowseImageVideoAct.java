@@ -70,7 +70,7 @@ public class BrowseImageVideoAct extends BaseActivity {
     private List<ImageVideo> editLists;
     private int mCurrentPosition;
     private int maxCount;
-    private ArrayList<String> selectLists;
+    private ArrayList<String> mSelectResultList;
     private String format = "完成(%d/%d)";
 
     public static final int REQUEST_CODE = 8888;
@@ -96,20 +96,14 @@ public class BrowseImageVideoAct extends BaseActivity {
         super.initListener();
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
             @Override
             public void onPageSelected(int position) {
                 leftNo.setText(String.valueOf(position+1));
                 mCurrentPosition = position;
             }
-
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
 
         tvComplete.setOnClickListener(v->{
@@ -147,12 +141,11 @@ public class BrowseImageVideoAct extends BaseActivity {
         mImageVideos = imageVideos;
         mConfig = getIntent().getParcelableExtra("config");
         maxCount = mConfig.max_count;
-        selectLists = mConfig.selectLists;
+        mSelectResultList = mConfig.selectResultList;
         isOnlyBrowse = mConfig.isOnlyBrowse;
         if (isOnlyBrowse){
             gone(tvComplete);
         }
-        //LogUtil.zhLogW(mConfig.position+"=selectLists========"+selectLists.size());
         if (!mConfig.isShowImageVideo) {
             editLists = new ArrayList<>();
             String path = mImageVideos.get(mConfig.position).path;
@@ -193,9 +186,9 @@ public class BrowseImageVideoAct extends BaseActivity {
 
 
     private void result(boolean isComplete){
-        if (!isEmpty(selectLists)) {
+        if (!isEmpty(mSelectResultList)) {
             Intent intent = new Intent();
-            intent.putStringArrayListExtra("data",selectLists);
+            intent.putStringArrayListExtra("data", mSelectResultList);
             intent.putExtra("isComplete",isComplete);
             setResult(Activity.RESULT_OK,intent);
         }
@@ -379,29 +372,29 @@ public class BrowseImageVideoAct extends BaseActivity {
 
     private boolean selectHandler(int position, boolean oldSelection, ImageVideo imageVideo) {
         int count;
-        if (selectLists == null) {
-            selectLists = new ArrayList<>();
+        if (mSelectResultList == null) {
+            mSelectResultList = new ArrayList<>();
         }
         if (oldSelection) {
-            selectLists.add(imageVideo.path);
+            mSelectResultList.add(imageVideo.path);
             if (isCanSelect() == -1) {
-                selectLists.remove(imageVideo.path);
+                mSelectResultList.remove(imageVideo.path);
                 Common.staticToast("图片和视频不能同时选择");
                 return false;
             } else if (isCanSelect() == -2) {
-                selectLists.remove(imageVideo.path);
+                mSelectResultList.remove(imageVideo.path);
                 Common.staticToast("只能选择一个视频");
                 return false;
             }
-            count = selectLists.size();
+            count = mSelectResultList.size();
             if (count > maxCount) {
-                selectLists.remove(imageVideo.path);
+                mSelectResultList.remove(imageVideo.path);
                 Common.staticToast(String.format("您最多只能选择%d张图片", maxCount));
                 return false;
             }
         } else {
-            selectLists.remove(imageVideo.path);
-            count = selectLists.size();
+            mSelectResultList.remove(imageVideo.path);
+            count = mSelectResultList.size();
         }
         tvComplete.setText(String.format(format,count,maxCount));
         return true;
@@ -414,11 +407,11 @@ public class BrowseImageVideoAct extends BaseActivity {
      * @return -1 图片和视频不能一起选择  -2不能同时选这两个视频
      */
     public int isCanSelect() {
-        if (!isEmpty(selectLists)) {
+        if (!isEmpty(mSelectResultList)) {
             boolean isImage = false;
             boolean isVideo = false;
             int video_count = 0;
-            for (String path : selectLists) {
+            for (String path : mSelectResultList) {
                 if (isPicFile(path)) {
                     isImage = true;
                 }
@@ -482,7 +475,7 @@ public class BrowseImageVideoAct extends BaseActivity {
          */
         public int position;
 
-        public ArrayList<String> selectLists;
+        public ArrayList<String> selectResultList;
 
         public BuildConfig() {
         }
@@ -499,7 +492,7 @@ public class BrowseImageVideoAct extends BaseActivity {
             dest.writeInt(this.max_count);
             dest.writeInt(this.count);
             dest.writeInt(this.position);
-            dest.writeStringList(this.selectLists);
+            dest.writeStringList(this.selectResultList);
         }
 
         protected BuildConfig(Parcel in) {
@@ -508,7 +501,7 @@ public class BrowseImageVideoAct extends BaseActivity {
             this.max_count = in.readInt();
             this.count = in.readInt();
             this.position = in.readInt();
-            this.selectLists = in.createStringArrayList();
+            this.selectResultList = in.createStringArrayList();
         }
 
         public static final Creator<BuildConfig> CREATOR = new Creator<BuildConfig>() {
