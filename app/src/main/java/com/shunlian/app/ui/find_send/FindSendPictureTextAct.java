@@ -262,8 +262,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if (!isEmpty(imgList)){
             StringBuilder sb = new StringBuilder();
             for (ImageVideo e:imgList) {
-                if (!isMP4Path(e.url)) {
-                    sb.append(e.url);
+                if (!isMP4Path(e.path)) {
+                    sb.append(e.path);
                     sb.append(",");
                 }
             }
