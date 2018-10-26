@@ -12,6 +12,8 @@ import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.discover_new.discoverMsg.AttentionMsgFrag;
+import com.shunlian.app.ui.discover_new.discoverMsg.DownloadMsgFrag;
+import com.shunlian.app.ui.discover_new.discoverMsg.NoticeMsgFrag;
 import com.shunlian.app.ui.discover_new.discoverMsg.ZanAndShareMsgFrag;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -78,15 +80,19 @@ public class DiscoverMsgActivity extends BaseActivity {
     @BindView(R.id.viewpager)
     ViewPager viewpager;
 
+    @BindView(R.id.tv_title)
+    TextView tv_title;
+
     private List<BaseFragment> baseFragmentList;
     private ZanAndShareMsgFrag zanFrag;
     private AttentionMsgFrag attentionMsgFrag;
+    private DownloadMsgFrag downloadMsgFrag;
+    private NoticeMsgFrag noticeMsgFrag;
     private String[] titles = {"点赞/分享", "关注", "下载", "通知"};
     private int showType;//0 分享点赞 ,1 关注 2,下载 3,通知
 
-    public static void startActivity(Context context, int tabPosition) {
+    public static void startActivity(Context context) {
         Intent intent = new Intent(context, DiscoverMsgActivity.class);
-        intent.putExtra("position", tabPosition);
         context.startActivity(intent);
     }
 
@@ -97,14 +103,11 @@ public class DiscoverMsgActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        ImmersionBar.with(this).fitsSystemWindows(true)
-                .statusBarColor(R.color.white)
-                .statusBarDarkFont(true, 0.2f)
-                .init();
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
 
+        tv_title.setText("发现消息");
         initFrags();
-
-        showType = getIntent().getIntExtra("position", 0);
 
         showTab(showType);
         viewpager.setCurrentItem(showType);
@@ -141,7 +144,7 @@ public class DiscoverMsgActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                position = showType;
+                showType = position;
                 showTab(showType);
             }
 
@@ -159,9 +162,13 @@ public class DiscoverMsgActivity extends BaseActivity {
 
         zanFrag = new ZanAndShareMsgFrag();
         attentionMsgFrag = new AttentionMsgFrag();
+        downloadMsgFrag = new DownloadMsgFrag();
+        noticeMsgFrag = new NoticeMsgFrag();
 
         baseFragmentList.add(zanFrag);
         baseFragmentList.add(attentionMsgFrag);
+        baseFragmentList.add(downloadMsgFrag);
+        baseFragmentList.add(noticeMsgFrag);
 
         viewpager.setOffscreenPageLimit(baseFragmentList.size());
         viewpager.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), baseFragmentList, titles));

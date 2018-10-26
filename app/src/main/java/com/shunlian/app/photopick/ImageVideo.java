@@ -31,9 +31,13 @@ public class ImageVideo implements Comparable<ImageVideo>{
     @Override
     public String toString() {
         return "ImageVideo{" +
+                "path='" + path + '\'' +
                 ", name='" + name + '\'' +
                 ", creatTime=" + creatTime +
+                ", isSelect=" + isSelect +
                 ", videoDuration=" + videoDuration +
+                ", coverPath='" + coverPath + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 

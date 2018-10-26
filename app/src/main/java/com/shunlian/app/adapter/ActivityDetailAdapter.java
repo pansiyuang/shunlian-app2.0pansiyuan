@@ -83,7 +83,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Bl
         if (holder instanceof HotBlogAdapter.BlogViewHolder) {
             HotBlogsEntity.Blog blog = lists.get(position - 1);
             HotBlogAdapter.BlogViewHolder blogViewHolder = (HotBlogAdapter.BlogViewHolder) holder;
-            GlideUtils.getInstance().loadCircleImage(context, blogViewHolder.miv_icon, blog.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, blogViewHolder.miv_icon, blog.avatar);
             blogViewHolder.tv_name.setText(blog.nickname);
             blogViewHolder.tv_time.setText(blog.time_desc);
 

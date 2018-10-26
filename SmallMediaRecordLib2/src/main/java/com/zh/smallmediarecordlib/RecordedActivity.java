@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -197,6 +198,7 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onLift() {
                 if (start_state && completeRecord()) {
+                    mRecordControl.closeButton();
                     UIState(2);
                 }
                 mHandler.removeCallbacksAndMessages(null);
@@ -384,6 +386,9 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
             visible(vv_play, rl_bottom);
             gone(rl_top, tv_hint, mRecordControl, iv_close);
             playVideo(url);
+            Uri localUri = Uri.parse("file://" + url);
+            Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
+            sendBroadcast(localIntent);
         }
     }
 

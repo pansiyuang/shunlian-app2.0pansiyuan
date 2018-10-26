@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.FansEntity;
+import com.shunlian.app.bean.MemberEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 
@@ -20,10 +20,10 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/23.
  */
 
-public class MyFansAdapter extends BaseRecyclerAdapter<FansEntity.Fans> {
+public class MemberListAdapter extends BaseRecyclerAdapter<MemberEntity.Member> {
     private OnAdapterCallBack mCallBack;
 
-    public MyFansAdapter(Context context, List<FansEntity.Fans> lists) {
+    public MemberListAdapter(Context context, List<MemberEntity.Member> lists) {
         super(context, true, lists);
     }
 
@@ -35,24 +35,24 @@ public class MyFansAdapter extends BaseRecyclerAdapter<FansEntity.Fans> {
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof FansViewHolder) {
-            FansViewHolder fansViewHolder = (FansViewHolder) holder;
-            FansEntity.Fans fans = lists.get(position);
-            GlideUtils.getInstance().loadCircleImage(context, fansViewHolder.miv_icon, fans.avatar);
-            fansViewHolder.tv_name.setText(fans.nickname);
+            FansViewHolder memberViewHolder = (FansViewHolder) holder;
+            MemberEntity.Member member = lists.get(position);
+            GlideUtils.getInstance().loadCircleAvar(context, memberViewHolder.miv_icon, member.avatar);
+            memberViewHolder.tv_name.setText(member.nickname);
 
-            if (fans.focus_status == 1) {//已经关注
-                fansViewHolder.tv_attention.setBackgroundDrawable(null);
-                fansViewHolder.tv_attention.setText("已关注");
-                fansViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+            if (member.focus_status == 1) {//已经关注
+                memberViewHolder.tv_attention.setBackgroundDrawable(null);
+                memberViewHolder.tv_attention.setText("已关注");
+                memberViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
             } else {
-                fansViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
-                fansViewHolder.tv_attention.setText("关注");
-                fansViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+                memberViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
+                memberViewHolder.tv_attention.setText("关注");
+                memberViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
             }
 
-            fansViewHolder.tv_attention.setOnClickListener(v -> {
+            memberViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
-                    mCallBack.toFocusUser(fans.focus_status, fans.member_id);
+                    mCallBack.toFocusUser(member.focus_status, member.member_id);
                 }
             });
         }

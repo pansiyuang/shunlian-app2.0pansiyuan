@@ -218,7 +218,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
             switch (requestCode) {
                 // 相机拍照完成后，返回图片路径
                 case ImageCaptureManager.REQUEST_TAKE_PHOTO:
-                    if (captureManager.getCurrentPhotoPath() != null) {
+                    if (captureManager != null && captureManager.getCurrentPhotoPath() != null) {
                         captureManager.galleryAddPic();
                         String currentPhotoPath = captureManager.getCurrentPhotoPath();
                         resultLocalUrl(currentPhotoPath);
@@ -234,6 +234,10 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     boolean isComplete = data.getBooleanExtra("isComplete", false);
                     if (isComplete){
                         if (pics_path != null){
+                            if (selectLists == null){
+                                selectLists = new ArrayList<>();
+                            }
+                            selectLists.addAll(pics_path);
                             complete();
                         }else {
                             if (selectLists == null){
@@ -356,7 +360,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     config.count = selectLists.size();
                     config.position = position;
                     config.isShowImageVideo = false;
-                    config.isShowSelect = true;
+                    config.isOnlyBrowse = false;
                     config.selectLists = selectLists;
                     BrowseImageVideoAct.startAct(this,config,BrowseImageVideoAct.REQUEST_CODE);
                 });
@@ -540,7 +544,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     long videoDuration = data.getLong(data.getColumnIndexOrThrow(VIDEO_PROJECTION[3]));
                     long video_size = data.getLong(data.getColumnIndexOrThrow(VIDEO_PROJECTION[2]));
                     if (!isEmpty(videoPath) && videoPath.toLowerCase().endsWith(".mp4")
-                            && videoDuration < 16000 && video_size <= 10 * 1024 * 1024) {
+                            /*&& videoDuration < 16000 && video_size <= 10 * 1024 * 1024*/) {
                         String videoName = data.getString(data.getColumnIndexOrThrow(VIDEO_PROJECTION[5]));
                         long imageAddTime = data.getLong(data.getColumnIndexOrThrow(VIDEO_PROJECTION[4]));
                         ImageVideo imageVideo = new ImageVideo();

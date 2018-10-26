@@ -143,12 +143,16 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         presenter = new FindSendPicPresenter(this,this);
 
         singleImgAdapter.setOnItemClickListener((view, position) -> {
-            EventBus.getDefault().postSticky(imgList);
-            BrowseImageVideoAct.BuildConfig config1 = new BrowseImageVideoAct.BuildConfig();
-            config1.position = position;
-            config1.isShowImageVideo = true;
-            config1.isShowSelect = false;
-            BrowseImageVideoAct.startAct(this,config1,BrowseImageVideoAct.REQUEST_CODE);
+            if (position >= imgList.size()){
+                singleImgAdapter.selectPic();
+            }else {
+                EventBus.getDefault().postSticky(imgList);
+                BrowseImageVideoAct.BuildConfig config1 = new BrowseImageVideoAct.BuildConfig();
+                config1.position = position;
+                config1.isShowImageVideo = true;
+                config1.isOnlyBrowse = true;
+                BrowseImageVideoAct.startAct(this, config1, BrowseImageVideoAct.REQUEST_CODE);
+            }
         });
     }
 
@@ -163,7 +167,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                     if (s.length() > MAX_TEXT_COUNT){
                         edit.setText(s.subSequence(0,MAX_TEXT_COUNT));
                         edit.setSelection(MAX_TEXT_COUNT);
-                        Common.staticToast("字数不能超过800");
+                        Common.staticToast("字数不能超过"+MAX_TEXT_COUNT);
                     }
                 }
             });
@@ -365,26 +369,6 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         }).launch();
     }
 
-    /**
-     * 设置凭证图片
-     *
-     * @param pics
-     * @param isShow
-     */
-    @Override
-    public void setRefundPics(List<String> pics, boolean isShow) {
-        if (isEmpty(pics)){
-            return;
-        }
-        if (isShow){
-            for (String picturePath : pics) {
-                ImageVideo imageEntity = new ImageVideo();
-                imageEntity.url = picturePath;
-                imgList.add(imageEntity);
-            }
-            singleImgAdapter.notifyDataSetChanged();
-        }
-    }
 
     @Override
     public void uploadImg(UploadPicEntity picEntity) {
@@ -463,7 +447,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         }else if (!isEmpty(entity.pics)){
             for (String url:entity.pics) {
                 ImageVideo imageVideo = new ImageVideo();
-                imageVideo.url = url;
+                imageVideo.path = url;
                 imgList.add(imageVideo);
             }
             singleImgAdapter.notifyDataSetChanged();
