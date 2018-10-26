@@ -9,12 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,9 +30,9 @@ import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.app.widget.NewLookBigImgAct;
 import com.shunlian.app.widget.NewTextView;
+import com.shunlian.app.widget.banner.MyKanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -442,15 +439,4 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         }
     }
 
-    public void setAdapterCallBack(OnAdapterCallBack callBack) {
-        this.mCallBack = callBack;
-    }
-
-    public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
-
-        void toFocusMember(int isFocus, String memberId);
-
-        void toPraiseBlog(String blogId);
-    }
 }

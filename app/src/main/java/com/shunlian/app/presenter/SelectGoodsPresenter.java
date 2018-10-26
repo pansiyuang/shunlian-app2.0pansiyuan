@@ -3,11 +3,14 @@ package com.shunlian.app.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.shunlian.app.adapter.SelectGoodsAdapter;
 import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.GoodsSearchParam;
+import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IView;
 
@@ -27,6 +30,8 @@ public class SelectGoodsPresenter extends BasePresenter {
     private final String page_size = "20";
     private List<GoodsDeatilEntity.Goods> goodsLists = new ArrayList<>();
     private SelectGoodsAdapter adapter;
+    private GoodsSearchParam mGoodsSearchParam;
+    private String mKeyword;
 
     public SelectGoodsPresenter(Context context, IView iView) {
         super(context, iView);
@@ -55,6 +60,47 @@ public class SelectGoodsPresenter extends BasePresenter {
     @Override
     protected void initApi() {
         getValidGoods(true);
+    }
+
+    public void getSearchGoods(String keyword, boolean isShowLoading) {
+        mKeyword = keyword;
+        if (isShowLoading){
+            allPage = 1;
+            currentPage = 1;
+        }
+        Map<String, String> map = new HashMap<>();
+        if (!TextUtils.isEmpty(keyword)) {
+            map.put("keyword", keyword);
+        }
+        map.put("page", String.valueOf(currentPage));
+        map.put("page_size", page_size);
+
+        sortAndMD5(map);
+
+        Call<BaseEntity<SearchGoodsEntity>> searchGoodsCallback = getAddCookieApiService().getSearchGoods(getRequestBody(map));
+        getNetData(isShowLoading, searchGoodsCallback, new SimpleNetDataCallback<BaseEntity<SearchGoodsEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<SearchGoodsEntity> entity) {
+                super.onSuccess(entity);
+                isLoading = false;
+                SearchGoodsEntity searchGoodsEntity = entity.data;
+                currentPage = Integer.parseInt(entity.data.page);
+                allPage = Integer.parseInt(entity.data.total_page);
+                setData(searchGoodsEntity.goods_list);
+                currentPage++;
+            }
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                isLoading = false;
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
+            }
+        });
     }
 
     public void getValidGoods(boolean isShowLoading) {
@@ -91,6 +137,9 @@ public class SelectGoodsPresenter extends BasePresenter {
     }
 
     private void setData(List<GoodsDeatilEntity.Goods> list) {
+        if (currentPage == 1){
+            goodsLists.clear();
+        }
         if (!isEmpty(list)) {
             goodsLists.addAll(list);
         }
@@ -118,7 +167,11 @@ public class SelectGoodsPresenter extends BasePresenter {
         if (!isLoading) {
             if (currentPage <= allPage) {
                 isLoading = true;
-                getValidGoods(false);
+                if (isEmpty(mKeyword)) {
+                    getValidGoods(false);
+                }else {
+                    getSearchGoods(mKeyword,false);
+                }
             }
         }
     }
