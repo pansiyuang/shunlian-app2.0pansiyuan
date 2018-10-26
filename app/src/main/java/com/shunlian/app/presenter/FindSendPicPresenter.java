@@ -98,6 +98,34 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
         });
     }
 
+    /**
+     * 上传视频封面
+     * @param bytes
+     */
+    public void uploadVideoThumb(byte[] bytes){
+        List<MultipartBody.Part> parts = new ArrayList<>();
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), bytes);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("file", "video_thumb.png", requestBody);
+        parts.add(part);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("path_name", "video_thumb");
+        sortAndMD5(map);
+
+        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(parts, map);
+        getNetData(false, call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<UploadPicEntity> entity) {
+                super.onSuccess(entity);
+                UploadPicEntity uploadPicEntity = entity.data;
+                if (!isEmpty(uploadPicEntity.relativePath)){
+                    iView.videoThumb(uploadPicEntity.relativePath.get(0));
+                }
+            }
+        });
+    }
+
 
     public void uploadVideo(String videoPath){
         File file = new File(videoPath);
@@ -116,7 +144,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
         });
     }
 
-    public void publish(String text, String pics, String video,
+    public void publish(String text, String pics, String video,String video_thumb,
                         String activity_id, String place,
                         String related_goods, String draft) {
         Map<String, String> map = new HashMap<>();
@@ -126,6 +154,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
             map.put("pics", pics);
         } else if (!isEmpty(video)) {
             map.put("type", "2");
+            map.put("video_thumb",video_thumb);
             map.put("video", video);
         }
         if (!isEmpty(activity_id)) {

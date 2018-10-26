@@ -31,7 +31,7 @@ public class ZanShareEntity {
     public static class Blog {
         public String id;
         public String title;
-        public String media;
+        public int media;
         public String pic;
     }
 }

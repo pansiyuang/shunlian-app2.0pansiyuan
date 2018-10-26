@@ -90,6 +90,9 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
 
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
+
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
 

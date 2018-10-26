@@ -35,4 +35,10 @@ public interface ISelectPicVideoView extends IView {
      * @param entity
      */
     void resetDraft(BlogDraftEntity entity);
+
+    /**
+     * 视频封面地址
+     * @param s
+     */
+    void videoThumb(String s);
 }

@@ -1,8 +1,6 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.WeekExpertEntity;
+import com.shunlian.app.bean.ExpertEntity;
 import com.shunlian.app.ui.discover_new.WeekExpertRankFrag;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
@@ -23,10 +21,10 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/19.
  */
 
-public class WeekExpertAdapter extends BaseRecyclerAdapter<WeekExpertEntity.Expert> {
+public class WeekExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert> {
     private WeekExpertRankFrag weekExpertRankFrag;
 
-    public WeekExpertAdapter(Context context, List<WeekExpertEntity.Expert> lists, WeekExpertRankFrag frag) {
+    public WeekExpertAdapter(Context context, List<ExpertEntity.Expert> lists, WeekExpertRankFrag frag) {
         super(context, false, lists);
         this.weekExpertRankFrag = frag;
     }
@@ -39,9 +37,9 @@ public class WeekExpertAdapter extends BaseRecyclerAdapter<WeekExpertEntity.Expe
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ExpertViewHolder) {
-            WeekExpertEntity.Expert expert = lists.get(position);
+            ExpertEntity.Expert expert = lists.get(position);
             ExpertViewHolder expertViewHolder = (ExpertViewHolder) holder;
-            GlideUtils.getInstance().loadCircleImage(context, expertViewHolder.miv_icon, expert.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, expertViewHolder.miv_icon, expert.avatar);
             expertViewHolder.tv_nickname.setText(expert.nickname);
             expertViewHolder.tv_hot.setText(expert.hot_val + "热度");
             switch (position) {

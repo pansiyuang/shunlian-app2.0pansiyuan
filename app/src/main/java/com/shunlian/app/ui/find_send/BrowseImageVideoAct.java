@@ -433,11 +433,14 @@ public class BrowseImageVideoAct extends BaseActivity {
 
 
     private void playVideo(String url) {
-        LogUtil.zhLogW("++++++playVideo+++++"+url);
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri data = Uri.parse(url);
+        Uri data = Uri.parse("file://"+url);
         intent.setDataAndType(data, "video/mp4");
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        }catch (Exception e){
+
+        }
     }
 
 

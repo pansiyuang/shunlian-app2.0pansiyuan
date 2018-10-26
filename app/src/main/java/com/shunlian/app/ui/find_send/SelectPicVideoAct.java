@@ -540,7 +540,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     long videoDuration = data.getLong(data.getColumnIndexOrThrow(VIDEO_PROJECTION[3]));
                     long video_size = data.getLong(data.getColumnIndexOrThrow(VIDEO_PROJECTION[2]));
                     if (!isEmpty(videoPath) && videoPath.toLowerCase().endsWith(".mp4")
-                            /*&& videoDuration < 16000*/ && video_size <= 30 * 1024 * 1024) {
+                            && videoDuration < 16000 && video_size <= 10 * 1024 * 1024) {
                         String videoName = data.getString(data.getColumnIndexOrThrow(VIDEO_PROJECTION[5]));
                         long imageAddTime = data.getLong(data.getColumnIndexOrThrow(VIDEO_PROJECTION[4]));
                         ImageVideo imageVideo = new ImageVideo();

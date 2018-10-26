@@ -255,6 +255,7 @@
 
     <!--话费充值-->
     <color name="value_484848">#FF484848</color>
+    <color name="value_515151">#515151</color>
     <color name="value_8F8F8F">#FF8F8F8F</color>
 
     <!--大转盘抽奖-->
@@ -270,6 +271,9 @@
     <color name="value_3673FB">#3673FB</color>
     <color name="value_C0BABA">#C0BABA</color>
     <color name="value_2D2D2D">#2D2D2D</color>
+    <color name="value_E70101">#E70101</color>
+    <color name="value_00B97A">#00B97A</color>
+    <color name="value_F2F8FF">#F2F8FF</color>
 </resources>
 
 

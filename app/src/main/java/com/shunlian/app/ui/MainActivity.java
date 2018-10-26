@@ -24,12 +24,14 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
+import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.coupon.CouponListAct;
+import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.NewDiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
@@ -137,6 +139,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private MyLinearLayout mllayout_before,mllayout_after;
     private NewTextView ntv_get,ntv_aOne,ntv_check,ntv_use;
     private boolean isGetAward=false;
+    private ObjectMapper objectMapper;
 
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
@@ -189,6 +192,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
      */
     @Override
     protected void initData() {
+        objectMapper = new ObjectMapper();
+
         if (SharedPrefUtil.getSharedUserBoolean("hide_first",false)){
             miv_hint.setVisibility(View.GONE);
         }else {
@@ -338,6 +343,21 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
 //            mtv_message_count.setVisibility(View.GONE);
+
+            try {
+                String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
+                HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
+
+                if (discoverFrag != null && discoverFrag.isVisible()) {
+                    if (baseInfo.white_list == 0) {
+                        FindSendPictureTextAct.startAct(this, false);
+                    } else {
+                        FindSendPictureTextAct.startAct(this, true);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (handler == null)
             handler = new Handler();

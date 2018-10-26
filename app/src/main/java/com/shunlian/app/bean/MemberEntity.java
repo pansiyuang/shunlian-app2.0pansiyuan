@@ -9,10 +9,10 @@ import java.util.List;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FansEntity {
+public class MemberEntity {
 
     public Pager pager;
-    public List<Fans> list;
+    public List<Member> list;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Pager {
@@ -23,7 +23,7 @@ public class FansEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Fans {
+    public static class Member {
         public String id;
         public String member_id;
         public String nickname;

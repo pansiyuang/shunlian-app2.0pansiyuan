@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
-import com.shunlian.app.bean.FansEntity;
+import com.shunlian.app.bean.MemberEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IFansView;
@@ -21,6 +21,7 @@ import retrofit2.Call;
 public class FansPresenter extends BasePresenter<IFansView> {
 
     public static int PAGE_SIZE = 10;
+    private String currentMemberId;
 
     public FansPresenter(Context context, IFansView iView) {
         super(context, iView);
@@ -51,16 +52,51 @@ public class FansPresenter extends BasePresenter<IFansView> {
         map.put("page_size", String.valueOf(PAGE_SIZE));
         sortAndMD5(map);
 
-        Call<BaseEntity<FansEntity>> baseEntityCall = getAddCookieApiService().fansList(map);
-        getNetData(isFirst, baseEntityCall, new SimpleNetDataCallback<BaseEntity<FansEntity>>() {
+        Call<BaseEntity<MemberEntity>> baseEntityCall = getAddCookieApiService().fansList(map);
+        getNetData(isFirst, baseEntityCall, new SimpleNetDataCallback<BaseEntity<MemberEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<FansEntity> entity) {
+            public void onSuccess(BaseEntity<MemberEntity> entity) {
                 super.onSuccess(entity);
-                FansEntity fansEntity = entity.data;
+                MemberEntity memberEntity = entity.data;
                 isLoading = false;
-                iView.getFansList(fansEntity.list, fansEntity.pager.page, fansEntity.pager.total_page);
-                currentPage = fansEntity.pager.page;
-                allPage = fansEntity.pager.total_page;
+                iView.getFansList(memberEntity.list, memberEntity.pager.page, memberEntity.pager.total_page);
+                currentPage = memberEntity.pager.page;
+                allPage = memberEntity.pager.total_page;
+                currentPage++;
+            }
+
+            @Override
+            public void onFailure() {
+                isLoading = false;
+                super.onFailure();
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                isLoading = false;
+                super.onErrorCode(code, message);
+            }
+        });
+    }
+
+    public void getTaFansList(boolean isFirst, String memberId) {
+        currentMemberId = memberId;
+        Map<String, String> map = new HashMap<>();
+        map.put("member_id", memberId);
+        map.put("page", String.valueOf(currentPage));
+        map.put("page_size", String.valueOf(PAGE_SIZE));
+        sortAndMD5(map);
+
+        Call<BaseEntity<MemberEntity>> baseEntityCall = getAddCookieApiService().taFansList(map);
+        getNetData(isFirst, baseEntityCall, new SimpleNetDataCallback<BaseEntity<MemberEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<MemberEntity> entity) {
+                super.onSuccess(entity);
+                MemberEntity memberEntity = entity.data;
+                isLoading = false;
+                iView.getFansList(memberEntity.list, memberEntity.pager.page, memberEntity.pager.total_page);
+                currentPage = memberEntity.pager.page;
+                allPage = memberEntity.pager.total_page;
                 currentPage++;
             }
 
@@ -117,7 +153,11 @@ public class FansPresenter extends BasePresenter<IFansView> {
         if (!isLoading) {
             isLoading = true;
             if (currentPage <= allPage) {
-                getFansList(false);
+                if (isEmpty(currentMemberId)) {
+                    getFansList(false);
+                } else {
+                    getTaFansList(false, currentMemberId);
+                }
             }
         }
     }

@@ -3,7 +3,6 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -47,9 +46,12 @@ public class DiscoverSearchPresenter extends BasePresenter<IDiscoverSearchView> 
         getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<TagEntity>>() {
             @Override
             public void onSuccess(BaseEntity<TagEntity> entity) {
+                TagEntity tagEntity = entity.data;
+                iView.getTagList(tagEntity.list);
                 super.onSuccess(entity);
 
             }
+
             @Override
             public void onFailure() {
                 super.onFailure();

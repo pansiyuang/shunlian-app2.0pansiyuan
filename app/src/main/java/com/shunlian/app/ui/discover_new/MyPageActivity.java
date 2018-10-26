@@ -8,12 +8,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -84,10 +87,15 @@ public class MyPageActivity extends BaseActivity {
     @BindView(R.id.ll_zan)
     LinearLayout ll_zan;
 
+    @BindView(R.id.miv_title_right)
+    MyImageView miv_title_right;
+
     private String[] titles = {"我的", "收藏"};
     private List<BaseFragment> goodsFrags;
     private String currentMemberId;
     private boolean isDefault = true;
+    private ObjectMapper objectMapper;
+    private boolean isSelf;
 
     public static void startAct(Context context, String memberId) {
         Intent intent = new Intent(context, MyPageActivity.class);
@@ -102,14 +110,28 @@ public class MyPageActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        ImmersionBar.with(this).fitsSystemWindows(true)
-                .statusBarColor(R.color.white)
-                .statusBarDarkFont(true, 0.2f)
-                .init();
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
 
         currentMemberId = getIntent().getStringExtra("member_id");
+
         setTabMode(isDefault);
         initFrags();
+
+        objectMapper = new ObjectMapper();
+        try {
+            String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
+            HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
+            if (currentMemberId.equals(baseInfo.member_id)) {
+                isSelf = true;
+                miv_title_right.setVisibility(View.VISIBLE);
+                miv_title_right.setImageResource(R.mipmap.icon_faxian_xiaoxi);
+            } else {
+                miv_title_right.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -144,18 +166,31 @@ public class MyPageActivity extends BaseActivity {
         });
 
         ll_attention.setOnClickListener(v -> {
-
+            if (isSelf) {
+                AttentionMemberActivity.startAct(this);
+            } else {
+                AttentionMemberActivity.startAct(this, currentMemberId);
+            }
         });
 
         ll_fans.setOnClickListener(v -> {
+            if (isSelf) {
+                FansListActivity.startAct(this);
+            } else {
+                FansListActivity.startAct(this, currentMemberId);
+            }
+        });
+
+        miv_title_right.setOnClickListener(v -> {
+            DiscoverMsgActivity.startActivity(this);
         });
 
         ll_download.setOnClickListener(v -> {
-            DiscoverMsgActivity.startActivity(this, 2);
+            //暂时不需要添加点击事件
         });
 
         ll_zan.setOnClickListener(v -> {
-            DiscoverMsgActivity.startActivity(this, 0);
+            //暂时不需要添加点击事件
         });
         super.initListener();
     }
@@ -171,7 +206,7 @@ public class MyPageActivity extends BaseActivity {
 
     public void initInfo(HotBlogsEntity.MemberInfo memberInfo, HotBlogsEntity.DiscoveryInfo discoveryInfo) {
         if (memberInfo != null) {
-            GlideUtils.getInstance().loadCircleImage(this, miv_icon, memberInfo.avatar);
+            GlideUtils.getInstance().loadCircleAvar(this, miv_icon, memberInfo.avatar);
             tv_nickname.setText(memberInfo.nickname);
             tv_signature.setText(memberInfo.signature);
         }

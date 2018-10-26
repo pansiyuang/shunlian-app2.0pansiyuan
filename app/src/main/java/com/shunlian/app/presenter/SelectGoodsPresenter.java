@@ -59,7 +59,7 @@ public class SelectGoodsPresenter extends BasePresenter {
 
     public void getValidGoods(boolean isShowLoading) {
         Map<String, String> map = new HashMap<>();
-        map.put("from", "ALL");
+        map.put("from", "ORDERS");
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", page_size);
         sortAndMD5(map);

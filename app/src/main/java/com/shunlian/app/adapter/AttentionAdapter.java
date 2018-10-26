@@ -82,7 +82,7 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
     public void handlerItem(RecyclerView.ViewHolder holder, int position) {
         AttentionViewholder attentionViewholder = (AttentionViewholder) holder;
         HotBlogsEntity.RecomandFocus recomandFocus = lists.get(position - 1);
-        GlideUtils.getInstance().loadCircleImage(context, attentionViewholder.miv_icon, recomandFocus.avatar);
+        GlideUtils.getInstance().loadCircleAvar(context, attentionViewholder.miv_icon, recomandFocus.avatar);
         attentionViewholder.tv_name.setText(recomandFocus.nickname);
         attentionViewholder.tv_content.setText(recomandFocus.signature);
 
