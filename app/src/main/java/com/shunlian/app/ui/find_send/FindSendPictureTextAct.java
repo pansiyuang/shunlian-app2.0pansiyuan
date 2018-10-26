@@ -150,7 +150,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                 BrowseImageVideoAct.BuildConfig config1 = new BrowseImageVideoAct.BuildConfig();
                 config1.position = position;
                 config1.isShowImageVideo = true;
-                config1.isShowSelect = false;
+                config1.isOnlyBrowse = true;
                 BrowseImageVideoAct.startAct(this, config1, BrowseImageVideoAct.REQUEST_CODE);
             }
         });
@@ -167,7 +167,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                     if (s.length() > MAX_TEXT_COUNT){
                         edit.setText(s.subSequence(0,MAX_TEXT_COUNT));
                         edit.setSelection(MAX_TEXT_COUNT);
-                        Common.staticToast("字数不能超过800");
+                        Common.staticToast("字数不能超过"+MAX_TEXT_COUNT);
                     }
                 }
             });

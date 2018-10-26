@@ -989,6 +989,9 @@
             android:name=".ui.discover_new.VideoGoodPlayActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
+        <activity android:name=".utils.player.SmallMediaPlayer"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

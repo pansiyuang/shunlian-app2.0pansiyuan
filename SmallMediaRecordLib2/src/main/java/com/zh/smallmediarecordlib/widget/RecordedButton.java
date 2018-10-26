@@ -30,7 +30,7 @@ public class RecordedButton extends View {
     private int colorGray;
     private float radius1;
     private float radius2;
-    private float zoom = 0.8f;//初始化缩放比例
+    private float zoom = 1.0f;//初始化缩放比例
     private int dp5;
     private Paint paintProgress;
     private int colorBlue;
@@ -160,11 +160,11 @@ public class RecordedButton extends View {
                     }
                 }
 
-                float slideX = moveX - downX;
-                float slideY = moveY - downY;
+                //float slideX = moveX - downX;
+                //float slideY = moveY - downY;
                 //跟随手指移动
-                setX(getX() + slideX);
-                setY(getY() + slideY);
+                //setX(getX() + slideX);
+                //setY(getY() + slideY);
                 downX = moveX;
                 downY = moveY;
                 break;

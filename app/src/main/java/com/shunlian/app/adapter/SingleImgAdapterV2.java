@@ -110,10 +110,14 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
                 if (imgPath.toLowerCase().endsWith(".mp4")){
                     visible(viewHolder.mtv_video_duration);
                     String second = String.valueOf(imageEntity.videoDuration / 1000);
-                    if (second.length() == 1) {
-                        second = "0" + second;
+                    if ("0".equals(second)){
+                        viewHolder.mtv_video_duration.setText("");
+                    }else {
+                        if (second.length() == 1) {
+                            second = "0" + second;
+                        }
+                        viewHolder.mtv_video_duration.setText(String.format("00:%s", second));
                     }
-                    viewHolder.mtv_video_duration.setText(String.format("00:%s", second));
                     if (URLUtil.isNetworkUrl(imgPath)){
                         GlideUtils.getInstance().loadImage(context,viewHolder.miv_img,imageEntity.coverPath);
                     }else {

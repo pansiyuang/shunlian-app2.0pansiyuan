@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -25,7 +24,7 @@ import com.shunlian.app.photopick.ImageVideo;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.player.SmallMediaPlayer;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.photoview.HackyViewPager;
@@ -75,7 +74,7 @@ public class BrowseImageVideoAct extends BaseActivity {
     private String format = "完成(%d/%d)";
 
     public static final int REQUEST_CODE = 8888;
-    private boolean isShowSelect;
+    private boolean isOnlyBrowse;
 
     public static void startAct(Activity activity, BuildConfig config,int code) {
         activity.startActivityForResult(new Intent(activity, BrowseImageVideoAct.class)
@@ -149,7 +148,10 @@ public class BrowseImageVideoAct extends BaseActivity {
         mConfig = getIntent().getParcelableExtra("config");
         maxCount = mConfig.max_count;
         selectLists = mConfig.selectLists;
-        isShowSelect = mConfig.isShowSelect;
+        isOnlyBrowse = mConfig.isOnlyBrowse;
+        if (isOnlyBrowse){
+            gone(tvComplete);
+        }
         //LogUtil.zhLogW(mConfig.position+"=selectLists========"+selectLists.size());
         if (!mConfig.isShowImageVideo) {
             editLists = new ArrayList<>();
@@ -275,7 +277,6 @@ public class BrowseImageVideoAct extends BaseActivity {
 
             try {
                 ImageVideo imageVideo = list.get(position);
-                LogUtil.zhLogW("====imageVideo===="+imageVideo.toString());
                 url = imageVideo.path;
                 if (isMP4Path(url)) {
                     checkmark.setVisibility(View.GONE);
@@ -288,10 +289,10 @@ public class BrowseImageVideoAct extends BaseActivity {
                     }
                     visible(miv_play);
                 } else {
-                    if (isShowSelect) {
-                        checkmark.setVisibility(View.VISIBLE);
-                    }else {
+                    if (isOnlyBrowse) {
                         checkmark.setVisibility(View.GONE);
+                    }else {
+                        checkmark.setVisibility(View.VISIBLE);
                     }
                     gone(miv_play);
                     loadImg(url, imageView, spinner, layout_error);
@@ -322,7 +323,7 @@ public class BrowseImageVideoAct extends BaseActivity {
             }
 
             miv_play.setOnClickListener(v -> {
-                ImageVideo imageVideo = editLists.get(position);
+                ImageVideo imageVideo = list.get(position);
                 playVideo(imageVideo.path);
             });
             container.addView(imageLayout, 0);
@@ -438,14 +439,19 @@ public class BrowseImageVideoAct extends BaseActivity {
 
 
     private void playVideo(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri data = Uri.parse("file://"+url);
-        intent.setDataAndType(data, "video/mp4");
-        try {
-            startActivity(intent);
-        }catch (Exception e){
 
-        }
+        SmallMediaPlayer.startAct(this, url);
+        /*if (URLUtil.isNetworkUrl(url)){
+        }else {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri data = Uri.parse("file://" + url);
+            intent.setDataAndType(data, "video/mp4");
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+
+            }
+        }*/
     }
 
 
@@ -455,13 +461,14 @@ public class BrowseImageVideoAct extends BaseActivity {
      */
     public static class BuildConfig implements Parcelable {
         /**
-         * 是否显示可选择按钮
-         */
-        public boolean isShowSelect;
-        /**
          * 图片和视频是否一起选择
          */
         public boolean isShowImageVideo;
+
+        /**
+         * 是否仅预览
+         */
+        public boolean isOnlyBrowse;
         /**
          * 最大选择数量
          */
@@ -487,8 +494,8 @@ public class BrowseImageVideoAct extends BaseActivity {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeByte(this.isShowSelect ? (byte) 1 : (byte) 0);
             dest.writeByte(this.isShowImageVideo ? (byte) 1 : (byte) 0);
+            dest.writeByte(this.isOnlyBrowse ? (byte) 1 : (byte) 0);
             dest.writeInt(this.max_count);
             dest.writeInt(this.count);
             dest.writeInt(this.position);
@@ -496,8 +503,8 @@ public class BrowseImageVideoAct extends BaseActivity {
         }
 
         protected BuildConfig(Parcel in) {
-            this.isShowSelect = in.readByte() != 0;
             this.isShowImageVideo = in.readByte() != 0;
+            this.isOnlyBrowse = in.readByte() != 0;
             this.max_count = in.readInt();
             this.count = in.readInt();
             this.position = in.readInt();

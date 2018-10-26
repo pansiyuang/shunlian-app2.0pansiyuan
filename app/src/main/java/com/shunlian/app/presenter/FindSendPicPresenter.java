@@ -8,6 +8,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.photopick.ImageVideo;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ISelectPicVideoView;
 
 import java.io.File;
@@ -177,6 +178,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 iView.publishSuccess();
+                Common.staticToast(entity.message);
             }
         });
     }
