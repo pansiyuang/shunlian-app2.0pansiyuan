@@ -603,6 +603,7 @@
 
     <!-- 发现 -->
     <string name="discover_faxian">发现</string>
+    <string name="discover_shangping">商品(%s)款</string>
     <string name="discover_fenxiangdetuijian">分享的推荐商品</string>
     <string name="discover_shengchengerweimatuwen">生成二维码图文</string>
     <string name="discover_erweimatuwen">二维码图文</string>

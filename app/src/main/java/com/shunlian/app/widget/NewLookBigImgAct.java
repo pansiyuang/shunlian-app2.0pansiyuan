@@ -11,18 +11,25 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.DiscoverGoodsAdapter;
 import com.shunlian.app.adapter.OperateAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
@@ -48,6 +55,10 @@ public class NewLookBigImgAct extends BaseActivity{
     MyTextView rightNo;
     @BindView(R.id.tv_content)
     MyTextView tv_content;
+    @BindView(R.id.mtv_code)
+    MyTextView mtv_code;
+    @BindView(R.id.mtv_goods)
+    MyTextView mtv_goods;
     @BindView(R.id.mtv_save)
     MyTextView mtv_save;
     @BindView(R.id.view_pager)
@@ -128,6 +139,32 @@ public class NewLookBigImgAct extends BaseActivity{
                 savePhoto();
             }
         });
+        if (entity.blog==null||isEmpty(entity.blog.related_goods)){
+            mtv_code.setVisibility(View.GONE);
+            mtv_goods.setVisibility(View.GONE);
+        }else {
+            mtv_goods.setText(String.format(getStringResouce(R.string.discover_shangping),entity.blog.related_goods.size()));
+            mtv_code.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (entity.blog.related_goods.size()==1){
+                        GoodsDetailAct.startAct(baseAct,entity.blog.related_goods.get(0).goods_id);
+                    }else {
+                        initDialog(entity.blog,true);
+                    }
+                }
+            });
+            mtv_goods.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (entity.blog.related_goods.size()==1){
+                        GoodsDetailAct.startAct(baseAct,entity.blog.related_goods.get(0).goods_id);
+                    }else {
+                        initDialog(entity.blog,false);
+                    }
+                }
+            });
+        }
     }
 
     public void loadImg(String url, final PhotoView imageView, final ProgressBar spinner, final View layout_error) {
@@ -157,6 +194,45 @@ public class NewLookBigImgAct extends BaseActivity{
         } else {
             GlideUtils.getInstance().loadImage(this, imageView, url);
         }
+    }
+
+    public void initDialog(HotBlogsEntity.Blog blog,boolean isCode) {
+        Dialog dialog_new = new Dialog(baseAct, R.style.popAd);
+        dialog_new.setContentView(R.layout.dialog_found_goods);
+        Window window = dialog_new.getWindow();
+//        //设置边框距离
+//        window.getDecorView().setPadding(0, 0, 0, 0);
+        //设置dialog位置
+        window.setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        //设置宽高
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
+        MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
+        MyImageView miv_icon = dialog_new.findViewById(R.id.miv_icon);
+        NewTextView ntv_desc = dialog_new.findViewById(R.id.ntv_desc);
+        RecyclerView rv_goods = dialog_new.findViewById(R.id.rv_goods);
+
+        miv_close.setOnClickListener(view -> dialog_new.dismiss());
+        GlideUtils.getInstance().loadCircleImage(baseAct, miv_icon, blog.avatar);
+        SpannableStringBuilder ssb = Common.changeColor(blog.nickname
+                + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getResources().getColor(R.color.value_007AFF));
+        ntv_desc.setText(ssb);
+        rv_goods.setLayoutManager(new LinearLayoutManager(baseAct));
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct, blog.related_goods,isCode);
+        rv_goods.setAdapter(discoverGoodsAdapter);
+        discoverGoodsAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                GoodsDetailAct.startAct(baseAct, blog.related_goods.get(position).goods_id);
+            }
+        });
+        rv_goods.addItemDecoration(new MVerticalItemDecoration(baseAct,36,38,38));
+        dialog_new.setCancelable(false);
+        dialog_new.show();
+
     }
 
     public void savePhoto(){

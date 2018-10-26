@@ -36,10 +36,12 @@ import butterknife.BindView;
 public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
     private LayoutInflater mInflater;
+    private boolean isCode;
 
-    public DiscoverGoodsAdapter(Context context, List<GoodsDeatilEntity.Goods> lists) {
+    public DiscoverGoodsAdapter(Context context, List<GoodsDeatilEntity.Goods> lists,boolean isCode) {
         super(context, false, lists);
         mInflater = LayoutInflater.from(context);
+        this.isCode=isCode;
     }
 
 
@@ -55,9 +57,13 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                 GoodsDeatilEntity.Goods goods = lists.get(position);
                 GlideUtils.getInstance().loadCornerImage(context, viewHolder.miv_photo, goods.thumb);
                 viewHolder.ntv_title.setText(goods.title);
-                viewHolder.ntv_price.setText(goods.price);
-                viewHolder.ntv_priceM.setText(goods.old_price);
+                viewHolder.ntv_price.setText(getString(R.string.common_yuan)+goods.price);
+                viewHolder.ntv_priceM.setText(getString(R.string.common_yuan)+goods.market_price);
                 viewHolder.ntv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
+                if (isCode){
+                    viewHolder.ntv_code.setVisibility(View.VISIBLE);
+                    viewHolder.miv_share.setVisibility(View.GONE);
+                }
                 viewHolder.miv_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

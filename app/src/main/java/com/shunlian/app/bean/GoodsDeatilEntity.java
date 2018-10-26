@@ -874,6 +874,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public GoodsInfo goods_info;
         public String sku;                   //购物中的sku
         public String price;                 //价格
+        public String market_price;                 //价格
         public String old_price;                 //套餐原价
         public String left;                  // 剩余数量提醒，  大于等于三的时候不提醒，该值为null
         public List<AllProm> all_prom;
@@ -905,6 +906,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String limit_min_buy;//团购商品最少购买数
         public String big_label;//团购商品最少购买数
         public int share_num;
+        public String share_url;
 
         public Goods() {
         }

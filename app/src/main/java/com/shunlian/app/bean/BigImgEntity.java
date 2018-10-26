@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/12/15.
@@ -16,6 +17,7 @@ public class BigImgEntity implements Parcelable {
     public String content;
     public String id;
     public ArrayList<String> items;
+    public HotBlogsEntity.Blog blog;
 
     @Override
     public int describeContents() {
@@ -30,6 +32,7 @@ public class BigImgEntity implements Parcelable {
         dest.writeString(this.content);
         dest.writeString(this.id);
         dest.writeStringList(this.items);
+        dest.writeParcelable(this.blog,flags);
     }
 
     public BigImgEntity() {
@@ -42,6 +45,7 @@ public class BigImgEntity implements Parcelable {
         this.content = in.readString();
         this.id = in.readString();
         this.items = in.createStringArrayList();
+        this.blog = in.readParcelable(HotBlogsEntity.Blog.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<BigImgEntity> CREATOR = new Parcelable.Creator<BigImgEntity>() {

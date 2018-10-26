@@ -106,6 +106,12 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 blogViewHolder.tv_goods_name.setText(goods.title);
                 blogViewHolder.tv_goods_price.setText(getString(R.string.common_yuan) + goods.price);
                 blogViewHolder.tv_share_count.setText(String.valueOf(goods.share_num));
+                blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
             }
             if (blog.type == 1) {
                 int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
@@ -120,6 +126,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                         BigImgEntity bigImgEntity = new BigImgEntity();
                         bigImgEntity.itemList = (ArrayList<String>) blog.pics;
                         bigImgEntity.index = position;
+                        bigImgEntity.blog=blog;
                         NewLookBigImgAct.startAct(context, bigImgEntity);
                     }
                 });
@@ -187,6 +194,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 BigImgEntity bigImgEntity = new BigImgEntity();
                 bigImgEntity.itemList = (ArrayList<String>) blog.pics;
                 bigImgEntity.index = position;
+                bigImgEntity.blog=blog;
                 NewLookBigImgAct.startAct(context, bigImgEntity);
             });
             blogViewHolder.miv_more.setOnClickListener(v -> {
@@ -200,7 +208,11 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
             blogViewHolder.rlayout_goods.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    initDialog(blog);
+                    if (blog.related_goods.size()==1){
+                        GoodsDetailAct.startAct(context,blog.related_goods.get(0).goods_id);
+                    }else {
+                        initDialog(blog);
+                    }
                 }
             });
         }
@@ -208,15 +220,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
 
     public void initDialog(HotBlogsEntity.Blog blog) {
         Dialog dialog_new = new Dialog(context, R.style.popAd);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View viewDialog = inflater.inflate(R.layout.dialog_found_goods, null);
-        Activity activity= (Activity) context;
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-//        int height = display.getHeight();
-        //设置dialog的宽高为屏幕的宽高
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog_new.setContentView(viewDialog, layoutParams);
+        dialog_new.setContentView(R.layout.dialog_found_goods);
+        Window window = dialog_new.getWindow();
+//        //设置边框距离
+//        window.getDecorView().setPadding(0, 0, 0, 0);
+        //设置dialog位置
+        window.setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        //设置宽高
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
 
         MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
         MyImageView miv_icon = dialog_new.findViewById(R.id.miv_icon);
@@ -239,7 +253,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         rv_goods.addItemDecoration(new MVerticalItemDecoration(context,36,38,38));
         dialog_new.setCancelable(false);
         dialog_new.show();
-
 
     }
 
