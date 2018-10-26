@@ -37,7 +37,7 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
         if (holder instanceof AttentionMsgViewHolder) {
             AttentionMsgViewHolder attentionMsgViewHolder = (AttentionMsgViewHolder) holder;
             HotBlogsEntity.MemberInfo memberInfo = lists.get(position);
-            GlideUtils.getInstance().loadCircleImage(context, attentionMsgViewHolder.miv_icon, memberInfo.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, attentionMsgViewHolder.miv_icon, memberInfo.avatar);
             attentionMsgViewHolder.tv_name.setText(memberInfo.nickname);
 
             if (memberInfo.is_fans == 1) {//已经关注

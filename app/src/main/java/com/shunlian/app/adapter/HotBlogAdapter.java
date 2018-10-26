@@ -131,7 +131,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 blog = lists.get(position - 1);
             }
             BlogViewHolder blogViewHolder = (BlogViewHolder) holder;
-            GlideUtils.getInstance().loadCircleImage(context, blogViewHolder.miv_icon, blog.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, blogViewHolder.miv_icon, blog.avatar);
             blogViewHolder.tv_name.setText(blog.nickname);
             blogViewHolder.tv_time.setText(blog.time_desc);
 

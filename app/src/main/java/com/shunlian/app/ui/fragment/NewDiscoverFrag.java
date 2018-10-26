@@ -8,20 +8,26 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
+import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.discover_new.ActivityFrag;
 import com.shunlian.app.ui.discover_new.HotBlogFrag;
 import com.shunlian.app.ui.discover_new.AttentionFrag;
-import com.shunlian.app.ui.discover_new.MyFansActivity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.search.DiscoverSearchActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -53,6 +59,7 @@ public class NewDiscoverFrag extends BaseFragment {
     private HotBlogFrag hotBlogFrag;
     private ActivityFrag activityFrag;
     private String avatar;
+    private HotBlogsEntity.BaseInfo currentBaseInfo;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -62,6 +69,7 @@ public class NewDiscoverFrag extends BaseFragment {
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         ImmersionBar.with(this).fitsSystemWindows(true)
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
@@ -82,7 +90,7 @@ public class NewDiscoverFrag extends BaseFragment {
         super.initListener();
         miv_icon.setOnClickListener(v -> {
             if (!isEmpty(avatar)) {
-                MyFansActivity.startAct(getActivity());
+                MyPageActivity.startAct(getActivity(), currentBaseInfo.member_id);
             }
         });
         miv_search.setOnClickListener(v -> {
@@ -136,13 +144,16 @@ public class NewDiscoverFrag extends BaseFragment {
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(BaseInfoEvent event) {
+        currentBaseInfo = event.baseInfo;
+        avatar = currentBaseInfo.avatar;
+        GlideUtils.getInstance().loadCircleAvar(baseContext, miv_icon, avatar);
+    }
+
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden) {
-            avatar = SharedPrefUtil.getSharedUserString("personal_avatar", "");
-            LogUtil.httpLogW("avatar:" + avatar);
-            GlideUtils.getInstance().loadCircleAvar(baseContext, miv_icon, avatar);
-        }
-        super.onHiddenChanged(hidden);
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

@@ -6,16 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
-import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +45,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private HotBlogAdapter hotBlogAdapter;
     private List<HotBlogsEntity.Blog> blogList;
     private LinearLayoutManager manager;
+    private ObjectMapper objectMapper;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -58,6 +64,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         lay_refresh.setRefreshHeaderView(header);
         recycler_list.setNestedScrollingEnabled(false);
 
+        objectMapper = new ObjectMapper();
         blogList = new ArrayList<>();
         hotBlogPresenter = new HotBlogPresenter(getActivity(), this);
         hotBlogPresenter.getHotBlogList(true);
@@ -105,6 +112,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
                 nei_empty.setVisibility(View.GONE);
                 recycler_list.setVisibility(View.VISIBLE);
             }
+            saveBaseInfo(hotBlogsEntity.base_info);
         }
         if (!isEmpty(hotBlogsEntity.list)) {
             blogList.addAll(hotBlogsEntity.list);
@@ -175,5 +183,17 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     @Override
     public void toPraiseBlog(String blogId) {
         hotBlogPresenter.praiseBlos(blogId);
+    }
+
+    public void saveBaseInfo(HotBlogsEntity.BaseInfo baseInfo) {
+        try {
+            if (baseInfo != null) {
+                String infoStr = objectMapper.writeValueAsString(baseInfo);
+                SharedPrefUtil.saveSharedUserString("base_info", infoStr);
+                EventBus.getDefault().post(new BaseInfoEvent(baseInfo));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -39,7 +39,7 @@ public class WeekExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert> 
         if (holder instanceof ExpertViewHolder) {
             ExpertEntity.Expert expert = lists.get(position);
             ExpertViewHolder expertViewHolder = (ExpertViewHolder) holder;
-            GlideUtils.getInstance().loadCircleImage(context, expertViewHolder.miv_icon, expert.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, expertViewHolder.miv_icon, expert.avatar);
             expertViewHolder.tv_nickname.setText(expert.nickname);
             expertViewHolder.tv_hot.setText(expert.hot_val + "热度");
             switch (position) {

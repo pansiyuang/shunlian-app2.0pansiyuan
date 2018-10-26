@@ -21,6 +21,7 @@ public class HotBlogsEntity {
     public DiscoveryInfo discovery_info;
     public MemberInfo member_info;
     public Detail detail;
+    public BaseInfo base_info;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Pager {
@@ -189,5 +190,13 @@ public class HotBlogsEntity {
         public String add_time;
         public String update_time;
         public List<DiscoverActivityEntity.Member> members;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class BaseInfo {
+        public String member_id;
+        public int white_list;
+        public String avatar;
+        public String nickname;
     }
 }

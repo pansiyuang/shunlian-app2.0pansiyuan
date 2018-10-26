@@ -966,7 +966,11 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover_new.MyFansActivity"
+            android:name=".ui.discover_new.FansListActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.AttentionMemberActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity

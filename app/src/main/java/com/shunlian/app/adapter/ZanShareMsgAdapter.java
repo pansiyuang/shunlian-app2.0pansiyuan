@@ -37,7 +37,7 @@ public class ZanShareMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
         if (holder instanceof ZanViewHolder) {
             ZanViewHolder zanViewHolder = (ZanViewHolder) holder;
             ZanShareEntity.Msg msg = lists.get(position);
-            GlideUtils.getInstance().loadCircleImage(context, zanViewHolder.miv_icon, msg.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, zanViewHolder.miv_icon, msg.avatar);
             GlideUtils.getInstance().loadImage(context, zanViewHolder.miv_goods_icon, msg.blog.pic);
             zanViewHolder.tv_nickname.setText(msg.nickname);
             zanViewHolder.tv_date.setText(msg.create_time);

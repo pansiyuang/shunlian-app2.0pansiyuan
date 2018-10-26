@@ -1,6 +1,6 @@
 package com.shunlian.app.view;
 
-import com.shunlian.app.bean.FansEntity;
+import com.shunlian.app.bean.MemberEntity;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface IFansView extends IView {
 
-    void getFansList(List<FansEntity.Fans> fansList, int page, int totalPage);
+    void getFansList(List<MemberEntity.Member> fansList, int page, int totalPage);
 
     void focusUser(int isFocus, String memberId);
 

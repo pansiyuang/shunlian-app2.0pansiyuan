@@ -91,9 +91,8 @@ public class DiscoverMsgActivity extends BaseActivity {
     private String[] titles = {"点赞/分享", "关注", "下载", "通知"};
     private int showType;//0 分享点赞 ,1 关注 2,下载 3,通知
 
-    public static void startActivity(Context context, int tabPosition) {
+    public static void startActivity(Context context) {
         Intent intent = new Intent(context, DiscoverMsgActivity.class);
-        intent.putExtra("position", tabPosition);
         context.startActivity(intent);
     }
 
@@ -104,16 +103,11 @@ public class DiscoverMsgActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        ImmersionBar.with(this).fitsSystemWindows(true)
-                .statusBarColor(R.color.white)
-                .statusBarDarkFont(true, 0.2f)
-                .init();
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
 
         tv_title.setText("发现消息");
-
         initFrags();
-
-        showType = getIntent().getIntExtra("position", 0);
 
         showTab(showType);
         viewpager.setCurrentItem(showType);

@@ -36,7 +36,7 @@ public class DownloadMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
         if (holder instanceof DownViewHolder) {
             DownViewHolder downViewHolder = (DownViewHolder) holder;
             ZanShareEntity.Msg msg = lists.get(position);
-            GlideUtils.getInstance().loadCircleImage(context, downViewHolder.miv_icon, msg.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, downViewHolder.miv_icon, msg.avatar);
             GlideUtils.getInstance().loadImage(context, downViewHolder.miv_goods_icon, msg.blog.pic);
             downViewHolder.tv_nickname.setText(msg.nickname);
             downViewHolder.tv_date.setText(msg.create_time);

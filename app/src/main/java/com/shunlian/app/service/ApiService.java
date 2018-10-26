@@ -2725,7 +2725,25 @@ public interface ApiService {
      * 我的粉丝列表
      */
     @GET("discovery/discoveryuser/fansList")
-    Call<BaseEntity<FansEntity>> fansList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<MemberEntity>> fansList(@QueryMap Map<String, String> map);
+
+    /**
+     * TA的粉丝列表
+     */
+    @GET("discovery/blogfront/fansList")
+    Call<BaseEntity<MemberEntity>> taFansList(@QueryMap Map<String, String> map);
+
+    /**
+     * 我的关注列表
+     */
+    @GET("discovery/discoveryuser/focusList")
+    Call<BaseEntity<MemberEntity>> focusList(@QueryMap Map<String, String> map);
+
+    /**
+     * TA的关注列表
+     */
+    @GET("discovery/blogfront/focusList")
+    Call<BaseEntity<MemberEntity>> taFocusList(@QueryMap Map<String, String> map);
 
     /**
      * 活动详情
