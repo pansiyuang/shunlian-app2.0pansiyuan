@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
+import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,7 @@ import android.widget.TextView;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BitmapAdapter;
 import com.shunlian.app.photopick.ImageVideo;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -64,6 +69,9 @@ public class BrowseImageVideoAct extends BaseActivity {
 
     @BindView(R.id.layout_top_section)
     RelativeLayout layoutTopSection;
+
+    @BindView(R.id.recy_view)
+    RecyclerView recy_view;
 
     private ArrayList<ImageVideo> mImageVideos;
     private BuildConfig mConfig;
@@ -150,6 +158,7 @@ public class BrowseImageVideoAct extends BaseActivity {
             editLists = new ArrayList<>();
             String path = mImageVideos.get(mConfig.position).path;
             if (isMP4Path(path)){
+                //getVideoFrame(path);
                 for (int i = 0; i<mImageVideos.size();i++) {
                     ImageVideo iv = mImageVideos.get(i);
                     if (isMP4Path(iv.path)){
@@ -432,10 +441,8 @@ public class BrowseImageVideoAct extends BaseActivity {
 
 
     private void playVideo(String url) {
-
         SmallMediaPlayer.startAct(this, url);
-        /*if (URLUtil.isNetworkUrl(url)){
-        }else {
+        /*
             Intent intent = new Intent(Intent.ACTION_VIEW);
             Uri data = Uri.parse("file://" + url);
             intent.setDataAndType(data, "video/mp4");
@@ -444,9 +451,53 @@ public class BrowseImageVideoAct extends BaseActivity {
             } catch (Exception e) {
 
             }
-        }*/
+        */
     }
 
+    private void getVideoFrame(String url){
+        if (isMP4Path(url)){
+            new AsyncTask<String,Void,List<Bitmap>>(){
+                private MediaMetadataRetriever mRetriever;
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                    mRetriever = new MediaMetadataRetriever();
+                }
+
+                @Override
+                protected List<Bitmap> doInBackground(String... urls) {
+                    List<Bitmap> mBitmaps = null;
+                    if(urls!=null && urls.length > 0){
+                        mBitmaps = new ArrayList<>();
+                        mRetriever.setDataSource(urls[0]);
+                        String duration = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                        System.out.println(urls[0]+"========duration==="+duration);
+                        if (!TextUtils.isEmpty(duration) && TextUtils.isDigitsOnly(duration)){
+                            mBitmaps.add(mRetriever.getFrameAtTime());
+                            for (int i = 0; i < Long.parseLong(duration) / 1000; i++) {
+                                Bitmap bitmap = mRetriever.getFrameAtTime(i * 1000*1000,MediaMetadataRetriever.OPTION_CLOSEST);
+                                mBitmaps.add(bitmap);
+                            }
+                        }
+                    }
+                    return mBitmaps;
+                }
+
+
+                @Override
+                protected void onPostExecute(List<Bitmap> bitmaps) {
+                    super.onPostExecute(bitmaps);
+                    if (bitmaps != null) {
+                        System.out.println("===onPostExecute=====" + bitmaps.size());
+                        LinearLayoutManager manager = new LinearLayoutManager(BrowseImageVideoAct.this,
+                                LinearLayoutManager.HORIZONTAL,false);
+                        recy_view.setLayoutManager(manager);
+                        recy_view.setAdapter(new BitmapAdapter(BrowseImageVideoAct.this, bitmaps));
+                    }
+                }
+            }.execute(url);
+        }
+    }
 
 
     /**

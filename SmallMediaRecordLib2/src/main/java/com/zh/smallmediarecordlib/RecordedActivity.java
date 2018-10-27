@@ -8,8 +8,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -62,10 +61,11 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
     private TextView tv_hint;
 
 
+    private String mUrl;
+    private CountDownTimer mDownTimer;
     private SurfaceHolder mSurfaceHolder;
+    private final int maxDuration = 16000;//最大时长
     private MediaRecorderBase mediaRecorderBase;
-
-    private int maxDuration = 15000;//最大时长
 
     private SurfaceHolder.Callback mSurfaceCallBack = new SurfaceHolder.Callback() {
 
@@ -88,7 +88,6 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
                 mediaRecorderBase.releaseCamera();
         }
     };
-    private String mUrl;
 
     public static void startAct(Activity activity, int code) {
         Intent intent = new Intent(activity, RecordedActivity.class);
@@ -111,7 +110,8 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             for (int i = 0; i < permissions.length; i++) {
@@ -180,7 +180,6 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
         iv_finish.setOnClickListener(this);
 
         mRecordControl.setOnGestureListener(new RecordedButton.OnGestureListener() {
-
             private boolean start_state;
 
             @Override
@@ -201,7 +200,9 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
                     mRecordControl.closeButton();
                     UIState(2);
                 }
-                mHandler.removeCallbacksAndMessages(null);
+                if (mDownTimer != null) {
+                    mDownTimer.cancel();
+                }
             }
 
             @Override
@@ -211,10 +212,11 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
                     completeRecord();
                     UIState(2);
                 }
-                mHandler.removeCallbacksAndMessages(null);
+                if (mDownTimer != null) {
+                    mDownTimer.cancel();
+                }
             }
         });
-
 
         iv_change_flash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,25 +238,6 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
         });
     }
 
-
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0) {
-                mRecordControl.setProgress(seconds * 50);
-                mRecordControl.cleanSplit();
-                progress();
-            }
-        }
-    };
-
-    int seconds = 0;
-
-    public void progress() {
-        seconds++;
-        mHandler.sendEmptyMessageDelayed(0, 50);
-    }
-
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.iv_finish) {
@@ -272,6 +255,24 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDownTimer != null){
+            mDownTimer.cancel();
+            mDownTimer = null;
+        }
+        if (mSurfaceHolder != null){
+            mSurfaceHolder.removeCallback(mSurfaceCallBack);
+            mSurfaceCallBack = null;
+            mSurfaceHolder = null;
+        }
+
+        if (mediaRecorderBase != null){
+            mediaRecorderBase.destory();
+        }
+    }
+
     /**
      * ui状态
      * 1 预览状态
@@ -285,15 +286,12 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
             gone(rl_bottom, vv_play);
             mRecordControl.cleanSplit();
             mRecordControl.setProgress(0);
-            seconds = 0;
         } else if (state_code == 2) {
             gone(rl_top, mRecordControl, tv_hint, iv_close);
             visible(vv_play, rl_bottom);
             mRecordControl.cleanSplit();
             mRecordControl.setProgress(0);
-            seconds = 0;
         }
-
     }
 
     /**
@@ -359,7 +357,6 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
         return false;
     }
 
-
     /**
      * 开始合成视频
      */
@@ -405,6 +402,28 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
             vv_play.setLooping(true);
             vv_play.start();
         }
+    }
+
+    public void progress() {
+        if (mDownTimer == null) {
+            mDownTimer = new CountDownTimer(maxDuration, 50) {
+                @Override
+                public void onTick(long l) {
+                    if (mRecordControl != null)
+                        mRecordControl.setProgress(maxDuration - l);
+                }
+
+                @Override
+                public void onFinish() {
+                    if (mRecordControl != null) {
+                        mRecordControl.setProgress(maxDuration);
+                        mRecordControl.closeButton();
+                    }
+                }
+            };
+        }
+        mDownTimer.cancel();
+        mDownTimer.start();
     }
 }
 
