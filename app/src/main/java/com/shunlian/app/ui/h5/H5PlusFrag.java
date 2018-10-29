@@ -9,7 +9,7 @@ import com.shunlian.mylibrary.ImmersionBar;
  * Created by Administrator on 2017/12/26.
  */
 
-public class H5PlusFrag extends H5Frag {
+public class H5PlusFrag extends H5X5Frag {
 
 
     protected void jsCallback(H5CallEntity h5CallEntity) {

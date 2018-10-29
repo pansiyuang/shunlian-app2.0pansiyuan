@@ -32,7 +32,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.balance.BalanceDetailAct;
 import com.shunlian.app.ui.balance.BalanceMainAct;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.sale_data.SaleDetailAct;
 import com.shunlian.app.ui.sale_data.SplineChart06View;
 import com.shunlian.app.utils.Common;
@@ -548,7 +548,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                 break;
             case R.id.miv_toolbar_help:
                 if (!TextUtils.isEmpty(profit_help_url)) {
-                    H5Act.startAct(this, profit_help_url, H5Act.MODE_SONIC);
+                    H5X5Act.startAct(this, profit_help_url, H5X5Act.MODE_SONIC);
                 }
                 break;
             case R.id.llayout_week_reward:

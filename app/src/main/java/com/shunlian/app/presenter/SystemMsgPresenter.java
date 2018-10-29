@@ -2,7 +2,6 @@ package com.shunlian.app.presenter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.shunlian.app.adapter.SysMsgAdapter;
 import com.shunlian.app.bean.BaseEntity;
@@ -15,7 +14,6 @@ import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.message.PunishAct;
 import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.ui.order.OrderDetailAct;

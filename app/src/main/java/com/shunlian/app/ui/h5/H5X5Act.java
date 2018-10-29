@@ -355,6 +355,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             @Override
             public void onPageStarted(WebView webView, String url, Bitmap bitmap) {
                 super.onPageStarted(webView, url, bitmap);
+                addCookie(url);
                 LogUtil.zhLogW("=onPageStarted=======" + url);
 //                if (!isFinishing() && httpDialog != null) {
 //                    httpDialog.show();
@@ -367,6 +368,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                addCookie(url);
                 if (!isFinishing()) {
                     if (!isEmpty(view.getTitle())) {
                         title = view.getTitle();
@@ -445,6 +447,8 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 //                }
 //                return false;
                 } else {
+//                    if (!Common.getDomain(h5Url).equals(Common.getDomain(url)))
+                        addCookie(url);
                     return super.shouldOverrideUrlLoading(view, url);
 //                    return false;
                 }
@@ -455,7 +459,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
                 if (sonicSession != null) {
                     try {
                         return (WebResourceResponse) sonicSession.getSessionClient().requestResource(url);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         return super.shouldInterceptRequest(view, url);
                     }
                 }
@@ -531,7 +535,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             }
 
         });
-        addCookie();
+        addCookie(h5Url);
         mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString() + " " + SharedPrefUtil
 //        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
                 .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
@@ -552,14 +556,14 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             mwv_h5.loadUrl(h5Url, setWebviewHeader());
             beforeUrl = h5Url;
         } else {
-            addCookie();
+            addCookie(h5Url);
             if (!member_id.equals(SharedPrefUtil.getSharedUserString("member_id", "")))
                 mwv_h5.reload();
         }
         member_id = SharedPrefUtil.getSharedUserString("member_id", "");
     }
 
-    public void addCookie() {
+    public void addCookie(String url) {
         //add
         String token = SharedPrefUtil.getSharedUserString("token", "");
         String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
@@ -570,7 +574,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
 
-        String domain = Common.getDomain(h5Url);
+        String domain = Common.getDomain(url);
         cookieManager.setCookie(domain, "Client-Type=Android");
         cookieManager.setCookie(domain, "token=" + token);
         cookieManager.setCookie(domain, "User-Agent=" + ua);

@@ -15,12 +15,9 @@ import android.webkit.WebViewClient;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.widget.WebViewProgressBar;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
-
-import butterknife.BindView;
 
 /**
  * Created by Administrator on 2018/5/28.
