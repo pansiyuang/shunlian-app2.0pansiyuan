@@ -23,9 +23,12 @@ import butterknife.BindView;
 public class SelectGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
     private boolean isShowAdd = true;
+    private List<String> mSelectList;
 
-    public SelectGoodsAdapter(Context context,boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
+    public SelectGoodsAdapter(Context context, boolean isShowFooter,
+                              List<GoodsDeatilEntity.Goods> lists, List<String> mSelectList) {
         super(context, isShowFooter, lists);
+        this.mSelectList = mSelectList;
         if (context instanceof FindSendPictureTextAct){
             isShowAdd = false;
         }
@@ -58,11 +61,22 @@ public class SelectGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         mHolder.mtvPrice.setText("￥"+goods.price);
 
         if (isShowAdd){
-            visible(mHolder.mtv_add);
             gone(mHolder.miv_del);
+            if (!isEmpty(mSelectList)){
+                if (mSelectList.contains(goods.goods_id)){
+                    gone(mHolder.mtv_add);
+                    visible(mHolder.mtv_complete_add);
+                }else {
+                    visible(mHolder.mtv_add);
+                    gone(mHolder.mtv_complete_add);
+                }
+            }else {
+                visible(mHolder.mtv_add);
+                gone(mHolder.mtv_complete_add);
+            }
         }else {
             visible(mHolder.miv_del);
-            gone(mHolder.mtv_add);
+            gone(mHolder.mtv_add,mHolder.mtv_complete_add);
         }
     }
 
@@ -82,6 +96,9 @@ public class SelectGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
         @BindView(R.id.miv_del)
         MyImageView miv_del;
+
+        @BindView(R.id.mtv_complete_add)
+        MyTextView mtv_complete_add;
 
         public SelectGoodsHolder(View itemView) {
             super(itemView);

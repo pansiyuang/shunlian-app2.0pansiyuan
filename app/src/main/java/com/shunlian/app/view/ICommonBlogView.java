@@ -13,4 +13,6 @@ public interface ICommonBlogView extends IView {
     void focusUser(int isFocus, String memberId);
 
     void praiseBlog(String blogId);
+
+    void refreshFinish();
 }

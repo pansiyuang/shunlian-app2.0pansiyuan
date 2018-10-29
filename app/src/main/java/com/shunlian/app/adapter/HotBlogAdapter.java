@@ -8,6 +8,7 @@ import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -232,7 +233,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
             }
 
-            if (blog.is_self == 0) {
+            if (blog.is_self == 1) {
                 blogViewHolder.miv_more.setVisibility(View.GONE);
             } else {
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
@@ -268,7 +269,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 NewLookBigImgAct.startAct(context, bigImgEntity);
             });
             blogViewHolder.miv_more.setOnClickListener(v -> {
-
+                if (mCallBack != null) {
+                    mCallBack.clickMoreBtn(blog.id);
+                }
             });
 
             blogViewHolder.rl_video.setOnClickListener(v -> {
@@ -285,6 +288,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                     }
                 }
             });
+            blogViewHolder.rlayout_goods.setOnClickListener(view -> initDialog(blog));
         }
     }
 
@@ -301,6 +305,15 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View viewDialog = inflater.inflate(R.layout.dialog_found_goods, null);
+        Activity activity = (Activity) context;
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int width = display.getWidth();
+//        int height = display.getHeight();
+        //设置dialog的宽高为屏幕的宽高
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog_new.setContentView(viewDialog, layoutParams);
 
         MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
         MyImageView miv_icon = dialog_new.findViewById(R.id.miv_icon);
@@ -367,18 +380,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
         public TopViewHolder(View itemView) {
             super(itemView);
         }
-    }
-
-    public void setAdapterCallBack(OnAdapterCallBack callBack) {
-        this.mCallBack = callBack;
-    }
-
-    public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
-
-        void toFocusMember(int isFocus, String memberId);
-
-        void toPraiseBlog(String blogId);
     }
 
     public class BlogViewHolder extends BaseRecyclerViewHolder {
@@ -456,4 +457,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
         }
     }
 
+    public void setAdapterCallBack(OnAdapterCallBack callBack) {
+        this.mCallBack = callBack;
+    }
+
+    public interface OnAdapterCallBack {
+        void toFocusUser(int isFocus, String memberId);
+
+        void toFocusMember(int isFocus, String memberId);
+
+        void toPraiseBlog(String blogId);
+
+        void clickMoreBtn(String blogId);
+    }
 }

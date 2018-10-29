@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,10 +71,10 @@ public class MyPageActivity extends BaseActivity {
     View line_right;
 
     @BindView(R.id.ll_left)
-    LinearLayout ll_left;
+    RelativeLayout ll_left;
 
     @BindView(R.id.ll_right)
-    LinearLayout ll_right;
+    RelativeLayout ll_right;
 
     @BindView(R.id.ll_attention)
     LinearLayout ll_attention;

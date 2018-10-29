@@ -172,6 +172,18 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
 
         UIState(1);
         mRecordControl.setMax(maxDuration);
+
+        if (MediaRecorderBase.isSupportCameraLedFlash(getPackageManager())){
+            visible(iv_change_flash);
+        }else {
+            gone(iv_change_flash);
+        }
+
+        if (MediaRecorderBase.isSupportFrontCamera()){
+            visible(iv_change_camera);
+        }else {
+            gone(iv_change_camera);
+        }
     }
 
     private void initListener() {
