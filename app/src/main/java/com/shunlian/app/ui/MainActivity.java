@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,6 +47,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.app.widget.MyFrameLayout;
@@ -324,6 +326,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (MyOnClickListener.isFastClick()) {
             return;
         }
+
+
         if (view.getId() == R.id.ll_tab_main_page) {
             miv_first.setVisibility(View.VISIBLE);
             miv_tab_main.setVisibility(View.GONE);
@@ -358,6 +362,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         break;
                     case R.id.ll_tab_sort:
                         //myPlusClick();
+                        RelativeLayout.LayoutParams layoutParams= (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
+                        int topOne= -TransformUtil.dip2px(baseAct,12);
+//                        int topTwo= TransformUtil.dip2px(baseAct,8);
+                        miv_tab_discover.setImageResource(R.mipmap.tab_03_sel);
+                        layoutParams.setMargins(0,topOne,0,0);
                         sortClick();
                         break;
                     case R.id.ll_tab_discover:

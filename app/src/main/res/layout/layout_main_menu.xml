@@ -86,9 +86,9 @@
                 android:id="@+id/miv_tab_discover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/tab_3_n"
+                android:background="@mipmap/tab_03_sel"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="-16dp"/>
 
             <TextView
                 android:id="@+id/tv_tab_discover"
