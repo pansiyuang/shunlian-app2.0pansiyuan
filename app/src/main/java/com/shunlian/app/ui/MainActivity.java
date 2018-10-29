@@ -332,8 +332,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //            miv_first.animate().rotation(0).setDuration(0).start();
 //            miv_first.animate().rotation(360).setDuration(300).start();
 //        } else {
-            view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-            view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+//            view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+//            view.animate().scaleX(1).scaleY(1).setDuration(300).start();
 //        }
         if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
@@ -351,121 +351,153 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         int topTwo= TransformUtil.dip2px(baseAct,8);
         int threeTwo= -TransformUtil.dip2px(baseAct,10);
         int fourTwo= TransformUtil.dip2px(baseAct,6);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                switch (view.getId()) {
-                    case R.id.ll_tab_main_page:
-                        layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
-                        miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
-                        layoutParams_discover.setMargins(0,topTwo,0,0);
+        switch (view.getId()) {
+            case R.id.ll_tab_main_page:
+                layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
+                miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
+                layoutParams_discover.setMargins(0,topTwo,0,0);
 
-                        miv_tab_main.setImageResource(R.mipmap.tab_01_sel);
-                        layoutParams_main.setMargins(0,topOne,0,0);
+                miv_tab_main.setImageResource(R.mipmap.tab_01_sel);
+                layoutParams_main.setMargins(0,topOne,0,0);
 
-                        miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
-                        layoutParams_sort.setMargins(0,topTwo,0,0);
+                miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
+                layoutParams_sort.setMargins(0,topTwo,0,0);
 
-                        miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
-                        layoutParams_shopping_car.setMargins(0,topTwo,0,0);
+                miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
+                layoutParams_shopping_car.setMargins(0,topTwo,0,0);
 
-                        miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
-                        layoutParams_person_center.setMargins(0,topTwo,0,0);
+                miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
+                layoutParams_person_center.setMargins(0,topTwo,0,0);
 
-                        if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
-                            cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
-                            if (cateGoryFrag.rv_view != null) {
-                                cateGoryFrag.rv_view.scrollToPosition(0);
+                if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
+                    cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
+                    if (cateGoryFrag.rv_view != null) {
+                        cateGoryFrag.rv_view.scrollToPosition(0);
 //                                cateGoryFrag.rv_view.smoothScrollToPosition(0);
-                                FirstPageFrag.mAppbar.setExpanded(true);
-                            }
-                        } else {
-                            mainPageClick();
-                        }
-                        break;
-                    case R.id.ll_tab_sort:
-                        //myPlusClick();
-                        layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
-
-                        miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
-                        layoutParams_discover.setMargins(0,topTwo,0,0);
-
-                        miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
-                        layoutParams_main.setMargins(0,topTwo,0,0);
-
-                        miv_tab_sort.setImageResource(R.mipmap.tab_02_sel);
-                        layoutParams_sort.setMargins(0,topOne,0,0);
-
-                        miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
-                        layoutParams_shopping_car.setMargins(0,topTwo,0,0);
-
-                        miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
-                        layoutParams_person_center.setMargins(0,topTwo,0,0);
-                        sortClick();
-                        break;
-                    case R.id.ll_tab_discover:
-                        layoutParams_message_count.setMargins(0,threeTwo,0,0);
-
-                        miv_tab_discover.setImageResource(R.mipmap.tab_03_sel);
-                        layoutParams_discover.setMargins(0,topOne,0,0);
-
-                        miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
-                        layoutParams_main.setMargins(0,topTwo,0,0);
-
-                        miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
-                        layoutParams_sort.setMargins(0,topTwo,0,0);
-
-                        miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
-                        layoutParams_shopping_car.setMargins(0,topTwo,0,0);
-
-                        miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
-                        layoutParams_person_center.setMargins(0,topTwo,0,0);
-                        discoverClick();
-                        break;
-                    case R.id.ll_tab_shopping_car:
-//                        CouponMsgAct.startAct(MainActivity.this,"");
-                        layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
-
-                        miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
-                        layoutParams_discover.setMargins(0,topTwo,0,0);
-
-                        miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
-                        layoutParams_main.setMargins(0,topTwo,0,0);
-
-                        miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
-                        layoutParams_sort.setMargins(0,topTwo,0,0);
-
-                        miv_shopping_car.setImageResource(R.mipmap.tab_04_sel);
-                        layoutParams_shopping_car.setMargins(0,topOne,0,0);
-
-                        miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
-                        layoutParams_person_center.setMargins(0,topTwo,0,0);
-                        shoppingCarClick();
-                        break;
-                    case R.id.ll_tab_person_center:
-                        layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
-
-                        miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
-                        layoutParams_discover.setMargins(0,topTwo,0,0);
-
-                        miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
-                        layoutParams_main.setMargins(0,topTwo,0,0);
-
-                        miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
-                        layoutParams_sort.setMargins(0,topTwo,0,0);
-
-                        miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
-                        layoutParams_shopping_car.setMargins(0,topTwo,0,0);
-
-                        miv_person_center.setImageResource(R.mipmap.tab_05_sel);
-                        layoutParams_person_center.setMargins(0,topOne,0,0);
-                        miv_hint.setVisibility(View.GONE);
-                        SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
-                        personCenterClick();
-                        break;
+                        FirstPageFrag.mAppbar.setExpanded(true);
+                    }
+                } else {
+                    mainPageClick();
                 }
-            }
-        }, 300);
+                break;
+            case R.id.ll_tab_sort:
+                //myPlusClick();
+                layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
+
+                miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
+                layoutParams_discover.setMargins(0,topTwo,0,0);
+
+                miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
+                layoutParams_main.setMargins(0,topTwo,0,0);
+
+                miv_tab_sort.setImageResource(R.mipmap.tab_02_sel);
+                layoutParams_sort.setMargins(0,topOne,0,0);
+
+                miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
+                layoutParams_shopping_car.setMargins(0,topTwo,0,0);
+
+                miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
+                layoutParams_person_center.setMargins(0,topTwo,0,0);
+                sortClick();
+                break;
+            case R.id.ll_tab_discover:
+                layoutParams_message_count.setMargins(0,threeTwo,0,0);
+
+                miv_tab_discover.setImageResource(R.mipmap.tab_03_sel);
+                layoutParams_discover.setMargins(0,topOne,0,0);
+
+                miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
+                layoutParams_main.setMargins(0,topTwo,0,0);
+
+                miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
+                layoutParams_sort.setMargins(0,topTwo,0,0);
+
+                miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
+                layoutParams_shopping_car.setMargins(0,topTwo,0,0);
+
+                miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
+                layoutParams_person_center.setMargins(0,topTwo,0,0);
+                discoverClick();
+                break;
+            case R.id.ll_tab_shopping_car:
+//                        CouponMsgAct.startAct(MainActivity.this,"");
+                layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
+
+                miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
+                layoutParams_discover.setMargins(0,topTwo,0,0);
+
+                miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
+                layoutParams_main.setMargins(0,topTwo,0,0);
+
+                miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
+                layoutParams_sort.setMargins(0,topTwo,0,0);
+
+                miv_shopping_car.setImageResource(R.mipmap.tab_04_sel);
+                layoutParams_shopping_car.setMargins(0,topOne,0,0);
+
+                miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
+                layoutParams_person_center.setMargins(0,topTwo,0,0);
+                shoppingCarClick();
+                break;
+            case R.id.ll_tab_person_center:
+                layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
+
+                miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
+                layoutParams_discover.setMargins(0,topTwo,0,0);
+
+                miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
+                layoutParams_main.setMargins(0,topTwo,0,0);
+
+                miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
+                layoutParams_sort.setMargins(0,topTwo,0,0);
+
+                miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
+                layoutParams_shopping_car.setMargins(0,topTwo,0,0);
+
+                miv_person_center.setImageResource(R.mipmap.tab_05_sel);
+                layoutParams_person_center.setMargins(0,topOne,0,0);
+                miv_hint.setVisibility(View.GONE);
+                SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
+                personCenterClick();
+                break;
+        }
+        view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+        view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                switch (view.getId()) {
+//                    case R.id.ll_tab_main_page:
+//                        if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
+//                            cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
+//                            if (cateGoryFrag.rv_view != null) {
+//                                cateGoryFrag.rv_view.scrollToPosition(0);
+////                                cateGoryFrag.rv_view.smoothScrollToPosition(0);
+//                                FirstPageFrag.mAppbar.setExpanded(true);
+//                            }
+//                        } else {
+//                            mainPageClick();
+//                        }
+//                        break;
+//                    case R.id.ll_tab_sort:
+//                        //myPlusClick();
+//                        sortClick();
+//                        break;
+//                    case R.id.ll_tab_discover:
+//                        discoverClick();
+//                        break;
+//                    case R.id.ll_tab_shopping_car:
+////                        CouponMsgAct.startAct(MainActivity.this,"");
+//                        shoppingCarClick();
+//                        break;
+//                    case R.id.ll_tab_person_center:
+//                        miv_hint.setVisibility(View.GONE);
+//                        SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
+//                        personCenterClick();
+//                        break;
+//                }
+//            }
+//        }, 300);
     }
 
     public void mainPageClick() {

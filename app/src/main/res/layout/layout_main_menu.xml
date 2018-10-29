@@ -20,8 +20,8 @@
             android:id="@+id/miv_tab_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:src="@mipmap/tab_shouye_p" />
+            android:layout_marginTop="-12dp"
+            android:src="@mipmap/tab_01_sel" />
 
         <TextView
             android:id="@+id/tv_tab_main"
@@ -110,7 +110,7 @@
             android:paddingRight="3dp"
             android:textColor="@color/pink_color"
             android:textSize="8.5sp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <View
             android:id="@+id/view_message"
