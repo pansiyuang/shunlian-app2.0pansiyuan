@@ -67,6 +67,9 @@ public class CommonBlogPresenter extends BasePresenter<ICommonBlogView> {
                 iView.getFocusblogs(hotBlogsEntity, hotBlogsEntity.pager.page, hotBlogsEntity.pager.total_page);
                 currentPage = hotBlogsEntity.pager.page;
                 allPage = hotBlogsEntity.pager.total_page;
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 

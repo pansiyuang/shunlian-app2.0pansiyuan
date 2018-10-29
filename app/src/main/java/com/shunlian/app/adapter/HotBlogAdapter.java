@@ -178,7 +178,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
             if (blog.type == 1) {
                 int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
                 SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth);
-                BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, singlePicAdapter, blog.pics, mActivity
+                BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, singlePicAdapter, blog.pics, (Activity) context
                         , 0, 0, 63, 12, 16, 0, 4, 0);
                 singlePicAdapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override
@@ -225,7 +225,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
             }
 
-            if (blog.is_self == 0) {
+            if (blog.is_self == 1) {
                 blogViewHolder.miv_more.setVisibility(View.GONE);
             } else {
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
@@ -260,19 +260,16 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 NewLookBigImgAct.startAct(context, bigImgEntity);
             });
             blogViewHolder.miv_more.setOnClickListener(v -> {
-
+                if (mCallBack != null) {
+                    mCallBack.clickMoreBtn(blog.id);
+                }
             });
 
             blogViewHolder.rl_video.setOnClickListener(v -> {
                 VideoGoodPlayActivity.startActivity(context, blog);
             });
 
-            blogViewHolder.rlayout_goods.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    initDialog(blog);
-                }
-            });
+            blogViewHolder.rlayout_goods.setOnClickListener(view -> initDialog(blog));
         }
     }
 
@@ -280,7 +277,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         Dialog dialog_new = new Dialog(context, R.style.popAd);
         LayoutInflater inflater = LayoutInflater.from(context);
         View viewDialog = inflater.inflate(R.layout.dialog_found_goods, null);
-        Activity activity= (Activity) context;
+        Activity activity = (Activity) context;
         Display display = activity.getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
 //        int height = display.getHeight();
@@ -306,7 +303,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id);
             }
         });
-        rv_goods.addItemDecoration(new MVerticalItemDecoration(context,36,38,38));
+        rv_goods.addItemDecoration(new MVerticalItemDecoration(context, 36, 38, 38));
         dialog_new.setCancelable(false);
         dialog_new.show();
 
@@ -353,18 +350,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         public TopViewHolder(View itemView) {
             super(itemView);
         }
-    }
-
-    public void setAdapterCallBack(OnAdapterCallBack callBack) {
-        this.mCallBack = callBack;
-    }
-
-    public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
-
-        void toFocusMember(int isFocus, String memberId);
-
-        void toPraiseBlog(String blogId);
     }
 
     public class BlogViewHolder extends BaseRecyclerViewHolder {
@@ -452,5 +437,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         void toFocusMember(int isFocus, String memberId);
 
         void toPraiseBlog(String blogId);
+
+        void clickMoreBtn(String blogId);
     }
 }
