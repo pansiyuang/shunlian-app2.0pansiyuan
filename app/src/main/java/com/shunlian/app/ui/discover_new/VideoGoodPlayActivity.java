@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SaveAlbumDialog;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.view.IHotBlogView;
@@ -62,7 +64,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
 
     @BindView(R.id.customVideoPlayer)
     GoodVideoPlayer customVideoPlayer;
-
+    QuickActions quick_actions;
     @BindView(R.id.ll_rootView)
     RelativeLayout ll_rootView;
 
@@ -94,6 +96,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         customVideoPlayer.setUp(blog.video, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
         customVideoPlayer.startVideo();
         httpDialog = new HttpDialog(this);
+        quick_actions = new QuickActions(this);
     }
 
     @Override
@@ -129,12 +132,8 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     }
 
     public void shareArticle() {
-        if (!Common.isAlreadyLogin()) {
-//            if(blog!=null&&blog.related_goods!=null&&blog.related_goods.size()>0) {
-//                Common.goGoGo(this, "HTMLShare", "2","http://www.baidu.com", blog.related_goods.get(0).title,"",blog.related_goods.get(0).thumb);
-//            }
-        } else {
-//            isShare = true;
+        if (quick_actions != null){
+            quick_actions.shareStyle1Dialog();
         }
     }
 
@@ -209,6 +208,11 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     public void startGoodInfo() {
         if(blog!=null&&blog.related_goods!=null&&blog.related_goods.size()>0)
         GoodsDetailAct.startAct(this, blog.related_goods.get(0).goods_id);
+    }
+
+    @Override
+    public void destoryVideo() {
+        onBackPressed();
     }
 
 }
