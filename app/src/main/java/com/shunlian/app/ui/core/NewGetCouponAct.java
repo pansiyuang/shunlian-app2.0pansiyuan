@@ -214,9 +214,8 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
                     mtv_zuixin.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
                     view_remen.setVisibility(View.VISIBLE);
                     view_zuixin.setVisibility(View.INVISIBLE);
-                    pGetCoupon.resetBaby(type, "");
-                    ntv_pintai.setVisibility(View.VISIBLE);
                     rv_pingtai.setVisibility(View.VISIBLE);
+                    pGetCoupon.resetBaby(type, "");
                 }
                 break;
         }
@@ -268,6 +267,7 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
             ntv_pintai.setVisibility(View.GONE);
             return;
         }
+        ntv_pintai.setVisibility(View.VISIBLE);
         mDatas = new ArrayList<>();
         mDatas.addAll(vouchercenterplEntity.seller_voucher);
         rv_pingtai.setNestedScrollingEnabled(false);

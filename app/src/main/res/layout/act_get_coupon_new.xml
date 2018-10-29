@@ -151,6 +151,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="bottom"
+                android:visibility="gone"
                 android:text="@string/coupon_pintaiyouhui"
                 android:textColor="@color/share_text"
                 android:textSize="14sp" />
