@@ -341,33 +341,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         if (handler == null)
             handler = new Handler();
-        RelativeLayout.LayoutParams layoutParams_discover= (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
-        RelativeLayout.LayoutParams layoutParams_message_count= (RelativeLayout.LayoutParams) mtv_message_count.getLayoutParams();
-        LinearLayout.LayoutParams layoutParams_main= (LinearLayout.LayoutParams) miv_tab_main.getLayoutParams();
-        LinearLayout.LayoutParams layoutParams_sort= (LinearLayout.LayoutParams) miv_tab_sort.getLayoutParams();
-        LinearLayout.LayoutParams layoutParams_shopping_car= (LinearLayout.LayoutParams) miv_shopping_car.getLayoutParams();
-        LinearLayout.LayoutParams layoutParams_person_center= (LinearLayout.LayoutParams) miv_person_center.getLayoutParams();
-        int topOne= -TransformUtil.dip2px(baseAct,12);
-        int topTwo= TransformUtil.dip2px(baseAct,8);
-        int threeTwo= -TransformUtil.dip2px(baseAct,10);
-        int fourTwo= TransformUtil.dip2px(baseAct,6);
+
         switch (view.getId()) {
             case R.id.ll_tab_main_page:
-                layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
-                miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
-                layoutParams_discover.setMargins(0,topTwo,0,0);
-
-                miv_tab_main.setImageResource(R.mipmap.tab_01_sel);
-                layoutParams_main.setMargins(0,topOne,0,0);
-
-                miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
-                layoutParams_sort.setMargins(0,topTwo,0,0);
-
-                miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
-                layoutParams_shopping_car.setMargins(0,topTwo,0,0);
-
-                miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
-                layoutParams_person_center.setMargins(0,topTwo,0,0);
 
                 if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
                     cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
@@ -382,80 +358,16 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 break;
             case R.id.ll_tab_sort:
                 //myPlusClick();
-                layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
-
-                miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
-                layoutParams_discover.setMargins(0,topTwo,0,0);
-
-                miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
-                layoutParams_main.setMargins(0,topTwo,0,0);
-
-                miv_tab_sort.setImageResource(R.mipmap.tab_02_sel);
-                layoutParams_sort.setMargins(0,topOne,0,0);
-
-                miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
-                layoutParams_shopping_car.setMargins(0,topTwo,0,0);
-
-                miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
-                layoutParams_person_center.setMargins(0,topTwo,0,0);
                 sortClick();
                 break;
             case R.id.ll_tab_discover:
-                layoutParams_message_count.setMargins(0,threeTwo,0,0);
-
-                miv_tab_discover.setImageResource(R.mipmap.tab_03_sel);
-                layoutParams_discover.setMargins(0,topOne,0,0);
-
-                miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
-                layoutParams_main.setMargins(0,topTwo,0,0);
-
-                miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
-                layoutParams_sort.setMargins(0,topTwo,0,0);
-
-                miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
-                layoutParams_shopping_car.setMargins(0,topTwo,0,0);
-
-                miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
-                layoutParams_person_center.setMargins(0,topTwo,0,0);
                 discoverClick();
                 break;
             case R.id.ll_tab_shopping_car:
 //                        CouponMsgAct.startAct(MainActivity.this,"");
-                layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
-
-                miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
-                layoutParams_discover.setMargins(0,topTwo,0,0);
-
-                miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
-                layoutParams_main.setMargins(0,topTwo,0,0);
-
-                miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
-                layoutParams_sort.setMargins(0,topTwo,0,0);
-
-                miv_shopping_car.setImageResource(R.mipmap.tab_04_sel);
-                layoutParams_shopping_car.setMargins(0,topOne,0,0);
-
-                miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
-                layoutParams_person_center.setMargins(0,topTwo,0,0);
                 shoppingCarClick();
                 break;
             case R.id.ll_tab_person_center:
-                layoutParams_message_count.setMargins(0,fourTwo,fourTwo,0);
-
-                miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
-                layoutParams_discover.setMargins(0,topTwo,0,0);
-
-                miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
-                layoutParams_main.setMargins(0,topTwo,0,0);
-
-                miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
-                layoutParams_sort.setMargins(0,topTwo,0,0);
-
-                miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
-                layoutParams_shopping_car.setMargins(0,topTwo,0,0);
-
-                miv_person_center.setImageResource(R.mipmap.tab_05_sel);
-                layoutParams_person_center.setMargins(0,topOne,0,0);
                 miv_hint.setVisibility(View.GONE);
                 SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
                 personCenterClick();
@@ -664,6 +576,58 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     private void chageTabItem(int pageIndex) {
+        RelativeLayout.LayoutParams layoutParams_discover= (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
+        RelativeLayout.LayoutParams layoutParams_message_count= (RelativeLayout.LayoutParams) mtv_message_count.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams_main= (LinearLayout.LayoutParams) miv_tab_main.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams_sort= (LinearLayout.LayoutParams) miv_tab_sort.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams_shopping_car= (LinearLayout.LayoutParams) miv_shopping_car.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams_person_center= (LinearLayout.LayoutParams) miv_person_center.getLayoutParams();
+        int topOne= -TransformUtil.dip2px(baseAct,12);
+        int topTwo= TransformUtil.dip2px(baseAct,8);
+        int topThree= -TransformUtil.dip2px(baseAct,10);
+        int topFour= TransformUtil.dip2px(baseAct,6);
+
+
+        layoutParams_message_count.setMargins(0,topFour,topFour,0);
+        miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
+        layoutParams_discover.setMargins(0,topTwo,0,0);
+
+        miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
+        layoutParams_main.setMargins(0,topTwo,0,0);
+
+        miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
+        layoutParams_sort.setMargins(0,topTwo,0,0);
+
+        miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
+        layoutParams_shopping_car.setMargins(0,topTwo,0,0);
+
+        miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
+        layoutParams_person_center.setMargins(0,topTwo,0,0);
+
+        switch (pageIndex) {
+            case 0:
+                miv_tab_main.setImageResource(R.mipmap.tab_01_sel);
+                layoutParams_main.setMargins(0,topOne,0,0);
+                break;
+            case 1:
+                miv_tab_sort.setImageResource(R.mipmap.tab_02_sel);
+                layoutParams_sort.setMargins(0,topOne,0,0);
+                break;
+            case 2:
+                miv_tab_discover.setImageResource(R.mipmap.tab_03_sel);
+                layoutParams_discover.setMargins(0,topOne,0,0);
+                layoutParams_message_count.setMargins(0,topThree,topFour,0);
+                break;
+            case 3:
+                miv_shopping_car.setImageResource(R.mipmap.tab_04_sel);
+                layoutParams_shopping_car.setMargins(0,topOne,0,0);
+                break;
+            case 4:
+                miv_person_center.setImageResource(R.mipmap.tab_05_sel);
+                layoutParams_person_center.setMargins(0,topOne,0,0);
+                break;
+        }
+
 //        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
 //        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
 
