@@ -467,18 +467,21 @@ public class BrowseImageVideoAct extends BaseActivity {
                 @Override
                 protected List<Bitmap> doInBackground(String... urls) {
                     List<Bitmap> mBitmaps = null;
-                    if(urls!=null && urls.length > 0){
-                        mBitmaps = new ArrayList<>();
-                        mRetriever.setDataSource(urls[0]);
-                        String duration = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-                        System.out.println(urls[0]+"========duration==="+duration);
-                        if (!TextUtils.isEmpty(duration) && TextUtils.isDigitsOnly(duration)){
-                            mBitmaps.add(mRetriever.getFrameAtTime());
-                            for (int i = 0; i < Long.parseLong(duration) / 1000; i++) {
-                                Bitmap bitmap = mRetriever.getFrameAtTime(i * 1000*1000,MediaMetadataRetriever.OPTION_CLOSEST);
-                                mBitmaps.add(bitmap);
+                    try {
+                        if(urls!=null && urls.length > 0){
+                            mBitmaps = new ArrayList<>();
+                            mRetriever.setDataSource(urls[0]);
+                            String duration = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                            System.out.println(urls[0]+"========duration==="+duration);
+                            if (!TextUtils.isEmpty(duration) && TextUtils.isDigitsOnly(duration)){
+                                mBitmaps.add(mRetriever.getFrameAtTime());
+                                for (int i = 0; i < Long.parseLong(duration) / 1000; i++) {
+                                    Bitmap bitmap = mRetriever.getFrameAtTime(i * 1000*1000,MediaMetadataRetriever.OPTION_CLOSEST);
+                                    mBitmaps.add(bitmap);
+                                }
                             }
                         }
+                    }catch (Exception e){
                     }
                     return mBitmaps;
                 }

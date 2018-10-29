@@ -280,11 +280,13 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                 String path = picturePaths.get(0);
                 if (!isEmpty(path) && isMP4Path(path)) {
                     if (presenter != null) {
-                        MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
-                        mRetriever.setDataSource(path);
-                        Bitmap bitmap = mRetriever.getFrameAtTime();
-                        presenter.uploadVideoThumb(BitmapUtil.Bitmap2Bytes(bitmap));
-                        presenter.uploadVideo(path);
+                        try {
+                            MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+                            mRetriever.setDataSource(path);
+                            Bitmap bitmap = mRetriever.getFrameAtTime();
+                            presenter.uploadVideoThumb(BitmapUtil.Bitmap2Bytes(bitmap));
+                            presenter.uploadVideo(path);
+                        }catch (Exception e){}
                     }
                 } else {
                     index = 0;
