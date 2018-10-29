@@ -8,6 +8,7 @@ import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -379,18 +380,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
         public TopViewHolder(View itemView) {
             super(itemView);
         }
-    }
-
-    public void setAdapterCallBack(OnAdapterCallBack callBack) {
-        this.mCallBack = callBack;
-    }
-
-    public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
-
-        void toFocusMember(int isFocus, String memberId);
-
-        void toPraiseBlog(String blogId);
     }
 
     public class BlogViewHolder extends BaseRecyclerViewHolder {
