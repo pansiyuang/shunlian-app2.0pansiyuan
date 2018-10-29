@@ -31,7 +31,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView, HotBlogAdapter.OnAdapterCallBack {
+public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView, HotBlogAdapter.OnAdapterCallBack, HotBlogAdapter.OnDelBlogListener, HotBlogAdapter.OnFavoListener {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -151,6 +151,8 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
             hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity());
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
+            hotBlogAdapter.setOnDelListener(this);
+            hotBlogAdapter.setOnFavoListener(this);
         }
         hotBlogAdapter.setPageLoading(currentPage, totalPage);
         hotBlogAdapter.notifyDataSetChanged();
@@ -206,11 +208,6 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
         mPresenter.praiseBlos(blogId);
     }
 
-    @Override
-    public void clickMoreBtn(String blogId) {
-
-    }
-
     /**
      * 刷新完成
      */
@@ -218,6 +215,34 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     public void refreshFinish() {
         if (lay_refresh != null) {
             lay_refresh.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void onDel(String blogId) {
+        for (int i = 0; i < blogList.size(); i++) {
+            BigImgEntity.Blog blog = blogList.get(i);
+            if (blogId.equals(blog.id)) {
+                blogList.remove(i);
+            }
+        }
+        if (isEmpty(blogList)) {
+            recycler_list.setVisibility(View.GONE);
+            nestedScrollView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void OnFavo(int isFavo, String blogId) {
+        for (int i = 0; i < blogList.size(); i++) {
+            BigImgEntity.Blog blog = blogList.get(i);
+            if (blogId.equals(blog.id) && isFavo == 0) {
+                blogList.remove(i);
+            }
+        }
+        if (isEmpty(blogList)) {
+            recycler_list.setVisibility(View.GONE);
+            nestedScrollView.setVisibility(View.VISIBLE);
         }
     }
 }

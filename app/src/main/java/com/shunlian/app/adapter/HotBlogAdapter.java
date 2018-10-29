@@ -29,9 +29,11 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.BlogBottomDialog;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.NewLookBigImgAct;
@@ -47,7 +49,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/17.
  */
 
-public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
+public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> implements BlogBottomDialog.OnDialogCallBack {
     public static final int LAYOUT_TOP = 10003;
     private Activity mActivity;
     private List<HotBlogsEntity.RecomandFocus> recomandFocusList;
@@ -55,6 +57,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
     private OnAdapterCallBack mCallBack;
     private List<HotBlogsEntity.Ad> adList;
     private List<String> banners;
+    private BlogBottomDialog blogBottomDialog;
+    private OnDelBlogListener delBlogListener;
+    private OnFavoListener favoListener;
 
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity) {
         super(context, true, lists);
@@ -194,7 +199,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                         BigImgEntity bigImgEntity = new BigImgEntity();
                         bigImgEntity.itemList = (ArrayList<String>) blog.pics;
                         bigImgEntity.index = position;
-                        bigImgEntity.blog=blog;
+                        bigImgEntity.blog = blog;
                         NewLookBigImgAct.startAct(context, bigImgEntity);
                     }
                 });
@@ -234,8 +239,10 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
             }
 
             if (blog.is_self == 1) {
+                blogViewHolder.tv_attention.setVisibility(View.GONE);
                 blogViewHolder.miv_more.setVisibility(View.GONE);
             } else {
+                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
             }
 
@@ -257,6 +264,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 blogViewHolder.rl_attention.setVisibility(View.GONE);
             }
 
+            blogViewHolder.miv_video.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
+
             blogViewHolder.ll_member.setOnClickListener(v -> {
                 MyPageActivity.startAct(context, blog.member_id);
             });
@@ -265,13 +274,14 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 BigImgEntity bigImgEntity = new BigImgEntity();
                 bigImgEntity.itemList = (ArrayList<String>) blog.pics;
                 bigImgEntity.index = position;
-                bigImgEntity.blog=blog;
+                bigImgEntity.blog = blog;
                 NewLookBigImgAct.startAct(context, bigImgEntity);
             });
+
+            int i = TransformUtil.dip2px(context, 20);
+            TransformUtil.expandViewTouchDelegate(blogViewHolder.miv_more, i, i, i, i);
             blogViewHolder.miv_more.setOnClickListener(v -> {
-                if (mCallBack != null) {
-                    mCallBack.clickMoreBtn(blog.id);
-                }
+                showDialog(blog);
             });
 
             blogViewHolder.rl_video.setOnClickListener(v -> {
@@ -281,9 +291,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
             blogViewHolder.rlayout_goods.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (blog.related_goods.size()==1){
-                        GoodsDetailAct.startAct(context,blog.related_goods.get(0).goods_id);
-                    }else {
+                    if (blog.related_goods.size() == 1) {
+                        GoodsDetailAct.startAct(context, blog.related_goods.get(0).goods_id);
+                    } else {
                         initDialog(blog);
                     }
                 }
@@ -325,8 +335,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(context));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.related_goods,false, null,
-                SharedPrefUtil.getSharedUserString("nickname", ""),SharedPrefUtil.getSharedUserString("avatar", ""));
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.related_goods, false, null,
+                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -334,7 +344,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id);
             }
         });
-        rv_goods.addItemDecoration(new MVerticalItemDecoration(context,36,38,38));
+        rv_goods.addItemDecoration(new MVerticalItemDecoration(context, 36, 38, 38));
         dialog_new.setCancelable(false);
         dialog_new.show();
 
@@ -363,6 +373,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                     mCallBack.toFocusMember(isFocus, memberId);
                 }
             });
+            attentionMemberAdapter.setOnItemClickListener((view, position) -> MyPageActivity.startAct(context, list.get(position).member_id));
         }
     }
 
@@ -370,6 +381,34 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
         if (attentionMemberAdapter != null) {
             attentionMemberAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void addFavo(int favo, String blogId) {
+        for (int i = 0; i < lists.size(); i++) {
+            BigImgEntity.Blog blog = lists.get(i);
+            if (blogId.equals(blog.id)) {
+                blog.is_favo = favo;
+                if (favoListener != null) {
+                    favoListener.OnFavo(favo, blogId);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDel(String blogId) {
+        for (int i = 0; i < lists.size(); i++) {
+            BigImgEntity.Blog blog = lists.get(i);
+            if (blogId.equals(blog.id)) {
+                lists.remove(i);
+                if (delBlogListener != null) {
+                    delBlogListener.onDel(blogId);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public class TopViewHolder extends BaseRecyclerViewHolder {
@@ -461,13 +500,36 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
         this.mCallBack = callBack;
     }
 
+    public void setOnDelListener(OnDelBlogListener listener) {
+        this.delBlogListener = listener;
+    }
+
+    public void setOnFavoListener(OnFavoListener listener) {
+        this.favoListener = listener;
+    }
+
     public interface OnAdapterCallBack {
         void toFocusUser(int isFocus, String memberId);
 
         void toFocusMember(int isFocus, String memberId);
 
         void toPraiseBlog(String blogId);
+    }
 
-        void clickMoreBtn(String blogId);
+    public interface OnDelBlogListener {
+        void onDel(String blogId);
+    }
+
+    public interface OnFavoListener {
+        void OnFavo(int isFavo, String blogId);
+    }
+
+    public void showDialog(BigImgEntity.Blog blog) {
+        if (blogBottomDialog == null) {
+            blogBottomDialog = new BlogBottomDialog(context);
+            blogBottomDialog.setOnDialogCallBack(this);
+        }
+        blogBottomDialog.setBlog(blog);
+        blogBottomDialog.show();
     }
 }

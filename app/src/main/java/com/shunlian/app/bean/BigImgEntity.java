@@ -21,35 +21,6 @@ public class BigImgEntity implements Parcelable {
     public ArrayList<String> items;
     public Blog blog;
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringList(this.itemList);
-        dest.writeInt(this.index);
-        dest.writeString(this.desc);
-        dest.writeString(this.content);
-        dest.writeString(this.id);
-        dest.writeStringList(this.items);
-        dest.writeParcelable(this.blog,flags);
-    }
-
-    public BigImgEntity() {
-    }
-
-    protected BigImgEntity(Parcel in) {
-        this.itemList = in.createStringArrayList();
-        this.index = in.readInt();
-        this.desc = in.readString();
-        this.content = in.readString();
-        this.id = in.readString();
-        this.items = in.createStringArrayList();
-        this.blog = in.readParcelable(Blog.class.getClassLoader());
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Blog implements Parcelable {
         public String avatar;
@@ -75,6 +46,7 @@ public class BigImgEntity implements Parcelable {
         public String time_desc;
         public int total_share_num;
         public int is_self;
+        public int is_favo;
 
         @Override
         public int describeContents() {
@@ -106,6 +78,7 @@ public class BigImgEntity implements Parcelable {
             dest.writeString(this.time_desc);
             dest.writeInt(this.total_share_num);
             dest.writeInt(this.is_self);
+            dest.writeInt(this.is_favo);
         }
 
         public Blog() {
@@ -135,6 +108,7 @@ public class BigImgEntity implements Parcelable {
             this.time_desc = in.readString();
             this.total_share_num = in.readInt();
             this.is_self = in.readInt();
+            this.is_favo = in.readInt();
         }
 
         public static final Parcelable.Creator<Blog> CREATOR = new Parcelable.Creator<Blog>() {
@@ -149,6 +123,36 @@ public class BigImgEntity implements Parcelable {
             }
         };
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringList(this.itemList);
+        dest.writeInt(this.index);
+        dest.writeString(this.desc);
+        dest.writeString(this.content);
+        dest.writeString(this.id);
+        dest.writeStringList(this.items);
+        dest.writeParcelable(this.blog, flags);
+    }
+
+    public BigImgEntity() {
+    }
+
+    protected BigImgEntity(Parcel in) {
+        this.itemList = in.createStringArrayList();
+        this.index = in.readInt();
+        this.desc = in.readString();
+        this.content = in.readString();
+        this.id = in.readString();
+        this.items = in.createStringArrayList();
+        this.blog = in.readParcelable(Blog.class.getClassLoader());
+    }
+
     public static final Parcelable.Creator<BigImgEntity> CREATOR = new Parcelable.Creator<BigImgEntity>() {
         @Override
         public BigImgEntity createFromParcel(Parcel source) {

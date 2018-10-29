@@ -236,11 +236,6 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     }
 
     @Override
-    public void clickMoreBtn(String blogId) {
-
-    }
-
-    @Override
     public void onFocus(int isFocus, String memberId) {
         focusType = 2;
         mPresenter.focusUser(isFocus, memberId);

@@ -38,6 +38,9 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
+    @BindView(R.id.miv_join)
+    MyImageView miv_join;
+
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -99,6 +102,12 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         totalDy = layoutHeight;
                     }
                 }
+            }
+        });
+        miv_join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

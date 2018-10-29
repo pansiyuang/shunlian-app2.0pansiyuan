@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.DiscoverActivityEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 
@@ -91,6 +93,7 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
                 onFocusListener.onFocus(recomandFocus.focus_status, recomandFocus.member_id);
             }
         });
+        attentionViewholder.ll_member.setOnClickListener(v -> MyPageActivity.startAct(context, recomandFocus.member_id));
 
         if (recomandFocus.focus_status == 1) {//已经关注
             attentionViewholder.tv_attention.setBackgroundDrawable(null);
@@ -116,6 +119,9 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
 
         @BindView(R.id.tv_attention)
         TextView tv_attention;
+
+        @BindView(R.id.ll_member)
+        LinearLayout ll_member;
 
         public AttentionViewholder(View itemView) {
             super(itemView);

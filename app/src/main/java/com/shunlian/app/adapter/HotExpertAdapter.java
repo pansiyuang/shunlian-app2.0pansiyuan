@@ -14,9 +14,11 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -74,16 +76,22 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                     mCallBack.toFocusUser(blog.is_focus, blog.member_id);
                 }
             });
-            hotExpertViewHolder.tv_zan.setOnClickListener(v -> {
-                if (mCallBack != null) {
-                    mCallBack.toPraiseBlog(blog.id);
-                }
-            });
+//            hotExpertViewHolder.tv_zan.setOnClickListener(v -> {
+//                if (mCallBack != null) {
+//                    mCallBack.toPraiseBlog(blog.id);
+//                }
+//            });
+            hotExpertViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
+            hotExpertViewHolder.tv_nickname.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
+            hotExpertViewHolder.rl_video.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
 
             if (blog.type == 1) {
-                BitmapUtil.discoverImg(hotExpertViewHolder.miv_big_icon, hotExpertViewHolder.recycler_list, null, blog.pics, (Activity) context
+                int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
+                SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth);
+                BitmapUtil.discoverImg(hotExpertViewHolder.miv_big_icon, hotExpertViewHolder.recycler_list, singlePicAdapter, blog.pics, (Activity) context
                         , 0, 0, 63, 12, 16, 0, 4, 0);
                 hotExpertViewHolder.rl_video.setVisibility(View.GONE);
+                singlePicAdapter.setOnItemClickListener((view, position1) -> MyPageActivity.startAct(context, blog.member_id));
             } else {
                 String imageWidth, imageheight;
                 int width, height;

@@ -19,6 +19,8 @@ import com.shunlian.app.ui.discover_new.HotBlogFrag;
 import com.shunlian.app.ui.discover_new.AttentionFrag;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.search.DiscoverSearchActivity;
+import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -95,6 +97,25 @@ public class NewDiscoverFrag extends BaseFragment {
         });
         miv_search.setOnClickListener(v -> {
             DiscoverSearchActivity.startActivity(getActivity());
+        });
+
+        tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0 && !Common.isAlreadyLogin()) {
+                    LoginAct.startAct(getActivity());
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
         });
     }
 

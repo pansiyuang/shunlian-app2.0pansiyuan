@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -18,8 +17,10 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.utils.DeviceInfoUtil;
-import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.presenter.FavoBlogPresenter;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
+import com.shunlian.app.view.IFavBlogView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,37 +33,37 @@ import butterknife.Unbinder;
  * Created by Administrator on 2018/10/26.
  */
 
-public class CommBottomDialog extends Dialog implements BaseRecyclerAdapter.OnItemClickListener {
+public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnItemClickListener, IFavBlogView {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    private OnItemClickCallBack mCallBack;
     private Unbinder bind;
     private LinearLayoutManager manager;
     private List<String> stringList;
     private SingTextAdapter mAdapter;
+    private BigImgEntity.Blog currentBlog;
+    private FavoBlogPresenter mPresenter;
+    private OnDialogCallBack mCallBack;
 
-    public CommBottomDialog(Context context) {
+    public BlogBottomDialog(Context context) {
         this(context, R.style.popAd);
         initView();
     }
 
-    public CommBottomDialog(Context context, int themeResId) {
+    public BlogBottomDialog(Context context, int themeResId) {
         super(context, themeResId);
         initView();
     }
 
     private void initView() {
         //设置当前dialog宽高
-//        Window win = getWindow();
-//        WindowManager.LayoutParams lp = win.getAttributes();
-////        lp.width = DeviceInfoUtil.getDeviceWidth(getContext()) - TransformUtil.dip2px(getContext(), 32);
-//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-////        lp.gravity = Gravity.BOTTOM;
-//        win.setAttributes(lp);
-//        win.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Window win = getWindow();
+        WindowManager.LayoutParams lp = win.getAttributes();
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.BOTTOM;
+        win.setAttributes(lp);
+        win.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_bottom_dialog, null, false);
         setContentView(view);
@@ -73,10 +74,24 @@ public class CommBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
         stringList = new ArrayList<>();
     }
 
-    public void setRecyclerList(List<String> list) {
+    public void setBlog(BigImgEntity.Blog blog) {
+        if (blog == null) {
+            return;
+        }
+        currentBlog = blog;
         stringList.clear();
-        if (list != null && list.size() != 0) {
-            stringList.addAll(list);
+        if (blog.is_self == 1) {
+            stringList.add("删除");
+        } else {
+            switch (blog.is_favo) {
+                case 0:
+                    stringList.add("收藏");
+                    break;
+                case 1:
+                    stringList.add("取消收藏");
+                    break;
+            }
+            stringList.add("他的主页");
         }
         stringList.add("取消");
         if (mAdapter == null) {
@@ -87,12 +102,18 @@ public class CommBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
         mAdapter.notifyDataSetChanged();
     }
 
-    public void setOnItemClickCallBack(OnItemClickCallBack callBack) {
-        mCallBack = callBack;
+    public void toDelBlog(String blogId) {
+        if (mPresenter == null) {
+            mPresenter = new FavoBlogPresenter(getContext(), this);
+        }
+        mPresenter.removeBlog(blogId);
     }
 
-    public interface OnItemClickCallBack {
-        void clickItem(String string);
+    public void toFavoBlog(int isFavo, String blogId) {
+        if (mPresenter == null) {
+            mPresenter = new FavoBlogPresenter(getContext(), this);
+        }
+        mPresenter.FavoBlog(isFavo, blogId);
     }
 
     public void destory() {
@@ -106,14 +127,55 @@ public class CommBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
 
     @Override
     public void onItemClick(View view, int position) {
-        if (mCallBack != null) {
-            String s = stringList.get(position);
-            if ("取消".equals(s) && isShowing()) {
-                dismiss();
-                return;
-            }
-            mCallBack.clickItem(s);
+        String s = stringList.get(position);
+        if ("取消".equals(s) && isShowing()) {
+            dismiss();
+            return;
         }
+        switch (stringList.get(position)) {
+            case "收藏":
+            case "取消收藏":
+                toFavoBlog(currentBlog.is_favo, currentBlog.id);
+                dismiss();
+                break;
+            case "删除":
+                toDelBlog(currentBlog.id);
+                dismiss();
+                break;
+            case "他的主页":
+                MyPageActivity.startAct(getContext(), currentBlog.member_id);
+                dismiss();
+                break;
+        }
+    }
+
+    @Override
+    public void favoBlog(int type, String blogId) {
+        if (mCallBack != null) {
+            if (type == 0) {
+                mCallBack.addFavo(1, blogId);
+            } else {
+                mCallBack.addFavo(0, blogId);
+            }
+        }
+    }
+
+    @Override
+    public void removeBlog(String blogId) {
+        if (mCallBack != null) {
+            mCallBack.onDel(blogId);
+        }
+    }
+
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 
     public class SingTextAdapter extends BaseRecyclerAdapter<String> {
@@ -145,5 +207,15 @@ public class CommBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
                 super(itemView);
             }
         }
+    }
+
+    public void setOnDialogCallBack(OnDialogCallBack callBack) {
+        this.mCallBack = callBack;
+    }
+
+    public interface OnDialogCallBack {
+        void addFavo(int favo, String blogId);
+
+        void onDel(String blogId);
     }
 }

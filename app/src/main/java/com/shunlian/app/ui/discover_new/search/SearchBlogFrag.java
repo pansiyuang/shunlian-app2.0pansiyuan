@@ -204,9 +204,4 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     public void toPraiseBlog(String blogId) {
         mPresenter.praiseBlos(blogId);
     }
-
-    @Override
-    public void clickMoreBtn(String blogId) {
-
-    }
 }

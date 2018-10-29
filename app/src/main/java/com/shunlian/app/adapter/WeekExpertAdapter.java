@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ExpertEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.WeekExpertRankFrag;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
@@ -73,6 +74,8 @@ public class WeekExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert> 
                 expertViewHolder.tv_attention.setText("关注");
                 expertViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
             }
+            expertViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, expert.member_id));
+            expertViewHolder.tv_nickname.setOnClickListener(v -> MyPageActivity.startAct(context, expert.member_id));
 
             expertViewHolder.tv_attention.setOnClickListener(v -> {
                 weekExpertRankFrag.toFocus(expert.focus_status, expert.member_id);

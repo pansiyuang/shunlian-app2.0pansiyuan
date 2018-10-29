@@ -43,15 +43,13 @@
             android:layout_marginRight="8dp"
             android:layout_toLeftOf="@+id/tv_join"
             android:overScrollMode="never"
-            android:scrollbars="none"
-            android:visibility="gone"></android.support.v7.widget.RecyclerView>
+            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 
         <TextView
             android:id="@+id/tv_join"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="8848人在参与"
             android:textColor="@color/value_484848"
             android:textSize="15sp" />
     </RelativeLayout>

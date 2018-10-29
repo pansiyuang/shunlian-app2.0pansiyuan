@@ -2792,4 +2792,16 @@ public interface ApiService {
      */
     @GET("discovery/blogfront/searchExpert")
     Call<BaseEntity<ExpertEntity>> searchExpert(@QueryMap Map<String, String> map);
+
+    /**
+     * 收藏文章
+     */
+    @GET("discovery/discoveryuser/addFavo")
+    Call<BaseEntity<EmptyEntity>> addFavo(@QueryMap Map<String, String> map);
+
+    /**
+     * 收藏文章
+     */
+    @GET("discovery/discoveryuser/removeBlog")
+    Call<BaseEntity<EmptyEntity>> removeBlog(@QueryMap Map<String, String> map);
 }
