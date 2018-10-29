@@ -90,12 +90,12 @@ public final class InterentTools {
         }
 
         /**
-         * 设置超时时间20秒
+         * 设置超时时间30秒
          *
          * @return
          */
         public Builder connectTimeout() {
-            okHttpBuilder.connectTimeout(20, TimeUnit.SECONDS);
+            okHttpBuilder.connectTimeout(30, TimeUnit.SECONDS);
             return this;
         }
 
