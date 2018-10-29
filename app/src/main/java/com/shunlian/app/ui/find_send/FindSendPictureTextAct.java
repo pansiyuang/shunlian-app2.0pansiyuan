@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -107,15 +109,16 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     private int MAX_TEXT_COUNT = 300;
     /***最多关联商品数量***/
     private final int MAX_ASSOCIATED_GOODS = 5;
+    private SendConfig mConfig;
 
     /**
      *
      * @param context
-     * @param isWhiteList true白名单用户  否则普通用户
+     * @param config 配置信息
      */
-    public static void startAct(Context context, boolean isWhiteList) {
+    public static void startAct(Context context, SendConfig config) {
         Intent intent = new Intent(context, FindSendPictureTextAct.class);
-        intent.putExtra("isWhiteList", isWhiteList);
+        intent.putExtra("config", config);
         if (!(context instanceof Activity))
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -152,9 +155,14 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        boolean isWhiteList = getIntent().getBooleanExtra("isWhiteList", false);
-        if (isWhiteList) {
+        mConfig = getIntent().getParcelableExtra("config");
+        if (mConfig != null && mConfig.isWhiteList) {
             MAX_TEXT_COUNT = 800;
+        }
+
+        if (mConfig != null && !isEmpty(mConfig.activityTitle)){
+            mtv_topic.setText(mConfig.activityTitle);
+            topic_id = mConfig.activityID;
         }
 
         mtvToolbarTitle.setText("发布图文");
@@ -216,7 +224,9 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     @OnClick(R.id.rlayout_topic)
     public void addTopic() {
-        AddTopicAct.startAct(this, ADDTOPIC_REQUEST_CODE);
+        if (!(mConfig != null && !isEmpty(mConfig.activityID))){
+            AddTopicAct.startAct(this, ADDTOPIC_REQUEST_CODE);
+        }
     }
 
     /**
@@ -594,5 +604,47 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                 Common.staticToast("上传图片失败");
             }
         }).launch();
+    }
+
+    public static class SendConfig implements Parcelable {
+        /******是否是白名单***必传*****/
+        public boolean isWhiteList;//true白名单用户  否则普通用户
+        /*********活动id******非必传******/
+        public String activityID;
+        /*********活动标题******非必传******/
+        public String activityTitle;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeByte(this.isWhiteList ? (byte) 1 : (byte) 0);
+            dest.writeString(this.activityID);
+            dest.writeString(this.activityTitle);
+        }
+
+        public SendConfig() {
+        }
+
+        protected SendConfig(Parcel in) {
+            this.isWhiteList = in.readByte() != 0;
+            this.activityID = in.readString();
+            this.activityTitle = in.readString();
+        }
+
+        public static final Parcelable.Creator<SendConfig> CREATOR = new Parcelable.Creator<SendConfig>() {
+            @Override
+            public SendConfig createFromParcel(Parcel source) {
+                return new SendConfig(source);
+            }
+
+            @Override
+            public SendConfig[] newArray(int size) {
+                return new SendConfig[size];
+            }
+        };
     }
 }

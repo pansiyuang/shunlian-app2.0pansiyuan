@@ -350,9 +350,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
                 if (discoverFrag != null && discoverFrag.isVisible()) {
                     if (baseInfo.white_list == 0) {
-                        FindSendPictureTextAct.startAct(this, false);
+                        FindSendPictureTextAct.startAct(this, null);
                     } else {
-                        FindSendPictureTextAct.startAct(this, true);
+                        FindSendPictureTextAct.startAct(this, null);
                     }
                 }
             } catch (Exception e) {
