@@ -28,6 +28,11 @@ import retrofit2.Call;
 
 public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
 
+    private Call<BaseEntity<CommonEntity>> sendBlogCall;
+    private Call<BaseEntity<UploadPicEntity>> uploadMultiPicsCall;
+    private Call<BaseEntity<UploadPicEntity>> uploadPicCall;
+    private Call<BaseEntity<CommonEntity>> uploadVideoCall;
+
     public FindSendPicPresenter(Context context, ISelectPicVideoView iView) {
         super(context, iView);
         initApi();
@@ -46,6 +51,26 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
      */
     @Override
     public void detachView() {
+        if (sendBlogCall != null && sendBlogCall.isExecuted()) {
+            sendBlogCall.cancel();
+        }
+        sendBlogCall = null;
+
+        if (uploadMultiPicsCall != null && uploadMultiPicsCall.isExecuted()) {
+            uploadMultiPicsCall.cancel();
+        }
+        uploadMultiPicsCall = null;
+
+        if (uploadPicCall != null && uploadPicCall.isExecuted()) {
+            uploadPicCall.cancel();
+        }
+        uploadPicCall = null;
+
+        if (uploadVideoCall != null && uploadVideoCall.isExecuted()) {
+            uploadVideoCall.cancel();
+        }
+        uploadVideoCall = null;
+
 
     }
 
@@ -56,8 +81,8 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
     public void initApi() {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
-        Call<BaseEntity<BlogDraftEntity>> entityCall = getApiService().getDraft(map);
-        getNetData(true,entityCall,new SimpleNetDataCallback<BaseEntity<BlogDraftEntity>>(){
+        Call<BaseEntity<BlogDraftEntity>> getDraftCall = getApiService().getDraft(map);
+        getNetData(true, getDraftCall, new SimpleNetDataCallback<BaseEntity<BlogDraftEntity>>() {
             @Override
             public void onSuccess(BaseEntity<BlogDraftEntity> entity) {
                 super.onSuccess(entity);
@@ -67,6 +92,12 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
 
     }
 
+    /**
+     * 上传多张图片
+     *
+     * @param filePath
+     * @param uploadPath
+     */
     public void uploadPic(List<ImageVideo> filePath, final String uploadPath) {
         if (isEmpty(filePath)) {
             return;
@@ -85,8 +116,8 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
         map.put("path_name", uploadPath);
         sortAndMD5(map);
 
-        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(parts, map);
-        getNetData(true, call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
+        uploadMultiPicsCall = getAddCookieApiService().uploadPic(parts, map);
+        getNetData(true, uploadMultiPicsCall, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
                 super.onSuccess(entity);
@@ -100,9 +131,10 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
 
     /**
      * 上传视频封面
+     *
      * @param bytes
      */
-    public void uploadVideoThumb(byte[] bytes){
+    public void uploadVideoThumb(byte[] bytes) {
         List<MultipartBody.Part> parts = new ArrayList<>();
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), bytes);
@@ -113,38 +145,44 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
         map.put("path_name", "video_thumb");
         sortAndMD5(map);
 
-        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(parts, map);
-        getNetData(false, call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
+        uploadPicCall = getAddCookieApiService().uploadPic(parts, map);
+        getNetData(false, uploadPicCall, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
                 super.onSuccess(entity);
                 UploadPicEntity uploadPicEntity = entity.data;
-                if (!isEmpty(uploadPicEntity.relativePath)){
+                if (!isEmpty(uploadPicEntity.relativePath)) {
                     iView.videoThumb(uploadPicEntity.relativePath.get(0));
                 }
             }
         });
     }
 
-
-    public void uploadVideo(String videoPath){
+    /**
+     * 上传视频
+     * @param videoPath
+     */
+    public void uploadVideo(String videoPath) {
         File file = new File(videoPath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("video/*"), file);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
 
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().uploadVideo(part);
+        uploadVideoCall = getAddCookieApiService().uploadVideo(part);
 
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+        getNetData(true, uploadVideoCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 String url = entity.data.name;
-                iView.uploadViodeSuccess(url,videoPath);
+                iView.uploadViodeSuccess(url, videoPath);
             }
         });
     }
 
-    public void publish(String text, String pics, String video,String video_thumb,
+    /**
+     * 发布
+     */
+    public void publish(String text, String pics, String video, String video_thumb,
                         String activity_id, String place,
                         String related_goods, String draft) {
         Map<String, String> map = new HashMap<>();
@@ -154,7 +192,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
             map.put("pics", pics);
         } else if (!isEmpty(video)) {
             map.put("type", "2");
-            map.put("video_thumb",video_thumb);
+            map.put("video_thumb", video_thumb);
             map.put("video", video);
         }
         if (!isEmpty(activity_id)) {
@@ -171,9 +209,9 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
         }
         sortAndMD5(map);
 
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().pubishBlog(getRequestBody(map));
+        sendBlogCall = getAddCookieApiService().pubishBlog(getRequestBody(map));
 
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+        getNetData(true, sendBlogCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);

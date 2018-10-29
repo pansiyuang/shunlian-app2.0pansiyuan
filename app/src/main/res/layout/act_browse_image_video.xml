@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
     <com.shunlian.app.widget.photoview.HackyViewPager
         android:id="@+id/view_pager"
@@ -77,5 +76,13 @@
             android:textColor="@color/white"
             android:textSize="15sp" />
     </RelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
 
 </RelativeLayout>

@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
+import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,7 @@ import android.widget.TextView;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BitmapAdapter;
 import com.shunlian.app.photopick.ImageVideo;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -65,12 +70,15 @@ public class BrowseImageVideoAct extends BaseActivity {
     @BindView(R.id.layout_top_section)
     RelativeLayout layoutTopSection;
 
+    @BindView(R.id.recy_view)
+    RecyclerView recy_view;
+
     private ArrayList<ImageVideo> mImageVideos;
     private BuildConfig mConfig;
     private List<ImageVideo> editLists;
     private int mCurrentPosition;
     private int maxCount;
-    private ArrayList<String> selectLists;
+    private ArrayList<String> mSelectResultList;
     private String format = "完成(%d/%d)";
 
     public static final int REQUEST_CODE = 8888;
@@ -96,20 +104,14 @@ public class BrowseImageVideoAct extends BaseActivity {
         super.initListener();
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
             @Override
             public void onPageSelected(int position) {
                 leftNo.setText(String.valueOf(position+1));
                 mCurrentPosition = position;
             }
-
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
 
         tvComplete.setOnClickListener(v->{
@@ -147,16 +149,16 @@ public class BrowseImageVideoAct extends BaseActivity {
         mImageVideos = imageVideos;
         mConfig = getIntent().getParcelableExtra("config");
         maxCount = mConfig.max_count;
-        selectLists = mConfig.selectLists;
+        mSelectResultList = mConfig.selectResultList;
         isOnlyBrowse = mConfig.isOnlyBrowse;
         if (isOnlyBrowse){
             gone(tvComplete);
         }
-        //LogUtil.zhLogW(mConfig.position+"=selectLists========"+selectLists.size());
         if (!mConfig.isShowImageVideo) {
             editLists = new ArrayList<>();
             String path = mImageVideos.get(mConfig.position).path;
             if (isMP4Path(path)){
+                //getVideoFrame(path);
                 for (int i = 0; i<mImageVideos.size();i++) {
                     ImageVideo iv = mImageVideos.get(i);
                     if (isMP4Path(iv.path)){
@@ -193,9 +195,9 @@ public class BrowseImageVideoAct extends BaseActivity {
 
 
     private void result(boolean isComplete){
-        if (!isEmpty(selectLists)) {
+        if (!isEmpty(mSelectResultList)) {
             Intent intent = new Intent();
-            intent.putStringArrayListExtra("data",selectLists);
+            intent.putStringArrayListExtra("data", mSelectResultList);
             intent.putExtra("isComplete",isComplete);
             setResult(Activity.RESULT_OK,intent);
         }
@@ -379,29 +381,29 @@ public class BrowseImageVideoAct extends BaseActivity {
 
     private boolean selectHandler(int position, boolean oldSelection, ImageVideo imageVideo) {
         int count;
-        if (selectLists == null) {
-            selectLists = new ArrayList<>();
+        if (mSelectResultList == null) {
+            mSelectResultList = new ArrayList<>();
         }
         if (oldSelection) {
-            selectLists.add(imageVideo.path);
+            mSelectResultList.add(imageVideo.path);
             if (isCanSelect() == -1) {
-                selectLists.remove(imageVideo.path);
+                mSelectResultList.remove(imageVideo.path);
                 Common.staticToast("图片和视频不能同时选择");
                 return false;
             } else if (isCanSelect() == -2) {
-                selectLists.remove(imageVideo.path);
+                mSelectResultList.remove(imageVideo.path);
                 Common.staticToast("只能选择一个视频");
                 return false;
             }
-            count = selectLists.size();
+            count = mSelectResultList.size();
             if (count > maxCount) {
-                selectLists.remove(imageVideo.path);
+                mSelectResultList.remove(imageVideo.path);
                 Common.staticToast(String.format("您最多只能选择%d张图片", maxCount));
                 return false;
             }
         } else {
-            selectLists.remove(imageVideo.path);
-            count = selectLists.size();
+            mSelectResultList.remove(imageVideo.path);
+            count = mSelectResultList.size();
         }
         tvComplete.setText(String.format(format,count,maxCount));
         return true;
@@ -414,11 +416,11 @@ public class BrowseImageVideoAct extends BaseActivity {
      * @return -1 图片和视频不能一起选择  -2不能同时选这两个视频
      */
     public int isCanSelect() {
-        if (!isEmpty(selectLists)) {
+        if (!isEmpty(mSelectResultList)) {
             boolean isImage = false;
             boolean isVideo = false;
             int video_count = 0;
-            for (String path : selectLists) {
+            for (String path : mSelectResultList) {
                 if (isPicFile(path)) {
                     isImage = true;
                 }
@@ -439,10 +441,8 @@ public class BrowseImageVideoAct extends BaseActivity {
 
 
     private void playVideo(String url) {
-
         SmallMediaPlayer.startAct(this, url);
-        /*if (URLUtil.isNetworkUrl(url)){
-        }else {
+        /*
             Intent intent = new Intent(Intent.ACTION_VIEW);
             Uri data = Uri.parse("file://" + url);
             intent.setDataAndType(data, "video/mp4");
@@ -451,9 +451,53 @@ public class BrowseImageVideoAct extends BaseActivity {
             } catch (Exception e) {
 
             }
-        }*/
+        */
     }
 
+    private void getVideoFrame(String url){
+        if (isMP4Path(url)){
+            new AsyncTask<String,Void,List<Bitmap>>(){
+                private MediaMetadataRetriever mRetriever;
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                    mRetriever = new MediaMetadataRetriever();
+                }
+
+                @Override
+                protected List<Bitmap> doInBackground(String... urls) {
+                    List<Bitmap> mBitmaps = null;
+                    if(urls!=null && urls.length > 0){
+                        mBitmaps = new ArrayList<>();
+                        mRetriever.setDataSource(urls[0]);
+                        String duration = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                        System.out.println(urls[0]+"========duration==="+duration);
+                        if (!TextUtils.isEmpty(duration) && TextUtils.isDigitsOnly(duration)){
+                            mBitmaps.add(mRetriever.getFrameAtTime());
+                            for (int i = 0; i < Long.parseLong(duration) / 1000; i++) {
+                                Bitmap bitmap = mRetriever.getFrameAtTime(i * 1000*1000,MediaMetadataRetriever.OPTION_CLOSEST);
+                                mBitmaps.add(bitmap);
+                            }
+                        }
+                    }
+                    return mBitmaps;
+                }
+
+
+                @Override
+                protected void onPostExecute(List<Bitmap> bitmaps) {
+                    super.onPostExecute(bitmaps);
+                    if (bitmaps != null) {
+                        System.out.println("===onPostExecute=====" + bitmaps.size());
+                        LinearLayoutManager manager = new LinearLayoutManager(BrowseImageVideoAct.this,
+                                LinearLayoutManager.HORIZONTAL,false);
+                        recy_view.setLayoutManager(manager);
+                        recy_view.setAdapter(new BitmapAdapter(BrowseImageVideoAct.this, bitmaps));
+                    }
+                }
+            }.execute(url);
+        }
+    }
 
 
     /**
@@ -482,7 +526,7 @@ public class BrowseImageVideoAct extends BaseActivity {
          */
         public int position;
 
-        public ArrayList<String> selectLists;
+        public ArrayList<String> selectResultList;
 
         public BuildConfig() {
         }
@@ -499,7 +543,7 @@ public class BrowseImageVideoAct extends BaseActivity {
             dest.writeInt(this.max_count);
             dest.writeInt(this.count);
             dest.writeInt(this.position);
-            dest.writeStringList(this.selectLists);
+            dest.writeStringList(this.selectResultList);
         }
 
         protected BuildConfig(Parcel in) {
@@ -508,7 +552,7 @@ public class BrowseImageVideoAct extends BaseActivity {
             this.max_count = in.readInt();
             this.count = in.readInt();
             this.position = in.readInt();
-            this.selectLists = in.createStringArrayList();
+            this.selectResultList = in.createStringArrayList();
         }
 
         public static final Creator<BuildConfig> CREATOR = new Creator<BuildConfig>() {

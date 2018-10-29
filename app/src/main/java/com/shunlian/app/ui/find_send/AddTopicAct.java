@@ -106,6 +106,15 @@ public class AddTopicAct extends BaseActivity implements IView{
         },400);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+            presenter = null;
+        }
+    }
+
     /**
      * 显示网络请求失败的界面
      *
