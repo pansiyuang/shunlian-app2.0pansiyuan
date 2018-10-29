@@ -1,6 +1,7 @@
 package com.zh.smallmediarecordlib;
 
 import android.content.Context;
+import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Camera;
@@ -473,5 +474,34 @@ public class MediaRecorderBase {
 
     private String getVideoName() {
         return "VID_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
+    }
+
+
+    /** 判断是否支持闪光灯 */
+    public static boolean isSupportCameraLedFlash(PackageManager pm) {
+        if (pm != null) {
+            FeatureInfo[] features = pm.getSystemAvailableFeatures();
+            if (features != null) {
+                for (FeatureInfo f : features) {
+                    if (f != null && PackageManager.FEATURE_CAMERA_FLASH.equals(f.name)) //判断设备是否支持闪光灯
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是否支持前置摄像头
+     * @return
+     */
+    public static boolean isSupportFrontCamera(){
+        try {
+            int number = Camera.getNumberOfCameras();
+            if (number == 2) return true;
+            else return false;
+        }catch (Exception e){
+            return false;
+        }
     }
 }

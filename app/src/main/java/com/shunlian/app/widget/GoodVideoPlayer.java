@@ -556,6 +556,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         } else if (i == cn.jzvd.R.id.back) {
             topContainer.setVisibility(VISIBLE);
             backPress(); //暂时去掉该功能
+            parseAttent.destoryVideo();
         } else if (i == cn.jzvd.R.id.back_tiny) {
             backPress();
             goOnPlayOnPause();
@@ -1227,6 +1228,8 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         void shareBolg();
         /**进入商品详情页面*/
         void startGoodInfo();
+
+        void destoryVideo();
     }
 
 }

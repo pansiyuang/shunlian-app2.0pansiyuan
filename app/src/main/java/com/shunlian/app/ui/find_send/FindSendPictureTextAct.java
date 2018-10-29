@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,7 +72,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     MyTextView mtv_topic;
 
     @BindView(R.id.recy_view)
-    RecyclerView recy_view;
+    RecyclerView recyGoods;
 
     @BindView(R.id.recy_pics)
     RecyclerView recy_pics;
@@ -80,6 +82,9 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
+
+    @BindView(R.id.mtv_associated_goods)
+    MyTextView mtv_associated_goods;
 
     private List<GoodsDeatilEntity.Goods> mGoodsLists;
     private SelectGoodsAdapter mGoodsAdapter;
@@ -102,15 +107,18 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      * 最大心得字数
      */
     private int MAX_TEXT_COUNT = 300;
+    /***最多关联商品数量***/
+    private final int MAX_ASSOCIATED_GOODS = 5;
+    private SendConfig mConfig;
 
     /**
      *
      * @param context
-     * @param isWhiteList true白名单用户  否则普通用户
+     * @param config 配置信息
      */
-    public static void startAct(Context context, boolean isWhiteList) {
+    public static void startAct(Context context, SendConfig config) {
         Intent intent = new Intent(context, FindSendPictureTextAct.class);
-        intent.putExtra("isWhiteList", isWhiteList);
+        intent.putExtra("config", config);
         if (!(context instanceof Activity))
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -147,9 +155,14 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        boolean isWhiteList = getIntent().getBooleanExtra("isWhiteList", false);
-        if (isWhiteList) {
+        mConfig = getIntent().getParcelableExtra("config");
+        if (mConfig != null && mConfig.isWhiteList) {
             MAX_TEXT_COUNT = 800;
+        }
+
+        if (mConfig != null && !isEmpty(mConfig.activityTitle)){
+            mtv_topic.setText(mConfig.activityTitle);
+            topic_id = mConfig.activityID;
         }
 
         mtvToolbarTitle.setText("发布图文");
@@ -160,9 +173,10 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
 
         /********商品列表*********/
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        recy_view.setLayoutManager(manager);
-        recy_view.addItemDecoration(new MVerticalItemDecoration(this, 0.5f,
+        recyGoods.setLayoutManager(manager);
+        recyGoods.addItemDecoration(new MVerticalItemDecoration(this, 0.5f,
                 0, 0, Color.parseColor("#ECECEC")));
+        recyGoods.setNestedScrollingEnabled(false);
         /********end*********/
 
 
@@ -210,7 +224,9 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     @OnClick(R.id.rlayout_topic)
     public void addTopic() {
-        AddTopicAct.startAct(this, ADDTOPIC_REQUEST_CODE);
+        if (!(mConfig != null && !isEmpty(mConfig.activityID))){
+            AddTopicAct.startAct(this, ADDTOPIC_REQUEST_CODE);
+        }
     }
 
     /**
@@ -218,7 +234,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     @OnClick(R.id.rlayout_select_goods)
     public void selectGoods() {
-        SelectGoodsAct.startAct(this, ADDGOODS_REQUEST_CODE);
+        String goodsid = getGoodsid();
+        SelectGoodsAct.startAct(this,goodsid, ADDGOODS_REQUEST_CODE);
     }
 
     /**
@@ -255,10 +272,15 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                 mGoodsLists = new ArrayList<>();
             }
             GoodsDeatilEntity.Goods goods = data.getParcelableExtra("goods");
-            mGoodsLists.add(goods);
+            if (mGoodsLists.size() >= MAX_ASSOCIATED_GOODS) {
+                Common.staticToast(String.format("最多关联%d个商品",MAX_ASSOCIATED_GOODS));
+                return;
+            }else {
+                mGoodsLists.add(goods);
+            }
             if (mGoodsAdapter == null) {
-                mGoodsAdapter = new SelectGoodsAdapter(this, false, mGoodsLists);
-                recy_view.setAdapter(mGoodsAdapter);
+                mGoodsAdapter = new SelectGoodsAdapter(this, false, mGoodsLists, null);
+                recyGoods.setAdapter(mGoodsAdapter);
             } else {
                 mGoodsAdapter.notifyDataSetChanged();
             }
@@ -268,11 +290,13 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                 String path = picturePaths.get(0);
                 if (!isEmpty(path) && isMP4Path(path)) {
                     if (presenter != null) {
-                        MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
-                        mRetriever.setDataSource(path);
-                        Bitmap bitmap = mRetriever.getFrameAtTime();
-                        presenter.uploadVideoThumb(BitmapUtil.Bitmap2Bytes(bitmap));
-                        presenter.uploadVideo(path);
+                        try {
+                            MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+                            mRetriever.setDataSource(path);
+                            Bitmap bitmap = mRetriever.getFrameAtTime();
+                            presenter.uploadVideoThumb(BitmapUtil.Bitmap2Bytes(bitmap));
+                            presenter.uploadVideo(path);
+                        }catch (Exception e){}
                     }
                 } else {
                     index = 0;
@@ -370,8 +394,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             }
             mGoodsLists.addAll(entity.goods_infos);
             if (mGoodsAdapter == null) {
-                mGoodsAdapter = new SelectGoodsAdapter(this, false, mGoodsLists);
-                recy_view.setAdapter(mGoodsAdapter);
+                mGoodsAdapter = new SelectGoodsAdapter(this, false, mGoodsLists, null);
+                recyGoods.setAdapter(mGoodsAdapter);
             } else {
                 mGoodsAdapter.notifyDataSetChanged();
             }
@@ -580,5 +604,47 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                 Common.staticToast("上传图片失败");
             }
         }).launch();
+    }
+
+    public static class SendConfig implements Parcelable {
+        /******是否是白名单***必传*****/
+        public boolean isWhiteList;//true白名单用户  否则普通用户
+        /*********活动id******非必传******/
+        public String activityID;
+        /*********活动标题******非必传******/
+        public String activityTitle;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeByte(this.isWhiteList ? (byte) 1 : (byte) 0);
+            dest.writeString(this.activityID);
+            dest.writeString(this.activityTitle);
+        }
+
+        public SendConfig() {
+        }
+
+        protected SendConfig(Parcel in) {
+            this.isWhiteList = in.readByte() != 0;
+            this.activityID = in.readString();
+            this.activityTitle = in.readString();
+        }
+
+        public static final Parcelable.Creator<SendConfig> CREATOR = new Parcelable.Creator<SendConfig>() {
+            @Override
+            public SendConfig createFromParcel(Parcel source) {
+                return new SendConfig(source);
+            }
+
+            @Override
+            public SendConfig[] newArray(int size) {
+                return new SendConfig[size];
+            }
+        };
     }
 }

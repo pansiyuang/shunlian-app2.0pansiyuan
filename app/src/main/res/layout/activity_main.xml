@@ -10,7 +10,7 @@
         android:id="@+id/fl_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layout_bottom"/>
+        android:layout_above="@+id/layout_bottom"/>
 
     <include
         android:id="@+id/layout_bottom"
@@ -18,8 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:clipChildren="false"
-        />
+        android:clipChildren="false" />
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_hint"

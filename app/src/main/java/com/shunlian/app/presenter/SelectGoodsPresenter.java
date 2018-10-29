@@ -30,9 +30,11 @@ public class SelectGoodsPresenter extends BasePresenter {
     private List<GoodsDeatilEntity.Goods> goodsLists = new ArrayList<>();
     private SelectGoodsAdapter adapter;
     private String mKeyword;
+    private List<String> mSelectList;
 
-    public SelectGoodsPresenter(Context context, IView iView) {
+    public SelectGoodsPresenter(Context context, IView iView, List<String> selectList) {
         super(context, iView);
+        this.mSelectList = selectList;
         initApi();
     }
 
@@ -152,16 +154,25 @@ public class SelectGoodsPresenter extends BasePresenter {
             goodsLists.addAll(list);
         }
         if (adapter == null) {
-            adapter = new SelectGoodsAdapter(context,true, goodsLists);
+            adapter = new SelectGoodsAdapter(context,true, goodsLists,mSelectList);
             if (iView != null)
                 iView.setAdapter(adapter);
 
             adapter.setOnItemClickListener((view, position) -> {
                 GoodsDeatilEntity.Goods goods = goodsLists.get(position);
-                Intent intent = new Intent();
-                intent.putExtra("goods",goods);
-                ((Activity)context).setResult(Activity.RESULT_OK,intent);
-                ((Activity)context).finish();
+                if (!isEmpty(mSelectList)) {
+                    if (!mSelectList.contains(goods.goods_id)) {
+                        Intent intent = new Intent();
+                        intent.putExtra("goods", goods);
+                        ((Activity) context).setResult(Activity.RESULT_OK, intent);
+                        ((Activity) context).finish();
+                    }
+                }else {
+                    Intent intent = new Intent();
+                    intent.putExtra("goods", goods);
+                    ((Activity) context).setResult(Activity.RESULT_OK, intent);
+                    ((Activity) context).finish();
+                }
             });
         } else {
             adapter.notifyDataSetChanged();
