@@ -13,19 +13,15 @@ import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.photopick.ImageVideo;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.find_send.SelectPicVideoAct;
-import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,18 +54,6 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
         }
     }
 
-    public List<String> toStringArray() {
-        List<String> result = new ArrayList<>();
-        for (ImageVideo imageEntity : lists) {
-            if (!TextUtils.isEmpty(imageEntity.path)) {
-                result.add(imageEntity.path);
-            } else if (!TextUtils.isEmpty(imageEntity.url)) {
-                result.add(imageEntity.url);
-            }
-        }
-        return result;
-    }
-
     /**
      * 判断是否是MP4文件路径
      * @param path
@@ -78,6 +62,15 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
     private boolean isMP4Path(String path){
         if (isEmpty(path))return false;
         else return path.toLowerCase().endsWith(".mp4");
+    }
+
+    public void destory(){
+        if(mRetriever != null){
+            mRetriever.release();
+        }
+        if (mConfig != null){
+            mConfig = null;
+        }
     }
 
     /**
@@ -110,13 +103,17 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
             String imgPath = imageEntity.path;
             String imgUrl = imageEntity.url;
             if (!TextUtils.isEmpty(imgPath)) {
-                if (imgPath.toLowerCase().endsWith(".mp4")){
+                if (isMP4Path(imgPath)){
                     visible(viewHolder.mtv_video_duration);
                     String second = String.valueOf(imageEntity.videoDuration / 1000);
-                    if (second.length() == 1) {
-                        second = "0" + second;
+                    if ("0".equals(second)){
+                        viewHolder.mtv_video_duration.setText("");
+                    }else {
+                        if (second.length() == 1) {
+                            second = "0" + second;
+                        }
+                        viewHolder.mtv_video_duration.setText(String.format("00:%s", second));
                     }
-                    viewHolder.mtv_video_duration.setText(String.format("00:%s", second));
                     if (URLUtil.isNetworkUrl(imgPath)){
                         GlideUtils.getInstance().loadImage(context,viewHolder.miv_img,imageEntity.coverPath);
                     }else {
@@ -130,37 +127,32 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
                     }
                 }else {
                     gone(viewHolder.mtv_video_duration);
-                    GlideUtils.getInstance().loadFileImageWithView(context, new File(imgPath), viewHolder.miv_img);
+                    GlideUtils.getInstance().loadImage(context, viewHolder.miv_img, imgPath);
                 }
             } else if (!TextUtils.isEmpty(imgUrl)) {
                 gone(viewHolder.mtv_video_duration);
                 GlideUtils.getInstance().loadImage(context, viewHolder.miv_img, imgUrl);
             }
-            viewHolder.miv_img.setOnClickListener(v -> {
-                BigImgEntity bigImgEntity = new BigImgEntity();
-                bigImgEntity.itemList = (ArrayList<String>) toStringArray();
-                bigImgEntity.index = position;
-                LookBigImgAct.startAct(context, bigImgEntity);
-            });
         } else {
             gone(viewHolder.miv_del,viewHolder.mtv_video_duration);
             visible(viewHolder.mtv_max);
             viewHolder.mtv_max.setText("(最多" + mConfig.max_count + "张)");
             GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_tupian, viewHolder.miv_img);
-            viewHolder.miv_img.setOnClickListener(v -> {
-                int size = 0;
-                if (lists != null) {
-                    size = lists.size();
-                }
-                SelectPicVideoAct.startAct((Activity) context,
-                        FindSendPictureTextAct.SELECT_PIC_REQUESTCODE, mConfig.max_count - size);
-            });
         }
         viewHolder.miv_del.setOnClickListener(v -> {
             ImageVideo imageEntity = lists.get(position);
             lists.remove(imageEntity);
             notifyDataSetChanged();
         });
+    }
+
+    public void selectPic(){
+        int size = 0;
+        if (lists != null) {
+            size = lists.size();
+        }
+        SelectPicVideoAct.startAct((Activity) context,
+                FindSendPictureTextAct.SELECT_PIC_REQUESTCODE, mConfig.max_count - size);
     }
 
     public class SingleImgHolderV2 extends BaseRecyclerViewHolder {
@@ -186,6 +178,11 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
             layoutParams.width = (screenWidth - TransformUtil.dip2px(context, 20 + (4 * 4))) / 5;
             layoutParams.height = layoutParams.width;
             layoutImg.setLayoutParams(layoutParams);
+            itemView.setOnClickListener(v -> {
+                if (listener != null){
+                    listener.onItemClick(v,getAdapterPosition());
+                }
+            });
         }
     }
 

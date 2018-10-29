@@ -28,6 +28,7 @@ public class NearAddressAct extends BaseActivity implements IView{
 
     @BindView(R.id.recy_view)
     RecyclerView recyView;
+
     private NearAddressPresenter presenter;
 
     public static void startAct(Activity activity,int code){
@@ -68,6 +69,15 @@ public class NearAddressAct extends BaseActivity implements IView{
         recyView.setLayoutManager(manager);
 
         presenter = new NearAddressPresenter(this,this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+            presenter = null;
+        }
     }
 
     /**

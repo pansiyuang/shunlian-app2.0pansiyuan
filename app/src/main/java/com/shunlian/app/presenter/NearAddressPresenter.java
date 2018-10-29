@@ -78,6 +78,11 @@ public class NearAddressPresenter extends BasePresenter {
             relatedPlaces.cancel();
         }
         relatedPlaces=null;
+
+        if (mHandler != null){
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
+        }
     }
 
     /**

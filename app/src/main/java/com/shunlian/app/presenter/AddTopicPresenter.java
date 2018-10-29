@@ -32,16 +32,16 @@ public class AddTopicPresenter extends BasePresenter {
     public String key_word;
 
 
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             TopicEntity.ItemBean itemBean = itemBeans.get(msg.what);
             Intent intent = new Intent();
-            intent.putExtra("title",itemBean.title);
-            intent.putExtra("id",itemBean.id);
-            ((Activity)context).setResult(Activity.RESULT_OK,intent);
-            ((Activity)context).finish();
+            intent.putExtra("title", itemBean.title);
+            intent.putExtra("id", itemBean.id);
+            ((Activity) context).setResult(Activity.RESULT_OK, intent);
+            ((Activity) context).finish();
         }
     };
 
@@ -64,18 +64,23 @@ public class AddTopicPresenter extends BasePresenter {
      */
     @Override
     public void detachView() {
-        if (itemBeans != null){
+        if (itemBeans != null) {
             itemBeans.clear();
             itemBeans = null;
         }
 
-        if (adaper != null){
+        if (adaper != null) {
             adaper.unbind();
-            adaper=null;
+            adaper = null;
+        }
+
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
         }
 
         key_word = null;
-        currentPage=1;
+        currentPage = 1;
         allPage = 1;
     }
 
@@ -84,22 +89,22 @@ public class AddTopicPresenter extends BasePresenter {
      */
     @Override
     public void initApi() {
-        currentPage=1;
+        currentPage = 1;
         allPage = 1;
         itemBeans.clear();
         requestData(true);
     }
 
-    public void requestData(boolean isLoad){
-        Map<String,String> map = new HashMap<>();
+    public void requestData(boolean isLoad) {
+        Map<String, String> map = new HashMap<>();
         if (!isEmpty(key_word))
-            map.put("key_word",key_word);
-        map.put("page",String.valueOf(currentPage));
-        map.put("page_size",page_size);
+            map.put("key_word", key_word);
+        map.put("page", String.valueOf(currentPage));
+        map.put("page_size", page_size);
         sortAndMD5(map);
 
         Call<BaseEntity<TopicEntity>> activitys = getApiService().getTopics(map);
-        getNetData(isLoad,activitys,new SimpleNetDataCallback<BaseEntity<TopicEntity>>(){
+        getNetData(isLoad, activitys, new SimpleNetDataCallback<BaseEntity<TopicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<TopicEntity> entity) {
                 super.onSuccess(entity);
@@ -130,28 +135,28 @@ public class AddTopicPresenter extends BasePresenter {
         if (!isEmpty(list))
             itemBeans.addAll(list);
 
-        if (adaper==null){
-            adaper = new TopicAdaper(context,itemBeans);
-            if (iView != null){
+        if (adaper == null) {
+            adaper = new TopicAdaper(context, itemBeans);
+            if (iView != null) {
                 iView.setAdapter(adaper);
             }
 
             adaper.setOnItemClickListener((view, position) -> {
                 adaper.item_id = position;
                 adaper.notifyDataSetChanged();
-                mHandler.sendEmptyMessageDelayed(position,400);
+                mHandler.sendEmptyMessageDelayed(position, 400);
             });
-        }else {
+        } else {
             adaper.notifyDataSetChanged();
         }
-        adaper.setPageLoading(currentPage,allPage);
+        adaper.setPageLoading(currentPage, allPage);
     }
 
     @Override
     public void onRefresh() {
         super.onRefresh();
-        if (!isLoading){
-            if (currentPage <= allPage){
+        if (!isLoading) {
+            if (currentPage <= allPage) {
                 requestData(false);
             }
         }

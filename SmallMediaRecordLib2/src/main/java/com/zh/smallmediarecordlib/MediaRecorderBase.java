@@ -116,7 +116,6 @@ public class MediaRecorderBase {
         }
     }
 
-
     /**
      * 设置摄像头为竖屏
      *
@@ -145,134 +144,8 @@ public class MediaRecorderBase {
         mCamera.setParameters(params);
     }
 
-
     /**
-     * 释放摄像头资源
-     *
-     * @author liuzhongjun
-     * @date 2016-2-5
-     */
-    public void releaseCamera() {
-        if (mCamera != null) {
-            mCamera.setPreviewCallback(null);
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
-    }
-
-    /**
-     * 开始录制视频
-     */
-    private boolean start_Record() {
-        //录制视频前必须先解锁Camera
-        if (mCamera == null) return false;
-        mCamera.unlock();
-        configMediaRecorder();
-        try {
-            mediaRecorder.start();
-        } catch (Exception e) {
-            releaseMediaRecorder();
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 停止录制视频
-     */
-    private boolean releaseMediaRecorder() {
-        try {
-            if (mediaRecorder != null) {
-                // 设置后不会崩
-                mediaRecorder.setOnErrorListener(null);
-                mediaRecorder.setPreviewDisplay(null);
-                mediaRecorder.setOnInfoListener(null);
-                //停止录制
-                mediaRecorder.stop();
-                mediaRecorder.reset();
-                //释放资源
-                mediaRecorder.release();
-                mediaRecorder = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(mContext, "录制时间太短", Toast.LENGTH_SHORT).show();
-            new File(currentVideoFilePath).delete();
-            if (mediaRecorder != null){
-                mediaRecorder.reset();
-                //释放资源
-                mediaRecorder.release();
-                mediaRecorder = null;
-            }
-            return false;
-        }
-        return true;
-    }
-
-    private void pause_Record() {
-        //正在录制的视频，点击后暂停
-        //取消自动对焦
-        cancelAutoFocus();
-        releaseMediaRecorder();
-    }
-
-    /**
-     * 初始化录制
-     */
-    public void initRecord() {
-        initCamera();
-        //configMediaRecorder();
-    }
-
-    /**
-     * 开始录制
-     */
-    public boolean startRecord() {
-        if (getSDPath(mContext) == null) return false;
-        //视频文件保存路径，configMediaRecorder方法中会设置
-        currentVideoFilePath = getSDPath(mContext) + getVideoName();
-        //开始录制视频
-        return start_Record();
-    }
-
-    /**
-     * 暂停录制
-     */
-    public void pauseRecord() {
-        pause_Record();
-        //判断是否进行视频合并
-        if ("".equals(saveVideoPath)) {
-            saveVideoPath = currentVideoFilePath;
-        } else {
-            mergeRecordVideoFile();
-        }
-    }
-
-    /**
-     * 完成录制
-     */
-    public boolean completeRecord() {
-        //停止视频录制
-        if (!releaseMediaRecorder()){
-            if (iMediaRecorder != null) {
-                iMediaRecorder.completeMergeRecordVideo(null);
-                return false;
-            }
-        }else{
-            //先给Camera加锁后再释放相机
-            if (mCamera != null) {
-                mCamera.lock();
-            }
-            releaseCamera();
-            //判断是否进行视频合并
-            mergeRecordVideoFile();
-        }
-        return true;
-    }
-
-    /**
-     * 配置MediaRecorder()
+     * 配置MediaRecorder
      */
     private void configMediaRecorder() {
         mediaRecorder = new MediaRecorder();
@@ -303,8 +176,8 @@ public class MediaRecorderBase {
         //音频一秒钟包含多少数据位
         CamcorderProfile mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
         mediaRecorder.setAudioEncodingBitRate(44100);
-        if (mProfile.videoBitRate > 10 * 1024 * 1024)
-            mediaRecorder.setVideoEncodingBitRate(10 * 1024 * 1024);
+        if (mProfile.videoBitRate > 20 * 1024 * 1024)
+            mediaRecorder.setVideoEncodingBitRate(20 * 1024 * 1024);
         else
             mediaRecorder.setVideoEncodingBitRate(mProfile.videoBitRate);
         mediaRecorder.setVideoFrameRate(mProfile.videoFrameRate);
@@ -328,6 +201,197 @@ public class MediaRecorderBase {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 开始录制视频
+     */
+    private boolean start_Record() {
+        //录制视频前必须先解锁Camera
+        if (mCamera == null) return false;
+        mCamera.unlock();
+        configMediaRecorder();
+        try {
+            mediaRecorder.start();
+        } catch (Exception e) {
+            releaseMediaRecorder();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 暂停录制
+     */
+    private void pause_Record() {
+        //正在录制的视频，点击后暂停
+        //取消自动对焦
+        cancelAutoFocus();
+        releaseMediaRecorder();
+    }
+
+    /**
+     * 停止录制视频,释放
+     */
+    private boolean releaseMediaRecorder() {
+        try {
+            if (mediaRecorder != null) {
+                // 设置后不会崩
+                mediaRecorder.setOnErrorListener(null);
+                mediaRecorder.setPreviewDisplay(null);
+                mediaRecorder.setOnInfoListener(null);
+                //停止录制
+                mediaRecorder.stop();
+                mediaRecorder.reset();
+                //释放资源
+                mediaRecorder.release();
+                mediaRecorder = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(mContext, "录制时间太短", Toast.LENGTH_SHORT).show();
+            new File(currentVideoFilePath).delete();
+            if (mediaRecorder != null) {
+                mediaRecorder.reset();
+                //释放资源
+                mediaRecorder.release();
+                mediaRecorder = null;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 合并录像视频方法
+     */
+    private void mergeRecordVideoFile() {
+        if (TextUtils.isEmpty(saveVideoPath) || saveVideoPath.equals(currentVideoFilePath)) {
+            if (iMediaRecorder != null) {
+                iMediaRecorder.completeMergeRecordVideo(currentVideoFilePath);
+            }
+        } else {
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected void onPreExecute() {
+                    if (iMediaRecorder != null) {
+                        iMediaRecorder.startMergeRecordVideo();
+                    }
+                }
+
+                @Override
+                protected String doInBackground(Void... voids) {
+                    try {
+                        String[] str = new String[]{saveVideoPath, currentVideoFilePath};
+                        //将2个视频文件合并到 append.mp4文件下
+                        VideoUtils.appendVideo(mContext, getSDPath(mContext) + "append.mp4", str);
+                        File reName = new File(saveVideoPath);
+                        File f = new File(getSDPath(mContext) + "append.mp4");
+                        //再将合成的append.mp4视频文件 移动到 saveVideoPath 路径下
+                        f.renameTo(reName);
+                        if (reName.exists()) {
+                            f.delete();
+                            new File(currentVideoFilePath).delete();
+                        }
+                        return reName.getAbsolutePath();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(String s) {
+                    if (iMediaRecorder != null) {
+                        iMediaRecorder.completeMergeRecordVideo(s);
+                    }
+                }
+            }.execute();
+        }
+    }
+
+    /**
+     * 释放摄像头资源
+     *
+     * @author liuzhongjun
+     * @date 2016-2-5
+     */
+    public void releaseCamera() {
+        if (mCamera != null) {
+            mCamera.setPreviewCallback(null);
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
+    }
+
+
+    /**
+     * 初始化录制
+     */
+    public void initRecord() {
+        initCamera();
+        //configMediaRecorder();
+    }
+
+
+    /**
+     * 释放资源
+     */
+    public void destory(){
+        releaseMediaRecorder();
+        if (mCamera != null)
+            mCamera.lock();
+        releaseCamera();
+    }
+
+
+
+    /**
+     * 开始录制
+     */
+    public boolean startRecord() {
+        if (getSDPath(mContext) == null) return false;
+        //视频文件保存路径，configMediaRecorder方法中会设置
+        currentVideoFilePath = getSDPath(mContext) + getVideoName();
+        //开始录制视频
+        return start_Record();
+    }
+
+    /**
+     * 暂停录制
+     */
+    public void pauseRecord() {
+        pause_Record();
+        //判断是否进行视频合并
+        if ("".equals(saveVideoPath)) {
+            saveVideoPath = currentVideoFilePath;
+        } else {
+            mergeRecordVideoFile();
+        }
+    }
+
+    /**
+     * 完成录制
+     */
+    public boolean completeRecord() {
+        //停止视频录制
+        if (!releaseMediaRecorder()) {
+            if (iMediaRecorder != null) {
+                iMediaRecorder.completeMergeRecordVideo(null);
+                return false;
+            }
+        } else {
+            //先给Camera加锁后再释放相机
+            if (mCamera != null) {
+                mCamera.lock();
+            }
+            releaseCamera();
+            //判断是否进行视频合并
+            mergeRecordVideoFile();
+        }
+        return true;
+    }
+
 
     /**
      * 改变闪光灯
@@ -376,64 +440,18 @@ public class MediaRecorderBase {
         initCamera();
     }
 
+    /**
+     * 取消焦点
+     */
     public void cancelAutoFocus() {
         if (mCamera != null)
-        mCamera.autoFocus(new Camera.AutoFocusCallback() {
-            @Override
-            public void onAutoFocus(boolean success, Camera camera) {
-                if (success && mCamera != null)
-                    mCamera.cancelAutoFocus();
-            }
-        });
-    }
-
-
-    /**
-     * 合并录像视频方法
-     */
-    private void mergeRecordVideoFile() {
-        if (TextUtils.isEmpty(saveVideoPath) || saveVideoPath.equals(currentVideoFilePath)) {
-            if (iMediaRecorder != null) {
-                iMediaRecorder.completeMergeRecordVideo(currentVideoFilePath);
-            }
-        } else {
-            new AsyncTask<Void, Void, String>() {
+            mCamera.autoFocus(new Camera.AutoFocusCallback() {
                 @Override
-                protected void onPreExecute() {
-                    if (iMediaRecorder != null) {
-                        iMediaRecorder.startMergeRecordVideo();
-                    }
+                public void onAutoFocus(boolean success, Camera camera) {
+                    if (success && mCamera != null)
+                        mCamera.cancelAutoFocus();
                 }
-
-                @Override
-                protected String doInBackground(Void... voids) {
-                    try {
-                        String[] str = new String[]{saveVideoPath, currentVideoFilePath};
-                        //将2个视频文件合并到 append.mp4文件下
-                        VideoUtils.appendVideo(mContext, getSDPath(mContext) + "append.mp4", str);
-                        File reName = new File(saveVideoPath);
-                        File f = new File(getSDPath(mContext) + "append.mp4");
-                        //再将合成的append.mp4视频文件 移动到 saveVideoPath 路径下
-                        f.renameTo(reName);
-                        if (reName.exists()) {
-                            f.delete();
-                            new File(currentVideoFilePath).delete();
-                        }
-                        return reName.getAbsolutePath();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-
-                @Override
-                protected void onPostExecute(String s) {
-                    if (iMediaRecorder != null) {
-                        iMediaRecorder.completeMergeRecordVideo(s);
-                    }
-                }
-            }.execute();
-        }
+            });
     }
 
 

@@ -11,6 +11,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.AttentionAdapter;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.adapter.TieziAvarAdapter;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.AttentionPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
@@ -45,7 +46,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
 
     private AttentionPresenter mPresenter;
     private HotBlogAdapter hotBlogAdapter;
-    private List<HotBlogsEntity.Blog> blogList;
+    private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
     private List<String> memberIcon;
     private AttentionAdapter attentionAdapter;
@@ -154,7 +155,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     public void focusUser(int isFocus, String memberId) {
         switch (focusType) {
             case 0:
-                for (HotBlogsEntity.Blog blog : blogList) {
+                for (BigImgEntity.Blog blog : blogList) {
                     if (memberId.equals(blog.member_id)) {
                         if (blog.is_focus == 0) {
                             blog.is_focus = 1;
@@ -187,7 +188,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
 
     @Override
     public void praiseBlog(String blogId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
                 blog.is_praise = 1;
                 blog.praise_num++;

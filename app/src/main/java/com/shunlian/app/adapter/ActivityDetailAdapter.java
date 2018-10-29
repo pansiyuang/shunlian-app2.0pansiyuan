@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.DiscoverActivityEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
@@ -37,13 +38,13 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/23.
  */
 
-public class ActivityDetailAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
+public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
     public static final int LAYOUT_TOP = 10003;
     private OnAdapterCallBack mCallBack;
     private HotBlogsEntity.Detail mDetail;
     private TieziAvarAdapter tieziAvarAdapter;
 
-    public ActivityDetailAdapter(Context context, List<HotBlogsEntity.Blog> lists, HotBlogsEntity.Detail detail) {
+    public ActivityDetailAdapter(Context context, List<BigImgEntity.Blog> lists, HotBlogsEntity.Detail detail) {
         super(context, true, lists);
         this.mDetail = detail;
     }
@@ -81,7 +82,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Bl
 
     private void handleItem(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HotBlogAdapter.BlogViewHolder) {
-            HotBlogsEntity.Blog blog = lists.get(position - 1);
+            BigImgEntity.Blog blog = lists.get(position - 1);
             HotBlogAdapter.BlogViewHolder blogViewHolder = (HotBlogAdapter.BlogViewHolder) holder;
             GlideUtils.getInstance().loadCircleAvar(context, blogViewHolder.miv_icon, blog.avatar);
             blogViewHolder.tv_name.setText(blog.nickname);

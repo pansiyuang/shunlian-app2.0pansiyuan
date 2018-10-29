@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.presenter.SelectGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.view.IView;
 
@@ -58,6 +60,19 @@ public class SelectGoodsAct extends BaseActivity implements IView{
                 }
             }
         });
+
+        edEdit.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                Common.hideKeyboard(edEdit);
+                if (presenter != null){
+                    presenter.getSearchGoods(edEdit.getText().toString(),true);
+                    if (recyView != null){
+                        recyView.scrollToPosition(0);
+                    }
+                }
+            }
+            return false;
+        });
     }
 
     /**
@@ -71,6 +86,15 @@ public class SelectGoodsAct extends BaseActivity implements IView{
         recyView.setLayoutManager(manager);
         recyView.addItemDecoration(new MVerticalItemDecoration(this,12,0,0));
         presenter = new SelectGoodsPresenter(this,this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+            presenter = null;
+        }
     }
 
     /**
