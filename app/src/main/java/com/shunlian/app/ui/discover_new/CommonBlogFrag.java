@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.discover_new;
 
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
@@ -34,16 +36,19 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
+
     private CommonBlogPresenter mPresenter;
     private String currentFrom, currentType, currentMemberId;
     private HotBlogAdapter hotBlogAdapter;
-    private List<HotBlogsEntity.Blog> blogList;
+    private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
 
     @Override
@@ -68,17 +73,23 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
-        recycler_list.setNestedScrollingEnabled(false);
+
+        NestedSlHeader header = new NestedSlHeader(getActivity());
+        lay_refresh.setRefreshHeaderView(header);
 
         currentMemberId = getArguments().getString("member_id");
         currentFrom = getArguments().getString("from");
 
         if ("我的".equals(currentFrom)) {
             currentType = "2";
+            nei_empty.setImageResource(R.mipmap.img_empty_faxian)
+                    .setText("空空如也，还没有分享过内容")
+                    .setButtonText(null);
         } else if ("收藏".equals(currentFrom)) {
             currentType = "3";
+            nei_empty.setImageResource(R.mipmap.img_empty_faxian)
+                    .setText("空空如也，还没有收藏过内容")
+                    .setButtonText(null);
         }
 
         mPresenter = new CommonBlogPresenter(getActivity(), this);
@@ -88,28 +99,17 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
-
-        nei_empty.setImageResource(R.mipmap.img_empty_faxian)
-                .setText("空空如也，还没有分享过内容")
-                .setButtonText(null);
     }
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getBlogList(true, currentMemberId, currentType);
-                }
-            }
-
-            @Override
-            public void onLoadMore() {
-
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getBlogList(true, currentMemberId, currentType);
             }
         });
+
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -129,16 +129,15 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
 
     @Override
     public void getFocusblogs(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage) {
-        refreshview.stopRefresh(true);
         if (currentPage == 1) {
             blogList.clear();
 
             if (isEmpty(hotBlogsEntity.list)) {
-                nei_empty.setVisibility(View.VISIBLE);
                 recycler_list.setVisibility(View.GONE);
+                nestedScrollView.setVisibility(View.VISIBLE);
             } else {
-                nei_empty.setVisibility(View.GONE);
                 recycler_list.setVisibility(View.VISIBLE);
+                nestedScrollView.setVisibility(View.GONE);
             }
 
             if (getActivity() instanceof MyPageActivity) {
@@ -159,7 +158,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
 
     @Override
     public void focusUser(int isFocus, String memberId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (memberId.equals(blog.member_id)) {
                 if (blog.is_focus == 0) {
                     blog.is_focus = 1;
@@ -173,7 +172,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
 
     @Override
     public void praiseBlog(String blogId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
                 blog.is_praise = 1;
                 blog.praise_num++;
@@ -184,6 +183,9 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
 
     @Override
     public void showFailureView(int request_code) {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -202,5 +204,20 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @Override
     public void toPraiseBlog(String blogId) {
         mPresenter.praiseBlos(blogId);
+    }
+
+    @Override
+    public void clickMoreBtn(String blogId) {
+
+    }
+
+    /**
+     * 刷新完成
+     */
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  */
 
 public interface IActivityDetailView extends IView {
-    void getActivityDetail(List<HotBlogsEntity.Blog> blogList, HotBlogsEntity.Detail detail, int page, int totalPage);
+    void getActivityDetail(List<BigImgEntity.Blog> blogList, HotBlogsEntity.Detail detail, int page, int totalPage);
 
     void focusUser(int isFocus,String memberId);
 

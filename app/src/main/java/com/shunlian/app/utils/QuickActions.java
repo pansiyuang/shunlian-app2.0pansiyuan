@@ -32,6 +32,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewLookBigImgAct;
 import com.shunlian.app.widget.circle.CircleImageView;
 import com.shunlian.app.widget.circle.RoundRectImageView;
 import com.shunlian.app.widget.popmenu.PopMenu;
@@ -797,6 +798,135 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         Common.staticToast("分享失败");
+                        reset();
+                    }
+                });
+    }
+
+
+    /**
+     * 保存商品分享图new
+     */
+    public void saveshareGoodsPic(String shareLink,String title,String desc,String price,String goodsId,
+                                  String thumb,boolean isSuperiorProduct,boolean isShow,String from,String froms) {
+        removeAllViews();
+        setVisibility(INVISIBLE);
+        final View inflate = LayoutInflater.from(getContext())
+                .inflate(R.layout.share_goods, this, false);
+
+        ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
+        layoutParams1.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams1.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+        inflate.setLayoutParams(layoutParams1);
+        removeAllViews();
+        addView(inflate);
+
+        CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
+
+        MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
+        mtv_nickname.setText("来自" + from + "的分享");
+
+        MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
+        int i = TransformUtil.dip2px(getContext(), 92.5f);
+        Bitmap qrImage = BitmapUtil.createQRImage(shareLink, null, i);
+        miv_code.setImageBitmap(qrImage);
+
+
+        MyTextView mtv_title = (MyTextView) inflate.findViewById(R.id.mtv_title);
+        mtv_title.setText(title);
+
+        MyTextView mtv_desc = (MyTextView) inflate.findViewById(R.id.mtv_desc);
+        if (!TextUtils.isEmpty(desc)) {
+            mtv_desc.setVisibility(VISIBLE);
+            mtv_desc.setText(desc);
+        } else {
+            mtv_desc.setVisibility(GONE);
+        }
+
+        MyTextView mtv_price = (MyTextView) inflate.findViewById(R.id.mtv_price);
+        mtv_price.setText("￥" + price);
+
+        MyTextView mtv_time = (MyTextView) inflate.findViewById(R.id.mtv_time);
+        MyTextView mtv_act_label = (MyTextView) inflate.findViewById(R.id.mtv_act_label);
+
+        MyTextView mtv_goodsID = (MyTextView) inflate.findViewById(R.id.mtv_goodsID);
+        mtv_goodsID.setText("商品编号:" + goodsId + "(搜索可直达)");
+
+        LinearLayout llayout_day = (LinearLayout) inflate.findViewById(R.id.llayout_day);
+
+//        if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
+            llayout_day.setVisibility(GONE);
+//        } else {
+//            mtv_time.setText(mShareInfoParam.start_time);
+//            mtv_act_label.setText(mShareInfoParam.act_label);
+//        }
+
+        //显示优品图标
+        MyImageView miv_SuperiorProduct = (MyImageView) inflate.findViewById(R.id.miv_SuperiorProduct);
+        if (isSuperiorProduct) {
+            miv_SuperiorProduct.setVisibility(VISIBLE);
+        } else {
+            miv_SuperiorProduct.setVisibility(GONE);
+        }
+
+
+        MyImageView miv_goods_pic = (MyImageView) inflate.findViewById(R.id.miv_goods_pic);
+        GlideUtils.getInstance().loadBitmapSync(getContext(), froms,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_user_head.setImageBitmap(resource);
+                        goodsPic(inflate, miv_goods_pic,thumb,isShow);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        miv_user_head.setImageResource(R.mipmap.img_set_defaulthead);
+                        goodsPic(inflate, miv_goods_pic,thumb,isShow);
+                    }
+                });
+    }
+
+    private void goodsPic(View inflate, MyImageView miv_goods_pic,String thumb,boolean isShow) {
+        GlideUtils.getInstance().loadBitmapSync(mContext, thumb,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_goods_pic.setImageBitmap(resource);
+                        inflate.postDelayed(() -> {
+                            Bitmap bitmapByView = getBitmapByView(inflate);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+                            if (isSuccess) {
+                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
+//                                dialog.show();
+                                if (isShow){
+                                    Common.staticToast(mContext.getString(R.string.operate_tupianyibaocun));
+                                }else {
+                                    Common.openWeiXin(mContext,"","");
+                                }
+                            } else {
+                                if (isShow){
+                                    Common.staticToast(mContext.getString(R.string.operate_tupianbaocunshibai));
+                                }else {
+                                    Common.staticToast("分享失败");
+                                }
+                            }
+                            reset();
+                        }, 100);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        if (isShow){
+                            Common.staticToast(mContext.getString(R.string.operate_tupianbaocunshibai));
+                        }else {
+                            Common.staticToast("分享失败");
+                        }
                         reset();
                     }
                 });

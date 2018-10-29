@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotExpertAdapter;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.HotExpertPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
@@ -30,7 +31,7 @@ public class HotExpertFrag extends BaseLazyFragment implements IHotExpertView, H
     private HotExpertPresenter mPresenter;
     private HotExpertAdapter mAdapter;
     private LinearLayoutManager manager;
-    private List<HotBlogsEntity.Blog> blogList;
+    private List<BigImgEntity.Blog> blogList;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -65,7 +66,7 @@ public class HotExpertFrag extends BaseLazyFragment implements IHotExpertView, H
     }
 
     @Override
-    public void getHotExpertList(List<HotBlogsEntity.Blog> hotBlogList) {
+    public void getHotExpertList(List<BigImgEntity.Blog> hotBlogList) {
         if (isEmpty(hotBlogList)) {
             return;
         }
@@ -79,7 +80,7 @@ public class HotExpertFrag extends BaseLazyFragment implements IHotExpertView, H
 
     @Override
     public void focusUser(int isFocus, String memberId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (memberId.equals(blog.member_id)) {
                 if (blog.is_focus == 0) {
                     blog.is_focus = 1;
@@ -97,7 +98,7 @@ public class HotExpertFrag extends BaseLazyFragment implements IHotExpertView, H
 
     @Override
     public void praiseBlog(String blogId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
                 blog.is_praise = 1;
                 blog.praise_num++;

@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -113,7 +114,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     private ImageView img_goods_icon;
     private TextView tv_goods_name,tv_goods_price,tv_old_price;
 
-    private HotBlogsEntity.Blog blog;
+    private BigImgEntity.Blog blog;
     public GoodVideoPlayer(Context context) {
         super(context);
         //LogUtil.zhLogW("=====SmallVideoPlayer==1========");
@@ -181,7 +182,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     /**
      * 设置商品用户信息信息
      */
-    public void setGoodUserInfo(HotBlogsEntity.Blog blog,updateParseAttent parseAttent){
+    public void setGoodUserInfo(BigImgEntity.Blog blog, updateParseAttent parseAttent){
            this.blog = blog;
            this.parseAttent = parseAttent;
              setParseStateView();

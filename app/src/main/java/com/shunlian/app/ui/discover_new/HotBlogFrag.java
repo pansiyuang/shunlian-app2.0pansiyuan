@@ -9,13 +9,15 @@ import android.view.ViewGroup;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
+import com.shunlian.app.widget.CommBottomDialog;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
@@ -31,7 +33,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack {
+public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack, CommBottomDialog.OnItemClickCallBack {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -43,9 +45,11 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     private HotBlogPresenter hotBlogPresenter;
     private HotBlogAdapter hotBlogAdapter;
-    private List<HotBlogsEntity.Blog> blogList;
+    private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
     private ObjectMapper objectMapper;
+    private List<String> stringList = new ArrayList<>();
+    private CommBottomDialog commBottomDialog;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -75,6 +79,9 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         nei_empty.setImageResource(R.mipmap.img_empty_common)
                 .setText("暂时没有用户发布精选文章")
                 .setButtonText(null);
+
+        stringList.add("收藏");
+        stringList.add("他人主页");
     }
 
     @Override
@@ -128,7 +135,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Override
     public void focusUser(int isFocus, String memberId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (memberId.equals(blog.member_id)) {
                 if (blog.is_focus == 0) {
                     blog.is_focus = 1;
@@ -142,7 +149,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Override
     public void praiseBlog(String blogId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
                 blog.is_praise = 1;
                 blog.praise_num++;
@@ -185,6 +192,16 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         hotBlogPresenter.praiseBlos(blogId);
     }
 
+    @Override
+    public void clickMoreBtn(String blogId) {
+        if (commBottomDialog == null) {
+            commBottomDialog = new CommBottomDialog(getActivity());
+            commBottomDialog.setOnItemClickCallBack(this);
+        }
+        commBottomDialog.setRecyclerList(stringList);
+        commBottomDialog.show();
+    }
+
     public void saveBaseInfo(HotBlogsEntity.BaseInfo baseInfo) {
         try {
             if (baseInfo != null) {
@@ -195,5 +212,10 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void clickItem(String string) {
+        Common.staticToast(string);
     }
 }

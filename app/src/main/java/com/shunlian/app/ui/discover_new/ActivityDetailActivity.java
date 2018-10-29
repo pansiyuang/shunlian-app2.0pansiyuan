@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ActivityDetailAdapter;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -46,7 +47,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private int layoutHeight;
     private ActivityDetailPresenter mPresent;
     private String currentId;
-    private List<HotBlogsEntity.Blog> blogList;
+    private List<BigImgEntity.Blog> blogList;
     private ActivityDetailAdapter mAdapter;
 
     @Override
@@ -149,7 +150,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
-    public void getActivityDetail(List<HotBlogsEntity.Blog> list, HotBlogsEntity.Detail detail, int page, int totalPage) {
+    public void getActivityDetail(List<BigImgEntity.Blog> list, HotBlogsEntity.Detail detail, int page, int totalPage) {
         if (page == 1) {
             blogList.clear();
         }
@@ -167,7 +168,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     public void focusUser(int isFocus, String memberId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (memberId.equals(blog.member_id)) {
                 if (blog.is_focus == 0) {
                     blog.is_focus = 1;
@@ -181,7 +182,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     public void praiseBlog(String blogId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
                 blog.is_praise = 1;
                 blog.praise_num++;

@@ -60,7 +60,7 @@ public class PaySuccessAct extends BaseActivity implements IPaySuccessView, Mess
         intent.putExtra("orderId", orderId);
         intent.putExtra("price", price);
         intent.putExtra("pay_sn", pay_sn);
-        intent.putExtra("isPlus", isPlus);
+        intent.putExtra("isSuperiorProduct", isPlus);
         context.startActivity(intent);
     }
 
@@ -78,7 +78,7 @@ public class PaySuccessAct extends BaseActivity implements IPaySuccessView, Mess
         orderId = intent.getStringExtra("orderId");
         pay_sn = intent.getStringExtra("pay_sn");
         String price = intent.getStringExtra("price");
-        isPlus=intent.getBooleanExtra("isPlus",false);
+        isPlus=intent.getBooleanExtra("isSuperiorProduct",false);
         mtv_price.setText(price);
 
         GridLayoutManager manager = new GridLayoutManager(this,2);
