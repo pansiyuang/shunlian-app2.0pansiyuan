@@ -15,6 +15,9 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.view.IView;
 
+import java.util.Arrays;
+import java.util.List;
+
 import butterknife.BindView;
 
 /**
@@ -31,8 +34,9 @@ public class SelectGoodsAct extends BaseActivity implements IView{
     private LinearLayoutManager manager;
     private SelectGoodsPresenter presenter;
 
-    public static void startAct(Activity activity,int code){
-        activity.startActivityForResult(new Intent(activity,SelectGoodsAct.class),code);
+    public static void startAct(Activity activity, String goodsid, int code){
+        activity.startActivityForResult(new Intent(activity,SelectGoodsAct.class)
+                .putExtra("goods",goodsid),code);
     }
 
     /**
@@ -82,10 +86,16 @@ public class SelectGoodsAct extends BaseActivity implements IView{
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        String goods = getIntent().getStringExtra("goods");
+        List<String> mSelectList = null;
+        if (!isEmpty(goods)){
+            String[] split = goods.split(",");
+            mSelectList = Arrays.asList(split);
+        }
         manager = new LinearLayoutManager(this);
         recyView.setLayoutManager(manager);
         recyView.addItemDecoration(new MVerticalItemDecoration(this,12,0,0));
-        presenter = new SelectGoodsPresenter(this,this);
+        presenter = new SelectGoodsPresenter(this,this,mSelectList);
     }
 
     @Override

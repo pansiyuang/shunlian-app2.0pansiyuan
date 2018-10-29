@@ -70,7 +70,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     MyTextView mtv_topic;
 
     @BindView(R.id.recy_view)
-    RecyclerView recy_view;
+    RecyclerView recyGoods;
 
     @BindView(R.id.recy_pics)
     RecyclerView recy_pics;
@@ -80,6 +80,9 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
+
+    @BindView(R.id.mtv_associated_goods)
+    MyTextView mtv_associated_goods;
 
     private List<GoodsDeatilEntity.Goods> mGoodsLists;
     private SelectGoodsAdapter mGoodsAdapter;
@@ -102,6 +105,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      * 最大心得字数
      */
     private int MAX_TEXT_COUNT = 300;
+    /***最多关联商品数量***/
+    private final int MAX_ASSOCIATED_GOODS = 5;
 
     /**
      *
@@ -160,9 +165,10 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
 
         /********商品列表*********/
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        recy_view.setLayoutManager(manager);
-        recy_view.addItemDecoration(new MVerticalItemDecoration(this, 0.5f,
+        recyGoods.setLayoutManager(manager);
+        recyGoods.addItemDecoration(new MVerticalItemDecoration(this, 0.5f,
                 0, 0, Color.parseColor("#ECECEC")));
+        recyGoods.setNestedScrollingEnabled(false);
         /********end*********/
 
 
@@ -218,7 +224,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     @OnClick(R.id.rlayout_select_goods)
     public void selectGoods() {
-        SelectGoodsAct.startAct(this, ADDGOODS_REQUEST_CODE);
+        String goodsid = getGoodsid();
+        SelectGoodsAct.startAct(this,goodsid, ADDGOODS_REQUEST_CODE);
     }
 
     /**
@@ -255,10 +262,15 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                 mGoodsLists = new ArrayList<>();
             }
             GoodsDeatilEntity.Goods goods = data.getParcelableExtra("goods");
-            mGoodsLists.add(goods);
+            if (mGoodsLists.size() >= MAX_ASSOCIATED_GOODS) {
+                Common.staticToast(String.format("最多关联%d个商品",MAX_ASSOCIATED_GOODS));
+                return;
+            }else {
+                mGoodsLists.add(goods);
+            }
             if (mGoodsAdapter == null) {
-                mGoodsAdapter = new SelectGoodsAdapter(this, false, mGoodsLists);
-                recy_view.setAdapter(mGoodsAdapter);
+                mGoodsAdapter = new SelectGoodsAdapter(this, false, mGoodsLists, null);
+                recyGoods.setAdapter(mGoodsAdapter);
             } else {
                 mGoodsAdapter.notifyDataSetChanged();
             }
@@ -370,8 +382,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             }
             mGoodsLists.addAll(entity.goods_infos);
             if (mGoodsAdapter == null) {
-                mGoodsAdapter = new SelectGoodsAdapter(this, false, mGoodsLists);
-                recy_view.setAdapter(mGoodsAdapter);
+                mGoodsAdapter = new SelectGoodsAdapter(this, false, mGoodsLists, null);
+                recyGoods.setAdapter(mGoodsAdapter);
             } else {
                 mGoodsAdapter.notifyDataSetChanged();
             }

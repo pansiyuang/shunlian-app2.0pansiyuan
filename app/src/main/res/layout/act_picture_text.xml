@@ -78,6 +78,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="25dp"
                     android:layout_toLeftOf="@+id/miv_tip"
                     android:layout_toRightOf="@+id/mtv_topic_label"
                     android:gravity="right"
@@ -126,7 +129,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="25dp"
                     android:layout_marginRight="5dp"
                     android:layout_toLeftOf="@+id/miv_tip1"
                     android:layout_toRightOf="@+id/mtv_addr"
@@ -164,6 +167,7 @@
                 android:paddingRight="12dp">
 
                 <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_associated_goods"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
