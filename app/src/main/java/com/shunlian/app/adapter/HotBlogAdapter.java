@@ -8,7 +8,6 @@ import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,9 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.MyImageView;
@@ -46,7 +47,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/17.
  */
 
-public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
+public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
     public static final int LAYOUT_TOP = 10003;
     private Activity mActivity;
     private List<HotBlogsEntity.RecomandFocus> recomandFocusList;
@@ -55,17 +56,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
     private List<HotBlogsEntity.Ad> adList;
     private List<String> banners;
 
-    public HotBlogAdapter(Context context, List<HotBlogsEntity.Blog> lists, Activity activity) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity) {
         super(context, true, lists);
         this.mActivity = activity;
     }
 
-    public HotBlogAdapter(Context context, List<HotBlogsEntity.Blog> lists, List<HotBlogsEntity.Ad> ads) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads) {
         super(context, true, lists);
         this.adList = ads;
     }
 
-    public HotBlogAdapter(Context context, List<HotBlogsEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list) {
         super(context, true, lists);
         this.mActivity = activity;
         this.recomandFocusList = list;
@@ -133,7 +134,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
 
     public void handleItem(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BlogViewHolder) {
-            HotBlogsEntity.Blog blog;
+            BigImgEntity.Blog blog;
             if (isEmpty(adList)) {
                 blog = lists.get(position);
             } else {
@@ -184,7 +185,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
             if (blog.type == 1) {
                 int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
                 SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth);
-                BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, singlePicAdapter, blog.pics, mActivity
+                BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, singlePicAdapter, blog.pics, (Activity) context
                         , 0, 0, 63, 12, 16, 0, 4, 0);
                 singlePicAdapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override
@@ -288,7 +289,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         }
     }
 
-    public void initDialog(HotBlogsEntity.Blog blog) {
+    public void initDialog(BigImgEntity.Blog blog) {
         Dialog dialog_new = new Dialog(context, R.style.popAd);
         dialog_new.setContentView(R.layout.dialog_found_goods);
         Window window = dialog_new.getWindow();
@@ -312,7 +313,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(context));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.related_goods);
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.related_goods,false, null,
+                SharedPrefUtil.getSharedUserString("nickname", ""),SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -455,15 +457,4 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
         }
     }
 
-    public void setAdapterCallBack(OnAdapterCallBack callBack) {
-        this.mCallBack = callBack;
-    }
-
-    public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
-
-        void toFocusMember(int isFocus, String memberId);
-
-        void toPraiseBlog(String blogId);
-    }
 }

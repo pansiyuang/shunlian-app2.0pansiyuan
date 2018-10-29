@@ -27,14 +27,16 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverGoodsAdapter;
 import com.shunlian.app.adapter.OperateAdapter;
 import com.shunlian.app.bean.BigImgEntity;
-import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.photoview.HackyViewPager;
 import com.shunlian.app.widget.photoview.PhotoView;
 import com.shunlian.app.widget.photoview.PhotoViewAttacher;
@@ -73,6 +75,8 @@ public class NewLookBigImgAct extends BaseActivity{
     private int pos = 0;
     private PromptDialog promptDialog;
 
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     public static void startAct(Context context, BigImgEntity entity) {
         Intent intent = new Intent(context, NewLookBigImgAct.class);
@@ -81,6 +85,12 @@ public class NewLookBigImgAct extends BaseActivity{
         context.startActivity(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
+    }
 
     /**
      * 布局id
@@ -124,7 +134,6 @@ public class NewLookBigImgAct extends BaseActivity{
             public void onPageScrollStateChanged(int state) {
             }
         });
-
         rightNo.setText(String.valueOf(entity.itemList.size()));
         view_pager.setCurrentItem(entity.index);
         if (isEmpty(entity.desc)) {
@@ -196,7 +205,7 @@ public class NewLookBigImgAct extends BaseActivity{
         }
     }
 
-    public void initDialog(HotBlogsEntity.Blog blog,boolean isCode) {
+    public void initDialog(BigImgEntity.Blog blog,boolean isCode) {
         Dialog dialog_new = new Dialog(baseAct, R.style.popAd);
         dialog_new.setContentView(R.layout.dialog_found_goods);
         Window window = dialog_new.getWindow();
@@ -221,7 +230,8 @@ public class NewLookBigImgAct extends BaseActivity{
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(baseAct));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct, blog.related_goods,isCode);
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct, blog.related_goods,isCode,quick_actions,
+                SharedPrefUtil.getSharedUserString("nickname", ""),SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override

@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -892,6 +893,8 @@ public class GoodsDeatilEntity implements Parcelable {
         public int type;                     //0普通商品、1优品、2团购
         public int is_sell_out;
         public String sales_desc;
+        public String desc;
+        public int isSuperiorProduct;
         public String self_buy_earn;
         public String free_ship;             //是否 包邮，1是，0否
         public String send_area;             //发货地
@@ -936,6 +939,8 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.price);
             dest.writeString(this.old_price);
             dest.writeString(this.left);
+            dest.writeString(this.market_price);
+            dest.writeString(this.share_url);
             dest.writeTypedList(this.all_prom);
             dest.writeString(this.cate_id);
             dest.writeString(this.cate_name);
@@ -965,6 +970,8 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.limit_min_buy);
             dest.writeString(this.big_label);
             dest.writeInt(this.share_num);
+            dest.writeInt(this.isSuperiorProduct);
+            dest.writeString(this.desc);
         }
 
         protected Goods(Parcel in) {
@@ -986,6 +993,8 @@ public class GoodsDeatilEntity implements Parcelable {
             this.price = in.readString();
             this.old_price = in.readString();
             this.left = in.readString();
+            this.market_price = in.readString();
+            this.share_url = in.readString();
             this.all_prom = in.createTypedArrayList(AllProm.CREATOR);
             this.cate_id = in.readString();
             this.cate_name = in.readString();
@@ -1015,6 +1024,8 @@ public class GoodsDeatilEntity implements Parcelable {
             this.limit_min_buy = in.readString();
             this.big_label = in.readString();
             this.share_num = in.readInt();
+            this.isSuperiorProduct = in.readInt();
+            this.desc = in.readString();
         }
 
         public static final Creator<Goods> CREATOR = new Creator<Goods>() {

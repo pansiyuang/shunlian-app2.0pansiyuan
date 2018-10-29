@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.presenter.HotBlogPresenter;
@@ -43,7 +44,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     private HotBlogPresenter hotBlogPresenter;
     private HotBlogAdapter hotBlogAdapter;
-    private List<HotBlogsEntity.Blog> blogList;
+    private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
     private ObjectMapper objectMapper;
 
@@ -128,7 +129,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Override
     public void focusUser(int isFocus, String memberId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (memberId.equals(blog.member_id)) {
                 if (blog.is_focus == 0) {
                     blog.is_focus = 1;
@@ -142,7 +143,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Override
     public void praiseBlog(String blogId) {
-        for (HotBlogsEntity.Blog blog : blogList) {
+        for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
                 blog.is_praise = 1;
                 blog.praise_num++;

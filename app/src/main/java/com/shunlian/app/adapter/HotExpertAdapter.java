@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
@@ -26,10 +27,10 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class HotExpertAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
+public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
     private OnAdapterCallBack mCallBack;
 
-    public HotExpertAdapter(Context context, List<HotBlogsEntity.Blog> lists) {
+    public HotExpertAdapter(Context context, List<BigImgEntity.Blog> lists) {
         super(context, false, lists);
     }
 
@@ -42,7 +43,7 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Blog> {
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HotExpertViewHolder) {
             HotExpertViewHolder hotExpertViewHolder = (HotExpertViewHolder) holder;
-            HotBlogsEntity.Blog blog = lists.get(position);
+            BigImgEntity.Blog blog = lists.get(position);
             GlideUtils.getInstance().loadCircleAvar(context, hotExpertViewHolder.miv_icon, blog.avatar);
             hotExpertViewHolder.tv_nickname.setText(blog.nickname);
             hotExpertViewHolder.tv_fans.setText(String.valueOf(blog.fans_num));

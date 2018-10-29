@@ -16,6 +16,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.OperateAdapter;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
@@ -65,13 +66,13 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     @BindView(R.id.ll_rootView)
     RelativeLayout ll_rootView;
 
-    public static void startActivity(Context context, HotBlogsEntity.Blog blog) {
+    public static void startActivity(Context context, BigImgEntity.Blog blog) {
         Intent intent = new Intent(context, VideoGoodPlayActivity.class);
         intent.putExtra("blog", blog);
         context.startActivity(intent);
     }
     public HttpDialog httpDialog;
-    private  HotBlogsEntity.Blog blog;
+    private  BigImgEntity.Blog blog;
 
     private HotVideoBlogPresenter hotBlogPresenter;
     @Override
