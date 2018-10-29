@@ -87,6 +87,7 @@
     <color name="bg_gray_four">#F4F4F4</color>
     <!-- 新版首页颜色值-->
     <color name="new_orange">#ff5b41</color>
+    <color name="value_FFEFAF">#FFEFAF</color>
     <color name="new_gray">#858585</color>
     <color name="new_blue">#2e85fb</color>
     <color name="new_bg_line">#f1f1f1</color>
