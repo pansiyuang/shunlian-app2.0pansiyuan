@@ -437,8 +437,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     public void popAd(String url, TaskHomeEntity.AdUrlBean pop_ad_url) {
         if (isEmpty(url))return;
         String cache_url = SharedPrefUtil.getCacheSharedPrf(TASK_AD_KEY, "");
-            adDialog(url,pop_ad_url);
         if (!cache_url.equals(url)){
+            adDialog(url,pop_ad_url);
             SharedPrefUtil.saveCacheSharedPrf(TASK_AD_KEY,url);
         }
     }
