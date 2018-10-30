@@ -1074,10 +1074,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
     public Bitmap getBitmapByView(View view) {
         Bitmap bitmap = null;
-        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
-                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
-        final Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
+        try {
+            bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+                    view.getMeasuredHeight(), Bitmap.Config.RGB_565);
+            final Canvas canvas = new Canvas(bitmap);
+            view.draw(canvas);
+        }catch (Exception e){
+        }
         return bitmap;
     }
 

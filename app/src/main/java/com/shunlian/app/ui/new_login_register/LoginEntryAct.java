@@ -115,12 +115,16 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
         int wxSdkVersion = api.getWXAppSupportAPI();
         if (wxSdkVersion >= Constant.TIMELINE_SUPPORTED_VERSION){
-            // send oauth request
-            final SendAuth.Req req = new SendAuth.Req();
-            req.scope = "snsapi_userinfo";
-            req.state = SharedPrefUtil.getCacheSharedPrf("X-Device-ID",
-                    "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
-            api.sendReq(req);
+            try {
+                // send oauth request
+                final SendAuth.Req req = new SendAuth.Req();
+                req.scope = "snsapi_userinfo";
+                req.state = SharedPrefUtil.getCacheSharedPrf("X-Device-ID",
+                        "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
+                api.sendReq(req);
+            }catch (Exception e){
+
+            }
             finish();
         }else if (wxSdkVersion == 0) {
             Common.staticToast("请先安装微信");

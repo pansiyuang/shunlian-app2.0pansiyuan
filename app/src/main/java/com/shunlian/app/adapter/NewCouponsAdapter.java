@@ -76,15 +76,19 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
     }
     @Override
     public int getItemViewType(int position) {
-        if (position > lists.size() - 1)
-            return super.getItemViewType(position);
-        switch (lists.get(position).is_more) {
-            case "1":
-                return TYPE2;
-            case "0":
-                return TYPE3;
-            default:
+        try {
+            if (position > lists.size() - 1)
                 return super.getItemViewType(position);
+            switch (lists.get(position).is_more) {
+                case "1":
+                    return TYPE2;
+                case "0":
+                    return TYPE3;
+                default:
+                    return super.getItemViewType(position);
+            }
+        }catch (Exception e){
+            return super.getItemViewType(position);
         }
     }
     @Override

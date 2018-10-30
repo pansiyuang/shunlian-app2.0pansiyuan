@@ -207,7 +207,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 return;
             }
             int heightDiff = ll_rootView.getRootView().getHeight() - ll_rootView.getHeight();
-            if (heightDiff > 100) { //高度变小100像素则认为键盘弹出
+            if (heightDiff > DeviceInfoUtil.getDeviceHeight(this) / 3) {
                 recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
             }
         });

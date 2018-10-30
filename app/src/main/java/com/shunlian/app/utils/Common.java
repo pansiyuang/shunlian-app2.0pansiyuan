@@ -561,7 +561,11 @@ public class Common {
      * @return
      */
     public static int getScreenWidth(Activity ac) {
-        return ac.getWindowManager().getDefaultDisplay().getWidth();
+        if (ac!=null){
+            return ac.getWindowManager().getDefaultDisplay().getWidth();
+        }else {
+           return 720;
+        }
     }
 
 
@@ -981,7 +985,7 @@ public class Common {
      * @return
      */
     public static String getDomain(String url) {
-        if (TextUtils.isEmpty(url))
+        if (TextUtils.isEmpty(url)||!url.startsWith("http"))
             return "";
         try {
             String result = "";

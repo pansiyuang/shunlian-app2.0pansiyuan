@@ -558,9 +558,9 @@ public class BitmapUtil {
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
         Bitmap newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
-        if (!origin.isRecycled()) {
-            origin.recycle();
-        }
+//        if (!origin.isRecycled()) {
+//            origin.recycle();
+//        }
         return newBM;
     }
 

@@ -227,25 +227,29 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
      */
     private void shareUrl2Circle(final String url, int type, String title,
                                  String desc, Bitmap img, String flag) {
-        WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = url;
-        WXMediaMessage msg = new WXMediaMessage(webpage);
-        if ("circle".equals(flag)) {
+        try {
+            WXWebpageObject webpage = new WXWebpageObject();
+            webpage.webpageUrl = url;
+            WXMediaMessage msg = new WXMediaMessage(webpage);
+            if ("circle".equals(flag)) {
 //            msg.title = desc;
-            msg.title = title;
-        } else if ("friend".equals(flag)) {
-            msg.title = title;
-            msg.description = desc;
+                msg.title = title;
+            } else if ("friend".equals(flag)) {
+                msg.title = title;
+                msg.description = desc;
+            }
+            if (img != null) {
+                img = BitmapUtil.createBitmapThumbnail(img);
+                msg.setThumbImage(img);
+            }
+            SendMessageToWX.Req req = new SendMessageToWX.Req();
+            req.transaction = buildTransaction("webpage");
+            req.message = msg;
+            req.scene = type;
+            api.sendReq(req);
+        }catch (Exception e){
+
         }
-        if (img != null) {
-            img = BitmapUtil.createBitmapThumbnail(img);
-            msg.setThumbImage(img);
-        }
-        SendMessageToWX.Req req = new SendMessageToWX.Req();
-        req.transaction = buildTransaction("webpage");
-        req.message = msg;
-        req.scene = type;
-        api.sendReq(req);
         mYFinish();
     }
 
