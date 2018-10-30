@@ -588,7 +588,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         int topFour= TransformUtil.dip2px(baseAct,6);
 
 
-        layoutParams_message_count.setMargins(0,topFour,topFour,0);
+        layoutParams_message_count.setMargins(0,topFour,topTwo,0);
         miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
         layoutParams_discover.setMargins(0,topTwo,0,0);
 
