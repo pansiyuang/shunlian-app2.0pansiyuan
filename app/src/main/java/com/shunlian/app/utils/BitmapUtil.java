@@ -557,10 +557,20 @@ public class BitmapUtil {
         float scaleHeight = ((float) newHeight) / height;
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
-//        if (!origin.isRecycled()) {
-//            origin.recycle();
-//        }
+
+        if (origin.isRecycled()){
+            return null;
+        }
+
+        Bitmap newBM = null;
+        try {
+            newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
+        }catch (Exception e){
+            return null;
+        }
+        if (!origin.isRecycled()) {
+            origin.recycle();
+        }
         return newBM;
     }
 
