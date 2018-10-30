@@ -10,13 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ActivityDetailAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -52,6 +57,8 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private String currentId;
     private List<BigImgEntity.Blog> blogList;
     private ActivityDetailAdapter mAdapter;
+    private ObjectMapper objectMapper;
+    private HotBlogsEntity.Detail currentDetail;
 
     @Override
     protected int getLayoutId() {
@@ -81,6 +88,8 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         recycler_list.setLayoutManager(manager);
         ((SimpleItemAnimator) recycler_list.getItemAnimator()).setSupportsChangeAnimations(false);
         recycler_list.setNestedScrollingEnabled(false);
+
+        objectMapper = new ObjectMapper();
     }
 
 
@@ -104,10 +113,25 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 }
             }
         });
-        miv_join.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        miv_join.setOnClickListener(v -> {
+            if (!Common.isAlreadyLogin()) {
+                LoginAct.startAct(ActivityDetailActivity.this);
+                return;
+            }
+            try {
+                String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
+                HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
+                FindSendPictureTextAct.SendConfig sendConfig = new FindSendPictureTextAct.SendConfig();
+                if (baseInfo.white_list == 0) {
+                    sendConfig.isWhiteList = false;
+                } else {
+                    sendConfig.isWhiteList = true;
+                }
+                sendConfig.activityID = currentId;
+                sendConfig.activityTitle = currentDetail.title;
+                FindSendPictureTextAct.startAct(ActivityDetailActivity.this, sendConfig);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -160,6 +184,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     public void getActivityDetail(List<BigImgEntity.Blog> list, HotBlogsEntity.Detail detail, int page, int totalPage) {
+        currentDetail = detail;
         if (page == 1) {
             blogList.clear();
         }

@@ -43,7 +43,6 @@ public class HotBlogsEntity {
     public static class AdLink {
         public String type;
         public String item_id;
-        public String item_type;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

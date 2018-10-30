@@ -2,6 +2,11 @@ package com.shunlian.app.ui.discover_new;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -34,11 +39,23 @@ import butterknife.BindView;
 
 public class MyPageActivity extends BaseActivity {
 
+    @BindView(R.id.mAppbar)
+    AppBarLayout mAppbar;
+
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
     @BindView(R.id.tv_nickname)
     TextView tv_nickname;
+
+    @BindView(R.id.miv_title_icon)
+    MyImageView miv_title_icon;
+
+    @BindView(R.id.tv_title_nickname)
+    TextView tv_title_nickname;
+
+    @BindView(R.id.tv_attention)
+    TextView tv_attention;
 
     @BindView(R.id.tv_signature)
     TextView tv_signature;
@@ -97,6 +114,21 @@ public class MyPageActivity extends BaseActivity {
     private boolean isDefault = true;
     private ObjectMapper objectMapper;
     private boolean isSelf;
+    private int totalDistance;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                int distance = (int) msg.obj;
+                float alph = Float.valueOf(distance) / totalDistance;
+                miv_title_icon.setAlpha(alph);
+                tv_title_nickname.setAlpha(alph);
+                tv_attention.setAlpha(alph);
+            }
+        }
+    };
 
     public static void startAct(Context context, String memberId) {
         Intent intent = new Intent(context, MyPageActivity.class);
@@ -126,9 +158,14 @@ public class MyPageActivity extends BaseActivity {
             if (currentMemberId.equals(baseInfo.member_id)) {
                 isSelf = true;
                 miv_title_right.setVisibility(View.VISIBLE);
-                miv_title_right.setImageResource(R.mipmap.icon_faxian_xiaoxi);
+                miv_title_icon.setVisibility(View.GONE);
+                tv_title_nickname.setVisibility(View.GONE);
+                tv_attention.setVisibility(View.GONE);
             } else {
                 miv_title_right.setVisibility(View.GONE);
+                miv_title_icon.setVisibility(View.VISIBLE);
+                tv_title_nickname.setVisibility(View.VISIBLE);
+                tv_attention.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,6 +174,30 @@ public class MyPageActivity extends BaseActivity {
 
     @Override
     protected void initListener() {
+        tv_attention.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mAppbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            if (isSelf) {
+                return;
+            }
+            totalDistance = TransformUtil.dip2px(MyPageActivity.this, 81);
+            int y = 0;
+            if (verticalOffset < 0) {
+                y = verticalOffset * -1;
+            }
+            if (y > totalDistance) {
+                y = totalDistance;
+            }
+            Message message = mHandler.obtainMessage(1);
+            message.obj = y;
+            mHandler.sendMessage(message);
+        });
+
         ll_left.setOnClickListener(v -> {
             isDefault = true;
             setTabMode(isDefault);
@@ -208,7 +269,9 @@ public class MyPageActivity extends BaseActivity {
     public void initInfo(HotBlogsEntity.MemberInfo memberInfo, HotBlogsEntity.DiscoveryInfo discoveryInfo) {
         if (memberInfo != null) {
             GlideUtils.getInstance().loadCircleAvar(this, miv_icon, memberInfo.avatar);
+            GlideUtils.getInstance().loadCircleAvar(this, miv_title_icon, memberInfo.avatar);
             tv_nickname.setText(memberInfo.nickname);
+            tv_title_nickname.setText(memberInfo.nickname);
             tv_signature.setText(memberInfo.signature);
         }
         if (discoveryInfo != null) {

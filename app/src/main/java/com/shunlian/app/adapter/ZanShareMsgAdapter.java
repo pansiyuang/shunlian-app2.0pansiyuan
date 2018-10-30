@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ZanShareEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 
@@ -53,6 +55,8 @@ public class ZanShareMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
             } else {
                 zanViewHolder.miv_video.setVisibility(View.GONE);
             }
+            zanViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context,msg.member_id));
+            zanViewHolder.ll_member.setOnClickListener(v -> MyPageActivity.startAct(context,msg.member_id));
         }
     }
 
@@ -81,6 +85,9 @@ public class ZanShareMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
 
         @BindView(R.id.tv_goods_title)
         TextView tv_goods_title;
+
+        @BindView(R.id.ll_member)
+        LinearLayout ll_member;
 
         public ZanViewHolder(View itemView) {
             super(itemView);

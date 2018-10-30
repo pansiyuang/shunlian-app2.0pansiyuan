@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 
@@ -55,6 +56,8 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
                     mCallBack.toFocusUser(memberInfo.is_fans, memberInfo.member_id);
                 }
             });
+            attentionMsgViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, memberInfo.member_id));
+            attentionMsgViewHolder.tv_name.setOnClickListener(v -> MyPageActivity.startAct(context, memberInfo.member_id));
         }
     }
 

@@ -345,20 +345,21 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             view_message.setVisibility(View.GONE);
 //            mtv_message_count.setVisibility(View.GONE);
 
-            if (!Common.isAlreadyLogin() && discoverFrag != null && discoverFrag.isVisible()) {
-                LoginAct.startAct(this);
-                return;
-            }
+//            if (!Common.isAlreadyLogin() && discoverFrag != null && discoverFrag.isVisible()) {
+//                LoginAct.startAct(this);
+//                return;
+//            }
             try {
                 String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
                 HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
-
+                FindSendPictureTextAct.SendConfig sendConfig = new FindSendPictureTextAct.SendConfig();
                 if (discoverFrag != null && discoverFrag.isVisible()) {
                     if (baseInfo.white_list == 0) {
-                        FindSendPictureTextAct.startAct(this, null);
+                        sendConfig.isWhiteList = false;
                     } else {
-                        FindSendPictureTextAct.startAct(this, null);
+                        sendConfig.isWhiteList = true;
                     }
+                    FindSendPictureTextAct.startAct(this, sendConfig);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

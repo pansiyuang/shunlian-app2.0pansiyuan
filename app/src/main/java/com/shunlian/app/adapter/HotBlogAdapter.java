@@ -132,7 +132,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             topViewHolder.myKanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
             topViewHolder.myKanner.setBanner(banners);
             topViewHolder.myKanner.setOnItemClickL(position -> {
-//                    Common.goGoGo(baseAct, coreHotEntity.banner_list.get(position).type, coreHotEntity.banner_list.get(position).item_id);
+                    Common.goGoGo(context, adList.get(position).ad_link.type,  adList.get(position).ad_link.item_id);
             });
         }
     }
@@ -187,7 +187,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     }
                 });
             }
-            if (blog.type == 1) {
+            if (blog.type == 1) { //图文
                 int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
                 SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth);
                 BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, singlePicAdapter, blog.pics, (Activity) context
@@ -204,7 +204,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     }
                 });
                 blogViewHolder.rl_video.setVisibility(View.GONE);
-                blogViewHolder.recycler_list.setVisibility(View.GONE);
+                blogViewHolder.recycler_list.setVisibility(View.VISIBLE);
             } else {
                 String imageWidth, imageheight;
                 int width, height;
@@ -263,7 +263,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             } else {
                 blogViewHolder.rl_attention.setVisibility(View.GONE);
             }
-
+            blogViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
             blogViewHolder.miv_video.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
 
             blogViewHolder.ll_member.setOnClickListener(v -> {
