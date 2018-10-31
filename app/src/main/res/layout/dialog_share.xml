@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent">
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_corner_white_8px"
+        android:orientation="vertical">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="156dp"
+            android:orientation="horizontal">
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_weixinhaoyou"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_wechat" />
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:text="微信好友"
+                    android:textColor="@color/share_text"
+                    android:textSize="12sp" />
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_weixinpenyou"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_pengyouquan" />
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:text="微信朋友圈"
+                    android:textColor="@color/share_text"
+                    android:textSize="12sp" />
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_shangping"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_lianjies" />
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:text="商品链接"
+                    android:textColor="@color/share_text"
+                    android:textSize="12sp" />
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_tuwenerweima"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_erweimass" />
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:text="二维码图文"
+                    android:textColor="@color/share_text"
+                    android:textSize="12sp" />
+            </com.shunlian.app.widget.MyLinearLayout>
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/light_gray_three" />
+
+        <com.shunlian.app.widget.NewTextView
+            android:id="@+id/ntv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/errcode_cancel"
+            android:textColor="@color/share_text"
+            android:textSize="14sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+</com.shunlian.app.widget.MyRelativeLayout>

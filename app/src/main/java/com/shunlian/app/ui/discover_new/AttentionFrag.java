@@ -16,6 +16,7 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.AttentionPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.HorizonItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IAttentionView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
