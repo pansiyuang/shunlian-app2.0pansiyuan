@@ -35,7 +35,6 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
 
     public FindSendPicPresenter(Context context, ISelectPicVideoView iView) {
         super(context, iView);
-        initApi();
     }
 
     /**
@@ -76,6 +75,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
 
     /**
      * 处理网络请求
+     * 获取草稿
      */
     @Override
     public void initApi() {
