@@ -47,6 +47,7 @@ public class BigImgEntity implements Parcelable {
         public int total_share_num;
         public int is_self;
         public int is_favo;
+        public int expert;
 
         @Override
         public int describeContents() {
@@ -79,6 +80,7 @@ public class BigImgEntity implements Parcelable {
             dest.writeInt(this.total_share_num);
             dest.writeInt(this.is_self);
             dest.writeInt(this.is_favo);
+            dest.writeInt(this.expert);
         }
 
         public Blog() {
@@ -109,9 +111,10 @@ public class BigImgEntity implements Parcelable {
             this.total_share_num = in.readInt();
             this.is_self = in.readInt();
             this.is_favo = in.readInt();
+            this.expert = in.readInt();
         }
 
-        public static final Parcelable.Creator<Blog> CREATOR = new Parcelable.Creator<Blog>() {
+        public static final Creator<Blog> CREATOR = new Creator<Blog>() {
             @Override
             public Blog createFromParcel(Parcel source) {
                 return new Blog(source);
