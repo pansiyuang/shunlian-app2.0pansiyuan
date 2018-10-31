@@ -41,7 +41,7 @@ public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        return new MViewHolder(LayoutInflater.from(context).inflate(R.layout.item_single_pic, parent, false));
+        return new MViewHolder(LayoutInflater.from(context).inflate(R.layout.item_single_pic, null));
     }
 
     @Override

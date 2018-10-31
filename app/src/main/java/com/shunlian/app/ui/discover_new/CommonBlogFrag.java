@@ -140,10 +140,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 recycler_list.setVisibility(View.VISIBLE);
                 nestedScrollView.setVisibility(View.GONE);
             }
-
-            if (getActivity() instanceof MyPageActivity) {
-                ((MyPageActivity) getActivity()).initInfo(hotBlogsEntity.member_info, hotBlogsEntity.discovery_info);
-            }
+            ((MyPageActivity) getActivity()).initInfo(hotBlogsEntity.member_info, hotBlogsEntity.discovery_info);
         }
         if (!isEmpty(hotBlogsEntity.list)) {
             blogList.addAll(hotBlogsEntity.list);
@@ -168,6 +165,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 } else {
                     blog.is_focus = 0;
                 }
+                ((MyPageActivity) getActivity()).setAttentStatus(blog.is_focus, memberId);
             }
         }
         hotBlogAdapter.notifyDataSetChanged();
@@ -197,7 +195,9 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
 
     @Override
     public void toFocusUser(int isFocus, String memberId) {
-        mPresenter.focusUser(isFocus, memberId);
+        if (mPresenter != null) {
+            mPresenter.focusUser(isFocus, memberId);
+        }
     }
 
     @Override
@@ -241,6 +241,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blogList.remove(i);
             }
         }
+        hotBlogAdapter.notifyDataSetChanged();
         if (isEmpty(blogList)) {
             recycler_list.setVisibility(View.GONE);
             nestedScrollView.setVisibility(View.VISIBLE);

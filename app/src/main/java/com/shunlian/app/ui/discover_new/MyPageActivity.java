@@ -111,9 +111,11 @@ public class MyPageActivity extends BaseActivity {
     private String[] titles = {"我的", "收藏"};
     private List<BaseFragment> goodsFrags;
     private String currentMemberId;
+    private HotBlogsEntity.MemberInfo currentMember;
     private boolean isDefault = true;
     private ObjectMapper objectMapper;
     private boolean isSelf;
+    private BaseFragment commonBlogFrag;
     private int totalDistance;
 
     private Handler mHandler = new Handler() {
@@ -125,7 +127,6 @@ public class MyPageActivity extends BaseActivity {
                 float alph = Float.valueOf(distance) / totalDistance;
                 miv_title_icon.setAlpha(alph);
                 tv_title_nickname.setAlpha(alph);
-                tv_attention.setAlpha(alph);
             }
         }
     };
@@ -158,13 +159,9 @@ public class MyPageActivity extends BaseActivity {
             if (currentMemberId.equals(baseInfo.member_id)) {
                 isSelf = true;
                 miv_title_right.setVisibility(View.VISIBLE);
-                miv_title_icon.setVisibility(View.GONE);
-                tv_title_nickname.setVisibility(View.GONE);
                 tv_attention.setVisibility(View.GONE);
             } else {
                 miv_title_right.setVisibility(View.GONE);
-                miv_title_icon.setVisibility(View.VISIBLE);
-                tv_title_nickname.setVisibility(View.VISIBLE);
                 tv_attention.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
@@ -174,17 +171,14 @@ public class MyPageActivity extends BaseActivity {
 
     @Override
     protected void initListener() {
-        tv_attention.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        tv_attention.setOnClickListener(v -> {
+            if (currentMember != null) {
+                ((CommonBlogFrag) commonBlogFrag).toFocusUser(currentMember.is_focus, currentMemberId);
             }
         });
 
         mAppbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
-            if (isSelf) {
-                return;
-            }
+
             totalDistance = TransformUtil.dip2px(MyPageActivity.this, 81);
             int y = 0;
             if (verticalOffset < 0) {
@@ -262,17 +256,21 @@ public class MyPageActivity extends BaseActivity {
         for (int i = 0; i < titles.length; i++) {
             goodsFrags.add(CommonBlogFrag.getInstance(titles[i], currentMemberId));
         }
+        commonBlogFrag = goodsFrags.get(0);
         viewpager.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titles));
         viewpager.setOffscreenPageLimit(goodsFrags.size());
     }
 
     public void initInfo(HotBlogsEntity.MemberInfo memberInfo, HotBlogsEntity.DiscoveryInfo discoveryInfo) {
         if (memberInfo != null) {
+            currentMember = memberInfo;
             GlideUtils.getInstance().loadCircleAvar(this, miv_icon, memberInfo.avatar);
             GlideUtils.getInstance().loadCircleAvar(this, miv_title_icon, memberInfo.avatar);
             tv_nickname.setText(memberInfo.nickname);
             tv_title_nickname.setText(memberInfo.nickname);
             tv_signature.setText(memberInfo.signature);
+
+            setAttentStatus(currentMember.is_focus, memberInfo.member_id);
         }
         if (discoveryInfo != null) {
             tv_attention_count.setText(discoveryInfo.focus_num);
@@ -295,6 +293,22 @@ public class MyPageActivity extends BaseActivity {
             line_right.setVisibility(View.VISIBLE);
             line_left.setVisibility(View.GONE);
             viewpager.setCurrentItem(1);
+        }
+    }
+
+    public void setAttentStatus(int isFocus, String memberId) {
+        if (!currentMemberId.equals(memberId)) {
+            return;
+        }
+        currentMember.is_focus = isFocus;
+        if (isFocus == 1) {//已经关注
+            tv_attention.setBackgroundDrawable(null);
+            tv_attention.setText("已关注");
+            tv_attention.setTextColor(getResources().getColor(R.color.text_gray2));
+        } else {
+            tv_attention.setBackgroundDrawable(getResources().getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
+            tv_attention.setText("关注");
+            tv_attention.setTextColor(getResources().getColor(R.color.pink_color));
         }
     }
 }

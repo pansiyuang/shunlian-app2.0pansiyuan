@@ -160,9 +160,13 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             MAX_TEXT_COUNT = 800;
         }
 
+        presenter = new FindSendPicPresenter(this, this);
+
         if (mConfig != null && !isEmpty(mConfig.activityTitle)){
             mtv_topic.setText(mConfig.activityTitle);
             topic_id = mConfig.activityID;
+        }else {//从活动进发布页不加载草稿
+            presenter.initApi();
         }
 
         mtvToolbarTitle.setText("发布图文");
@@ -205,9 +209,6 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             }
         });
         /****end***/
-
-
-        presenter = new FindSendPicPresenter(this, this);
 
     }
 

@@ -25,8 +25,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@+id/miv_close"
-            android:scaleType="centerCrop"
-            android:visibility="gone" />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/tv_title_nickname"
@@ -36,8 +35,7 @@
             android:layout_marginLeft="11dp"
             android:layout_toRightOf="@+id/miv_title_icon"
             android:textColor="@color/value_2D2D2D"
-            android:textSize="13.5sp"
-            android:visibility="gone" />
+            android:textSize="13.5sp" />
 
         <TextView
             android:id="@+id/tv_attention"
