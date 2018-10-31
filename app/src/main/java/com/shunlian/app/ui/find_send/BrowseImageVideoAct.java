@@ -149,7 +149,7 @@ public class BrowseImageVideoAct extends BaseActivity {
         mImageVideos = imageVideos;
         mConfig = getIntent().getParcelableExtra("config");
         maxCount = mConfig.max_count;
-        mSelectResultList = mConfig.selectResultList;
+        mSelectResultList = new ArrayList<>();
         isOnlyBrowse = mConfig.isOnlyBrowse;
         if (isOnlyBrowse){
             gone(tvComplete);

@@ -481,7 +481,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      * 询问是否保存草稿
      */
     private void saveDraft() {
-        if ((edit != null && !isEmpty(edit.getText().toString())) || !isEmpty(mImgList)) {
+        if ((edit != null && !isEmpty(edit.getText().toString())) && !isEmpty(mImgList)) {
             final PromptDialog promptDialog = new PromptDialog(this);
             promptDialog.setTvSureBGColor(Color.WHITE);
             promptDialog.setCancelable(true);
