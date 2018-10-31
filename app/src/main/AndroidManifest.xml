@@ -461,6 +461,10 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--优化x5内核首次启动卡顿黑屏现象-->
+        <service android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+            android:label="dexopt"
+            android:process=":dexopt"/>
         <activity
             android:name=".ui.h5.H5SpecialAct"
             android:exported="false"
