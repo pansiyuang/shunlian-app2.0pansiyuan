@@ -897,7 +897,11 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         }else{
             line_good_info.setVisibility(View.VISIBLE);
             relt_bottom_user.setVisibility(View.VISIBLE);
-            include_good.setVisibility(View.VISIBLE);
+            if(blog==null||blog.related_goods==null||blog.related_goods.size()==0){
+                include_good.setVisibility(View.GONE);
+            }else {
+                include_good.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -1081,7 +1085,11 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
                 bottomContainer.setVisibility(View.INVISIBLE);
                 line_good_info.setVisibility(View.VISIBLE);
                 relt_bottom_user.setVisibility(View.VISIBLE);
-                include_good.setVisibility(View.VISIBLE);
+                if(blog==null||blog.related_goods==null||blog.related_goods.size()==0){
+                    include_good.setVisibility(View.GONE);
+                }else {
+                    include_good.setVisibility(View.VISIBLE);
+                }
                 topContainer.setVisibility(View.VISIBLE);
                 startButton.setVisibility(View.INVISIBLE);
                 if (clarityPopWindow != null) {
