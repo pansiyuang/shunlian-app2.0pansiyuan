@@ -1,7 +1,10 @@
 package com.shunlian.app.bean;
 
+import android.graphics.Bitmap;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.shunlian.app.utils.BitmapUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ public class ShareInfoParam implements Serializable {
     public String img;
     public String photo;
     public String type;
+    public Bitmap bitmap;
     public boolean isCopyTitle;
     //店铺分享
     public String shop_star;

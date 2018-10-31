@@ -98,6 +98,9 @@ import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.popmenu.PopMenu;
+import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
 
@@ -233,6 +236,7 @@ public class Common {
                 return "";
         }
     }
+
 
     public static void goGoGo(Context context, String type, String... params) {
         //params从第7个参数开始是聊天的参数
