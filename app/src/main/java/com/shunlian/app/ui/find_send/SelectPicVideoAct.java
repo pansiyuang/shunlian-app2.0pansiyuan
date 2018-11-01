@@ -141,7 +141,6 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
         getSupportLoaderManager().initLoader(LOADER_IMAGE_ALL, null, mLoaderImageCallback);
         getSupportLoaderManager().initLoader(LOADER_VIDEO_ALL, null, mLoaderVideoCallback);
 
-
         GridLayoutManager manager = new GridLayoutManager(this, 4);
         recy_view.setLayoutManager(manager);
         int i = TransformUtil.dip2px(this, 2);
@@ -521,6 +520,8 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
             if (httpDialog != null) {
                 httpDialog.dismiss();
             }
+            getSupportLoaderManager().destroyLoader(LOADER_IMAGE_ALL);
+            getSupportLoaderManager().destroyLoader(LOADER_VIDEO_ALL);
             Collections.sort(mImageVideos);
             isVideo = isImage = false;
 

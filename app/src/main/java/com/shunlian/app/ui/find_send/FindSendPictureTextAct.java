@@ -471,10 +471,11 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             Common.staticToast("请添加图片或视频~");
             return;
         }
-
         String goodsid = getGoodsid();
 
         String address = mtv_address.getText().toString();
+        //过滤空地址
+        if ("请您添加所在地址".equals(address)){address = null;}
 
         if (presenter != null) {
             presenter.publish(edit, pics, mVideoUrl, mVideoThumb, topic_id, address, goodsid, draft);
