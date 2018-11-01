@@ -47,6 +47,20 @@
                 android:text=""
                 android:textColor="#767676"
                 android:textSize="10sp" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/miv_share"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="10dp"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_more_fenxiang" />
+            </RelativeLayout>
         </LinearLayout>
 
 </RelativeLayout>
