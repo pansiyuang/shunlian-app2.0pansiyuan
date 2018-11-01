@@ -48,7 +48,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private LinearLayoutManager manager;
     private ObjectMapper objectMapper;
     private List<String> stringList = new ArrayList<>();
-    @BindView(R.id.quick_actions)
+
     QuickActions quick_actions;
 
     @Override
@@ -66,6 +66,11 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Override
     protected void initData() {
+        //分享
+        quick_actions = new QuickActions(baseActivity);
+        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
+        decorView.addView(quick_actions);
+        quick_actions.setVisibility(View.INVISIBLE);
     }
 
     @Override
