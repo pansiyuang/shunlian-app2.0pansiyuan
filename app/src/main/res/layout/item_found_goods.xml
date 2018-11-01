@@ -31,15 +31,16 @@
         android:layout_marginLeft="12dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="6dp"/>
+
     <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:padding="6dp"
-        android:id="@+id/miv_share"
         android:layout_marginRight="30dp"
-        android:src="@mipmap/icon_more_fenxiang"/>
+        android:padding="6dp"
+        android:src="@mipmap/icon_more_fenxiang" />
     <com.shunlian.app.widget.NewTextView
         android:layout_width="wrap_content"
         android:layout_height="24dp"
