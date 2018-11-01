@@ -148,7 +148,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         rightMargin = px / 2;
     }
 
-    public static boolean saveImageToShare(Context context, Bitmap bmp) {
+    public static boolean saveImageToShare(Context context, Bitmap bmp,boolean isFriend) {
 
         if (!Common.hasSD()) {
             Common.staticToast("没有sd卡");
@@ -185,7 +185,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 //                        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
                 ShareInfoParam shareInfoParam = new ShareInfoParam();
                 shareInfoParam.photo = path;
-                WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+                WXEntryActivity.startAct(context, isFriend?"shareFriend":"shareCircle", shareInfoParam);
                 return true;
             } else {
                 return false;
@@ -671,13 +671,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             mllayout_wexin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    saveshareGoodsPic(shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
+                    saveshareGoodsPic(true,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
                 }
             });
             mllayout_save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    saveshareGoodsPic(shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, true, from, froms);
+                    saveshareGoodsPic(true,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, true, from, froms);
                 }
             });
             dialog_new.setCancelable(false);
@@ -739,15 +739,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 WXEntryActivity.startAct(getContext(),
-                        "shareCircle", mShareInfoParam);
+                        "shareFriend", mShareInfoParam);
                 dialog_new.dismiss();
             }
         });
         mllayout_weixinpenyou.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//                                mShareInfoParam.photo=
-                saveshareGoodsPic(shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
+                saveshareGoodsPic(false,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
                 dialog_new.dismiss();
             }
         });
@@ -1039,7 +1038,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 保存商品分享图new
      */
-    public void saveshareGoodsPic(String shareLink, String title, String desc, String price, String goodsId,
+    public void saveshareGoodsPic(boolean isFriend,String shareLink, String title, String desc, String price, String goodsId,
                                   String thumb, boolean isSuperiorProduct, boolean isShow, String from, String froms) {
         removeAllViews();
         setVisibility(INVISIBLE);
@@ -1110,19 +1109,19 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                         miv_user_head.setImageBitmap(resource);
-                        goodsPic(inflate, miv_goods_pic, thumb, isShow);
+                        goodsPic(isFriend,inflate, miv_goods_pic, thumb, isShow);
                     }
 
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         miv_user_head.setImageResource(R.mipmap.img_set_defaulthead);
-                        goodsPic(inflate, miv_goods_pic, thumb, isShow);
+                        goodsPic(isFriend,inflate, miv_goods_pic, thumb, isShow);
                     }
                 });
     }
 
-    private void goodsPic(View inflate, MyImageView miv_goods_pic, String thumb, boolean isShow) {
+    private void goodsPic(boolean isFriend,View inflate, MyImageView miv_goods_pic, String thumb, boolean isShow) {
         GlideUtils.getInstance().loadBitmapSync(mContext, thumb,
                 new SimpleTarget<Bitmap>() {
                     @Override
@@ -1141,7 +1140,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                     Common.staticToast(mContext.getString(R.string.operate_tupianbaocunshibai));
                                 }
                             } else {
-                                boolean isSuccess = saveImageToShare(mContext, bitmapByView);
+                                boolean isSuccess = saveImageToShare(mContext, bitmapByView,isFriend);
                                 if (!isSuccess)
                                     Common.staticToast("分享失败");
                             }

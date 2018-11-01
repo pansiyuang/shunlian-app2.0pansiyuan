@@ -16,6 +16,7 @@ import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ICommonBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -43,6 +44,9 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
 
@@ -51,6 +55,13 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     private HotBlogAdapter hotBlogAdapter;
     private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
+
+    @Override
+    public void onDestroyView() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroyView();
+    }
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -146,7 +157,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity());
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(),quick_actions);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
             hotBlogAdapter.setOnDelListener(this);

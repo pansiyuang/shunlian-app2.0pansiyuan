@@ -31,6 +31,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.BlogBottomDialog;
@@ -60,21 +61,25 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private BlogBottomDialog blogBottomDialog;
     private OnDelBlogListener delBlogListener;
     private OnFavoListener favoListener;
+    private QuickActions quickActions;
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity,QuickActions quickActions) {
         super(context, true, lists);
         this.mActivity = activity;
+        this.quickActions=quickActions;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads,QuickActions quickActions) {
         super(context, true, lists);
         this.adList = ads;
+        this.quickActions=quickActions;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list,QuickActions quickActions) {
         super(context, true, lists);
         this.mActivity = activity;
         this.recomandFocusList = list;
+        this.quickActions=quickActions;
     }
 
     @Override
@@ -351,7 +356,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(context));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.related_goods, false, null,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.related_goods, false, quickActions,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id));
