@@ -110,6 +110,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     /***最多关联商品数量***/
     private final int MAX_ASSOCIATED_GOODS = 5;
     private SendConfig mConfig;
+    private PromptDialog promptDialog;
 
     /**
      *
@@ -334,6 +335,9 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             mImgAdapter.unbind();
             mImgAdapter = null;
         }
+        if (promptDialog != null){
+            promptDialog.dismiss();
+        }
     }
 
     @Override
@@ -482,7 +486,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     private void saveDraft() {
         if ((edit != null && !isEmpty(edit.getText().toString())) && !isEmpty(mImgList)) {
-            final PromptDialog promptDialog = new PromptDialog(this);
+            promptDialog = new PromptDialog(this);
             promptDialog.setTvSureBGColor(Color.WHITE);
             promptDialog.setCancelable(true);
             promptDialog.setTvSureColor(R.color.pink_color);
@@ -502,8 +506,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if (!isEmpty(mImgList)) {
             StringBuilder sb = new StringBuilder();
             for (ImageVideo e : mImgList) {
-                if (!isMP4Path(e.path)) {
-                    sb.append(e.path);
+                if (!isMP4Path(e.url)) {
+                    sb.append(e.url);
                     sb.append(",");
                 }
             }
