@@ -109,7 +109,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         ShareInfoParam shareInfoParam = (ShareInfoParam) intent.getSerializableExtra("shareInfoParam");
         if (!isEmpty(flag)) SharedPrefUtil.saveCacheSharedPrf("wx_flag",flag);
         if (!isEmpty(flag) && shareInfoParam != null) {
-            if (!isEmpty(shareInfoParam.photo)) {
+             if (!isEmpty(shareInfoParam.photo)) {
                 downloadPic(shareInfoParam);
             } else {
                 defShare(shareInfoParam);
@@ -146,6 +146,9 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     if (flag.equals("shareFriend")) {
                         shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneSession,
                                 currTitle, currentDesc, resource, "friend");
+                    }else if (flag.equals("shareCircle")){
+                        shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneTimeline,
+                                currTitle, currentDesc, resource, "circle");
                     }
                 }
                 @Override
@@ -165,7 +168,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             @Override
             public void onResourceReady(Bitmap resource,
                                         GlideAnimation<? super Bitmap> glideAnimation) {
-                sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
+                if (flag.equals("shareFriend")) {
+                    sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
+                }else if (flag.equals("shareCircle")){
+                    sharePicture(SendMessageToWX.Req.WXSceneTimeline, resource);
+                }
+
             }
 
             @Override
@@ -182,6 +190,9 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (flag.equals("shareFriend")) {
             shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneSession,
                     currTitle, currentDesc, img, "friend");
+        }else if (flag.equals("shareCircle")){
+            shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneTimeline,
+                    currTitle, currentDesc, img, "circle");
         }
     }
 
@@ -233,6 +244,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if ("circle".equals(flag)) {
 //            msg.title = desc;
             msg.title = title;
+            msg.description = desc;
         } else if ("friend".equals(flag)) {
             msg.title = title;
             msg.description = desc;
@@ -292,7 +304,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     } else {
                         mYFinish();
                     }
-//                    Common.staticToast("分享成功");
+                    Common.staticToast("分享成功");
                 }
                 SharedPrefUtil.saveCacheSharedPrf("wx_flag","");
                 break;
