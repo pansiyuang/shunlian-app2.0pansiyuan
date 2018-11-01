@@ -549,7 +549,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     config.position = position;
                     config.isShowImageVideo = false;
                     config.isOnlyBrowse = false;
-                    config.selectResultList = mSelectResultList;
+                    //config.selectResultList = mSelectResultList;
                     BrowseImageVideoAct.startAct(this, config, BrowseImageVideoAct.REQUEST_CODE);
                 });
                 mImageVideoAdapter.setOnSelectionListener((position, oldSelection) -> {
