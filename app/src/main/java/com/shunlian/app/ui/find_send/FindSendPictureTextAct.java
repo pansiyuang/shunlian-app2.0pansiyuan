@@ -18,18 +18,16 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SelectGoodsAdapter;
-import com.shunlian.app.adapter.SingleImgAdapterV2;
 import com.shunlian.app.bean.BlogDraftEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.UploadPicEntity;
-import com.shunlian.app.photopick.ImageVideo;
 import com.shunlian.app.presenter.FindSendPicPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -39,16 +37,11 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
 
 /**
  * Created by zhanghe on 2018/10/12.
@@ -86,11 +79,14 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @BindView(R.id.mtv_associated_goods)
     MyTextView mtv_associated_goods;
 
+    @BindView(R.id.mtv_count)
+    MyTextView mtv_count;
+
+    @BindView(R.id.miv_tip)
+    MyImageView miv_tip;
+
     private List<GoodsDeatilEntity.Goods> mGoodsLists;
     private SelectGoodsAdapter mGoodsAdapter;
-    private SingleImgAdapterV2 mImgAdapter;
-    private ArrayList<ImageVideo> mImgList = new ArrayList();
-    private int index;
     private FindSendPicPresenter presenter;
     /********打开选择图片activity的请求码**********/
     public static final int SELECT_PIC_REQUESTCODE = 800;
@@ -107,6 +103,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      * 最大心得字数
      */
     private int MAX_TEXT_COUNT = 300;
+    private final String text_format = "%d/%d";
     /***最多关联商品数量***/
     private final int MAX_ASSOCIATED_GOODS = 5;
     private SendConfig mConfig;
@@ -144,6 +141,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                         edit.setSelection(MAX_TEXT_COUNT);
                         Common.staticToast("字数不能超过" + MAX_TEXT_COUNT);
                     }
+                    mtv_count.setText(String.format(text_format,edit.getText().length(),MAX_TEXT_COUNT));
                 }
             });
         }
@@ -160,17 +158,19 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if (mConfig != null && mConfig.isWhiteList) {
             MAX_TEXT_COUNT = 800;
         }
-
+        mtv_count.setText(String.format(text_format,0,MAX_TEXT_COUNT));
         presenter = new FindSendPicPresenter(this, this);
 
+        mtvToolbarTitle.setText("发布图文");
         if (mConfig != null && !isEmpty(mConfig.activityTitle)){
             mtv_topic.setText(mConfig.activityTitle);
             topic_id = mConfig.activityID;
+            miv_tip.setVisibility(View.INVISIBLE);
+            mtvToolbarTitle.setText("发布心得");
         }else {//从活动进发布页不加载草稿
             presenter.initApi();
         }
 
-        mtvToolbarTitle.setText("发布图文");
         gone(mrlayoutToolbarMore);
         visible(mtvToolbarRight);
         mtvToolbarRight.setText("发布");
@@ -188,27 +188,10 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
 
 
         /****上传图片***/
-        SingleImgAdapterV2.BuildConfig config = new SingleImgAdapterV2.BuildConfig();
-        config.max_count = 9;
-        config.pictureAndVideo = false;
         GridLayoutManager picManager = new GridLayoutManager(this, 5);
-        mImgAdapter = new SingleImgAdapterV2(this, mImgList, config);
         recy_pics.setLayoutManager(picManager);
         int space = TransformUtil.dip2px(this, 4);
         recy_pics.addItemDecoration(new GridSpacingItemDecoration(space, false));
-        recy_pics.setAdapter(mImgAdapter);
-        mImgAdapter.setOnItemClickListener((view, position) -> {
-            if (position >= mImgList.size()) {
-                mImgAdapter.selectPic();
-            } else {
-                EventBus.getDefault().postSticky(mImgList);
-                BrowseImageVideoAct.BuildConfig config1 = new BrowseImageVideoAct.BuildConfig();
-                config1.position = position;
-                config1.isShowImageVideo = true;
-                config1.isOnlyBrowse = true;
-                BrowseImageVideoAct.startAct(this, config1, BrowseImageVideoAct.REQUEST_CODE);
-            }
-        });
         /****end***/
 
     }
@@ -275,14 +258,22 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             }
             GoodsDeatilEntity.Goods goods = data.getParcelableExtra("goods");
             if (mGoodsLists.size() >= MAX_ASSOCIATED_GOODS) {
-                Common.staticToast(String.format("最多关联%d个商品",MAX_ASSOCIATED_GOODS));
+                //Common.staticToast(String.format("最多关联%d个商品",MAX_ASSOCIATED_GOODS));
                 return;
             }else {
                 mGoodsLists.add(goods);
+                associated();
             }
             if (mGoodsAdapter == null) {
                 mGoodsAdapter = new SelectGoodsAdapter(this, false, mGoodsLists, null);
                 recyGoods.setAdapter(mGoodsAdapter);
+                mGoodsAdapter.setOnDelGoodsListener(position -> {
+                    if (!isEmpty(mGoodsLists)) {
+                        mGoodsLists.remove(position);
+                        mGoodsAdapter.notifyDataSetChanged();
+                        associated();
+                    }
+                });
             } else {
                 mGoodsAdapter.notifyDataSetChanged();
             }
@@ -301,8 +292,9 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                         }catch (Exception e){}
                     }
                 } else {
-                    index = 0;
-                    compressImgs(index, picturePaths);
+                    if (presenter != null){
+                        presenter.reducePics(picturePaths);
+                    }
                 }
             }
         }
@@ -325,16 +317,6 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             mGoodsAdapter = null;
         }
 
-        if (mImgList != null){
-            mImgList.clear();
-            mImgList = null;
-        }
-
-        if (mImgAdapter != null){
-            mImgAdapter.destory();
-            mImgAdapter.unbind();
-            mImgAdapter = null;
-        }
         if (promptDialog != null){
             promptDialog.dismiss();
         }
@@ -342,11 +324,6 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
 
     @Override
     public void uploadImg(UploadPicEntity picEntity) {
-        for (int i = 0; i < picEntity.relativePath.size(); i++) {
-            mImgList.get(i).url = picEntity.relativePath.get(i);
-        }
-        if (mImgAdapter != null)
-            mImgAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -357,13 +334,12 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @Override
     public void uploadViodeSuccess(String url, String local_path) {
         mVideoUrl = url;
-        if (mImgAdapter != null) {
-            ImageVideo entity = new ImageVideo();
-            entity.path = local_path;
-            entity.url = url;
-            mImgList.add(entity);
-            mImgAdapter.notifyDataSetChanged();
-        }
+    }
+
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        if (recy_pics != null)
+        recy_pics.setAdapter(adapter);
     }
 
     /**
@@ -409,18 +385,6 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if (!isEmpty(entity.video)) {
             mVideoThumb = entity.video_thumb;
             mVideoUrl = entity.video;
-            ImageVideo imageVideo = new ImageVideo();
-            imageVideo.path = entity.video;
-            imageVideo.coverPath = entity.video_thumb;
-            mImgList.add(imageVideo);
-            mImgAdapter.notifyDataSetChanged();
-        } else if (!isEmpty(entity.pics)) {
-            for (String url : entity.pics) {
-                ImageVideo imageVideo = new ImageVideo();
-                imageVideo.path = url;
-                mImgList.add(imageVideo);
-            }
-            mImgAdapter.notifyDataSetChanged();
         }
     }
 
@@ -466,7 +430,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             Common.staticToast("请输入内容~");
             return;
         }
-        String pics = getpicsPath();
+        String pics = presenter.getpicsPath();
         if (isEmpty(pics) && isEmpty(mVideoUrl)) {
             Common.staticToast("请添加图片或视频~");
             return;
@@ -475,7 +439,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
 
         String address = mtv_address.getText().toString();
         //过滤空地址
-        if ("请您添加所在地址".equals(address)){address = null;}
+        if (getStringResouce(R.string.find_add_addr).equals(address)){address = null;}
 
         if (presenter != null) {
             presenter.publish(edit, pics, mVideoUrl, mVideoThumb, topic_id, address, goodsid, draft);
@@ -486,7 +450,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      * 询问是否保存草稿
      */
     private void saveDraft() {
-        if ((edit != null && !isEmpty(edit.getText().toString())) && !isEmpty(mImgList)) {
+        if ((edit != null && !isEmpty(edit.getText().toString()))
+                && presenter != null && !isEmpty(presenter.getmImgList())) {
             promptDialog = new PromptDialog(this);
             promptDialog.setTvSureBGColor(Color.WHITE);
             promptDialog.setCancelable(true);
@@ -503,20 +468,16 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         finish();
     }
 
-    private String getpicsPath() {
-        if (!isEmpty(mImgList)) {
-            StringBuilder sb = new StringBuilder();
-            for (ImageVideo e : mImgList) {
-                if (!isMP4Path(e.url)) {
-                    sb.append(e.url);
-                    sb.append(",");
-                }
-            }
-            if (sb.length() > 1) {
-                return sb.toString().substring(0, sb.length() - 1);
-            }
+    /**
+     * 关联商品数量标识
+     */
+    private void associated(){
+        if (isEmpty(mGoodsLists)){
+            mtv_associated_goods.setText(getStringResouce(R.string.find_associated_goods));
+        }else {
+            String format = getStringResouce(R.string.find_associated_goods) + "(%d/%d)";
+            mtv_associated_goods.setText(String.format(format, mGoodsLists.size(), MAX_ASSOCIATED_GOODS));
         }
-        return "";
     }
 
     /**
@@ -575,41 +536,6 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             return false;
         }
         return (scrollY > 0) || (scrollY < scrollDifference - 1);
-    }
-
-    /**
-     * 压缩图片
-     * @param i
-     * @param list
-     */
-    public void compressImgs(int i, final List<String> list) {
-        Luban.with(this).load(list.get(i)).putGear(3).setCompressListener(new OnCompressListener() {
-
-            @Override
-            public void onStart() {
-                LogUtil.httpLogW("onStart()");
-            }
-
-            @Override
-            public void onSuccess(File file) {
-                LogUtil.httpLogW("onSuccess:" + file.length());
-                ImageVideo imageEntity = new ImageVideo();
-                imageEntity.path = list.get(index);
-                imageEntity.file = file;
-                mImgList.add(imageEntity);
-                index++;
-                if (index >= list.size()) {
-                    presenter.uploadPic(mImgList, "customer_service");//上传图片
-                } else {
-                    compressImgs(index, list);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Common.staticToast("上传图片失败");
-            }
-        }).launch();
     }
 
     public static class SendConfig implements Parcelable {

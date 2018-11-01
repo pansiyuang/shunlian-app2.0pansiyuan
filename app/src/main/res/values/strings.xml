@@ -866,4 +866,12 @@
     <string name="more_creadit">话费充值</string>
     <string name="prepaid_phone_records">充值记录</string>
     <string name="prepaid_phone_dingdanzhifu">订单支付成功</string>
+
+    <!--发现发布-->
+    <string name="find_add_addr">请您添加所在地址</string>
+    <string name="find_upload_pics">上传图片</string>
+    <string name="find_add_topic">添加话题</string>
+    <string name="find_my_topic">#我的话题</string>
+    <string name="find_add_location">添加位置</string>
+    <string name="find_associated_goods">关联商品</string>
 </resources>
