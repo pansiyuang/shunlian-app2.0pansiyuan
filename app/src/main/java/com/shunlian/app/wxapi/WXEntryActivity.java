@@ -168,7 +168,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             @Override
             public void onResourceReady(Bitmap resource,
                                         GlideAnimation<? super Bitmap> glideAnimation) {
-                sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
+                if (flag.equals("shareFriend")) {
+                    sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
+                }else if (flag.equals("shareCircle")){
+                    sharePicture(SendMessageToWX.Req.WXSceneTimeline, resource);
+                }
+
             }
 
             @Override

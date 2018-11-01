@@ -14,6 +14,7 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -47,6 +48,15 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private LinearLayoutManager manager;
     private ObjectMapper objectMapper;
     private List<String> stringList = new ArrayList<>();
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @Override
+    public void onDestroyView() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroyView();
+    }
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -122,7 +132,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, hotBlogsEntity.ad_list);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, hotBlogsEntity.ad_list,quick_actions);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }

@@ -14,6 +14,7 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHotBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
@@ -44,6 +45,16 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     private List<BigImgEntity.Blog> blogList;
     private HotBlogAdapter hotBlogAdapter;
     private String currentKeyword;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @Override
+    public void onDestroyView() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroyView();
+    }
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -142,7 +153,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity());
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(),quick_actions);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }
