@@ -98,6 +98,9 @@ import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.popmenu.PopMenu;
+import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
 
@@ -183,6 +186,8 @@ public class Common {
                 return "H5SpecialAct";
             case "slyoupin":
                 return "SuperProductsAct";
+            case "slmall":
+                return "TaskCenterAct";
             case "benefit":
                 return "DayDayAct";
             case "sale":
@@ -233,6 +238,7 @@ public class Common {
                 return "";
         }
     }
+
 
     public static void goGoGo(Context context, String type, String... params) {
         //params从第7个参数开始是聊天的参数
@@ -451,6 +457,9 @@ public class Common {
                 break;
             case "slyoupin"://顺联优品
                 SuperProductsAct.startAct(context);
+                break;
+            case "slmall"://任务中心
+                TaskCenterAct.startAct(context);
                 break;
             case "plus":
                 MainActivity.startAct(context, "myplus");

@@ -110,6 +110,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     /***最多关联商品数量***/
     private final int MAX_ASSOCIATED_GOODS = 5;
     private SendConfig mConfig;
+    private PromptDialog promptDialog;
 
     /**
      *
@@ -334,6 +335,9 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             mImgAdapter.unbind();
             mImgAdapter = null;
         }
+        if (promptDialog != null){
+            promptDialog.dismiss();
+        }
     }
 
     @Override
@@ -467,10 +471,11 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             Common.staticToast("请添加图片或视频~");
             return;
         }
-
         String goodsid = getGoodsid();
 
         String address = mtv_address.getText().toString();
+        //过滤空地址
+        if ("请您添加所在地址".equals(address)){address = null;}
 
         if (presenter != null) {
             presenter.publish(edit, pics, mVideoUrl, mVideoThumb, topic_id, address, goodsid, draft);
@@ -481,8 +486,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      * 询问是否保存草稿
      */
     private void saveDraft() {
-        if ((edit != null && !isEmpty(edit.getText().toString())) || !isEmpty(mImgList)) {
-            final PromptDialog promptDialog = new PromptDialog(this);
+        if ((edit != null && !isEmpty(edit.getText().toString())) && !isEmpty(mImgList)) {
+            promptDialog = new PromptDialog(this);
             promptDialog.setTvSureBGColor(Color.WHITE);
             promptDialog.setCancelable(true);
             promptDialog.setTvSureColor(R.color.pink_color);
@@ -502,8 +507,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if (!isEmpty(mImgList)) {
             StringBuilder sb = new StringBuilder();
             for (ImageVideo e : mImgList) {
-                if (!isMP4Path(e.path)) {
-                    sb.append(e.path);
+                if (!isMP4Path(e.url)) {
+                    sb.append(e.url);
                     sb.append(",");
                 }
             }

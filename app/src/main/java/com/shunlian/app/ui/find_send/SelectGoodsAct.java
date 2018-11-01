@@ -14,6 +14,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.view.IView;
+import com.shunlian.app.widget.MyTextView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +32,10 @@ public class SelectGoodsAct extends BaseActivity implements IView{
 
     @BindView(R.id.recy_view)
     RecyclerView recyView;
+
+    @BindView(R.id.mtv_near)
+    MyTextView mtv_near;
+
     private LinearLayoutManager manager;
     private SelectGoodsPresenter presenter;
 
@@ -69,6 +74,7 @@ public class SelectGoodsAct extends BaseActivity implements IView{
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 Common.hideKeyboard(edEdit);
                 if (presenter != null){
+                    gone(mtv_near);
                     presenter.getSearchGoods(edEdit.getText().toString(),true);
                     if (recyView != null){
                         recyView.scrollToPosition(0);
