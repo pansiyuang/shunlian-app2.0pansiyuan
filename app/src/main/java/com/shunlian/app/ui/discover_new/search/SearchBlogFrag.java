@@ -46,7 +46,6 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     private HotBlogAdapter hotBlogAdapter;
     private String currentKeyword;
 
-    @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
     @Override
@@ -64,6 +63,11 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
 
     @Override
     protected void initData() {
+        //分享
+        quick_actions = new QuickActions(baseActivity);
+        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
+        decorView.addView(quick_actions);
+        quick_actions.setVisibility(View.INVISIBLE);
     }
 
     public static SearchBlogFrag getInstance(String str) {

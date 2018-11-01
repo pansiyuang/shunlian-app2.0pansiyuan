@@ -200,7 +200,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        quickActions.shareDiscoverDialog(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
+                                1==goods.isSuperiorProduct,SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
                     }
                 });
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
@@ -313,13 +314,13 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             });
 
             blogViewHolder.rlayout_goods.setOnClickListener(view -> {
+                LogUtil.augusLogW("dddd--"+blog.related_goods.size());
                 if (blog.related_goods.size() == 1) {
                     GoodsDetailAct.startAct(context, blog.related_goods.get(0).goods_id);
                 } else {
                     initDialog(blog);
                 }
             });
-            blogViewHolder.rlayout_goods.setOnClickListener(view -> initDialog(blog));
         }
     }
 

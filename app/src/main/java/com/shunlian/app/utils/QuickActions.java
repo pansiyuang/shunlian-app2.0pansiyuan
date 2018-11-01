@@ -1042,7 +1042,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                   String thumb, boolean isSuperiorProduct, boolean isShow, String from, String froms) {
         removeAllViews();
         setVisibility(INVISIBLE);
-        final View inflate = LayoutInflater.from(getContext())
+        final View inflate = LayoutInflater.from(mContext)
                 .inflate(R.layout.share_goods, this, false);
 
         ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
@@ -1059,7 +1059,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mtv_nickname.setText("来自" + from + "的分享");
 
         MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
-        int i = TransformUtil.dip2px(getContext(), 92.5f);
+        int i = TransformUtil.dip2px(mContext, 92.5f);
         Bitmap qrImage = BitmapUtil.createQRImage(shareLink, null, i);
         miv_code.setImageBitmap(qrImage);
 
@@ -1103,7 +1103,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
 
         MyImageView miv_goods_pic = (MyImageView) inflate.findViewById(R.id.miv_goods_pic);
-        GlideUtils.getInstance().loadBitmapSync(getContext(), froms,
+        GlideUtils.getInstance().loadBitmapSync(mContext, froms,
                 new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource,
@@ -1131,7 +1131,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         inflate.postDelayed(() -> {
                             Bitmap bitmapByView = getBitmapByView(inflate);
                             if (isShow) {
-                                boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+                                boolean isSuccess = BitmapUtil.saveImageToAlbumn(mContext, bitmapByView);
                                 if (isSuccess) {
 //                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
 //                                dialog.show();

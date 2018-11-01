@@ -55,7 +55,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     private TieziAvarAdapter tieziAvarAdapter;
     private List<HotBlogsEntity.RecomandFocus> recomandFocusList;
     private int focusType; //0 关注blog列表用户,1关注推荐关注用户,2,关注空页面推荐关注用户
-    @BindView(R.id.quick_actions)
+
     QuickActions quick_actions;
 
     @Override
@@ -72,6 +72,11 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
 
     @Override
     protected void initData() {
+        //分享
+        quick_actions = new QuickActions(baseActivity);
+        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
+        decorView.addView(quick_actions);
+        quick_actions.setVisibility(View.INVISIBLE);
     }
 
     @Override

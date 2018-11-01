@@ -44,7 +44,6 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
-    @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
     @BindView(R.id.nestedScrollView)
@@ -80,6 +79,11 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
 
     @Override
     protected void initData() {
+        //分享
+        quick_actions = new QuickActions(baseActivity);
+        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
+        decorView.addView(quick_actions);
+        quick_actions.setVisibility(View.INVISIBLE);
     }
 
     @Override
