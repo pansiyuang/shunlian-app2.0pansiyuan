@@ -33,13 +33,23 @@
                 android:textColor="#767676"
                 android:textSize="17sp" />
 
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="0/100"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="12dp"
+                android:layout_gravity="right"
+                android:textColor="@color/text_gray2"/>
 
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
-                android:text="上传图片"
+                android:text="@string/find_upload_pics"
                 android:textColor="@color/value_343434"
                 android:textSize="19sp" />
 
@@ -67,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="添加话题"
+                    android:text="@string/find_add_topic"
                     android:textColor="@color/value_343434"
                     android:textSize="15sp" />
 
@@ -84,7 +94,7 @@
                     android:layout_toLeftOf="@+id/miv_tip"
                     android:layout_toRightOf="@+id/mtv_topic_label"
                     android:gravity="right"
-                    android:text="#我的话题"
+                    android:text="@string/find_my_topic"
                     android:textColor="#148EFF"
                     android:textSize="15sp" />
 
@@ -119,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="添加位置"
+                    android:text="@string/find_add_location"
                     android:textColor="@color/value_343434"
                     android:textSize="15sp" />
 
@@ -136,7 +146,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:text="请您添加所在地址"
+                    android:text="@string/find_add_addr"
                     android:textColor="@color/text_gray2"
                     android:textSize="15sp" />
 
@@ -171,7 +181,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="关联商品"
+                    android:text="@string/find_associated_goods"
                     android:textColor="@color/value_343434"
                     android:textSize="15sp" />
 
