@@ -55,6 +55,7 @@ public class ZanShareMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
             } else {
                 zanViewHolder.miv_video.setVisibility(View.GONE);
             }
+            zanViewHolder.tv_goods_title.setText(msg.blog.title);
             zanViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context,msg.member_id));
             zanViewHolder.ll_member.setOnClickListener(v -> MyPageActivity.startAct(context,msg.member_id));
         }

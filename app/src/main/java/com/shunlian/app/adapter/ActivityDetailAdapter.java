@@ -81,9 +81,9 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
     }
 
     private void handleItem(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof HotBlogAdapter.BlogViewHolder) {
+        if (holder instanceof BlogViewHolder) {
             BigImgEntity.Blog blog = lists.get(position - 1);
-            HotBlogAdapter.BlogViewHolder blogViewHolder = (HotBlogAdapter.BlogViewHolder) holder;
+            BlogViewHolder blogViewHolder = (BlogViewHolder) holder;
             GlideUtils.getInstance().loadCircleAvar(context, blogViewHolder.miv_icon, blog.avatar);
             blogViewHolder.tv_name.setText(blog.nickname);
             blogViewHolder.tv_time.setText(blog.time_desc);
@@ -104,6 +104,12 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.miv_v.setVisibility(View.VISIBLE);
             } else {
                 blogViewHolder.miv_v.setVisibility(View.GONE);
+            }
+
+            if (blog.expert == 1) {
+                blogViewHolder.miv_expert.setVisibility(View.VISIBLE);
+            } else {
+                blogViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
             blogViewHolder.tv_tag.setText(blog.activity_title);
@@ -269,6 +275,9 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
     public class BlogViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
 
         @BindView(R.id.ll_member)
         LinearLayout ll_member;

@@ -44,12 +44,14 @@ public class DownloadMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
             downViewHolder.tv_date.setText(msg.create_time);
 
             downViewHolder.miv_status.setVisibility(View.GONE);
+            downViewHolder.tv_content.setText("下载了这条心得");
 
             if (msg.blog.media == 2) {//视频
                 downViewHolder.miv_video.setVisibility(View.VISIBLE);
             } else {
                 downViewHolder.miv_video.setVisibility(View.GONE);
             }
+            downViewHolder.tv_goods_title.setText(msg.blog.title);
             downViewHolder.ll_member.setOnClickListener(v -> MyPageActivity.startAct(context, msg.member_id));
             downViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, msg.member_id));
         }

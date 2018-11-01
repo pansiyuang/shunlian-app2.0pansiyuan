@@ -158,14 +158,16 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
 
     @Override
     public void focusUser(int isFocus, String memberId) {
+        int focus;
+        if (isFocus == 0) {
+            focus = 1;
+        } else {
+            focus = 0;
+        }
+        ((MyPageActivity) getActivity()).setAttentStatus(focus, memberId);
         for (BigImgEntity.Blog blog : blogList) {
             if (memberId.equals(blog.member_id)) {
-                if (blog.is_focus == 0) {
-                    blog.is_focus = 1;
-                } else {
-                    blog.is_focus = 0;
-                }
-                ((MyPageActivity) getActivity()).setAttentStatus(blog.is_focus, memberId);
+                blog.is_focus = focus;
             }
         }
         hotBlogAdapter.notifyDataSetChanged();

@@ -163,9 +163,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             }
 
             if (blog.add_v == 1) {
+                GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_v, blog.v_icon);
                 blogViewHolder.miv_v.setVisibility(View.VISIBLE);
             } else {
                 blogViewHolder.miv_v.setVisibility(View.GONE);
+            }
+
+            if (blog.expert == 1) {
+                GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_expert, blog.expert_icon);
+                blogViewHolder.miv_expert.setVisibility(View.VISIBLE);
+            } else {
+                blogViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
             blogViewHolder.tv_tag.setText(blog.activity_title);
@@ -216,7 +224,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     NewLookBigImgAct.startAct(context, bigImgEntity);
                 });
                 blogViewHolder.rl_video.setVisibility(View.GONE);
-                blogViewHolder.recycler_list.setVisibility(View.VISIBLE);
             } else {
                 String imageWidth, imageheight;
                 int width, height;
@@ -230,6 +237,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                         GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, width, height);
                     }
                 }
+                blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.recycler_list.setVisibility(View.GONE);
                 blogViewHolder.rl_video.setVisibility(View.VISIBLE);
             }
@@ -238,16 +246,12 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_attention.setBackgroundDrawable(null);
                 blogViewHolder.tv_attention.setText("已关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+                blogViewHolder.tv_attention.setVisibility(View.GONE);
             } else {
                 blogViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 blogViewHolder.tv_attention.setText("关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
-            }
-
-            if (blog.expert == 1) {
-                blogViewHolder.miv_expert.setVisibility(View.VISIBLE);
-            } else {
-                blogViewHolder.miv_expert.setVisibility(View.GONE);
+                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
             }
 
             if (blog.is_praise == 1) {
@@ -262,7 +266,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
                 blogViewHolder.miv_more.setVisibility(View.GONE);
             } else {
-                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
             }
 

@@ -177,7 +177,9 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                             recomandFocus.focus_status = 0;
                         }
                     }
-                    hotBlogAdapter.MemberAdapterNotifyDataSetChanged();
+                    if (hotBlogAdapter != null) {
+                        hotBlogAdapter.MemberAdapterNotifyDataSetChanged();
+                    }
                     if (attentionAdapter == null) {
                         return;
                     }

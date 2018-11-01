@@ -99,10 +99,12 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
             attentionViewholder.tv_attention.setBackgroundDrawable(null);
             attentionViewholder.tv_attention.setText("已关注");
             attentionViewholder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+            attentionViewholder.tv_attention.setVisibility(View.GONE);
         } else {
             attentionViewholder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
             attentionViewholder.tv_attention.setText("关注");
             attentionViewholder.tv_attention.setTextColor(getColor(R.color.pink_color));
+            attentionViewholder.tv_attention.setVisibility(View.VISIBLE);
         }
     }
 
@@ -110,6 +112,9 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
 
         @BindView(R.id.tv_name)
         TextView tv_name;
