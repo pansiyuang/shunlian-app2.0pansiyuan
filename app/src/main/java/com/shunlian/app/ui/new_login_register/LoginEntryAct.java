@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.shunlian.app.R;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
@@ -15,6 +16,10 @@ import com.shunlian.app.widget.MyTextView;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,6 +59,7 @@ public class LoginEntryAct extends BaseActivity implements IView{
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        EventBus.getDefault().register(this);
     }
 
     @OnClick(R.id.llayout_wechat_login)
@@ -106,6 +112,12 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     /**
      * 微信登录
      */
@@ -125,7 +137,7 @@ public class LoginEntryAct extends BaseActivity implements IView{
             }catch (Exception e){
 
             }
-            finish();
+            //finish();//在此finish会导致某些页面的请求隐私接口时频繁打开登录入口，导致微信登录调不起来
         }else if (wxSdkVersion == 0) {
             Common.staticToast("请先安装微信");
             finish();
@@ -135,4 +147,10 @@ public class LoginEntryAct extends BaseActivity implements IView{
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void notifClose(DefMessageEvent n){
+        if (n != null && n.loginSuccess){
+            finish();
+        }
+    }
 }
