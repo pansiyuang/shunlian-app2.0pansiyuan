@@ -24,6 +24,7 @@ public class SelectGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
     private boolean isShowAdd = true;
     private List<String> mSelectList;
+    private OnDelGoodsListener mDelGoodsListener;
 
     public SelectGoodsAdapter(Context context, boolean isShowFooter,
                               List<GoodsDeatilEntity.Goods> lists, List<String> mSelectList) {
@@ -109,11 +110,19 @@ public class SelectGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             });
 
             miv_del.setOnClickListener(v -> {
-                if (!isEmpty(lists)) {
-                    lists.remove(getAdapterPosition());
-                    notifyDataSetChanged();
+                if (mDelGoodsListener != null){
+                    mDelGoodsListener.delGoods(getAdapterPosition());
                 }
             });
         }
+    }
+
+
+    public void setOnDelGoodsListener(OnDelGoodsListener delGoodsListener){
+        mDelGoodsListener = delGoodsListener;
+    }
+
+    public interface OnDelGoodsListener{
+        void delGoods(int position);
     }
 }

@@ -16,8 +16,12 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,11 +41,14 @@ import android.widget.Toast;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.DiscoverGoodsAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.circle.CircleImageView;
@@ -110,7 +117,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     private CircleImageView image_user_head;
     private TextView tv_user_name;
     private TextView tv_user_attent;
-
+    private ImageView miv_share;
     private ImageView img_goods_icon;
     private TextView tv_goods_name,tv_goods_price,tv_old_price;
 
@@ -128,6 +135,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     @Override
     public void init(Context context) {
         super.init(context);
+        miv_share= findViewById(cn.jzvd.R.id.miv_share);
         line_dianzan = findViewById(cn.jzvd.R.id.line_dianzan);
         line_down = findViewById(cn.jzvd.R.id.line_down);
         line_share = findViewById(cn.jzvd.R.id.line_share);
@@ -146,7 +154,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         line_dianzan.setOnClickListener(this);
         line_down.setOnClickListener(this);
         line_share.setOnClickListener(this);
-
+        miv_share.setOnClickListener(this);
         bottomProgressBar = findViewById(cn.jzvd.R.id.bottom_progress);
         backButton = findViewById(cn.jzvd.R.id.back);
         thumbImageView = findViewById(cn.jzvd.R.id.thumb);
@@ -213,8 +221,8 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
                tv_goods_name.setText(blog.related_goods.get(0).title);
                if(blog.related_goods.get(0).price!=null)
                tv_goods_price.setText("¥"+blog.related_goods.get(0).price);
-               if(blog.related_goods.get(0).old_price!=null) {
-                   tv_old_price.setText("¥" + blog.related_goods.get(0).old_price);
+               if(blog.related_goods.get(0).market_price!=null) {
+                   tv_old_price.setText("¥" + blog.related_goods.get(0).market_price);
                    tv_old_price.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG);
                }else{
                    tv_old_price.setText("");
@@ -238,7 +246,12 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
      * 设置关注显示
      */
     public void setAttentStateView(){
-        tv_user_attent.setText(blog.is_focus==0?"关注":"已关注");
+        if(blog.is_focus==0) {
+            tv_user_attent.setText(blog.is_focus == 0 ? "关注" : "已关注");
+            tv_user_attent.setVisibility(VISIBLE);
+        }else{
+            tv_user_attent.setVisibility(GONE);
+        }
         tv_user_attent.setTextColor(blog.is_focus==0?getResources().getColor(R.color.deep_red):getResources().getColor(R.color.value_878B8A));
         tv_user_attent.setBackgroundResource(blog.is_focus==0?R.drawable.rounded_rectangle_stroke_22px:R.drawable.rounded_rectangle_gray_22px);
     }
@@ -601,15 +614,21 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
                 parseAttent.updateParse(blog.is_praise == 1);
             }
         }else if(i==R.id.line_share){
-            parseAttent.shareBolg();
         }else if(i==R.id.line_down){
             readToDownLoad();
         }else if(i==R.id.tv_user_attent){
             parseAttent.updateAttent(blog.is_focus==1);
         }else if(i==R.id.include_good){
-            parseAttent.startGoodInfo();
+            if (blog.related_goods.size() == 1) {
+                parseAttent.startGoodInfo();
+            } else {
+                parseAttent.startListGoodInfo();
+            }
+        }else if(i==R.id.miv_share){
+            parseAttent.shareBolg();
         }
     }
+
 
     @Override
     public void showWifiDialog() {
@@ -1236,6 +1255,8 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         void shareBolg();
         /**进入商品详情页面*/
         void startGoodInfo();
+
+        void startListGoodInfo();
 
         void destoryVideo();
     }

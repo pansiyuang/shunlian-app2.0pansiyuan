@@ -245,6 +245,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 }
                 blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.recycler_list.setVisibility(View.GONE);
+                blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.rl_video.setVisibility(View.VISIBLE);
             }
 
