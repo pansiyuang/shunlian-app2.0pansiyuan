@@ -97,7 +97,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     @Override
     protected void onPause() {
         super.onPause();
-        customVideoPlayer.releaseAllVideos();
+        GoodVideoPlayer.goOnPlayOnPause();
     }
 
     @Override
@@ -132,6 +132,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         EventBus.getDefault().unregister(this);
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        GoodVideoPlayer.backPress();
         super.onDestroy();
     }
 
@@ -248,6 +249,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         dialog_new.setCancelable(false);
         dialog_new.show();
     }
+
 
     @Override
     public void destoryVideo() {

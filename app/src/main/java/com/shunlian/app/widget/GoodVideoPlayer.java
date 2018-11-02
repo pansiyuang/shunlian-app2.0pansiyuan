@@ -45,6 +45,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.DiscoverGoodsAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DownLoadImageThread;
@@ -162,6 +163,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         line_down.setOnClickListener(this);
         line_share.setOnClickListener(this);
         miv_share.setOnClickListener(this);
+        image_user_head.setOnClickListener(this);
         bottomProgressBar = findViewById(cn.jzvd.R.id.bottom_progress);
         backButton = findViewById(cn.jzvd.R.id.back);
         thumbImageView = findViewById(cn.jzvd.R.id.thumb);
@@ -634,6 +636,8 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             }
         }else if(i==R.id.miv_share){
             parseAttent.shareBolg();
+        }else if(i==R.id.image_user_head){
+            MyPageActivity.startAct(getContext(), blog.member_id);
         }
     }
 
