@@ -13,4 +13,6 @@ public interface ISearchExpertView extends IView {
     void getExpertList(List<ExpertEntity.Expert> list, int page, int totalPage);
 
     void focusUser(int isFocus,String memberId);
+
+    void refreshFinish();
 }

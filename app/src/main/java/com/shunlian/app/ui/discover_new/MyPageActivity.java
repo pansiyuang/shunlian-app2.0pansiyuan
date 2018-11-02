@@ -272,6 +272,20 @@ public class MyPageActivity extends BaseActivity {
             currentMember = memberInfo;
             GlideUtils.getInstance().loadCircleAvar(this, miv_icon, memberInfo.avatar);
             GlideUtils.getInstance().loadCircleAvar(this, miv_title_icon, memberInfo.avatar);
+
+            if (memberInfo.add_v == 0) {
+                miv_v.setVisibility(View.GONE);
+            } else {
+                GlideUtils.getInstance().loadImage(this, miv_v, memberInfo.v_icon);
+                miv_v.setVisibility(View.VISIBLE);
+            }
+
+            if (memberInfo.expert == 0) {
+                miv_expert.setVisibility(View.GONE);
+            } else {
+                GlideUtils.getInstance().loadImage(this, miv_expert, memberInfo.expert_icon);
+                miv_expert.setVisibility(View.VISIBLE);
+            }
             tv_nickname.setText(memberInfo.nickname);
             tv_title_nickname.setText(memberInfo.nickname);
             tv_signature.setText(memberInfo.signature);

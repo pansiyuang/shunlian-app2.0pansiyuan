@@ -14,6 +14,8 @@ import com.shunlian.app.presenter.AttentionMemberPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.view.IAttentionMemberView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -31,8 +33,8 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
@@ -67,6 +69,9 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
+        NestedSlHeader header = new NestedSlHeader(this);
+        lay_refresh.setRefreshHeaderView(header);
+
         currentMemberId = getIntent().getStringExtra("member_id");
 
         mPresenter = new AttentionMemberPresenter(this, this);
@@ -87,8 +92,6 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
             mPresenter.getTaAttentionList(true, currentMemberId);
         }
 
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
         recycler_list.setNestedScrollingEnabled(false);
 
         manager = new LinearLayoutManager(this);
@@ -99,22 +102,15 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    if (isEmpty(currentMemberId)) {
-                        mPresenter.getAttentionList(true);
-                    } else {
-                        mPresenter.getTaAttentionList(true, currentMemberId);
-                    }
+        super.initListener();
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                if (isEmpty(currentMemberId)) {
+                    mPresenter.getAttentionList(true);
+                } else {
+                    mPresenter.getTaAttentionList(true, currentMemberId);
                 }
-            }
-
-            @Override
-            public void onLoadMore() {
-
             }
         });
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -131,12 +127,10 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
                 }
             }
         });
-        super.initListener();
     }
 
     @Override
     public void getAttentionList(List<MemberEntity.Member> list, int page, int totalPage) {
-        refreshview.stopRefresh(true);
         if (page == 1) {
             memberList.clear();
         }
@@ -146,10 +140,10 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
 
         if (page == 1 && isEmpty(memberList)) {
             nei_empty.setVisibility(View.VISIBLE);
-            recycler_list.setVisibility(View.GONE);
+            lay_refresh.setVisibility(View.GONE);
         } else {
             nei_empty.setVisibility(View.GONE);
-            recycler_list.setVisibility(View.VISIBLE);
+            lay_refresh.setVisibility(View.VISIBLE);
         }
 
         if (mAdapter == null) {
@@ -176,8 +170,17 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
     }
 
     @Override
-    public void showFailureView(int request_code) {
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
+    }
 
+    @Override
+    public void showFailureView(int request_code) {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override

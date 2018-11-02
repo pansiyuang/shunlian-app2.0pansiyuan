@@ -51,6 +51,21 @@ public class DownloadMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
             } else {
                 downViewHolder.miv_video.setVisibility(View.GONE);
             }
+
+            if (msg.add_v == 1) {
+                downViewHolder.miv_v.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, downViewHolder.miv_v, msg.v_icon);
+            } else {
+                downViewHolder.miv_v.setVisibility(View.GONE);
+            }
+
+            if (msg.expert == 1) {
+                downViewHolder.miv_expert.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, downViewHolder.miv_expert, msg.expert_icon);
+            } else {
+                downViewHolder.miv_expert.setVisibility(View.GONE);
+            }
+
             downViewHolder.tv_goods_title.setText(msg.blog.title);
             downViewHolder.ll_member.setOnClickListener(v -> MyPageActivity.startAct(context, msg.member_id));
             downViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, msg.member_id));
@@ -61,6 +76,12 @@ public class DownloadMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
+
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
 
         @BindView(R.id.miv_video)
         MyImageView miv_video;

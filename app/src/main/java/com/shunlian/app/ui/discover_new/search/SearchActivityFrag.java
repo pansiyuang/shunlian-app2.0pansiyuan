@@ -16,6 +16,8 @@ import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.ui.discover_new.ActivityDetailActivity;
 import com.shunlian.app.view.IActivityView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -33,8 +35,8 @@ public class SearchActivityFrag extends BaseLazyFragment implements IActivityVie
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
@@ -65,18 +67,11 @@ public class SearchActivityFrag extends BaseLazyFragment implements IActivityVie
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getActivities(true, currentKeyword, "");
-                }
-            }
-
-            @Override
-            public void onLoadMore() {
-
+        super.initListener();
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getActivities(true, currentKeyword, "");
             }
         });
 
@@ -94,7 +89,6 @@ public class SearchActivityFrag extends BaseLazyFragment implements IActivityVie
                 }
             }
         });
-        super.initListener();
     }
 
     public void setKeyWord(String str) {
@@ -109,8 +103,8 @@ public class SearchActivityFrag extends BaseLazyFragment implements IActivityVie
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
 
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
+        NestedSlHeader header = new NestedSlHeader(baseContext);
+        lay_refresh.setRefreshHeaderView(header);
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
@@ -128,16 +122,15 @@ public class SearchActivityFrag extends BaseLazyFragment implements IActivityVie
 
     @Override
     public void getActivities(DiscoverActivityEntity activityEntity, int page, int totalPage) {
-        refreshview.stopRefresh(true);
         if (page == 1) {
             activityList.clear();
 
             if (isEmpty(activityEntity.list)) {
                 nei_empty.setVisibility(View.VISIBLE);
-                recycler_list.setVisibility(View.GONE);
+                lay_refresh.setVisibility(View.GONE);
             } else {
                 nei_empty.setVisibility(View.GONE);
-                recycler_list.setVisibility(View.VISIBLE);
+                lay_refresh.setVisibility(View.VISIBLE);
             }
         }
         if (!isEmpty(activityEntity.list)) {
@@ -156,12 +149,16 @@ public class SearchActivityFrag extends BaseLazyFragment implements IActivityVie
 
     @Override
     public void refreshFinish() {
-
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override

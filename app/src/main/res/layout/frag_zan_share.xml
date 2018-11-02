@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.shunlian.app.widget.refresh.turkey.SlRefreshView
-        android:id="@+id/refreshview"
+    <com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout
+        android:id="@+id/lay_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout_title">
+        android:background="@color/white_ash"
+        app:mode="follow">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_list"
@@ -16,11 +18,12 @@
             android:layout_height="match_parent"
             android:overScrollMode="never"
             android:scrollbars="none" />
+    </com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>
 
-        <com.shunlian.app.widget.empty.NetAndEmptyInterface
-            android:id="@+id/nei_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-    </com.shunlian.app.widget.refresh.turkey.SlRefreshView>
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_title"
+        android:visibility="gone" />
 </LinearLayout>

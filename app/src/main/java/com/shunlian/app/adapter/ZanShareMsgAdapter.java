@@ -55,9 +55,24 @@ public class ZanShareMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
             } else {
                 zanViewHolder.miv_video.setVisibility(View.GONE);
             }
+
+            if (msg.add_v == 1) {
+                zanViewHolder.miv_v.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, zanViewHolder.miv_v, msg.v_icon);
+            } else {
+                zanViewHolder.miv_v.setVisibility(View.GONE);
+            }
+
+            if (msg.expert == 1) {
+                zanViewHolder.miv_expert.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, zanViewHolder.miv_expert, msg.expert_icon);
+            } else {
+                zanViewHolder.miv_expert.setVisibility(View.GONE);
+            }
+
             zanViewHolder.tv_goods_title.setText(msg.blog.title);
-            zanViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context,msg.member_id));
-            zanViewHolder.ll_member.setOnClickListener(v -> MyPageActivity.startAct(context,msg.member_id));
+            zanViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, msg.member_id));
+            zanViewHolder.ll_member.setOnClickListener(v -> MyPageActivity.startAct(context, msg.member_id));
         }
     }
 
@@ -65,6 +80,12 @@ public class ZanShareMsgAdapter extends BaseRecyclerAdapter<ZanShareEntity.Msg> 
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
+
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
 
         @BindView(R.id.miv_video)
         MyImageView miv_video;

@@ -63,23 +63,23 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private OnFavoListener favoListener;
     private QuickActions quickActions;
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity,QuickActions quickActions) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, QuickActions quickActions) {
         super(context, true, lists);
         this.mActivity = activity;
-        this.quickActions=quickActions;
+        this.quickActions = quickActions;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads,QuickActions quickActions) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads, QuickActions quickActions) {
         super(context, true, lists);
         this.adList = ads;
-        this.quickActions=quickActions;
+        this.quickActions = quickActions;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list,QuickActions quickActions) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list, QuickActions quickActions) {
         super(context, true, lists);
         this.mActivity = activity;
         this.recomandFocusList = list;
-        this.quickActions=quickActions;
+        this.quickActions = quickActions;
     }
 
     @Override
@@ -208,8 +208,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        quickActions.shareDiscoverDialog(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
-                                1==goods.isSuperiorProduct,SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
+                        quickActions.shareDiscoverDialog(goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+                                1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
                     }
                 });
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
@@ -231,17 +231,10 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 });
                 blogViewHolder.rl_video.setVisibility(View.GONE);
             } else {
-                String imageWidth, imageheight;
-                int width, height;
                 if (!isEmpty(blog.video_thumb)) {
-                    imageWidth = Common.getURLParameterValue(blog.video_thumb, "w");
-                    imageheight = Common.getURLParameterValue(blog.video_thumb, "h");
+                    int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 240, 240);
 
-                    if (!isEmpty(imageWidth) && !isEmpty(imageheight)) {
-                        width = Integer.valueOf(imageWidth);
-                        height = Integer.valueOf(imageheight);
-                        GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, width, height);
-                    }
+                    GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, params[0]), TransformUtil.dip2px(context, params[1]));
                 }
                 blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.recycler_list.setVisibility(View.GONE);
@@ -318,7 +311,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             });
 
             blogViewHolder.rlayout_goods.setOnClickListener(view -> {
-                LogUtil.augusLogW("dddd--"+blog.related_goods.size());
+                LogUtil.augusLogW("dddd--" + blog.related_goods.size());
                 if (blog.related_goods.size() == 1) {
                     GoodsDetailAct.startAct(context, blog.related_goods.get(0).goods_id);
                 } else {

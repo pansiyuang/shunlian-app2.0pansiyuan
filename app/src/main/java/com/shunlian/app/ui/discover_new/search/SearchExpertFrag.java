@@ -16,6 +16,8 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.view.ISearchExpertView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -33,8 +35,8 @@ public class SearchExpertFrag extends BaseLazyFragment implements ISearchExpertV
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
@@ -74,20 +76,13 @@ public class SearchExpertFrag extends BaseLazyFragment implements ISearchExpertV
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getSearchExpertList(true, currentKeyword);
-                }
-            }
-
-            @Override
-            public void onLoadMore() {
-
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getSearchExpertList(true, currentKeyword);
             }
         });
+
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -109,8 +104,8 @@ public class SearchExpertFrag extends BaseLazyFragment implements ISearchExpertV
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
 
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
+        NestedSlHeader header = new NestedSlHeader(baseContext);
+        lay_refresh.setRefreshHeaderView(header);
 
         expertList = new ArrayList<>();
         manager = new LinearLayoutManager(getActivity());
@@ -127,16 +122,15 @@ public class SearchExpertFrag extends BaseLazyFragment implements ISearchExpertV
 
     @Override
     public void getExpertList(List<ExpertEntity.Expert> list, int page, int totalPage) {
-        refreshview.stopRefresh(true);
         if (page == 1) {
             expertList.clear();
 
             if (isEmpty(list)) {
                 nei_empty.setVisibility(View.VISIBLE);
-                recycler_list.setVisibility(View.GONE);
+                lay_refresh.setVisibility(View.GONE);
             } else {
                 nei_empty.setVisibility(View.GONE);
-                recycler_list.setVisibility(View.VISIBLE);
+                lay_refresh.setVisibility(View.VISIBLE);
             }
         }
         if (!isEmpty(list)) {
@@ -165,8 +159,17 @@ public class SearchExpertFrag extends BaseLazyFragment implements ISearchExpertV
     }
 
     @Override
-    public void showFailureView(int request_code) {
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
+    }
 
+    @Override
+    public void showFailureView(int request_code) {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override

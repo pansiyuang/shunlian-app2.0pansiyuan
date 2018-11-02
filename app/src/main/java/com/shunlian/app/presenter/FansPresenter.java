@@ -62,6 +62,9 @@ public class FansPresenter extends BasePresenter<IFansView> {
                 iView.getFansList(memberEntity.list, memberEntity.pager.page, memberEntity.pager.total_page);
                 currentPage = memberEntity.pager.page;
                 allPage = memberEntity.pager.total_page;
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 

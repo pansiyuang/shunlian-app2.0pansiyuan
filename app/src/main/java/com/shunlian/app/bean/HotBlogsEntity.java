@@ -1,8 +1,5 @@
 package com.shunlian.app.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -76,6 +73,10 @@ public class HotBlogsEntity {
         public String signature;
         public int is_focus;
         public int is_fans;
+        public int expert;
+        public int add_v;
+        public String expert_icon;
+        public String v_icon;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -101,5 +102,11 @@ public class HotBlogsEntity {
         public int white_list;
         public String avatar;
         public String nickname;
+        public String follow_num;
+        public String blog_num;
+        public int expert;
+        public int add_v;
+        public String expert_icon;
+        public String v_icon;
     }
 }
