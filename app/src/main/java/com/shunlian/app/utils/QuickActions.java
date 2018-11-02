@@ -40,6 +40,7 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 import com.shunlian.app.widget.circle.RoundRectImageView;
+import com.shunlian.app.widget.dialog.CommonDialog;
 import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
 import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
@@ -685,6 +686,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         }
     }
 
+    public CommonDialog nomalBuildl;
 //    发现对话框
     public void shareDiscoverDialog(String shareLink, String title, String desc, String price, String goodsId, String thumb,
                                     boolean isSuperiorProduct, String from, String froms) {
@@ -695,68 +697,110 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mShareInfoParam.desc = desc;
         mShareInfoParam.img = thumb;
 
-        Dialog dialog_new = new Dialog(mContext, R.style.popAd);
-        dialog_new.setContentView(R.layout.dialog_share);
-        Window window = dialog_new.getWindow();
-//        //设置边框距离
-        window.getDecorView().setPadding(TransformUtil.dip2px(mContext, 12),
-                0,
-                TransformUtil.dip2px(mContext, 12),
-                TransformUtil.dip2px(mContext, 12));
-        //设置dialog位置
-//            window.setGravity(Gravity.BOTTOM);
-        WindowManager.LayoutParams lp = window.getAttributes();
-        //设置宽高
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(lp);
-
-        NewTextView ntv_cancel = dialog_new.findViewById(R.id.ntv_cancel);
-        MyLinearLayout mllayout_tuwenerweima = dialog_new.findViewById(R.id.mllayout_tuwenerweima);
-        MyLinearLayout mllayout_weixinhaoyou = dialog_new.findViewById(R.id.mllayout_weixinhaoyou);
-        MyLinearLayout mllayout_weixinpenyou = dialog_new.findViewById(R.id.mllayout_weixinpenyou);
-        MyLinearLayout mllayout_shangping = dialog_new.findViewById(R.id.mllayout_shangping);
-
-        dialog_new.setCancelable(false);
-        dialog_new.show();
-
-        ntv_cancel.setOnClickListener(new OnClickListener() {
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(mContext).fromBottom()
+                .setView(R.layout.dialog_share);
+        nomalBuildl = nomalBuild.create();
+        nomalBuildl.setCancelable(false);
+        nomalBuildl.show();
+        nomalBuildl.setOnClickListener(R.id.ntv_cancel, new OnClickListener() {
             @Override
-            public void onClick(View view) {
-                dialog_new.dismiss();
+            public void onClick(View v) {
+                nomalBuildl.dismiss();
             }
         });
-
-        mllayout_tuwenerweima.setOnClickListener(new OnClickListener() {
+        nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new OnClickListener() {
             @Override
-            public void onClick(View view) {
-                createCode(shareLink, title, desc, price, goodsId, thumb,
-                        isSuperiorProduct, from, froms);
-                dialog_new.dismiss();
-            }
-        });
-        mllayout_weixinhaoyou.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 WXEntryActivity.startAct(getContext(),
                         "shareFriend", mShareInfoParam);
-                dialog_new.dismiss();
+                nomalBuildl.dismiss();
             }
         });
-        mllayout_weixinpenyou.setOnClickListener(new OnClickListener() {
+        nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, new OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 saveshareGoodsPic(false,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
-                dialog_new.dismiss();
+                nomalBuildl.dismiss();
             }
         });
-        mllayout_shangping.setOnClickListener(new OnClickListener() {
+        nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new OnClickListener() {
             @Override
-            public void onClick(View view) {
-                copyText(true);
-                dialog_new.dismiss();
+            public void onClick(View v) {
+                createCode(shareLink, title, desc, price, goodsId, thumb,
+                isSuperiorProduct, from, froms);
+                nomalBuildl.dismiss();
             }
         });
+        nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(true);
+                nomalBuildl.dismiss();
+            }
+        });
+
+//        Dialog dialog_new = new Dialog(mContext, R.style.popAd);
+//        dialog_new.setContentView(R.layout.dialog_share);
+//        Window window = dialog_new.getWindow();
+////        //设置边框距离
+//        window.getDecorView().setPadding(TransformUtil.dip2px(mContext, 12),
+//                0,
+//                TransformUtil.dip2px(mContext, 12),
+//                TransformUtil.dip2px(mContext, 12));
+//        //设置dialog位置
+////            window.setGravity(Gravity.BOTTOM);
+//        WindowManager.LayoutParams lp = window.getAttributes();
+//        //设置宽高
+//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//        window.setAttributes(lp);
+//
+//        NewTextView ntv_cancel = dialog_new.findViewById(R.id.ntv_cancel);
+//        MyLinearLayout mllayout_tuwenerweima = dialog_new.findViewById(R.id.mllayout_tuwenerweima);
+//        MyLinearLayout mllayout_weixinhaoyou = dialog_new.findViewById(R.id.mllayout_weixinhaoyou);
+//        MyLinearLayout mllayout_weixinpenyou = dialog_new.findViewById(R.id.mllayout_weixinpenyou);
+//        MyLinearLayout mllayout_shangping = dialog_new.findViewById(R.id.mllayout_shangping);
+//
+//        dialog_new.setCancelable(false);
+//        dialog_new.show();
+//
+//        ntv_cancel.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog_new.dismiss();
+//            }
+//        });
+//
+//        mllayout_tuwenerweima.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                createCode(shareLink, title, desc, price, goodsId, thumb,
+//                        isSuperiorProduct, from, froms);
+//                dialog_new.dismiss();
+//            }
+//        });
+//        mllayout_weixinhaoyou.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                WXEntryActivity.startAct(getContext(),
+//                        "shareFriend", mShareInfoParam);
+//                dialog_new.dismiss();
+//            }
+//        });
+//        mllayout_weixinpenyou.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                saveshareGoodsPic(false,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
+//                dialog_new.dismiss();
+//            }
+//        });
+//        mllayout_shangping.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                copyText(true);
+//                dialog_new.dismiss();
+//            }
+//        });
     }
 
 //    public void dealHideBack(){
