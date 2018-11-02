@@ -22,6 +22,7 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+
 import com.shunlian.app.bean.*;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.newchat.entity.*;
@@ -41,6 +42,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 /**
@@ -2804,4 +2806,11 @@ public interface ApiService {
      */
     @GET("discovery/discoveryuser/removeBlog")
     Call<BaseEntity<EmptyEntity>> removeBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 下载文件
+     */
+     @Streaming
+     @GET
+     Call<ResponseBody> download(@Url String url);
 }
