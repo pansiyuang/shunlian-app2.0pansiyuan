@@ -82,6 +82,9 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @BindView(R.id.mtv_count)
     MyTextView mtv_count;
 
+    @BindView(R.id.miv_tip)
+    MyImageView miv_tip;
+
     private List<GoodsDeatilEntity.Goods> mGoodsLists;
     private SelectGoodsAdapter mGoodsAdapter;
     private FindSendPicPresenter presenter;
@@ -158,14 +161,16 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         mtv_count.setText(String.format(text_format,0,MAX_TEXT_COUNT));
         presenter = new FindSendPicPresenter(this, this);
 
+        mtvToolbarTitle.setText("发布图文");
         if (mConfig != null && !isEmpty(mConfig.activityTitle)){
             mtv_topic.setText(mConfig.activityTitle);
             topic_id = mConfig.activityID;
+            miv_tip.setVisibility(View.INVISIBLE);
+            mtvToolbarTitle.setText("发布心得");
         }else {//从活动进发布页不加载草稿
             presenter.initApi();
         }
 
-        mtvToolbarTitle.setText("发布图文");
         gone(mrlayoutToolbarMore);
         visible(mtvToolbarRight);
         mtvToolbarRight.setText("发布");
