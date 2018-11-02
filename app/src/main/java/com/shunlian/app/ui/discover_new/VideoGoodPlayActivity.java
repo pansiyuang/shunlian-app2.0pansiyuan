@@ -26,6 +26,7 @@ import com.shunlian.app.presenter.HotVideoBlogPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.QuickActions;
@@ -61,7 +62,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     }
     public HttpDialog httpDialog;
     private  BigImgEntity.Blog blog;
-
+    private  int deviceWidth;
     private HotVideoBlogPresenter hotBlogPresenter;
     @Override
     protected int getLayoutId() {
@@ -79,10 +80,12 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         hotBlogPresenter = new HotVideoBlogPresenter(this, this);
         EventBus.getDefault().register(this);
         blog = getIntent().getParcelableExtra("blog");
-
+        deviceWidth = DeviceInfoUtil.getDeviceWidth(this);
         if(blog!=null){
             customVideoPlayer.setGoodUserInfo(blog,this);
         }
+        if(blog!=null&&blog.video_thumb!=null)
+        GlideUtils.getInstance().loadImage(this, customVideoPlayer.thumbImageView, blog.video_thumb);
         customVideoPlayer.setUp(blog.video, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
         customVideoPlayer.startVideo();
         httpDialog = new HttpDialog(this);
