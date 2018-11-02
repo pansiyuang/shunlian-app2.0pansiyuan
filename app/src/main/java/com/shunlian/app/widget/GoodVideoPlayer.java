@@ -51,7 +51,6 @@ import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
-import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.download.DownLoadDialogProgress;
@@ -1175,7 +1174,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             public void fileDownLoad() {
                 downloadUtils.download(currentUrl,fileName);
             }
-        },!NetworkUtils.isWifiConnected(getContext()));
+        },true);
     }
     /**
      * 检查下载的文件是否存在
@@ -1214,7 +1213,9 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         downloadUtils = new DownloadUtils(new JsDownloadListener() {
             @Override
             public void onStartDownload() {
+
             }
+
             @Override
             public void onProgress(int progress) {
                 Log.d("下载","进度："+progress);
