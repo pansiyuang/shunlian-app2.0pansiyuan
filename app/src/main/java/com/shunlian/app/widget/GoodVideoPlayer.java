@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,13 +45,18 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.DiscoverGoodsAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.download.DownLoadDialogProgress;
+import com.shunlian.app.utils.download.DownloadUtils;
+import com.shunlian.app.utils.download.JsDownloadListener;
 import com.shunlian.app.widget.circle.CircleImageView;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -121,6 +127,8 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     private ImageView img_goods_icon;
     private TextView tv_goods_name,tv_goods_price,tv_old_price;
 
+    private DownLoadDialogProgress downLoadDialogProgress;
+    private DownloadUtils downloadUtils;
     private BigImgEntity.Blog blog;
     public GoodVideoPlayer(Context context) {
         super(context);
@@ -155,6 +163,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         line_down.setOnClickListener(this);
         line_share.setOnClickListener(this);
         miv_share.setOnClickListener(this);
+        image_user_head.setOnClickListener(this);
         bottomProgressBar = findViewById(cn.jzvd.R.id.bottom_progress);
         backButton = findViewById(cn.jzvd.R.id.back);
         thumbImageView = findViewById(cn.jzvd.R.id.thumb);
@@ -185,6 +194,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         startButton.setOnClickListener(this);
         backPlayButton.setOnClickListener(this);
         iv_download.setOnClickListener(this);
+        downLoadDialogProgress = new DownLoadDialogProgress();
     }
 
     /**
@@ -626,6 +636,8 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             }
         }else if(i==R.id.miv_share){
             parseAttent.shareBolg();
+        }else if(i==R.id.image_user_head){
+            MyPageActivity.startAct(getContext(), blog.member_id);
         }
     }
 
@@ -1149,10 +1161,25 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         if (checkState) {
             Common.staticToast("已下载过该视频,请勿重复下载!");
         } else {
-            new Thread(() -> downLoadVideo(fileName)).start();
+            downFileStart();
         }
     }
 
+
+    private void downFileStart(){
+        downLoadVideo();
+        downLoadDialogProgress.showDownLoadDialogProgress(getContext(), new DownLoadDialogProgress.downStateListen() {
+            @Override
+            public void cancelDownLoad() {
+                downloadUtils.setCancel(true);
+            }
+
+            @Override
+            public void fileDownLoad() {
+                downloadUtils.download(currentUrl,fileName);
+            }
+        },true);
+    }
     /**
      * 检查下载的文件是否存在
      * @return
@@ -1186,37 +1213,37 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         return false;
     }
 
+    public void downLoadVideo() {
+        downloadUtils = new DownloadUtils(new JsDownloadListener() {
+            @Override
+            public void onStartDownload() {
 
-    public void downLoadVideo(String fileName) {
-        Message obtain1 = Message.obtain();
-        obtain1.obj = "开始下载";
-        obtain1.what = 100;
-        mHandler.sendMessage(obtain1);
-        try {
-            URL url = new URL(currentUrl);
-            // 打开连接
-            URLConnection conn = url.openConnection();
-            // 打开输入流
-            InputStream is = conn.getInputStream();
-            // 创建字节流
-            byte[] bs = new byte[1024];
-            int len;
-            OutputStream os = new FileOutputStream(fileName);
-            // 写数据
-            while ((len = is.read(bs)) != -1) {
-                os.write(bs, 0, len);
             }
-            // 完成后关闭流
-            saveVideoFile(fileName);
-            os.close();
-            is.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Message obtain = Message.obtain();
-            obtain.obj = "下载失败";
-            obtain.what = 100;
-            mHandler.sendMessage(obtain);
-        }
+
+            @Override
+            public void onProgress(int progress) {
+                Log.d("下载","进度："+progress);
+                downLoadDialogProgress.showProgress(progress);
+            }
+
+            @Override
+            public void onFinishDownload(String filePath,boolean isCancel) {
+                if(!isCancel) {
+                    saveVideoFile(filePath);
+                }else{
+                    File file1 = new File(filePath);
+                    if(file1.exists()){
+                        file1.delete();
+                    }
+                }
+                downLoadDialogProgress.dissMissDialog();
+            }
+
+            @Override
+            public void onFail(String errorInfo) {
+                downLoadDialogProgress.dissMissDialog();
+            }
+        });
     }
 
     public void saveVideoFile(String fileDir) {

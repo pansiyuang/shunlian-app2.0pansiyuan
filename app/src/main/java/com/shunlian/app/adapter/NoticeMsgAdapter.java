@@ -41,9 +41,9 @@ public class NoticeMsgAdapter extends BaseRecyclerAdapter<NoticeMsgEntity.Notice
             NoticeViewHolder noticeViewHolder = (NoticeViewHolder) holder;
 
             if (notice.opt == 1) {//已通过
-                noticeViewHolder.tv_content.setText(HighLightKeyWordUtil.getHighLightKeyWord(R.color.value_E70101, notice.content, "审核已通过"));
+                noticeViewHolder.tv_content.setText(HighLightKeyWordUtil.getHighLightKeyWord(context.getResources().getColor(R.color.value_E70101), notice.content, "审核已通过"));
             } else {
-                noticeViewHolder.tv_content.setText(HighLightKeyWordUtil.getHighLightKeyWord(R.color.value_00B97A, notice.content, "审核未通过"));
+                noticeViewHolder.tv_content.setText(HighLightKeyWordUtil.getHighLightKeyWord(context.getResources().getColor(R.color.value_00B97A), notice.content, "审核未通过"));
             }
         }
     }
