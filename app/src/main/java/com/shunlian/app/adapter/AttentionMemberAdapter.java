@@ -58,6 +58,13 @@ public class AttentionMemberAdapter extends BaseRecyclerAdapter<HotBlogsEntity.R
                     onFocusListener.onFocus(recomandFocus.focus_status, recomandFocus.member_id);
                 }
             });
+
+            if (recomandFocus.add_v == 0) {
+                memberViewHolder.miv_v.setVisibility(View.GONE);
+                GlideUtils.getInstance().loadImage(context, memberViewHolder.miv_v, recomandFocus.v_icon);
+            } else {
+                memberViewHolder.miv_v.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -65,6 +72,9 @@ public class AttentionMemberAdapter extends BaseRecyclerAdapter<HotBlogsEntity.R
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
 
         @BindView(R.id.tv_nickname)
         TextView tv_nickname;

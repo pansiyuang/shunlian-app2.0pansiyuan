@@ -65,14 +65,31 @@ public class WeekExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert> 
                     expertViewHolder.tv_rank.setVisibility(View.VISIBLE);
                     break;
             }
+
+            if (expert.add_v == 0) {
+                expertViewHolder.miv_v.setVisibility(View.GONE);
+            } else {
+                expertViewHolder.miv_v.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, expertViewHolder.miv_v, expert.v_icon);
+            }
+
+            if (expert.expert == 0) {
+                expertViewHolder.miv_expert.setVisibility(View.GONE);
+            } else {
+                expertViewHolder.miv_expert.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, expertViewHolder.miv_expert, expert.expert_icon);
+            }
+
             if (expert.focus_status == 1) {
                 expertViewHolder.tv_attention.setBackgroundDrawable(null);
                 expertViewHolder.tv_attention.setText("已关注");
                 expertViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+                expertViewHolder.tv_attention.setVisibility(View.GONE);
             } else {
                 expertViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 expertViewHolder.tv_attention.setText("关注");
                 expertViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+                expertViewHolder.tv_attention.setVisibility(View.VISIBLE);
             }
             expertViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, expert.member_id));
             expertViewHolder.tv_nickname.setOnClickListener(v -> MyPageActivity.startAct(context, expert.member_id));
@@ -88,6 +105,12 @@ public class WeekExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert> 
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
+
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
 
         @BindView(R.id.miv_rank)
         MyImageView miv_rank;

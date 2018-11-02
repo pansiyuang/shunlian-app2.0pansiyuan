@@ -27,6 +27,10 @@ public class ExpertEntity {
         public String hot_val;
         public String avatar;
         public String nickname;
+        public int expert;
+        public int add_v;
+        public String expert_icon;
+        public String v_icon;
         public int focus_status;
     }
 }

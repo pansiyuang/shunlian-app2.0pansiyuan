@@ -97,26 +97,40 @@
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp">
 
-                        <com.shunlian.app.widget.MyImageView
-                            android:id="@+id/miv_icon"
+                        <RelativeLayout
                             android:layout_width="65dp"
-                            android:layout_height="65dp"
-                            android:scaleType="centerCrop" />
+                            android:layout_height="65dp">
 
-                        <LinearLayout
+                            <com.shunlian.app.widget.MyImageView
+                                android:id="@+id/miv_icon"
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
+                                android:scaleType="centerCrop" />
+
+                            <com.shunlian.app.widget.MyImageView
+                                android:id="@+id/miv_v"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_alignBottom="@+id/miv_icon"
+                                android:layout_alignRight="@+id/miv_icon"
+                                android:scaleType="fitXY"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="65dp"
-                            android:layout_marginLeft="15dp"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
+                            android:layout_marginLeft="15dp">
 
                             <TextView
                                 android:id="@+id/tv_nickname"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
                                 android:layout_marginRight="9dp"
                                 android:ellipsize="end"
                                 android:singleLine="true"
+                                android:text="昵称"
                                 android:textColor="@color/value_343434"
                                 android:textSize="18sp" />
 
@@ -124,13 +138,22 @@
                                 android:id="@+id/tv_signature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
                                 android:layout_marginRight="9dp"
                                 android:layout_marginTop="12dp"
                                 android:ellipsize="end"
                                 android:singleLine="true"
                                 android:textColor="@color/text_gray2"
                                 android:textSize="13sp" />
-                        </LinearLayout>
+
+                            <com.shunlian.app.widget.MyImageView
+                                android:id="@+id/miv_expert"
+                                android:layout_width="40dp"
+                                android:layout_height="12dp"
+                                android:layout_alignParentBottom="true"
+                                android:scaleType="fitXY"
+                                android:visibility="invisible" />
+                        </RelativeLayout>
                     </LinearLayout>
 
                     <LinearLayout

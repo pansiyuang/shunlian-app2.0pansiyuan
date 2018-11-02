@@ -45,7 +45,6 @@
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/tv_name"
         android:scaleType="fitXY"
-        android:src="@mipmap/icon_labels_faxian"
         android:visibility="gone" />
 
     <TextView

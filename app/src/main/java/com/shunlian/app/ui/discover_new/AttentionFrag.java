@@ -64,6 +64,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
             quick_actions.destoryQuickActions();
         super.onDestroyView();
     }
+
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.frag_attention, null, false);
@@ -157,10 +158,10 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
             recycler_list.setAdapter(attentionAdapter);
         } else {
             if (hotBlogAdapter == null) {
-                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList,quick_actions);
+                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList, quick_actions);
                 hotBlogAdapter.setAdapterCallBack(this);
+                recycler_list.setAdapter(hotBlogAdapter);
             }
-            recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setPageLoading(currentPage, totalPage);
             hotBlogAdapter.notifyDataSetChanged();
         }

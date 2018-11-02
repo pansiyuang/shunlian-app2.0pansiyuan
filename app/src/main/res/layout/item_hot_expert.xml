@@ -19,6 +19,15 @@
             android:layout_centerVertical="true"
             android:scaleType="centerCrop" />
 
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_v"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_alignBottom="@+id/miv_icon"
+            android:layout_alignRight="@+id/miv_icon"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
@@ -29,6 +38,16 @@
             android:text="格奥尔格·卢卡奇"
             android:textColor="@color/value_343434"
             android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_expert"
+            android:layout_width="40dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tv_nickname"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_attention"
@@ -69,6 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="63dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="12dp"
         android:orientation="vertical"
         android:visibility="gone">

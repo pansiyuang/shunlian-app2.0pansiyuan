@@ -53,6 +53,10 @@ public class HotBlogsEntity {
         public String signature;
         public String follow_num;
         public String blog_num;
+        public int expert;
+        public int add_v;
+        public String expert_icon;
+        public String v_icon;
         public int focus_status;
     }
 

@@ -45,6 +45,12 @@ public class MyPageActivity extends BaseActivity {
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
+    @BindView(R.id.miv_v)
+    MyImageView miv_v;
+
+    @BindView(R.id.miv_expert)
+    MyImageView miv_expert;
+
     @BindView(R.id.tv_nickname)
     TextView tv_nickname;
 

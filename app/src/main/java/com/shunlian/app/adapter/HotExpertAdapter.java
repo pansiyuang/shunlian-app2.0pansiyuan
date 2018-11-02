@@ -52,8 +52,8 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
             hotExpertViewHolder.tv_download.setText(String.valueOf(blog.down_num));
             hotExpertViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
 
-
             if (blog.is_focus == 1) {//已经关注
+                hotExpertViewHolder.tv_attention.setVisibility(View.GONE);
                 hotExpertViewHolder.tv_attention.setBackgroundDrawable(null);
                 hotExpertViewHolder.tv_attention.setText("已关注");
                 hotExpertViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
@@ -61,6 +61,20 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 hotExpertViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 hotExpertViewHolder.tv_attention.setText("关注");
                 hotExpertViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+            }
+
+            if (blog.add_v == 1) {
+                hotExpertViewHolder.miv_v.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, hotExpertViewHolder.miv_v, blog.v_icon);
+            } else {
+                hotExpertViewHolder.miv_v.setVisibility(View.GONE);
+            }
+
+            if (blog.expert == 1) {
+                hotExpertViewHolder.miv_expert.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, hotExpertViewHolder.miv_expert, blog.expert_icon);
+            } else {
+                hotExpertViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
             if (blog.is_praise == 1) {
@@ -103,6 +117,8 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
 
                     GlideUtils.getInstance().loadOverrideImage(context, hotExpertViewHolder.miv_video, blog.video_thumb, width, height);
                 }
+                hotExpertViewHolder.miv_big_icon.setVisibility(View.GONE);
+                hotExpertViewHolder.recycler_list.setVisibility(View.GONE);
                 hotExpertViewHolder.rl_video.setVisibility(View.VISIBLE);
             }
         }
@@ -118,6 +134,12 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
     public class HotExpertViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
+
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
 
         @BindView(R.id.miv_big_icon)
         MyImageView miv_big_icon;

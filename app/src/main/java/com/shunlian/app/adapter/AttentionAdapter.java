@@ -106,12 +106,29 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
             attentionViewholder.tv_attention.setTextColor(getColor(R.color.pink_color));
             attentionViewholder.tv_attention.setVisibility(View.VISIBLE);
         }
+
+        if (recomandFocus.add_v == 0) {
+            attentionViewholder.miv_v.setVisibility(View.GONE);
+            GlideUtils.getInstance().loadImage(context, attentionViewholder.miv_v, recomandFocus.v_icon);
+        } else {
+            attentionViewholder.miv_v.setVisibility(View.VISIBLE);
+        }
+
+        if (recomandFocus.expert == 0) {
+            attentionViewholder.miv_expert.setVisibility(View.GONE);
+            GlideUtils.getInstance().loadImage(context, attentionViewholder.miv_expert, recomandFocus.expert_icon);
+        } else {
+            attentionViewholder.miv_expert.setVisibility(View.VISIBLE);
+        }
     }
 
     public class AttentionViewholder extends BaseRecyclerViewHolder {
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
 
         @BindView(R.id.miv_expert)
         MyImageView miv_expert;
