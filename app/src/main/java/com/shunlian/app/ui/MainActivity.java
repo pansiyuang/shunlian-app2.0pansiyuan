@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,16 +25,13 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
-import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.coupon.CouponListAct;
-import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
-import com.shunlian.app.ui.fragment.NewDiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
@@ -41,7 +39,6 @@ import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
 import com.shunlian.app.ui.h5.H5X5Frag;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -49,6 +46,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.app.widget.MyFrameLayout;
@@ -120,8 +118,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private MyPlusFrag myPlusFrag;
     private SortFrag sortFrag;
     private H5PlusFrag h5PlusFrag;
-//    private DiscoverFrag discoverFrag;
-    private NewDiscoverFrag discoverFrag;
+    private DiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
     private PersonalCenterFrag personalCenterFrag;
     private long mExitTime;
@@ -140,7 +137,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private MyLinearLayout mllayout_before,mllayout_after;
     private NewTextView ntv_get,ntv_aOne,ntv_check,ntv_use;
     private boolean isGetAward=false;
-    private ObjectMapper objectMapper;
 
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
@@ -182,7 +178,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             view_message.setVisibility(View.GONE);
         } else {
             if (discoverFrag != null)
-//                discoverFrag.initMessage(null);
+                discoverFrag.initMessage(null);
             mtv_message_count.setVisibility(View.GONE);
             view_message.setVisibility(View.VISIBLE);
         }
@@ -193,8 +189,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
      */
     @Override
     protected void initData() {
-        objectMapper = new ObjectMapper();
-
         if (SharedPrefUtil.getSharedUserBoolean("hide_first",false)){
             miv_hint.setVisibility(View.GONE);
         }else {
@@ -331,77 +325,91 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (MyOnClickListener.isFastClick()) {
             return;
         }
-        if (view.getId() == R.id.ll_tab_main_page) {
-            miv_first.setVisibility(View.VISIBLE);
-            miv_tab_main.setVisibility(View.GONE);
-            tv_tab_main.setVisibility(View.GONE);
-            miv_first.animate().rotation(0).setDuration(0).start();
-            miv_first.animate().rotation(360).setDuration(300).start();
-        } else {
-            view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-            view.animate().scaleX(1).scaleY(1).setDuration(300).start();
-        }
+//        if (view.getId() == R.id.ll_tab_main_page) {
+//            miv_first.setVisibility(View.VISIBLE);
+//            miv_tab_main.setVisibility(View.GONE);
+//            tv_tab_main.setVisibility(View.GONE);
+//            miv_first.animate().rotation(0).setDuration(0).start();
+//            miv_first.animate().rotation(360).setDuration(300).start();
+//        } else {
+//            view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+//            view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+//        }
         if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
 //            mtv_message_count.setVisibility(View.GONE);
-
-//            if (!Common.isAlreadyLogin() && discoverFrag != null && discoverFrag.isVisible()) {
-//                LoginAct.startAct(this);
-//                return;
-//            }
-            try {
-                String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
-                HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
-                FindSendPictureTextAct.SendConfig sendConfig = new FindSendPictureTextAct.SendConfig();
-                if (discoverFrag != null && discoverFrag.isVisible()) {
-                    if (baseInfo.white_list == 0) {
-                        sendConfig.isWhiteList = false;
-                    } else {
-                        sendConfig.isWhiteList = true;
-                    }
-                    FindSendPictureTextAct.startAct(this, sendConfig);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
         if (handler == null)
             handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                switch (view.getId()) {
-                    case R.id.ll_tab_main_page:
-                        if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
-                            cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
-                            if (cateGoryFrag.rv_view != null) {
-                                cateGoryFrag.rv_view.scrollToPosition(0);
+
+        switch (view.getId()) {
+            case R.id.ll_tab_main_page:
+
+                if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
+                    cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
+                    if (cateGoryFrag.rv_view != null) {
+                        cateGoryFrag.rv_view.scrollToPosition(0);
 //                                cateGoryFrag.rv_view.smoothScrollToPosition(0);
-                                FirstPageFrag.mAppbar.setExpanded(true);
-                            }
-                        } else {
-                            mainPageClick();
-                        }
-                        break;
-                    case R.id.ll_tab_sort:
-                        //myPlusClick();
-                        sortClick();
-                        break;
-                    case R.id.ll_tab_discover:
-                        discoverClick();
-                        break;
-                    case R.id.ll_tab_shopping_car:
-//                        CouponMsgAct.startAct(MainActivity.this,"");
-                        shoppingCarClick();
-                        break;
-                    case R.id.ll_tab_person_center:
-                        miv_hint.setVisibility(View.GONE);
-                        SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
-                        personCenterClick();
-                        break;
+                        FirstPageFrag.mAppbar.setExpanded(true);
+                    }
+                } else {
+                    mainPageClick();
                 }
-            }
-        }, 300);
+                break;
+            case R.id.ll_tab_sort:
+                //myPlusClick();
+                sortClick();
+                break;
+            case R.id.ll_tab_discover:
+                discoverClick();
+                break;
+            case R.id.ll_tab_shopping_car:
+//                        CouponMsgAct.startAct(MainActivity.this,"");
+                shoppingCarClick();
+                break;
+            case R.id.ll_tab_person_center:
+                miv_hint.setVisibility(View.GONE);
+                SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
+                personCenterClick();
+                break;
+        }
+        view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+        view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                switch (view.getId()) {
+//                    case R.id.ll_tab_main_page:
+//                        if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
+//                            cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
+//                            if (cateGoryFrag.rv_view != null) {
+//                                cateGoryFrag.rv_view.scrollToPosition(0);
+////                                cateGoryFrag.rv_view.smoothScrollToPosition(0);
+//                                FirstPageFrag.mAppbar.setExpanded(true);
+//                            }
+//                        } else {
+//                            mainPageClick();
+//                        }
+//                        break;
+//                    case R.id.ll_tab_sort:
+//                        //myPlusClick();
+//                        sortClick();
+//                        break;
+//                    case R.id.ll_tab_discover:
+//                        discoverClick();
+//                        break;
+//                    case R.id.ll_tab_shopping_car:
+////                        CouponMsgAct.startAct(MainActivity.this,"");
+//                        shoppingCarClick();
+//                        break;
+//                    case R.id.ll_tab_person_center:
+//                        miv_hint.setVisibility(View.GONE);
+//                        SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
+//                        personCenterClick();
+//                        break;
+//                }
+//            }
+//        }, 300);
     }
 
     public void mainPageClick() {
@@ -498,21 +506,21 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         isFirst = false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (discoverFrag == null) {
-            discoverFrag = (NewDiscoverFrag) fragmentMap.get(flags[2]);
+            discoverFrag = (DiscoverFrag) fragmentMap.get(flags[2]);
             if (discoverFrag == null) {
-                discoverFrag = new NewDiscoverFrag();
+                discoverFrag = new DiscoverFrag();
                 Bundle bundle = new Bundle();
                 bundle.putString("flag", flag);
                 discoverFrag.setArguments(bundle);
                 fragmentMap.put(flags[2], discoverFrag);
             }
         } else {
-//            discoverFrag.setArgument(flag);
-//            if (Common.isAlreadyLogin()) {
-//                discoverFrag.initMessage(data);
-//            } else {
-//                discoverFrag.initMessage(null);
-//            }
+            discoverFrag.setArgument(flag);
+            if (Common.isAlreadyLogin()) {
+                discoverFrag.initMessage(data);
+            } else {
+                discoverFrag.initMessage(null);
+            }
         }
         switchContent(discoverFrag);
         pageIndex = 2;
@@ -568,51 +576,103 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     private void chageTabItem(int pageIndex) {
-//        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
-//        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
+        RelativeLayout.LayoutParams layoutParams_discover= (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
+        RelativeLayout.LayoutParams layoutParams_message_count= (RelativeLayout.LayoutParams) mtv_message_count.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams_main= (LinearLayout.LayoutParams) miv_tab_main.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams_sort= (LinearLayout.LayoutParams) miv_tab_sort.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams_shopping_car= (LinearLayout.LayoutParams) miv_shopping_car.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams_person_center= (LinearLayout.LayoutParams) miv_person_center.getLayoutParams();
+        int topOne= -TransformUtil.dip2px(baseAct,12);
+        int topTwo= TransformUtil.dip2px(baseAct,8);
+        int topThree= -TransformUtil.dip2px(baseAct,10);
+        int topFour= TransformUtil.dip2px(baseAct,6);
 
-        miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
-        tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
-        tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
+        layoutParams_message_count.setMargins(0,topFour,topTwo,0);
+        miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
+        layoutParams_discover.setMargins(0,topTwo,0,0);
 
-        miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_n));
-        tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
+        miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
+        layoutParams_main.setMargins(0,topTwo,0,0);
 
-        miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_n));
-        tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
+        miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
+        layoutParams_sort.setMargins(0,topTwo,0,0);
 
-        miv_first.setVisibility(View.GONE);
-        miv_tab_main.setVisibility(View.VISIBLE);
-        tv_tab_main.setVisibility(View.VISIBLE);
+        miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
+        layoutParams_shopping_car.setMargins(0,topTwo,0,0);
+
+        miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
+        layoutParams_person_center.setMargins(0,topTwo,0,0);
 
         switch (pageIndex) {
             case 0:
-                miv_first.setVisibility(View.VISIBLE);
-                miv_tab_main.setVisibility(View.GONE);
-                tv_tab_main.setVisibility(View.GONE);
-
-//                miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_h));
-//                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
+                miv_tab_main.setImageResource(R.mipmap.tab_01_sel);
+                layoutParams_main.setMargins(0,topOne,0,0);
                 break;
             case 1:
-                miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_h));
-                tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
+                miv_tab_sort.setImageResource(R.mipmap.tab_02_sel);
+                layoutParams_sort.setMargins(0,topOne,0,0);
                 break;
             case 2:
-                miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
-                tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
+                miv_tab_discover.setImageResource(R.mipmap.tab_03_sel);
+                layoutParams_discover.setMargins(0,topOne,0,0);
+                layoutParams_message_count.setMargins(0,topThree,topFour,0);
                 break;
             case 3:
-                miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_h));
-                tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
+                miv_shopping_car.setImageResource(R.mipmap.tab_04_sel);
+                layoutParams_shopping_car.setMargins(0,topOne,0,0);
                 break;
             case 4:
-                miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_h));
-                tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
+                miv_person_center.setImageResource(R.mipmap.tab_05_sel);
+                layoutParams_person_center.setMargins(0,topOne,0,0);
                 break;
         }
+
+//        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
+//        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+//        miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
+//        tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
+//
+//        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_n));
+//        tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
+//
+//        miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_n));
+//        tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
+//
+//        miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_n));
+//        tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
+//
+//        miv_first.setVisibility(View.GONE);
+//        miv_tab_main.setVisibility(View.VISIBLE);
+//        tv_tab_main.setVisibility(View.VISIBLE);
+//
+//        switch (pageIndex) {
+//            case 0:
+//                miv_first.setVisibility(View.VISIBLE);
+//                miv_tab_main.setVisibility(View.GONE);
+//                tv_tab_main.setVisibility(View.GONE);
+//
+////                miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_h));
+////                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
+//                break;
+//            case 1:
+//                miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_h));
+//                tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
+//                break;
+//            case 2:
+//                miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_h));
+//                tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
+//                break;
+//            case 3:
+//                miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_h));
+//                tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
+//                break;
+//            case 4:
+//                miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_h));
+//                tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
+//                break;
+//        }
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -866,7 +926,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             }
         }
         if (discoverFrag != null) {
-//            discoverFrag.initMessage(data);
+            discoverFrag.initMessage(data);
         }
     }
 

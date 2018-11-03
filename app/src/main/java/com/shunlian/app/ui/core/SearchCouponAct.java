@@ -3,6 +3,7 @@ package com.shunlian.app.ui.core;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CouponsAdapter;
+import com.shunlian.app.adapter.NewCouponsAdapter;
 import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.presenter.PGetCoupon;
 import com.shunlian.app.ui.BaseActivity;
@@ -47,8 +49,8 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
 
 
     private PGetCoupon pGetCoupon;
-    private CouponsAdapter couponsAdapter;
-    private LinearLayoutManager linearLayoutManager;
+    private NewCouponsAdapter couponsAdapter;
+    private LinearLayoutManager gridLayoutManager;
     private String key;
 
     public static void startAct(Context context) {
@@ -78,9 +80,9 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
         rv_search.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (linearLayoutManager != null) {
-                    int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
+                if (gridLayoutManager != null) {
+                    int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
                         if (pGetCoupon != null) {
                             pGetCoupon.refreshBaby("", key);
                         }
@@ -142,11 +144,11 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
             visible(rv_search);
         }
         if (couponsAdapter == null) {
-            couponsAdapter = new CouponsAdapter(baseAct, true, mData, pGetCoupon);
-            linearLayoutManager = new LinearLayoutManager(baseAct, LinearLayoutManager.VERTICAL, false);
-            rv_search.setLayoutManager(linearLayoutManager);
+            couponsAdapter = new NewCouponsAdapter(baseAct, true, mData, pGetCoupon);
+            gridLayoutManager = new GridLayoutManager(baseAct,1, LinearLayoutManager.VERTICAL, false);
+            rv_search.setLayoutManager(gridLayoutManager);
             rv_search.setAdapter(couponsAdapter);
-            rv_search.addItemDecoration(new MVerticalItemDecoration(baseAct, 10, 10, 0));
+//            rv_search.addItemDecoration(new MVerticalItemDecoration(baseAct, 10, 10, 0));
         } else {
             couponsAdapter.notifyDataSetChanged();
         }
@@ -157,6 +159,14 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
     public void getCouponCallBack(boolean isCommon, int position, String isGet) {
         if ("1".equals(isGet)){
             pGetCoupon.mDatas.get(position).if_get = "1";
+            couponsAdapter.notifyItemChanged(position);
+        }
+    }
+
+    @Override
+    public void getCouponCallBacks(int position, String isGet, int positions) {
+        if ("1".equals(isGet)) {
+            pGetCoupon.mDatas.get(position).goods_data.get(positions).if_get = "1";
             couponsAdapter.notifyItemChanged(position);
         }
     }

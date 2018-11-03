@@ -159,9 +159,13 @@ public class TaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemTask
         public TaskListHolder(View itemView) {
             super(itemView);
             llayout_right.setOnClickListener(v -> {
-                TaskListEntity.ItemTask itemTask = lists.get(getAdapterPosition());
-                if (listener != null && "0".equals(itemTask.task_status))
-                    listener.onItemClick(v, getAdapterPosition());
+                try {
+                    TaskListEntity.ItemTask itemTask = lists.get(getAdapterPosition());
+                    if (listener != null && "0".equals(itemTask.task_status))
+                        listener.onItemClick(v, getAdapterPosition());
+                }catch (Exception e){
+
+                }
             });
             itemView.setOnClickListener(null);
         }

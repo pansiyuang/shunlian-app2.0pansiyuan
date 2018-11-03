@@ -40,6 +40,7 @@ public class CouponListEntity {
         public String lazy_id;
         public String voucher_id;
         public String special_id;
+        public String tag;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

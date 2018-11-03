@@ -119,6 +119,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String detail_pic;
         public String if_act_price;
         public String if_time;
+        public String tag_pic;
         public String actprice;
         public String activity_status;
         public String start_remain_seconds;
@@ -138,6 +139,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.if_act_price);
             dest.writeString(this.if_time);
             dest.writeString(this.actprice);
+            dest.writeString(this.tag_pic);
             dest.writeString(this.activity_status);
             dest.writeString(this.start_remain_seconds);
             dest.writeString(this.end_remain_seconds);
@@ -154,6 +156,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.if_act_price = in.readString();
             this.if_time = in.readString();
             this.actprice = in.readString();
+            this.tag_pic = in.readString();
             this.activity_status = in.readString();
             this.start_remain_seconds = in.readString();
             this.end_remain_seconds = in.readString();
@@ -860,6 +863,7 @@ public class GoodsDeatilEntity implements Parcelable {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Goods implements Parcelable {
         public String id;
+        public String tag_pic;
         public String cart_id;                  //是否被编辑
         public String store_id;              //店铺id
         public String store_name;            //店铺名字
@@ -923,6 +927,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.id);
             dest.writeString(this.cart_id);
+            dest.writeString(this.tag_pic);
             dest.writeString(this.store_id);
             dest.writeString(this.store_name);
             dest.writeString(this.goods_id);
@@ -977,6 +982,7 @@ public class GoodsDeatilEntity implements Parcelable {
         protected Goods(Parcel in) {
             this.id = in.readString();
             this.cart_id = in.readString();
+            this.tag_pic = in.readString();
             this.store_id = in.readString();
             this.store_name = in.readString();
             this.goods_id = in.readString();

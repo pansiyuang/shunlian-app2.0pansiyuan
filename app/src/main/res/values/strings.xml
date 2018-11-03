@@ -122,6 +122,13 @@
 
     <!--优惠券-->
     <string name="coupon_youxiaoqi">有效期：</string>
+    <string name="coupon_lingquanzhongxin">领券中心</string>
+    <string name="coupon_pintaiyouhui">平台优惠券</string>
+    <string name="coupon_shangjia">商家优惠券</string>
+    <string name="coupon_lijishiyong">立即使用</string>
+    <string name="coupon_keyongquan">可用券</string>
+    <string name="coupon_sousuoyouhuiquan">搜索优惠券</string>
+    <string name="coupon_shunliandongli">顺联动力优惠券</string>
 
     <!--店铺-->
     <string name="store_search">搜索店铺内商品</string>
