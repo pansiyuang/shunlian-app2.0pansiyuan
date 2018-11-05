@@ -17,6 +17,8 @@ import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHotBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -34,8 +36,8 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
@@ -88,18 +90,11 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getHotBlogList(true, "", currentKeyword);
-                }
-            }
-
-            @Override
-            public void onLoadMore() {
-
+        super.initListener();
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getHotBlogList(true, "", currentKeyword);
             }
         });
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -116,15 +111,14 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
                 }
             }
         });
-        super.initListener();
     }
 
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
 
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
+        NestedSlHeader header = new NestedSlHeader(baseContext);
+        lay_refresh.setRefreshHeaderView(header);
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
@@ -141,23 +135,22 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
 
     @Override
     public void getBlogList(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage) {
-        refreshview.stopRefresh(true);
         if (currentPage == 1) {
             blogList.clear();
 
             if (isEmpty(hotBlogsEntity.list)) {
                 nei_empty.setVisibility(View.VISIBLE);
-                recycler_list.setVisibility(View.GONE);
+                lay_refresh.setVisibility(View.GONE);
             } else {
                 nei_empty.setVisibility(View.GONE);
-                recycler_list.setVisibility(View.VISIBLE);
+                lay_refresh.setVisibility(View.VISIBLE);
             }
         }
         if (!isEmpty(hotBlogsEntity.list)) {
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(),quick_actions);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), quick_actions);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }
@@ -192,12 +185,16 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
 
     @Override
     public void refreshFinish() {
-
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override

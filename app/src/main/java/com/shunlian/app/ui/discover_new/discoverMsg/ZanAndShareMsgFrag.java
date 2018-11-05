@@ -15,6 +15,7 @@ import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.view.IZanShareView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -32,8 +33,8 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
@@ -55,18 +56,10 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getZanShareList(true);
-                }
-            }
-
-            @Override
-            public void onLoadMore() {
-
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getZanShareList(true);
             }
         });
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -90,8 +83,8 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
 
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
+        NestedSlHeader header = new NestedSlHeader(baseContext);
+        lay_refresh.setRefreshHeaderView(header);
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
@@ -107,8 +100,11 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
+
 
     @Override
     public void showDataEmptyView(int request_code) {
@@ -117,7 +113,6 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
 
     @Override
     public void getMsgList(List<ZanShareEntity.Msg> list, int page, int totalPage) {
-        refreshview.stopRefresh(true);
         if (page == 1) {
             msgList.clear();
         }
@@ -127,10 +122,10 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
 
         if (page == 1 && isEmpty(msgList)) {
             nei_empty.setVisibility(View.VISIBLE);
-            recycler_list.setVisibility(View.GONE);
+            lay_refresh.setVisibility(View.GONE);
         } else {
             nei_empty.setVisibility(View.GONE);
-            recycler_list.setVisibility(View.VISIBLE);
+            lay_refresh.setVisibility(View.VISIBLE);
         }
 
         if (mAdapter == null) {
@@ -139,5 +134,15 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
         }
         mAdapter.setPageLoading(page, totalPage);
         mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 刷新完成
+     */
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 }

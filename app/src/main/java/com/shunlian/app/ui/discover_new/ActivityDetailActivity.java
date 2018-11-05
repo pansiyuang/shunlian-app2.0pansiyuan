@@ -21,6 +21,7 @@ import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
 import com.shunlian.app.widget.MyImageView;
@@ -48,6 +49,9 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     public int offset;
     private LinearLayoutManager manager;
@@ -192,7 +196,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             blogList.addAll(list);
         }
         if (mAdapter == null) {
-            mAdapter = new ActivityDetailAdapter(this, blogList, detail);
+            mAdapter = new ActivityDetailAdapter(this, blogList, detail, quick_actions);
             recycler_list.setAdapter(mAdapter);
             mAdapter.setAdapterCallBack(this);
         }
@@ -248,5 +252,12 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     @Override
     public void OnTopSize(int height) {
         layoutHeight = height - offset - ImmersionBar.getStatusBarHeight(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

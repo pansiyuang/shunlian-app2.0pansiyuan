@@ -14,6 +14,8 @@ import com.shunlian.app.presenter.FansPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.view.IFansView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -31,8 +33,8 @@ public class FansListActivity extends BaseActivity implements IFansView, MemberL
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
@@ -67,6 +69,9 @@ public class FansListActivity extends BaseActivity implements IFansView, MemberL
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
+        NestedSlHeader header = new NestedSlHeader(this);
+        lay_refresh.setRefreshHeaderView(header);
+
         currentMemberId = getIntent().getStringExtra("member_id");
 
         mPresenter = new FansPresenter(this, this);
@@ -87,8 +92,6 @@ public class FansListActivity extends BaseActivity implements IFansView, MemberL
             mPresenter.getTaFansList(true, currentMemberId);
         }
 
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
         recycler_list.setNestedScrollingEnabled(false);
 
         manager = new LinearLayoutManager(this);
@@ -99,24 +102,18 @@ public class FansListActivity extends BaseActivity implements IFansView, MemberL
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    if (isEmpty(currentMemberId)) {
-                        mPresenter.getFansList(true);
-                    } else {
-                        mPresenter.getTaFansList(true, currentMemberId);
-                    }
+
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                if (isEmpty(currentMemberId)) {
+                    mPresenter.getFansList(true);
+                } else {
+                    mPresenter.getTaFansList(true, currentMemberId);
                 }
             }
-
-            @Override
-            public void onLoadMore() {
-
-            }
         });
+
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -136,7 +133,6 @@ public class FansListActivity extends BaseActivity implements IFansView, MemberL
 
     @Override
     public void getFansList(List<MemberEntity.Member> list, int page, int totalPage) {
-        refreshview.stopRefresh(true);
         if (page == 1) {
             memberList.clear();
         }
@@ -146,10 +142,10 @@ public class FansListActivity extends BaseActivity implements IFansView, MemberL
 
         if (page == 1 && isEmpty(memberList)) {
             nei_empty.setVisibility(View.VISIBLE);
-            recycler_list.setVisibility(View.GONE);
+            lay_refresh.setVisibility(View.GONE);
         } else {
             nei_empty.setVisibility(View.GONE);
-            recycler_list.setVisibility(View.VISIBLE);
+            lay_refresh.setVisibility(View.VISIBLE);
         }
 
         if (mAdapter == null) {
@@ -177,7 +173,9 @@ public class FansListActivity extends BaseActivity implements IFansView, MemberL
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -188,5 +186,15 @@ public class FansListActivity extends BaseActivity implements IFansView, MemberL
     @Override
     public void toFocusUser(int isFocus, String memberId) {
         mPresenter.focusUser(isFocus, memberId);
+    }
+
+    /**
+     * 刷新完成
+     */
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 }

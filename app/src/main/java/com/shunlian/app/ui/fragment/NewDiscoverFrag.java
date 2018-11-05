@@ -100,7 +100,7 @@ public class NewDiscoverFrag extends BaseFragment {
     protected void initListener() {
         super.initListener();
         miv_icon.setOnClickListener(v -> {
-            if (!isEmpty(avatar)) {
+            if (currentBaseInfo != null && !isEmpty(currentBaseInfo.member_id)) {
                 MyPageActivity.startAct(getActivity(), currentBaseInfo.member_id);
             }
         });

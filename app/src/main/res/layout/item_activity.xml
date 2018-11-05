@@ -10,7 +10,7 @@
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_icon"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
+        android:layout_height="wrap_content"
         android:scaleType="centerCrop" />
 
     <RelativeLayout
@@ -31,7 +31,6 @@
             android:layout_toLeftOf="@+id/recycler_list"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="#我的秋日圆月#"
             android:textColor="@color/value_484848"
             android:textSize="15sp"
             android:textStyle="bold" />

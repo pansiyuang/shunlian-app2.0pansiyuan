@@ -6,10 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.DiscoverActivityEntity;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorizonItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
@@ -66,6 +68,13 @@ public class DiscoverActivityAdapter extends BaseRecyclerAdapter<DiscoverActivit
             } else {
                 activityViewHolder.recycler_list.setVisibility(View.GONE);
             }
+
+            int screenWidth = DeviceInfoUtil.getDeviceWidth(context) - TransformUtil.dip2px(context, 32);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) activityViewHolder.miv_icon.getLayoutParams();
+            layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+            double height = screenWidth / 710d * 400;
+            layoutParams.height = (int) Math.round(height);
+            activityViewHolder.miv_icon.setLayoutParams(layoutParams);
         }
     }
 

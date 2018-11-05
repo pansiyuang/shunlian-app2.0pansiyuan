@@ -27,10 +27,8 @@
             android:layout_height="12dp"
             android:layout_alignBottom="@+id/miv_icon"
             android:layout_alignRight="@+id/miv_icon"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/icon_v"
+            android:scaleType="fitXY"
             android:visibility="gone" />
-
 
         <LinearLayout
             android:id="@+id/ll_member"
@@ -51,17 +49,15 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="格奥尔格·卢卡奇"
                     android:textColor="@color/value_343434"
                     android:textSize="14sp" />
 
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_expert"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="14dp"
                     android:layout_marginLeft="5dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/icon_labels_faxian"
+                    android:scaleType="fitXY"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -70,20 +66,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:text="2小时前"
                 android:textColor="@color/text_gray2"
                 android:textSize="10sp" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_attention"
-            android:layout_width="44dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
             android:background="@drawable/rounded_corner_stroke_pink_20px"
             android:gravity="center"
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:text="关注"
             android:textColor="@color/pink_color"
             android:textSize="14sp" />
@@ -98,7 +97,6 @@
         android:background="@drawable/rounded_corner_solid_007aff_20px"
         android:paddingLeft="7.5dp"
         android:paddingRight="7.5dp"
-        android:text="我的话题"
         android:textColor="@color/value_007AFF"
         android:textSize="14sp" />
 
@@ -138,6 +136,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="63dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="12dp"
         android:orientation="vertical"
         android:visibility="gone">
@@ -163,7 +162,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="63dp"
         android:layout_marginTop="9dp"
-        android:text="位置#杭州江陵路星耀城#观光体验店"
+        android:textColor="@color/text_gray2"
         android:textSize="10sp" />
 
     <RelativeLayout
@@ -242,7 +241,7 @@
             android:drawableLeft="@mipmap/icon_faxian_xaizai"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:text="4809"
+            android:text="0"
             android:textColor="@color/value_343434"
             android:textSize="10sp" />
 
@@ -256,7 +255,7 @@
             android:drawableLeft="@mipmap/icon_faxian_zan"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:text="899"
+            android:text="0"
             android:textColor="@color/value_343434"
             android:textSize="10sp" />
 
@@ -282,7 +281,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white_ash"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv1"

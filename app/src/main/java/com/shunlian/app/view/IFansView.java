@@ -14,4 +14,5 @@ public interface IFansView extends IView {
 
     void focusUser(int isFocus, String memberId);
 
+    void refreshFinish();
 }
