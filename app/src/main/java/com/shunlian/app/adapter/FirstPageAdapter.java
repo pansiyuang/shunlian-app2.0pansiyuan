@@ -263,8 +263,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                 if (holder instanceof ThreeHolder) {
                     ThreeHolder threeHolder = (ThreeHolder) holder;
                     GetDataEntity.MData data = lists.get(position);
-                    if (Common.isColor(data.bg_color))
+//                    if (Common.isColor(data.bg_color))
+//                        threeHolder.mrlayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
+                    if (!TextUtils.isEmpty(data.bg_pic)) {
+                        GlideUtils.getInstance().loadBgImage(context, threeHolder.mrlayout_root, data.bg_pic);
+                    } else if (Common.isColor(data.bg_color)) {
                         threeHolder.mrlayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
+                    }
                     if (!isEmpty(data.number))
                         switch (data.number) {
                             case "1":
@@ -420,8 +425,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                 if (holder instanceof FourHolder) {
                     FourHolder fourHolder = (FourHolder) holder;
                     GetDataEntity.MData data = lists.get(position);
-                    if (Common.isColor(data.bg_color))
+                    if (!TextUtils.isEmpty(data.bg_pic)) {
+                        GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_root, data.bg_pic);
+                    } else if (Common.isColor(data.bg_color)) {
                         fourHolder.mllayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
+                    }
+//                    if (Common.isColor(data.bg_color))
+//                        fourHolder.mllayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
                     GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_one,
                             data.ttth.thumb, R.mipmap.img_default_home_ttth);
                     GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_two,

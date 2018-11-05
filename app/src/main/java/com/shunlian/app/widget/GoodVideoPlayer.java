@@ -45,13 +45,13 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.DiscoverGoodsAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
-import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.download.DownLoadDialogProgress;
@@ -163,6 +163,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         line_down.setOnClickListener(this);
         line_share.setOnClickListener(this);
         miv_share.setOnClickListener(this);
+        image_user_head.setOnClickListener(this);
         bottomProgressBar = findViewById(cn.jzvd.R.id.bottom_progress);
         backButton = findViewById(cn.jzvd.R.id.back);
         thumbImageView = findViewById(cn.jzvd.R.id.thumb);
@@ -635,6 +636,8 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             }
         }else if(i==R.id.miv_share){
             parseAttent.shareBolg();
+        }else if(i==R.id.image_user_head){
+            MyPageActivity.startAct(getContext(), blog.member_id);
         }
     }
 
@@ -1175,7 +1178,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             public void fileDownLoad() {
                 downloadUtils.download(currentUrl,fileName);
             }
-        },!NetworkUtils.isWifiConnected(getContext()));
+        },true);
     }
     /**
      * 检查下载的文件是否存在
@@ -1214,7 +1217,9 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         downloadUtils = new DownloadUtils(new JsDownloadListener() {
             @Override
             public void onStartDownload() {
+
             }
+
             @Override
             public void onProgress(int progress) {
                 Log.d("下载","进度："+progress);

@@ -2,11 +2,14 @@
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/xx60"
+    android:layout_marginRight="@dimen/xx60"
     android:background="@color/transparent">
 
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_marginBottom="@dimen/xx60"
         android:layout_alignParentBottom="true"
         android:background="@drawable/rounded_corner_white_8px"
         android:orientation="vertical">
