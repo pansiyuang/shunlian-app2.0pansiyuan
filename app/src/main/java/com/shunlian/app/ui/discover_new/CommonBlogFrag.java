@@ -54,6 +54,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     private HotBlogAdapter hotBlogAdapter;
     private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
+    private boolean isMine;
 
     @Override
     public void onDestroyView() {
@@ -68,10 +69,11 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
         return view;
     }
 
-    public static BaseFragment getInstance(String comFrom, String memberId) {
+    public static BaseFragment getInstance(String comFrom, String memberId, boolean isSelf) {
         CommonBlogFrag commonBlogFrag = new CommonBlogFrag();
         Bundle bundle = new Bundle();
         bundle.putString("from", comFrom);
+        bundle.putBoolean("is_self", isSelf);
         bundle.putString("member_id", memberId);
         commonBlogFrag.setArguments(bundle);
         return commonBlogFrag;
@@ -95,6 +97,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
 
         currentMemberId = getArguments().getString("member_id");
         currentFrom = getArguments().getString("from");
+        isMine = getArguments().getBoolean("is_self", false);
 
         if ("我的".equals(currentFrom)) {
             currentType = "2";
@@ -161,26 +164,33 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(),quick_actions);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), quick_actions);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
             hotBlogAdapter.setOnDelListener(this);
             hotBlogAdapter.setOnFavoListener(this);
         }
+
+        if ("2".equals(currentType) && isMine == false) {
+            hotBlogAdapter.setShowAttention(false);
+        }
+
         hotBlogAdapter.setPageLoading(currentPage, totalPage);
         hotBlogAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void focusUser(int isFocus, String memberId) {
+        int focus;
+        if (isFocus == 0) {
+            focus = 1;
+        } else {
+            focus = 0;
+        }
+        ((MyPageActivity) getActivity()).setAttentStatus(focus, memberId);
         for (BigImgEntity.Blog blog : blogList) {
             if (memberId.equals(blog.member_id)) {
-                if (blog.is_focus == 0) {
-                    blog.is_focus = 1;
-                } else {
-                    blog.is_focus = 0;
-                }
-                ((MyPageActivity) getActivity()).setAttentStatus(blog.is_focus, memberId);
+                blog.is_focus = focus;
             }
         }
         hotBlogAdapter.notifyDataSetChanged();

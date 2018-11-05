@@ -16,6 +16,8 @@ import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.INoticeMsgView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -33,8 +35,8 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
@@ -56,20 +58,14 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getNoticeMsgList(true);
-                }
-            }
-
-            @Override
-            public void onLoadMore() {
-
+        super.initListener();
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getNoticeMsgList(true);
             }
         });
+
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -84,7 +80,6 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
                 }
             }
         });
-        super.initListener();
     }
 
 
@@ -97,8 +92,8 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
         mPresenter = new NoticeMsgPresenter(getActivity(), this);
         mPresenter.getNoticeMsgList(true);
 
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
+        NestedSlHeader header = new NestedSlHeader(baseContext);
+        lay_refresh.setRefreshHeaderView(header);
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
@@ -110,7 +105,9 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -120,7 +117,6 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
 
     @Override
     public void getNoticeMsgList(List<NoticeMsgEntity.Notice> noticeList, int page, int totalPage) {
-        refreshview.stopRefresh(true);
         if (page == 1) {
             notices.clear();
         }
@@ -130,10 +126,10 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
 
         if (page == 1 && isEmpty(notices)) {
             nei_empty.setVisibility(View.VISIBLE);
-            recycler_list.setVisibility(View.GONE);
+            lay_refresh.setVisibility(View.GONE);
         } else {
             nei_empty.setVisibility(View.GONE);
-            recycler_list.setVisibility(View.VISIBLE);
+            lay_refresh.setVisibility(View.VISIBLE);
         }
 
         if (mAdapter == null) {
@@ -142,5 +138,16 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
         }
         mAdapter.setPageLoading(page, totalPage);
         mAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * 刷新完成
+     */
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 }

@@ -32,7 +32,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack{
+public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -47,7 +47,6 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
     private ObjectMapper objectMapper;
-    private List<String> stringList = new ArrayList<>();
 
     QuickActions quick_actions;
 
@@ -91,9 +90,6 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         nei_empty.setImageResource(R.mipmap.img_empty_common)
                 .setText("暂时没有用户发布精选文章")
                 .setButtonText(null);
-
-        stringList.add("收藏");
-        stringList.add("他人主页");
     }
 
     @Override
@@ -137,7 +133,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, hotBlogsEntity.ad_list,quick_actions);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, hotBlogsEntity.ad_list, quick_actions);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }

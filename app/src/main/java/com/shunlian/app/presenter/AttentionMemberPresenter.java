@@ -62,6 +62,9 @@ public class AttentionMemberPresenter extends BasePresenter<IAttentionMemberView
                 iView.getAttentionList(memberEntity.list, memberEntity.pager.page, memberEntity.pager.total_page);
                 currentPage = memberEntity.pager.page;
                 allPage = memberEntity.pager.total_page;
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 
@@ -97,6 +100,9 @@ public class AttentionMemberPresenter extends BasePresenter<IAttentionMemberView
                 iView.getAttentionList(memberEntity.list, memberEntity.pager.page, memberEntity.pager.total_page);
                 currentPage = memberEntity.pager.page;
                 allPage = memberEntity.pager.total_page;
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 

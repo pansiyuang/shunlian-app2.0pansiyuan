@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.MemberEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 
@@ -49,6 +50,9 @@ public class MemberListAdapter extends BaseRecyclerAdapter<MemberEntity.Member> 
                 memberViewHolder.tv_attention.setText("关注");
                 memberViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
             }
+
+            memberViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, member.member_id));
+            memberViewHolder.tv_name.setOnClickListener(v -> MyPageActivity.startAct(context, member.member_id));
 
             memberViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {

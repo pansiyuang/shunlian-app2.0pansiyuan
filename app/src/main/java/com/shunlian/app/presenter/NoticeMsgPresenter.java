@@ -58,6 +58,9 @@ public class NoticeMsgPresenter extends BasePresenter<INoticeMsgView> {
                 iView.getNoticeMsgList(noticeMsgEntity.list, noticeMsgEntity.page, noticeMsgEntity.total_page);
                 currentPage = noticeMsgEntity.page;
                 allPage = noticeMsgEntity.total_page;
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 

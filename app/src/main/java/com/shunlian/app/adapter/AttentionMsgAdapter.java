@@ -41,21 +41,24 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
             GlideUtils.getInstance().loadCircleAvar(context, attentionMsgViewHolder.miv_icon, memberInfo.avatar);
             attentionMsgViewHolder.tv_name.setText(memberInfo.nickname);
 
-            if (memberInfo.is_fans == 1) {//已经关注
-                attentionMsgViewHolder.tv_attention.setBackgroundDrawable(null);
-                attentionMsgViewHolder.tv_attention.setText("已关注");
-                attentionMsgViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+            attentionMsgViewHolder.tv_attention.setBackgroundDrawable(null);
+            attentionMsgViewHolder.tv_attention.setText("关注了你");
+            attentionMsgViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+
+            if (memberInfo.add_v == 1) {
+                attentionMsgViewHolder.miv_v.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, attentionMsgViewHolder.miv_v, memberInfo.v_icon);
             } else {
-                attentionMsgViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
-                attentionMsgViewHolder.tv_attention.setText("关注");
-                attentionMsgViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+                attentionMsgViewHolder.miv_v.setVisibility(View.GONE);
             }
 
-            attentionMsgViewHolder.tv_attention.setOnClickListener(v -> {
-                if (mCallBack != null) {
-                    mCallBack.toFocusUser(memberInfo.is_fans, memberInfo.member_id);
-                }
-            });
+            if (memberInfo.expert == 1) {
+                attentionMsgViewHolder.miv_expert.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, attentionMsgViewHolder.miv_expert, memberInfo.expert_icon);
+            } else {
+                attentionMsgViewHolder.miv_expert.setVisibility(View.GONE);
+            }
+
             attentionMsgViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, memberInfo.member_id));
             attentionMsgViewHolder.tv_name.setOnClickListener(v -> MyPageActivity.startAct(context, memberInfo.member_id));
         }
@@ -64,6 +67,12 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
     public class AttentionMsgViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
+
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
 
         @BindView(R.id.tv_name)
         TextView tv_name;

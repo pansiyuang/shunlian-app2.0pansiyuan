@@ -179,6 +179,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 nineHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                                     @Override
                                     public void onItemClick(int position) {
+
                                         if (data.datass.get(position).url!=null)
                                             Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
                                     }

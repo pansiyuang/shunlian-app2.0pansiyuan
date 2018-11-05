@@ -16,18 +16,36 @@
         android:layout_centerVertical="true"
         android:scaleType="centerCrop" />
 
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_v"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_alignBottom="@+id/miv_icon"
+        android:layout_alignRight="@+id/miv_icon"
+        android:scaleType="fitXY"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="12.5dp"
-        android:layout_toLeftOf="@+id/tv_attention"
         android:layout_toRightOf="@+id/miv_icon"
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@color/value_343434"
         android:textSize="14sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_expert"
+        android:layout_width="40dp"
+        android:layout_height="14dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/tv_name"
+        android:scaleType="fitXY"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_attention"

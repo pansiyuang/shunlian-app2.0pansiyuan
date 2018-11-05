@@ -62,24 +62,29 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private OnDelBlogListener delBlogListener;
     private OnFavoListener favoListener;
     private QuickActions quickActions;
+    private boolean showAttention = true;
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity,QuickActions quickActions) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, QuickActions quickActions) {
         super(context, true, lists);
         this.mActivity = activity;
-        this.quickActions=quickActions;
+        this.quickActions = quickActions;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads,QuickActions quickActions) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads, QuickActions quickActions) {
         super(context, true, lists);
         this.adList = ads;
-        this.quickActions=quickActions;
+        this.quickActions = quickActions;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list,QuickActions quickActions) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list, QuickActions quickActions) {
         super(context, true, lists);
         this.mActivity = activity;
         this.recomandFocusList = list;
-        this.quickActions=quickActions;
+        this.quickActions = quickActions;
+    }
+
+    public void setShowAttention(boolean isShow) {
+        showAttention = isShow;
     }
 
     @Override
@@ -168,9 +173,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             }
 
             if (blog.add_v == 1) {
+                GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_v, blog.v_icon);
                 blogViewHolder.miv_v.setVisibility(View.VISIBLE);
             } else {
                 blogViewHolder.miv_v.setVisibility(View.GONE);
+            }
+
+            if (blog.expert == 1) {
+                GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_expert, blog.expert_icon);
+                blogViewHolder.miv_expert.setVisibility(View.VISIBLE);
+            } else {
+                blogViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
             blogViewHolder.tv_tag.setText(blog.activity_title);
@@ -200,8 +213,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        quickActions.shareDiscoverDialog(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
-                                1==goods.isSuperiorProduct,SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
+                        quickActions.shareDiscoverDialog(goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+                                1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
                     }
                 });
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
@@ -223,18 +236,12 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 });
                 blogViewHolder.rl_video.setVisibility(View.GONE);
             } else {
-                String imageWidth, imageheight;
-                int width, height;
                 if (!isEmpty(blog.video_thumb)) {
-                    imageWidth = Common.getURLParameterValue(blog.video_thumb, "w");
-                    imageheight = Common.getURLParameterValue(blog.video_thumb, "h");
+                    int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 190, 190);
 
-                    if (!isEmpty(imageWidth) && !isEmpty(imageheight)) {
-                        width = Integer.valueOf(imageWidth);
-                        height = Integer.valueOf(imageheight);
-                        GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, width, height);
-                    }
+                    GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, params[0]), TransformUtil.dip2px(context, params[1]));
                 }
+                blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.recycler_list.setVisibility(View.GONE);
                 blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.rl_video.setVisibility(View.VISIBLE);
@@ -250,12 +257,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
             }
 
-            if (blog.expert == 1) {
-                blogViewHolder.miv_expert.setVisibility(View.VISIBLE);
-            } else {
-                blogViewHolder.miv_expert.setVisibility(View.GONE);
-            }
-
             if (blog.is_praise == 1) {
                 blogViewHolder.tv_zan.setClickable(false);
                 setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
@@ -268,7 +269,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
                 blogViewHolder.miv_more.setVisibility(View.GONE);
             } else {
-                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
             }
 
@@ -314,13 +314,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             });
 
             blogViewHolder.rlayout_goods.setOnClickListener(view -> {
-                LogUtil.augusLogW("dddd--"+blog.related_goods.size());
+                LogUtil.augusLogW("dddd--" + blog.related_goods.size());
                 if (blog.related_goods.size() == 1) {
                     GoodsDetailAct.startAct(context, blog.related_goods.get(0).goods_id);
                 } else {
                     initDialog(blog);
                 }
             });
+
+            if (!showAttention) {
+                blogViewHolder.tv_attention.setVisibility(View.GONE);
+            }
         }
     }
 

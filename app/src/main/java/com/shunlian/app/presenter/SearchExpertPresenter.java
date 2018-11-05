@@ -64,6 +64,9 @@ public class SearchExpertPresenter extends BasePresenter<ISearchExpertView> {
                 iView.getExpertList(expertEntity.list, expertEntity.pager.page, expertEntity.pager.total_page);
                 currentPage = expertEntity.pager.page;
                 allPage = expertEntity.pager.total_page;
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 

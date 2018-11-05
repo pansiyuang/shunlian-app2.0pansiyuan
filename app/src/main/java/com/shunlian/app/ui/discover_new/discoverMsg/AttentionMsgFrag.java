@@ -13,6 +13,8 @@ import com.shunlian.app.presenter.AttentionMsgPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.view.IAttentionMsgView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -30,8 +32,8 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
@@ -54,8 +56,9 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
+
+        NestedSlHeader header = new NestedSlHeader(baseContext);
+        lay_refresh.setRefreshHeaderView(header);
         recycler_list.setNestedScrollingEnabled(false);
 
         manager = new LinearLayoutManager(getActivity());
@@ -64,24 +67,21 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
 
         mPresenter = new AttentionMsgPresenter(getActivity(), this);
         mPresenter.getAttentionMsgList(true);
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common)
+                .setText("还没有人关注你哦")
+                .setButtonText(null);
     }
 
     @Override
     protected void initListener() {
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getAttentionMsgList(true);
-                }
-            }
-
-            @Override
-            public void onLoadMore() {
-
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getAttentionMsgList(true);
             }
         });
+
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -102,9 +102,10 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
-
     @Override
     public void showDataEmptyView(int request_code) {
 
@@ -112,13 +113,21 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
 
     @Override
     public void getAttentionMsgList(List<HotBlogsEntity.MemberInfo> list, int page, int totalPage) {
-        refreshview.stopRefresh(true);
         if (page == 1) {
             memberInfoList.clear();
         }
         if (!isEmpty(list)) {
             memberInfoList.addAll(list);
         }
+
+        if (page == 1 && isEmpty(memberInfoList)) {
+            nei_empty.setVisibility(View.VISIBLE);
+            lay_refresh.setVisibility(View.GONE);
+        } else {
+            nei_empty.setVisibility(View.GONE);
+            lay_refresh.setVisibility(View.VISIBLE);
+        }
+
         if (mAdapter == null) {
             mAdapter = new AttentionMsgAdapter(getActivity(), memberInfoList);
             mAdapter.setAdapterCallBack(this);
@@ -145,5 +154,16 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
     @Override
     public void toFocusUser(int isFocus, String memberId) {
         mPresenter.focusUser(isFocus, memberId);
+    }
+
+
+    /**
+     * 刷新完成
+     */
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 }

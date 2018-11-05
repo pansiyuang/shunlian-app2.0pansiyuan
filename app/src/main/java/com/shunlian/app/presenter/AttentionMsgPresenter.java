@@ -62,6 +62,10 @@ public class AttentionMsgPresenter extends BasePresenter<IAttentionMsgView> {
                 iView.getAttentionMsgList(attentionMsgEntity.list, attentionMsgEntity.page, attentionMsgEntity.total_page);
                 currentPage = attentionMsgEntity.page;
                 allPage = attentionMsgEntity.total_page;
+
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 

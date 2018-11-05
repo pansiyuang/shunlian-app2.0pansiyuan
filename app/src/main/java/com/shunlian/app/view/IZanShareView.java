@@ -12,4 +12,6 @@ import java.util.List;
 public interface IZanShareView extends IView {
 
     void getMsgList(List<ZanShareEntity.Msg> list, int page, int totalPage);
+
+    void refreshFinish();
 }

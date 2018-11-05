@@ -59,6 +59,9 @@ public class ZanSharePresenter extends BasePresenter<IZanShareView> {
                 iView.getMsgList(zanShareEntity.list, zanShareEntity.page, zanShareEntity.total_page);
                 currentPage = zanShareEntity.page;
                 allPage = zanShareEntity.total_page;
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 

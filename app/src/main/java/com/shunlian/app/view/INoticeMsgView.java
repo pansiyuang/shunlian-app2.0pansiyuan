@@ -11,4 +11,6 @@ import java.util.List;
 public interface INoticeMsgView extends IView {
 
     void getNoticeMsgList(List<NoticeMsgEntity.Notice> noticeList, int page, int totalPage);
+
+    void refreshFinish();
 }

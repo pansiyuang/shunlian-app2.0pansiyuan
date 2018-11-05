@@ -23,6 +23,10 @@ public class ZanShareEntity {
         public String member_id;
         public String nickname;
         public String avatar;
+        public int add_v;
+        public int expert;
+        public String v_icon;
+        public String expert_icon;
         public Blog blog;
         public String create_time;
     }

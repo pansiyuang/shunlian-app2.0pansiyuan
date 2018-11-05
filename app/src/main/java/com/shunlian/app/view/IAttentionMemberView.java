@@ -13,4 +13,6 @@ public interface IAttentionMemberView extends IView {
     void getAttentionList(List<MemberEntity.Member> fansList, int page, int totalPage);
 
     void focusUser(int isFocus, String memberId);
+
+    void refreshFinish();
 }

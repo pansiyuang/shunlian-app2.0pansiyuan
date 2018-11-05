@@ -13,4 +13,6 @@ public interface IAttentionMsgView extends IView {
     void getAttentionMsgList(List<HotBlogsEntity.MemberInfo> list,int page,int totalPage);
 
     void focusUser(int isFocus,String memberId);
+
+    void refreshFinish();
 }

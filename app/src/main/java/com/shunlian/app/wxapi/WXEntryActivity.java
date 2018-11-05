@@ -29,6 +29,7 @@ import com.shunlian.app.ui.new_login_register.RegisterAndBindingAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -358,6 +359,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                         RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);
                 mYFinish();
             } else if ("1".equals(status)) {//登录成功
+                JosnSensorsDataAPI.login("微信登录");
                 loginSuccess(entity, wxLoginEntity);
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
                 RegisterAndBindingAct.startAct(this,
