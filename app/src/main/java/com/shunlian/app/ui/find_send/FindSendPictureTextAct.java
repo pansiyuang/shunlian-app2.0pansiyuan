@@ -495,12 +495,16 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if (!isEmpty(mGoodsLists)) {
             StringBuilder sb = new StringBuilder();
             for (GoodsDeatilEntity.Goods goods : mGoodsLists) {
-                sb.append(goods.goods_id);
+                if (!isEmpty(goods.goods_id)) {
+                    sb.append(goods.goods_id);
+                }else if (!isEmpty(goods.id)){
+                    sb.append(goods.id);
+                }
                 sb.append(",");
             }
             return sb.toString().substring(0, sb.length() - 1);
         }
-        return "";
+        return null;
     }
 
     @Override

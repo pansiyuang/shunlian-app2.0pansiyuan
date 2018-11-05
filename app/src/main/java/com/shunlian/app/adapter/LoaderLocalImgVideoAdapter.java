@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.shunlian.app.R;
 import com.shunlian.app.photopick.ImageVideo;
-import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -59,7 +61,7 @@ public class LoaderLocalImgVideoAdapter extends BaseRecyclerAdapter<ImageVideo> 
             if (isEmpty(imageVideo.coverPath)) {
                 mHolder.image.setImageBitmap(imageVideo.coverBitmap);
             }else {
-                GlideUtils.getInstance().loadOverrideImage(context,
+                loadOverrideImage(context,
                         mHolder.image, imageVideo.coverPath, 176, 176);
             }
             visible(mHolder.mtv_video_duration);
@@ -72,7 +74,7 @@ public class LoaderLocalImgVideoAdapter extends BaseRecyclerAdapter<ImageVideo> 
             mHolder.mtv_video_duration.setText(String.format("00:%s", second));
         } else {
             visible(mHolder.checkmark);
-            GlideUtils.getInstance().loadOverrideImage(context,
+            loadOverrideImage(context,
                     mHolder.image, imageVideo.path, 176, 176);
             gone(mHolder.mtv_video_duration);
         }
@@ -151,5 +153,19 @@ public class LoaderLocalImgVideoAdapter extends BaseRecyclerAdapter<ImageVideo> 
 
     public interface OnSelectionListener{
         void selection(int position,boolean oldSelection);
+    }
+
+    public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize) {
+        if (imageView == null||withSize<=0||heightSize<=0) return;
+        Glide.with(context)
+                .load(imgUrl)
+                .error(R.mipmap.default_error)
+                .placeholder(R.mipmap.default_error)
+                .crossFade()
+                .dontAnimate()
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .override(withSize, heightSize)
+                .into(imageView);
     }
 }

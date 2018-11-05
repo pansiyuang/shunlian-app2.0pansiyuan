@@ -43,6 +43,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
     private ArrayList<ImageVideo> mImgList = new ArrayList();
     private SingleImgAdapterV2 mImgAdapter;
     private int index = 0;//递归压缩图片下标
+    private byte[] mBitmapBytes;
 
     public FindSendPicPresenter(Context context, ISelectPicVideoView iView) {
         super(context, iView);
@@ -107,6 +108,9 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
         if (mImgList != null){
             mImgList.clear();
             mImgList = null;
+        }
+        if (mBitmapBytes != null){
+            mBitmapBytes = null;
         }
     }
 
@@ -192,6 +196,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
      * @param bytes
      */
     public void uploadVideoThumb(byte[] bytes) {
+        mBitmapBytes = bytes;
         List<MultipartBody.Part> parts = new ArrayList<>();
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), bytes);
@@ -211,6 +216,12 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
                 if (!isEmpty(uploadPicEntity.relativePath)) {
                     iView.videoThumb(uploadPicEntity.relativePath.get(0));
                 }
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                uploadVideoThumb(mBitmapBytes);
             }
         });
     }
