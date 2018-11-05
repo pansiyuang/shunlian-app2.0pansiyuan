@@ -221,7 +221,8 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
                     }
                 });
              if(blog.is_self==1){
-                 tv_user_attent.setVisibility(GONE);
+//                 tv_user_attent.setVisibility(GONE);
+                 setAttentStateView();
              }else {
                  setAttentStateView();
              }
@@ -260,7 +261,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             tv_user_attent.setText(blog.is_focus == 0 ? "关注" : "已关注");
             tv_user_attent.setVisibility(VISIBLE);
         }else{
-            tv_user_attent.setVisibility(GONE);
+            tv_user_attent.setVisibility(VISIBLE);
         }
         tv_user_attent.setTextColor(blog.is_focus==0?getResources().getColor(R.color.deep_red):getResources().getColor(R.color.value_878B8A));
         tv_user_attent.setBackgroundResource(blog.is_focus==0?R.drawable.rounded_rectangle_stroke_22px:R.drawable.rounded_rectangle_gray_22px);
