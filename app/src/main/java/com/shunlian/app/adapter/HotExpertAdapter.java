@@ -53,7 +53,6 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
             hotExpertViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
 
             if (blog.is_focus == 1) {//已经关注
-                hotExpertViewHolder.tv_attention.setVisibility(View.GONE);
                 hotExpertViewHolder.tv_attention.setBackgroundDrawable(null);
                 hotExpertViewHolder.tv_attention.setText("已关注");
                 hotExpertViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));

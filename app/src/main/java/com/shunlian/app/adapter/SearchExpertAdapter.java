@@ -41,7 +41,7 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
             ExpertViewHolder expertViewHolder = (ExpertViewHolder) holder;
             GlideUtils.getInstance().loadCircleImage(context, expertViewHolder.miv_icon, expert.avatar);
             expertViewHolder.tv_nickname.setText(expert.nickname);
-            expertViewHolder.tv_hot.setText(expert.hot_val + "热度");
+            expertViewHolder.tv_hot.setText(expert.hot + "热度");
             if (expert.focus_status == 1) {
                 expertViewHolder.tv_attention.setBackgroundDrawable(null);
                 expertViewHolder.tv_attention.setText("已关注");
@@ -50,6 +50,20 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
                 expertViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 expertViewHolder.tv_attention.setText("关注");
                 expertViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+            }
+
+            if (expert.add_v == 1) {
+                expertViewHolder.miv_v.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, expertViewHolder.miv_v, expert.v_icon);
+            } else {
+                expertViewHolder.miv_v.setVisibility(View.GONE);
+            }
+
+            if (expert.expert == 1) {
+                expertViewHolder.miv_expert.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, expertViewHolder.miv_expert, expert.expert_icon);
+            } else {
+                expertViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
             expertViewHolder.tv_attention.setOnClickListener((View v) -> {
@@ -62,6 +76,12 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
+
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
 
         @BindView(R.id.tv_nickname)
         TextView tv_nickname;

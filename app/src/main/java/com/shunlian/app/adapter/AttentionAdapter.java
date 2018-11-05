@@ -94,6 +94,7 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
             }
         });
         attentionViewholder.ll_member.setOnClickListener(v -> MyPageActivity.startAct(context, recomandFocus.member_id));
+        attentionViewholder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, recomandFocus.member_id));
 
         if (recomandFocus.focus_status == 1) {//已经关注
             attentionViewholder.tv_attention.setBackgroundDrawable(null);

@@ -18,12 +18,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.presenter.MyPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.setting.AutographAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.view.IMyPageView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -37,7 +40,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class MyPageActivity extends BaseActivity {
+public class MyPageActivity extends BaseActivity implements IMyPageView {
 
     @BindView(R.id.mAppbar)
     AppBarLayout mAppbar;
@@ -123,6 +126,7 @@ public class MyPageActivity extends BaseActivity {
     private boolean isSelf;
     private BaseFragment commonBlogFrag;
     private int totalDistance;
+    private MyPagePresenter mPresenter;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -155,8 +159,7 @@ public class MyPageActivity extends BaseActivity {
 
         currentMemberId = getIntent().getStringExtra("member_id");
 
-        setTabMode(isDefault);
-        initFrags();
+        mPresenter = new MyPagePresenter(this, this);
 
         objectMapper = new ObjectMapper();
         try {
@@ -173,10 +176,20 @@ public class MyPageActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        setTabMode(isDefault);
+        initFrags();
     }
 
     @Override
     protected void initListener() {
+
+        tv_signature.setOnClickListener(v -> {
+            if (isSelf) {
+                AutographAct.startAct(this, tv_signature.getText().toString());
+            }
+        });
+
         tv_attention.setOnClickListener(v -> {
             if (currentMember != null) {
                 ((CommonBlogFrag) commonBlogFrag).toFocusUser(currentMember.is_focus, currentMemberId);
@@ -260,7 +273,7 @@ public class MyPageActivity extends BaseActivity {
     public void initFrags() {
         goodsFrags = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
-            goodsFrags.add(CommonBlogFrag.getInstance(titles[i], currentMemberId));
+            goodsFrags.add(CommonBlogFrag.getInstance(titles[i], currentMemberId, isSelf));
         }
         commonBlogFrag = goodsFrags.get(0);
         viewpager.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titles));
@@ -288,8 +301,15 @@ public class MyPageActivity extends BaseActivity {
             }
             tv_nickname.setText(memberInfo.nickname);
             tv_title_nickname.setText(memberInfo.nickname);
-            tv_signature.setText(memberInfo.signature);
-
+            if (isEmpty(memberInfo.signature)) {
+                if (isSelf) {
+                    tv_signature.setText("还没有个人介绍哦，赶紧去编辑吧");
+                } else {
+                    tv_signature.setText("TA有点高冷，还没有介绍~");
+                }
+            } else {
+                tv_signature.setText(memberInfo.signature);
+            }
             setAttentStatus(currentMember.is_focus, memberInfo.member_id);
         }
         if (discoveryInfo != null) {
@@ -330,5 +350,33 @@ public class MyPageActivity extends BaseActivity {
             tv_attention.setText("关注");
             tv_attention.setTextColor(getResources().getColor(R.color.pink_color));
         }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (RESULT_OK == resultCode//个性签名
+                && requestCode == AutographAct.REQUEST_CODE) {
+            String signature = data.getStringExtra("signature");
+            if (!isEmpty(signature) && mPresenter != null) {
+                mPresenter.setInfo("signature", signature);
+            }
+        }
+    }
+
+    @Override
+    public void setSignature(String signature) {
+        tv_signature.setText(signature);
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }

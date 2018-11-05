@@ -195,12 +195,10 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.tv_attention.setBackgroundDrawable(null);
                 blogViewHolder.tv_attention.setText("已关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
-                blogViewHolder.tv_attention.setVisibility(View.GONE);
             } else {
                 blogViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 blogViewHolder.tv_attention.setText("关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
-                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
             }
 
             if (blog.is_praise == 1) {

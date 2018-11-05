@@ -144,9 +144,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginRight="9dp"
-                                android:layout_marginTop="12dp"
                                 android:ellipsize="end"
                                 android:singleLine="true"
+                                android:text="个性签名呀"
                                 android:textColor="@color/text_gray2"
                                 android:textSize="13sp" />
 
@@ -156,7 +156,7 @@
                                 android:layout_height="12dp"
                                 android:layout_alignParentBottom="true"
                                 android:scaleType="fitXY"
-                                android:visibility="invisible" />
+                                android:visibility="visible" />
                         </RelativeLayout>
                     </LinearLayout>
 

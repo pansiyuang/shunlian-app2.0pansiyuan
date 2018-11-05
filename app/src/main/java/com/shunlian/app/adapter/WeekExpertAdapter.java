@@ -84,12 +84,10 @@ public class WeekExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert> 
                 expertViewHolder.tv_attention.setBackgroundDrawable(null);
                 expertViewHolder.tv_attention.setText("已关注");
                 expertViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
-                expertViewHolder.tv_attention.setVisibility(View.GONE);
             } else {
                 expertViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 expertViewHolder.tv_attention.setText("关注");
                 expertViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
-                expertViewHolder.tv_attention.setVisibility(View.VISIBLE);
             }
             expertViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, expert.member_id));
             expertViewHolder.tv_nickname.setOnClickListener(v -> MyPageActivity.startAct(context, expert.member_id));

@@ -62,6 +62,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private OnDelBlogListener delBlogListener;
     private OnFavoListener favoListener;
     private QuickActions quickActions;
+    private boolean showAttention = true;
 
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, QuickActions quickActions) {
         super(context, true, lists);
@@ -80,6 +81,10 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         this.mActivity = activity;
         this.recomandFocusList = list;
         this.quickActions = quickActions;
+    }
+
+    public void setShowAttention(boolean isShow) {
+        showAttention = isShow;
     }
 
     @Override
@@ -232,7 +237,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.rl_video.setVisibility(View.GONE);
             } else {
                 if (!isEmpty(blog.video_thumb)) {
-                    int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 240, 240);
+                    int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 190, 190);
 
                     GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, params[0]), TransformUtil.dip2px(context, params[1]));
                 }
@@ -246,12 +251,10 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_attention.setBackgroundDrawable(null);
                 blogViewHolder.tv_attention.setText("已关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
-                blogViewHolder.tv_attention.setVisibility(View.GONE);
             } else {
                 blogViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 blogViewHolder.tv_attention.setText("关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
-                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
             }
 
             if (blog.is_praise == 1) {
@@ -318,6 +321,10 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     initDialog(blog);
                 }
             });
+
+            if (!showAttention) {
+                blogViewHolder.tv_attention.setVisibility(View.GONE);
+            }
         }
     }
 

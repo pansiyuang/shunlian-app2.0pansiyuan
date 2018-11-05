@@ -25,6 +25,7 @@ public class ExpertEntity {
     public static class Expert {
         public String member_id;
         public String hot_val;
+        public String hot;
         public String avatar;
         public String nickname;
         public int expert;
