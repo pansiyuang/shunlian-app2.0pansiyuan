@@ -106,7 +106,8 @@ public class MediaRecorderBase {
             return;
         }
         mRl = getResolution();
-        System.out.println(mRl.width+"======getResolution======="+mRl.height);
+        //if (mRl != null)
+        //System.out.println(mRl.width+"======getResolution======="+mRl.height);
         if (mSurfaceView != null) {
             mSurfaceView.setTouchFocus(mCamera);
         }
@@ -205,7 +206,9 @@ public class MediaRecorderBase {
 
         //设置录像的分辨率
         if (mRl != null){
-            mediaRecorder.setVideoSize(mRl.width,mRl.height);
+            mediaRecorder.setVideoSize(mRl.width, mRl.height);
+        }else {
+            mediaRecorder.setVideoSize(720, 480);
         }
 
         //设置录像视频输出地址
@@ -527,18 +530,33 @@ public class MediaRecorderBase {
             List<Camera.Size> previewSizes = mCamera.getParameters().getSupportedPreviewSizes();
             List<Camera.Size> tempSize = new ArrayList<>();
 
+            //System.out.println("====当前预览比例======"+thisRate());
+
+            /*for (Camera.Size size : videoSizes) {
+                String format = "videoSizes   w=%d  h=%d   比例=%f";
+                System.out.println(String.format(format,size.width,size.height,size.width*1.0f/size.height));
+            }*/
+
+
             //筛选相同的分辨率，并且是适合本机预览尺寸的分辨率
             for (Camera.Size size : previewSizes) {
+                //String format = "previewSizes   w=%d  h=%d   比例=%f";
+                //System.out.println(String.format(format,size.width,size.height,size.width*1.0f/size.height));
                 if (videoSizes.contains(size) && equalRate(size,thisRate())) {
                     tempSize.add(size);
+                    //System.out.println(size.width+"=====所有========"+size.height);
                 }
             }
 
             if (tempSize.size() > 0){
                 //将筛选过的按降序排序
-                sort(tempSize,true);
-                int i = tempSize.size() / 2;
-                return tempSize.get(i);
+                sort(tempSize,false);
+                /*for (int i = 0; i < tempSize.size(); i++) {
+                    Camera.Size size = tempSize.get(i);
+                    System.out.println(size.width+"=====合适比例========"+size.height);
+                }*/
+                int size = tempSize.size();
+                return tempSize.get(size / 2);
             }
         }
         return null;
@@ -562,7 +580,8 @@ public class MediaRecorderBase {
 
     private float thisRate(){
         DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
-        return dm.heightPixels/dm.widthPixels;
+        //System.out.println(dm.widthPixels+"==宽=========高==="+dm.heightPixels);
+        return dm.heightPixels*1.0f/dm.widthPixels;
     }
 
     private boolean equalRate(Camera.Size s,float rate){

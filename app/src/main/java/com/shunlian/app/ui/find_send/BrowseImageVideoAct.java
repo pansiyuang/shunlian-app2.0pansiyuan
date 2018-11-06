@@ -313,6 +313,10 @@ public class BrowseImageVideoAct extends BaseActivity {
                 }
 
                 checkmark.setOnClickListener(v -> {
+                    if (imageVideo.isPicDamage){
+                        Common.staticToast("图片损坏，请换一张");
+                        return;
+                    }
                     imageVideo.isSelect = !imageVideo.isSelect;
                     boolean isSel = selectHandler(position, imageVideo.isSelect, imageVideo);
                     if (isSel) {
