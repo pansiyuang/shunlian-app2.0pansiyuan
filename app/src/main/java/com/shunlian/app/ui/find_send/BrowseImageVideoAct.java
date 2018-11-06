@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.find_send;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -17,10 +18,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
@@ -283,7 +288,7 @@ public class BrowseImageVideoAct extends BaseActivity {
                 if (isMP4Path(url)) {
                     checkmark.setVisibility(View.GONE);
                     if (!isEmpty(imageVideo.coverPath)) {
-                        GlideUtils.getInstance().loadImage(baseAct,imageView,imageVideo.coverPath);
+                        loadImage(baseAct,imageView,imageVideo.coverPath);
                     }else {
                         mRetriever.setDataSource(url);
                         Bitmap frameAtTime = mRetriever.getFrameAtTime();
@@ -308,6 +313,10 @@ public class BrowseImageVideoAct extends BaseActivity {
                 }
 
                 checkmark.setOnClickListener(v -> {
+                    if (imageVideo.isPicDamage){
+                        Common.staticToast("图片损坏，请换一张");
+                        return;
+                    }
                     imageVideo.isSelect = !imageVideo.isSelect;
                     boolean isSel = selectHandler(position, imageVideo.isSelect, imageVideo);
                     if (isSel) {
@@ -375,7 +384,7 @@ public class BrowseImageVideoAct extends BaseActivity {
                 }
             });
         } else {
-            GlideUtils.getInstance().loadImage(this, imageView, url);
+            loadImage(this, imageView, url);
         }
     }
 
@@ -454,6 +463,20 @@ public class BrowseImageVideoAct extends BaseActivity {
         */
     }
 
+    public void loadImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null) return;
+        Glide.with(context)
+                .load(imgUrl)
+                .error(R.mipmap.default_error)
+                .placeholder(R.mipmap.default_error)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
+                //source:缓存源资源   result：缓存转换后的资源
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .into(imageView);
+    }
+
     private void getVideoFrame(String url){
         if (isMP4Path(url)){
             new AsyncTask<String,Void,List<Bitmap>>(){
@@ -472,7 +495,7 @@ public class BrowseImageVideoAct extends BaseActivity {
                             mBitmaps = new ArrayList<>();
                             mRetriever.setDataSource(urls[0]);
                             String duration = mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-                            System.out.println(urls[0]+"========duration==="+duration);
+                            //System.out.println(urls[0]+"========duration==="+duration);
                             if (!TextUtils.isEmpty(duration) && TextUtils.isDigitsOnly(duration)){
                                 mBitmaps.add(mRetriever.getFrameAtTime());
                                 for (int i = 0; i < Long.parseLong(duration) / 1000; i++) {
@@ -491,7 +514,7 @@ public class BrowseImageVideoAct extends BaseActivity {
                 protected void onPostExecute(List<Bitmap> bitmaps) {
                     super.onPostExecute(bitmaps);
                     if (bitmaps != null) {
-                        System.out.println("===onPostExecute=====" + bitmaps.size());
+                        //System.out.println("===onPostExecute=====" + bitmaps.size());
                         LinearLayoutManager manager = new LinearLayoutManager(BrowseImageVideoAct.this,
                                 LinearLayoutManager.HORIZONTAL,false);
                         recy_view.setLayoutManager(manager);

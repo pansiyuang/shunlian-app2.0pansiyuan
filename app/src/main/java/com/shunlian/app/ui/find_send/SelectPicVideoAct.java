@@ -359,7 +359,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     imageItem.path = imagePath;
                     imageItem.name = imageName;
                     mImageVideos.add(imageItem);
-
+                    //LogUtil.zhLogW("=====imagePath========="+imagePath);
                     mediaStoreCategory(imagePath, imageItem);
                 }
                 isImage = true;
