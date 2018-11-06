@@ -274,6 +274,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.miv_more.setVisibility(View.GONE);
             } else {
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
+                int i = TransformUtil.dip2px(context, 20);
+                TransformUtil.expandViewTouchDelegate(blogViewHolder.miv_more, i, i, i, i);
             }
 
             blogViewHolder.tv_attention.setOnClickListener(v -> {
@@ -307,8 +309,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 NewLookBigImgAct.startAct(context, bigImgEntity);
             });
 
-            int i = TransformUtil.dip2px(context, 20);
-            TransformUtil.expandViewTouchDelegate(blogViewHolder.miv_more, i, i, i, i);
+
             blogViewHolder.miv_more.setOnClickListener(v -> {
                 showDialog(blog);
             });
