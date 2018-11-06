@@ -352,8 +352,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     @Override
     public void publishSuccess() {
-        finish();
         MyPageActivity.startAct(this,mConfig.memberId);
+        finish();
     }
 
     /**
