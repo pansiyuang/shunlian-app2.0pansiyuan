@@ -6,13 +6,13 @@ apply plugin: 'com.jfrog.bintray'
 version = "2.1.2"
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '27.0.3'
 
     resourcePrefix "sensors_analytics_"
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -28,7 +28,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:appcompat-v7:27.1.1'
     compile 'org.aspectj:aspectjrt:1.8.10'
 }
 

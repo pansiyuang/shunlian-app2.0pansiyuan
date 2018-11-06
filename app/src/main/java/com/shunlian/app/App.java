@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 
-import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
+//import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
@@ -58,7 +58,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
      * Sensors Analytics 采集数据的地址
      */
     private final static String SA_SERVER_URL = "http://test-zouyuhan.cloud.sensorsdata.cn:8006/sa?project=wangzhuozhou&token=db52d13749514676";
-    private final SensorsDataAPI.DebugMode SA_DEBUG_MODE = SensorsDataAPI.DebugMode.DEBUG_AND_TRACK;
+//    private final SensorsDataAPI.DebugMode SA_DEBUG_MODE = SensorsDataAPI.DebugMode.DEBUG_AND_TRACK;
 
     public static App mApp;
     private ActivityHelper mActivityHelper;
@@ -184,22 +184,22 @@ public class App extends Application implements Application.ActivityLifecycleCal
      */
     private void initSensorsDataAPI() {
 
-        SensorsDataAPI.sharedInstance(
-                this,                               // 传入 Context
-                SA_SERVER_URL,                      // 数据接收的 URL
-                SA_DEBUG_MODE);                     // Debug 模式选项
-        // 打开自动采集, 并指定追踪哪些 AutoTrack 事件
-        List<SensorsDataAPI.AutoTrackEventType> eventTypeList = new ArrayList<>();
-        // $AppStart
-        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_START);
-        // $AppEnd
-        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_END);
-        // $AppViewScreen
-        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_VIEW_SCREEN);
-        // $AppClick
-        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_CLICK);
-        SensorsDataAPI.sharedInstance(this).enableAutoTrack(eventTypeList);
-        SensorsDataAPI.sharedInstance().trackFragmentAppViewScreen();
+//        SensorsDataAPI.sharedInstance(
+//                this,                               // 传入 Context
+//                SA_SERVER_URL,                      // 数据接收的 URL
+//                SA_DEBUG_MODE);                     // Debug 模式选项
+//        // 打开自动采集, 并指定追踪哪些 AutoTrack 事件
+//        List<SensorsDataAPI.AutoTrackEventType> eventTypeList = new ArrayList<>();
+//        // $AppStart
+//        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_START);
+//        // $AppEnd
+//        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_END);
+//        // $AppViewScreen
+//        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_VIEW_SCREEN);
+//        // $AppClick
+//        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_CLICK);
+//        SensorsDataAPI.sharedInstance(this).enableAutoTrack(eventTypeList);
+//        SensorsDataAPI.sharedInstance().trackFragmentAppViewScreen();
         registerActivityLifecycleCallbacks(this);
     }
 

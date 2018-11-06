@@ -139,7 +139,7 @@ dependencies {
     implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1325_43613_sharewithdownload_withoutGame_obfs_20180807_151115.jar')
     implementation project(':SmallMediaRecordLib2')
     implementation project(':layoutfit')
-    compile project(path: ':SensorsAnalyticsSDK')
+//    compile project(path: ':SensorsAnalyticsSDK')
 }
 bugly {
     appId = '1400008795' // 注册时分配的App ID

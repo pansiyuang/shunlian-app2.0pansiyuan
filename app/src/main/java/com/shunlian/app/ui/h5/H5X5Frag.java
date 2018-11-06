@@ -23,7 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
+//import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.ui.BaseFragment;
@@ -304,7 +304,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
         webSetting.setSaveFormData(false);
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
-        SensorsDataAPI.sharedInstance().showUpX5WebView(mwv_h5,true);
+//        SensorsDataAPI.sharedInstance().showUpX5WebView(mwv_h5,true);
         //x5新增
         webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         webSetting.setSupportZoom(true);
@@ -654,7 +654,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
     /**
      * 截取商品id
      *
-    * @param url
+//    * @param url
      * @return
      */
 //    private String interceptId(String url) {

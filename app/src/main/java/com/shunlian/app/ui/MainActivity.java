@@ -898,7 +898,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         currentLocation = event.location;
         currentImgWidth = event.imgWidth;
         if (currentLocation != null && currentImgWidth != 0) {
-//            showGuideView();
+            showGuideView();
         }
     }
 
@@ -914,8 +914,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         currentLocation[1] = currentLocation[1] + currentImgWidth / 2;
 
         DiscoveryGuideView guide_view = new DiscoveryGuideView(this);
-        guide_view.setImageLocation(currentLocation, location2,currentImgWidth,bottomImgWidth);
-        guide_view.setBackgroundColor(Color.parseColor("#33000000"));
+        guide_view.setOnClickListener(v -> {
+            LogUtil.httpLogW("OnClick");
+            guide_view.setVisibility(View.GONE);
+        });
+        guide_view.setImageLocation(currentLocation, location2);
+        guide_view.setBackgroundColor(Color.parseColor("#4D000000"));
         ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         guide_view.setLayoutParams(layoutParams);

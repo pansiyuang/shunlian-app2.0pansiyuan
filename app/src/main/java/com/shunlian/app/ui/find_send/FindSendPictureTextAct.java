@@ -25,6 +25,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.presenter.FindSendPicPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
@@ -348,6 +349,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @Override
     public void publishSuccess() {
         finish();
+        MyPageActivity.startAct(this,mConfig.memberId);
     }
 
     /**
