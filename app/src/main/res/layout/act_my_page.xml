@@ -153,7 +153,7 @@
                             <com.shunlian.app.widget.MyImageView
                                 android:id="@+id/miv_expert"
                                 android:layout_width="40dp"
-                                android:layout_height="12dp"
+                                android:layout_height="14dp"
                                 android:layout_alignParentBottom="true"
                                 android:scaleType="fitXY"
                                 android:visibility="visible" />

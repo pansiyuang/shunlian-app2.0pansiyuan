@@ -150,7 +150,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
             blogList.addAll(hotBlogsEntity.list);
         }
 
-        if (isEmpty(blogList) && currentPage == 1) { //没有关注的用户并且当前是第一次获取数据
+        if (blogList.size() == 0 && currentPage == 1) { //没有关注的用户并且当前是第一次获取数据
             if (attentionAdapter == null) {
                 attentionAdapter = new AttentionAdapter(getActivity(), recomandFocusList);
                 attentionAdapter.setOnFocusListener(this);
@@ -160,6 +160,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
             if (hotBlogAdapter == null) {
                 hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList, quick_actions);
                 hotBlogAdapter.setAdapterCallBack(this);
+                hotBlogAdapter.setShowAttention(false);
                 recycler_list.setAdapter(hotBlogAdapter);
             }
             hotBlogAdapter.setPageLoading(currentPage, totalPage);

@@ -100,26 +100,24 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
             attentionViewholder.tv_attention.setBackgroundDrawable(null);
             attentionViewholder.tv_attention.setText("已关注");
             attentionViewholder.tv_attention.setTextColor(getColor(R.color.text_gray2));
-            attentionViewholder.tv_attention.setVisibility(View.GONE);
         } else {
             attentionViewholder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
             attentionViewholder.tv_attention.setText("关注");
             attentionViewholder.tv_attention.setTextColor(getColor(R.color.pink_color));
-            attentionViewholder.tv_attention.setVisibility(View.VISIBLE);
         }
 
         if (recomandFocus.add_v == 0) {
             attentionViewholder.miv_v.setVisibility(View.GONE);
-            GlideUtils.getInstance().loadImage(context, attentionViewholder.miv_v, recomandFocus.v_icon);
         } else {
             attentionViewholder.miv_v.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImage(context, attentionViewholder.miv_v, recomandFocus.v_icon);
         }
 
         if (recomandFocus.expert == 0) {
             attentionViewholder.miv_expert.setVisibility(View.GONE);
-            GlideUtils.getInstance().loadImage(context, attentionViewholder.miv_expert, recomandFocus.expert_icon);
         } else {
             attentionViewholder.miv_expert.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImage(context, attentionViewholder.miv_expert, recomandFocus.expert_icon);
         }
     }
 

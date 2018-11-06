@@ -12,21 +12,28 @@
     android:paddingRight="12dp"
     android:paddingTop="8dp">
 
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_icon"
+
+    <RelativeLayout
+        android:id="@+id/rl_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_centerVertical="true"
-        android:scaleType="centerCrop" />
+        android:layout_centerVertical="true">
 
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_v"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_alignBottom="@+id/miv_icon"
-        android:layout_alignRight="@+id/miv_icon"
-        android:scaleType="fitXY"
-        android:visibility="gone" />
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="centerCrop" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_v"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ll_member"
@@ -36,7 +43,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="12dp"
         android:layout_toLeftOf="@+id/tv_attention"
-        android:layout_toRightOf="@+id/miv_icon"
+        android:layout_toRightOf="@+id/rl_icon"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -57,8 +64,8 @@
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_expert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="14dp"
                 android:layout_marginLeft="5dp"
                 android:scaleType="fitXY"
                 android:visibility="gone" />

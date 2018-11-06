@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ExpertEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.search.SearchExpertFrag;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
@@ -40,7 +41,7 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
             ExpertEntity.Expert expert = lists.get(position);
             ExpertViewHolder expertViewHolder = (ExpertViewHolder) holder;
             GlideUtils.getInstance().loadCircleImage(context, expertViewHolder.miv_icon, expert.avatar);
-            expertViewHolder.tv_nickname.setText(expert.nickname);
+            expertViewHolder.tv_name.setText(expert.nickname);
             expertViewHolder.tv_hot.setText(expert.hot + "热度");
             if (expert.focus_status == 1) {
                 expertViewHolder.tv_attention.setBackgroundDrawable(null);
@@ -66,6 +67,8 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
                 expertViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
+            expertViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context,expert.member_id));
+
             expertViewHolder.tv_attention.setOnClickListener((View v) -> {
                 mFrag.toFocus(expert.focus_status, expert.member_id);
             });
@@ -83,8 +86,8 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
         @BindView(R.id.miv_expert)
         MyImageView miv_expert;
 
-        @BindView(R.id.tv_nickname)
-        TextView tv_nickname;
+        @BindView(R.id.tv_name)
+        TextView tv_name;
 
         @BindView(R.id.tv_hot)
         TextView tv_hot;

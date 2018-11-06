@@ -18,12 +18,12 @@
 
             <com.shunlian.app.widget.MyLinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="46dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
-                <com.shunlian.app.widget.circle.CircleImageView
+                <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_user_head"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="@color/light_gray_three"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_title"
@@ -57,9 +57,9 @@
                 android:maxLines="2"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="20dp"
+                android:paddingTop="6dp"
                 android:textColor="@color/new_text"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_desc"
@@ -70,11 +70,11 @@
                 android:background="@color/white_ash"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:paddingBottom="30dp"
+                android:paddingBottom="6dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:textColor="@color/share_text"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
 
             <com.shunlian.app.widget.MyImageView
@@ -102,26 +102,51 @@
                     android:layout_marginTop="20dp" />
 
                 <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_goodsID"
+                    android:id="@+id/mtv_prompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/mtv_price"
-                    android:layout_alignLeft="@+id/mtv_price"
-                    android:layout_marginBottom="-6dp"
-                    android:maxLines="1"
-                    android:textColor="@color/new_text"
+                    android:layout_alignBottom="@id/miv_code"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@id/miv_code"
+                    android:text="长按图片识别二维码"
+                    android:textColor="@color/my_gray_one"
                     android:textSize="10sp" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_SuperiorProduct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/mtv_prompt"
+                    android:layout_alignLeft="@+id/mtv_prompt"
+                    android:layout_marginTop="6dp"
+                    android:src="@mipmap/img_plus_youping_xiao"
+                    android:visibility="gone"
+                    app:iv_control_adapter="true"
+                    app:iv_control_height="40"
+                    app:iv_control_width="40" />
+
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/miv_code"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_toRightOf="@+id/miv_code"
+                    android:layout_above="@id/miv_SuperiorProduct"
+                    android:layout_alignLeft="@id/mtv_prompt"
                     android:textColor="@color/pink_color"
                     android:textSize="14sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_goodsID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/mtv_price"
+                    android:layout_alignLeft="@id/mtv_prompt"
+                    android:maxLines="1"
+                    android:textColor="@color/new_text"
+                    android:textSize="10sp" />
+
+
 
                 <LinearLayout
                     android:id="@+id/llayout_day"
@@ -160,32 +185,6 @@
                 </LinearLayout>
 
                 <com.shunlian.app.widget.MyImageView
-                    android:id="@+id/miv_SuperiorProduct"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/mtv_price"
-                    android:layout_below="@+id/mtv_price"
-                    android:layout_marginTop="6dp"
-                    android:src="@mipmap/img_plus_youping_xiao"
-                    android:visibility="gone"
-                    app:iv_control_adapter="true"
-                    app:iv_control_height="40"
-                    app:iv_control_width="40" />
-
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_prompt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/miv_code"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toRightOf="@+id/miv_code"
-                    android:text="长按图片识别二维码"
-                    android:textColor="@color/my_gray_one"
-                    android:textSize="10sp" />
-
-                <com.shunlian.app.widget.MyImageView
                     android:layout_width="52dp"
                     android:layout_height="12dp"
                     android:layout_alignBottom="@+id/mtv_prompt"
@@ -203,7 +202,7 @@
 
             <com.shunlian.app.widget.MyLinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="92dp"
+                android:layout_height="90dp"
                 android:orientation="horizontal">
 
                 <com.shunlian.app.widget.MyLinearLayout
@@ -226,7 +225,7 @@
                         android:layout_marginTop="6dp"
                         android:text="@string/discover_weiixnhaoyou"
                         android:textColor="@color/share_text"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </com.shunlian.app.widget.MyLinearLayout>
 
                 <com.shunlian.app.widget.MyLinearLayout
@@ -249,7 +248,7 @@
                         android:layout_marginTop="6dp"
                         android:text="@string/discover_baocuntupian"
                         android:textColor="@color/share_text"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </com.shunlian.app.widget.MyLinearLayout>
             </com.shunlian.app.widget.MyLinearLayout>
         </LinearLayout>

@@ -25,6 +25,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.presenter.FindSendPicPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
@@ -352,6 +353,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @Override
     public void publishSuccess() {
         finish();
+        MyPageActivity.startAct(this,mConfig.memberId);
     }
 
     /**
@@ -554,6 +556,11 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         public String activityID;
         /*********活动标题******非必传******/
         public String activityTitle;
+        /*********用户Id******必传******/
+        public String memberId;
+
+        public SendConfig() {
+        }
 
         @Override
         public int describeContents() {
@@ -565,18 +572,17 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             dest.writeByte(this.isWhiteList ? (byte) 1 : (byte) 0);
             dest.writeString(this.activityID);
             dest.writeString(this.activityTitle);
-        }
-
-        public SendConfig() {
+            dest.writeString(this.memberId);
         }
 
         protected SendConfig(Parcel in) {
             this.isWhiteList = in.readByte() != 0;
             this.activityID = in.readString();
             this.activityTitle = in.readString();
+            this.memberId = in.readString();
         }
 
-        public static final Parcelable.Creator<SendConfig> CREATOR = new Parcelable.Creator<SendConfig>() {
+        public static final Creator<SendConfig> CREATOR = new Creator<SendConfig>() {
             @Override
             public SendConfig createFromParcel(Parcel source) {
                 return new SendConfig(source);

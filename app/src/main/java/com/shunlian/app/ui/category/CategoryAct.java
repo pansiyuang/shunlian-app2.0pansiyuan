@@ -29,6 +29,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
@@ -286,6 +287,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
     @Override
     public void getSearchGoods(SearchGoodsEntity goodsEntity, int page, int allPage) {
+        JosnSensorsDataAPI.search(searchParam.keyword,goodsEntity.goods_list!=null&&goodsEntity.goods_list.size()>0,
+                JosnSensorsDataAPI.isHistory,JosnSensorsDataAPI.isRecommend);
         currentPage = page;
         totalPage = allPage;
         if (currentPage == 1) {
