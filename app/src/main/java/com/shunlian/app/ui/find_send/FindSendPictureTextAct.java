@@ -545,6 +545,11 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         public String activityID;
         /*********活动标题******非必传******/
         public String activityTitle;
+        /*********用户Id******必传******/
+        public String memberId;
+
+        public SendConfig() {
+        }
 
         @Override
         public int describeContents() {
@@ -556,18 +561,17 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             dest.writeByte(this.isWhiteList ? (byte) 1 : (byte) 0);
             dest.writeString(this.activityID);
             dest.writeString(this.activityTitle);
-        }
-
-        public SendConfig() {
+            dest.writeString(this.memberId);
         }
 
         protected SendConfig(Parcel in) {
             this.isWhiteList = in.readByte() != 0;
             this.activityID = in.readString();
             this.activityTitle = in.readString();
+            this.memberId = in.readString();
         }
 
-        public static final Parcelable.Creator<SendConfig> CREATOR = new Parcelable.Creator<SendConfig>() {
+        public static final Creator<SendConfig> CREATOR = new Creator<SendConfig>() {
             @Override
             public SendConfig createFromParcel(Parcel source) {
                 return new SendConfig(source);

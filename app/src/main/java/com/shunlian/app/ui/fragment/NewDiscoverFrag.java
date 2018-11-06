@@ -12,7 +12,9 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
+import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.discover_new.ActivityFrag;
 import com.shunlian.app.ui.discover_new.AttentionFrag;
 import com.shunlian.app.ui.discover_new.HotBlogFrag;
@@ -94,6 +96,13 @@ public class NewDiscoverFrag extends BaseFragment {
         reflex(tab_layout);
 
         view_pager.setCurrentItem(1);
+
+        miv_icon.post(() -> {
+            int[] location = new int[2];
+            miv_icon.getLocationInWindow(location);
+            int imgWidth = miv_icon.getWidth();
+            EventBus.getDefault().post(new DiscoveryLocationEvent(location, imgWidth));
+        });
     }
 
     @Override
