@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 
 /**
@@ -21,7 +22,6 @@ import com.shunlian.app.utils.TransformUtil;
 
 public class DiscoveryGuideView extends RelativeLayout {
     private int[] locationFirst, locationSecond;
-    private int topWidth, bottomWidth;
 
     public DiscoveryGuideView(Context context) {
         super(context);
@@ -35,11 +35,9 @@ public class DiscoveryGuideView extends RelativeLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setImageLocation(int[] location1, int[] location2, int topImgWidth, int bottomImgWidth) {
+    public void setImageLocation(int[] location1, int[] location2) {
         locationFirst = location1;
         locationSecond = location2;
-        topWidth = topImgWidth;
-        bottomWidth = bottomImgWidth;
         invalidate();
     }
 
@@ -49,27 +47,29 @@ public class DiscoveryGuideView extends RelativeLayout {
         int canvasWidth = canvas.getWidth();
         int canvasHeight = canvas.getHeight();
         Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        Paint bitMapPaint = new Paint();
+        bitMapPaint.setAntiAlias(true);
         int layerId = canvas.saveLayer(0, 0, canvasWidth, canvasHeight, null, Canvas.ALL_SAVE_FLAG);
-        paint.setColor(Color.parseColor("#33000000"));
+        paint.setColor(Color.parseColor("#FFFFFFFF"));
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         if (locationFirst != null) {
-            canvas.drawCircle(locationFirst[0], locationFirst[1], TransformUtil.dip2px(getContext(), 17), paint);
+            canvas.drawCircle(locationFirst[0], locationFirst[1], TransformUtil.dip2px(getContext(), 19), paint);
             Bitmap bitmapTop = BitmapFactory.decodeResource(getResources(), R.mipmap.img_faxian_ying);
-            canvas.drawBitmap(bitmapTop, locationFirst[0] + topWidth - TransformUtil.dip2px(getContext(), 15), locationFirst[1] + topWidth + TransformUtil.dip2px(getContext(), 30), paint);
+            canvas.drawBitmap(bitmapTop, locationFirst[0] + TransformUtil.dip2px(getContext(), 7), locationFirst[1] + TransformUtil.dip2px(getContext(), 25), bitMapPaint);
         }
         if (locationSecond != null) {
             canvas.drawCircle(locationSecond[0], locationSecond[1], TransformUtil.dip2px(getContext(), 22), paint);
             Bitmap bitmapBottom = BitmapFactory.decodeResource(getResources(), R.mipmap.img_faxian_dao);
-            canvas.drawBitmap(bitmapBottom, locationSecond[0] + bottomWidth / 2, locationSecond[1] - bitmapBottom.getHeight() + TransformUtil.dip2px(getContext(), 15), paint)
-            ;
+            canvas.drawBitmap(bitmapBottom, locationSecond[0], locationSecond[1] - bitmapBottom.getHeight() - TransformUtil.dip2px(getContext(), 10), bitMapPaint);
         }
         paint.setXfermode(null);
         canvas.restoreToCount(layerId);
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
         return true;
     }
 }

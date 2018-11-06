@@ -1,6 +1,6 @@
 package com.shunlian.app.utils;
 
-import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
+//import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +22,7 @@ public class JosnSensorsDataAPI {
             properties.put("bannerID", bannerID);
             properties.put("url", url);
             properties.put("bannerRank", bannerRank);
-            SensorsDataAPI.sharedInstance().track("bannerClick", properties);
+//            SensorsDataAPI.sharedInstance().track("bannerClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -36,7 +36,7 @@ public class JosnSensorsDataAPI {
         try {
             JSONObject properties = new JSONObject();
             properties.put("loginMethod", loginMethod);
-            SensorsDataAPI.sharedInstance().track("login", properties);
+//            SensorsDataAPI.sharedInstance().track("login", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -51,7 +51,7 @@ public class JosnSensorsDataAPI {
             JSONObject properties = new JSONObject();
             properties.put("signUpMethod", signUpMethod);
             properties.put("code", code);
-            SensorsDataAPI.sharedInstance().track("signUp", properties);
+//            SensorsDataAPI.sharedInstance().track("signUp", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -68,7 +68,7 @@ public class JosnSensorsDataAPI {
             properties.put("hasResult", hasResult);
             properties.put("isHistory", isHistory);
             properties.put("isRecommend", isRecommend);
-            SensorsDataAPI.sharedInstance().track("signUp", properties);
+//            SensorsDataAPI.sharedInstance().track("signUp", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }

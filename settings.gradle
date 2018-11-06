@@ -1,2 +1,2 @@
-include ':app', ':immersive', ':mlibrary', ':chartlibrary', ':jiaozivideoplayer', ':SmallMediaRecordLib2', ':layoutfit', ':SensorsAnalyticsSDK'
+include ':app', ':immersive', ':mlibrary', ':chartlibrary', ':jiaozivideoplayer', ':SmallMediaRecordLib2', ':layoutfit'
 project(':mlibrary').projectDir = new File('library')
