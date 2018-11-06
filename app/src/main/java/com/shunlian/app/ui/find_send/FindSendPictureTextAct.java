@@ -363,6 +363,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     public void resetDraft(BlogDraftEntity entity) {
         if (edit != null && !isEmpty(entity.text)) {
             edit.setText(entity.text);
+            edit.setSelection(entity.text.length());
         }
 
         if (mtv_topic != null && !isEmpty(entity.activity_title)) {
