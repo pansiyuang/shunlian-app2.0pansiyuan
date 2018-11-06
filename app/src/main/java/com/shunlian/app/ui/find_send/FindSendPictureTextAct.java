@@ -220,7 +220,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @OnClick(R.id.rlayout_select_goods)
     public void selectGoods() {
         if (!isEmpty(mGoodsLists) && mGoodsLists.size() >= MAX_ASSOCIATED_GOODS){
-            Common.staticToast("共联商品最多可选5个哦~");
+            Common.staticToast("关联商品最多可选5个哦~");
             return;
         }
         String goodsid = getGoodsid();
