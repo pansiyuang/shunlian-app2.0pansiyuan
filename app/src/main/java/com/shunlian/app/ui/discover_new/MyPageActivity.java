@@ -22,6 +22,7 @@ import com.shunlian.app.presenter.MyPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.setting.AutographAct;
+import com.shunlian.app.ui.setting.PersonalDataAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -267,6 +268,8 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
         ll_zan.setOnClickListener(v -> {
             //暂时不需要添加点击事件
         });
+
+        miv_icon.setOnClickListener(v -> PersonalDataAct.startAct(MyPageActivity.this));
         super.initListener();
     }
 

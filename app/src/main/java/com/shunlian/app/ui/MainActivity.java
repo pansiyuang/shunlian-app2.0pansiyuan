@@ -918,7 +918,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             guide_view.setVisibility(View.GONE);
         });
         guide_view.setImageLocation(currentLocation, location2);
-        guide_view.setBackgroundColor(Color.parseColor("#B3000000"));
+        guide_view.setAlpha(0.7f);
         ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         guide_view.setLayoutParams(layoutParams);
