@@ -56,7 +56,7 @@ public class DiscoveryGuideView extends RelativeLayout {
         if (locationFirst != null) {
             canvas.drawCircle(locationFirst[0], locationFirst[1], TransformUtil.dip2px(getContext(), 17), paint);
             Bitmap bitmapTop = BitmapFactory.decodeResource(getResources(), R.mipmap.img_faxian_ying);
-            canvas.drawBitmap(bitmapTop, locationFirst[0] + topWidth - TransformUtil.dip2px(getContext(), 15), locationFirst[0] + topWidth + TransformUtil.dip2px(getContext(), 30), paint);
+            canvas.drawBitmap(bitmapTop, locationFirst[0] + topWidth - TransformUtil.dip2px(getContext(), 15), locationFirst[1] + topWidth + TransformUtil.dip2px(getContext(), 30), paint);
         }
         if (locationSecond != null) {
             canvas.drawCircle(locationSecond[0], locationSecond[1], TransformUtil.dip2px(getContext(), 22), paint);
