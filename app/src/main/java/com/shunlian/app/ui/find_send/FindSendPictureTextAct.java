@@ -221,7 +221,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @OnClick(R.id.rlayout_select_goods)
     public void selectGoods() {
         if (!isEmpty(mGoodsLists) && mGoodsLists.size() >= MAX_ASSOCIATED_GOODS){
-            Common.staticToast("共联商品最多可选5个哦~");
+            Common.staticToast("关联商品最多可选5个哦~");
             return;
         }
         String goodsid = getGoodsid();
@@ -352,8 +352,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     @Override
     public void publishSuccess() {
-        finish();
         MyPageActivity.startAct(this,mConfig.memberId);
+        finish();
     }
 
     /**
@@ -365,6 +365,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     public void resetDraft(BlogDraftEntity entity) {
         if (edit != null && !isEmpty(entity.text)) {
             edit.setText(entity.text);
+            edit.setSelection(entity.text.length());
         }
 
         if (mtv_topic != null && !isEmpty(entity.activity_title)) {

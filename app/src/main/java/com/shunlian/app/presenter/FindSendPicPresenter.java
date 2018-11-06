@@ -140,6 +140,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
                     for (String url : data.pics) {
                         ImageVideo imageVideo = new ImageVideo();
                         imageVideo.path = url;
+                        imageVideo.url = url;
                         mImgList.add(imageVideo);
                     }
                     mImgAdapter.notifyDataSetChanged();
