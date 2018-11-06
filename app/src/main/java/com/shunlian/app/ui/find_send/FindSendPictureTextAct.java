@@ -220,6 +220,10 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     @OnClick(R.id.rlayout_select_goods)
     public void selectGoods() {
+        if (!isEmpty(mGoodsLists) && mGoodsLists.size() >= MAX_ASSOCIATED_GOODS){
+            Common.staticToast("共联商品最多可选5个哦~");
+            return;
+        }
         String goodsid = getGoodsid();
         SelectGoodsAct.startAct(this,goodsid, ADDGOODS_REQUEST_CODE);
     }
@@ -497,12 +501,16 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if (!isEmpty(mGoodsLists)) {
             StringBuilder sb = new StringBuilder();
             for (GoodsDeatilEntity.Goods goods : mGoodsLists) {
-                sb.append(goods.goods_id);
+                if (!isEmpty(goods.goods_id)) {
+                    sb.append(goods.goods_id);
+                }else if (!isEmpty(goods.id)){
+                    sb.append(goods.id);
+                }
                 sb.append(",");
             }
             return sb.toString().substring(0, sb.length() - 1);
         }
-        return "";
+        return null;
     }
 
     @Override

@@ -64,7 +64,7 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
     private String mUrl;
     private CountDownTimer mDownTimer;
     private SurfaceHolder mSurfaceHolder;
-    private final int maxDuration = 16000;//最大时长
+    private final int maxDuration = 15900;//最大时长
     private MediaRecorderBase mediaRecorderBase;
 
     private SurfaceHolder.Callback mSurfaceCallBack = new SurfaceHolder.Callback() {

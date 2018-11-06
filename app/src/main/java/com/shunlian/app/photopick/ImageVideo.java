@@ -21,6 +21,8 @@ public class ImageVideo implements Comparable<ImageVideo>{
     /***视频封面**/
     public Bitmap coverBitmap;
     public String coverPath;
+    /******图片是否损坏************/
+    public boolean isPicDamage;
 
     public File file;
     /**

@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.widget.Toast;
@@ -22,7 +23,11 @@ import com.zh.smallmediarecordlib.widget.FocusSurfaceView;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zhanghe on 2018/10/16.
@@ -57,6 +62,7 @@ public class MediaRecorderBase {
 
     public static final String CACHE_PATH_EXTERNAL = Environment.getExternalStorageDirectory()
             .getAbsolutePath() + File.separator + "shunlian";
+    private Camera.Size mRl;
 
     public MediaRecorderBase(Context context, FocusSurfaceView surfaceView, IMediaRecorder iMediaRecorder) {
         mContext = context;
@@ -99,7 +105,9 @@ public class MediaRecorderBase {
             Toast.makeText(mContext, "未能获取到相机！", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        mRl = getResolution();
+        //if (mRl != null)
+        //System.out.println(mRl.width+"======getResolution======="+mRl.height);
         if (mSurfaceView != null) {
             mSurfaceView.setTouchFocus(mCamera);
         }
@@ -134,7 +142,13 @@ public class MediaRecorderBase {
             mCamera.setDisplayOrientation(0);
         }
         //设置聚焦模式
-        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+        List<String> focusModes = params.getSupportedFocusModes();
+        if (focusModes.contains(params.FOCUS_MODE_CONTINUOUS_VIDEO))
+            params.setFocusMode(params.FOCUS_MODE_CONTINUOUS_VIDEO);
+
+        if (mRl != null){
+            params.setPreviewSize(mRl.width,mRl.height);
+        }
         //缩短Recording启动时间
         params.setRecordingHint(true);
         //影像稳定能力
@@ -191,16 +205,14 @@ public class MediaRecorderBase {
         }
 
         //设置录像的分辨率
-        mediaRecorder.setVideoSize(720, 480);
+        if (mRl != null){
+            mediaRecorder.setVideoSize(mRl.width, mRl.height);
+        }else {
+            mediaRecorder.setVideoSize(720, 480);
+        }
 
         //设置录像视频输出地址
         mediaRecorder.setOutputFile(currentVideoFilePath);
-        //开始录制
-        try {
-            mediaRecorder.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -212,8 +224,11 @@ public class MediaRecorderBase {
         mCamera.unlock();
         configMediaRecorder();
         try {
+            //开始录制
+            mediaRecorder.prepare();
             mediaRecorder.start();
         } catch (Exception e) {
+            e.printStackTrace();
             releaseMediaRecorder();
             return false;
         }
@@ -501,6 +516,79 @@ public class MediaRecorderBase {
             if (number == 2) return true;
             else return false;
         }catch (Exception e){
+            return false;
+        }
+    }
+
+    /**
+     * 获取合适的分辨率
+     * @return
+     */
+    private Camera.Size getResolution() {
+        if (mCamera != null) {
+            List<Camera.Size> videoSizes = mCamera.getParameters().getSupportedVideoSizes();
+            List<Camera.Size> previewSizes = mCamera.getParameters().getSupportedPreviewSizes();
+            List<Camera.Size> tempSize = new ArrayList<>();
+
+            //System.out.println("====当前预览比例======"+thisRate());
+
+            /*for (Camera.Size size : videoSizes) {
+                String format = "videoSizes   w=%d  h=%d   比例=%f";
+                System.out.println(String.format(format,size.width,size.height,size.width*1.0f/size.height));
+            }*/
+
+
+            //筛选相同的分辨率，并且是适合本机预览尺寸的分辨率
+            for (Camera.Size size : previewSizes) {
+                //String format = "previewSizes   w=%d  h=%d   比例=%f";
+                //System.out.println(String.format(format,size.width,size.height,size.width*1.0f/size.height));
+                if (videoSizes.contains(size) && equalRate(size,thisRate())) {
+                    tempSize.add(size);
+                    //System.out.println(size.width+"=====所有========"+size.height);
+                }
+            }
+
+            if (tempSize.size() > 0){
+                //将筛选过的按降序排序
+                sort(tempSize,false);
+                /*for (int i = 0; i < tempSize.size(); i++) {
+                    Camera.Size size = tempSize.get(i);
+                    System.out.println(size.width+"=====合适比例========"+size.height);
+                }*/
+                int size = tempSize.size();
+                return tempSize.get(size / 2);
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param sizes
+     * @param isDesc true降序 否则升序
+     */
+    private void sort(List<Camera.Size> sizes, final boolean isDesc){
+        Collections.sort(sizes, new Comparator<Camera.Size>() {
+            @Override
+            public int compare(Camera.Size o1, Camera.Size o2) {
+                if (o1.width < o2.width) return isDesc?1:-1;
+                else if (o1.width == o2.width) return 0;
+                else return isDesc?-1:1;
+            }
+        });
+    }
+
+    private float thisRate(){
+        DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
+        //System.out.println(dm.widthPixels+"==宽=========高==="+dm.heightPixels);
+        return dm.heightPixels*1.0f/dm.widthPixels;
+    }
+
+    private boolean equalRate(Camera.Size s,float rate){
+        float r = (float)(s.width)/(float)(s.height);
+        if(Math.abs(r - rate) <= 0.2){
+            return true;
+        } else{
             return false;
         }
     }
