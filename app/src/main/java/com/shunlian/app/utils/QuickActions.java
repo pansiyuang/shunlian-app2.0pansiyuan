@@ -609,9 +609,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
             MyLinearLayout mllayout_wexin = dialog_new.findViewById(R.id.mllayout_wexin);
             MyLinearLayout mllayout_save = dialog_new.findViewById(R.id.mllayout_save);
-//            CircleImageView miv_user_head = dialog_new.findViewById(R.id.miv_user_head);
-//            MyTextView mtv_nickname = dialog_new.findViewById(R.id.mtv_nickname);
-//            mtv_nickname.setText("来自" + mShareInfoParam.userName + "的分享");
+            MyImageView miv_user_head = dialog_new.findViewById(R.id.miv_user_head);
+            MyTextView mtv_nickname = dialog_new.findViewById(R.id.mtv_nickname);
+            mtv_nickname.setText("来自" + from + "的分享");
+            GlideUtils.getInstance().loadCircleAvar(mContext,miv_user_head,froms);
             MyImageView miv_code = (MyImageView) dialog_new.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(mContext, 92.5f);
             Bitmap qrImage = BitmapUtil.createQRImage(shareLink, null, i);
@@ -697,7 +698,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mShareInfoParam.desc = desc;
         mShareInfoParam.img = thumb;
 
-        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(mContext).fromBottom()
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(mContext,R.style.popAd).fromBottom()
                 .setView(R.layout.dialog_share);
         nomalBuildl = nomalBuild.create();
         nomalBuildl.setCancelable(false);

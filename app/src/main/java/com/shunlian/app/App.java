@@ -1,12 +1,14 @@
 package com.shunlian.app;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
@@ -19,6 +21,8 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.smtt.sdk.QbSdk;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -49,12 +53,25 @@ import cn.jpush.android.api.JPushInterface;
  * Created by zhang on 2017/4/13 15 : 17.
  */
 
-public class App extends Application {
+public class App extends Application implements Application.ActivityLifecycleCallbacks {
+    /**
+     * Sensors Analytics 采集数据的地址
+     */
+    private final static String SA_SERVER_URL = "http://test-zouyuhan.cloud.sensorsdata.cn:8006/sa?project=wangzhuozhou&token=db52d13749514676";
+    private final SensorsDataAPI.DebugMode SA_DEBUG_MODE = SensorsDataAPI.DebugMode.DEBUG_AND_TRACK;
+
     public static App mApp;
     private ActivityHelper mActivityHelper;
     private static Context context;
     public static String CACHE_PATH;
     public static String DOWNLOAD_PATH;
+
+    //页面名称
+    public static String SCREEN_NAME;
+    //页面标题
+    public static String TITLE;
+    public static long START_INDEX_TIME;
+    public static boolean IS_ENTER_HOME = false;
 
     public static ActivityHelper getActivityHelper() {
         return mApp.mActivityHelper;
@@ -159,5 +176,62 @@ public class App extends Application {
         };
         //x5内核初始化接口
         QbSdk.initX5Environment(getApplicationContext(),  cb);
+        initSensorsDataAPI();
+    }
+
+    /**
+     * 初始化 Sensors Analytics SDK
+     */
+    private void initSensorsDataAPI() {
+
+        SensorsDataAPI.sharedInstance(
+                this,                               // 传入 Context
+                SA_SERVER_URL,                      // 数据接收的 URL
+                SA_DEBUG_MODE);                     // Debug 模式选项
+        // 打开自动采集, 并指定追踪哪些 AutoTrack 事件
+        List<SensorsDataAPI.AutoTrackEventType> eventTypeList = new ArrayList<>();
+        // $AppStart
+        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_START);
+        // $AppEnd
+        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_END);
+        // $AppViewScreen
+        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_VIEW_SCREEN);
+        // $AppClick
+        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_CLICK);
+        SensorsDataAPI.sharedInstance(this).enableAutoTrack(eventTypeList);
+        SensorsDataAPI.sharedInstance().trackFragmentAppViewScreen();
+        registerActivityLifecycleCallbacks(this);
+    }
+
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
     }
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.sensorsdata.analytics.android.sdk.SensorsDataTrackFragmentAppViewScreen;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 
@@ -50,6 +51,7 @@ import butterknife.Unbinder;
  * Created by zhang on 2017/6/22 14 : 47.
  */
 
+@SensorsDataTrackFragmentAppViewScreen
 public abstract class BaseFragment extends Fragment implements View.OnClickListener{
 
 
