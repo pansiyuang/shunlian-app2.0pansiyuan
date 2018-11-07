@@ -229,28 +229,28 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="63dp"
-        android:layout_marginTop="15dp">
+        android:layout_height="45dp"
+        android:layout_marginLeft="63dp">
 
         <TextView
             android:id="@+id/tv_download"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:drawableLeft="@mipmap/icon_faxian_xaizai"
             android:drawablePadding="5dp"
             android:gravity="center"
             android:text="0"
+            android:paddingRight="17.5dp"
             android:textColor="@color/value_343434"
             android:textSize="10sp" />
 
         <TextView
             android:id="@+id/tv_zan"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="35dp"
+            android:paddingLeft="17.5dp"
             android:layout_toRightOf="@+id/tv_download"
             android:drawableLeft="@mipmap/icon_faxian_zan"
             android:drawablePadding="5dp"
@@ -262,10 +262,11 @@
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_more"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="25dp"
+            android:paddingRight="25dp"
+            android:paddingLeft="20dp"
             android:src="@mipmap/icon_shoucang"
             android:visibility="gone" />
     </RelativeLayout>
@@ -273,7 +274,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="16dp"
         android:background="@color/value_ECECEC" />
 
     <RelativeLayout
