@@ -10,4 +10,6 @@ public interface JsDownloadListener {
     void onFinishDownload(String filePath,boolean isCancel);
 
     void onFail(String errorInfo);
+
+    void onFinishEnd();
 }

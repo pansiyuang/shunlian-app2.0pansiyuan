@@ -620,14 +620,14 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         }else if (i == cn.jzvd.R.id.iv_voice){
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,0,0);
         }else if (i == cn.jzvd.R.id.iv_download){
-            readToDownLoad();
+            downFileStart();
         }else if(i==R.id.line_dianzan){
             if(blog.is_praise==0) {
                 parseAttent.updateParse(blog.is_praise == 1);
             }
         }else if(i==R.id.line_share){
         }else if(i==R.id.line_down){
-            readToDownLoad();
+            downFileStart();
         }else if(i==R.id.tv_user_attent){
             parseAttent.updateAttent(blog.is_focus==1);
         }else if(i==R.id.include_good){
@@ -1154,22 +1154,35 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         }
     }
 
-    public String dirName;
     public String currentUrl;
-    String fileName = "";
-
-    public void readToDownLoad() {
-       boolean checkState = checkDownLoadFileExists();
-        if (checkState) {
-            Common.staticToast("已下载过该视频,请勿重复下载!");
-        } else {
-            downFileStart();
-        }
-    }
-
 
     private void downFileStart(){
-        downLoadVideo();
+        downloadUtils = new DownloadUtils(new JsDownloadListener() {
+            @Override
+            public void onStartDownload() {
+            }
+            @Override
+            public void onProgress(int progress) {
+                downLoadDialogProgress.showProgress(progress);
+            }
+            @Override
+            public void onFinishDownload(String filePath,boolean isCancel) {
+                downLoadDialogProgress.downLoadSuccess();
+            }
+            @Override
+            public void onFail(String errorInfo) {
+                downLoadDialogProgress.dissMissDialog();
+            }
+            @Override
+            public void onFinishEnd() {
+                parseAttent.downVideo();
+            }
+        });
+        boolean checkState = downloadUtils.checkDownLoadFileExists(currentUrl);
+        if (checkState) {
+            Common.staticToast("已下载过该视频,请勿重复下载!");
+            return;
+        }
         downLoadDialogProgress.showDownLoadDialogProgress(getContext(), new DownLoadDialogProgress.downStateListen() {
             @Override
             public void cancelDownLoad() {
@@ -1179,75 +1192,11 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
 
             @Override
             public void fileDownLoad() {
-                downloadUtils.download(currentUrl,fileName);
+                downloadUtils.download(currentUrl,downloadUtils.fileName);
             }
         }, !NetworkUtils.isWifiConnected(getContext()));
     }
-    /**
-     * 检查下载的文件是否存在
-     * @return
-     */
-    public boolean checkDownLoadFileExists(){
-        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                .getAbsolutePath()+"/Camera";
-        File file = new File(dirName);
-        // 文件夹不存在时创建
-        if (!file.exists()) {
-            dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                    .getAbsolutePath();
-            file = new File(dirName);
-            if (!file.exists())
-                file.mkdirs();
-        }
-        // 下载后的文件名
 
-        if (!TextUtils.isEmpty(currentUrl)) {
-            int i = currentUrl.lastIndexOf("/"); // 取的最后一个斜杠后的字符串为名
-            fileName = dirName + currentUrl.substring(i, currentUrl.length());
-        }else {
-            fileName = dirName+ "/shunlian"+System.currentTimeMillis()+".mp4";
-        }
-        LogUtil.httpLogW("文件名:" + fileName);
-        File file1 = new File(fileName);
-        if (file1.exists()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public void downLoadVideo() {
-        downloadUtils = new DownloadUtils(new JsDownloadListener() {
-            @Override
-            public void onStartDownload() {
-
-            }
-
-            @Override
-            public void onProgress(int progress) {
-                Log.d("下载","进度："+progress);
-                downLoadDialogProgress.showProgress(progress);
-            }
-
-            @Override
-            public void onFinishDownload(String filePath,boolean isCancel) {
-                if(!isCancel) {
-                    saveVideoFile(filePath);
-                }else{
-                    File file1 = new File(filePath);
-                    if(file1.exists()){
-                        file1.delete();
-                    }
-                }
-                downLoadDialogProgress.downLoadSuccess();
-            }
-
-            @Override
-            public void onFail(String errorInfo) {
-                downLoadDialogProgress.dissMissDialog();
-            }
-        });
-    }
 
     public void saveVideoFile(String fileDir) {
         //strDir视频路径
