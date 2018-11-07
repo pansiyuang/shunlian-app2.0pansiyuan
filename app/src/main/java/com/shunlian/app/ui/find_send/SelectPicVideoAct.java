@@ -227,29 +227,34 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     boolean isComplete = data.getBooleanExtra("isComplete", false);
                     if (isComplete) {//图片
                         if (pics_path != null) {
-                            if (mSelectResultList == null) {
-                                mSelectResultList = new ArrayList<>();
-                            }
+                            listClear();
                             mSelectResultList.addAll(pics_path);
                             complete();
                         } else {//视频
-                            if (mSelectResultList == null) {
-                                mSelectResultList = new ArrayList<>();
-                            }
-                            mSelectResultList.clear();
+                            listClear();
                             mSelectResultList.add(video);
                             complete();
                         }
                     } else {
                         if (pics_path != null) {
-                            mSelectResultList.clear();
+                            listClear();
                             mSelectResultList.addAll(pics_path);
+                            if (mImageVideoAdapter != null){
+                                mImageVideoAdapter.notifyDataSetChanged();
+                            }
                             tv_complete.setText(String.format(format, mSelectResultList.size(), maxCount));
                         }
                     }
                     break;
             }
         }
+    }
+
+    private void listClear() {
+        if (mSelectResultList == null) {
+            mSelectResultList = new ArrayList<>();
+        }
+        mSelectResultList.clear();
     }
 
 
@@ -304,10 +309,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
      * @param currentPhotoPath
      */
     private void resultLocalUrl(String currentPhotoPath) {
-        if (mSelectResultList == null) {
-            mSelectResultList = new ArrayList<>();
-        }
-        mSelectResultList.clear();
+        listClear();
         mSelectResultList.add(currentPhotoPath);
         Intent intent = new Intent();
         intent.putExtra(EXTRA_RESULT, mSelectResultList);
@@ -550,7 +552,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     config.position = position;
                     config.isShowImageVideo = false;
                     config.isOnlyBrowse = false;
-                    //config.selectResultList = mSelectResultList;
+                    config.selectResultList = mSelectResultList;
                     BrowseImageVideoAct.startAct(this, config, BrowseImageVideoAct.REQUEST_CODE);
                 });
                 mImageVideoAdapter.setOnSelectionListener((position, oldSelection) -> {
