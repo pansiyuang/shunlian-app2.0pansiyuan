@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
@@ -23,11 +24,13 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover_new.ActivityDetailActivity;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.VideoGoodPlayActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
@@ -39,6 +42,7 @@ import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.NewLookBigImgAct;
 import com.shunlian.app.widget.NewTextView;
+import com.shunlian.app.widget.SaveImgDialog;
 import com.shunlian.app.widget.banner.MyKanner;
 
 import java.util.ArrayList;
@@ -64,6 +68,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private QuickActions quickActions;
     private boolean showAttention = true;
     private boolean isShowMore = false;
+    private SaveImgDialog saveImgDialog;
 
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, QuickActions quickActions) {
         super(context, true, lists);
@@ -335,6 +340,12 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     initDialog(blog);
                 }
             });
+            blogViewHolder.tv_tag.setOnClickListener(v -> {
+                if (isEmpty(blog.activity_id)) {
+                    return;
+                }
+                ActivityDetailActivity.startAct(context, blog.activity_id);
+            });
 
             if (!showAttention) {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
@@ -569,5 +580,37 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         }
         blogBottomDialog.setBlog(blog);
         blogBottomDialog.show();
+    }
+
+    public void readyToDownLoad(BigImgEntity.Blog blog) {
+        switch (blog.type) {
+            case 1://图文
+                if (!isEmpty(blog.pics)) {
+                    ArrayList arrayList = new ArrayList();
+                    arrayList.addAll(blog.pics);
+                    DownLoadImageThread threads = new DownLoadImageThread(context, arrayList, new DownLoadImageThread.MyCallBack() {
+                        @Override
+                        public void successBack() {
+                            Activity activity = (Activity) context;
+                            if (saveImgDialog == null) {
+                                saveImgDialog = new SaveImgDialog(activity);
+                            }
+                            saveImgDialog.show();
+                        }
+
+                        @Override
+                        public void errorBack() {
+                            Common.staticToast("保存图片失败");
+                        }
+                    });
+                    threads.start();
+                    ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    cm.setText(blog.activity_title);
+                }
+                break;
+            case 2://视频
+                
+                break;
+        }
     }
 }

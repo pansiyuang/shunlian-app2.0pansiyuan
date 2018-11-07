@@ -897,9 +897,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void refreshData(DiscoveryLocationEvent event) {
         currentLocation = event.location;
         currentImgWidth = event.imgWidth;
-        LogUtil.httpLogW("refreshData:" + currentImgWidth);
         if (currentLocation != null && currentImgWidth != 0) {
-            LogUtil.httpLogW("showGuideView");
             showGuideView();
         }
     }
@@ -916,8 +914,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         currentLocation[1] = currentLocation[1] + currentImgWidth / 2;
 
         DiscoveryGuideView guide_view = new DiscoveryGuideView(this);
-        guide_view.setBackgroundColor(Color.BLACK);
-        guide_view.setAlpha(0.7f);
         guide_view.setOnClickListener(v -> {
             guide_view.setVisibility(View.GONE);
         });

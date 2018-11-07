@@ -94,7 +94,7 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
         mPresenter.getZanShareList(true);
 
         nei_empty.setImageResource(R.mipmap.img_empty_common)
-                .setText("还没有关注你的粉丝哟")
+                .setText("还没有人给你点赞/分享哦")
                 .setButtonText(null);
     }
 

@@ -59,10 +59,6 @@ public class DiscoverActivityAdapter extends BaseRecyclerAdapter<DiscoverActivit
                     pics.add(member.avatar);
                 }
                 TieziAvarAdapter tieziAvarAdapter = new TieziAvarAdapter(context, pics, TransformUtil.dip2px(context, 20));
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-                linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                activityViewHolder.recycler_list.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(context, -8)));
-                activityViewHolder.recycler_list.setLayoutManager(linearLayoutManager);
                 activityViewHolder.recycler_list.setAdapter(tieziAvarAdapter);
                 activityViewHolder.recycler_list.setVisibility(View.VISIBLE);
             } else {
@@ -94,6 +90,10 @@ public class DiscoverActivityAdapter extends BaseRecyclerAdapter<DiscoverActivit
 
         public ActivityViewHolder(View itemView) {
             super(itemView);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recycler_list.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(context, -8)));
+            recycler_list.setLayoutManager(linearLayoutManager);
         }
     }
 }

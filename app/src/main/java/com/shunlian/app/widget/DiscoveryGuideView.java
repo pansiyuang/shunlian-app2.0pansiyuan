@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
@@ -20,7 +21,7 @@ import com.shunlian.app.utils.TransformUtil;
  * Created by Administrator on 2018/11/5.
  */
 
-public class DiscoveryGuideView extends RelativeLayout {
+public class DiscoveryGuideView extends View {
     private int[] locationFirst, locationSecond;
 
     public DiscoveryGuideView(Context context) {
@@ -50,6 +51,9 @@ public class DiscoveryGuideView extends RelativeLayout {
         Paint bitMapPaint = new Paint();
         paint.setAntiAlias(true);
         bitMapPaint.setAntiAlias(true);
+
+        paint.setColor(Color.parseColor("#CC000000"));
+
         int layerId = canvas.saveLayer(0, 0, canvasWidth, canvasHeight, null, Canvas.ALL_SAVE_FLAG);
 
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, paint);
@@ -66,10 +70,5 @@ public class DiscoveryGuideView extends RelativeLayout {
         }
         paint.setXfermode(null);
         canvas.restoreToCount(layerId);
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return true;
     }
 }

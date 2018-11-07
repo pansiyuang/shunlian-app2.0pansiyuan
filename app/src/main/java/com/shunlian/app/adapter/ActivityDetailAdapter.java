@@ -384,7 +384,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         TextView tv_join_count;
 
         @BindView(R.id.tv_activity_content)
-        TextView tv_activity_content;
+        FolderTextView tv_activity_content;
 
         public DetailTopViewHolder(View itemView) {
             super(itemView);

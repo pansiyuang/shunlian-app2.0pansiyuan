@@ -61,9 +61,9 @@ public class AttentionMemberAdapter extends BaseRecyclerAdapter<HotBlogsEntity.R
 
             if (recomandFocus.add_v == 0) {
                 memberViewHolder.miv_v.setVisibility(View.GONE);
-                GlideUtils.getInstance().loadImage(context, memberViewHolder.miv_v, recomandFocus.v_icon);
             } else {
                 memberViewHolder.miv_v.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, memberViewHolder.miv_v, recomandFocus.v_icon);
             }
         }
     }

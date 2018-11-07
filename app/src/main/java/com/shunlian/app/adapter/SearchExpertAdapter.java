@@ -40,7 +40,7 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
         if (holder instanceof ExpertViewHolder) {
             ExpertEntity.Expert expert = lists.get(position);
             ExpertViewHolder expertViewHolder = (ExpertViewHolder) holder;
-            GlideUtils.getInstance().loadCircleImage(context, expertViewHolder.miv_icon, expert.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, expertViewHolder.miv_icon, expert.avatar);
             expertViewHolder.tv_name.setText(expert.nickname);
             expertViewHolder.tv_hot.setText(expert.hot + "热度");
             if (expert.focus_status == 1) {

@@ -132,7 +132,9 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                     sendConfig.isWhiteList = true;
                 }
                 sendConfig.activityID = currentId;
-                sendConfig.activityTitle = currentDetail.title;
+                if(!isEmpty(currentDetail.title)){
+                    sendConfig.activityTitle = "#" + currentDetail.title + "#";
+                }
                 sendConfig.memberId = baseInfo.member_id;
                 FindSendPictureTextAct.startAct(ActivityDetailActivity.this, sendConfig);
             } catch (Exception e) {
