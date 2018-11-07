@@ -291,7 +291,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.publishSuccess();
+                iView.publishSuccess(draft);
                 Common.staticToast(entity.message);
             }
         });

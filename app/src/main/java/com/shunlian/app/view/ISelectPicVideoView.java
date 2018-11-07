@@ -21,7 +21,7 @@ public interface ISelectPicVideoView extends IView {
     /**
      * 发布成功
      */
-    void publishSuccess();
+    void publishSuccess(String draft);
 
     /**
      * 显示草稿
