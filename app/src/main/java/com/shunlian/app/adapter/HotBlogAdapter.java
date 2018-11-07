@@ -63,6 +63,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private OnFavoListener favoListener;
     private QuickActions quickActions;
     private boolean showAttention = true;
+    private boolean isShowMore = false;
 
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, QuickActions quickActions) {
         super(context, true, lists);
@@ -85,6 +86,10 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
     public void setShowAttention(boolean isShow) {
         showAttention = isShow;
+    }
+
+    public void setShowMore(boolean isShow) {
+        isShowMore = isShow;
     }
 
     @Override
@@ -271,7 +276,11 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
             if (blog.is_self == 1) {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
-                blogViewHolder.miv_more.setVisibility(View.GONE);
+                if (isShowMore) {
+                    blogViewHolder.miv_more.setVisibility(View.VISIBLE);
+                } else {
+                    blogViewHolder.miv_more.setVisibility(View.GONE);
+                }
             } else {
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
             }

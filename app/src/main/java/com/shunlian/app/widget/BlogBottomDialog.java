@@ -85,7 +85,7 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
         } else {
             switch (blog.is_favo) {
                 case 0:
-                    stringList.add("收藏");
+                    stringList.add("添加收藏");
                     break;
                 case 1:
                     stringList.add("取消收藏");
@@ -133,7 +133,7 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
             return;
         }
         switch (stringList.get(position)) {
-            case "收藏":
+            case "添加收藏":
             case "取消收藏":
                 toFavoBlog(currentBlog.is_favo, currentBlog.id);
                 dismiss();
