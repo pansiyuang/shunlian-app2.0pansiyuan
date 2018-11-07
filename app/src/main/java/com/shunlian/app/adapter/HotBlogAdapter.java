@@ -288,8 +288,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 }
             } else {
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
-                int i = TransformUtil.dip2px(context, 20);
-                TransformUtil.expandViewTouchDelegate(blogViewHolder.miv_more, i, i, i, i);
             }
 
             blogViewHolder.tv_attention.setOnClickListener(v -> {

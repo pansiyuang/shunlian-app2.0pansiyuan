@@ -9,33 +9,80 @@
 
    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="120dp">
     <com.shunlian.app.widget.CBProgressBar
         android:id="@+id/my_progress"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_centerInParent="true"
         cb:orientation="circle"
-        cb:percent_text_color="@color/btn_red"
+        cb:percent_text_color="@color/pink_color"
         cb:percent_text_size="20sp"
         cb:stroke_width="4dp"
-        cb:progressBarBgColor="@color/btn_red"
-        cb:progressColor="@color/white" />
+        cb:progressBarBgColor="@color/value_ECECEC"
+        cb:progressColor="@color/pink_color" />
 
 
         <TextView
             android:id="@+id/tv_down_2g"
-            android:layout_width="120dp"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
             android:text="当前是流量网络数据是否确定下载"
             android:gravity="center"
             android:visibility="gone"
             android:layout_centerInParent="true"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:lineSpacingExtra="4dp"
             android:textColor="@color/value_484848"
           />
+       <LinearLayout
+           android:id="@+id/tv_ready_down"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:gravity="center"
+           android:visibility="gone"
+           android:orientation="vertical">
+       <ImageView
+           android:layout_width="45dp"
+           android:layout_height="45dp"
+           android:src="@mipmap/btn_renwu_qiandao"/>
+       <TextView
+           android:layout_width="120dp"
+           android:layout_height="wrap_content"
+           android:text="下载准备中..."
+           android:layout_marginLeft="10dp"
+           android:visibility="visible"
+           android:textSize="16sp"
+           android:layout_marginTop="10dp"
+           android:lineSpacingExtra="4dp"
+           android:textColor="@color/value_484848"
+           />
+       </LinearLayout>
+       <LinearLayout
+           android:id="@+id/tv_down_success"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:gravity="center_horizontal"
+           android:visibility="gone"
+           android:paddingTop="20dp"
+           android:orientation="vertical">
+           <ImageView
+               android:layout_width="45dp"
+               android:layout_height="45dp"
+               android:src="@mipmap/icon_renwu_yiqiandao"/>
+       <TextView
+           android:layout_width="150dp"
+           android:layout_height="wrap_content"
+           android:text="视频下载成功可分享微信好友"
+           android:gravity="bottom|center_horizontal"
+           android:layout_marginTop="10dp"
+           android:textSize="16sp"
+           android:lineSpacingExtra="4dp"
+           android:textColor="@color/value_484848"
+           />
+       </LinearLayout>
         <View
+            android:id="@+id/bottom_view"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
@@ -47,6 +94,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:id="@+id/down_bottom"
+        android:visibility="invisible"
         android:orientation="horizontal">
      <TextView
          android:id="@+id/tv_down_calcel"
