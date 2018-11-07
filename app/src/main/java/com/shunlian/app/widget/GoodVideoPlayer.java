@@ -1174,6 +1174,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             @Override
             public void cancelDownLoad() {
                 downloadUtils.setCancel(true);
+                parseAttent.downVideo();
             }
 
             @Override
