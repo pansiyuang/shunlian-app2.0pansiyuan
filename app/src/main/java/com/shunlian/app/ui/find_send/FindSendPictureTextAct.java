@@ -351,9 +351,11 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      * 发布成功
      */
     @Override
-    public void publishSuccess() {
+    public void publishSuccess(String draft) {
+        if (!"1".equals(draft)) {//直接发布或者从活动里发布，成功后跳转个人中心的我的。 保存草稿和直接返回就直接finish
+            MyPageActivity.startAct(this, mConfig.memberId);
+        }
         finish();
-        MyPageActivity.startAct(this,mConfig.memberId);
     }
 
     /**

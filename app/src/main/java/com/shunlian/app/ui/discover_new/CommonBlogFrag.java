@@ -171,8 +171,12 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
             hotBlogAdapter.setOnFavoListener(this);
         }
 
-        if ("2".equals(currentType) && isMine == false) {
+        if ("2".equals(currentType) && !isMine) {
             hotBlogAdapter.setShowAttention(false);
+        }
+
+        if ("2".equals(currentType) && isMine) {
+            hotBlogAdapter.setShowMore(true);
         }
 
         hotBlogAdapter.setPageLoading(currentPage, totalPage);

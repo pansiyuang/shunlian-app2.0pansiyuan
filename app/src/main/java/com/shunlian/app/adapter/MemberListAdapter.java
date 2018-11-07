@@ -51,6 +51,20 @@ public class MemberListAdapter extends BaseRecyclerAdapter<MemberEntity.Member> 
                 memberViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
             }
 
+            if (member.add_v == 1) {
+                memberViewHolder.miv_v.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, memberViewHolder.miv_v, member.v_icon);
+            } else {
+                memberViewHolder.miv_v.setVisibility(View.GONE);
+            }
+
+            if (member.expert == 1) {
+                memberViewHolder.miv_expert.setVisibility(View.VISIBLE);
+                GlideUtils.getInstance().loadImage(context, memberViewHolder.miv_expert, member.expert_icon);
+            } else {
+                memberViewHolder.miv_expert.setVisibility(View.GONE);
+            }
+
             memberViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, member.member_id));
             memberViewHolder.tv_name.setOnClickListener(v -> MyPageActivity.startAct(context, member.member_id));
 
@@ -66,6 +80,12 @@ public class MemberListAdapter extends BaseRecyclerAdapter<MemberEntity.Member> 
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
+
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
 
         @BindView(R.id.tv_name)
         TextView tv_name;

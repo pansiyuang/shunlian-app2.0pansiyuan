@@ -22,6 +22,7 @@ import com.shunlian.app.presenter.MyPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.setting.AutographAct;
+import com.shunlian.app.ui.setting.PersonalDataAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -267,6 +268,12 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
         ll_zan.setOnClickListener(v -> {
             //暂时不需要添加点击事件
         });
+
+        miv_icon.setOnClickListener(v -> {
+            if (isSelf) {
+                PersonalDataAct.startAct(MyPageActivity.this);
+            }
+        });
         super.initListener();
     }
 
@@ -304,11 +311,14 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
             if (isEmpty(memberInfo.signature)) {
                 if (isSelf) {
                     tv_signature.setText("还没有个人介绍哦，赶紧去编辑吧");
+                    tv_signature.setEnabled(true);
                 } else {
                     tv_signature.setText("TA有点高冷，还没有介绍~");
+                    tv_signature.setEnabled(false);
                 }
             } else {
                 tv_signature.setText(memberInfo.signature);
+                tv_signature.setEnabled(false);
             }
             setAttentStatus(currentMember.is_focus, memberInfo.member_id);
         }
@@ -368,6 +378,7 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
     @Override
     public void setSignature(String signature) {
         tv_signature.setText(signature);
+        tv_signature.setEnabled(false);
     }
 
     @Override

@@ -29,5 +29,9 @@ public class MemberEntity {
         public String nickname;
         public String avatar;
         public int focus_status;
+        public int expert;
+        public int add_v;
+        public String expert_icon;
+        public String v_icon;
     }
 }

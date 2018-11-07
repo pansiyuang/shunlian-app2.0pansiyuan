@@ -47,11 +47,11 @@ public class DiscoveryGuideView extends RelativeLayout {
         int canvasWidth = canvas.getWidth();
         int canvasHeight = canvas.getHeight();
         Paint paint = new Paint();
-        paint.setAntiAlias(true);
         Paint bitMapPaint = new Paint();
+        paint.setAntiAlias(true);
         bitMapPaint.setAntiAlias(true);
         int layerId = canvas.saveLayer(0, 0, canvasWidth, canvasHeight, null, Canvas.ALL_SAVE_FLAG);
-        paint.setColor(Color.parseColor("#FFFFFFFF"));
+
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         if (locationFirst != null) {

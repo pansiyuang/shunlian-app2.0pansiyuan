@@ -140,6 +140,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
                     for (String url : data.pics) {
                         ImageVideo imageVideo = new ImageVideo();
                         imageVideo.path = url;
+                        imageVideo.url = url;
                         mImgList.add(imageVideo);
                     }
                     mImgAdapter.notifyDataSetChanged();
@@ -290,7 +291,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.publishSuccess();
+                iView.publishSuccess(draft);
                 Common.staticToast(entity.message);
             }
         });
