@@ -140,6 +140,7 @@ dependencies {
     implementation project(':SmallMediaRecordLib2')
     implementation project(':layoutfit')
 //    compile project(path: ':SensorsAnalyticsSDK')
+//    compile 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:2.1.0'
 }
 bugly {
     appId = '1400008795' // 注册时分配的App ID
