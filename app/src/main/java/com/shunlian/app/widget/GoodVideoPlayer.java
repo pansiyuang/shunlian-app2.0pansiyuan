@@ -52,6 +52,7 @@ import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.download.DownLoadDialogProgress;
@@ -1179,7 +1180,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             public void fileDownLoad() {
                 downloadUtils.download(currentUrl,fileName);
             }
-        },true);
+        }, !NetworkUtils.isWifiConnected(getContext()));
     }
     /**
      * 检查下载的文件是否存在
@@ -1237,7 +1238,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
                         file1.delete();
                     }
                 }
-                downLoadDialogProgress.dissMissDialog();
+                downLoadDialogProgress.downLoadSuccess();
             }
 
             @Override
@@ -1264,7 +1265,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 100){
-                Common.staticToast((String) msg.obj);
+//                Common.staticToast((String) msg.obj);
                 if(((String) msg.obj).equals("下载成功")){
                    parseAttent.downVideo();
                 }

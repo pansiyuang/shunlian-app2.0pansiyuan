@@ -186,7 +186,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     @Override
     public void downVideo() {
         //上传下载成功
-        hotBlogPresenter.downCount(blog.id);
+        hotBlogPresenter.downCountHideToast(blog.id);
     }
 
     @Override
