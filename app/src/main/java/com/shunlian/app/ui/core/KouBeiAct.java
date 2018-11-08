@@ -82,7 +82,7 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
     private PAishang pAishang;
     private KoubeiAdapter koubeiAdapter;
     private LinearLayoutManager linearLayoutManager;
-    private String cate_id;
+    private String cate_id,cate_name;
 
     @OnClick(R.id.rl_more)
     public void more() {
@@ -221,6 +221,7 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
         }
         CoreHotMenuAdapter coreHotMenuAdapter = new CoreHotMenuAdapter(baseAct, false, coreHotEntity.cate_name);
         cate_id=coreHotEntity.cate_name.get(0).cate_id;
+        cate_name=coreHotEntity.cate_name.get(0).cate_name;
         pAishang.resetBaby("hot",cate_id);
         coreHotMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -228,6 +229,7 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
                 coreHotMenuAdapter.selectedPosition = position;
                 coreHotMenuAdapter.notifyDataSetChanged();
                 cate_id=coreHotEntity.cate_name.get(position).cate_id;
+                cate_name=coreHotEntity.cate_name.get(position).cate_name;
                 if (rv_category.getScrollState() == 0) {
                     pAishang.resetBaby("hot",cate_id);
                 }
@@ -255,6 +257,7 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
             koubeiAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+                    JosnSensorsDataAPI.koubeiGoodClick(cate_name,mData.get(position).id,mData.get(position).title,position);
                     GoodsDetailAct.startAct(baseAct,mData.get(position).id);
                 }
             });

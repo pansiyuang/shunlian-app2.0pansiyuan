@@ -133,6 +133,39 @@ public class JosnSensorsDataAPI {
     }
 
     /**
+     * 口碑热销商品点击
+     * @return
+     */
+    public static void koubeiGoodClick(String channelName,String goodId,String goodName,int rank){
+        try {
+            JSONObject properties = new JSONObject();
+            properties.put("channelName", channelName);
+            properties.put("goodId", goodId);
+            properties.put("goodName", goodName);
+            properties.put("rank", rank);
+            SensorsDataAPI.sharedInstance().track("koubeiGoodClick", properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 优品商品点击
+     * @return
+     */
+    public static void youpinGoodClick(String type,String goodId,String goodName,int rank){
+        try {
+            JSONObject properties = new JSONObject();
+            properties.put("type", type);
+            properties.put("goodId", goodId);
+            properties.put("goodName", goodName);
+            properties.put("rank", rank);
+            SensorsDataAPI.sharedInstance().track("youpinGoodClick", properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
      * 频道页商品点击
      * @return
      */
