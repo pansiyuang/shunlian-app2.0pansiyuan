@@ -24,6 +24,7 @@ import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.QuickActions;
@@ -208,6 +209,8 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
                     kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                         @Override
                         public void onItemClick(int position) {
+                            JosnSensorsDataAPI.bannerClick(getTitle().toString(),coreHotEntity.banner_list.get(position).type,coreHotEntity.banner_list.get(position).id,
+                                    coreHotEntity.banner_list.get(position).item_id,position);
                             Common.goGoGo(baseAct, coreHotEntity.banner_list.get(position).type, coreHotEntity.banner_list.get(position).item_id);
                         }
                     });

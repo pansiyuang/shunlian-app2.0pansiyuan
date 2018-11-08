@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PingListAdapter;
@@ -22,6 +23,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.timer.DayRedBlackDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
@@ -347,6 +349,8 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
             pingListAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+                    JosnSensorsDataAPI.pinpaiStoreGoodClick(currentId,corePingEntity.brand.title
+                            ,mDatas.get(position).id,mDatas.get(position).title,position);
                     GoodsDetailAct.startAct(baseAct,mDatas.get(position).id);
                 }
             });

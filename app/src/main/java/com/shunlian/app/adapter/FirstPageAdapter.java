@@ -30,6 +30,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
@@ -73,11 +74,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     private int second = (int) (System.currentTimeMillis() / 1000);
     private int hotPosition = -1;
 
-    public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
+    private String chinnel_name;
+    public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition,String chinnel_name) {
         super(context, isShowFooter, datas);
         this.isFirst = isFirst;
         this.cateGoryFrag = cateGoryFrag;
         this.mergePosition = mergePosition;
+        this.chinnel_name =chinnel_name;
     }
 
     @Override
@@ -179,9 +182,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 nineHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                                     @Override
                                     public void onItemClick(int position) {
-
-                                        if (data.datass.get(position).url!=null)
+                                        if (data.datass.get(position).url!=null) {
+                                            JosnSensorsDataAPI.bannerClick(chinnel_name,data.datass.get(position).url.type,data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id,position);
                                             Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
+                                        }
+
                                     }
                                 });
                             }
@@ -206,8 +211,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     twoHolder.firstNavyAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            if (data.datass.get(position).url!=null)
-                            Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
+                            if (data.datass.get(position).url!=null) {
+                                JosnSensorsDataAPI.fristIconClick(data.datass.get(position).url.type,data.datass.get(position).title,position);
+                                Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
+                            }
                         }
                     });
 //                        }else {
@@ -565,6 +572,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         public void onClick(View view) {
                             if (data.url!=null)
                             Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            if(isFirst){
+                                JosnSensorsDataAPI.fristQualityHotClick("小图",data.url.type,data.url.item_id,data.url.channe_id,position);
+                            }
                         }
                     });
                 }
@@ -597,8 +607,14 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (data.url!=null)
-                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            if (data.url!=null) {
+                                Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                                if(isFirst){
+                                    JosnSensorsDataAPI.fristQualityHotClick("大图",data.url.type,data.url.item_id,data.url.channe_id,position);
+                                }else{
+                                    JosnSensorsDataAPI.channelGoodClick(chinnel_name,"精选活动",data.datass.get(position).url.item_id,data.datass.get(position).title,position);
+                                }
+                            }
                         }
                     });
 //                        if (sixHolder.firstHorizonAdapter == null) {
@@ -611,6 +627,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         @Override
                         public void onItemClick(View view, int position) {
                             GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
+                            if(isFirst){
+                                JosnSensorsDataAPI.fristQualityHotClick("大图",data.url.type,data.url.item_id,data.url.channe_id,position);
+                            }else{
+                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"精选活动",data.datass.get(position).url.item_id,data.datass.get(position).title,position);
+                            }
                         }
                     });
 //                        }
@@ -632,6 +653,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         @Override
                         public void onItemClick(View view, int position) {
                             GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
+                            if(!isFirst){
+                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"限时特惠",data.datass.get(position).url.item_id,data.datass.get(position).title,position);
+                            }
                         }
                     });
 //                        }
@@ -693,6 +717,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         @Override
                         public void onClick(View view) {
                             GoodsDetailAct.startAct(context, goods.id);
+                            if(!isFirst){
+                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"热销榜单",goods.id,goods.title,position);
+                            }
                         }
                     });
                     if ("1".equals(goods.is_new)) {
@@ -729,6 +756,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+    }
+
+    private void bannerInfoClick(String type,GetDataEntity.MData ndata){
+
     }
 
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {

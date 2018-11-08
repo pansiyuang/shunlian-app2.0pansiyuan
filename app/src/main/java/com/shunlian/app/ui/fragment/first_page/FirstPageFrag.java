@@ -306,7 +306,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         }
         fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {
-            fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id));
+            fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id,getMenuEntiy.datas.get(i).channel_name));
             if (i >= getMenuEntiy.datas.size() - 1 && isAdded()) {
                 firstId = getMenuEntiy.datas.get(0).id;
                 pager.setAdapter(new MyFrPagerAdapter(getChildFragmentManager(), getMenuEntiy.datas, fragments));

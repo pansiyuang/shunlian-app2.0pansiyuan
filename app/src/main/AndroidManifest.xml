@@ -970,7 +970,7 @@
         <activity
             android:name=".ui.core.PingpaiListAct"
             android:exported="false"
-            android:label="品牌列表"
+            android:label="品牌特卖商品列表"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.sale_rank.SaleRankAct"

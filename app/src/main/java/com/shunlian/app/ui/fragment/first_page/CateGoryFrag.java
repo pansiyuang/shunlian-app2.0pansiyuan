@@ -42,18 +42,19 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     NestedRefreshLoadMoreLayout lay_refresh;
     //    @BindView(R.id.mtv_empty)
 //    MyTextView mtv_empty;
-    private String channel_id;
+    private String channel_id,chinnel_name;
     private FirstPageAdapter firstPageAdapter;
     private GridLayoutManager gridLayoutManager;
     private boolean isFirst = false, isRefresh = false/*, isShow = true*/;
     private View rootView;
 
 
-    public static BaseFragment getInstance(String channel_id) {
+    public static BaseFragment getInstance(String channel_id,String chinnel_name) {
         CateGoryFrag fragment = new CateGoryFrag();
 
         Bundle args = new Bundle();
         args.putSerializable("channel_id", channel_id);
+        args.putString("chinnel_name", chinnel_name);
         fragment.setArguments(args);
         return fragment;
     }
@@ -130,6 +131,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         //end
         if (getArguments() != null)
             channel_id = (String) getArguments().getSerializable("channel_id");
+            chinnel_name=  getArguments().getString("chinnel_name");
         if (FirstPageFrag.firstId.equals(channel_id)) {
             isFirst = true;
         } else {
@@ -178,7 +180,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
             mDatass.addAll(getDataEntity.datas);
         }
 //        if (firstPageAdapter==null){
-        firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this, size);
+        firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this, size,chinnel_name);
         gridLayoutManager = new GridLayoutManager(baseActivity, 2);
 
         if (rv_view == null)
