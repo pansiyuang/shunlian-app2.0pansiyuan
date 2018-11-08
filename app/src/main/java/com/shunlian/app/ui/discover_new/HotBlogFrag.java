@@ -238,7 +238,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     public void shareGoodsSuccess(String blogId, String goodsId) {
         for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
-                blog.share_num++;
+                blog.total_share_num++;
             }
         }
         hotBlogAdapter.notifyDataSetChanged();

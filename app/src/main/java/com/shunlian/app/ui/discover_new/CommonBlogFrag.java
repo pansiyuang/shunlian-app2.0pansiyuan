@@ -302,11 +302,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     public void shareGoodsSuccess(String blogId, String goodsId) {
         for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
-                for (GoodsDeatilEntity.Goods goods : blog.related_goods) {
-                    if (goodsId.equals(goods.goods_id)) {
-                        goods.share_num++;
-                    }
-                }
+                blog.total_share_num++;
             }
         }
         hotBlogAdapter.notifyDataSetChanged();

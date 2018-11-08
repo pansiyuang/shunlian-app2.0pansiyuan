@@ -255,7 +255,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_goods_icon, goods.thumb);
                 blogViewHolder.tv_goods_name.setText(goods.title);
                 blogViewHolder.tv_goods_price.setText(getString(R.string.common_yuan) + goods.price);
-                blogViewHolder.tv_share_count.setText(String.valueOf(blog.share_num));
+                blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
                 blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
