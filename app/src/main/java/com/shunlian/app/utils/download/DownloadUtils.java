@@ -46,10 +46,6 @@ public class DownloadUtils {
 
     private JsDownloadListener listener;
 
-    private String baseUrl;
-
-    private String downloadUrl;
-
     private boolean isCancel = false;
     public DownloadUtils(JsDownloadListener listener) {
         this.listener = listener;
@@ -67,7 +63,6 @@ public class DownloadUtils {
     }
 
     public String dirName;
-    public String currentUrl;
     public  String fileName = "";
     /**
      * 检查下载的文件是否存在
