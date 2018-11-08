@@ -63,20 +63,25 @@
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            android:gravity="center_horizontal"
-           android:visibility="gone"
-           android:paddingTop="20dp"
+           android:visibility="visible"
+           android:paddingTop="15dp"
            android:orientation="vertical">
            <ImageView
                android:layout_width="45dp"
                android:layout_height="45dp"
+               android:visibility="gone"
                android:src="@mipmap/icon_renwu_yiqiandao"/>
+           <com.shunlian.app.widget.circle.DrawHookView
+               android:id="@+id/draw_hook"
+               android:layout_width="50dp"
+               android:layout_height="50dp" />
        <TextView
            android:layout_width="150dp"
            android:layout_height="wrap_content"
            android:text="视频下载成功可分享微信好友"
            android:gravity="bottom|center_horizontal"
            android:layout_marginTop="10dp"
-           android:textSize="16sp"
+           android:textSize="15sp"
            android:lineSpacingExtra="4dp"
            android:textColor="@color/value_484848"
            />
