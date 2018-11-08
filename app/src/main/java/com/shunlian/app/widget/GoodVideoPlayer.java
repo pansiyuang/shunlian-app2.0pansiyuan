@@ -1168,6 +1168,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             }
             @Override
             public void onFinishDownload(String filePath,boolean isCancel) {
+                if(!isCancel)
                 downLoadDialogProgress.downLoadSuccess();
             }
             @Override

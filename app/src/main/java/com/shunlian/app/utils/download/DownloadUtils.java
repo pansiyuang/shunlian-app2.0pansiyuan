@@ -134,6 +134,7 @@ public class DownloadUtils {
                     listener.onProgress(msg.arg1);
                     break;
                 case  2:
+                    Log.d("test:","是否取消下载"+isCancel);
                     if(!isCancel) {
                         saveVideoFile((String) msg.obj);
                     }else{
