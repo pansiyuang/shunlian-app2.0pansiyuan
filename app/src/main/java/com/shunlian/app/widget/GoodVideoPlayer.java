@@ -176,7 +176,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         mRetryBtn = findViewById(cn.jzvd.R.id.retry_btn);
         mRetryLayout = findViewById(cn.jzvd.R.id.retry_layout);
         topContainer.setVisibility(VISIBLE);
-        fullscreenButton.setVisibility(VISIBLE);
+        fullscreenButton.setVisibility(GONE);
         playControl = findViewById(R.id.iv_play_control);
         playControl.setVisibility(VISIBLE);
         line_good_info = findViewById(R.id.line_good_info);
@@ -262,6 +262,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             tv_user_attent.setText(blog.is_focus == 0 ? "关注" : "已关注");
             tv_user_attent.setVisibility(VISIBLE);
         }else{
+            tv_user_attent.setText(blog.is_focus == 0 ? "关注" : "已关注");
             tv_user_attent.setVisibility(VISIBLE);
         }
         tv_user_attent.setTextColor(blog.is_focus==0?getResources().getColor(R.color.deep_red):getResources().getColor(R.color.value_878B8A));

@@ -14,7 +14,7 @@ import com.shunlian.app.widget.dialog.CommonDialog;
 
 
 public class DownLoadDialogProgress {
-    private long time = 300;
+    private long time = 1000;
     private CommonDialog nomalBuildl;
     private TextView tv_down_2g;
     private CBProgressBar cbProgressBar;
@@ -52,7 +52,6 @@ public class DownLoadDialogProgress {
                 nomalBuildl.dismiss();
             }
         },time);
-
     };
     public void dissMissDialog(){
         if(nomalBuildl!=null&&nomalBuildl.isShowing()){
@@ -64,7 +63,7 @@ public class DownLoadDialogProgress {
             return;
         }
         if(nomalBuildl==null) {
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context).setWidth((int) TransformUtil.dip2px(context, 250f))
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context).setWidth((int) TransformUtil.dip2px(context, 250f)).loadAniamtion()
                     .setView(R.layout.dialog_down_file);
             nomalBuild.setOnClickListener(R.id.tv_down_calcel, new View.OnClickListener() {
                 @Override
@@ -96,37 +95,41 @@ public class DownLoadDialogProgress {
             tv_down_ok.setVisibility(View.VISIBLE);
             tv_down_success.setVisibility(View.GONE);
         }else{
-            tv_down_2g.setVisibility(View.GONE);
-            tv_ready_down.setVisibility(View.VISIBLE);
-            cbProgressBar.setVisibility(View.GONE);
-            show_line.setVisibility(View.GONE);
-            tv_down_success.setVisibility(View.GONE);
-            tv_down_ok.setVisibility(View.GONE);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    showStartDown();
-                    stateListen.fileDownLoad();
-                }
-            },time);
+//            tv_down_2g.setVisibility(View.GONE);
+//            tv_ready_down.setVisibility(View.VISIBLE);
+//            cbProgressBar.setVisibility(View.GONE);
+//            show_line.setVisibility(View.GONE);
+//            tv_down_success.setVisibility(View.GONE);
+//            tv_down_ok.setVisibility(View.GONE);
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    showStartDown();
+//                    stateListen.fileDownLoad();
+//                }
+//            },time);
+            showStartDown();
+            stateListen.fileDownLoad();
 
         }
         tv_down_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_down_2g.setVisibility(View.GONE);
-                tv_ready_down.setVisibility(View.VISIBLE);
-                cbProgressBar.setVisibility(View.GONE);
-                show_line.setVisibility(View.GONE);
-                tv_down_success.setVisibility(View.GONE);
-                tv_down_ok.setVisibility(View.GONE);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        showStartDown();
-                        stateListen.fileDownLoad();
-                    }
-                },time);
+                showStartDown();
+                stateListen.fileDownLoad();
+//                tv_down_2g.setVisibility(View.GONE);
+//                tv_ready_down.setVisibility(View.VISIBLE);
+//                cbProgressBar.setVisibility(View.GONE);
+//                show_line.setVisibility(View.GONE);
+//                tv_down_success.setVisibility(View.GONE);
+//                tv_down_ok.setVisibility(View.GONE);
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        showStartDown();
+//                        stateListen.fileDownLoad();
+//                    }
+//                },time);
             }
         });
 

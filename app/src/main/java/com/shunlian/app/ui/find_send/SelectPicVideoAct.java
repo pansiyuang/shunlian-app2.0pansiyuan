@@ -578,16 +578,19 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
         if (oldSelection) {
             mSelectResultList.add(imageVideo.path);
             if (isCanSelect() == -1) {
+                imageVideo.isSelect = !oldSelection;
                 mSelectResultList.remove(imageVideo.path);
                 Common.staticToast("图片和视频不能同时选择");
                 return false;
             } else if (isCanSelect() == -2) {
+                imageVideo.isSelect = !oldSelection;
                 mSelectResultList.remove(imageVideo.path);
                 Common.staticToast("只能选择一个视频");
                 return false;
             }
             count = mSelectResultList.size();
             if (count > maxCount) {
+                imageVideo.isSelect = !oldSelection;
                 mSelectResultList.remove(imageVideo.path);
                 Common.staticToast(String.format("您最多只能选择%d张图片", maxCount));
                 return false;

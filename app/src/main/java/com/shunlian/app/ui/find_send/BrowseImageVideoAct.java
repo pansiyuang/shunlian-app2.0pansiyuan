@@ -159,6 +159,11 @@ public class BrowseImageVideoAct extends BaseActivity {
         }else {
             mSelectResultList = new ArrayList<>();
         }
+
+        if (mSelectResultList.size() > 0 && tvComplete != null){
+            tvComplete.setText(String.format(format,mSelectResultList.size(),maxCount));
+        }
+
         isOnlyBrowse = mConfig.isOnlyBrowse;
         if (isOnlyBrowse){
             gone(tvComplete);
