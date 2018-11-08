@@ -71,7 +71,20 @@ public class GoodsDeatilEntity implements Parcelable {
     //分享信息
     public UserInfo user_info;
     public String self_buy_earn;//自购赚多少，该字段有返回时才前台显示（该字段有可能不返回）
+    public static String getAttrsInfo(boolean isValue,ArrayList<Attrs> attrs){
+        StringBuffer sb = new StringBuffer();
+        if(attrs!=null&&attrs.size()>0){
+            for (Attrs attr:attrs){
+                if(isValue){
+                    sb.append(attr.value+";");
+                }else{
+                    sb.append(attr.label+";");
+                }
+            }
+        }
 
+        return sb.toString();
+    }
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class UserInfo implements Parcelable {
         public String nickname;

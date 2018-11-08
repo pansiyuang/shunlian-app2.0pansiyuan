@@ -3,6 +3,7 @@ package com.shunlian.app.ui.goods_detail;
 import android.animation.Animator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +49,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -202,10 +205,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private FragmentManager mFragmentManager;
     private Handler mHandler;
     private Runnable mGoldEggsDowntime;
-
+    public static String goTitleType = "";
     public static void startAct(Context context, String goodsId) {
         Intent intent = new Intent(context, GoodsDetailAct.class);
         intent.putExtra("goodsId", goodsId);
+        intent.putExtra("goTitleType", ((Activity)context).getTitle().toString());
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -235,7 +239,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected void initData() {
         goodsId = getIntent().getStringExtra("goodsId");
-
+        goTitleType = getIntent().getStringExtra("goTitleType");
         initConstant();
         defToolbar();
         goodsFrag();
@@ -507,6 +511,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             store_id = store_info.store_id;
         }
         mShareInfoParam = goodsDetailPresenter.getShareInfoParam();
+        JosnSensorsDataAPI.commodityDetail(GoodsDetailAct.goTitleType,goodsDeatilEntity.id,goodsDeatilEntity.title,
+                GoodsDeatilEntity.getAttrsInfo(true,goodsDeatilEntity.attrs),  GoodsDeatilEntity.getAttrsInfo(false,goodsDeatilEntity.attrs),
+                goodsDeatilEntity.price,goodsDeatilEntity.store_info.store_id,goodsDeatilEntity.store_info.decoration_name);
     }
 
 
@@ -719,6 +726,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }*/
                 //需求更改：每次加入购物车都需要选择属性
                 goodsDeatilFrag.showParamDialog();
+                JosnSensorsDataAPI.addToShoppingcart(GoodsDetailAct.goTitleType,mGoodsDeatilEntity.id,mGoodsDeatilEntity.title,
+                        GoodsDeatilEntity.getAttrsInfo(true,mGoodsDeatilEntity.attrs),  GoodsDeatilEntity.getAttrsInfo(false,mGoodsDeatilEntity.attrs),
+                        mGoodsDeatilEntity.store_info.goods_count,"商品详情加入");
                 break;
             case R.id.miv_more:
                 moreAnim();
