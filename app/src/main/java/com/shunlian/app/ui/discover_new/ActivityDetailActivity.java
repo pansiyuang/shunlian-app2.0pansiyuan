@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ActivityDetailAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -36,7 +37,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack {
+public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack, QuickActions.OnShareBlogCallBack {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -94,6 +95,8 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         recycler_list.setNestedScrollingEnabled(false);
 
         objectMapper = new ObjectMapper();
+
+        quick_actions.setOnShareBlogCallBack(this);
     }
 
 
@@ -270,6 +273,25 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     @Override
     public void OnTopSize(int height) {
         layoutHeight = height - offset - ImmersionBar.getStatusBarHeight(this);
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                for (GoodsDeatilEntity.Goods goods : blog.related_goods) {
+                    if (goodsId.equals(goods.goods_id)) {
+                        goods.share_num++;
+                    }
+                }
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        mPresent.goodsShare("blog_goods", blogId, goodsId);
     }
 
     @Override

@@ -8,18 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.adapter.SearchExpertAdapter;
 import com.shunlian.app.bean.ExpertEntity;
 import com.shunlian.app.presenter.SearchExpertPresenter;
-import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.view.ISearchExpertView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
-import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
-import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
