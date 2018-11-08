@@ -14,5 +14,7 @@ public interface ICommonBlogView extends IView {
 
     void praiseBlog(String blogId);
 
+    void downCountSuccess(String blogId);
+
     void refreshFinish();
 }

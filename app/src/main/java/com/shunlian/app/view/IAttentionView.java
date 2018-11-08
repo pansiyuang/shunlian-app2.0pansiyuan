@@ -14,6 +14,8 @@ public interface IAttentionView extends IView {
 
     void praiseBlog(String blogId);
 
+    void downCountSuccess(String blogId);
+
     /**
      * 刷新完成
      */

@@ -154,6 +154,31 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
         });
     }
 
+    public void downCount(String blogId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("blog_id", blogId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().downCount(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.downCountSuccess(blogId);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToast(message);
+            }
+        });
+    }
 
     @Override
     public void onRefresh() {

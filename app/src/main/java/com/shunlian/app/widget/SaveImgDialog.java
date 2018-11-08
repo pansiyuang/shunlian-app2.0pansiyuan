@@ -2,62 +2,78 @@ package com.shunlian.app.widget;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.TransformUtil;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by Administrator on 2018/11/7.
  */
 
-public class SaveImgDialog {
+public class SaveImgDialog extends Dialog {
+    @BindView(R.id.miv_share_wechat)
+    MyImageView miv_wechat;
+
+    @BindView(R.id.tv_cancel)
+    TextView tv_cancel;
+
+    private Unbinder bind;
     private Activity act;
-    private Dialog saveImgDialog;
-    private MyImageView miv_wechat;
-    private TextView tv_cancel;
 
     public SaveImgDialog(Activity activity) {
+        this(activity, R.style.popAd);
         this.act = activity;
-        saveImgDialog = new Dialog(activity, R.style.Mydialog);
-        saveImgDialog.setContentView(R.layout.dialog_save_imgs);
-        initView(saveImgDialog);
-        setCancelable(false);
+        initView();
     }
 
-    private void initView(Dialog dialog) {
-        miv_wechat = dialog.findViewById(R.id.mtv_close);
-        tv_cancel = dialog.findViewById(R.id.tv_cancel);
-        tv_cancel.setOnClickListener((v) -> release());
+    public SaveImgDialog(Context context, int themeResId) {
+        super(context, themeResId);
+        initView();
+    }
+
+    private void initView() {
+        //设置当前dialog宽高
+        Window win = getWindow();
+        WindowManager.LayoutParams lp = win.getAttributes();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.BOTTOM;
+        win.setAttributes(lp);
+        win.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_save_imgs, null, false);
+        setContentView(view);
+        bind = ButterKnife.bind(this, view);
+        setCancelable(false);
 
         miv_wechat.setOnClickListener((v) -> {
             Common.openWeiXin(act, "", "");
-            release();
+            dismiss();
         });
+        tv_cancel.setOnClickListener(v -> dismiss());
     }
 
-    public void setCancelable(boolean flag) {
-        if (saveImgDialog != null)
-            saveImgDialog.setCancelable(flag);
-    }
-
-    public void show() {
-        if (!act.isFinishing() && saveImgDialog != null && !saveImgDialog.isShowing()) {
-            saveImgDialog.show();
+    public void destory() {
+        if (isShowing()) {
+            dismiss();
         }
-    }
-
-    public void dismiss() {
-        if (saveImgDialog != null && saveImgDialog.isShowing()) {
-            saveImgDialog.dismiss();
+        if (bind != null) {
+            bind.unbind();
         }
-    }
-
-    /**
-     * 释放dialog 防止内存泄漏
-     */
-    public void release() {
-        dismiss();
-        saveImgDialog = null;
     }
 }

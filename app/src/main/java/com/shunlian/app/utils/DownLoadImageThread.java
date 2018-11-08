@@ -58,6 +58,7 @@ public class DownLoadImageThread extends Thread {
                 e.printStackTrace();
             }
         }
+        myCallBack.successBack();
     }
 
     private void saveSplitePic(String pic) {

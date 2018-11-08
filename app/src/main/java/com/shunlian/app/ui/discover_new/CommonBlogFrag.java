@@ -212,6 +212,16 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     }
 
     @Override
+    public void downCountSuccess(String blogId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.down_num++;
+            }
+        }
+        hotBlogAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void showFailureView(int request_code) {
         if (lay_refresh != null) {
             lay_refresh.setRefreshing(false);
@@ -236,6 +246,11 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @Override
     public void toPraiseBlog(String blogId) {
         mPresenter.praiseBlos(blogId);
+    }
+
+    @Override
+    public void toDown(String blogId) {
+        mPresenter.downCount(blogId);
     }
 
     /**

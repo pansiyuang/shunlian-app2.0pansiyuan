@@ -4,11 +4,18 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,17 +41,25 @@ import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.download.DownLoadDialogProgress;
+import com.shunlian.app.utils.download.DownloadUtils;
+import com.shunlian.app.utils.download.JsDownloadListener;
 import com.shunlian.app.widget.BlogBottomDialog;
 import com.shunlian.app.widget.FolderTextView;
+import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.NewLookBigImgAct;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.SaveImgDialog;
 import com.shunlian.app.widget.banner.MyKanner;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +84,27 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private boolean showAttention = true;
     private boolean isShowMore = false;
     private SaveImgDialog saveImgDialog;
+    private DownLoadDialogProgress downLoadDialogProgress;
+    private DownloadUtils downloadUtils;
+    private HttpDialog httpDialog;
+    private String currentBlogId;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (httpDialog != null) {
+                httpDialog.dismiss();
+            }
+            if (saveImgDialog == null) {
+                Activity activity = (Activity) context;
+                saveImgDialog = new SaveImgDialog(activity);
+            }
+            saveImgDialog.show();
+            if (mCallBack != null) {
+                mCallBack.toDown(currentBlogId);
+            }
+        }
+    };
 
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, QuickActions quickActions) {
         super(context, true, lists);
@@ -345,6 +381,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 ActivityDetailActivity.startAct(context, blog.activity_id);
             });
 
+            blogViewHolder.tv_download.setOnClickListener(v -> readyToDownLoad(blog));
+
             if (!showAttention) {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
             }
@@ -561,6 +599,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         void toFocusMember(int isFocus, String memberId);
 
         void toPraiseBlog(String blogId);
+
+        void toDown(String blogId);
     }
 
     public interface OnDelBlogListener {
@@ -581,19 +621,20 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     }
 
     public void readyToDownLoad(BigImgEntity.Blog blog) {
+        currentBlogId = blog.id;
         switch (blog.type) {
             case 1://图文
                 if (!isEmpty(blog.pics)) {
+                    if (httpDialog == null) {
+                        httpDialog = new HttpDialog(context);
+                    }
+                    httpDialog.show();
                     ArrayList arrayList = new ArrayList();
                     arrayList.addAll(blog.pics);
                     DownLoadImageThread threads = new DownLoadImageThread(context, arrayList, new DownLoadImageThread.MyCallBack() {
                         @Override
                         public void successBack() {
-                            Activity activity = (Activity) context;
-                            if (saveImgDialog == null) {
-                                saveImgDialog = new SaveImgDialog(activity);
-                            }
-                            saveImgDialog.show();
+                            mHandler.sendEmptyMessage(1);
                         }
 
                         @Override
@@ -607,8 +648,58 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 }
                 break;
             case 2://视频
-                
+                downFileStart(blog.video);
                 break;
         }
+    }
+
+    private void downFileStart(String url) {
+        downLoadDialogProgress = new DownLoadDialogProgress();
+        downloadUtils = new DownloadUtils(new JsDownloadListener() {
+            @Override
+            public void onStartDownload() {
+            }
+
+            @Override
+            public void onProgress(int progress) {
+                downLoadDialogProgress.showProgress(progress);
+            }
+
+            @Override
+            public void onFinishDownload(String filePath, boolean isCancel) {
+                downLoadDialogProgress.downLoadSuccess();
+            }
+
+            @Override
+            public void onFail(String errorInfo) {
+                downLoadDialogProgress.dissMissDialog();
+            }
+
+            @Override
+            public void onFinishEnd() {
+                if (mCallBack != null) {
+                    mCallBack.toDown(currentBlogId);
+                }
+            }
+        });
+        boolean checkState = downloadUtils.checkDownLoadFileExists(url);
+        if (checkState) {
+            Common.staticToast("已下载过该视频,请勿重复下载!");
+            return;
+        }
+        downLoadDialogProgress.showDownLoadDialogProgress(context, new DownLoadDialogProgress.downStateListen() {
+            @Override
+            public void cancelDownLoad() {
+                downloadUtils.setCancel(true);
+                if (mCallBack != null) {
+                    mCallBack.toDown(currentBlogId);
+                }
+            }
+
+            @Override
+            public void fileDownLoad() {
+                downloadUtils.download(url, downloadUtils.fileName);
+            }
+        }, !NetworkUtils.isWifiConnected(context));
     }
 }

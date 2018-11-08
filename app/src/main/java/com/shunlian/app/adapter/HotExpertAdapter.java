@@ -103,21 +103,21 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth);
                 BitmapUtil.discoverImg(hotExpertViewHolder.miv_big_icon, hotExpertViewHolder.recycler_list, singlePicAdapter, blog.pics, (Activity) context
                         , 0, 0, 63, 12, 16, 0, 4, 0);
-                hotExpertViewHolder.rl_video.setVisibility(View.GONE);
                 singlePicAdapter.setOnItemClickListener((view, position1) -> MyPageActivity.startAct(context, blog.member_id));
+                hotExpertViewHolder.rl_video.setVisibility(View.GONE);
             } else {
-                String imageWidth, imageheight;
-                int width, height;
                 if (!isEmpty(blog.video_thumb)) {
-                    imageWidth = Common.getURLParameterValue(blog.video_thumb, "w");
-                    imageheight = Common.getURLParameterValue(blog.video_thumb, "h");
-                    width = Integer.valueOf(imageWidth);
-                    height = Integer.valueOf(imageheight);
+                    int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 190, 190);
 
-                    GlideUtils.getInstance().loadOverrideImage(context, hotExpertViewHolder.miv_video, blog.video_thumb, width, height);
+                    if (params == null || params.length == 0) {
+                        GlideUtils.getInstance().loadOverrideImage(context, hotExpertViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, 95), TransformUtil.dip2px(context, 95));
+                    } else {
+                        GlideUtils.getInstance().loadOverrideImage(context, hotExpertViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, params[0]), TransformUtil.dip2px(context, params[1]));
+                    }
                 }
                 hotExpertViewHolder.miv_big_icon.setVisibility(View.GONE);
                 hotExpertViewHolder.recycler_list.setVisibility(View.GONE);
+                hotExpertViewHolder.miv_big_icon.setVisibility(View.GONE);
                 hotExpertViewHolder.rl_video.setVisibility(View.VISIBLE);
             }
         }

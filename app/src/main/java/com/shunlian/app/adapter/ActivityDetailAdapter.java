@@ -2,12 +2,20 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,24 +33,34 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.DiscoverActivityEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.ui.discover_new.ActivityDetailActivity;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.VideoGoodPlayActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorizonItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.download.DownLoadDialogProgress;
+import com.shunlian.app.utils.download.DownloadUtils;
+import com.shunlian.app.utils.download.JsDownloadListener;
 import com.shunlian.app.widget.BlogBottomDialog;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.NewLookBigImgAct;
 import com.shunlian.app.widget.NewTextView;
+import com.shunlian.app.widget.SaveImgDialog;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +77,24 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
     private TieziAvarAdapter tieziAvarAdapter;
     private BlogBottomDialog blogBottomDialog;
     private QuickActions quickActions;
+    private SaveImgDialog saveImgDialog;
+    private DownLoadDialogProgress downLoadDialogProgress;
+    private DownloadUtils downloadUtils;
+    private String currentBlogId;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (saveImgDialog == null) {
+                Activity activity = (Activity) context;
+                saveImgDialog = new SaveImgDialog(activity);
+            }
+            if (mCallBack != null) {
+                mCallBack.toDown(currentBlogId);
+            }
+            saveImgDialog.show();
+        }
+    };
 
     public ActivityDetailAdapter(Context context, List<BigImgEntity.Blog> lists, HotBlogsEntity.Detail detail, QuickActions actions) {
         super(context, true, lists);
@@ -165,20 +201,18 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 });
                 blogViewHolder.rl_video.setVisibility(View.GONE);
             } else {
-                String imageWidth, imageheight;
-                int width, height;
                 if (!isEmpty(blog.video_thumb)) {
-                    imageWidth = Common.getURLParameterValue(blog.video_thumb, "w");
-                    imageheight = Common.getURLParameterValue(blog.video_thumb, "h");
+                    int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 190, 190);
 
-                    if (!isEmpty(imageWidth) && !isEmpty(imageheight)) {
-                        width = Integer.valueOf(imageWidth);
-                        height = Integer.valueOf(imageheight);
-                        GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, width, height);
+                    if (params == null || params.length == 0) {
+                        GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, 95), TransformUtil.dip2px(context, 95));
+                    } else {
+                        GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, params[0]), TransformUtil.dip2px(context, params[1]));
                     }
                 }
                 blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.recycler_list.setVisibility(View.GONE);
+                blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.rl_video.setVisibility(View.VISIBLE);
             }
 
@@ -222,6 +256,8 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 }
             });
 
+            blogViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
+
             blogViewHolder.tv_zan.setOnClickListener(v -> {
                 if (mCallBack != null) {
                     mCallBack.toPraiseBlog(blog.id);
@@ -250,6 +286,15 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                     initDialog(blog);
                 }
             });
+
+            blogViewHolder.tv_tag.setOnClickListener(v -> {
+                if (isEmpty(blog.activity_id)) {
+                    return;
+                }
+                ActivityDetailActivity.startAct(context, blog.activity_id);
+            });
+
+            blogViewHolder.tv_download.setOnClickListener(v -> readyToDownLoad(blog));
         }
     }
 
@@ -487,6 +532,87 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
         void toPraiseBlog(String blogId);
 
+        void toDown(String blogId);
+
         void OnTopSize(int height);
+    }
+
+    public void readyToDownLoad(BigImgEntity.Blog blog) {
+        currentBlogId = blog.id;
+        switch (blog.type) {
+            case 1://图文
+                if (!isEmpty(blog.pics)) {
+                    ArrayList arrayList = new ArrayList();
+                    arrayList.addAll(blog.pics);
+                    DownLoadImageThread threads = new DownLoadImageThread(context, arrayList, new DownLoadImageThread.MyCallBack() {
+                        @Override
+                        public void successBack() {
+                            mHandler.sendEmptyMessage(1);
+                        }
+
+                        @Override
+                        public void errorBack() {
+                            Common.staticToast("保存图片失败");
+                        }
+                    });
+                    threads.start();
+                    ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    cm.setText(blog.activity_title);
+                }
+                break;
+            case 2://视频
+                downFileStart(blog.video);
+                break;
+        }
+    }
+
+    private void downFileStart(String url) {
+        downLoadDialogProgress = new DownLoadDialogProgress();
+        downloadUtils = new DownloadUtils(new JsDownloadListener() {
+            @Override
+            public void onStartDownload() {
+            }
+
+            @Override
+            public void onProgress(int progress) {
+                downLoadDialogProgress.showProgress(progress);
+            }
+
+            @Override
+            public void onFinishDownload(String filePath, boolean isCancel) {
+                downLoadDialogProgress.downLoadSuccess();
+            }
+
+            @Override
+            public void onFail(String errorInfo) {
+                downLoadDialogProgress.dissMissDialog();
+            }
+
+            @Override
+            public void onFinishEnd() {
+                if (mCallBack != null) {
+                    mCallBack.toDown(currentBlogId);
+                }
+            }
+        });
+        boolean checkState = downloadUtils.checkDownLoadFileExists(url);
+        if (checkState) {
+            Common.staticToast("已下载过该视频,请勿重复下载!");
+            return;
+        }
+        downLoadDialogProgress.showDownLoadDialogProgress(context, new DownLoadDialogProgress.downStateListen() {
+            @Override
+            public void cancelDownLoad() {
+                downloadUtils.setCancel(true);
+                if (mCallBack != null) {
+                    mCallBack.toDown(currentBlogId);
+                }
+            }
+
+            @Override
+            public void fileDownLoad() {
+                downloadUtils.download(url, downloadUtils.fileName);
+            }
+        }, !NetworkUtils.isWifiConnected(context));
     }
 }

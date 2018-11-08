@@ -14,5 +14,7 @@ public interface IActivityDetailView extends IView {
 
     void focusUser(int isFocus,String memberId);
 
+    void downCountSuccess(String blogId);
+
     void praiseBlog(String blogId);
 }

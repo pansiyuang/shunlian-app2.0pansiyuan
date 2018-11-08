@@ -166,6 +166,16 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         hotBlogAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void downCountSuccess(String blogId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.down_num++;
+            }
+        }
+        hotBlogAdapter.notifyDataSetChanged();
+    }
+
     /**
      * 刷新完成
      */
@@ -198,6 +208,11 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     @Override
     public void toPraiseBlog(String blogId) {
         hotBlogPresenter.praiseBlos(blogId);
+    }
+
+    @Override
+    public void toDown(String id) {
+        hotBlogPresenter.downCount(id);
     }
 
     public void saveBaseInfo(HotBlogsEntity.BaseInfo baseInfo) {

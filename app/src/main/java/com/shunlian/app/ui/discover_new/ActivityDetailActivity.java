@@ -132,7 +132,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                     sendConfig.isWhiteList = true;
                 }
                 sendConfig.activityID = currentId;
-                if(!isEmpty(currentDetail.title)){
+                if (!isEmpty(currentDetail.title)) {
                     sendConfig.activityTitle = "#" + currentDetail.title + "#";
                 }
                 sendConfig.memberId = baseInfo.member_id;
@@ -153,7 +153,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     public void setBgColor(int totalDy) {
-        ImmersionBar immersionBar = ImmersionBar.with(this).addViewSupportTransformColor(toolbar, R.color.white);
+        ImmersionBar immersionBar = ImmersionBar.with(this).addViewSupportTransformColor(toolbar, R.color.transparent);
         if (totalDy <= layoutHeight) {
             if (totalDy <= 0) {
                 totalDy = 0;
@@ -222,6 +222,16 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
+    public void downCountSuccess(String blogId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.down_num++;
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void praiseBlog(String blogId) {
         for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
@@ -250,6 +260,11 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     @Override
     public void toPraiseBlog(String blogId) {
         mPresent.praiseBlos(blogId);
+    }
+
+    @Override
+    public void toDown(String blogId) {
+        mPresent.downCount(blogId);
     }
 
     @Override
