@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
@@ -193,6 +194,38 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         }
     }
 
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        if (!isEmpty(payloads) && holder instanceof BlogViewHolder) {
+            BigImgEntity.Blog blog = (BigImgEntity.Blog) payloads.get(0);
+            BlogViewHolder blogViewHolder = (BlogViewHolder) holder;
+
+            if (blog.is_focus == 1) {//已经关注
+                blogViewHolder.tv_attention.setBackgroundDrawable(null);
+                blogViewHolder.tv_attention.setText("已关注");
+                blogViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+            } else {
+                blogViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
+                blogViewHolder.tv_attention.setText("关注");
+                blogViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+            }
+
+            if (blog.is_praise == 1) {
+                blogViewHolder.tv_zan.setClickable(false);
+                setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
+            } else {
+                blogViewHolder.tv_zan.setClickable(true);
+                setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
+            }
+
+            blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
+            blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
+
+
     public void handleItem(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BlogViewHolder) {
             BigImgEntity.Blog blog;
@@ -259,7 +292,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        quickActions.shareDiscoverDialog(blog.id,goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+                        quickActions.shareDiscoverDialog(blog.id, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
                                 1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
                     }
                 });
@@ -422,7 +455,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(context));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context,blog.id, blog.related_goods, false, quickActions,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.id, blog.related_goods, false, quickActions,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id));

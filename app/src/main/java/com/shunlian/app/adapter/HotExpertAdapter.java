@@ -94,6 +94,7 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
 //                    mCallBack.toPraiseBlog(blog.id);
 //                }
 //            });
+            hotExpertViewHolder.miv_big_icon.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
             hotExpertViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
             hotExpertViewHolder.tv_nickname.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
             hotExpertViewHolder.rl_video.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));

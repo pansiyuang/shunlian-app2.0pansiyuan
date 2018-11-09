@@ -144,14 +144,14 @@ public class SearchExpertFrag extends BaseLazyFragment implements ISearchExpertV
     public void focusUser(int isFocus, String memberId) {
         for (ExpertEntity.Expert expert : expertList) {
             if (memberId.equals(expert.member_id)) {
-                if (expert.focus_status == 0) {
-                    expert.focus_status = 1;
+                if (expert.is_focus == 0) {
+                    expert.is_focus = 1;
                 } else {
-                    expert.focus_status = 0;
+                    expert.is_focus = 0;
                 }
             }
-            mAdapter.notifyDataSetChanged();
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

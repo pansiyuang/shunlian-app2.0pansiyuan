@@ -43,7 +43,8 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
             GlideUtils.getInstance().loadCircleAvar(context, expertViewHolder.miv_icon, expert.avatar);
             expertViewHolder.tv_name.setText(expert.nickname);
             expertViewHolder.tv_hot.setText(expert.hot + "热度");
-            if (expert.focus_status == 1) {
+
+            if (expert.is_focus == 1) {
                 expertViewHolder.tv_attention.setBackgroundDrawable(null);
                 expertViewHolder.tv_attention.setText("已关注");
                 expertViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
@@ -67,10 +68,10 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
                 expertViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
-            expertViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context,expert.member_id));
+            expertViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, expert.member_id));
 
             expertViewHolder.tv_attention.setOnClickListener((View v) -> {
-                mFrag.toFocus(expert.focus_status, expert.member_id);
+                mFrag.toFocus(expert.is_focus, expert.member_id);
             });
         }
     }
