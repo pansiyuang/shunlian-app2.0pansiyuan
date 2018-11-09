@@ -337,14 +337,14 @@
         <activity
             android:name=".ui.store.StoreAct"
             android:exported="false"
-            android:label="微信回调"
+            android:label="店铺主页"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.goods_detail.GoodsDetailAct"
             android:exported="false"
             android:resizeableActivity="true"
             android:screenOrientation="portrait"
-            android:label="@string/store_search"
+            android:label="商品详情"
             android:supportsPictureInPicture="true" />
         <activity
             android:name=".ui.store.StoreIntroduceAct"
