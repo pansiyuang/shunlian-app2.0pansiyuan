@@ -31,12 +31,12 @@ public class ShareInfoParam implements Serializable {
     public String shop_logo;
     public String shop_name;
     public String code_link;
-
+    public String market_price;
     @JsonProperty("nick_name")
     public String userName;//用户名
     @JsonProperty("portrait")
     public String userAvatar;//用户头像
-
+    public String   price;
     public String goodsPrice;//商品价格
 
     public ArrayList<String> downloadPic;//需要下载的图片
@@ -67,10 +67,12 @@ public class ShareInfoParam implements Serializable {
                 ", userName='" + userName + '\'' +
                 ", userAvatar='" + userAvatar + '\'' +
                 ", goodsPrice='" + goodsPrice + '\'' +
+                ", goodsPrice='" + price + '\'' +
                 ", downloadPic=" + downloadPic +
                 ", thumb_type='" + thumb_type + '\'' +
                 ", start_time='" + start_time + '\'' +
                 ", act_label='" + act_label + '\'' +
+                ", market_price='" + market_price + '\'' +
                 ", isSuperiorProduct=" + isSuperiorProduct +
                 '}';
     }

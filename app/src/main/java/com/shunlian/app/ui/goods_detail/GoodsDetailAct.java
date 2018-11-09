@@ -48,6 +48,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
@@ -78,6 +79,7 @@ import cn.jzvd.JZMediaManager;
 
 public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetailView, View.OnClickListener {
 
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     public static final String FRAG_GOODS = GoodsDeatilFrag.class.getName();
     public static final String FRAG_COMMENT = CommentFrag.class.getName();
     public static final int GOODS_ID = 0;//商品
@@ -257,6 +259,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     private void initConstant() {
         fragments = new HashMap();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         int statusBarHeight = ImmersionBar.getStatusBarHeight(this);
         int deviceWidth = DeviceInfoUtil.getDeviceWidth(this);
         //偏移量
@@ -448,13 +451,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             } else {
                 miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
                 if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
+                    miv_is_fav.setImageResource(R.mipmap.icon_fenxiang);
                 } else {
                     miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
                 }
                 miv_more.setImageResource(R.mipmap.icon_more_n);
             }
         }
+        miv_is_fav.setVisibility(View.GONE);
     }
 
 
@@ -881,16 +885,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      * 显示分享框
      */
     public void moreAnim() {
-        float alpha = mll_item.getAlpha();
-        if (alpha < 1 && alpha > 0) return;//导航栏没有全部显示的情况下，显示分享框会有透明条
-        immersionBar.statusBarColor(R.color.white).init();
-        visible(mll_share);
-        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
-                -1, Animation.RELATIVE_TO_SELF, 0);
-        animation.setDuration(250);
-        mll_share.setAnimation(animation);
-        mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(this, "login");
+            return;
+        }
+        if(goodsDetailPresenter!=null) {
+            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
+        }
     }
 
     private void addCartAnim() {
@@ -1257,7 +1258,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginRefresh(DefMessageEvent event) {
         if (event.loginSuccess && goodsDetailPresenter != null) {
-            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
+//            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1271,13 +1272,17 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         if (mShareInfoParam != null) {
+            mShareInfoParam =baseEntity.data;
             mShareInfoParam.userName = baseEntity.data.userName;
             mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
             mShareInfoParam.shareLink = baseEntity.data.shareLink;
             mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
             if (goodsDetailPresenter != null) {
                 goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
+                shareGoodDialogUtil.shareGoodDialog(goodsDetailPresenter.getShareInfoParam());
             }
         }
+
     }
 }

@@ -75,6 +75,15 @@ public class BitmapUtil {
         return newBitMap;
     }
 
+    public static Bitmap getBitmapByView(View view) {
+        Bitmap bitmap = null;
+        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
+        final Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
     public static byte[] getImage(String path) throws Exception {
         URL url = new URL(path);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
