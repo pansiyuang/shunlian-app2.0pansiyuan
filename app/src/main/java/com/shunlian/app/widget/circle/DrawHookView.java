@@ -121,4 +121,15 @@ public class DrawHookView extends View {
             invalidate();
         }
     }
+
+    public void setInitData() {
+        //绘制圆弧的进度值
+       progress = 0;
+       line1_x = 0;
+       line1_y = 0;
+       line2_x = 0;
+       line2_y = 0;
+       isUpdateFinfish = false;
+
+    }
 }

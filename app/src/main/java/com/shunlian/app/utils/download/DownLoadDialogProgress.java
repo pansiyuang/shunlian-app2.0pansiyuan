@@ -48,6 +48,7 @@ public class DownLoadDialogProgress {
         tv_down_success.setVisibility(View.VISIBLE);
         bottom_view.setVisibility(View.GONE);
         down_bottom.setVisibility(View.INVISIBLE);
+        draw_hook.setInitData();
         draw_hook.invalidate();
         handler.postDelayed(new Runnable() {
             @Override
