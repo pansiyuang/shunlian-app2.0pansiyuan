@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.presenter.HotBlogPresenter;
@@ -32,7 +33,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack {
+public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack, QuickActions.OnShareBlogCallBack {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -70,6 +71,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+        quick_actions.setOnShareBlogCallBack(this);
     }
 
     @Override
@@ -225,5 +227,20 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        hotBlogPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.share_num++;
+            }
+        }
+        hotBlogAdapter.notifyDataSetChanged();
     }
 }

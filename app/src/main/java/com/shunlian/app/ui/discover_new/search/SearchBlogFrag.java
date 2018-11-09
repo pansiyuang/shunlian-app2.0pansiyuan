@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
@@ -31,7 +32,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/24.
  */
 
-public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack {
+public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack, QuickActions.OnShareBlogCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -70,6 +71,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
         ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+        quick_actions.setOnShareBlogCallBack(this);
     }
 
     public static SearchBlogFrag getInstance(String str) {
@@ -193,6 +195,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
         hotBlogAdapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void refreshFinish() {
         if (lay_refresh != null) {
@@ -230,5 +233,25 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     @Override
     public void toDown(String blogId) {
         mPresenter.downCount(blogId);
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        mPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                for (GoodsDeatilEntity.Goods goods : blog.related_goods) {
+                    if (goodsId.equals(goods.goods_id)) {
+                        goods.share_num++;
+                    }
+                }
+            }
+        }
+        hotBlogAdapter.notifyDataSetChanged();
     }
 }
