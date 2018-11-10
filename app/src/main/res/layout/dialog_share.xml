@@ -8,15 +8,30 @@
 
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="255dp"
         android:layout_marginBottom="@dimen/xx60"
         android:layout_alignParentBottom="true"
         android:background="@drawable/rounded_corner_white_8px"
         android:orientation="vertical">
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="乐分享 赚金蛋"
+            android:gravity="center"
+            android:textColor="@color/value_484848"
+            android:textSize="14sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="分享给好友查看后 -- 获得随机金蛋奖励！"
+            android:gravity="center"
+            android:textColor="@color/share_text"
+            android:textSize="12sp" />
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="match_parent"
-            android:layout_height="156dp"
+            android:layout_height="136dp"
             android:orientation="horizontal">
 
             <com.shunlian.app.widget.MyLinearLayout

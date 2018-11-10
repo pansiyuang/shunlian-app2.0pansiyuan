@@ -15,13 +15,11 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ShareInfoParam;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.dialog.CommonDialog;
 import com.shunlian.app.wxapi.WXEntryActivity;
-import com.shunlian.mylibrary.ImmersionBar;
 
 public class ShareGoodDialogUtil {
     private ShareInfoParam mShareInfoParam;
@@ -34,7 +32,7 @@ public class ShareGoodDialogUtil {
     }
 
     //分享商品的diolog
-    public void shareGoodDialog(ShareInfoParam shareInfoParam) {
+    public void shareGoodDialog(ShareInfoParam shareInfoParam,boolean isGood) {
         this.mShareInfoParam = shareInfoParam;
         CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottom()
                 .setView(R.layout.dialog_share);
@@ -50,26 +48,32 @@ public class ShareGoodDialogUtil {
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WXEntryActivity.startAct(context,
-                        "shareFriend", mShareInfoParam);
-                Constant.SHARE_TYPE = "goods";
-                Constant.SHARE_ID = mShareInfoParam.goods_id;
-                nomalBuildl.dismiss();
+                if(isGood) {
+                    WXEntryActivity.startAct(context,
+                            "shareFriend", mShareInfoParam);
+                    Constant.SHARE_TYPE = "goods";
+                    Constant.SHARE_ID = mShareInfoParam.goods_id;
+                    nomalBuildl.dismiss();
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WXEntryActivity.startAct(context, "shareCircle", shareInfoParam);
-                Constant.SHARE_TYPE = "goods";
-                Constant.SHARE_ID = mShareInfoParam.goods_id;
-                nomalBuildl.dismiss();
+                if(isGood) {
+                    WXEntryActivity.startAct(context, "shareCircle", shareInfoParam);
+                    Constant.SHARE_TYPE = "goods";
+                    Constant.SHARE_ID = mShareInfoParam.goods_id;
+                    nomalBuildl.dismiss();
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createCode();
+                if(isGood) {
+                    createCode();
+                }
 //                nomalBuildl.dismiss();
             }
         });

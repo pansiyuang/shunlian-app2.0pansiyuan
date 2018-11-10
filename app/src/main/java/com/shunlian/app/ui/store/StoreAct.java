@@ -43,6 +43,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.StoreView;
 import com.shunlian.app.widget.MyImageView;
@@ -156,8 +157,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     MyRelativeLayout mrlayout_sort;
     @BindView(R.id.mrlayout_sorts)
     MyRelativeLayout mrlayout_sorts;
-    @BindView(R.id.rl_more)
-    RelativeLayout rl_more;
+    @BindView(R.id.rl_share)
+    RelativeLayout rl_share;
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
     @BindView(R.id.tv_msg_count)
@@ -180,7 +181,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private GridLayoutManager babyManager, discountManager;
     private ShareInfoParam shareInfoParam;
     private List<GoodsDeatilEntity.Voucher> vouchers;
-
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     public static void startAct(Context context, String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
         intent.putExtra("storeId", storeId);
@@ -188,7 +189,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         context.startActivity(intent);
     }
 
-    @OnClick(R.id.rl_more)
+    @OnClick(R.id.rl_share)
     public void more() {
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.shareInfo(shareInfoParam);
@@ -200,9 +201,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         if (Common.isAlreadyLogin()) {
             messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
-                String s = messageCountManager.setTextCount(tv_msg_count);
-                if (quick_actions != null)
-                    quick_actions.setMessageCount(s);
+//                String s = messageCountManager.setTextCount(tv_msg_count);
+//                if (quick_actions != null)
+//                    quick_actions.setMessageCount(s);
             } else {
                 messageCountManager.initData();
             }
@@ -213,16 +214,16 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
+//        String s = messageCountManager.setTextCount(tv_msg_count);
+//        if (quick_actions != null)
+//            quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
+//        String s = messageCountManager.setTextCount(tv_msg_count);
+//        if (quick_actions != null)
+//            quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -246,6 +247,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     protected void initListener() {
         super.initListener();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         mtv_attention.setOnClickListener(this);
         mrlayout_stores.setOnClickListener(this);
         mrlayout_baby.setOnClickListener(this);
