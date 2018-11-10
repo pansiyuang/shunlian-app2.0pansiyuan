@@ -31,6 +31,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.ui.discover_new.ActivityDetailActivity;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.VideoGoodPlayActivity;
@@ -43,6 +44,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.download.DownLoadDialogProgress;
@@ -80,7 +82,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private BlogBottomDialog blogBottomDialog;
     private OnDelBlogListener delBlogListener;
     private OnFavoListener favoListener;
-    private QuickActions quickActions;
     private boolean showAttention = true;
     private boolean isShowMore = false;
     private SaveImgDialog saveImgDialog;
@@ -88,6 +89,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private DownloadUtils downloadUtils;
     private HttpDialog httpDialog;
     private String currentBlogId;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
+    private ShareInfoParam  mShareInfoParam;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -106,23 +109,23 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         }
     };
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, QuickActions quickActions) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity,ShareGoodDialogUtil mShareGoodDialogUtil) {
         super(context, true, lists);
         this.mActivity = activity;
-        this.quickActions = quickActions;
+        shareGoodDialogUtil = mShareGoodDialogUtil;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads, QuickActions quickActions) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads, ShareGoodDialogUtil mShareGoodDialogUtil) {
         super(context, true, lists);
         this.adList = ads;
-        this.quickActions = quickActions;
+        shareGoodDialogUtil = mShareGoodDialogUtil;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list, QuickActions quickActions) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list,ShareGoodDialogUtil mShareGoodDialogUtil) {
         super(context, true, lists);
         this.mActivity = activity;
         this.recomandFocusList = list;
-        this.quickActions = quickActions;
+        shareGoodDialogUtil = mShareGoodDialogUtil;
     }
 
     public void setShowAttention(boolean isShow) {
@@ -259,8 +262,21 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        quickActions.shareDiscoverDialog(blog.id,goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
-                                1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
+                        mShareInfoParam = new ShareInfoParam();
+                        mShareInfoParam.blogId =blog.id;
+                        mShareInfoParam.shareLink=goods.share_url;
+                        mShareInfoParam.title =goods.title;
+                        mShareInfoParam.desc =goods.desc;
+                        mShareInfoParam.goods_id =goods.goods_id;
+                        mShareInfoParam.price =goods.price;
+                        mShareInfoParam.market_price =goods.market_price;
+                        mShareInfoParam.img =goods.thumb;
+                        mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
+                        mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
+                        mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
+                        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,true);
+//                        quickActions.shareDiscoverDialog(blog.id,goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+//                                1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
                     }
                 });
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
@@ -422,7 +438,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(context));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context,blog.id, blog.related_goods, false, quickActions,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context,blog.id, blog.related_goods, false,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id));

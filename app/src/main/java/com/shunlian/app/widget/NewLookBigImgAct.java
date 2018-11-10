@@ -234,7 +234,7 @@ public class NewLookBigImgAct extends BaseActivity{
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(baseAct));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct,blog.id, blog.related_goods,isCode,quick_actions,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct,blog.id, blog.related_goods,isCode,
                 SharedPrefUtil.getSharedUserString("nickname", ""),SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {

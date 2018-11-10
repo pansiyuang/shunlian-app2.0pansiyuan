@@ -17,8 +17,7 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.AttentionPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.HorizonItemDecoration;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IAttentionView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -33,7 +32,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class AttentionFrag extends BaseLazyFragment implements IAttentionView, HotBlogAdapter.OnAdapterCallBack, AttentionAdapter.OnFocusListener, QuickActions.OnShareBlogCallBack {
+public class AttentionFrag extends BaseLazyFragment implements IAttentionView, HotBlogAdapter.OnAdapterCallBack, AttentionAdapter.OnFocusListener, ShareGoodDialogUtil.OnShareBlogCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -57,12 +56,9 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     private List<HotBlogsEntity.RecomandFocus> recomandFocusList;
     private int focusType; //0 关注blog列表用户,1关注推荐关注用户,2,关注空页面推荐关注用户
 
-    QuickActions quick_actions;
-
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @Override
     public void onDestroyView() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         super.onDestroyView();
     }
 
@@ -75,11 +71,8 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     @Override
     protected void initData() {
         //分享
-        quick_actions = new QuickActions(baseActivity);
-        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
-        decorView.addView(quick_actions);
-        quick_actions.setVisibility(View.INVISIBLE);
-        quick_actions.setOnShareBlogCallBack(this);
+        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
     }
 
     @Override
@@ -160,7 +153,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
             recycler_list.setAdapter(attentionAdapter);
         } else {
             if (hotBlogAdapter == null) {
-                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList, quick_actions);
+                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList,shareGoodDialogUtil);
                 hotBlogAdapter.setAdapterCallBack(this);
                 hotBlogAdapter.setShowAttention(false);
                 recycler_list.setAdapter(hotBlogAdapter);

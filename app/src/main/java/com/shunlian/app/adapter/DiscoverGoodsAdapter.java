@@ -53,16 +53,14 @@ import butterknife.BindView;
 public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> implements IHotVideoBlogView {
     private LayoutInflater mInflater;
     private boolean isCode;
-    private QuickActions quickActions;
     private String from,froms,mBlogId;
     private ShareInfoParam  mShareInfoParam;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private HotVideoBlogPresenter hotVideoBlogPresenter;
-    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,QuickActions quick_actions,String from,String froms) {
+    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,String from,String froms) {
         super(context, false, lists);
         mInflater = LayoutInflater.from(context);
         this.isCode=isCode;
-        this.quickActions=quick_actions;
         this.from=from;
         this.froms=froms;
         this.mBlogId = blogId;

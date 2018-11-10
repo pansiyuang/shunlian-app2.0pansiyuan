@@ -22,7 +22,6 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
-import com.shunlian.app.presenter.BasePresenter;
 import com.shunlian.app.presenter.HotVideoBlogPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -56,7 +55,6 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     GoodVideoPlayer customVideoPlayer;
     @BindView(R.id.ll_rootView)
     RelativeLayout ll_rootView;
-    private QuickActions quick_actions;
     public static void startActivity(Context context, BigImgEntity.Blog blog) {
         Intent intent = new Intent(context, VideoGoodPlayActivity.class);
         intent.putExtra("blog", blog);
@@ -77,10 +75,6 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     protected void initData() {
         shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         setHideStatusAndNavigation();
-        quick_actions = new QuickActions(this);
-        ViewGroup decorView = (ViewGroup) this.getWindow().getDecorView();
-        decorView.addView(quick_actions);
-        quick_actions.setVisibility(View.INVISIBLE);
 
         hotBlogPresenter = new HotVideoBlogPresenter(this, this);
         EventBus.getDefault().register(this);
@@ -133,8 +127,6 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         GoodVideoPlayer.backPress();
         super.onDestroy();
     }
@@ -267,7 +259,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, this.getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(this));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this,blog.id, blog.related_goods, false, quick_actions,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this,blog.id, blog.related_goods, false,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(this, blog.related_goods.get(position).goods_id));
