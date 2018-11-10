@@ -558,7 +558,7 @@ public class GlideUtils {
         Glide.with(context).load(url).asBitmap().into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                BitmapUtil.saveImageToAlbumn(context, resource);
+                BitmapUtil.saveImageToAlbumn(context, resource,false,false);
                 Common.staticToasts(context, "已保存到手机相册", R.mipmap.icon_common_duihao);
             }
 

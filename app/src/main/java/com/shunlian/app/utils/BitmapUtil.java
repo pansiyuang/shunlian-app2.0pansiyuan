@@ -31,8 +31,10 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SinglePicAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.wxapi.WXEntryActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -334,7 +336,7 @@ public class BitmapUtil {
         return bitmap;
     }
 
-    public static boolean saveImageToAlbumn(Context context, Bitmap bmp) {
+    public static boolean saveImageToAlbumn(Context context, Bitmap bmp,boolean isShare,boolean isFriend) {
 
         if (!Common.hasSD()) {
             Common.staticToast("没有sd卡");
@@ -369,6 +371,12 @@ public class BitmapUtil {
                 fileUri = new File(path);
                 context.sendBroadcast(new
                         Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
+
+                if(isShare) {
+                    ShareInfoParam shareInfoParam = new ShareInfoParam();
+                    shareInfoParam.photo = path;
+                    WXEntryActivity.startAct(context, isFriend ? "shareFriend" : "shareCircle", shareInfoParam);
+                }
                 return true;
             } else {
                 return false;

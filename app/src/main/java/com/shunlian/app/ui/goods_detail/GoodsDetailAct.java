@@ -447,15 +447,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 } else {
                     miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
                 }
-                miv_more.setImageResource(R.mipmap.icon_more_gengduo);
+                miv_more.setImageResource(R.mipmap.icon_fenxiang);
             } else {
                 miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
                 if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_fenxiang);
+                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
                 } else {
                     miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
                 }
-                miv_more.setImageResource(R.mipmap.icon_more_n);
+                miv_more.setImageResource(R.mipmap.img_xiangqing_fenxiang);
             }
         }
         miv_is_fav.setVisibility(View.GONE);
@@ -523,28 +523,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void isFavorite(String is_fav) {
         favId = is_fav;
         if (goodsDeatilFrag != null) {
-            int item = goodsDeatilFrag.currentFirstItem;
-            if (item > 0) {
-                if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
-                } else {
-                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
-                }
-            } else {
-                if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
-                } else {
-                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
-                }
-            }
-        } else {
-            if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)) {
-                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
-            } else {
-                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
-            }
+            mGoodsDeatilEntity.is_fav =is_fav;
+            goodsDeatilFrag.updateFav(is_fav);
         }
-
     }
 
     /**
@@ -785,13 +766,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 break;
 
             case R.id.miv_is_fav:
-                if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
-                    goodsDetailPresenter.goodsFavAdd(goodsId);
-                } else {
-                    goodsDetailPresenter.goodsFavRemove(favId);
-                }
                 break;
-
             case R.id.mllayout_car:
                 MainActivity.startAct(this, "shoppingcar");
                 break;
@@ -799,6 +774,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (goodsDetailPresenter != null)
                     goodsDetailPresenter.goodsWant();
                 break;
+        }
+    }
+
+    public void favAddOrRemove(){
+        if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
+            goodsDetailPresenter.goodsFavAdd(goodsId);
+        } else {
+            goodsDetailPresenter.goodsFavRemove(favId);
         }
     }
 

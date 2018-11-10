@@ -52,7 +52,7 @@ public class DownLoadImageThread extends Thread {
                 byte[] b = BitmapUtil.getImage(pics.get(i));
                 if (b != null) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-                    BitmapUtil.saveImageToAlbumn(mContext, bitmap);
+                    BitmapUtil.saveImageToAlbumn(mContext, bitmap,false,false);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -66,7 +66,7 @@ public class DownLoadImageThread extends Thread {
             byte[] b = BitmapUtil.getImage(pic);
             if (b != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-                BitmapUtil.saveImageToAlbumn(mContext, bitmap);
+                BitmapUtil.saveImageToAlbumn(mContext, bitmap,false,false);
             }
             myCallBack.successBack();
         } catch (Exception e) {

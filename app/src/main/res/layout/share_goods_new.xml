@@ -207,11 +207,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="12dp"
+                android:id="@+id/line_share_line"
                 android:background="@color/light_gray_three" />
 
             <com.shunlian.app.widget.MyLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
+                android:id="@+id/line_share_boottom"
                 android:orientation="horizontal">
 
                 <com.shunlian.app.widget.MyLinearLayout

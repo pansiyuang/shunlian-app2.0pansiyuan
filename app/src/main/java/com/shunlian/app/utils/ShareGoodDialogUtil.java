@@ -52,6 +52,8 @@ public class ShareGoodDialogUtil {
             public void onClick(View v) {
                 WXEntryActivity.startAct(context,
                         "shareFriend", mShareInfoParam);
+                Constant.SHARE_TYPE = "goods";
+                Constant.SHARE_ID = mShareInfoParam.goods_id;
                 nomalBuildl.dismiss();
             }
         });
@@ -59,6 +61,8 @@ public class ShareGoodDialogUtil {
             @Override
             public void onClick(View v) {
                 WXEntryActivity.startAct(context, "shareCircle", shareInfoParam);
+                Constant.SHARE_TYPE = "goods";
+                Constant.SHARE_ID = mShareInfoParam.goods_id;
                 nomalBuildl.dismiss();
             }
         });
@@ -86,7 +90,7 @@ public class ShareGoodDialogUtil {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_goods_new, null, false);
             CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd)
-                    .setView(R.layout.share_goods_new);
+                    .setView(inflate);
             showGoodBuild = nomalBuild.create();
             showGoodBuild.setCancelable(false);
             showGoodBuild.show();
@@ -136,7 +140,8 @@ public class ShareGoodDialogUtil {
             layoutParams.width = width;
             layoutParams.height = width;
             GlideUtils.getInstance().loadImageZheng(context, miv_goods_pic, mShareInfoParam.img);
-
+            showGoodBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
+            showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
             miv_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -147,47 +152,55 @@ public class ShareGoodDialogUtil {
             mllayout_wexin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    saveshareGoodsPic(true,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
+                    showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
+                    showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    showGoodBuild.dismiss();
+                    goodsPic(inflate,false);
                 }
             });
             mllayout_save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    saveshareGoodsPic(true,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, true, from, froms);
+                    showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
+                    showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    showGoodBuild.dismiss();
+                    goodsPic(inflate,true);
                 }
             });
         }
     }
 
-    private void goodsPic(View inflate) {
+    private void goodsPic(View inflate,boolean isShow) {
         GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
                 new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
-                        inflate.postDelayed(() -> {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView);
+                        if (isShow) {
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,false);
                             if (isSuccess) {
-                                if (context instanceof GoodsDetailAct) {
-//                                    ((GoodsDetailAct) context).moreHideAnim();
-                                    if (context instanceof GoodsDetailAct &&
-                                            ImmersionBar.hasNavigationBar((Activity) context)) {
-                                        ((GoodsDetailAct) context).setFullScreen(false);
-                                    }
-                                }
-//                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) context, shareType, shareId);
+//                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
 //                                dialog.show();
+                                Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
                             } else {
-                                Common.staticToast("分享失败");
+                                Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
                             }
-                        }, 100);
+                        } else {
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,true);
+                            if (!isSuccess)
+                                Common.staticToast("分享失败");
+                        }
                     }
 
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        Common.staticToast("分享失败");
+                        if (isShow) {
+                            Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
+                        } else {
+                            Common.staticToast("分享失败");
+                        }
                     }
                 });
     }

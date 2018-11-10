@@ -1189,7 +1189,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         inflate.postDelayed(() -> {
                             Bitmap bitmapByView = getBitmapByView(inflate);
                             if (isShow) {
-                                boolean isSuccess = BitmapUtil.saveImageToAlbumn(mContext, bitmapByView);
+                                boolean isSuccess = BitmapUtil.saveImageToAlbumn(mContext, bitmapByView,false,false);
                                 if (isSuccess) {
 //                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
 //                                dialog.show();
@@ -1323,7 +1323,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         miv_goods_pic.setImageBitmap(resource);
                         inflate.postDelayed(() -> {
                             Bitmap bitmapByView = getBitmapByView(inflate);
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView,false,false);
                             if (isSuccess) {
                                 if (mContext instanceof GoodsDetailAct) {
                                     ((GoodsDetailAct) mContext).moreHideAnim();
@@ -1507,7 +1507,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private void savePic(View inflate) {
         inflate.postDelayed(() -> {
             Bitmap bitmapByView = getBitmapByView(inflate);
-            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView,false,false);
             if (isSuccess) {
                 LogUtil.httpLogW("图片保存成功");
                 SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
