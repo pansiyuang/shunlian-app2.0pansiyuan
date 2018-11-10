@@ -18,7 +18,11 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.presenter.ActivityPresenter;
+import com.shunlian.app.presenter.HotVideoBlogPresenter;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
@@ -27,7 +31,10 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SaveAlbumDialog;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.view.IHotVideoBlogView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -43,13 +50,14 @@ import butterknife.BindView;
  * Created by Administrator on 2018/3/1.
  */
 
-public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
-
+public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> implements IHotVideoBlogView {
     private LayoutInflater mInflater;
     private boolean isCode;
     private QuickActions quickActions;
     private String from,froms,mBlogId;
-
+    private ShareInfoParam  mShareInfoParam;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
+    private HotVideoBlogPresenter hotVideoBlogPresenter;
     public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,QuickActions quick_actions,String from,String froms) {
         super(context, false, lists);
         mInflater = LayoutInflater.from(context);
@@ -58,6 +66,8 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
         this.from=from;
         this.froms=froms;
         this.mBlogId = blogId;
+        shareGoodDialogUtil = new ShareGoodDialogUtil(context);
+        hotVideoBlogPresenter = new HotVideoBlogPresenter(context,this);
     }
 
 
@@ -91,16 +101,49 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
 //                            }else {
 //                                is=false;
 //                            }
-                            quickActions.createCode(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
-                                    1==goods.isSuperiorProduct,from,froms);
+//                            quickActions.createCode(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
+//                                    1==goods.isSuperiorProduct,from,froms);
+                            mShareInfoParam = new ShareInfoParam();
+                            mShareInfoParam.blogId =mBlogId;
+                            mShareInfoParam.shareLink=goods.share_url;
+                            mShareInfoParam.title =goods.title;
+                            mShareInfoParam.desc =goods.desc;
+                            mShareInfoParam.goods_id =goods.goods_id;
+                            mShareInfoParam.price =goods.price;
+                            mShareInfoParam.market_price =goods.market_price;
+                            mShareInfoParam.img =goods.thumb;
+                            mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
+                            mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
+                            mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
+                            shareGoodDialogUtil.setShareInfoParam(mShareInfoParam);
+                            shareGoodDialogUtil.createGoodCode(true);
                         }
                     });
                 }else {
                     viewHolder.miv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            quickActions.shareDiscoverDialog(mBlogId, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
-                                    1 == goods.isSuperiorProduct, from, froms);
+                            shareGoodDialogUtil.setOnShareBlogCallBack(new ShareGoodDialogUtil.OnShareBlogCallBack() {
+                                @Override
+                                public void shareSuccess(String blogId, String goodsId) {
+                                    hotVideoBlogPresenter.goodsShare("blog_goods", blogId, goodsId);
+                                }
+                            });
+                            mShareInfoParam = new ShareInfoParam();
+                            mShareInfoParam.blogId =mBlogId;
+                            mShareInfoParam.shareLink=goods.share_url;
+                            mShareInfoParam.title =goods.title;
+                            mShareInfoParam.desc =goods.desc;
+                            mShareInfoParam.goods_id =goods.goods_id;
+                            mShareInfoParam.price =goods.price;
+                            mShareInfoParam.market_price =goods.market_price;
+                            mShareInfoParam.img =goods.thumb;
+                            mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
+                            mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
+                            mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
+                            shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,true);
+//                            quickActions.shareDiscoverDialog(mBlogId, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+//                                    1 == goods.isSuperiorProduct, from, froms);
                         }
                     });
                 }
@@ -108,6 +151,45 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
             }
     }
 
+    @Override
+    public void focusUser(int isFocus, String memberId) {
+
+    }
+
+    @Override
+    public void parseBlog(int isAttent, String memberId) {
+
+    }
+
+    @Override
+    public void downCountSuccess() {
+
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String id) {
+
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+
+    }
+
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+
+    }
 
 
     public class SingleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {

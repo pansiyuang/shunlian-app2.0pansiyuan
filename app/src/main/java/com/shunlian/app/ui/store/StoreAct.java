@@ -194,8 +194,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @OnClick(R.id.rl_share)
     public void more() {
 //        quick_actions.setVisibility(View.VISIBLE);
-        quick_actions.shareInfo(shareInfoParam);
-        quick_actions.shop();
+//        quick_actions.shareInfo(shareInfoParam);
+//        quick_actions.shop();
         if (!Common.isAlreadyLogin()) {
             Common.goGoGo(this, "login");
             return;
@@ -810,7 +810,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                     shareInfoParam.storeGoodList = dataList;
                 }
             }
-            shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false);
+            shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
         }
     }
 }

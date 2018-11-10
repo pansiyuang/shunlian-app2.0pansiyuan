@@ -42,6 +42,7 @@ public class ShareInfoParam implements Serializable {
 
     public ArrayList<String> downloadPic;//需要下载的图片
 
+    public String blogId;
     //发现
     public String thumb_type;//0小图（左右布局，图在右侧），1大图（上下布局，图是通栏显示）
     public String start_time;//活动开始时间

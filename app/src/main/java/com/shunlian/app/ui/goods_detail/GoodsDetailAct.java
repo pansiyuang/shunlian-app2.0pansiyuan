@@ -1215,7 +1215,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
             if (goodsDetailPresenter != null) {
                 goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
-                shareGoodDialogUtil.shareGoodDialog(goodsDetailPresenter.getShareInfoParam(),true);
+                shareGoodDialogUtil.shareGoodDialog(goodsDetailPresenter.getShareInfoParam(),true,false);
             }
         }
 

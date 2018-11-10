@@ -27,7 +27,7 @@ import com.shunlian.app.wxapi.WXEntryActivity;
 public class ShareGoodDialogUtil {
     private ShareInfoParam mShareInfoParam;
     public Context context;
-
+    private OnShareBlogCallBack mCallBack;
     public CommonDialog nomalBuildl;
     public CommonDialog showGoodBuild;
     public CommonDialog showShopBuild;
@@ -35,8 +35,11 @@ public class ShareGoodDialogUtil {
         this.context = context;
     }
 
+    public void setShareInfoParam(ShareInfoParam shareInfoParam){
+        this.mShareInfoParam = mShareInfoParam;
+    }
     //分享商品的diolog
-    public void shareGoodDialog(ShareInfoParam shareInfoParam,boolean isGood) {
+    public void shareGoodDialog(ShareInfoParam shareInfoParam,boolean isGood,boolean isFound) {
         this.mShareInfoParam = shareInfoParam;
         CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottom()
                 .setView(R.layout.dialog_share);
@@ -57,6 +60,9 @@ public class ShareGoodDialogUtil {
                             "shareFriend", mShareInfoParam);
                     Constant.SHARE_TYPE = "goods";
                     Constant.SHARE_ID = mShareInfoParam.goods_id;
+                    if(isFound&&mCallBack!=null){
+                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
+                    }
                     nomalBuildl.dismiss();
                 }else{
                     Constant.SHARE_TYPE = "";
@@ -73,6 +79,9 @@ public class ShareGoodDialogUtil {
                     Constant.SHARE_TYPE = "goods";
                     Constant.SHARE_ID = mShareInfoParam.goods_id;
                     WXEntryActivity.startAct(context, "shareCircle", shareInfoParam);
+                    if(isFound&&mCallBack!=null){
+                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
+                    }
                     nomalBuildl.dismiss();
                 }else{
                     Constant.SHARE_TYPE = "";
@@ -87,7 +96,7 @@ public class ShareGoodDialogUtil {
             public void onClick(View v) {
                 nomalBuildl.dismiss();
                 if(isGood) {
-                    createGoodCode();
+                    createGoodCode(isFound);
                 }else{
                     createShopCode();
                 }
@@ -106,7 +115,7 @@ public class ShareGoodDialogUtil {
     /**
      * 创建商品视图
      */
-    public void createGoodCode() {
+    public void createGoodCode(boolean isFound) {
         if (!Common.isAlreadyLogin()) {
             Common.goGoGo(context, "login");
         } else {
@@ -179,6 +188,9 @@ public class ShareGoodDialogUtil {
                     showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                     showGoodBuild.dismiss();
                     goodsPic(inflate,mShareInfoParam.img,false);
+                    if(isFound&&mCallBack!=null){
+                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
+                    }
                 }
             });
             mllayout_save.setOnClickListener(new View.OnClickListener() {
@@ -291,6 +303,10 @@ public class ShareGoodDialogUtil {
                 });
     }
 
+
+    public void setOnShareBlogCallBack(OnShareBlogCallBack callBack) {
+        this.mCallBack = callBack;
+    }
 
     public interface OnShareBlogCallBack {
         void shareSuccess(String blogId,String goodsId);

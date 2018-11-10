@@ -22,6 +22,7 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
+import com.shunlian.app.presenter.BasePresenter;
 import com.shunlian.app.presenter.HotVideoBlogPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -30,6 +31,7 @@ import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotVideoBlogView;
 import com.shunlian.app.widget.CustomVideoPlayer;
@@ -48,7 +50,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/7/23.
  */
 
-public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlayer.updateParseAttent,IHotVideoBlogView {
+public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlayer.updateParseAttent,IHotVideoBlogView ,ShareGoodDialogUtil.OnShareBlogCallBack{
 
     @BindView(R.id.customVideoPlayer)
     GoodVideoPlayer customVideoPlayer;
@@ -64,6 +66,8 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     private  BigImgEntity.Blog blog;
     private  int deviceWidth;
     private HotVideoBlogPresenter hotBlogPresenter;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
+    private ShareInfoParam mShareInfoParam;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_goods_video_play;
@@ -71,6 +75,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
 
     @Override
     protected void initData() {
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         setHideStatusAndNavigation();
         quick_actions = new QuickActions(this);
         ViewGroup decorView = (ViewGroup) this.getWindow().getDecorView();
@@ -123,11 +128,6 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         }
     }
 
-    public void shareArticle() {
-        if (quick_actions != null){
-            quick_actions.shareStyle1Dialog();
-        }
-    }
 
 
     @Override
@@ -160,6 +160,11 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     }
 
     @Override
+    public void shareGoodsSuccess(String blogId, String id) {
+
+    }
+
+    @Override
     public void showFailureView(int request_code) {
     }
 
@@ -169,6 +174,8 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+
+
     }
 
     @Override
@@ -191,12 +198,28 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
 
     @Override
     public void shareBolg() {
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(this, "login");
+            return;
+        }
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
         //分享
       if(blog.related_goods!=null&&blog.related_goods.size()>0){
           GoodsDeatilEntity.Goods goods = blog.related_goods.get(0);
-          quick_actions.shareDiscoverDialog(blog.id,goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
-                  1==goods.isSuperiorProduct,  SharedPrefUtil.getSharedUserString("nickname", ""),
-                  SharedPrefUtil.getSharedUserString("avatar", ""));
+//          hotBlogPresenter.getShareInfo(hotBlogPresenter.nice, goods.goods_id);
+          mShareInfoParam = new ShareInfoParam();
+          mShareInfoParam.blogId =blog.id;
+          mShareInfoParam.shareLink=goods.share_url;
+          mShareInfoParam.title =goods.title;
+          mShareInfoParam.desc =goods.desc;
+          mShareInfoParam.goods_id =goods.goods_id;
+          mShareInfoParam.price =goods.price;
+          mShareInfoParam.market_price =goods.market_price;
+          mShareInfoParam.img =goods.thumb;
+          mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
+          mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
+          mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
+          shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,true);
       }
     }
 
@@ -253,10 +276,13 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         dialog_new.show();
     }
 
-
     @Override
     public void destoryVideo() {
         onBackPressed();
     }
 
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        hotBlogPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
 }
