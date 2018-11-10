@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.StoreShareBabyAdapter;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -27,6 +30,7 @@ public class ShareGoodDialogUtil {
 
     public CommonDialog nomalBuildl;
     public CommonDialog showGoodBuild;
+    public CommonDialog showShopBuild;
     public ShareGoodDialogUtil(Context context){
         this.context = context;
     }
@@ -54,6 +58,11 @@ public class ShareGoodDialogUtil {
                     Constant.SHARE_TYPE = "goods";
                     Constant.SHARE_ID = mShareInfoParam.goods_id;
                     nomalBuildl.dismiss();
+                }else{
+                    Constant.SHARE_TYPE = "";
+                    Constant.SHARE_ID = "";
+                    WXEntryActivity.startAct(context,
+                            "shareFriend", mShareInfoParam);
                 }
             }
         });
@@ -61,20 +70,27 @@ public class ShareGoodDialogUtil {
             @Override
             public void onClick(View v) {
                 if(isGood) {
-                    WXEntryActivity.startAct(context, "shareCircle", shareInfoParam);
                     Constant.SHARE_TYPE = "goods";
                     Constant.SHARE_ID = mShareInfoParam.goods_id;
+                    WXEntryActivity.startAct(context, "shareCircle", shareInfoParam);
                     nomalBuildl.dismiss();
+                }else{
+                    Constant.SHARE_TYPE = "";
+                    Constant.SHARE_ID = "";
+                    WXEntryActivity.startAct(context,
+                            "shareCircle", mShareInfoParam);
                 }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                nomalBuildl.dismiss();
                 if(isGood) {
-                    createCode();
+                    createGoodCode();
+                }else{
+                    createShopCode();
                 }
-//                nomalBuildl.dismiss();
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new View.OnClickListener() {
@@ -87,13 +103,16 @@ public class ShareGoodDialogUtil {
     }
 
 
-    public void createCode() {
+    /**
+     * 创建商品视图
+     */
+    public void createGoodCode() {
         if (!Common.isAlreadyLogin()) {
             Common.goGoGo(context, "login");
         } else {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_goods_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd)
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle()
                     .setView(inflate);
             showGoodBuild = nomalBuild.create();
             showGoodBuild.setCancelable(false);
@@ -159,7 +178,7 @@ public class ShareGoodDialogUtil {
                     showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                     showGoodBuild.dismiss();
-                    goodsPic(inflate,false);
+                    goodsPic(inflate,mShareInfoParam.img,false);
                 }
             });
             mllayout_save.setOnClickListener(new View.OnClickListener() {
@@ -168,14 +187,74 @@ public class ShareGoodDialogUtil {
                     showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                     showGoodBuild.dismiss();
-                    goodsPic(inflate,true);
+                    goodsPic(inflate,mShareInfoParam.img,true);
                 }
             });
         }
     }
 
-    private void goodsPic(View inflate,boolean isShow) {
-        GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
+    /**
+     * 创建商品视图
+     */
+    public void createShopCode() {
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(context, "login");
+        } else {
+            final View inflate = LayoutInflater.from(context)
+                    .inflate(R.layout.share_shop_new, null, false);
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle()
+                    .setView(inflate);
+            showShopBuild = nomalBuild.create();
+            showShopBuild.setCancelable(false);
+            showShopBuild.show();
+            MyImageView miv_close = showShopBuild.findViewById(R.id.miv_close);
+            MyLinearLayout mllayout_save = showShopBuild.findViewById(R.id.mllayout_save);
+            MyImageView miv_user_head = showShopBuild.findViewById(R.id.miv_user_head);
+            MyImageView  miv_store = showShopBuild.findViewById(R.id.miv_store);
+            MyTextView mtv_nickname = showShopBuild.findViewById(R.id.mtv_nickname);
+            mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
+            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("nickname", ""));
+            GlideUtils.getInstance().loadImageZheng(context, miv_store, mShareInfoParam.shop_logo);
+            MyImageView miv_code =  showShopBuild.findViewById(R.id.miv_code);
+            int i = TransformUtil.dip2px(context, 92.5f);
+            Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
+            miv_code.setImageBitmap(qrImage);
+            MyTextView mtv_title =  showShopBuild.findViewById(R.id.mtv_title);
+            mtv_title.setText(mShareInfoParam.title);
+            RecyclerView recycler_shop = showShopBuild.findViewById(R.id.recycler_shop);
+            if(mShareInfoParam.storeGoodList!=null&&mShareInfoParam.storeGoodList.size()>0) {
+                recycler_shop.setVisibility(View.VISIBLE);
+                StoreShareBabyAdapter storeBabyAdapter = new StoreShareBabyAdapter(context, true, mShareInfoParam.storeGoodList);
+                GridLayoutManager babyManager = new GridLayoutManager(context, 2);
+                recycler_shop.setLayoutManager(babyManager);
+                recycler_shop.addItemDecoration(new GrideItemDecoration(0, 0, TransformUtil.dip2px(context, 5), TransformUtil.dip2px(context, 5), true));
+                recycler_shop.setAdapter(storeBabyAdapter);
+            }else{
+                recycler_shop.setVisibility(View.GONE);
+            }
+
+            showShopBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
+            showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
+            miv_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showShopBuild.dismiss();
+                }
+            });
+            mllayout_save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
+                    showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    showShopBuild.dismiss();
+                    goodsPic(inflate,mShareInfoParam.shop_logo,true);
+                }
+            });
+        }
+    }
+
+    private void goodsPic(View inflate,String img,boolean isShow) {
+        GlideUtils.getInstance().loadBitmapSync(context, img,
                 new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource,
@@ -184,8 +263,6 @@ public class ShareGoodDialogUtil {
                         if (isShow) {
                             boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,false);
                             if (isSuccess) {
-//                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
-//                                dialog.show();
                                 Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
                             } else {
                                 Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
@@ -196,12 +273,17 @@ public class ShareGoodDialogUtil {
                                 Common.staticToast("分享失败");
                         }
                     }
-
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         if (isShow) {
-                            Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
+                            Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,false);
+                            if (isSuccess) {
+                                Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
+                            } else {
+                                Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
+                            }
                         } else {
                             Common.staticToast("分享失败");
                         }

@@ -182,6 +182,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private ShareInfoParam shareInfoParam;
     private List<GoodsDeatilEntity.Voucher> vouchers;
     private ShareGoodDialogUtil shareGoodDialogUtil;
+    private StoreIndexEntity.Head storeHead;
+    private List<StoreGoodsListEntity.MData> dataList;
     public static void startAct(Context context, String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
         intent.putExtra("storeId", storeId);
@@ -191,9 +193,16 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @OnClick(R.id.rl_share)
     public void more() {
-        quick_actions.setVisibility(View.VISIBLE);
+//        quick_actions.setVisibility(View.VISIBLE);
         quick_actions.shareInfo(shareInfoParam);
         quick_actions.shop();
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(this, "login");
+            return;
+        }
+        if(storePresenter!=null) {
+            storePresenter.getShareInfo(storePresenter.store, storeId);
+        }
     }
 
     @Override
@@ -544,6 +553,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     public void storeBaby(final List<StoreGoodsListEntity.MData> mDataList, int allPage, final int page) {
+        if(mDataList!=null){
+            dataList = mDataList;
+        }
         if (storeBabyAdapter == null) {
             storeBabyAdapter = new StoreBabyAdapter(this, true, mDataList);
             babyManager = new GridLayoutManager(this, 2);
@@ -633,14 +645,15 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         mtv_babyNum.setText(head.goods_count);
         mtv_discountNum.setText(head.promotion_count);
         mtv_newNum.setText(head.new_count);
-        shareInfoParam = new ShareInfoParam();
-        shareInfoParam.shareLink = head.share_url;
-        shareInfoParam.shop_logo = head.decoration_logo;
-        shareInfoParam.shop_name = head.decoration_name;
-        shareInfoParam.shop_star = head.star;
-        shareInfoParam.userName = head.nickname;
-        shareInfoParam.userAvatar = head.avatar;
-        shareInfoParam.desc = head.decoration_name;
+        storeHead = head;
+//        shareInfoParam = new ShareInfoParam();
+//        shareInfoParam.shareLink = head.share_url;
+//        shareInfoParam.shop_logo = head.decoration_logo;
+//        shareInfoParam.shop_name = head.decoration_name;
+//        shareInfoParam.shop_star = head.star;
+//        shareInfoParam.userName = head.nickname;
+//        shareInfoParam.userAvatar = head.avatar;
+//        shareInfoParam.desc = head.decoration_name;
     }
 
     @Override
@@ -776,11 +789,28 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        shareInfoParam = baseEntity.data;
         if (shareInfoParam != null) {
-            shareInfoParam.shareLink = baseEntity.data.shareLink;
-            shareInfoParam.userName = baseEntity.data.userName;
-            shareInfoParam.userAvatar = baseEntity.data.userAvatar;
-            shareInfoParam.desc = baseEntity.data.desc;
+//            shareInfoParam.shareLink = baseEntity.data.shareLink;
+//            shareInfoParam.userName = baseEntity.data.userName;
+//            shareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            if(storeHead!=null) {
+                shareInfoParam.shareLink = storeHead.share_url;
+                shareInfoParam.shop_logo = storeHead.decoration_logo;
+                shareInfoParam.shop_name = storeHead.decoration_name;
+                shareInfoParam.shop_star = storeHead.star;
+                shareInfoParam.userName = storeHead.nickname;
+                shareInfoParam.userAvatar = storeHead.avatar;
+                shareInfoParam.desc = storeHead.decoration_name;
+            }
+            if(dataList!=null&&dataList.size()>0){
+                if(dataList.size()>2) {
+                    shareInfoParam.storeGoodList = dataList.subList(0,2);
+                }else{
+                    shareInfoParam.storeGoodList = dataList;
+                }
+            }
+            shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false);
         }
     }
 }

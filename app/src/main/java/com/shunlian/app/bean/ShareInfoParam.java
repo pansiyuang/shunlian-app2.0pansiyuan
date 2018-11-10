@@ -8,6 +8,7 @@ import com.shunlian.app.utils.BitmapUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/5/6 0006.
@@ -48,6 +49,7 @@ public class ShareInfoParam implements Serializable {
     public String video_url;//视频地址
 
     //是否是优品  默认不是
+    public List<StoreGoodsListEntity.MData> storeGoodList;
     public boolean isSuperiorProduct;
     public String goods_id;//商品id
 
