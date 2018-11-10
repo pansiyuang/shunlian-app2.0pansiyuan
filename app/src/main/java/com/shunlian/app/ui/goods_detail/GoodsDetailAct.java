@@ -168,9 +168,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
-
     @BindView(R.id.mtv_want)
     MyTextView mtv_want;
 
@@ -1120,41 +1117,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         moreHideAnim();
     }
 
-    @OnClick(R.id.mtv_weixin_share)
-    public void weChatShare() {
-        if (!Common.isAlreadyLogin()) {
-            sharePrompt();
-            return;
-        }
-        currentQuickAction = 6;
-        moreHideAnim();
-    }
-
-    @OnClick(R.id.mtv_picText_share)
-    public void picTextShare() {
-        if (!Common.isAlreadyLogin()) {
-            sharePrompt();
-            return;
-        }
-        if (goodsDetailPresenter != null) {
-            quick_actions.shareInfo(mShareInfoParam);
-            goodsDetailPresenter.copyText(false);
-            quick_actions.saveshareGoodsPic();
-        }
-    }
-
-    @OnClick(R.id.mtv_copyLink_share)
-    public void copyLinkShare() {
-        if (!Common.isAlreadyLogin()) {
-            sharePrompt();
-            return;
-        }
-        if (goodsDetailPresenter != null) {
-            goodsDetailPresenter.copyText(true);
-        }
-        moreHideAnim();
-    }
-
     public void sharePrompt() {
         Common.goGoGo(this, "login");
         moreHideAnim();
@@ -1185,14 +1147,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 break;
             case 5:
                 Common.goGoGo(this, "help");
-                break;
-            case 6://分享到微信
-                if (goodsDetailPresenter != null) {
-                    WXEntryActivity.startAct(this, "shareFriend",
-                            goodsDetailPresenter.getShareInfoParam());
-                    Constant.SHARE_TYPE = "goods";
-                    Constant.SHARE_ID = goodsId;
-                }
                 break;
         }
         currentQuickAction = -1;
@@ -1228,8 +1182,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         if (goodsDetailPresenter != null) {
             goodsDetailPresenter.detachView();
             goodsDetailPresenter = null;
