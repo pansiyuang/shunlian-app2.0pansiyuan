@@ -140,8 +140,6 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                             mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
                             mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
                             shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,true);
-//                            quickActions.shareDiscoverDialog(mBlogId, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
-//                                    1 == goods.isSuperiorProduct, from, froms);
                         }
                     });
                 }

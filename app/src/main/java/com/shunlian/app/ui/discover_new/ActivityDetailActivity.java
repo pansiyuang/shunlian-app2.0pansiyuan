@@ -23,6 +23,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
 import com.shunlian.app.widget.MyImageView;
@@ -37,7 +38,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack, QuickActions.OnShareBlogCallBack {
+public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack, ShareGoodDialogUtil.OnShareBlogCallBack {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -51,9 +52,6 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
-
     public int offset;
     private LinearLayoutManager manager;
     private int totalDy;
@@ -64,7 +62,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private ActivityDetailAdapter mAdapter;
     private ObjectMapper objectMapper;
     private HotBlogsEntity.Detail currentDetail;
-
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @Override
     protected int getLayoutId() {
         return R.layout.act_activity_detail;
@@ -79,7 +77,8 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     @Override
     protected void initData() {
         defToolbar();
-
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
         offset = toolbarParams.height;
 
@@ -95,8 +94,6 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         recycler_list.setNestedScrollingEnabled(false);
 
         objectMapper = new ObjectMapper();
-
-        quick_actions.setOnShareBlogCallBack(this);
     }
 
 
@@ -202,7 +199,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             blogList.addAll(list);
         }
         if (mAdapter == null) {
-            mAdapter = new ActivityDetailAdapter(this, blogList, detail, quick_actions);
+            mAdapter = new ActivityDetailAdapter(this, blogList, detail, shareGoodDialogUtil);
             recycler_list.setAdapter(mAdapter);
             mAdapter.setAdapterCallBack(this);
         }
@@ -296,8 +293,6 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         super.onDestroy();
     }
 }

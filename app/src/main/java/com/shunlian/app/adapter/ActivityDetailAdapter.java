@@ -33,6 +33,7 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.DiscoverActivityEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.ui.discover_new.ActivityDetailActivity;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.VideoGoodPlayActivity;
@@ -46,6 +47,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.download.DownLoadDialogProgress;
@@ -81,6 +83,8 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
     private DownLoadDialogProgress downLoadDialogProgress;
     private DownloadUtils downloadUtils;
     private String currentBlogId;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
+    private ShareInfoParam mShareInfoParam;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -96,10 +100,10 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         }
     };
 
-    public ActivityDetailAdapter(Context context, List<BigImgEntity.Blog> lists, HotBlogsEntity.Detail detail, QuickActions actions) {
+    public ActivityDetailAdapter(Context context, List<BigImgEntity.Blog> lists, HotBlogsEntity.Detail detail,ShareGoodDialogUtil mShareGoodDialogUtil) {
         super(context, true, lists);
         this.mDetail = detail;
-        this.quickActions = actions;
+        this.shareGoodDialogUtil = mShareGoodDialogUtil;
     }
 
     @Override
@@ -179,8 +183,24 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.tv_goods_name.setText(goods.title);
                 blogViewHolder.tv_goods_price.setText(getString(R.string.common_yuan) + goods.price);
                 blogViewHolder.tv_share_count.setText(String.valueOf(blog.share_num));
-                blogViewHolder.tv_share_count.setOnClickListener(view -> quickActions.shareDiscoverDialog(blog.id, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
-                        1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", "")));
+                blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mShareInfoParam = new ShareInfoParam();
+                        mShareInfoParam.blogId =blog.id;
+                        mShareInfoParam.shareLink=goods.share_url;
+                        mShareInfoParam.title =goods.title;
+                        mShareInfoParam.desc =goods.desc;
+                        mShareInfoParam.goods_id =goods.goods_id;
+                        mShareInfoParam.price =goods.price;
+                        mShareInfoParam.market_price =goods.market_price;
+                        mShareInfoParam.img =goods.thumb;
+                        mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
+                        mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
+                        mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
+                        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,true);
+                    }
+                });
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
             } else {
                 blogViewHolder.rlayout_goods.setVisibility(View.GONE);
