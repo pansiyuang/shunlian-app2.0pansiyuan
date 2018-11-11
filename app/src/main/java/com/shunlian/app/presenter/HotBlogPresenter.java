@@ -3,10 +3,12 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.IHotBlogView;
 
 import java.util.HashMap;
@@ -160,7 +162,7 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
         sortAndMD5(map);
 
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().downCount(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -176,6 +178,34 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
                 Common.staticToast(message);
+            }
+        });
+    }
+
+
+    public void goodsShare(String type, String blogId, String id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", type);
+        map.put("id", id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getSaveCookieApiService().shareSuccessCall(getRequestBody(map));
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast("感谢您的分享");
+                iView.shareGoodsSuccess(blogId, id);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
             }
         });
     }

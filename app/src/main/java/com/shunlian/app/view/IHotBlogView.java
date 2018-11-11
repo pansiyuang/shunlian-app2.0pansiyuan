@@ -16,6 +16,8 @@ public interface IHotBlogView extends IView {
 
     void downCountSuccess(String blogId);
 
+    void shareGoodsSuccess(String blogId,String goodsId);
+
     /**
      *
      * 刷新完成

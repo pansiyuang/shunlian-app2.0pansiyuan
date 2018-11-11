@@ -12,6 +12,7 @@ import com.shunlian.app.adapter.AttentionAdapter;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.adapter.TieziAvarAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.AttentionPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
@@ -32,7 +33,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class AttentionFrag extends BaseLazyFragment implements IAttentionView, HotBlogAdapter.OnAdapterCallBack, AttentionAdapter.OnFocusListener {
+public class AttentionFrag extends BaseLazyFragment implements IAttentionView, HotBlogAdapter.OnAdapterCallBack, AttentionAdapter.OnFocusListener, QuickActions.OnShareBlogCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -78,6 +79,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
         ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+        quick_actions.setOnShareBlogCallBack(this);
     }
 
     @Override
@@ -226,6 +228,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
         hotBlogAdapter.notifyDataSetChanged();
     }
 
+
     /**
      * 刷新完成
      */
@@ -273,5 +276,24 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     public void onFocus(int isFocus, String memberId) {
         focusType = 2;
         mPresenter.focusUser(isFocus, memberId);
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                for (GoodsDeatilEntity.Goods goods : blog.related_goods) {
+                    if (goodsId.equals(goods.goods_id)) {
+                        goods.share_num++;
+                    }
+                }
+            }
+        }
+        hotBlogAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        mPresenter.goodsShare("blog_goods", blogId, goodsId);
     }
 }

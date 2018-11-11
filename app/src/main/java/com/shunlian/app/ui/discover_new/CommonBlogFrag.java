@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
@@ -33,7 +34,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView, HotBlogAdapter.OnAdapterCallBack, HotBlogAdapter.OnDelBlogListener, HotBlogAdapter.OnFavoListener {
+public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView, HotBlogAdapter.OnAdapterCallBack, HotBlogAdapter.OnDelBlogListener, HotBlogAdapter.OnFavoListener, QuickActions.OnShareBlogCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -86,6 +87,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
         ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+        quick_actions.setOnShareBlogCallBack(this);
     }
 
     @Override
@@ -290,5 +292,23 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
             recycler_list.setVisibility(View.GONE);
             nestedScrollView.setVisibility(View.VISIBLE);
         }
+    }
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        mPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                for (GoodsDeatilEntity.Goods goods : blog.related_goods) {
+                    if (goodsId.equals(goods.goods_id)) {
+                        goods.share_num++;
+                    }
+                }
+            }
+        }
+        hotBlogAdapter.notifyDataSetChanged();
     }
 }

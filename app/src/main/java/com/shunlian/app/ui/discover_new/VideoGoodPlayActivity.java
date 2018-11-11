@@ -194,7 +194,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         //分享
       if(blog.related_goods!=null&&blog.related_goods.size()>0){
           GoodsDeatilEntity.Goods goods = blog.related_goods.get(0);
-          quick_actions.shareDiscoverDialog(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
+          quick_actions.shareDiscoverDialog(blog.id,goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
                   1==goods.isSuperiorProduct,  SharedPrefUtil.getSharedUserString("nickname", ""),
                   SharedPrefUtil.getSharedUserString("avatar", ""));
       }
@@ -244,7 +244,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, this.getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(this));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this, blog.related_goods, false, quick_actions,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this,blog.id, blog.related_goods, false, quick_actions,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(this, blog.related_goods.get(position).goods_id));
