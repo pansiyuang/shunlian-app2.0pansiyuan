@@ -9,7 +9,7 @@
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_height="255dp"
-        android:layout_marginBottom="@dimen/xx60"
+        android:layout_marginBottom="@dimen/xx25"
         android:layout_alignParentBottom="true"
         android:background="@drawable/rounded_corner_white_8px"
         android:orientation="vertical">
