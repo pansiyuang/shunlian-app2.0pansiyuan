@@ -444,7 +444,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 } else {
                     miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
                 }
-                miv_more.setImageResource(R.mipmap.icon_fenxiang);
+                miv_more.setImageResource(R.mipmap.icon_head_fenxiang);
             } else {
                 miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
                 if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
@@ -452,7 +452,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 } else {
                     miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
                 }
-                miv_more.setImageResource(R.mipmap.img_xiangqing_fenxiang);
+                miv_more.setImageResource(R.mipmap.icon_head_fenxiang_black);
             }
         }
         miv_is_fav.setVisibility(View.GONE);
