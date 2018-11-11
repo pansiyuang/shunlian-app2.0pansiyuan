@@ -32,6 +32,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HourRedDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
@@ -73,11 +74,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     private int second = (int) (System.currentTimeMillis() / 1000);
     private int hotPosition = -1;
 
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
         super(context, isShowFooter, datas);
         this.isFirst = isFirst;
         this.cateGoryFrag = cateGoryFrag;
         this.mergePosition = mergePosition;
+        shareGoodDialogUtil = new ShareGoodDialogUtil(context);
     }
 
     @Override
@@ -546,14 +549,21 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             mShareInfoParam.title = data.share.title;
                             mShareInfoParam.desc = data.share.content;
                             mShareInfoParam.img = data.share.logo;
-
+                            mShareInfoParam.goods_id = data.url.item_id;
+                            mShareInfoParam.price = data.price;
+                            if(data.moreGoods!=null){
+                                if( data.moreGoods.market_price!=null)
+                                mShareInfoParam.market_price = data.moreGoods.market_price;
+                                mShareInfoParam.isSuperiorProduct = data.moreGoods.isSuperiorProduct==1;
+                            }
                             if (!Common.isAlreadyLogin()) {
                                 Common.goGoGo(context, "login");
                                 return;
                             }
                             if (!isEmpty(data.share.share_url)) {
                                 mShareInfoParam.shareLink = data.share.share_url;
-                                shareStyle2Dialog();
+                                shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,false);
+//                                shareStyle2Dialog();
                             } else {
                                 if (data.url!=null)
                                 cateGoryFrag.getShareInfo(data.url.type, data.url.item_id);
@@ -733,7 +743,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         mShareInfoParam = baseEntity.data;
-        shareStyle2Dialog();
+        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,false);
+//        shareStyle2Dialog();
     }
 
     /**
