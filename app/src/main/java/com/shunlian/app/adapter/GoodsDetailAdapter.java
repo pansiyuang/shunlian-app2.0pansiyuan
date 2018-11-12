@@ -572,12 +572,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private void handlerTitle(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TitleHolder) {
             final TitleHolder mHolder = (TitleHolder) holder;
-            if (SharedPrefUtil.getSharedUserBoolean("hide_goods",false)){
-                mHolder.miv_hint.setVisibility(View.GONE);
-            }else {
-                GlideUtils.getInstance().loadLocal(context,mHolder.miv_hint,R.drawable.goods_hint);
-                mHolder.miv_hint.setVisibility(View.VISIBLE);
-            }
+//            if (SharedPrefUtil.getSharedUserBoolean("hide_goods",false)){
+//                mHolder.miv_hint.setVisibility(View.GONE);
+//            }else {
+//                GlideUtils.getInstance().loadLocal(context,mHolder.miv_hint,R.drawable.goods_hint);
+//                mHolder.miv_hint.setVisibility(View.VISIBLE);
+//            }
             int pref_length = 0;
             String title = mGoodsEntity.title;
             String is_preferential = mGoodsEntity.is_preferential;

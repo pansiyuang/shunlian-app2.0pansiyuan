@@ -271,6 +271,7 @@
             android:layout_below="@id/ll_root"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:src="@mipmap/icon_write_close" />
     </com.shunlian.app.widget.MyRelativeLayout>
 </com.shunlian.app.widget.MyRelativeLayout>
