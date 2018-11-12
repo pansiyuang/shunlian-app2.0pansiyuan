@@ -186,6 +186,7 @@
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
                         android:textColor="@color/white"
+                        android:text="天天特惠"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 

@@ -224,6 +224,18 @@ public class ShareGoodDialogUtil {
             MyImageView miv_user_head = showShopBuild.findViewById(R.id.miv_user_head);
             MyImageView  miv_store = showShopBuild.findViewById(R.id.miv_store);
             MyTextView mtv_nickname = showShopBuild.findViewById(R.id.mtv_nickname);
+            LinearLayout  llayout_day =showShopBuild.findViewById(R.id.llayout_day);
+
+            MyTextView mtv_time  = showShopBuild.findViewById(R.id.mtv_time);
+            MyTextView mtv_act_label  = showShopBuild.findViewById(R.id.mtv_act_label);
+            if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
+                llayout_day.setVisibility(View.GONE);
+            } else {
+                llayout_day.setVisibility(View.VISIBLE);
+                mtv_time.setText(mShareInfoParam.start_time);
+                mtv_act_label.setText(mShareInfoParam.act_label);
+            }
+
             mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
             GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("nickname", ""));
             GlideUtils.getInstance().loadImageZheng(context, miv_store, mShareInfoParam.shop_logo);
