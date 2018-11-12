@@ -18,6 +18,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
@@ -254,10 +255,12 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(RefreshBlogEvent event) {
+        LogUtil.httpLogW("refreshData:" + event.mData.memberId);
         switch (event.mType) {
             case RefreshBlogEvent.ATTENITON_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
                     if (event.mData.memberId.equals(blog.member_id)) {
+                        LogUtil.httpLogW("is_focus:" + event.mData.is_focus);
                         blog.is_focus = event.mData.is_focus;
                     }
                 }

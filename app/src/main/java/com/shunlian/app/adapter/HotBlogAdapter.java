@@ -356,6 +356,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     blogViewHolder.miv_more.setVisibility(View.GONE);
                 }
             } else {
+                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
             }
 
@@ -373,9 +374,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
             if (position == 0) {
                 showAttentionList(recomandFocusList, holder);
-            } else {
-                blogViewHolder.rl_attention.setVisibility(View.GONE);
             }
+
             blogViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
 
             blogViewHolder.ll_member.setOnClickListener(v -> {

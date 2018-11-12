@@ -149,7 +149,8 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
 
         RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
         blogData.blogId = blog.id;
-        blogData.is_praise = blog.is_focus;
+        blogData.memberId = blog.member_id;
+        blogData.is_focus = blog.is_focus;
         EventBus.getDefault().post(new RefreshBlogEvent(blogData, RefreshBlogEvent.ATTENITON_TYPE));
     }
 

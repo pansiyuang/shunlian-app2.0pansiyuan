@@ -245,6 +245,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
             if (blog.is_self == 0) {
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
+                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
             } else {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
                 blogViewHolder.miv_more.setVisibility(View.GONE);

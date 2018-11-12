@@ -20,6 +20,7 @@ import com.shunlian.app.ui.discover_new.search.DiscoverSearchActivity;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.LazyViewPager;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -123,8 +124,11 @@ public class NewDiscoverFrag extends BaseFragment {
     protected void initListener() {
         super.initListener();
         miv_icon.setOnClickListener(v -> {
-            if (currentBaseInfo != null && !isEmpty(currentBaseInfo.member_id)) {
-                MyPageActivity.startAct(getActivity(), currentBaseInfo.member_id);
+            String member_id = SharedPrefUtil.getSharedUserString("member_id", "null");
+            if (!isEmpty(member_id) && Common.isAlreadyLogin()) {
+                MyPageActivity.startAct(getActivity(), member_id);
+            } else {
+                LoginAct.startAct(getActivity());
             }
         });
         miv_search.setOnClickListener(v -> {
@@ -148,6 +152,22 @@ public class NewDiscoverFrag extends BaseFragment {
         ll_activity.setOnClickListener(v -> {
             showTab(2);
             view_pager.setCurrentItem(2);
+        });
+        view_pager.setOnPageChangeListener(new LazyViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                showTab(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
         });
     }
 

@@ -59,8 +59,7 @@
                     android:layout_height="wrap_content"
                     android:text="精选"
                     android:textColor="@color/pink_color"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textSize="15sp" />
 
                 <View
                     android:id="@+id/view_blog"
