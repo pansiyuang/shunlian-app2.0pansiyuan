@@ -27,6 +27,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.timer.DayRedWhiteDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.IAishang;
@@ -94,11 +95,17 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
     private boolean isMore=false;
     private ShareInfoParam shareInfoParam;
 
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @OnClick(R.id.rl_more)
     public void more() {
 //        quick_actions.setVisibility(View.VISIBLE);
 //        quick_actions.special();
 //        quick_actions.shareInfo(shareInfoParam);
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(this, "login");
+            return;
+        }
+           pAishang.getShareInfo(pAishang.hotpush,hotId,channeId);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -111,6 +118,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         shareInfoParam = baseEntity.data;
+        shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
     }
 
     @Override
@@ -131,16 +139,16 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
+//        String s = messageCountManager.setTextCount(tv_msg_count);
+//        if (quick_actions != null)
+//            quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
+//        String s = messageCountManager.setTextCount(tv_msg_count);
+//        if (quick_actions != null)
+//            quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -209,6 +217,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initData() {
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         EventBus.getDefault().register(this);
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
