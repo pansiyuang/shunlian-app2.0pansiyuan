@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
@@ -33,6 +34,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,6 +52,9 @@ import butterknife.OnClick;
 public class HotRecommendAct extends BaseActivity implements View.OnClickListener, IAishang, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
+
+    @BindView(R.id.miv_dot)
+    MyImageView miv_dot;
 
     @BindView(R.id.mtv_desc)
     MyTextView mtv_desc;
@@ -91,9 +96,9 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     @OnClick(R.id.rl_more)
     public void more() {
-        quick_actions.setVisibility(View.VISIBLE);
-        quick_actions.special();
-        quick_actions.shareInfo(shareInfoParam);
+//        quick_actions.setVisibility(View.VISIBLE);
+//        quick_actions.special();
+//        quick_actions.shareInfo(shareInfoParam);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -110,17 +115,17 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onResume() {
-        if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(baseAct);
-            if (messageCountManager.isLoad()) {
-                String s = messageCountManager.setTextCount(tv_msg_count);
-                if (quick_actions != null)
-                    quick_actions.setMessageCount(s);
-            } else {
-                messageCountManager.initData();
-            }
-            messageCountManager.setOnGetMessageListener(this);
-        }
+//        if (Common.isAlreadyLogin()) {
+//            messageCountManager = MessageCountManager.getInstance(baseAct);
+//            if (messageCountManager.isLoad()) {
+//                String s = messageCountManager.setTextCount(tv_msg_count);
+//                if (quick_actions != null)
+//                    quick_actions.setMessageCount(s);
+//            } else {
+//                messageCountManager.initData();
+//            }
+//            messageCountManager.setOnGetMessageListener(this);
+//        }
         super.onResume();
     }
 
@@ -211,9 +216,15 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         channeId=getIntent().getStringExtra("channeId");
         pAishang = new PAishang(this, this);
         pAishang.getHotRd(hotId,channeId);
-
+        mtv_title.setText("");
         nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
         nei_empty.setButtonText(null);
+        miv_dot.setImageResource(R.mipmap.icon_head_fenxiang_black);
+        RelativeLayout.LayoutParams layoutParamsMore = new RelativeLayout.LayoutParams(DensityUtil.dip2px(this,50),DensityUtil.dip2px(this,50));
+        layoutParamsMore.setMargins(0,0,0,0);
+        layoutParamsMore.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        rl_more.setLayoutParams(layoutParamsMore);
+        miv_dot.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT));
     }
 
     @Override
