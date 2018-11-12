@@ -543,31 +543,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     } else {
                         fiveHolder.mtv_price.setVisibility(View.GONE);
                     }
-                    fiveHolder.miv_share.setOnClickListener(new View.OnClickListener() {
+                    fiveHolder.mtv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            mShareInfoParam.title = data.share.title;
-                            mShareInfoParam.desc = data.share.content;
-                            mShareInfoParam.img = data.share.logo;
-                            mShareInfoParam.goods_id = data.url.item_id;
-                            mShareInfoParam.price = data.price;
-                            if(data.moreGoods!=null){
-                                if( data.moreGoods.market_price!=null)
-                                mShareInfoParam.market_price = data.moreGoods.market_price;
-                                mShareInfoParam.isSuperiorProduct = data.moreGoods.isSuperiorProduct==1;
-                            }
-                            if (!Common.isAlreadyLogin()) {
-                                Common.goGoGo(context, "login");
-                                return;
-                            }
-                            if (!isEmpty(data.share.share_url)) {
-                                mShareInfoParam.shareLink = data.share.share_url;
-                                shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,false);
-//                                shareStyle2Dialog();
-                            } else {
-                                if (data.url!=null)
-                                cateGoryFrag.getShareInfo(data.url.type, data.url.item_id);
-                            }
+                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                         }
                     });
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
@@ -995,8 +974,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     class FiveHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
-        @BindView(R.id.miv_share)
-        MyImageView miv_share;
+        @BindView(R.id.mtv_share)
+        MyTextView mtv_share;
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
         @BindView(R.id.mtv_desc)
