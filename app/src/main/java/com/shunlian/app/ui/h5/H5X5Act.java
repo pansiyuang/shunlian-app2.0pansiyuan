@@ -100,7 +100,8 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
     public MyImageView miv_close;
     @BindView(R.id.mProgressbar)
     public WebViewProgressBar mProgressbar;
-
+    @BindView(R.id.miv_title_more)
+    public MyImageView miv_title_more;
     @BindView(R.id.oget)
     protected ObtainGoldenEggsTip oget;
 

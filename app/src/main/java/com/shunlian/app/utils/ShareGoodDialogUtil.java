@@ -10,11 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.zxing.common.StringUtils;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -31,6 +33,7 @@ public class ShareGoodDialogUtil {
     public CommonDialog nomalBuildl;
     public CommonDialog showGoodBuild;
     public CommonDialog showShopBuild;
+    public CommonDialog showSpecialBuild;
     public ShareGoodDialogUtil(Context context){
         this.context = context;
     }
@@ -95,12 +98,18 @@ public class ShareGoodDialogUtil {
             @Override
             public void onClick(View v) {
                 nomalBuildl.dismiss();
+                if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
+                    createSpecialCode();
+                    return;
+                }
                 if(isGood) {
                     createGoodCode(isFound);
                 }else{
                     createShopCode();
                 }
             }
+
+
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new View.OnClickListener() {
             @Override
@@ -111,7 +120,57 @@ public class ShareGoodDialogUtil {
         });
     }
 
+    /**
+     * 创建专题图文
+     */
+    private void createSpecialCode() {
+            final View inflate = LayoutInflater.from(context)
+                    .inflate(R.layout.share_special_new, null, false);
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle()
+                    .setView(inflate);
+            showSpecialBuild = nomalBuild.create();
+            showSpecialBuild.setCancelable(false);
+            showSpecialBuild.show();
+            MyImageView miv_close = showSpecialBuild.findViewById(R.id.miv_close);
+            MyLinearLayout mllayout_save = showSpecialBuild.findViewById(R.id.mllayout_save);
+            MyLinearLayout  mllayout_wexin = showSpecialBuild.findViewById(R.id.mllayout_wexin);
+            MyTextView tv_title_name =  showSpecialBuild.findViewById(R.id.tv_title_name);
+            MyImageView miv_code =  showSpecialBuild.findViewById(R.id.miv_code);
+           ImageView imv_special_pic =  showSpecialBuild.findViewById(R.id.imv_special_pic);
+            int i = TransformUtil.dip2px(context, 92.5f);
+            Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
+            miv_code.setImageBitmap(qrImage);
 
+            tv_title_name.setText(mShareInfoParam.title);
+           GlideUtils.getInstance().loadImageZheng(context, imv_special_pic, mShareInfoParam.img);
+
+           showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
+           showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
+            miv_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showSpecialBuild.dismiss();
+                }
+            });
+            mllayout_save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
+                    showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    showSpecialBuild.dismiss();
+                    goodsPic(inflate,mShareInfoParam.shop_logo,true);
+                }
+            });
+         mllayout_wexin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
+                showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                showSpecialBuild.dismiss();
+                goodsPic(inflate,mShareInfoParam.shop_logo,true);
+            }
+        });
+    }
     /**
      * 创建商品视图
      */
