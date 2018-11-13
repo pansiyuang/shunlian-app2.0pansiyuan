@@ -248,9 +248,9 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_title =  showShopBuild.findViewById(R.id.mtv_title);
             mtv_title.setText(mShareInfoParam.title);
             RecyclerView recycler_shop = showShopBuild.findViewById(R.id.recycler_shop);
-            if(mShareInfoParam.storeGoodList!=null&&mShareInfoParam.storeGoodList.size()>0) {
+            if(mShareInfoParam.share_goods!=null&&mShareInfoParam.share_goods.size()>0) {
                 recycler_shop.setVisibility(View.VISIBLE);
-                StoreShareBabyAdapter storeBabyAdapter = new StoreShareBabyAdapter(context, true, mShareInfoParam.storeGoodList);
+                StoreShareBabyAdapter storeBabyAdapter = new StoreShareBabyAdapter(context, true, mShareInfoParam.share_goods);
                 GridLayoutManager babyManager = new GridLayoutManager(context, 2);
                 recycler_shop.setLayoutManager(babyManager);
                 recycler_shop.addItemDecoration(new GrideItemDecoration(0, 0, TransformUtil.dip2px(context, 5), TransformUtil.dip2px(context, 5), true));

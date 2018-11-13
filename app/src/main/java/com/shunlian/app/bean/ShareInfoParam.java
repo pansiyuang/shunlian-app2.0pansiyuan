@@ -49,11 +49,9 @@ public class ShareInfoParam implements Serializable {
     public String act_label;//活动开始时间
     public String video_url;//视频地址
 
-    //是否是优品  默认不是
-    public List<StoreGoodsListEntity.MData> storeGoodList;
     public boolean isSuperiorProduct;
     public String goods_id;//商品id
-
+    public List<StoreGoodsListEntity.MData> share_goods;
     @Override
     public String toString() {
         return "ShareInfoParam{" +

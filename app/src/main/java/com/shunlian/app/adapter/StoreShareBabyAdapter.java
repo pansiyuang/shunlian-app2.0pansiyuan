@@ -50,7 +50,7 @@ public class StoreShareBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEnt
             oneHolder.mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
             oneHolder.miv_onel.setScaleType(ImageView.ScaleType.FIT_START);
             oneHolder.mtv_pricer.setText(context.getResources().getString(R.string.common_yuan)+data.market_price);
-            GlideUtils.getInstance().loadImage(context,oneHolder.miv_onel,data.whole_thumb);
+            GlideUtils.getInstance().loadImage(context,oneHolder.miv_onel,data.thumb);
         }
     }
 

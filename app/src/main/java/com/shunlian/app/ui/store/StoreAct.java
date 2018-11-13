@@ -803,12 +803,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 shareInfoParam.userAvatar = storeHead.avatar;
                 shareInfoParam.desc = storeHead.decoration_name;
             }
-            if(dataList!=null&&dataList.size()>0){
-                if(dataList.size()>2) {
-                    shareInfoParam.storeGoodList = dataList.subList(0,2);
-                }else{
-                    shareInfoParam.storeGoodList = dataList;
-                }
+             if(shareInfoParam.share_goods!=null&&shareInfoParam.share_goods.size()>2){
+                    shareInfoParam.share_goods = shareInfoParam.share_goods.subList(0,2);
             }
             shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
         }
