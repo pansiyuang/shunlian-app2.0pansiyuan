@@ -118,6 +118,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         shareInfoParam = baseEntity.data;
+        shareInfoParam.special_img_url = baseEntity.data.img;
         shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
     }
 
@@ -241,7 +242,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         shareInfoParam=new ShareInfoParam();
         shareInfoParam.desc=data.share.content;
         shareInfoParam.title=data.share.title;
-        shareInfoParam.img=data.share.logo;
+        shareInfoParam.special_img_url=data.share.logo;
         shareInfoParam.shareLink=data.share.share_url;
         if (mData==null||mData.size()<=0){
             visible(nei_empty);

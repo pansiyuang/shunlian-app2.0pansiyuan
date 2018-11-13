@@ -135,6 +135,7 @@ public class ShareGoodDialogUtil {
             MyLinearLayout mllayout_save = showSpecialBuild.findViewById(R.id.mllayout_save);
             MyLinearLayout  mllayout_wexin = showSpecialBuild.findViewById(R.id.mllayout_wexin);
             MyTextView tv_title_name =  showSpecialBuild.findViewById(R.id.tv_title_name);
+            MyTextView tv_title_desc =  showSpecialBuild.findViewById(R.id.tv_title_desc);
             MyImageView miv_code =  showSpecialBuild.findViewById(R.id.miv_code);
            ImageView imv_special_pic =  showSpecialBuild.findViewById(R.id.imv_special_pic);
             int i = TransformUtil.dip2px(context, 92.5f);
@@ -144,6 +145,9 @@ public class ShareGoodDialogUtil {
             tv_title_name.setText(mShareInfoParam.title);
            GlideUtils.getInstance().loadImageZheng(context, imv_special_pic, mShareInfoParam.img);
 
+           if(mShareInfoParam.desc!=null){
+               tv_title_desc.setText(mShareInfoParam.desc);
+           }
            showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
            showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
             miv_close.setOnClickListener(new View.OnClickListener() {

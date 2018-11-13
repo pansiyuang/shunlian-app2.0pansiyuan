@@ -56,6 +56,7 @@
                 </LinearLayout>
 
                 <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/tv_title_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="超值好货就在顺联APP,还有更多精彩..."
