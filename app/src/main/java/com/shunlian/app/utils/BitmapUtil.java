@@ -371,23 +371,15 @@ public class BitmapUtil {
             fos.close();
             if (isSuccess) {
                 // 其次把文件插入到系统图库
-//                String path = MediaStore.Images.Media
-//                        .insertImage(context.getContentResolver(),
-//                                file.getAbsolutePath(), fileName, null);
-//                if (TextUtils.isEmpty(path)) return false;
-//                // 最后通知图库更新
-//                fileUri = new File(path);
-//                context.sendBroadcast(new
-//                        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
-                MediaScannerConnection.scanFile(context,
-                        new String[]{file.getAbsolutePath()},
-                        new String[]{"image/*"},
-                        new MediaScannerConnection.OnScanCompletedListener() {
-                            @Override
-                            public void onScanCompleted(String path, Uri uri) {
-                                Log.i("保存图片","onScanCompleted"+path);
-                            }
-                        });
+                String path = MediaStore.Images.Media
+                        .insertImage(context.getContentResolver(),
+                                file.getAbsolutePath(), fileName, System.currentTimeMillis()+"");
+                if (TextUtils.isEmpty(path)) return false;
+                // 最后通知图库更新
+                fileUri = new File(getRealPathFromURI(Uri.parse(path),context));
+                context.sendBroadcast(new
+                        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
+//                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(path)));
                 if(isShare) {
                     ShareInfoParam shareInfoParam = new ShareInfoParam();
                     shareInfoParam.photo = file.getAbsolutePath();
@@ -408,6 +400,17 @@ public class BitmapUtil {
             fos = null;
         }
         return false;
+    }
+
+    //得到绝对地址
+    private static String getRealPathFromURI(Uri contentUri,Context context) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String fileStr = cursor.getString(column_index);
+        cursor.close();
+        return fileStr;
     }
 
     public static boolean saveImageToAlbumn(Context context, Bitmap bmp, String photoName) {
