@@ -158,7 +158,7 @@ public class ShareGoodDialogUtil {
                     showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                     showSpecialBuild.dismiss();
-                    goodsPic(inflate,mShareInfoParam.shop_logo,true);
+                    goodsPic(inflate,mShareInfoParam.img,false);
                 }
             });
          mllayout_wexin.setOnClickListener(new View.OnClickListener() {
