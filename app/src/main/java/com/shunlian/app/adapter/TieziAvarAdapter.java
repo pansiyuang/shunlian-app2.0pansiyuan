@@ -43,7 +43,7 @@ public class TieziAvarAdapter extends BaseRecyclerAdapter<String> {
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         MivHolder mivHolder = (MivHolder) holder;
-        GlideUtils.getInstance().loadCircleImage(context, mivHolder.miv_avar, lists.get(position));
+        GlideUtils.getInstance().loadCircleAvar(context, mivHolder.miv_avar, lists.get(position));
         if (picWidth != 0) {
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(picWidth, picWidth);
             mivHolder.miv_avar.setLayoutParams(layoutParams);

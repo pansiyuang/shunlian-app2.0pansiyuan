@@ -21,6 +21,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
 import com.shunlian.app.presenter.HotVideoBlogPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -48,7 +49,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/7/23.
  */
 
-public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlayer.updateParseAttent,IHotVideoBlogView {
+public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlayer.updateParseAttent,IHotVideoBlogView, QuickActions.OnShareBlogCallBack {
 
     @BindView(R.id.customVideoPlayer)
     GoodVideoPlayer customVideoPlayer;
@@ -76,6 +77,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         ViewGroup decorView = (ViewGroup) this.getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+        quick_actions.setOnShareBlogCallBack(this);
 
         hotBlogPresenter = new HotVideoBlogPresenter(this, this);
         EventBus.getDefault().register(this);
@@ -144,6 +146,12 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     public void focusUser(int isFocus, String memberId) {
         blog.is_focus = isFocus==0?1:0;
         customVideoPlayer.setAttentStateView();
+
+        RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
+        blogData.blogId = blog.id;
+        blogData.memberId = blog.member_id;
+        blogData.is_focus = blog.is_focus;
+        EventBus.getDefault().post(new RefreshBlogEvent(blogData, RefreshBlogEvent.ATTENITON_TYPE));
     }
 
     @Override
@@ -151,12 +159,28 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         blog.is_praise = isAttent;
         blog.praise_num =blog.praise_num+1;
         customVideoPlayer.setParseStateView();
+
+        RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
+        blogData.blogId = blog.id;
+        blogData.is_praise = isAttent;
+        EventBus.getDefault().post(new RefreshBlogEvent(blogData, RefreshBlogEvent.PRAISE_TYPE));
     }
 
     @Override
     public void downCountSuccess() {
         blog.down_num =blog.down_num+1;
         customVideoPlayer.setDownLoadSuccess();
+
+        RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
+        blogData.blogId = blog.id;
+        EventBus.getDefault().post(new RefreshBlogEvent(blogData,RefreshBlogEvent.DOWNLOAD_TYPE));
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
+        blogData.blogId = blog.id;
+        EventBus.getDefault().post(new RefreshBlogEvent(blogData,RefreshBlogEvent.SHARE_TYPE));
     }
 
     @Override
@@ -194,7 +218,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         //分享
       if(blog.related_goods!=null&&blog.related_goods.size()>0){
           GoodsDeatilEntity.Goods goods = blog.related_goods.get(0);
-          quick_actions.shareDiscoverDialog(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
+          quick_actions.shareDiscoverDialog(blog.id,goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
                   1==goods.isSuperiorProduct,  SharedPrefUtil.getSharedUserString("nickname", ""),
                   SharedPrefUtil.getSharedUserString("avatar", ""));
       }
@@ -244,7 +268,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, this.getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(this));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this, blog.related_goods, false, quick_actions,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this,blog.id, blog.related_goods, false, quick_actions,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(this, blog.related_goods.get(position).goods_id));
@@ -259,4 +283,8 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         onBackPressed();
     }
 
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        hotBlogPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
 }

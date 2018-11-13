@@ -14,7 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ActivityDetailAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
@@ -27,6 +29,10 @@ import com.shunlian.app.view.IActivityDetailView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +42,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack {
+public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack, QuickActions.OnShareBlogCallBack {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -78,7 +84,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     @Override
     protected void initData() {
         defToolbar();
-
+        EventBus.getDefault().register(this);
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
         offset = toolbarParams.height;
 
@@ -94,6 +100,8 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         recycler_list.setNestedScrollingEnabled(false);
 
         objectMapper = new ObjectMapper();
+
+        quick_actions.setOnShareBlogCallBack(this);
     }
 
 
@@ -132,7 +140,9 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                     sendConfig.isWhiteList = true;
                 }
                 sendConfig.activityID = currentId;
-                sendConfig.activityTitle = currentDetail.title;
+                if (!isEmpty(currentDetail.title)) {
+                    sendConfig.activityTitle = "#" + currentDetail.title + "#";
+                }
                 sendConfig.memberId = baseInfo.member_id;
                 FindSendPictureTextAct.startAct(ActivityDetailActivity.this, sendConfig);
             } catch (Exception e) {
@@ -151,7 +161,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     public void setBgColor(int totalDy) {
-        ImmersionBar immersionBar = ImmersionBar.with(this).addViewSupportTransformColor(toolbar, R.color.white);
+        ImmersionBar immersionBar = ImmersionBar.with(this).addViewSupportTransformColor(toolbar, R.color.transparent);
         if (totalDy <= layoutHeight) {
             if (totalDy <= 0) {
                 totalDy = 0;
@@ -220,6 +230,16 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
+    public void downCountSuccess(String blogId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.down_num++;
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void praiseBlog(String blogId) {
         for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
@@ -251,14 +271,74 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
+    public void toDown(String blogId) {
+        mPresent.downCount(blogId);
+    }
+
+    @Override
     public void OnTopSize(int height) {
         layoutHeight = height - offset - ImmersionBar.getStatusBarHeight(this);
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.total_share_num++;
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        mPresent.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(RefreshBlogEvent event) {
+        switch (event.mType) {
+            case RefreshBlogEvent.ATTENITON_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.memberId.equals(blog.member_id)) {
+                        blog.is_focus = event.mData.is_focus;
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+            case RefreshBlogEvent.PRAISE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.is_praise = event.mData.is_praise;
+                        blog.praise_num++;
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+            case RefreshBlogEvent.SHARE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.total_share_num++;
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+            case RefreshBlogEvent.DOWNLOAD_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.down_num++;
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+        }
     }
 
     @Override
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

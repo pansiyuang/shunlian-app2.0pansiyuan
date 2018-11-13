@@ -25,6 +25,12 @@ public class DownLoadImageThread extends Thread {
         this.pics = data;
     }
 
+    public DownLoadImageThread(Context context, ArrayList<String> data, MyCallBack myCallBack) {
+        mContext = context;
+        this.pics = data;
+        this.myCallBack = myCallBack;
+    }
+
     public DownLoadImageThread(Activity activity, String pic, MyCallBack myCallBack) {
         mContext = activity;
         this.pic = pic;
@@ -52,6 +58,7 @@ public class DownLoadImageThread extends Thread {
                 e.printStackTrace();
             }
         }
+        myCallBack.successBack();
     }
 
     private void saveSplitePic(String pic) {

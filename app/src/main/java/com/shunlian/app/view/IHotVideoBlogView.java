@@ -13,4 +13,6 @@ public interface IHotVideoBlogView extends IView {
     void parseBlog(int isAttent, String memberId);
 
     void downCountSuccess();
+
+    void shareGoodsSuccess(String blogId,String goodsId);
 }

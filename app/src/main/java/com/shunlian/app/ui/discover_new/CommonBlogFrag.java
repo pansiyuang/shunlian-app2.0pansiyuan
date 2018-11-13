@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
@@ -24,6 +26,10 @@ import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +39,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView, HotBlogAdapter.OnAdapterCallBack, HotBlogAdapter.OnDelBlogListener, HotBlogAdapter.OnFavoListener {
+public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView, HotBlogAdapter.OnAdapterCallBack, HotBlogAdapter.OnDelBlogListener, HotBlogAdapter.OnFavoListener, QuickActions.OnShareBlogCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -86,12 +92,13 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
         ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+        quick_actions.setOnShareBlogCallBack(this);
     }
 
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-
+        EventBus.getDefault().register(this);
         NestedSlHeader header = new NestedSlHeader(getActivity());
         lay_refresh.setRefreshHeaderView(header);
 
@@ -197,7 +204,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blog.is_focus = focus;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
     @Override
@@ -208,7 +215,17 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blog.praise_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+    }
+
+    @Override
+    public void downCountSuccess(String blogId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.down_num++;
+            }
+        }
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
     @Override
@@ -236,6 +253,11 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @Override
     public void toPraiseBlog(String blogId) {
         mPresenter.praiseBlos(blogId);
+    }
+
+    @Override
+    public void toDown(String blogId) {
+        mPresenter.downCount(blogId);
     }
 
     /**
@@ -270,10 +292,70 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blogList.remove(i);
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
         if (isEmpty(blogList)) {
             recycler_list.setVisibility(View.GONE);
             nestedScrollView.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        mPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.total_share_num++;
+            }
+        }
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(RefreshBlogEvent event) {
+        switch (event.mType) {
+            case RefreshBlogEvent.ATTENITON_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.memberId.equals(blog.member_id)) {
+                        blog.is_focus = event.mData.is_focus;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.PRAISE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.is_praise = event.mData.is_praise;
+                        blog.praise_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.SHARE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.total_share_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.DOWNLOAD_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.down_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

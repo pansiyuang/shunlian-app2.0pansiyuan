@@ -5,21 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.DownloadMsgAdapter;
 import com.shunlian.app.adapter.NoticeMsgAdapter;
 import com.shunlian.app.bean.NoticeMsgEntity;
-import com.shunlian.app.presenter.DownloadPresenter;
 import com.shunlian.app.presenter.NoticeMsgPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
-import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.INoticeMsgView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
-import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
-import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +37,9 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.ll_rootView)
+    LinearLayout ll_rootView;
 
     private NoticeMsgPresenter mPresenter;
     private LinearLayoutManager manager;
@@ -101,6 +101,14 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
         nei_empty.setImageResource(R.mipmap.img_empty_common)
                 .setText("还没有通知哦")
                 .setButtonText(null);
+
+        NestedRefreshLoadMoreLayout.LayoutParams layoutParams = (NestedRefreshLoadMoreLayout.LayoutParams) recycler_list.getLayoutParams();
+        layoutParams.width = NestedRefreshLoadMoreLayout.LayoutParams.MATCH_PARENT;
+        layoutParams.height = NestedRefreshLoadMoreLayout.LayoutParams.MATCH_PARENT;
+        layoutParams.setMargins(0, TransformUtil.dip2px(getActivity(), 16), 0, 0);
+        recycler_list.setLayoutParams(layoutParams);
+
+        lay_refresh.setBackgroundColor(getColorResouce(R.color.white));
     }
 
     @Override

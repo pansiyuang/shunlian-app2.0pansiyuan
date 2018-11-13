@@ -94,7 +94,7 @@
                 android:id="@+id/tv_tab_discover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/miv_tab_discover"
+                android:layout_below="@+id/miv_tab_discover"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="4dp"
                 android:text="@string/discover_center"

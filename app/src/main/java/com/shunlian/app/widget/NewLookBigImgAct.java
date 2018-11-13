@@ -28,6 +28,8 @@ import com.shunlian.app.adapter.DiscoverGoodsAdapter;
 import com.shunlian.app.adapter.OperateAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
+import com.shunlian.app.presenter.LookBigImgPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
@@ -38,9 +40,12 @@ import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.view.ILookBigImgView;
 import com.shunlian.app.widget.photoview.HackyViewPager;
 import com.shunlian.app.widget.photoview.PhotoView;
 import com.shunlian.app.widget.photoview.PhotoViewAttacher;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +56,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/15.
  */
 
-public class NewLookBigImgAct extends BaseActivity{
+public class NewLookBigImgAct extends BaseActivity implements QuickActions.OnShareBlogCallBack, ILookBigImgView {
     @BindView(R.id.leftNo)
     MyTextView leftNo;
     @BindView(R.id.rightNo)
@@ -75,7 +80,7 @@ public class NewLookBigImgAct extends BaseActivity{
     private Activity activity;
     private int pos = 0;
     private PromptDialog promptDialog;
-
+    private LookBigImgPresenter mPresenter;
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
@@ -149,35 +154,37 @@ public class NewLookBigImgAct extends BaseActivity{
                 savePhoto();
             }
         });
-        if (entity.blog==null||isEmpty(entity.blog.related_goods)){
+        if (entity.blog == null || isEmpty(entity.blog.related_goods)) {
             mtv_code.setVisibility(View.GONE);
             mtv_goods.setVisibility(View.GONE);
-        }else {
-            mtv_goods.setText(String.format(getStringResouce(R.string.discover_shangping),entity.blog.related_goods.size()));
+        } else {
+            mtv_goods.setText(String.format(getStringResouce(R.string.discover_shangping), entity.blog.related_goods.size()));
             mtv_code.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (entity.blog.related_goods.size()==1){
+                    if (entity.blog.related_goods.size() == 1) {
                         GoodsDeatilEntity.Goods goods = entity.blog.related_goods.get(0);
-                        quick_actions.createCode(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
-                                1==goods.isSuperiorProduct,SharedPrefUtil.getSharedUserString("nickname", ""),
+                        quick_actions.createCode(goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+                                1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""),
                                 SharedPrefUtil.getSharedUserString("avatar", ""));
-                    }else {
-                        initDialog(entity.blog,true);
+                    } else {
+                        initDialog(entity.blog, true);
                     }
                 }
             });
             mtv_goods.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (entity.blog.related_goods.size()==1){
-                        GoodsDetailAct.startAct(baseAct,entity.blog.related_goods.get(0).goods_id);
-                    }else {
-                        initDialog(entity.blog,false);
+                    if (entity.blog.related_goods.size() == 1) {
+                        GoodsDetailAct.startAct(baseAct, entity.blog.related_goods.get(0).goods_id);
+                    } else {
+                        initDialog(entity.blog, false);
                     }
                 }
             });
         }
+        mPresenter = new LookBigImgPresenter(this, this);
+        quick_actions.setOnShareBlogCallBack(this);
     }
 
     public void loadImg(String url, final PhotoView imageView, final ProgressBar spinner, final View layout_error) {
@@ -209,7 +216,7 @@ public class NewLookBigImgAct extends BaseActivity{
         }
     }
 
-    public void initDialog(BigImgEntity.Blog blog,boolean isCode) {
+    public void initDialog(BigImgEntity.Blog blog, boolean isCode) {
         Dialog dialog_new = new Dialog(baseAct, R.style.popAd);
         dialog_new.setContentView(R.layout.dialog_found_goods);
         Window window = dialog_new.getWindow();
@@ -234,8 +241,8 @@ public class NewLookBigImgAct extends BaseActivity{
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(baseAct));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct, blog.related_goods,isCode,quick_actions,
-                SharedPrefUtil.getSharedUserString("nickname", ""),SharedPrefUtil.getSharedUserString("avatar", ""));
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct, blog.id, blog.related_goods, isCode, quick_actions,
+                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -243,13 +250,13 @@ public class NewLookBigImgAct extends BaseActivity{
                 GoodsDetailAct.startAct(baseAct, blog.related_goods.get(position).goods_id);
             }
         });
-        rv_goods.addItemDecoration(new MVerticalItemDecoration(baseAct,36,38,38));
+        rv_goods.addItemDecoration(new MVerticalItemDecoration(baseAct, 36, 38, 38));
         dialog_new.setCancelable(false);
         dialog_new.show();
 
     }
 
-    public void savePhoto(){
+    public void savePhoto() {
         DownLoadImageThread thread = new DownLoadImageThread(activity,
                 entity.itemList.get(pos), new DownLoadImageThread.MyCallBack() {
             @Override
@@ -274,6 +281,29 @@ public class NewLookBigImgAct extends BaseActivity{
         });
         thread.start();
     }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        mPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
+        blogData.blogId = blogId;
+        EventBus.getDefault().post(new RefreshBlogEvent(blogData, RefreshBlogEvent.SHARE_TYPE));
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
     private class SamplePagerAdapter extends PagerAdapter {
         private List<String> list;
         private LayoutInflater inflater;

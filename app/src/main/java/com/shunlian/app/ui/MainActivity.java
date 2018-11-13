@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,11 +48,13 @@ import com.shunlian.app.ui.h5.H5X5Frag;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.app.widget.DiscoveryGuideView;
@@ -151,6 +154,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private ObjectMapper objectMapper;
     private int[] currentLocation;
     private int currentImgWidth;
+    private boolean isShowGuide = false;
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
 
@@ -585,7 +589,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
         tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
+        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_n));
         tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
 
         miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_n));
@@ -597,7 +601,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         miv_first.setVisibility(View.GONE);
         miv_tab_main.setVisibility(View.VISIBLE);
         tv_tab_main.setVisibility(View.VISIBLE);
+        mtv_message_count.setVisibility(View.GONE);
 
+        RelativeLayout.LayoutParams tvParams = (RelativeLayout.LayoutParams) tv_tab_discover.getLayoutParams();
+        tvParams.setMargins(0, TransformUtil.dip2px(this, 6), 0, TransformUtil.dip2px(this, 4));
+
+        RelativeLayout.LayoutParams ivParams = (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
+        ivParams.setMargins(0, TransformUtil.dip2px(this, 8), 0, 0);
         switch (pageIndex) {
             case 0:
                 miv_first.setVisibility(View.VISIBLE);
@@ -614,6 +624,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             case 2:
                 miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
                 tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
+
+                ivParams.setMargins(0, TransformUtil.dip2px(this, -12), 0, 0);
+                tvParams.setMargins(0, 0, 0, 0);
+                mtv_message_count.setVisibility(View.GONE);
                 break;
             case 3:
                 miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_h));
@@ -868,7 +882,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void setDiscoveryUnreadCount(CommonEntity data) {
         this.data = data;
         if (mtv_message_count != null) {
-            mtv_message_count.setVisibility(View.VISIBLE);
+            mtv_message_count.setVisibility(View.GONE);
             if (data.total > 99) {
                 mtv_message_count.setText("99+");
             } else if (data.total <= 0) {
@@ -895,11 +909,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(DiscoveryLocationEvent event) {
+        isShowGuide = SharedPrefUtil.getCacheSharedPrfBoolean("showGuide", false);
         currentLocation = event.location;
         currentImgWidth = event.imgWidth;
-        LogUtil.httpLogW("refreshData:" + currentImgWidth);
-        if (currentLocation != null && currentImgWidth != 0) {
-            LogUtil.httpLogW("showGuideView");
+        if (currentLocation != null && currentImgWidth != 0 && !isShowGuide) {
             showGuideView();
         }
     }
@@ -916,8 +929,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         currentLocation[1] = currentLocation[1] + currentImgWidth / 2;
 
         DiscoveryGuideView guide_view = new DiscoveryGuideView(this);
-        guide_view.setBackgroundColor(Color.BLACK);
-        guide_view.setAlpha(0.7f);
         guide_view.setOnClickListener(v -> {
             guide_view.setVisibility(View.GONE);
         });
@@ -926,5 +937,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         guide_view.setLayoutParams(layoutParams);
         decorView.addView(guide_view);
+
+        SharedPrefUtil.saveCacheSharedPrfBoolean("showGuide", true);
     }
 }

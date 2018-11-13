@@ -2,6 +2,7 @@ package com.shunlian.app.ui.discover_new;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
@@ -22,6 +27,8 @@ import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +39,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack {
+public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack, QuickActions.OnShareBlogCallBack {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -70,11 +77,13 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+        quick_actions.setOnShareBlogCallBack(this);
     }
 
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
+        EventBus.getDefault().register(this);
         NestedSlHeader header = new NestedSlHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
         recycler_list.setNestedScrollingEnabled(false);
@@ -86,6 +95,8 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
+
+        ((SimpleItemAnimator) recycler_list.getItemAnimator()).setSupportsChangeAnimations(false);
 
         nei_empty.setImageResource(R.mipmap.img_empty_common)
                 .setText("暂时没有用户发布精选文章")
@@ -152,7 +163,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
                 }
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
     @Override
@@ -163,7 +174,17 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
                 blog.praise_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+    }
+
+    @Override
+    public void downCountSuccess(String blogId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.down_num++;
+            }
+        }
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
     /**
@@ -200,6 +221,11 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         hotBlogPresenter.praiseBlos(blogId);
     }
 
+    @Override
+    public void toDown(String id) {
+        hotBlogPresenter.downCount(id);
+    }
+
     public void saveBaseInfo(HotBlogsEntity.BaseInfo baseInfo) {
         try {
             if (baseInfo != null) {
@@ -210,5 +236,68 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        hotBlogPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.total_share_num++;
+            }
+        }
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(RefreshBlogEvent event) {
+        LogUtil.httpLogW("refreshData:" + event.mData.memberId);
+        switch (event.mType) {
+            case RefreshBlogEvent.ATTENITON_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.memberId.equals(blog.member_id)) {
+                        LogUtil.httpLogW("is_focus:" + event.mData.is_focus);
+                        blog.is_focus = event.mData.is_focus;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.PRAISE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.is_praise = event.mData.is_praise;
+                        blog.praise_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.SHARE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.total_share_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.DOWNLOAD_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.down_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

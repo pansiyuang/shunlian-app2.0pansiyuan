@@ -48,16 +48,16 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
     private LayoutInflater mInflater;
     private boolean isCode;
     private QuickActions quickActions;
-    private String from,froms;
+    private String from,froms,mBlogId;
 
-
-    public DiscoverGoodsAdapter(Context context, List<GoodsDeatilEntity.Goods> lists,boolean isCode,QuickActions quick_actions,String from,String froms) {
+    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,QuickActions quick_actions,String from,String froms) {
         super(context, false, lists);
         mInflater = LayoutInflater.from(context);
         this.isCode=isCode;
         this.quickActions=quick_actions;
         this.from=from;
         this.froms=froms;
+        this.mBlogId = blogId;
     }
 
 
@@ -99,8 +99,8 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                     viewHolder.miv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            quickActions.shareDiscoverDialog(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
-                                    1==goods.isSuperiorProduct,from,froms);
+                            quickActions.shareDiscoverDialog(mBlogId, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+                                    1 == goods.isSuperiorProduct, from, froms);
                         }
                     });
                 }

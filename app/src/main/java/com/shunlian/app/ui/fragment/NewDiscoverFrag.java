@@ -1,7 +1,5 @@
 package com.shunlian.app.ui.fragment;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.discover_new.ActivityFrag;
 import com.shunlian.app.ui.discover_new.AttentionFrag;
 import com.shunlian.app.ui.discover_new.HotBlogFrag;
@@ -23,7 +20,8 @@ import com.shunlian.app.ui.discover_new.search.DiscoverSearchActivity;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.widget.LazyViewPager;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -31,7 +29,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,25 +40,50 @@ import butterknife.BindView;
 
 public class NewDiscoverFrag extends BaseFragment {
 
-    @BindView(R.id.tab_layout)
-    TabLayout tab_layout;
-
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
     @BindView(R.id.view_pager)
-    ViewPager view_pager;
+    LazyViewPager view_pager;
 
     @BindView(R.id.miv_search)
     MyImageView miv_search;
 
-    private String[] titles = {"关注", "精选", "活动"};
+    @BindView(R.id.ll_attention)
+    LinearLayout ll_attention;
+
+    @BindView(R.id.ll_blog)
+    LinearLayout ll_blog;
+
+    @BindView(R.id.ll_activity)
+    LinearLayout ll_activity;
+
+    @BindView(R.id.tv_attention)
+    TextView tv_attention;
+
+    @BindView(R.id.tv_blog)
+    TextView tv_blog;
+
+    @BindView(R.id.tv_activity)
+    TextView tv_activity;
+
+    @BindView(R.id.view_attention)
+    View view_attention;
+
+    @BindView(R.id.view_blog)
+    View view_blog;
+
+    @BindView(R.id.view_activity)
+    View view_activity;
+
     private List<BaseFragment> goodsFrags;
     private AttentionFrag attentionFrag;
     private HotBlogFrag hotBlogFrag;
     private ActivityFrag activityFrag;
     private String avatar;
+    private String[] titles = {"关注", "精选", "活动"};
     private HotBlogsEntity.BaseInfo currentBaseInfo;
+    private CommonLazyPagerAdapter mAdapter;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -88,14 +110,7 @@ public class NewDiscoverFrag extends BaseFragment {
                 .statusBarDarkFont(true, 0.2f)
                 .init();
 
-        for (String tab : titles) {
-            tab_layout.addTab(tab_layout.newTab().setText(tab));
-        }
         initFrags();
-        tab_layout.setupWithViewPager(view_pager);
-        reflex(tab_layout);
-
-        view_pager.setCurrentItem(1);
 
         miv_icon.post(() -> {
             int[] location = new int[2];
@@ -109,29 +124,48 @@ public class NewDiscoverFrag extends BaseFragment {
     protected void initListener() {
         super.initListener();
         miv_icon.setOnClickListener(v -> {
-            if (currentBaseInfo != null && !isEmpty(currentBaseInfo.member_id)) {
-                MyPageActivity.startAct(getActivity(), currentBaseInfo.member_id);
+            String member_id = SharedPrefUtil.getSharedUserString("member_id", "null");
+            if (!isEmpty(member_id) && Common.isAlreadyLogin()) {
+                MyPageActivity.startAct(getActivity(), member_id);
+            } else {
+                LoginAct.startAct(getActivity());
             }
         });
         miv_search.setOnClickListener(v -> {
             DiscoverSearchActivity.startActivity(getActivity());
         });
 
-        tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        ll_attention.setOnClickListener(v -> {
+            if (!Common.isAlreadyLogin()) {
+                LoginAct.startAct(getActivity());
+            } else {
+                showTab(0);
+                view_pager.setCurrentItem(0);
+            }
+        });
+
+        ll_blog.setOnClickListener(v -> {
+            showTab(1);
+            view_pager.setCurrentItem(1);
+        });
+
+        ll_activity.setOnClickListener(v -> {
+            showTab(2);
+            view_pager.setCurrentItem(2);
+        });
+        view_pager.setOnPageChangeListener(new LazyViewPager.OnPageChangeListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0 && !Common.isAlreadyLogin()) {
-                    LoginAct.startAct(getActivity());
-                }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
+            public void onPageSelected(int position) {
+                showTab(position);
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
@@ -147,40 +181,11 @@ public class NewDiscoverFrag extends BaseFragment {
         goodsFrags.add(hotBlogFrag);
         goodsFrags.add(activityFrag);
 
-        view_pager.setAdapter(new CommonLazyPagerAdapter(getChildFragmentManager(), goodsFrags, titles));
-        view_pager.setOffscreenPageLimit(goodsFrags.size());
-    }
-
-    public void reflex(final TabLayout tabLayout) {
-        tabLayout.post(() -> {
-            try {
-                LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
-                int dp10 = TransformUtil.dip2px(tabLayout.getContext(), 12.5f);
-                for (int i = 0; i < mTabStrip.getChildCount(); i++) {
-                    View tabView = mTabStrip.getChildAt(i);
-                    Field mTextViewField = tabView.getClass().getDeclaredField("mTextView");
-                    mTextViewField.setAccessible(true);
-                    TextView mTextView = (TextView) mTextViewField.get(tabView);
-                    tabView.setPadding(0, 0, 0, 0);
-                    int width = 0;
-                    width = mTextView.getWidth();
-                    if (width == 0) {
-                        mTextView.measure(0, 0);
-                        width = mTextView.getMeasuredWidth();
-                    }
-                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
-                    params.width = width;
-                    params.leftMargin = dp10;
-                    params.rightMargin = dp10;
-                    tabView.setLayoutParams(params);
-                    tabView.invalidate();
-                }
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        });
+        mAdapter = new CommonLazyPagerAdapter(getChildFragmentManager(), goodsFrags, titles);
+        view_pager.setAdapter(mAdapter);
+        view_pager.setOffscreenPageLimit(3);
+        view_pager.setCurrentItem(1);
+        showTab(1);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -188,6 +193,37 @@ public class NewDiscoverFrag extends BaseFragment {
         currentBaseInfo = event.baseInfo;
         avatar = currentBaseInfo.avatar;
         GlideUtils.getInstance().loadCircleAvar(baseContext, miv_icon, avatar);
+    }
+
+    public void showTab(int position) {
+        tv_attention.setTextColor(getColorResouce(R.color.value_484848));
+        tv_blog.setTextColor(getColorResouce(R.color.value_484848));
+        tv_activity.setTextColor(getColorResouce(R.color.value_484848));
+
+        tv_attention.getPaint().setFakeBoldText(false);
+        tv_blog.getPaint().setFakeBoldText(false);
+        tv_activity.getPaint().setFakeBoldText(false);
+
+        view_attention.setVisibility(View.INVISIBLE);
+        view_blog.setVisibility(View.INVISIBLE);
+        view_activity.setVisibility(View.INVISIBLE);
+        switch (position) {
+            case 0:
+                tv_attention.setTextColor(getColorResouce(R.color.pink_color));
+                tv_attention.getPaint().setFakeBoldText(true);
+                view_attention.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                tv_blog.setTextColor(getColorResouce(R.color.pink_color));
+                tv_blog.getPaint().setFakeBoldText(true);
+                view_blog.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                tv_activity.setTextColor(getColorResouce(R.color.pink_color));
+                tv_activity.getPaint().setFakeBoldText(true);
+                view_activity.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     @Override

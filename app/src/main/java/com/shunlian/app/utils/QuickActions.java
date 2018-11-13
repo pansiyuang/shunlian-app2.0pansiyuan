@@ -114,6 +114,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private ShareInfoParam mShareInfoParam;
     private String shareType = "", shareId = "";
     private Handler mHandler;
+    private OnShareBlogCallBack mCallBack;
     //    private String tag="";
 
 
@@ -689,7 +690,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
     public CommonDialog nomalBuildl;
 //    发现对话框
-    public void shareDiscoverDialog(String shareLink, String title, String desc, String price, String goodsId, String thumb,
+    public void shareDiscoverDialog(String blodId,String shareLink, String title, String desc, String price, String goodsId, String thumb,
                                     boolean isSuperiorProduct, String from, String froms) {
 
         mShareInfoParam = new ShareInfoParam();
@@ -707,6 +708,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new OnClickListener() {
@@ -715,6 +719,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 WXEntryActivity.startAct(getContext(),
                         "shareFriend", mShareInfoParam);
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, new OnClickListener() {
@@ -722,6 +729,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             public void onClick(View v) {
                 saveshareGoodsPic(false,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new OnClickListener() {
@@ -730,6 +740,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 createCode(shareLink, title, desc, price, goodsId, thumb,
                 isSuperiorProduct, from, froms);
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new OnClickListener() {
@@ -737,6 +750,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             public void onClick(View v) {
                 copyText(true);
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
 
@@ -1621,5 +1637,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
             promptDialog.show();
         });
+    }
+
+    public void setOnShareBlogCallBack(OnShareBlogCallBack callBack) {
+        this.mCallBack = callBack;
+    }
+
+    public interface OnShareBlogCallBack {
+        void shareSuccess(String blogId,String goodsId);
     }
 }

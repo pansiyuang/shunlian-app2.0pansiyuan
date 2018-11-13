@@ -1,12 +1,20 @@
 package com.shunlian.app.utils.download;
 
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.shunlian.app.App;
 import com.shunlian.app.service.ApiService;
 import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.utils.LogUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -38,16 +46,9 @@ public class DownloadUtils {
 
     private JsDownloadListener listener;
 
-    private String baseUrl;
-
-    private String downloadUrl;
-
     private boolean isCancel = false;
-
     public DownloadUtils(JsDownloadListener listener) {
-        this.baseUrl = baseUrl;
         this.listener = listener;
-
         JsDownloadInterceptor mInterceptor = new JsDownloadInterceptor(listener);
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(mInterceptor)
@@ -60,6 +61,42 @@ public class DownloadUtils {
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
     }
+
+    public String dirName;
+    public  String fileName = "";
+    /**
+     * 检查下载的文件是否存在
+     * @return
+     */
+    public boolean checkDownLoadFileExists(String downloadUrl){
+        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                .getAbsolutePath()+"/Camera";
+        File file = new File(dirName);
+        // 文件夹不存在时创建
+        if (!file.exists()) {
+            dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                    .getAbsolutePath();
+            file = new File(dirName);
+            if (!file.exists())
+                file.mkdirs();
+        }
+        // 下载后的文件名
+
+        if (!TextUtils.isEmpty(downloadUrl)) {
+            int i = downloadUrl.lastIndexOf("/"); // 取的最后一个斜杠后的字符串为名
+            fileName = dirName + downloadUrl.substring(i, downloadUrl.length());
+        }else {
+            fileName = dirName+ "/shunlian"+System.currentTimeMillis()+".mp4";
+        }
+        LogUtil.httpLogW("文件名:" + fileName);
+        File file1 = new File(fileName);
+        if (file1.exists()) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     public void setCancel(boolean isCancel){
         this.isCancel = isCancel;
@@ -97,10 +134,22 @@ public class DownloadUtils {
                     listener.onProgress(msg.arg1);
                     break;
                 case  2:
+                    Log.d("test:","是否取消下载"+isCancel);
+                    if(!isCancel) {
+                        saveVideoFile((String) msg.obj);
+                    }else{
+                        File file1 = new File((String) msg.obj);
+                        if(file1.exists()){
+                            file1.delete();
+                        }
+                    }
                     listener.onFinishDownload((String) msg.obj,isCancel);
                     break;
                 case  3:
                     listener.onFail("下载失败");
+                    break;
+                case  4:
+                    listener.onFinishEnd();
                     break;
                  default:
                         break;
@@ -166,4 +215,16 @@ public class DownloadUtils {
             }
         }
     }
+
+    public void saveVideoFile(String fileDir) {
+        //strDir视频路径
+        Uri localUri = Uri.parse("file://" + fileDir);
+        Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
+        App.getContext().sendBroadcast(localIntent);
+        EventBus.getDefault().post("");
+        Message obtain = Message.obtain();
+        obtain.what=4;
+        handerProgress.sendMessage( obtain);
+    }
+
 }
