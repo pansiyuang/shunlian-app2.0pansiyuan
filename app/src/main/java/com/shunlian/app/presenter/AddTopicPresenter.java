@@ -11,6 +11,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.PagerEntity;
 import com.shunlian.app.bean.TopicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.find_send.AddTopicAct;
 import com.shunlian.app.view.IView;
 
 import java.util.ArrayList;
@@ -144,6 +145,8 @@ public class AddTopicPresenter extends BasePresenter {
             adaper.setOnItemClickListener((view, position) -> {
                 adaper.item_id = position;
                 adaper.notifyDataSetChanged();
+                if (context != null && context instanceof AddTopicAct)
+                ((AddTopicAct)context).hideNotSelect();
                 mHandler.sendEmptyMessageDelayed(position, 400);
             });
         } else {
