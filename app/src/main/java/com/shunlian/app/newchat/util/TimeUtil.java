@@ -194,13 +194,22 @@ public class TimeUtil {
         return format.format(new Date(time));
     }
     /**
-     * 当天的显示时间格式
-     *
+     * 当天的显示时间格式 10月03日12点
      * @param time time
      * @return HH:mm
      */
     public static String getyMdHMin(long time) {
         SimpleDateFormat format = new SimpleDateFormat( "MM" + Common.getApplicationContext().getResources().getString(R.string.month) + "dd" + Common.getApplicationContext().getResources().getString(R.string.day) +"HH点");
+        return format.format(new Date(time));
+    }
+
+    /**
+     * 当天的显示时间格式 10月03日12:10
+     * @param time time
+     * @return HH:mm
+     */
+    public static String getyMdHmMin(long time) {
+        SimpleDateFormat format = new SimpleDateFormat( "MM" + Common.getApplicationContext().getResources().getString(R.string.month) + "dd" + Common.getApplicationContext().getResources().getString(R.string.day) +"HH:mm");
         return format.format(new Date(time));
     }
     /**
