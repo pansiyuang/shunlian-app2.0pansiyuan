@@ -161,8 +161,9 @@ public class ShareGoodDialogUtil {
                 public void onClick(View view) {
                     showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    miv_close.setVisibility(View.GONE);
                     showSpecialBuild.dismiss();
-                    goodsPic(inflate,mShareInfoParam.img,false);
+                    goodsPic(inflate,mShareInfoParam.img,true);
                 }
             });
          mllayout_wexin.setOnClickListener(new View.OnClickListener() {
@@ -170,8 +171,9 @@ public class ShareGoodDialogUtil {
             public void onClick(View view) {
                 showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                 showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                miv_close.setVisibility(View.GONE);
                 showSpecialBuild.dismiss();
-                goodsPic(inflate,mShareInfoParam.shop_logo,true);
+                goodsPic(inflate,mShareInfoParam.shop_logo,false);
             }
         });
     }
@@ -261,6 +263,7 @@ public class ShareGoodDialogUtil {
                 public void onClick(View view) {
                     showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    miv_close.setVisibility(View.GONE);
                     showGoodBuild.dismiss();
                     goodsPic(inflate,mShareInfoParam.img,false);
                     if(isFound&&mCallBack!=null){
@@ -273,6 +276,7 @@ public class ShareGoodDialogUtil {
                 public void onClick(View view) {
                     showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    miv_close.setVisibility(View.GONE);
                     showGoodBuild.dismiss();
                     goodsPic(inflate,mShareInfoParam.img,true);
                 }
@@ -335,6 +339,7 @@ public class ShareGoodDialogUtil {
                 public void onClick(View view) {
                     showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    miv_close.setVisibility(View.GONE);
                     showShopBuild.dismiss();
                     goodsPic(inflate,mShareInfoParam.shop_logo,true);
                 }

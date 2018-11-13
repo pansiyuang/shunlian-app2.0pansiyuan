@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.DocumentsContract;
@@ -19,6 +20,7 @@ import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -78,11 +80,17 @@ public class BitmapUtil {
     }
 
     public static Bitmap getBitmapByView(View view) {
-        Bitmap bitmap = null;
-        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
-                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
-        final Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
+//        Bitmap bitmap = null;
+//        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+//                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
+//        final Canvas canvas = new Canvas(bitmap);
+//        view.draw(canvas);
+
+        int me = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+        view.measure(me,me);
+        view.layout(0 ,0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        Bitmap bitmap = view.getDrawingCache();
         return bitmap;
     }
 
@@ -363,18 +371,26 @@ public class BitmapUtil {
             fos.close();
             if (isSuccess) {
                 // 其次把文件插入到系统图库
-                String path = MediaStore.Images.Media
-                        .insertImage(context.getContentResolver(),
-                                file.getAbsolutePath(), fileName, null);
-                if (TextUtils.isEmpty(path)) return false;
-                // 最后通知图库更新
-                fileUri = new File(path);
-                context.sendBroadcast(new
-                        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
-
+//                String path = MediaStore.Images.Media
+//                        .insertImage(context.getContentResolver(),
+//                                file.getAbsolutePath(), fileName, null);
+//                if (TextUtils.isEmpty(path)) return false;
+//                // 最后通知图库更新
+//                fileUri = new File(path);
+//                context.sendBroadcast(new
+//                        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
+                MediaScannerConnection.scanFile(context,
+                        new String[]{file.getAbsolutePath()},
+                        new String[]{"image/*"},
+                        new MediaScannerConnection.OnScanCompletedListener() {
+                            @Override
+                            public void onScanCompleted(String path, Uri uri) {
+                                Log.i("保存图片","onScanCompleted"+path);
+                            }
+                        });
                 if(isShare) {
                     ShareInfoParam shareInfoParam = new ShareInfoParam();
-                    shareInfoParam.photo = path;
+                    shareInfoParam.photo = file.getAbsolutePath();
                     WXEntryActivity.startAct(context, isFriend ? "shareFriend" : "shareCircle", shareInfoParam);
                 }
                 return true;
