@@ -708,6 +708,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new OnClickListener() {

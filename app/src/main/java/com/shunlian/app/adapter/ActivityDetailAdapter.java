@@ -178,7 +178,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_goods_icon, goods.thumb);
                 blogViewHolder.tv_goods_name.setText(goods.title);
                 blogViewHolder.tv_goods_price.setText(getString(R.string.common_yuan) + goods.price);
-                blogViewHolder.tv_share_count.setText(String.valueOf(blog.share_num));
+                blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
                 blogViewHolder.tv_share_count.setOnClickListener(view -> quickActions.shareDiscoverDialog(blog.id, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
                         1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", "")));
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
@@ -245,6 +245,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
             if (blog.is_self == 0) {
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
+                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
             } else {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
                 blogViewHolder.miv_more.setVisibility(View.GONE);
@@ -338,7 +339,6 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         rv_goods.addItemDecoration(new MVerticalItemDecoration(context, 36, 38, 38));
         dialog_new.setCancelable(false);
         dialog_new.show();
-
     }
 
 

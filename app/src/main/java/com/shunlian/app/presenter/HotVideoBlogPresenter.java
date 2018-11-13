@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -157,6 +158,32 @@ public class HotVideoBlogPresenter extends BasePresenter<IHotVideoBlogView> {
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
                 Common.staticToast(message);
+            }
+        });
+    }
+
+    public void goodsShare(String type, String blogId, String id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", type);
+        map.put("id", id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getSaveCookieApiService().shareSuccessCall(getRequestBody(map));
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.shareGoodsSuccess(blogId, id);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
             }
         });
     }

@@ -186,7 +186,6 @@ public class CommonBlogPresenter extends BasePresenter<ICommonBlogView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                Common.staticToast("感谢您的分享");
                 iView.shareGoodsSuccess(blogId, id);
             }
 
