@@ -16,6 +16,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
+import com.shunlian.app.newchat.util.TimeUtil;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
@@ -1213,6 +1215,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mShareInfoParam.shareLink = baseEntity.data.shareLink;
             mShareInfoParam.desc = baseEntity.data.desc;
             mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
+            if(mGoodsDeatilEntity.tt_act!=null&&!"0".equals(mGoodsDeatilEntity.status)){//非下架商品){
+                if(mGoodsDeatilEntity.tt_act.content!=null&&mGoodsDeatilEntity.tt_act.content.length()>2){
+                    mShareInfoParam.start_time =TimeUtil.getyMdHMin(System.currentTimeMillis()+Long.valueOf(mGoodsDeatilEntity.tt_act.time)*1000)
+                            +mGoodsDeatilEntity.tt_act.content.substring(mGoodsDeatilEntity.tt_act.content.length()-2,mGoodsDeatilEntity.tt_act.content.length());
+                }
+                mShareInfoParam.act_label = "天天特惠";
+                mShareInfoParam.price = mGoodsDeatilEntity.tt_act.act_price;
+                mShareInfoParam.market_price = mGoodsDeatilEntity.tt_act.market_price;
+            }
             if (goodsDetailPresenter != null) {
                 goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
                 shareGoodDialogUtil.shareGoodDialog(goodsDetailPresenter.getShareInfoParam(),true,false);

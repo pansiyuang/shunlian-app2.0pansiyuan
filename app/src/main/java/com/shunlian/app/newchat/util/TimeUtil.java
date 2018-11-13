@@ -193,7 +193,16 @@ public class TimeUtil {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         return format.format(new Date(time));
     }
-
+    /**
+     * 当天的显示时间格式
+     *
+     * @param time time
+     * @return HH:mm
+     */
+    public static String getyMdHMin(long time) {
+        SimpleDateFormat format = new SimpleDateFormat( "MM" + Common.getApplicationContext().getResources().getString(R.string.month) + "dd" + Common.getApplicationContext().getResources().getString(R.string.day) +"HH点");
+        return format.format(new Date(time));
+    }
     /**
      * 不同一周的显示时间格式
      *
