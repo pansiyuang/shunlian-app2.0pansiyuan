@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.NewCouponListAdapter;
 import com.shunlian.app.adapter.NewCouponsAdapter;
+import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -23,6 +24,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGetCoupon;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -78,6 +80,9 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.miv_logo)
     MyImageView miv_logo;
 
+    @BindView(R.id.miv_entry)
+    MyImageView miv_entry;
+
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
 
@@ -101,6 +106,8 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     private GridLayoutManager gridLayoutManager;
     private String type = "All";
     private List<VouchercenterplEntity.MData> mDatas;
+    private boolean isHide = false;
+    private AdEntity.Suspension.Link link;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, NewGetCouponAct.class);
@@ -163,6 +170,7 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
         miv_search.setOnClickListener(this);
         mllayout_remen.setOnClickListener(this);
         mllayout_zuixin.setOnClickListener(this);
+        miv_entry.setOnClickListener(this);
 //        rv_dianpu.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
 //            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -184,6 +192,21 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
                         pGetCoupon.refreshBaby(type, "");
                     }
                 }
+                int dy=y-oldy;
+                if (dy != 0) {
+                    int value = TransformUtil.dip2px(baseAct, 80);
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    if (dy > 0) {
+                        layoutParams.setMargins(0, 0, -value / 2, value);
+                        isHide = true;
+                    } else {
+                        layoutParams.setMargins(0, 0, 0, value);
+                        isHide = false;
+                    }
+                    miv_entry.setLayoutParams(layoutParams);
+                }
             }
         });
     }
@@ -192,6 +215,19 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
     public void onClick(View view) {
         super.onClick(view);
         switch (view.getId()) {
+            case R.id.miv_entry:
+                if (isHide) {
+                    int value = TransformUtil.dip2px(baseAct, 80);
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
+                    layoutParams.setMargins(0, 0, 0, value);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    miv_entry.setLayoutParams(layoutParams);
+                    isHide = false;
+                } else if (link != null) {
+                    Common.goGoGo(baseAct, link.type, link.item_id);
+                }
+                break;
             case R.id.miv_search:
                 SearchCouponAct.startAct(baseAct);
                 break;
@@ -229,6 +265,7 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
         pGetCoupon = new PGetCoupon(this, this);
         pGetCoupon.getPing();
         pGetCoupon.resetBaby(type, "");
+        pGetCoupon.adpush();
 
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
@@ -276,6 +313,16 @@ public class NewGetCouponAct extends BaseActivity implements View.OnClickListene
         rv_pingtai.setNestedScrollingEnabled(false);
         rv_pingtai.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 //        rv_pingtai.addItemDecoration(new MVerticalItemDecoration(this,10,0,0));
+    }
+
+    @Override
+    public void setAd(AdEntity adEntity) {
+        if (adEntity != null && adEntity.suspension != null && !isEmpty(adEntity.suspension.image)) {
+            miv_entry.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImageZheng(this, miv_entry, adEntity.suspension.image);
+        }else {
+            miv_entry.setVisibility(View.GONE);
+        }
     }
 
     @Override

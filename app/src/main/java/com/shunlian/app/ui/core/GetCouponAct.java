@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CouponAdapter;
 import com.shunlian.app.adapter.CouponsAdapter;
+import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -205,6 +206,11 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
         rv_pingtai.setAdapter(couponAdapter);
         rv_pingtai.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 //        rv_pingtai.addItemDecoration(new MVerticalItemDecoration(this,10,0,0));
+    }
+
+    @Override
+    public void setAd(AdEntity adEntity) {
+
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CoreHotEntity;
 import com.shunlian.app.bean.CoreNewEntity;
@@ -92,6 +93,27 @@ public class PGetCoupon extends BasePresenter<IGetCoupon> {
         });
 
     }
+
+    /**
+     * 万用广告弹窗接口
+     *
+     */
+
+    public void adpush() {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", "13");
+        sortAndMD5(map);
+
+        Call<BaseEntity<AdEntity>> baseEntityCall = getApiService().adpush(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<AdEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<AdEntity> entity) {
+                super.onSuccess(entity);
+                iView.setAd(entity.data);
+            }
+        });
+    }
+
     /**
      * 领取优惠券
      *
