@@ -67,7 +67,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="13dp"
             android:src="@mipmap/img_shoppingcar_selected_h"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
     </RelativeLayout>
 

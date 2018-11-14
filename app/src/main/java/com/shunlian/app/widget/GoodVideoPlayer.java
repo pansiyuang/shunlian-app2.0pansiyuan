@@ -243,8 +243,10 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     public void setParseStateView(){
         if(blog.is_praise==1) {//已点赞
             image_dianzai_state.setImageResource(R.mipmap.icon_dianzan_sel);
+            tv_dianzan.setTextColor(getResources().getColor(R.color.pink_color));
         }else{
             image_dianzai_state.setImageResource(R.mipmap.icon_dianzan_good);
+            tv_dianzan.setTextColor(getResources().getColor(R.color.white));
         }
         tv_dianzan.setText(blog.praise_num+"");
     }

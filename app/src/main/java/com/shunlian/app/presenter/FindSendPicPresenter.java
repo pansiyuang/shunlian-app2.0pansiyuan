@@ -2,7 +2,9 @@ package com.shunlian.app.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 
+import com.shunlian.app.R;
 import com.shunlian.app.adapter.SingleImgAdapterV2;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BlogDraftEntity;
@@ -13,6 +15,7 @@ import com.shunlian.app.photopick.ImageVideo;
 import com.shunlian.app.ui.find_send.BrowseImageVideoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.ISelectPicVideoView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,6 +47,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
     private SingleImgAdapterV2 mImgAdapter;
     private int index = 0;//递归压缩图片下标
     private byte[] mBitmapBytes;
+    private PromptDialog promptDialog;
 
     public FindSendPicPresenter(Context context, ISelectPicVideoView iView) {
         super(context, iView);
@@ -112,6 +116,9 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
         if (mBitmapBytes != null){
             mBitmapBytes = null;
         }
+        if (promptDialog != null){
+            promptDialog.dismiss();
+        }
     }
 
     /**
@@ -128,26 +135,39 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
             public void onSuccess(BaseEntity<BlogDraftEntity> entity) {
                 super.onSuccess(entity);
                 BlogDraftEntity data = entity.data;
-                iView.resetDraft(data);
-
-                if (!isEmpty(data.video)) {
-                    ImageVideo imageVideo = new ImageVideo();
-                    imageVideo.path = data.video;
-                    imageVideo.coverPath = data.video_thumb;
-                    mImgList.add(imageVideo);
-                    mImgAdapter.notifyDataSetChanged();
-                } else if (!isEmpty(data.pics)) {
-                    for (String url : data.pics) {
-                        ImageVideo imageVideo = new ImageVideo();
-                        imageVideo.path = url;
-                        imageVideo.url = url;
-                        mImgList.add(imageVideo);
-                    }
-                    mImgAdapter.notifyDataSetChanged();
-                }
+                promptDialog = new PromptDialog((Activity) context);
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setCancelable(true);
+                promptDialog.setTvSureColor(R.color.pink_color);
+                promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
+                        .setSureAndCancleListener("上次有未发布的内容，是否加载？",
+                                "确定", v -> loadDraft(data),
+                                "取消", v ->
+                                    promptDialog.dismiss()).show();
             }
         });
 
+    }
+    //加载草稿
+    private void loadDraft(BlogDraftEntity data) {
+        if (promptDialog != null)promptDialog.dismiss();
+        iView.resetDraft(data);
+
+        if (!isEmpty(data.video)) {
+            ImageVideo imageVideo = new ImageVideo();
+            imageVideo.path = data.video;
+            imageVideo.coverPath = data.video_thumb;
+            mImgList.add(imageVideo);
+            mImgAdapter.notifyDataSetChanged();
+        } else if (!isEmpty(data.pics)) {
+            for (String url : data.pics) {
+                ImageVideo imageVideo = new ImageVideo();
+                imageVideo.path = url;
+                imageVideo.url = url;
+                mImgList.add(imageVideo);
+            }
+            mImgAdapter.notifyDataSetChanged();
+        }
     }
 
     /**

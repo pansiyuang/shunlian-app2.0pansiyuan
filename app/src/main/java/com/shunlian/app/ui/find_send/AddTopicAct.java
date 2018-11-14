@@ -115,6 +115,10 @@ public class AddTopicAct extends BaseActivity implements IView{
         }
     }
 
+    public void hideNotSelect(){
+        gone(mivNot);
+    }
+
     /**
      * 显示网络请求失败的界面
      *
