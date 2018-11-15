@@ -212,7 +212,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @OnClick(R.id.rlayout_topic)
     public void addTopic() {
         if (!(mConfig != null && !isEmpty(mConfig.activityID))){
-            AddTopicAct.startAct(this, ADDTOPIC_REQUEST_CODE);
+            AddTopicAct.startAct(this,topic_id, ADDTOPIC_REQUEST_CODE);
         }
     }
 
