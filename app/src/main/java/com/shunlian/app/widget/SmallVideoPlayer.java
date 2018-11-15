@@ -1008,7 +1008,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         LogUtil.httpLogW("文件名:" + fileName);
         File file1 = new File(fileName);
         if (file1.exists()) {
-            Common.staticToast("已下载过该视频,请勿重复下载!");
+            Common.staticToast("该视频已下截过!");
         } else {
             new Thread(() -> downLoadVideo(fileName)).start();
         }
