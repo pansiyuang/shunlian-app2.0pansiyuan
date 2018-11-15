@@ -400,7 +400,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             });
 
             blogViewHolder.rlayout_goods.setOnClickListener(view -> {
-                LogUtil.augusLogW("dddd--" + blog.related_goods.size());
                 if (blog.related_goods.size() == 1) {
                     GoodsDetailAct.startAct(context, blog.related_goods.get(0).goods_id);
                 } else {
@@ -435,28 +434,21 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View viewDialog = inflater.inflate(R.layout.dialog_found_goods, null);
-        Activity activity = (Activity) context;
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-//        int height = display.getHeight();
-        //设置dialog的宽高为屏幕的宽高
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog_new.setContentView(viewDialog, layoutParams);
 
         MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
         MyImageView miv_icon = dialog_new.findViewById(R.id.miv_icon);
         NewTextView ntv_desc = dialog_new.findViewById(R.id.ntv_desc);
         RecyclerView rv_goods = dialog_new.findViewById(R.id.rv_goods);
         miv_close.setOnClickListener(view -> dialog_new.dismiss());
+        miv_icon.setOnClickListener(view -> MyPageActivity.startAct(context, blog.member_id));
+        ntv_desc.setOnClickListener(view -> MyPageActivity.startAct(context, blog.member_id));
         GlideUtils.getInstance().loadCircleImage(context, miv_icon, blog.avatar);
         SpannableStringBuilder ssb = Common.changeColor(blog.nickname
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(context));
         DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.id, blog.related_goods, false, quickActions,
-                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
+                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""),dialog_new);
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id));
         rv_goods.addItemDecoration(new MVerticalItemDecoration(context, 36, 38, 38));

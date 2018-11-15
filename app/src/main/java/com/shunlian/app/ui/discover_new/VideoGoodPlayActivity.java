@@ -249,14 +249,14 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View viewDialog = inflater.inflate(R.layout.dialog_found_goods, null);
-        Display display = this.getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-//        int height = display.getHeight();
-        //设置dialog的宽高为屏幕的宽高
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog_new.setContentView(viewDialog, layoutParams);
+//        LayoutInflater inflater = LayoutInflater.from(this);
+//        View viewDialog = inflater.inflate(R.layout.dialog_found_goods, null);
+//        Display display = this.getWindowManager().getDefaultDisplay();
+//        int width = display.getWidth();
+////        int height = display.getHeight();
+//        //设置dialog的宽高为屏幕的宽高
+//        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        dialog_new.setContentView(viewDialog, layoutParams);
 
         MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
         MyImageView miv_icon = dialog_new.findViewById(R.id.miv_icon);
@@ -268,8 +268,10 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, this.getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(this));
+        miv_icon.setOnClickListener(view -> MyPageActivity.startAct(baseAct, blog.member_id));
+        ntv_desc.setOnClickListener(view -> MyPageActivity.startAct(baseAct, blog.member_id));
         DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this,blog.id, blog.related_goods, false, quick_actions,
-                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
+                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""),dialog_new);
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(this, blog.related_goods.get(position).goods_id));
         rv_goods.addItemDecoration(new MVerticalItemDecoration(this, 36, 38, 38));

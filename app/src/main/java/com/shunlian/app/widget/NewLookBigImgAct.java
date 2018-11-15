@@ -31,6 +31,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.LookBigImgPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DownLoadImageThread;
@@ -241,8 +242,10 @@ public class NewLookBigImgAct extends BaseActivity implements QuickActions.OnSha
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(baseAct));
+        miv_icon.setOnClickListener(view -> MyPageActivity.startAct(baseAct, blog.member_id));
+        ntv_desc.setOnClickListener(view -> MyPageActivity.startAct(baseAct, blog.member_id));
         DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct, blog.id, blog.related_goods, isCode, quick_actions,
-                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
+                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""),dialog_new);
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override

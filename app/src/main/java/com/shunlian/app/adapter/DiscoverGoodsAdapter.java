@@ -49,8 +49,10 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
     private boolean isCode;
     private QuickActions quickActions;
     private String from,froms,mBlogId;
+    private Dialog dialog;
 
-    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,QuickActions quick_actions,String from,String froms) {
+    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,
+                                boolean isCode,QuickActions quick_actions,String from,String froms,Dialog dialog) {
         super(context, false, lists);
         mInflater = LayoutInflater.from(context);
         this.isCode=isCode;
@@ -58,6 +60,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
         this.from=from;
         this.froms=froms;
         this.mBlogId = blogId;
+        this.dialog=dialog;
     }
 
 
@@ -77,15 +80,22 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                 GlideUtils.getInstance().loadCornerImage(context, viewHolder.miv_photo, goods.thumb,4);
                 viewHolder.ntv_title.setText(goods.title);
                 viewHolder.ntv_price.setText(getString(R.string.common_yuan)+goods.price);
+                viewHolder.ntv_price1.setText(getString(R.string.common_yuan)+goods.price);
+                viewHolder.ntv_priceM1.setText(getString(R.string.common_yuan)+goods.market_price);
+                viewHolder.ntv_priceM1.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
                 viewHolder.ntv_priceM.setText(getString(R.string.common_yuan)+goods.market_price);
                 viewHolder.ntv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
                 if (isCode){
                     viewHolder.ntv_code.setVisibility(View.VISIBLE);
+                    viewHolder.ntv_price1.setVisibility(View.VISIBLE);
+                    viewHolder.ntv_priceM1.setVisibility(View.VISIBLE);
+                    viewHolder.ntv_priceM.setVisibility(View.GONE);
+                    viewHolder.ntv_price.setVisibility(View.GONE);
                     viewHolder.miv_share.setVisibility(View.GONE);
                     viewHolder.ntv_code.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            boolean is=false;
+//                            boolean is=false;
 //                            if (!isEmpty(goods.isSuperiorProduct)&&"1".equals(goods.isSuperiorProduct)){
 //                                is=true;
 //                            }else {
@@ -93,6 +103,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
 //                            }
                             quickActions.createCode(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
                                     1==goods.isSuperiorProduct,from,froms);
+                            dialog.dismiss();
                         }
                     });
                 }else {
@@ -101,6 +112,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                         public void onClick(View view) {
                             quickActions.shareDiscoverDialog(mBlogId, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
                                     1 == goods.isSuperiorProduct, from, froms);
+                            dialog.dismiss();
                         }
                     });
                 }
@@ -122,6 +134,12 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
 
         @BindView(R.id.ntv_price)
         NewTextView ntv_price;
+
+        @BindView(R.id.ntv_price1)
+        NewTextView ntv_price1;
+
+        @BindView(R.id.ntv_priceM1)
+        NewTextView ntv_priceM1;
 
         @BindView(R.id.ntv_code)
         NewTextView ntv_code;
