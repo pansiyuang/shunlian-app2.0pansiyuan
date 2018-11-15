@@ -45,10 +45,12 @@ public class AddTopicPresenter extends BasePresenter {
             ((Activity) context).finish();
         }
     };
+    private String mID;
 
 
-    public AddTopicPresenter(Context context, IView iView) {
+    public AddTopicPresenter(Context context, IView iView, String id) {
         super(context, iView);
+        this.mID = id;
         initApi();
     }
 
@@ -137,14 +139,14 @@ public class AddTopicPresenter extends BasePresenter {
             itemBeans.addAll(list);
 
         if (adaper == null) {
-            adaper = new TopicAdaper(context, itemBeans);
+            adaper = new TopicAdaper(context, itemBeans,mID);
             if (iView != null) {
                 iView.setAdapter(adaper);
             }
 
             adaper.setOnItemClickListener((view, position) -> {
                 adaper.item_id = position;
-                adaper.notifyDataSetChanged();
+                adaper.notifyItemRangeChanged(0,itemBeans.size(),itemBeans);
                 if (context != null && context instanceof AddTopicAct)
                 ((AddTopicAct)context).hideNotSelect();
                 mHandler.sendEmptyMessageDelayed(position, 400);

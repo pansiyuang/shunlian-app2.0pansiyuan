@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,11 @@ import butterknife.BindView;
 public class TopicAdaper extends BaseRecyclerAdapter<TopicEntity.ItemBean> {
 
     public int item_id = -1;
+    private String mID;
 
-    public TopicAdaper(Context context, List<TopicEntity.ItemBean> lists) {
+    public TopicAdaper(Context context, List<TopicEntity.ItemBean> lists, String id) {
         super(context, true, lists);
+        mID = id;
     }
 
     /**
@@ -37,6 +40,20 @@ public class TopicAdaper extends BaseRecyclerAdapter<TopicEntity.ItemBean> {
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         View view = mInflater.inflate(R.layout.item_topicv2, parent, false);
         return new TopicHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
+        if (!isEmpty(payloads)){
+            TopicHolder mHolder = (TopicHolder) holder;
+            if (position == item_id){
+                visible(mHolder.miv_select);
+            }else {
+                mHolder.miv_select.setVisibility(View.INVISIBLE);
+            }
+        }else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
     }
 
     /**
@@ -57,7 +74,8 @@ public class TopicAdaper extends BaseRecyclerAdapter<TopicEntity.ItemBean> {
         TopicEntity.ItemBean itemBean = lists.get(position);
         mHolder.mtvTitle.setText(itemBean.title);
         mHolder.mtvDesc.setText(String.format(format, itemBean.refer_member_num, itemBean.refer_num));
-        if (position == item_id){
+
+        if (!isEmpty(mID) && mID.equals(itemBean.id)){
             visible(mHolder.miv_select);
         }else {
             mHolder.miv_select.setVisibility(View.INVISIBLE);
