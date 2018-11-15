@@ -74,7 +74,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                 GoodsDeatilEntity.Goods goods = lists.get(position);
                 if (goods==null)
                     return;
-                GlideUtils.getInstance().loadCornerImage(context, viewHolder.miv_photo, goods.thumb);
+                GlideUtils.getInstance().loadCornerImage(context, viewHolder.miv_photo, goods.thumb,4);
                 viewHolder.ntv_title.setText(goods.title);
                 viewHolder.ntv_price.setText(getString(R.string.common_yuan)+goods.price);
                 viewHolder.ntv_priceM.setText(getString(R.string.common_yuan)+goods.market_price);
