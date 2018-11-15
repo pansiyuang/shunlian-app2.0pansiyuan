@@ -49,8 +49,10 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
     private boolean isCode;
     private QuickActions quickActions;
     private String from,froms,mBlogId;
+    private Dialog dialog;
 
-    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,QuickActions quick_actions,String from,String froms) {
+    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,
+                                boolean isCode,QuickActions quick_actions,String from,String froms,Dialog dialog) {
         super(context, false, lists);
         mInflater = LayoutInflater.from(context);
         this.isCode=isCode;
@@ -58,6 +60,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
         this.from=from;
         this.froms=froms;
         this.mBlogId = blogId;
+        this.dialog=dialog;
     }
 
 
@@ -93,6 +96,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
 //                            }
                             quickActions.createCode(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
                                     1==goods.isSuperiorProduct,from,froms);
+                            dialog.dismiss();
                         }
                     });
                 }else {
@@ -101,6 +105,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                         public void onClick(View view) {
                             quickActions.shareDiscoverDialog(mBlogId, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
                                     1 == goods.isSuperiorProduct, from, froms);
+                            dialog.dismiss();
                         }
                     });
                 }
