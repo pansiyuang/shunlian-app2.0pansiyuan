@@ -117,4 +117,11 @@ public class CustomVideoPlayer extends JZVideoPlayerStandard {
     public void startWindowTiny() {
         super.startWindowTiny();
     }
+
+    /**
+     * 设置隐藏更多
+     */
+    public void setMoreGone(){
+       findViewById(cn.jzvd.R.id.iv_more).setVisibility(View.GONE);
+    }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_rootView"
+    android:layout_width="88dp"
+    android:layout_height="88dp"
+    tools:ignore="ResourceName">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/default_error" />
+
+    <View
+        android:id="@+id/mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#88000000"
+        android:visibility="gone" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/checkmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:padding="5dp"
+        android:src="@mipmap/img_shoppingcar_selected_n"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_video_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone"
+        android:drawableLeft="@mipmap/icon_video01_nor"
+        android:drawablePadding="5dp"
+        android:text="00:15"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+
+</FrameLayout>

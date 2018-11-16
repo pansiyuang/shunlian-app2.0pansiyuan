@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
     android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyFrameLayout
+        android:id="@+id/fl_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layout_bottom" />
 
     <include
         android:id="@+id/layout_bottom"
         layout="@layout/layout_main_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
-
-    <com.shunlian.app.widget.MyFrameLayout
-        android:id="@+id/fl_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/layout_bottom" />
+        android:layout_alignParentBottom="true"
+        android:clipChildren="false" />
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_hint"

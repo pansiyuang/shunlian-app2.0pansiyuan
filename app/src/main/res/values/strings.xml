@@ -409,7 +409,8 @@
 
     <string name="all_image">所有图片</string>
     <string name="operate_baocuntupian">保存图片</string>
-    <string name="operate_tupianyibaocun">图片已保存，请在手机相册中查看</string>
+    <!--<string name="operate_tupianyibaocun">图片已保存，请在手机相册中查看</string>-->
+    <string name="operate_tupianyibaocun">保存成功</string>
     <string name="operate_tupianbaocunshibai">图片保存失败</string>
     <string name="preview">预览</string>
     <string name="msg_no_camera">无法启用系统相机</string>
@@ -603,6 +604,10 @@
 
     <!-- 发现 -->
     <string name="discover_faxian">发现</string>
+    <string name="discover_shangping">商品(%s)款</string>
+    <string name="discover_fenxiangdetuijian">分享的推荐商品</string>
+    <string name="discover_shengchengerweimatuwen">生成二维码图文</string>
+    <string name="discover_erweimatuwen">二维码图文</string>
     <string name="discover_dongtaixiangqing">动态详情</string>
     <string name="discover_wolaishuo">我来说两句</string>
     <string name="article">文章</string>
@@ -638,6 +643,8 @@
 
     <!--关注-->
     <string name="discover_notfollow">咦？还没有关注哦</string>
+    <string name="discover_weiixnhaoyou">微信好友</string>
+    <string name="discover_baocuntupian">保存图片</string>
     <string name="discover_gofollow">马上去关注</string>
     <string name="discover_failure_zan">点赞失败</string>
     <string name="discover_cacle_failure_zan">取消点赞失败</string>
@@ -860,4 +867,12 @@
     <string name="more_creadit">话费充值</string>
     <string name="prepaid_phone_records">充值记录</string>
     <string name="prepaid_phone_dingdanzhifu">订单支付成功</string>
+
+    <!--发现发布-->
+    <string name="find_add_addr">请您添加所在地址</string>
+    <string name="find_upload_pics">上传图片</string>
+    <string name="find_add_topic">添加话题</string>
+    <string name="find_my_topic">#我的话题</string>
+    <string name="find_add_location">添加位置</string>
+    <string name="find_associated_goods">关联商品(%d/%d)</string>
 </resources>

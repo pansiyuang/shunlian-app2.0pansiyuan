@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -21,9 +22,15 @@ import butterknife.BindView;
  */
 
 public class TieziAvarAdapter extends BaseRecyclerAdapter<String> {
+    private int picWidth;
 
     public TieziAvarAdapter(Context context, boolean isShowFooter, List<String> lists) {
         super(context, isShowFooter, lists);
+    }
+
+    public TieziAvarAdapter(Context context, List<String> lists, int width) {
+        super(context, false, lists);
+        this.picWidth = width;
     }
 
 
@@ -36,7 +43,11 @@ public class TieziAvarAdapter extends BaseRecyclerAdapter<String> {
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         MivHolder mivHolder = (MivHolder) holder;
-        GlideUtils.getInstance().loadCircleImage(context,mivHolder.miv_avar, lists.get(position));
+        GlideUtils.getInstance().loadCircleAvar(context, mivHolder.miv_avar, lists.get(position));
+        if (picWidth != 0) {
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(picWidth, picWidth);
+            mivHolder.miv_avar.setLayoutParams(layoutParams);
+        }
     }
 
     public class MivHolder extends BaseRecyclerViewHolder {

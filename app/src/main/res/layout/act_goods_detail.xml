@@ -278,6 +278,7 @@
                 android:src="@mipmap/icon_more_souchag_n"
                 android:layout_toLeftOf="@+id/miv_more"
                 app:iv_control_adapter="true"
+                android:visibility="gone"
                 app:iv_margin_right="23" />
 
             <com.shunlian.app.widget.MyImageView

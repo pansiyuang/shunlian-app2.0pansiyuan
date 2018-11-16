@@ -22,7 +22,7 @@ import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
@@ -36,8 +36,6 @@ import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
 import com.tencent.bugly.crashreport.CrashReport;
-
-import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -395,8 +393,8 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
                 }
                 break;
             case R.id.llayout_agreement:
-                H5Act.startAct(baseActivity, InterentTools.H5_HOST
-                        +RegisterAct.REGISTRATION_AGREEMENT,H5Act.MODE_SONIC);
+                H5X5Act.startAct(baseActivity, InterentTools.H5_HOST
+                        +RegisterAct.REGISTRATION_AGREEMENT,H5X5Act.MODE_SONIC);
                 break;
         }
     }
@@ -443,6 +441,8 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         SharedPrefUtil.saveSharedUserString("token", content.token);
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
+        SharedPrefUtil.saveSharedUserString("avatar", content.avatar);
+        SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
         SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
         CrashReport.setUserId(content.member_id);
         EasyWebsocketClient.getInstance(baseActivity).initChat(); //初始化聊天

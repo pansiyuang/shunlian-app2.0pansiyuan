@@ -572,12 +572,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private void handlerTitle(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TitleHolder) {
             final TitleHolder mHolder = (TitleHolder) holder;
-            if (SharedPrefUtil.getSharedUserBoolean("hide_goods",false)){
-                mHolder.miv_hint.setVisibility(View.GONE);
-            }else {
-                GlideUtils.getInstance().loadLocal(context,mHolder.miv_hint,R.drawable.goods_hint);
-                mHolder.miv_hint.setVisibility(View.VISIBLE);
-            }
+//            if (SharedPrefUtil.getSharedUserBoolean("hide_goods",false)){
+//                mHolder.miv_hint.setVisibility(View.GONE);
+//            }else {
+//                GlideUtils.getInstance().loadLocal(context,mHolder.miv_hint,R.drawable.goods_hint);
+//                mHolder.miv_hint.setVisibility(View.VISIBLE);
+//            }
             int pref_length = 0;
             String title = mGoodsEntity.title;
             String is_preferential = mGoodsEntity.is_preferential;
@@ -596,7 +596,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     pref_length = 0;
                 }
             }
-
+              if (TextUtils.isEmpty(mGoodsEntity.is_fav) || "0".equals(mGoodsEntity.is_fav)) {
+                    mHolder.miv_fav.setImageResource(R.mipmap.icon_found_quanzi_xin_n);
+                } else {
+                   mHolder.miv_fav.setImageResource(R.mipmap.icon_found_quanzi_xin_h);
+                }
             if (pref_length != 0) {
                 mHolder.mtv_title.setText(Common.getPlaceholder(pref_length) + title);
             } else {
@@ -1191,6 +1195,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_want)
         MyTextView mtv_want;
 
+        @BindView(R.id.miv_fav)
+        MyImageView miv_fav;
         public TitleHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
@@ -1210,11 +1216,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
         }
 
-        @OnClick({R.id.miv_share, R.id.mtv_share})
+        @OnClick({R.id.miv_fav, R.id.mtv_fav})
         public void share() {
             miv_hint.setVisibility(View.GONE);
-            SharedPrefUtil.saveSharedUserBoolean("hide_goods",true);
-            ((GoodsDetailAct) context).moreAnim();
+//            SharedPrefUtil.saveSharedUserBoolean("hide_goods",true);
+            ((GoodsDetailAct) context).favAddOrRemove();
         }
     }
 

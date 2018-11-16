@@ -17,6 +17,7 @@
     <uses-feature android:name="android.hardware.autofocus" />
     <uses-feature android:name="android.hardware.camera" />
 
+    <uses-permission android:name ="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -263,6 +264,7 @@
             android:resizeableActivity="true"
             android:screenOrientation="portrait"
             android:supportsPictureInPicture="true"
+            android:label="首页"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
@@ -275,26 +277,37 @@
             android:name=".ui.login.LoginAct"
             android:exported="false"
             android:launchMode="singleTask"
+            android:label="登录"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.register.SelectRecommendAct"
             android:exported="false"
+            android:label="选择导购专员"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".widget.NewLookBigImgAct"
+            android:exported="false"
+            android:label="查看图片"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.more_credit.PhoneRecordAct"
             android:exported="false"
+            android:label="@string/phone_chongzhijilu"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.more_credit.PhonePaySuccessAct"
             android:exported="false"
+            android:label="@string/prepaid_phone_dingdanzhifu"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.more_credit.PhoneOrderDetailAct"
             android:exported="false"
+            android:label="@string/order_xiangqing"
             android:screenOrientation="portrait" />
         <!--<activity-->
             <!--android:name=".ui.start.GuideAct"-->
@@ -309,6 +322,7 @@
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:launchMode="singleTop"
+            android:label="微信回调"
             android:screenOrientation="portrait"
             android:theme="@style/wx" >
            <!-- <intent-filter>
@@ -320,60 +334,73 @@
         <activity
             android:name=".ui.store.StoreAct"
             android:exported="false"
+            android:label="店铺主页"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.goods_detail.GoodsDetailAct"
             android:exported="false"
             android:resizeableActivity="true"
             android:screenOrientation="portrait"
+            android:label="商品详情"
             android:supportsPictureInPicture="true" />
         <activity
             android:name=".ui.store.StoreIntroduceAct"
             android:exported="false"
+            android:label="@string/store_dianpujianjie"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.store.StoreSortAct"
             android:exported="false"
+            android:label="@string/store_dianpufenlei"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.goods_detail.ComboDetailAct"
             android:exported="false"
+            android:label="@string/package_details"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.confirm_order.ConfirmOrderAct"
             android:exported="false"
+            android:label="@string/Confirmation_of_order"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.receive_adress.AddressListActivity"
             android:exported="false"
+            android:label="@string/select_order_address"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.receive_adress.AddressManageActivity"
             android:exported="false"
+            android:label="@string/address_manage"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.confirm_order.MegerOrderActivity"
             android:exported="false"
+            android:label="凑单"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.start.ADAct"
             android:exported="false"
+            android:label="引导页"
             android:screenOrientation="portrait"
             android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".ui.receive_adress.AddAdressAct"
             android:exported="false"
+            android:label="@string/address_add"
             android:screenOrientation="portrait" />
         <activity
             android:name="pay.PayListActivity"
             android:exported="false"
+            android:label="@string/select_pay_type"
             android:screenOrientation="portrait"
             android:theme="@style/pay" />
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
+            android:label="H5支付"
             android:screenOrientation="behind" />
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
@@ -383,23 +410,28 @@
         <activity
             android:name=".ui.my_comment.MyCommentAct"
             android:exported="false"
+            android:label="@string/my_comment"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.store.StoreLicenseAct"
             android:exported="false"
+            android:label="@string/store_yingyezhizhao"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my_comment.CreatCommentActivity"
             android:exported="false"
+            android:label="评价晒单"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.my_comment.CommentDetailAct"
             android:exported="false"
+            android:label="@string/comment_detail"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.order.MyOrderAct"
             android:exported="false"
+            android:label="@string/my_order"
             android:screenOrientation="portrait" />
 
 
@@ -407,197 +439,242 @@
             android:name=".ui.confirm_order.SearchOrderActivity"
             android:exported="false"
             android:launchMode="singleTask"
+            android:label="@string/search_all_order"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.my_comment.LookBigImgAct"
             android:exported="false"
+            android:label="查看大图"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my_comment.CommentSuccessAct"
             android:exported="false"
+            android:label="@string/comment_success"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.confirm_order.SearchOrderResultActivity"
             android:exported="false"
+            android:label="@string/search_all_order"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.order.OrderDetailAct"
             android:exported="false"
+            android:label="@string/order_xiangqing"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.plus.PlusOrderDetailAct"
             android:exported="false"
+            android:label="@string/order_xiangqing"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.confirm_order.PaySuccessAct"
             android:exported="false"
+            android:label="支付成功"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.confirm_order.OrderLogisticsActivity"
             android:exported="false"
+            android:label="@string/logistics_detail"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my_comment.SuccessfulTradeAct"
             android:exported="false"
+            android:label="交易成功"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.order.ExchangeDetailAct"
             android:exported="false"
             android:launchMode="singleTask"
+            android:label="@string/order_xiangqing"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.h5.H5Act"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--<activity-->
+            <!--android:name=".ui.h5.H5Act"-->
+            <!--android:exported="false"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:windowSoftInputMode="stateAlwaysHidden" />-->
         <activity
             android:name=".ui.h5.H5X5Act"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="H5页面"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.h5.H5SpecialAct"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="H5页面"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".photopick.PhotoPickerActivity"
             android:exported="false"
+            android:label="选择图片"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.returns_order.SelectServiceActivity"
             android:exported="false"
+            android:label="@string/select_service_type"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.returns_order.ReturnRequestActivity"
             android:exported="false"
+            android:label="@string/return_request"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.category.CategoryLetterAct"
             android:exported="false"
+            android:label="@string/category_pinpai"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.returns_order.ConsultHistoryAct"
             android:exported="false"
+            android:label="@string/consult_history"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.returns_order.RefundAfterSaleAct"
             android:exported="false"
+            android:label="@string/refund_after_sale"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.zxing_code.ZXingDemoAct"
             android:exported="false"
+            android:label="二维码扫码"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.returns_order.SubmitLogisticsInfoAct"
             android:exported="false"
+            android:label="提交物流信息"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.category.CategoryAct"
             android:exported="false"
+            android:label="分类刷选"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.returns_order.SelectLogisticsAct"
             android:exported="false"
+            android:label="@string/selection_of_logistics_companies"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.category.CategoryFiltrateAct"
             android:exported="false"
+            android:label="@string/category_shaixuan"
             android:screenOrientation="portrait"
             android:theme="@style/pay" />
         <activity
             android:name=".ui.category.RankingListAct"
             android:exported="false"
+            android:label="排行榜"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.order.PlatformInterventionRequestActivity"
             android:exported="false"
+            android:label="排行榜"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.goods_detail.SearchGoodsActivity"
             android:exported="false"
+            android:label="@string/platform_intervention_request"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.DayDayAct"
             android:exported="false"
+            android:label="天天特惠"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.collection.MyCollectionAct"
             android:exported="false"
+            android:label="@string/goods_collection"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.collection.SearchResultAct"
             android:exported="false"
+            android:label="搜索商品"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.sign.SignInAct"
             android:exported="false"
+            android:label="@string/personal_qiandao"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.store.StoreSearchAct"
             android:exported="false"
+            android:label="搜索商品"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.qr_code.QrCodeAct"
             android:exported="false"
+            android:label="订单详情"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.help.HelpOneAct"
+            android:label="@string/help_bangzhuzhongxin"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.help.HelpTwoAct"
             android:exported="false"
+            android:label="@string/help_bangzhuzhongxin"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.myself_store.MyLittleStoreActivity"
             android:exported="false"
+            android:label="@string/decorate_my_store"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.myself_store.AddStoreGoodsAct"
             android:exported="false"
+            android:label="@string/add_goods"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.category.BrandListAct"
             android:exported="false"
+            android:label="@string/category_pinpai"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.myself_store.GoodsSearchAct"
             android:exported="false"
+            android:label="商品搜索"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.myself_store.QrcodeStoreAct"
             android:exported="false"
+            android:label="小店信息"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.discover.other.SearchArticleActivity"
             android:exported="false"
+            android:label="@string/search_article"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.discover.jingxuan.ArticleH5Act"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="文章H5"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.discover.jingxuan.TagDetailActivity"
             android:exported="false"
+            android:label="标签详情"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.discover.other.ExperiencePublishActivity"
             android:exported="false"
+            android:label="@string/publish_experience"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.discover.other.CommentListAct"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="@string/comments"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name=".ui.discover.other.CommentDetailAct"
             android:exported="false"
+            android:label="@string/comments"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
@@ -605,97 +682,117 @@
             android:name=".ui.discover.guanzhu.FindSelectShopAct"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="查找关注的商铺"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name=".ui.discover.quanzi.DiscoverTieziAct"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="发现帖子"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name=".ui.discover.quanzi.DiscoverTieziDetailAct"
             android:exported="false"
+            android:label="动态详情"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.discover.quanzi.DiscoverPublishPhotoAct"
             android:exported="false"
+            android:label="@string/discover_fabiaodongtai"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.help.SearchQuestionAct"
             android:exported="false"
+            android:label="问题搜索"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.help.HelpClassAct"
             android:exported="false"
+            android:label="帮助分类"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".newchat.ui.ChatActivity"
             android:exported="false"
+            android:label="聊天"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".newchat.ui.MessageActivity"
             android:exported="false"
+            android:label="消息列表"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".newchat.ui.StoreMsgActivity"
             android:exported="false"
+            android:label="会员和订单消息"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".newchat.ui.FoundMsgActivity"
             android:exported="false"
+            android:label="头条和小店消息"
             android:screenOrientation="portrait" />
         <activity
             android:name=".newchat.ui.SearchCustomerActivity"
             android:exported="false"
+            android:label="@string/search_customer"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.discover.other.ExperienceDetailAct"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="心得详情"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name=".ui.message.SystemMsgAct"
             android:exported="false"
+            android:label="系统通知"
             android:screenOrientation="portrait" />
         <activity
             android:name=".newchat.ui.SelectGoodsActivity"
             android:exported="false"
+            android:label="@string/select_goods"
             android:screenOrientation="portrait" />
         <activity
             android:name=".newchat.ui.CustomerListActivity"
             android:exported="false"
             android:launchMode="singleTask"
+            android:label="@string/customer_list"
             android:screenOrientation="portrait" />
         <activity
             android:name=".newchat.ui.SwitchOtherActivity"
             android:exported="false"
+            android:label="@string/choose_customer_list"
             android:screenOrientation="portrait" />
         <activity
             android:name=".newchat.ui.SelectStoreGoodsActivity"
             android:exported="false"
+            android:label="@string/store_search"
             android:screenOrientation="portrait" />
         />
         <activity
             android:name=".ui.sale_data.SaleDataAct"
             android:exported="false"
+            android:label="@string/sale_data"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.sale_data.SaleDetailAct"
             android:exported="false"
+            android:label="销售明细"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my_profit.MyProfitAct"
             android:exported="false"
+            android:label="@string/my_profit"
             android:screenOrientation="portrait" />
         <!--<activity-->
             <!--android:name=".ui.my_profit.ProfitExtractAct"-->
@@ -704,162 +801,202 @@
         <activity
             android:name=".ui.my_profit.DetailOrderRecordAct"
             android:exported="false"
+            android:label="详细订单记录"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalanceMainAct"
             android:exported="false"
+            android:label="@string/balance_yue"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalanceDetailAct"
             android:exported="false"
+            android:label="@string/balance_yuemingxi"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.AmountDetailAct"
             android:exported="false"
+            android:label="@string/balance_shouzhiminxi"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalanceXQAct"
             android:exported="false"
+            android:label="@string/balance_yuexiangqing"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalanceTXAct"
             android:exported="false"
+            android:label="@string/balance_yuetixian"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalanceResultAct"
             android:exported="false"
+            android:label="@string/balance_tixianjieguo"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalancePaySetAct"
             android:exported="false"
+            android:label="@string/balance_zhifushezhi"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalancePaySetOneAct"
             android:exported="false"
+            android:label="@string/balance_zhifushezhi"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalancePaySetTwoAct"
             android:exported="false"
+            android:label="@string/balance_yanzhengshouji"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalanceVerifyPhoneAct"
             android:exported="false"
+            android:label="@string/balance_yanzhengshouji"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.AlipayMyAct"
             android:exported="false"
+            android:label="@string/balance_wodezhifu"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.AlipayAddAct"
             android:exported="false"
+            android:label="@string/balance_tianjiazhifu"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.AlipayDetailAct"
             android:exported="false"
+            android:label="@string/balance_zhifubaoxiang"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.coupon.CouponListAct"
             android:exported="false"
+            android:label="优惠券"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my_profit.SexSelectAct"
             android:exported="false"
+            android:label="选择性别"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my_profit.SelectLabelAct"
             android:exported="false"
+            android:label="感兴趣的标签"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.SettingAct"
             android:exported="false"
+            android:label="设置"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.PersonalDataAct"
             android:exported="false"
+            android:label="个人资料"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.NickNameAct"
             android:exported="false"
+            android:label="昵称"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.AutographAct"
             android:exported="false"
+            android:label="个性签名"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.UserSecurityAct"
             android:exported="false"
+            android:label="账号切换"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.SelectLikeAct"
             android:exported="false"
+            android:label="选择我喜欢的"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.feed_back.BeforeFeedBackAct"
             android:exported="false"
+            android:label="我要反馈"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.feed_back.NewFeedBackAct"
             android:exported="false"
+            android:label="我要反馈"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.BusinessCardAct"
             android:exported="false"
+            android:label="把APP推荐给好友"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.core.AishangAct"
             android:exported="false"
+            android:label="@string/first_aishangxin"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.core.KouBeiAct"
             android:exported="false"
+            android:label="@string/first_koubeire"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.core.PingpaiAct"
             android:exported="false"
+            android:label="@string/first_pingpaite"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.core.HotRecommendAct"
             android:exported="false"
+            android:label="热门商品"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.core.GetCouponAct"
             android:exported="false"
+            android:label="领券"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.task.EggDetailAct"
             android:exported="false"
+            android:label="@string/mission_jindanmingxi"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.core.SearchCouponAct"
             android:exported="false"
+            android:label="搜索优惠券"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.core.PingpaiListAct"
             android:exported="false"
+            android:label="品牌列表"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.sale_rank.SaleRankAct"
             android:exported="false"
+            android:label="@string/personal_youpingbenyue"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.help.HelpSolutionAct"
             android:exported="false"
+            android:label="@string/help_jiejuefangan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.help.ClassDetailAct"
             android:exported="false"
+            android:label="分类详情"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.plus.GifBagListAct"
             android:exported="false"
+            android:label="@string/gif_bag_list"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.message.PunishAct"
             android:exported="false"
+            android:label="@string/punish"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.confirm_order.PLUSConfirmOrderAct"
             android:exported="false"
+            android:label=" 确认订单"
             android:screenOrientation="portrait" />
         <!--<activity-->
             <!--android:name=".ui.plus.MyPlusAct"-->
@@ -868,18 +1005,22 @@
         <activity
             android:name=".ui.plus.SuperProductsAct"
             android:exported="false"
+            android:label="@string/super_product"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.plus.PlusGifDetailAct"
             android:exported="false"
+            android:label="@string/plus_product_detail"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.plus.PlusOrderAct"
             android:exported="false"
+            android:label="@string/plus_order"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.plus.PlusLogisticsDetailAct"
             android:exported="false"
+            android:label="@string/logistics_info"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.fragment.SortAct"
             android:exported="false"
@@ -888,15 +1029,18 @@
             android:name=".ui.register.RegisterAct"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="注册"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.setting.change_user.ModifyAct"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="账号修改"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".newchat.ui.CouponMsgAct"
             android:exported="false"
+            android:label="@string/chat_lingquyouhui"
             android:screenOrientation="portrait" />
         <activity
             android:name=".newchat.util.ChatDialog"
@@ -905,39 +1049,129 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.more_credit.MoreCreditAct"
             android:exported="false"
+            android:label="@string/prepaid_phone_records"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.new_login_register.LoginEntryAct"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:label="登录"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.new_login_register.RegisterAndBindingAct"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:label="注册"
             android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".ui.coupon.UserCouponListAct"
             android:exported="false"
+            android:label="使用优惠券"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.coupon.CouponGoodsAct"
             android:exported="false"
+            android:label="优惠商品"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.discover.VideoPlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="优惠商品"
             android:exported="false" />
-
         <activity
             android:name=".ui.LuckWheelPanActivity"
+            android:label="大转盘规则"
             android:exported="false" />
         <activity android:name=".ui.task.TaskCenterAct"
             android:exported="false"
+            android:label="任务中心"
             android:screenOrientation="portrait"/>
         <activity android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
             android:theme="@style/wx"
+            android:label="微信支付回调"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.FindSendPictureTextAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.SelectPicVideoAct"
+            android:exported="false"
+            android:label="选择视频和图片"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.NearAddressAct"
+            android:exported="false"
+            android:label="搜索附近位置"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.AddTopicAct"
+            android:exported="false"
+            android:label="添加查找话题"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.SelectGoodsAct"
+            android:exported="false"
+            android:label="查找商品"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.find_send.BrowseImageVideoAct"
+            android:exported="false"
+            android:label="图片"
+            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.HotExpertRankActivity"
+            android:exported="true"
+            android:label="精选达人每周达人榜"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.MyPageActivity"
+            android:exported="true"
+            android:label="精选达人每周达人榜"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.FansListActivity"
+            android:exported="true"
+            android:label="我的-收藏"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.AttentionMemberActivity"
+            android:exported="true"
+            android:label="我的关注"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.ActivityDetailActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.DiscoverMsgActivity"
+            android:exported="true"
+            android:label="点赞/分享- 关注-下载-通知"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.search.DiscoverSearchActivity"
+            android:exported="true"
+            android:label="搜索发现 文章 活动 达人"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.search.DiscoverSearchResultActivity"
+            android:exported="true"
+            android:label="文章 活动 达人"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.VideoGoodPlayActivity"
+            android:exported="true"
+            android:label="商品视频"
+            android:screenOrientation="portrait" />
+        <activity android:name=".utils.player.SmallMediaPlayer"
+            android:exported="true"
+            android:label="视频"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.new_user.NewUserPageActivity"
+            android:exported="true"
+            android:label="新人专享"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.new_user.ConfirmNewUserOrderAct"
+            android:exported="true"
+            android:label="新人确认订单"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -50,7 +50,7 @@ public class SelectAccountDialog extends Dialog  {
         }else if (netState.contains("api-front.v2")){//预发布
             commonEntities.add(addAccount("15805729571","123456","15805729571-augus"));
             commonEntities.add(addAccount("15068713363","123456","15068713363-吴小坚"));
-            commonEntities.add(addAccount("13007562706","123456","13007562706-张贺"));
+            commonEntities.add(addAccount("13007562706","a12345678","13007562706-张贺"));
             commonEntities.add(addAccount("13007562766","123456","张贺的下级"));
             commonEntities.add(addAccount("15058113375","a1234567890","15058113375"));
             commonEntities.add(addAccount("17601357886","aini1314","17601357886-刘利明"));

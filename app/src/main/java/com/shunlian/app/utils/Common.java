@@ -77,7 +77,6 @@ import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.fragment.SortAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpOneAct;
@@ -99,6 +98,9 @@ import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.popmenu.PopMenu;
+import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
 
@@ -184,6 +186,8 @@ public class Common {
                 return "H5SpecialAct";
             case "slyoupin":
                 return "SuperProductsAct";
+            case "slmall":
+                return "TaskCenterAct";
             case "benefit":
                 return "DayDayAct";
             case "sale":
@@ -235,6 +239,7 @@ public class Common {
         }
     }
 
+
     public static void goGoGo(Context context, String type, String... params) {
         //params从第7个参数开始是聊天的参数
         String token = SharedPrefUtil.getSharedUserString("token", "");
@@ -247,7 +252,7 @@ public class Common {
                 ((Activity) context).finish();
                 break;
             case "noTitleUrl":
-                H5Act.startAct(context, params[0], H5Act.MODE_SONIC,"noTitle");
+                H5X5Act.startAct(context, params[0], H5X5Act.MODE_SONIC,"noTitle");
                 break;
             case "taskSystems":
                 TaskCenterAct.startAct(context);
@@ -443,7 +448,7 @@ public class Common {
             case "special":
                 String url = InterentTools.H5_HOST + "special/" + params[0];
 //                String url = InterentTools.H5_HOST + "special/127";
-                H5SpecialAct.startAct(context, url, H5Act.MODE_SONIC);
+                H5SpecialAct.startAct(context, url, H5X5Act.MODE_SONIC);
                 break;
             case "url":
 //                LogUtil.augusLogW("uiui-"+params[0]);
@@ -452,6 +457,9 @@ public class Common {
                 break;
             case "slyoupin"://顺联优品
                 SuperProductsAct.startAct(context);
+                break;
+            case "slmall"://任务中心
+                TaskCenterAct.startAct(context);
                 break;
             case "plus":
                 MainActivity.startAct(context, "myplus");

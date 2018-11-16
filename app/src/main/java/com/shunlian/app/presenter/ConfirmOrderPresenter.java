@@ -109,6 +109,29 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
         });
     }
 
+    /**
+     * 购物车进入购买
+     * @param address_id
+     */
+    public void orderNewUserConfirm(String address_id){
+        Map<String,String> map = new HashMap<>();
+//        map.put("cart_ids",cart_ids);
+        if (!TextUtils.isEmpty(address_id)) {
+            map.put("address_id", address_id);
+        }
+        sortAndMD5(map);
+
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<ConfirmOrderEntity>> baseEntityCall = getAddCookieApiService().orderNewUserConfirm(requestBody);
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
+                super.onSuccess(entity);
+                setDate(entity);
+            }
+        });
+    }
+
     private void setDate(BaseEntity<ConfirmOrderEntity> entity) {
         ConfirmOrderEntity data = entity.data;
 

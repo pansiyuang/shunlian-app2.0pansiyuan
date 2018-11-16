@@ -19,6 +19,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICollectionSearchResultView;
@@ -167,6 +168,8 @@ public class SearchResultAct extends BaseActivity implements ICollectionSearchRe
      */
     @Override
     public void collectionGoodsList(int page, int allPage, List<CollectionGoodsEntity.Goods> collectionGoodsLists) {
+        JosnSensorsDataAPI.search(keyword,collectionGoodsLists!=null&&collectionGoodsLists.size()>0,
+                JosnSensorsDataAPI.isHistory,JosnSensorsDataAPI.isRecommend);
         if (page == 1){
             recycler_search.scrollToPosition(0);
             goodsLists.clear();

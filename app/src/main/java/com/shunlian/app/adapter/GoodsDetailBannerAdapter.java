@@ -16,6 +16,7 @@ import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.NewLookBigImgAct;
 import com.shunlian.app.widget.SmallVideoPlayer;
 import com.shunlian.app.widget.VideoBannerWrapper;
 
@@ -136,6 +137,7 @@ public class GoodsDetailBannerAdapter extends PagerAdapter {
                 BigImgEntity entity = new BigImgEntity();
                 entity.itemList = mPics;
                 entity.index = position;
+//                NewLookBigImgAct.startAct(mContext,entity);
                 LookBigImgAct.startAct(mContext, entity);
             });
         }
