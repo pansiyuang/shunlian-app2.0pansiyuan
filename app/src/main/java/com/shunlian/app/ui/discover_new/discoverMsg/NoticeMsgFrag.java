@@ -12,6 +12,7 @@ import com.shunlian.app.adapter.NoticeMsgAdapter;
 import com.shunlian.app.bean.NoticeMsgEntity;
 import com.shunlian.app.presenter.NoticeMsgPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.discover_new.DiscoverMsgActivity;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.INoticeMsgView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -126,6 +127,7 @@ public class NoticeMsgFrag extends BaseLazyFragment implements INoticeMsgView {
     @Override
     public void getNoticeMsgList(List<NoticeMsgEntity.Notice> noticeList, int page, int totalPage) {
         if (page == 1) {
+            ((DiscoverMsgActivity) getActivity()).showNoticePage();
             notices.clear();
         }
         if (!isEmpty(noticeList)) {

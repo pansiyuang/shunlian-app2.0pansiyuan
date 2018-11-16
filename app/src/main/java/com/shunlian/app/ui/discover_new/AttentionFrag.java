@@ -9,11 +9,14 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AttentionAdapter;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.adapter.TieziAvarAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.AttentionPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.HorizonItemDecoration;
@@ -22,6 +25,10 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IAttentionView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +85,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
+        EventBus.getDefault().register(this);
         NestedSlHeader header = new NestedSlHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
         recycler_list.setNestedScrollingEnabled(false);
@@ -132,6 +140,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                     recycler_icons.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(getActivity(), -9)));
                     recycler_icons.setLayoutManager(linearLayoutManager);
                     recycler_icons.setAdapter(tieziAvarAdapter);
+                    tieziAvarAdapter.setOnItemClickListener((view, position) -> HotExpertRankActivity.startActivity(getActivity()));
                 }
                 recycler_icons.setVisibility(View.VISIBLE);
             } else {
@@ -147,7 +156,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
 
         if (blogList.size() == 0 && currentPage == 1) { //没有关注的用户并且当前是第一次获取数据
             if (attentionAdapter == null) {
-                attentionAdapter = new AttentionAdapter(getActivity(), recomandFocusList);
+                attentionAdapter = new AttentionAdapter(getActivity(), recomandFocusList, hotBlogsEntity.is_have_focus);
                 attentionAdapter.setOnFocusListener(this);
             }
             recycler_list.setAdapter(attentionAdapter);
@@ -156,6 +165,8 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList,shareGoodDialogUtil);
                 hotBlogAdapter.setAdapterCallBack(this);
                 hotBlogAdapter.setShowAttention(false);
+            }
+            if (currentPage == 1) {
                 recycler_list.setAdapter(hotBlogAdapter);
             }
             hotBlogAdapter.setPageLoading(currentPage, totalPage);
@@ -176,7 +187,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         }
                     }
                 }
-                hotBlogAdapter.notifyDataSetChanged();
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
                 break;
             case 1:
             case 2:
@@ -187,14 +198,13 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         } else {
                             recomandFocus.focus_status = 0;
                         }
+                        if (hotBlogAdapter != null) {
+                            hotBlogAdapter.MemberAdapterNotifyDataSetChanged();
+                        }
+                        if (attentionAdapter != null) {
+                            attentionAdapter.notifyDataSetChanged();
+                        }
                     }
-                    if (hotBlogAdapter != null) {
-                        hotBlogAdapter.MemberAdapterNotifyDataSetChanged();
-                    }
-                    if (attentionAdapter == null) {
-                        return;
-                    }
-                    attentionAdapter.notifyDataSetChanged();
                 }
                 break;
         }
@@ -208,7 +218,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 blog.praise_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
     @Override
@@ -218,7 +228,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 blog.down_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
 
@@ -275,18 +285,67 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     public void shareGoodsSuccess(String blogId, String goodsId) {
         for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
-                for (GoodsDeatilEntity.Goods goods : blog.related_goods) {
-                    if (goodsId.equals(goods.goods_id)) {
-                        goods.share_num++;
-                    }
-                }
+                blog.total_share_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
     @Override
     public void shareSuccess(String blogId, String goodsId) {
         mPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(RefreshBlogEvent event) {
+        switch (event.mType) {
+            case RefreshBlogEvent.ATTENITON_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.memberId.equals(blog.member_id)) {
+                        blog.is_focus = event.mData.is_focus;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.PRAISE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.is_praise = event.mData.is_praise;
+                        blog.praise_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.SHARE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.total_share_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.DOWNLOAD_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.down_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(DefMessageEvent event) {
+        if (mPresenter != null && event.loginSuccess) {
+            mPresenter.initPage();
+            mPresenter.getFocusblogs(true);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

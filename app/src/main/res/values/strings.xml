@@ -409,7 +409,8 @@
 
     <string name="all_image">所有图片</string>
     <string name="operate_baocuntupian">保存图片</string>
-    <string name="operate_tupianyibaocun">图片已保存，请在手机相册中查看</string>
+    <!--<string name="operate_tupianyibaocun">图片已保存，请在手机相册中查看</string>-->
+    <string name="operate_tupianyibaocun">保存成功</string>
     <string name="operate_tupianbaocunshibai">图片保存失败</string>
     <string name="preview">预览</string>
     <string name="msg_no_camera">无法启用系统相机</string>
@@ -873,5 +874,5 @@
     <string name="find_add_topic">添加话题</string>
     <string name="find_my_topic">#我的话题</string>
     <string name="find_add_location">添加位置</string>
-    <string name="find_associated_goods">关联商品</string>
+    <string name="find_associated_goods">关联商品(%d/%d)</string>
 </resources>

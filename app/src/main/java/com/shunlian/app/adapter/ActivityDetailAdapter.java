@@ -40,6 +40,7 @@ import com.shunlian.app.ui.discover_new.VideoGoodPlayActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorizonItemDecoration;
@@ -201,12 +202,16 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                         shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,true);
                     }
                 });
+                blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
+                blogViewHolder.tv_share_count.setOnClickListener(view -> quickActions.shareDiscoverDialog(blog.id, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+                        1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", "")));
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
             } else {
                 blogViewHolder.rlayout_goods.setVisibility(View.GONE);
             }
 
             if (blog.type == 1) { //图文
+                setTextDrawable(blogViewHolder.tv_download, R.mipmap.icon_imagedown_nor);
                 int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
                 SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth);
                 BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, singlePicAdapter, blog.pics, (Activity) context
@@ -221,15 +226,22 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 });
                 blogViewHolder.rl_video.setVisibility(View.GONE);
             } else {
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) blogViewHolder.miv_video.getLayoutParams();
+                setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_xaizai);
                 if (!isEmpty(blog.video_thumb)) {
                     int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 190, 190);
 
                     if (params == null || params.length == 0) {
-                        GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, 95), TransformUtil.dip2px(context, 95));
+                        layoutParams.width = layoutParams.height = TransformUtil.dip2px(context, 95);
                     } else {
-                        GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, params[0]), TransformUtil.dip2px(context, params[1]));
+                        layoutParams.width = TransformUtil.dip2px(context, params[0]);
+                        layoutParams.height = TransformUtil.dip2px(context, params[1]);
                     }
+                } else {
+                    layoutParams.width = layoutParams.height = TransformUtil.dip2px(context, 95);
                 }
+                GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_video, blog.video_thumb);
+                blogViewHolder.miv_video.setLayoutParams(layoutParams);
                 blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.recycler_list.setVisibility(View.GONE);
                 blogViewHolder.miv_big_icon.setVisibility(View.GONE);
@@ -257,14 +269,17 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
             if (blog.is_praise == 1) {
                 blogViewHolder.tv_zan.setClickable(false);
-                setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
+                setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
+                blogViewHolder.tv_zan.setTextColor(getColor(R.color.pink_color));
             } else {
                 blogViewHolder.tv_zan.setClickable(true);
-                setPraiseImg(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
+                setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
+                blogViewHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
             }
 
             if (blog.is_self == 0) {
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
+                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
             } else {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
                 blogViewHolder.miv_more.setVisibility(View.GONE);
@@ -331,15 +346,6 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View viewDialog = inflater.inflate(R.layout.dialog_found_goods, null);
-        Activity activity = (Activity) context;
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-//        int height = display.getHeight();
-        //设置dialog的宽高为屏幕的宽高
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog_new.setContentView(viewDialog, layoutParams);
 
         MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
         MyImageView miv_icon = dialog_new.findViewById(R.id.miv_icon);
@@ -351,21 +357,21 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(context));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.id, blog.related_goods, false,
-                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
+        miv_icon.setOnClickListener(view -> MyPageActivity.startAct(context, blog.member_id));
+        ntv_desc.setOnClickListener(view -> MyPageActivity.startAct(context, blog.member_id));
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.id, blog.related_goods, false, quickActions,
+                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""),dialog_new);
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id));
         rv_goods.addItemDecoration(new MVerticalItemDecoration(context, 36, 38, 38));
         dialog_new.setCancelable(false);
         dialog_new.show();
-
     }
 
 
-    public void setPraiseImg(TextView textView, @DrawableRes int drawableRes) {
+    public void setTextDrawable(TextView textView, @DrawableRes int drawableRes) {
         Drawable drawable = context.getResources().getDrawable(drawableRes);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());// 设置边界
-        // param 左上右下
         textView.setCompoundDrawables(drawable, null, null, null);
     }
 
@@ -403,6 +409,14 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             } else {
                 detailTopViewHolder.recycler_list.setVisibility(View.GONE);
             }
+
+            int screenWidth = DeviceInfoUtil.getDeviceWidth(context);
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) detailTopViewHolder.miv_icon.getLayoutParams();
+            layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+            double imgHeight = screenWidth / 710d * 400;
+            layoutParams.height = (int) Math.round(imgHeight);
+            detailTopViewHolder.miv_icon.setLayoutParams(layoutParams);
+            detailTopViewHolder.ll_top.setLayoutParams(layoutParams);
         }
     }
 
@@ -435,6 +449,9 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
         @BindView(R.id.rl_rootView)
         RelativeLayout rl_rootView;
+
+        @BindView(R.id.ll_top)
+        LinearLayout ll_top;
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
@@ -617,7 +634,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         });
         boolean checkState = downloadUtils.checkDownLoadFileExists(url);
         if (checkState) {
-            Common.staticToast("已下载过该视频,请勿重复下载!");
+            Common.staticToast("该视频已下截过!");
             return;
         }
         downLoadDialogProgress.showDownLoadDialogProgress(context, new DownLoadDialogProgress.downStateListen() {

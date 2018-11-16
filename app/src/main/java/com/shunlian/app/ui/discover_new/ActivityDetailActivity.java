@@ -16,6 +16,7 @@ import com.shunlian.app.adapter.ActivityDetailAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
@@ -23,11 +24,16 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
-import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.mylibrary.ImmersionBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +48,9 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -76,9 +85,13 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     protected void initData() {
+        NestedSlHeader header = new NestedSlHeader(this);
+        lay_refresh.setRefreshHeaderView(header);
+
         defToolbar();
         shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         shareGoodDialogUtil.setOnShareBlogCallBack(this);
+        EventBus.getDefault().register(this);
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
         offset = toolbarParams.height;
 
@@ -140,6 +153,10 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+        lay_refresh.setOnRefreshListener(() -> {
+            mPresent.initPage();
+            mPresent.getActivityDetail(true, currentId);
         });
     }
 
@@ -276,14 +293,17 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     public void shareGoodsSuccess(String blogId, String goodsId) {
         for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
-                for (GoodsDeatilEntity.Goods goods : blog.related_goods) {
-                    if (goodsId.equals(goods.goods_id)) {
-                        goods.share_num++;
-                    }
-                }
+                blog.total_share_num++;
             }
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -291,8 +311,48 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         mPresent.goodsShare("blog_goods", blogId, goodsId);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(RefreshBlogEvent event) {
+        switch (event.mType) {
+            case RefreshBlogEvent.ATTENITON_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.memberId.equals(blog.member_id)) {
+                        blog.is_focus = event.mData.is_focus;
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+            case RefreshBlogEvent.PRAISE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.is_praise = event.mData.is_praise;
+                        blog.praise_num++;
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+            case RefreshBlogEvent.SHARE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.total_share_num++;
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+            case RefreshBlogEvent.DOWNLOAD_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.down_num++;
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+        }
+    }
+
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

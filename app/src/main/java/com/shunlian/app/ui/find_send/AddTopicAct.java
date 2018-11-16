@@ -40,8 +40,9 @@ public class AddTopicAct extends BaseActivity implements IView{
     private AddTopicPresenter presenter;
     private LinearLayoutManager manager;
 
-    public static void startAct(Activity activity, int code) {
-        activity.startActivityForResult(new Intent(activity, AddTopicAct.class), code);
+    public static void startAct(Activity activity, String topic_id, int code) {
+        activity.startActivityForResult(new Intent(activity, AddTopicAct.class)
+                .putExtra("id",topic_id), code);
     }
 
     /**
@@ -91,7 +92,9 @@ public class AddTopicAct extends BaseActivity implements IView{
         setStatusBarFontDark();
         manager = new LinearLayoutManager(this);
         recyView.setLayoutManager(manager);
-        presenter = new AddTopicPresenter(this,this);
+        String id = getIntent().getStringExtra("id");
+        if (!isEmpty(id)) hideNotSelect();
+        presenter = new AddTopicPresenter(this,this,id);
     }
 
 
@@ -113,6 +116,10 @@ public class AddTopicAct extends BaseActivity implements IView{
             presenter.detachView();
             presenter = null;
         }
+    }
+
+    public void hideNotSelect(){
+        gone(mivNot);
     }
 
     /**

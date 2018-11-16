@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
@@ -21,6 +22,10 @@ import com.shunlian.app.view.ICommonBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,9 +88,10 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-
+        EventBus.getDefault().register(this);
         NestedSlHeader header = new NestedSlHeader(getActivity());
         lay_refresh.setRefreshHeaderView(header);
+        lay_refresh.setRefreshEnabled(false);
 
         currentMemberId = getArguments().getString("member_id");
         currentFrom = getArguments().getString("from");
@@ -138,6 +144,11 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
         super.initListener();
     }
 
+    public void initPage() {
+        mPresenter.initPage();
+        mPresenter.getBlogList(true, currentMemberId, currentType);
+    }
+
     @Override
     public void getFocusblogs(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage) {
         if (currentPage == 1) {
@@ -150,7 +161,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 recycler_list.setVisibility(View.VISIBLE);
                 nestedScrollView.setVisibility(View.GONE);
             }
-            ((MyPageActivity) getActivity()).initInfo(hotBlogsEntity.member_info, hotBlogsEntity.discovery_info);
+            ((MyPageActivity) getActivity()).initInfo(hotBlogsEntity.member_info, hotBlogsEntity.discovery_info, hotBlogsEntity.unread);
         }
         if (!isEmpty(hotBlogsEntity.list)) {
             blogList.addAll(hotBlogsEntity.list);
@@ -189,7 +200,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blog.is_focus = focus;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
     @Override
@@ -200,7 +211,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blog.praise_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
     @Override
@@ -210,7 +221,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blog.down_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
     }
 
     @Override
@@ -277,12 +288,13 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blogList.remove(i);
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
         if (isEmpty(blogList)) {
             recycler_list.setVisibility(View.GONE);
             nestedScrollView.setVisibility(View.VISIBLE);
         }
     }
+
     @Override
     public void shareSuccess(String blogId, String goodsId) {
         mPresenter.goodsShare("blog_goods", blogId, goodsId);
@@ -292,13 +304,54 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     public void shareGoodsSuccess(String blogId, String goodsId) {
         for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
-                for (GoodsDeatilEntity.Goods goods : blog.related_goods) {
-                    if (goodsId.equals(goods.goods_id)) {
-                        goods.share_num++;
-                    }
-                }
+                blog.total_share_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(RefreshBlogEvent event) {
+        switch (event.mType) {
+            case RefreshBlogEvent.ATTENITON_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.memberId.equals(blog.member_id)) {
+                        blog.is_focus = event.mData.is_focus;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.PRAISE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.is_praise = event.mData.is_praise;
+                        blog.praise_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.SHARE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.total_share_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+            case RefreshBlogEvent.DOWNLOAD_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.down_num++;
+                    }
+                }
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -35,7 +35,7 @@ import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.photoview.HackyViewPager;
+import com.shunlian.mylibrary.ImmersionBar;
 import com.zh.smallmediarecordlib.RecordedActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,9 +75,6 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
 
     @BindView(R.id.rlayout_root)
     RelativeLayout rlayout_root;
-
-    @BindView(R.id.view_pager)
-    HackyViewPager view_pager;
 
     private int value_484848;
     private int pink_color;
@@ -443,21 +440,24 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
     private void createPopupFolderList() {
 
         mFolderPopupWindow = new ListPopupWindow(this);
-        mFolderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mFolderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         mFolderPopupWindow.setAdapter(mFolderAdapter);
         mFolderPopupWindow.setContentWidth(ListPopupWindow.MATCH_PARENT);
         mFolderPopupWindow.setWidth(ListPopupWindow.MATCH_PARENT);
 
         // 计算ListPopupWindow内容的高度(忽略mPopupAnchorView.height)，R.layout.item_foloer
-        int folderItemViewHeight = TransformUtil.dip2px(this, 92);
-        int folderViewHeight = mFolderAdapter.getCount() * folderItemViewHeight;
+        //int folderItemViewHeight = TransformUtil.dip2px(this, 92);
+        //int folderViewHeight = mFolderAdapter.getCount() * folderItemViewHeight;
 
+        int titleHeight = TransformUtil.dip2px(this, 44);
         int screenHeigh = getResources().getDisplayMetrics().heightPixels;
-        if (folderViewHeight >= screenHeigh) {
-            mFolderPopupWindow.setHeight(Math.round(screenHeigh * 0.6f));
+        mFolderPopupWindow.setHeight(Math.round(screenHeigh - titleHeight - ImmersionBar.getStatusBarHeight(this)));
+        /*if (folderViewHeight >= screenHeigh) {
         } else {
             mFolderPopupWindow.setHeight(ListPopupWindow.WRAP_CONTENT);
-        }
+        }*/
+
+        //mFolderPopupWindow.setHeight(ListPopupWindow.WRAP_CONTENT);
 
         mFolderPopupWindow.setAnchorView(rlayout_root);
         mFolderPopupWindow.setModal(true);
@@ -545,6 +545,12 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                 mImageVideoAdapter = new LoaderLocalImgVideoAdapter(this, mImageVideos);
                 recy_view.setAdapter(mImageVideoAdapter);
                 mImageVideoAdapter.setOnItemClickListener((view, position) -> {
+                    ImageVideo imageVideo = mImageVideos.get(position);
+                    if ((maxCount != 9 && isMP4Path(imageVideo.path)) ||
+                            (maxCount == 9 && isMP4Path(imageVideo.path) && !isEmpty(mSelectResultList))){
+                        Common.staticToast("图片和视频不能同时选择");
+                        return;
+                    }
                     EventBus.getDefault().postSticky(mImageVideos);
                     BrowseImageVideoAct.BuildConfig config = new BrowseImageVideoAct.BuildConfig();
                     config.max_count = maxCount;

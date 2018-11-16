@@ -103,7 +103,7 @@ public class AttentionPresenter extends BasePresenter<IAttentionView> {
         sortAndMD5(map);
 
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().focusUser(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -130,7 +130,7 @@ public class AttentionPresenter extends BasePresenter<IAttentionView> {
         sortAndMD5(map);
 
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().praiseBlog(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -189,7 +189,6 @@ public class AttentionPresenter extends BasePresenter<IAttentionView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                Common.staticToast("感谢您的分享");
                 iView.shareGoodsSuccess(blogId, id);
             }
 

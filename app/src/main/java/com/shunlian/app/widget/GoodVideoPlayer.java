@@ -221,12 +221,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
                         image_user_head.setImageResource(R.mipmap.img_set_defaulthead);
                     }
                 });
-             if(blog.is_self==1){
-//                 tv_user_attent.setVisibility(GONE);
                  setAttentStateView();
-             }else {
-                 setAttentStateView();
-             }
            if(blog.related_goods!=null&&blog.related_goods.size()>0) {
                GlideUtils.getInstance().loadCornerImage(getContext(), img_goods_icon, blog.related_goods.get(0).thumb, 4);
                if(blog.related_goods.get(0).title!=null)
@@ -248,8 +243,10 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     public void setParseStateView(){
         if(blog.is_praise==1) {//已点赞
             image_dianzai_state.setImageResource(R.mipmap.icon_dianzan_sel);
+            tv_dianzan.setTextColor(getResources().getColor(R.color.pink_color));
         }else{
             image_dianzai_state.setImageResource(R.mipmap.icon_dianzan_good);
+            tv_dianzan.setTextColor(getResources().getColor(R.color.white));
         }
         tv_dianzan.setText(blog.praise_num+"");
     }
@@ -265,6 +262,10 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             tv_user_attent.setText(blog.is_focus == 0 ? "关注" : "已关注");
             tv_user_attent.setVisibility(VISIBLE);
         }
+        if(blog.is_self==1){
+            tv_user_attent.setVisibility(GONE);
+        }
+
         tv_user_attent.setTextColor(blog.is_focus==0?getResources().getColor(R.color.deep_red):getResources().getColor(R.color.value_878B8A));
         tv_user_attent.setBackgroundResource(blog.is_focus==0?R.drawable.rounded_rectangle_stroke_22px:R.color.transparent);
     }

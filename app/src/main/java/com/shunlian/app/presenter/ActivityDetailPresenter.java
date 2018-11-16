@@ -64,6 +64,9 @@ public class ActivityDetailPresenter extends BasePresenter<IActivityDetailView> 
                 iView.getActivityDetail(hotBlogsEntity.list, hotBlogsEntity.detail, hotBlogsEntity.pager.page, hotBlogsEntity.pager.total_page);
                 currentPage = hotBlogsEntity.pager.page;
                 allPage = hotBlogsEntity.pager.total_page;
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 
@@ -94,7 +97,7 @@ public class ActivityDetailPresenter extends BasePresenter<IActivityDetailView> 
         sortAndMD5(map);
 
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().focusUser(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -121,7 +124,7 @@ public class ActivityDetailPresenter extends BasePresenter<IActivityDetailView> 
         sortAndMD5(map);
 
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().praiseBlog(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -179,7 +182,6 @@ public class ActivityDetailPresenter extends BasePresenter<IActivityDetailView> 
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                Common.staticToast("感谢您的分享");
                 iView.shareGoodsSuccess(blogId, id);
             }
 

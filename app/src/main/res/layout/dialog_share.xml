@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
-                    android:text="商品链接"
+                    android:text="复制链接"
                     android:textColor="@color/share_text"
                     android:textSize="12sp" />
             </com.shunlian.app.widget.MyLinearLayout>
@@ -117,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
-                    android:text="二维码图文"
+                    android:text="保存图片"
                     android:textColor="@color/share_text"
                     android:textSize="12sp" />
             </com.shunlian.app.widget.MyLinearLayout>

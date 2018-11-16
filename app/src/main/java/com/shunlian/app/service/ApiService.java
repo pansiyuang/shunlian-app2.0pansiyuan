@@ -2802,10 +2802,16 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> addFavo(@QueryMap Map<String, String> map);
 
     /**
-     * 收藏文章
+     * 删除文章
      */
     @GET("discovery/discoveryuser/removeBlog")
     Call<BaseEntity<EmptyEntity>> removeBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 未读消息统计
+     */
+    @GET("discovery/message/unreadcount")
+    Call<BaseEntity<CommonEntity>> unreadcount(@QueryMap Map<String, String> map);
 
     /**
      * 下载文件
@@ -2813,4 +2819,43 @@ public interface ApiService {
      @Streaming
      @GET
      Call<ResponseBody> download(@Url String url);
+
+    /**
+     * 新人专享banner
+     */
+    @GET("/newexclusive/adlist")
+    Call<BaseEntity<AdUserEntity>> adlist(@QueryMap Map<String, String> map);
+
+    /**
+     * 新人专享商品
+     * @return
+     */
+    @POST("/newexclusive/goodslist")
+    Call<BaseEntity<NewUserGoodsEntity>> usergoodslist(@QueryMap Map<String, String> map);
+
+    /**
+     * 新人专享添加购物车
+     * @return
+     */
+    @POST("/newexclusive/addcart")
+    Call<BaseEntity<CateEntity>> newuseraddCart(@Body RequestBody body);
+
+    /**
+     * 新人专享购物车商品列表
+     */
+    @GET("/newexclusive/cartlist")
+    Call<BaseEntity<NewUserGoodsEntity>> cartlist(@QueryMap Map<String, String> map);
+    /**
+     * 新人专享删除购物车
+     */
+    @GET("/newexclusive/deletecart")
+    Call<BaseEntity<EmptyEntity>> deletecart(@QueryMap Map<String, String> map);
+    /**
+     * 购物车进入确认订单页
+     *
+     * @param body
+     * @return
+     */
+    @POST("/newexclusive/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> orderNewUserConfirm(@Body RequestBody body);
 }

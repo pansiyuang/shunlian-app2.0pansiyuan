@@ -21,6 +21,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.eventbus_bean.VideoPlayEvent;
 import com.shunlian.app.presenter.HotVideoBlogPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -136,6 +137,12 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     public void focusUser(int isFocus, String memberId) {
         blog.is_focus = isFocus==0?1:0;
         customVideoPlayer.setAttentStateView();
+
+        RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
+        blogData.blogId = blog.id;
+        blogData.memberId = blog.member_id;
+        blogData.is_focus = blog.is_focus;
+        EventBus.getDefault().post(new RefreshBlogEvent(blogData, RefreshBlogEvent.ATTENITON_TYPE));
     }
 
     @Override
@@ -143,18 +150,30 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         blog.is_praise = isAttent;
         blog.praise_num =blog.praise_num+1;
         customVideoPlayer.setParseStateView();
+
+        RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
+        blogData.blogId = blog.id;
+        blogData.is_praise = isAttent;
+        EventBus.getDefault().post(new RefreshBlogEvent(blogData, RefreshBlogEvent.PRAISE_TYPE));
     }
 
     @Override
     public void downCountSuccess() {
         blog.down_num =blog.down_num+1;
         customVideoPlayer.setDownLoadSuccess();
+
+        RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
+        blogData.blogId = blog.id;
+        EventBus.getDefault().post(new RefreshBlogEvent(blogData,RefreshBlogEvent.DOWNLOAD_TYPE));
     }
 
     @Override
-    public void shareGoodsSuccess(String blogId, String id) {
-
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        RefreshBlogEvent.BlogData blogData = new RefreshBlogEvent.BlogData();
+        blogData.blogId = blog.id;
+        EventBus.getDefault().post(new RefreshBlogEvent(blogData,RefreshBlogEvent.SHARE_TYPE));
     }
+
 
     @Override
     public void showFailureView(int request_code) {
@@ -259,7 +278,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, this.getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(this));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this,blog.id, blog.related_goods, false,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this,blog.id, blog.related_goods, false, quick_actions,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(this, blog.related_goods.get(position).goods_id));
@@ -268,13 +287,10 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         dialog_new.show();
     }
 
+
     @Override
     public void destoryVideo() {
         onBackPressed();
     }
 
-    @Override
-    public void shareSuccess(String blogId, String goodsId) {
-        hotBlogPresenter.goodsShare("blog_goods", blogId, goodsId);
-    }
 }
