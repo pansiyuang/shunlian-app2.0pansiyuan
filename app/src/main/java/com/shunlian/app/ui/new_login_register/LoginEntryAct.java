@@ -8,6 +8,7 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
+import com.shunlian.app.ui.new3_login.New3LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -81,8 +82,11 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     @OnClick(R.id.mtv_pwd_login)
     public void pwdLoginEntry(){
-        RegisterAndBindingAct.startAct(this,
-                RegisterAndBindingAct.FLAG_PWD_LOGIN,null,null,null);
+        New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+        config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.PASSWORD_TO_LOGIN;
+        New3LoginAct.startAct(this,config);
+        /*RegisterAndBindingAct.startAct(this,
+                RegisterAndBindingAct.FLAG_PWD_LOGIN,null,null,null);*/
         finish();
     }
 

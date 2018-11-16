@@ -947,6 +947,9 @@
             android:exported="true"
             android:theme="@style/wx"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.new3_login.New3LoginAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
