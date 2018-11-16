@@ -130,8 +130,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     }
 
     private void init() {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_goods_select,
-                null, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_goods_select, null, false);
         setContentView(view);
         ButterKnife.bind(this, view);
         initListeners();
@@ -145,8 +144,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         lp.gravity = Gravity.BOTTOM;
         win.setAttributes(lp);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
-                (LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
         recycler_param.setLayoutParams(params);
         edt_number.setText(String.valueOf(currentCount));
         edt_number.setSelection(String.valueOf(currentCount).length());
@@ -169,16 +167,30 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                         currentCount = limit_min_buy;
                         Common.staticToast(String.format(mContext.getString(R.string.goods_tuangoushangping), String.valueOf(limit_min_buy)));
                     } else {
-                        edt_number.setText("1");
-                        edt_number.setSelection("1".length());
-                        currentCount = 1;
+                        if (totalStock > 0) {
+                            currentCount = 1;
+                        } else {
+                            currentCount = 0;
+                        }
                     }
                 } else {
                     int count = Integer.valueOf(s.toString());
-                    if (count > totalStock) {
-                        currentCount = totalStock;
-                        edt_number.setText(String.valueOf(totalStock));
-                        edt_number.setSelection(String.valueOf(totalStock).length());
+                    if (currentGoodsType == 2) {
+                        if (count < limit_min_buy) {
+                            currentCount = limit_min_buy;
+                            edt_number.setText(String.valueOf(totalStock));
+                            edt_number.setSelection(String.valueOf(totalStock).length());
+                        } else {
+                            currentCount = count;
+                        }
+                    } else {
+                        if (count > totalStock) {
+                            currentCount = totalStock;
+                            edt_number.setText(String.valueOf(totalStock));
+                            edt_number.setSelection(String.valueOf(totalStock).length());
+                        } else {
+                            currentCount = count;
+                        }
                     }
                 }
             }
@@ -303,10 +315,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 }
                 if (currentGoodsType == 2) {
                     if (currentCount > limit_min_buy) {
-//                        currentCount--;
-//                        if (currentCount <= 1) {
-//                            currentCount = 1;
-//                        }
                         if (currentCount <= 1) {
                             return;
                         }
@@ -327,6 +335,16 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 if (currentCount == 0) {
                     Common.staticToast("库存不足");
                     return;
+                }
+
+                if (currentCount > totalStock) {
+                    Common.staticToast("数量不能超过库存数量");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(edt_number.getText()) && currentCount == 1) {
+                    edt_number.setText("1");
+                    edt_number.setSelection("1".length());
                 }
 
                 if ("1".equals(hasOption)) {

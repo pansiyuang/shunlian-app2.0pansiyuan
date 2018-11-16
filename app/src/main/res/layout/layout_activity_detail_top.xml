@@ -11,18 +11,19 @@
         android:layout_height="144dp"
         android:scaleType="centerCrop" />
 
-    <RelativeLayout
-        android:id="@+id/rl_top"
+    <LinearLayout
+        android:id="@+id/ll_top"
         android:layout_width="match_parent"
         android:layout_height="144dp"
-        android:background="#4D000000">
+        android:background="#4D000000"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="53dp"
             android:ellipsize="end"
             android:paddingLeft="35dp"
             android:paddingRight="35dp"
@@ -57,13 +58,13 @@
                 android:textColor="@color/white"
                 android:textSize="12sp" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     <com.shunlian.app.widget.FolderTextView
         android:id="@+id/tv_activity_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_top"
+        android:layout_below="@+id/ll_top"
         android:layout_marginBottom="12dp"
         android:background="@color/white"
         android:padding="16dp"

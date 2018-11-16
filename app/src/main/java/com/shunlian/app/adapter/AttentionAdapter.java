@@ -28,9 +28,11 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
 
     public static final int HEAD_LAYOUT = 10001;
     private OnFocusListener onFocusListener;
+    private int hasFocus;
 
-    public AttentionAdapter(Context context, List<HotBlogsEntity.RecomandFocus> lists) {
+    public AttentionAdapter(Context context, List<HotBlogsEntity.RecomandFocus> lists, int focus) {
         super(context, false, lists);
+        hasFocus = focus;
     }
 
     @Override
@@ -78,6 +80,14 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
             emptyViewHolder.tv_attention_title.setVisibility(View.GONE);
         } else {
             emptyViewHolder.tv_attention_title.setVisibility(View.VISIBLE);
+        }
+
+        if (hasFocus == 1) {
+            emptyViewHolder.miv_empty.setImageResource(R.mipmap.img_wuguanzhu_xiao);
+            emptyViewHolder.tv_empty.setText("您关注的Ta还未发布文章");
+        } else {
+            emptyViewHolder.miv_empty.setImageResource(R.mipmap.img_wuguanzhu);
+            emptyViewHolder.tv_empty.setText("您还没有关注任何人");
         }
     }
 
@@ -153,6 +163,12 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
 
         @BindView(R.id.tv_attention_title)
         TextView tv_attention_title;
+
+        @BindView(R.id.miv_empty)
+        MyImageView miv_empty;
+
+        @BindView(R.id.tv_empty)
+        TextView tv_empty;
 
         public EmptyViewHolder(View itemView) {
             super(itemView);

@@ -2802,10 +2802,16 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> addFavo(@QueryMap Map<String, String> map);
 
     /**
-     * 收藏文章
+     * 删除文章
      */
     @GET("discovery/discoveryuser/removeBlog")
     Call<BaseEntity<EmptyEntity>> removeBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 未读消息统计
+     */
+    @GET("discovery/message/unreadcount")
+    Call<BaseEntity<CommonEntity>> unreadcount(@QueryMap Map<String, String> map);
 
     /**
      * 下载文件

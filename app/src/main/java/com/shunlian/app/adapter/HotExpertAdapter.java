@@ -76,14 +76,6 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 hotExpertViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
-            if (blog.is_praise == 1) {
-                hotExpertViewHolder.tv_zan.setClickable(false);
-                setPraiseImg(hotExpertViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
-            } else {
-                hotExpertViewHolder.tv_zan.setClickable(true);
-                setPraiseImg(hotExpertViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
-            }
-
             hotExpertViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
                     mCallBack.toFocusUser(blog.is_focus, blog.member_id);
@@ -107,15 +99,21 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 singlePicAdapter.setOnItemClickListener((view, position1) -> MyPageActivity.startAct(context, blog.member_id));
                 hotExpertViewHolder.rl_video.setVisibility(View.GONE);
             } else {
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) hotExpertViewHolder.miv_video.getLayoutParams();
                 if (!isEmpty(blog.video_thumb)) {
                     int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 190, 190);
 
                     if (params == null || params.length == 0) {
-                        GlideUtils.getInstance().loadOverrideImage(context, hotExpertViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, 95), TransformUtil.dip2px(context, 95));
+                        layoutParams.width = layoutParams.height = TransformUtil.dip2px(context, 95);
                     } else {
-                        GlideUtils.getInstance().loadOverrideImage(context, hotExpertViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, params[0]), TransformUtil.dip2px(context, params[1]));
+                        layoutParams.width = TransformUtil.dip2px(context, params[0]);
+                        layoutParams.height = TransformUtil.dip2px(context, params[1]);
                     }
+                } else {
+                    layoutParams.width = layoutParams.height = TransformUtil.dip2px(context, 95);
                 }
+                GlideUtils.getInstance().loadImage(context, hotExpertViewHolder.miv_video, blog.video_thumb);
+                hotExpertViewHolder.miv_video.setLayoutParams(layoutParams);
                 hotExpertViewHolder.miv_big_icon.setVisibility(View.GONE);
                 hotExpertViewHolder.recycler_list.setVisibility(View.GONE);
                 hotExpertViewHolder.miv_big_icon.setVisibility(View.GONE);

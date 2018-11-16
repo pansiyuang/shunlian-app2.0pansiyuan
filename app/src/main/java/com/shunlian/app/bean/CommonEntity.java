@@ -81,6 +81,12 @@ public class CommonEntity {
 
     public String name;
 
+    //发现未读消息统计
+    public int praise_share;
+    public int attention;
+    public int notice;
+    public int download;
+
     @Override
     public String toString() {
         return "CommonEntity{" +
