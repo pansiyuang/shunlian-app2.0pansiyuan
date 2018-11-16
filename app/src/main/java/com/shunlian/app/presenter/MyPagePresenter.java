@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMyPageView;
@@ -54,6 +55,37 @@ public class MyPagePresenter extends BasePresenter<IMyPageView> {
                 Common.staticToast(entity.message);
             }
         });
-
     }
+
+    public void getBlogList(String memberId, String type) {
+        Map<String, String> map = new HashMap<>();
+        map.put("member_id", memberId);
+        map.put("type", type);
+        sortAndMD5(map);
+
+        Call<BaseEntity<HotBlogsEntity>> baseEntityCall = getApiService().getblogs(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<HotBlogsEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<HotBlogsEntity> entity) {
+                super.onSuccess(entity);
+                HotBlogsEntity hotBlogsEntity = entity.data;
+                isLoading = false;
+                iView.getFocusblogs(hotBlogsEntity);
+                iView.refreshFinish();
+            }
+
+            @Override
+            public void onFailure() {
+                isLoading = false;
+                super.onFailure();
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                isLoading = false;
+                super.onErrorCode(code, message);
+            }
+        });
+    }
+
 }

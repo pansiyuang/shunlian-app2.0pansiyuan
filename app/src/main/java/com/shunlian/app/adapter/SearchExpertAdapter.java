@@ -69,6 +69,7 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
             }
 
             expertViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, expert.member_id));
+            expertViewHolder.tv_name.setOnClickListener(v -> MyPageActivity.startAct(context, expert.member_id));
 
             expertViewHolder.tv_attention.setOnClickListener((View v) -> {
                 mFrag.toFocus(expert.is_focus, expert.member_id);

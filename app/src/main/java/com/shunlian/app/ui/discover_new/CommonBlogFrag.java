@@ -101,6 +101,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
         EventBus.getDefault().register(this);
         NestedSlHeader header = new NestedSlHeader(getActivity());
         lay_refresh.setRefreshHeaderView(header);
+        lay_refresh.setRefreshEnabled(false);
 
         currentMemberId = getArguments().getString("member_id");
         currentFrom = getArguments().getString("from");
@@ -153,6 +154,11 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
         super.initListener();
     }
 
+    public void initPage() {
+        mPresenter.initPage();
+        mPresenter.getBlogList(true, currentMemberId, currentType);
+    }
+
     @Override
     public void getFocusblogs(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage) {
         if (currentPage == 1) {
@@ -165,7 +171,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 recycler_list.setVisibility(View.VISIBLE);
                 nestedScrollView.setVisibility(View.GONE);
             }
-            ((MyPageActivity) getActivity()).initInfo(hotBlogsEntity.member_info, hotBlogsEntity.discovery_info);
+            ((MyPageActivity) getActivity()).initInfo(hotBlogsEntity.member_info, hotBlogsEntity.discovery_info, hotBlogsEntity.unread);
         }
         if (!isEmpty(hotBlogsEntity.list)) {
             blogList.addAll(hotBlogsEntity.list);
