@@ -181,7 +181,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             } else {
                 mposition = position - 1;
             }
-            if (mposition<0)
+            if (mposition < 0)
                 return;
             GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
             if (!isEmpty(goods.id)) {
@@ -273,7 +273,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     }
 
     public void showEmptyView(boolean isShowEmpty) {
-        if (nei_empty==null)
+        if (nei_empty == null)
             return;
         if (isShowEmpty) {
             nei_empty.setImageResource(R.mipmap.img_empty_dingdan).setText("暂无商品").setButtonText(null);
@@ -287,8 +287,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
     @Override
     public void getSearchGoods(SearchGoodsEntity goodsEntity, int page, int allPage) {
-        JosnSensorsDataAPI.search(searchParam.keyword,goodsEntity.goods_list!=null&&goodsEntity.goods_list.size()>0,
-                JosnSensorsDataAPI.isHistory,JosnSensorsDataAPI.isRecommend);
+        JosnSensorsDataAPI.search(searchParam.keyword, goodsEntity.goods_list != null && goodsEntity.goods_list.size() > 0,
+                JosnSensorsDataAPI.isHistory, JosnSensorsDataAPI.isRecommend);
         currentPage = page;
         totalPage = allPage;
         if (currentPage == 1) {
@@ -315,6 +315,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             }
             singleAdapter.setPageLoading(page, allPage);
         } else if (currentMode == MODE_DOUBLE) {
+            doubleAdapter.setStoreData(mRefStore);
             if (goodsEntity.goods_list.size() <= CategoryPresenter.PAGE_SIZE) {
                 doubleAdapter.notifyDataSetChanged();
             } else {

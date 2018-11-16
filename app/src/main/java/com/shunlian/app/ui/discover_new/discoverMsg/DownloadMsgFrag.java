@@ -15,6 +15,7 @@ import com.shunlian.app.bean.ZanShareEntity;
 import com.shunlian.app.presenter.DownloadPresenter;
 import com.shunlian.app.presenter.ZanSharePresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.discover_new.DiscoverMsgActivity;
 import com.shunlian.app.view.IDownloadView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -118,6 +119,7 @@ public class DownloadMsgFrag extends BaseLazyFragment implements IDownloadView {
     @Override
     public void getMsgList(List<ZanShareEntity.Msg> list, int page, int totalPage) {
         if (page == 1) {
+            ((DiscoverMsgActivity) getActivity()).showDownloadPage();
             msgList.clear();
         }
         if (!isEmpty(list)) {

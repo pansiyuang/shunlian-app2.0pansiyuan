@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.DiscoveryCountEvent;
 import com.shunlian.app.presenter.MyPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
@@ -29,9 +27,13 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMyPageView;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.mylibrary.ImmersionBar;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 
-import java.lang.reflect.Field;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,9 @@ import butterknife.BindView;
  */
 
 public class MyPageActivity extends BaseActivity implements IMyPageView {
+
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.mAppbar)
     AppBarLayout mAppbar;
@@ -118,6 +123,9 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
     @BindView(R.id.miv_title_right)
     MyImageView miv_title_right;
 
+    @BindView(R.id.miv_msg_point)
+    MyImageView miv_msg_point;
+
     private String[] titles = {"我的", "收藏"};
     private List<BaseFragment> goodsFrags;
     private String currentMemberId;
@@ -128,6 +136,7 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
     private BaseFragment commonBlogFrag;
     private int totalDistance;
     private MyPagePresenter mPresenter;
+    private int currentUnreadCount;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -138,6 +147,12 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
                 float alph = Float.valueOf(distance) / totalDistance;
                 miv_title_icon.setAlpha(alph);
                 tv_title_nickname.setAlpha(alph);
+
+                if (distance == 0) {
+                    lay_refresh.setRefreshEnabled(true);
+                } else {
+                    lay_refresh.setRefreshEnabled(false);
+                }
             }
         }
     };
@@ -157,11 +172,13 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        EventBus.getDefault().register(this);
+
+        NestedSlHeader header = new NestedSlHeader(this);
+        lay_refresh.setRefreshHeaderView(header);
 
         currentMemberId = getIntent().getStringExtra("member_id");
-
         mPresenter = new MyPagePresenter(this, this);
-
         objectMapper = new ObjectMapper();
         try {
             String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
@@ -274,6 +291,8 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
                 PersonalDataAct.startAct(MyPageActivity.this);
             }
         });
+
+        lay_refresh.setOnRefreshListener(() -> mPresenter.getBlogList(currentMemberId, "2"));
         super.initListener();
     }
 
@@ -287,7 +306,8 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
         viewpager.setOffscreenPageLimit(goodsFrags.size());
     }
 
-    public void initInfo(HotBlogsEntity.MemberInfo memberInfo, HotBlogsEntity.DiscoveryInfo discoveryInfo) {
+    public void initInfo(HotBlogsEntity.MemberInfo memberInfo, HotBlogsEntity.DiscoveryInfo discoveryInfo, int UnreadCount) {
+        currentUnreadCount = UnreadCount;
         if (memberInfo != null) {
             currentMember = memberInfo;
             GlideUtils.getInstance().loadCircleAvar(this, miv_icon, memberInfo.avatar);
@@ -320,6 +340,13 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
                 tv_signature.setText(memberInfo.signature);
                 tv_signature.setEnabled(false);
             }
+
+            if (isSelf && currentUnreadCount > 0) {
+                miv_msg_point.setVisibility(View.VISIBLE);
+            } else {
+                miv_msg_point.setVisibility(View.GONE);
+            }
+
             setAttentStatus(currentMember.is_focus, memberInfo.member_id);
         }
         if (discoveryInfo != null) {
@@ -382,6 +409,70 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
     }
 
     @Override
+    public void getFocusblogs(HotBlogsEntity hotBlogsEntity) {
+        if (hotBlogsEntity != null) {
+            if (isDefault && goodsFrags.get(0) != null) {
+                ((CommonBlogFrag) goodsFrags.get(0)).initPage();
+            }
+        }
+        currentUnreadCount = hotBlogsEntity.unread;
+        if (hotBlogsEntity.member_info != null) {
+            currentMember = hotBlogsEntity.member_info;
+            GlideUtils.getInstance().loadCircleAvar(this, miv_icon, currentMember.avatar);
+            GlideUtils.getInstance().loadCircleAvar(this, miv_title_icon, currentMember.avatar);
+
+            if (currentMember.add_v == 0) {
+                miv_v.setVisibility(View.GONE);
+            } else {
+                GlideUtils.getInstance().loadImage(this, miv_v, currentMember.v_icon);
+                miv_v.setVisibility(View.VISIBLE);
+            }
+
+            if (currentMember.expert == 0) {
+                miv_expert.setVisibility(View.GONE);
+            } else {
+                GlideUtils.getInstance().loadImage(this, miv_expert, currentMember.expert_icon);
+                miv_expert.setVisibility(View.VISIBLE);
+            }
+            tv_nickname.setText(currentMember.nickname);
+            tv_title_nickname.setText(currentMember.nickname);
+            if (isEmpty(currentMember.signature)) {
+                if (isSelf) {
+                    tv_signature.setText("还没有个人介绍哦，赶紧去编辑吧");
+                    tv_signature.setEnabled(true);
+                } else {
+                    tv_signature.setText("TA有点高冷，还没有介绍~");
+                    tv_signature.setEnabled(false);
+                }
+            } else {
+                tv_signature.setText(currentMember.signature);
+                tv_signature.setEnabled(false);
+            }
+
+            if (isSelf && currentUnreadCount > 0) {
+                miv_msg_point.setVisibility(View.VISIBLE);
+            } else {
+                miv_msg_point.setVisibility(View.GONE);
+            }
+
+            setAttentStatus(currentMember.is_focus, currentMember.member_id);
+        }
+        if (hotBlogsEntity.discovery_info != null) {
+            tv_attention_count.setText(hotBlogsEntity.discovery_info.focus_num);
+            tv_fans_count.setText(hotBlogsEntity.discovery_info.fans_num);
+            tv_download_count.setText(hotBlogsEntity.discovery_info.down_num);
+            tv_praise_count.setText(hotBlogsEntity.discovery_info.praise_num);
+        }
+    }
+
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
+    }
+
+    @Override
     public void showFailureView(int request_code) {
 
     }
@@ -389,5 +480,21 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(DiscoveryCountEvent event) {
+        if (isSelf && event.isShow) {
+            miv_msg_point.setVisibility(View.VISIBLE);
+        } else {
+            miv_msg_point.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

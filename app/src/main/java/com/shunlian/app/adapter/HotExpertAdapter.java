@@ -76,14 +76,6 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 hotExpertViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
-            if (blog.is_praise == 1) {
-                hotExpertViewHolder.tv_zan.setClickable(false);
-                setPraiseImg(hotExpertViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
-            } else {
-                hotExpertViewHolder.tv_zan.setClickable(true);
-                setPraiseImg(hotExpertViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
-            }
-
             hotExpertViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
                     mCallBack.toFocusUser(blog.is_focus, blog.member_id);
