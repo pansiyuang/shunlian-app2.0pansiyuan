@@ -13,7 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.SettingPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.receive_adress.AddressManageActivity;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
@@ -209,7 +209,7 @@ public class SettingAct extends BaseActivity implements ISettingView {
                 BusinessCardAct.startAct(this, mAppQRCode);
                 break;
             case R.id.llayout_about:
-                H5Act.startAct(this, mAboutUrl, H5Act.MODE_SONIC);
+                H5X5Act.startAct(this, mAboutUrl, H5X5Act.MODE_SONIC);
                 break;
         }
     }

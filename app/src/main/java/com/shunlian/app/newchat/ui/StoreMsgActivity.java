@@ -13,7 +13,7 @@ import com.shunlian.app.newchat.adapter.StoreMsgAdapter;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.presenter.VipMsgPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IVipMsgView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -129,7 +129,7 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
 
         tv_vip_list.setOnClickListener(v -> {
             if (!isEmpty(h5Url)) {
-                H5Act.startAct(this, h5Url, H5Act.MODE_SONIC);
+                H5X5Act.startAct(this, h5Url, H5X5Act.MODE_SONIC);
             }
         });
         super.initListener();

@@ -16,7 +16,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
-import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IArticleDetailView;
 
@@ -28,7 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
  * Created by Administrator on 2018/3/19.
  */
 
-public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCountManager.OnGetMessageListener {
+public class ArticleH5Act extends H5X5Act implements IArticleDetailView, MessageCountManager.OnGetMessageListener {
 
     private String articleId;
 

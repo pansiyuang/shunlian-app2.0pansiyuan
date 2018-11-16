@@ -13,6 +13,24 @@
         android:background="#80000000" />
 
 
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:src="@mipmap/icon_faxian_guankan"/>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/checkmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:padding="16dp"
+        android:layout_marginTop="44dp"
+        android:visibility="gone"
+        android:src="@mipmap/img_shoppingcar_selected_n"/>
+
     <LinearLayout
         android:id="@+id/layout_error"
         android:layout_width="match_parent"

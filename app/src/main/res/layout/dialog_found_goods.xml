@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="66dp"
+        android:background="@drawable/bg_dialog_top"
+        android:orientation="vertical">
+
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                android:scaleType="fitXY" />
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="30dp"
+                android:layout_toRightOf="@id/miv_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/share_text"
+                android:textSize="14sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="12dp"
+                android:src="@mipmap/btn_huafei_close" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/value_ECECEC" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_goods"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"/>
+    </com.shunlian.app.widget.MyLinearLayout>
+</com.shunlian.app.widget.MyRelativeLayout>

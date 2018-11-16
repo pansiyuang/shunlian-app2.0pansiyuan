@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="16dp"
+            android:src="@mipmap/icon_common_back_black" />
+
+        <EditText
+            android:id="@+id/edt_search"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_search"
+            android:layout_toRightOf="@+id/miv_close"
+            android:background="@drawable/rounded_corner_solid_f7_56px"
+            android:gravity="center_vertical"
+            android:hint="搜索发现 文章 活动 达人"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="17dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:textColor="@color/value_484848"
+            android:textColorHint="@color/color_value_6c"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="67dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="@string/search" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/value_ECECEC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:paddingBottom="4dp">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:tabBackground="@android:color/transparent"
+            app:tabGravity="center"
+            app:tabIndicatorColor="@color/pink_color"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/pink_color"
+            app:tabTextColor="@color/value_484848"></android.support.design.widget.TabLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/value_ECECEC" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+</LinearLayout>

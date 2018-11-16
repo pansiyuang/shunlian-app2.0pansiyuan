@@ -87,9 +87,10 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     protected ProgressBar mDialogBrightnessProgressBar;
     protected TextView mDialogBrightnessTextView;
 
-    private LinearLayout closeVolumeControl;
-    private ImageView closeVideo;
-    private ImageView voiceControl;
+    protected LinearLayout closeVolumeControl;
+    protected ImageView closeVideo;
+    protected ImageView voiceControl;
+    protected ImageView iv_download;
 
     public SmallVideoPlayer(Context context) {
         super(context);
@@ -124,7 +125,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         //是否开启音量
         voiceControl = findViewById(R.id.iv_voice);
         findViewById(R.id.iv_more).setVisibility(GONE);
-        ImageView iv_download = findViewById(R.id.iv_download);
+        iv_download = findViewById(R.id.iv_download);
         iv_download.setVisibility(VISIBLE);
 
         thumbImageView.setOnClickListener(this);
@@ -1007,7 +1008,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         LogUtil.httpLogW("文件名:" + fileName);
         File file1 = new File(fileName);
         if (file1.exists()) {
-            Common.staticToast("已下载过该视频,请勿重复下载!");
+            Common.staticToast("该视频已下截过!");
         } else {
             new Thread(() -> downLoadVideo(fileName)).start();
         }

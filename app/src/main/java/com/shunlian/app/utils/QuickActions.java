@@ -1,6 +1,7 @@
 package com.shunlian.app.utils;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,14 +12,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -32,8 +37,10 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 import com.shunlian.app.widget.circle.RoundRectImageView;
+import com.shunlian.app.widget.dialog.CommonDialog;
 import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
 import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
@@ -107,6 +114,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private ShareInfoParam mShareInfoParam;
     private String shareType = "", shareId = "";
     private Handler mHandler;
+    private OnShareBlogCallBack mCallBack;
     //    private String tag="";
 
 
@@ -140,6 +148,61 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         px = TransformUtil.dip2px(mContext, 30);
         topMargin = px;
         rightMargin = px / 2;
+    }
+
+    public static boolean saveImageToShare(Context context, Bitmap bmp,boolean isFriend) {
+
+        if (!Common.hasSD()) {
+            Common.staticToast("没有sd卡");
+            return false;
+        }
+        LogUtil.httpLogW("剩余内存:" + Common.getSDFreeSize());
+        if (Common.getSDFreeSize() < 1024 * 5) {
+            Common.staticToast("内存不足");
+            return false;
+        }
+        // 首先保存图片
+        File appDir = new File(Constant.CACHE_PATH_EXTERNAL, "sldl");
+        if (!appDir.exists()) {
+            appDir.mkdirs();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(appDir, fileName);
+        FileOutputStream fos = null;
+        File fileUri = null;
+        try {
+            fos = new FileOutputStream(file);
+            boolean isSuccess = bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            if (isSuccess) {
+                // 其次把文件插入到系统图库
+                String path = MediaStore.Images.Media
+                        .insertImage(context.getContentResolver(),
+                                file.getAbsolutePath(), fileName, null);
+                if (TextUtils.isEmpty(path)) return false;
+                // 最后通知图库更新
+//                fileUri = new File(path);
+//                context.sendBroadcast(new
+//                        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
+                ShareInfoParam shareInfoParam = new ShareInfoParam();
+                shareInfoParam.photo = path;
+                WXEntryActivity.startAct(context, isFriend?"shareFriend":"shareCircle", shareInfoParam);
+                return true;
+            } else {
+                return false;
+            }
+        }/* catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } */ catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            appDir = null;
+            file = null;
+            fileUri = null;
+            fos = null;
+        }
+        return false;
     }
 
     /**
@@ -200,7 +263,6 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 break;
         }
     }
-
 
     public void setShowItem(int... showItemPos) {
         if (showItemPos == null) {
@@ -295,7 +357,6 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         }
     }
 
-
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
@@ -353,7 +414,6 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         }
 
     }
-
 
     /**
      * 店铺
@@ -526,6 +586,248 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         setShowItem(1, 3, 4, 6, 7);
     }
 
+    public void createCode(String shareLink, String title, String desc, String price, String goodsId, String thumb,
+                           boolean isSuperiorProduct, String from, String froms) {
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(mContext, "login");
+        } else {
+            Dialog dialog_new = new Dialog(mContext, R.style.popAd);
+            dialog_new.setContentView(R.layout.share_goods_new);
+            Window window = dialog_new.getWindow();
+//        //设置边框距离
+            window.getDecorView().setPadding(TransformUtil.dip2px(mContext, 30),
+                    0,
+                    TransformUtil.dip2px(mContext, 30),
+                    TransformUtil.dip2px(mContext, 12));
+            //设置dialog位置
+//            window.setGravity(Gravity.BOTTOM);
+            WindowManager.LayoutParams lp = window.getAttributes();
+            //设置宽高
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            window.setAttributes(lp);
+
+            MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
+            MyLinearLayout mllayout_wexin = dialog_new.findViewById(R.id.mllayout_wexin);
+            MyLinearLayout mllayout_save = dialog_new.findViewById(R.id.mllayout_save);
+            MyImageView miv_user_head = dialog_new.findViewById(R.id.miv_user_head);
+            MyTextView mtv_nickname = dialog_new.findViewById(R.id.mtv_nickname);
+            mtv_nickname.setText("来自" + from + "的分享");
+            GlideUtils.getInstance().loadCircleAvar(mContext,miv_user_head,froms);
+            MyImageView miv_code = (MyImageView) dialog_new.findViewById(R.id.miv_code);
+            int i = TransformUtil.dip2px(mContext, 92.5f);
+            Bitmap qrImage = BitmapUtil.createQRImage(shareLink, null, i);
+            miv_code.setImageBitmap(qrImage);
+
+
+            MyTextView mtv_title = (MyTextView) dialog_new.findViewById(R.id.mtv_title);
+            mtv_title.setText(title);
+
+            MyTextView mtv_desc = (MyTextView) dialog_new.findViewById(R.id.mtv_desc);
+            if (!TextUtils.isEmpty(desc)) {
+                mtv_desc.setVisibility(View.VISIBLE);
+                mtv_desc.setText(desc);
+            } else {
+                mtv_desc.setVisibility(View.GONE);
+            }
+
+            MyTextView mtv_price = (MyTextView) dialog_new.findViewById(R.id.mtv_price);
+            mtv_price.setText("￥" + price);
+
+//            MyTextView mtv_time = (MyTextView) dialog_new.findViewById(R.id.mtv_time);
+//            MyTextView mtv_act_label = (MyTextView) dialog_new.findViewById(R.id.mtv_act_label);
+
+            MyTextView mtv_goodsID = (MyTextView) dialog_new.findViewById(R.id.mtv_goodsID);
+            mtv_goodsID.setText("商品编号:" + goodsId + "(搜索可直达)");
+
+//            LinearLayout llayout_day = (LinearLayout) dialog_new.findViewById(R.id.llayout_day);
+
+//            if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
+//                llayout_day.setVisibility(View.GONE);
+//            } else {
+//                mtv_time.setText(mShareInfoParam.start_time);
+//                mtv_act_label.setText(mShareInfoParam.act_label);
+//            }
+
+            //显示优品图标
+            MyImageView miv_SuperiorProduct = (MyImageView) dialog_new.findViewById(R.id.miv_SuperiorProduct);
+            if (isSuperiorProduct) {
+                miv_SuperiorProduct.setVisibility(View.VISIBLE);
+            } else {
+                miv_SuperiorProduct.setVisibility(View.GONE);
+            }
+
+            MyImageView miv_goods_pic = (MyImageView) dialog_new.findViewById(R.id.miv_goods_pic);
+            int width = Common.getScreenWidth((Activity) mContext) - TransformUtil.dip2px(mContext, 120);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+            layoutParams.width = width;
+            layoutParams.height = width;
+            GlideUtils.getInstance().loadImageZheng(mContext, miv_goods_pic, thumb);
+
+            miv_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog_new.dismiss();
+                }
+            });
+
+            mllayout_wexin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveshareGoodsPic(true,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
+                }
+            });
+            mllayout_save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveshareGoodsPic(true,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, true, from, froms);
+                }
+            });
+            dialog_new.setCancelable(false);
+            dialog_new.show();
+        }
+    }
+
+    public CommonDialog nomalBuildl;
+//    发现对话框
+    public void shareDiscoverDialog(String blodId,String shareLink, String title, String desc, String price, String goodsId, String thumb,
+                                    boolean isSuperiorProduct, String from, String froms) {
+
+        mShareInfoParam = new ShareInfoParam();
+        mShareInfoParam.shareLink = shareLink;
+        mShareInfoParam.title = title;
+        mShareInfoParam.desc = desc;
+        mShareInfoParam.img = thumb;
+
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(mContext,R.style.popAd).fromBottom()
+                .setView(R.layout.dialog_share);
+        nomalBuildl = nomalBuild.create();
+        nomalBuildl.setCancelable(false);
+        nomalBuildl.show();
+        nomalBuildl.setOnClickListener(R.id.ntv_cancel, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
+            }
+        });
+        nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WXEntryActivity.startAct(getContext(),
+                        "shareFriend", mShareInfoParam);
+                nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
+            }
+        });
+        nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveshareGoodsPic(false,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
+                nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
+            }
+        });
+        nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createCode(shareLink, title, desc, price, goodsId, thumb,
+                isSuperiorProduct, from, froms);
+                nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
+            }
+        });
+        nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(true);
+                nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
+            }
+        });
+
+//        Dialog dialog_new = new Dialog(mContext, R.style.popAd);
+//        dialog_new.setContentView(R.layout.dialog_share);
+//        Window window = dialog_new.getWindow();
+////        //设置边框距离
+//        window.getDecorView().setPadding(TransformUtil.dip2px(mContext, 12),
+//                0,
+//                TransformUtil.dip2px(mContext, 12),
+//                TransformUtil.dip2px(mContext, 12));
+//        //设置dialog位置
+////            window.setGravity(Gravity.BOTTOM);
+//        WindowManager.LayoutParams lp = window.getAttributes();
+//        //设置宽高
+//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//        window.setAttributes(lp);
+//
+//        NewTextView ntv_cancel = dialog_new.findViewById(R.id.ntv_cancel);
+//        MyLinearLayout mllayout_tuwenerweima = dialog_new.findViewById(R.id.mllayout_tuwenerweima);
+//        MyLinearLayout mllayout_weixinhaoyou = dialog_new.findViewById(R.id.mllayout_weixinhaoyou);
+//        MyLinearLayout mllayout_weixinpenyou = dialog_new.findViewById(R.id.mllayout_weixinpenyou);
+//        MyLinearLayout mllayout_shangping = dialog_new.findViewById(R.id.mllayout_shangping);
+//
+//        dialog_new.setCancelable(false);
+//        dialog_new.show();
+//
+//        ntv_cancel.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog_new.dismiss();
+//            }
+//        });
+//
+//        mllayout_tuwenerweima.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                createCode(shareLink, title, desc, price, goodsId, thumb,
+//                        isSuperiorProduct, from, froms);
+//                dialog_new.dismiss();
+//            }
+//        });
+//        mllayout_weixinhaoyou.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                WXEntryActivity.startAct(getContext(),
+//                        "shareFriend", mShareInfoParam);
+//                dialog_new.dismiss();
+//            }
+//        });
+//        mllayout_weixinpenyou.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                saveshareGoodsPic(false,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
+//                dialog_new.dismiss();
+//            }
+//        });
+//        mllayout_shangping.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                copyText(true);
+//                dialog_new.dismiss();
+//            }
+//        });
+    }
+
+//    public void dealHideBack(){
+//        switch (tag){
+//            case "special":
+//
+//                break;
+//        }
+//    }
+
     /**
      * 只能分享微信和复制链接
      */
@@ -559,14 +861,6 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
                 }).build();
     }
-
-//    public void dealHideBack(){
-//        switch (tag){
-//            case "special":
-//
-//                break;
-//        }
-//    }
 
     /**
      * 分享微信和复制链接，图文分享
@@ -803,6 +1097,132 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     }
 
     /**
+     * 保存商品分享图new
+     */
+    public void saveshareGoodsPic(boolean isFriend,String shareLink, String title, String desc, String price, String goodsId,
+                                  String thumb, boolean isSuperiorProduct, boolean isShow, String from, String froms) {
+        removeAllViews();
+        setVisibility(INVISIBLE);
+        final View inflate = LayoutInflater.from(mContext)
+                .inflate(R.layout.share_goods, this, false);
+
+        ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
+        layoutParams1.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams1.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+        inflate.setLayoutParams(layoutParams1);
+        removeAllViews();
+        addView(inflate);
+
+        CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
+
+        MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
+        mtv_nickname.setText("来自" + from + "的分享");
+
+        MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
+        int i = TransformUtil.dip2px(mContext, 92.5f);
+        Bitmap qrImage = BitmapUtil.createQRImage(shareLink, null, i);
+        miv_code.setImageBitmap(qrImage);
+
+
+        MyTextView mtv_title = (MyTextView) inflate.findViewById(R.id.mtv_title);
+        mtv_title.setText(title);
+
+        MyTextView mtv_desc = (MyTextView) inflate.findViewById(R.id.mtv_desc);
+        if (!TextUtils.isEmpty(desc)) {
+            mtv_desc.setVisibility(VISIBLE);
+            mtv_desc.setText(desc);
+        } else {
+            mtv_desc.setVisibility(GONE);
+        }
+
+        MyTextView mtv_price = (MyTextView) inflate.findViewById(R.id.mtv_price);
+        mtv_price.setText("￥" + price);
+
+        MyTextView mtv_time = (MyTextView) inflate.findViewById(R.id.mtv_time);
+        MyTextView mtv_act_label = (MyTextView) inflate.findViewById(R.id.mtv_act_label);
+
+        MyTextView mtv_goodsID = (MyTextView) inflate.findViewById(R.id.mtv_goodsID);
+        mtv_goodsID.setText("商品编号:" + goodsId + "(搜索可直达)");
+
+        LinearLayout llayout_day = (LinearLayout) inflate.findViewById(R.id.llayout_day);
+
+//        if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
+        llayout_day.setVisibility(GONE);
+//        } else {
+//            mtv_time.setText(mShareInfoParam.start_time);
+//            mtv_act_label.setText(mShareInfoParam.act_label);
+//        }
+
+        //显示优品图标
+        MyImageView miv_SuperiorProduct = (MyImageView) inflate.findViewById(R.id.miv_SuperiorProduct);
+        if (isSuperiorProduct) {
+            miv_SuperiorProduct.setVisibility(VISIBLE);
+        } else {
+            miv_SuperiorProduct.setVisibility(GONE);
+        }
+
+
+        MyImageView miv_goods_pic = (MyImageView) inflate.findViewById(R.id.miv_goods_pic);
+        GlideUtils.getInstance().loadBitmapSync(mContext, froms,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_user_head.setImageBitmap(resource);
+                        goodsPic(isFriend,inflate, miv_goods_pic, thumb, isShow);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        miv_user_head.setImageResource(R.mipmap.img_set_defaulthead);
+                        goodsPic(isFriend,inflate, miv_goods_pic, thumb, isShow);
+                    }
+                });
+    }
+
+    private void goodsPic(boolean isFriend,View inflate, MyImageView miv_goods_pic, String thumb, boolean isShow) {
+        GlideUtils.getInstance().loadBitmapSync(mContext, thumb,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_goods_pic.setImageBitmap(resource);
+                        inflate.postDelayed(() -> {
+                            Bitmap bitmapByView = getBitmapByView(inflate);
+                            if (isShow) {
+                                boolean isSuccess = BitmapUtil.saveImageToAlbumn(mContext, bitmapByView,false,false);
+                                if (isSuccess) {
+//                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
+//                                dialog.show();
+                                    Common.staticToast(mContext.getString(R.string.operate_tupianyibaocun));
+                                } else {
+                                    Common.staticToast(mContext.getString(R.string.operate_tupianbaocunshibai));
+                                }
+                            } else {
+                                boolean isSuccess = saveImageToShare(mContext, bitmapByView,isFriend);
+                                if (!isSuccess)
+                                    Common.staticToast("分享失败");
+                            }
+                            reset();
+                        }, 100);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        if (isShow) {
+                            Common.staticToast(mContext.getString(R.string.operate_tupianbaocunshibai));
+                        } else {
+                            Common.staticToast("分享失败");
+                        }
+                        reset();
+                    }
+                });
+    }
+
+    /**
      * 保存商品分享图
      */
     public void saveshareGoodsPic() {
@@ -906,7 +1326,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         miv_goods_pic.setImageBitmap(resource);
                         inflate.postDelayed(() -> {
                             Bitmap bitmapByView = getBitmapByView(inflate);
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView,false,false);
                             if (isSuccess) {
                                 if (mContext instanceof GoodsDetailAct) {
                                     ((GoodsDetailAct) mContext).moreHideAnim();
@@ -1090,7 +1510,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private void savePic(View inflate) {
         inflate.postDelayed(() -> {
             Bitmap bitmapByView = getBitmapByView(inflate);
-            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView,false,false);
             if (isSuccess) {
                 LogUtil.httpLogW("图片保存成功");
                 SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
@@ -1217,5 +1637,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
             promptDialog.show();
         });
+    }
+
+    public void setOnShareBlogCallBack(OnShareBlogCallBack callBack) {
+        this.mCallBack = callBack;
+    }
+
+    public interface OnShareBlogCallBack {
+        void shareSuccess(String blogId,String goodsId);
     }
 }

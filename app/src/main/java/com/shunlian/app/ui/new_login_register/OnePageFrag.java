@@ -26,6 +26,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.register.SelectRecommendAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -451,7 +452,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
 
     @OnClick(R.id.mbtn_login)
     public void btnLogin(){
-
+        JosnSensorsDataAPI.login("手机号登录");
         String mobile = met_mobile.getText().toString().trim();
         String picCode = met_pic_code.getText().toString().trim();
         String pwd = met_pwd.getText().toString().trim();
@@ -611,23 +612,27 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
                 //注册
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mobile,picCode,
                         "",mMember_id,mFlag);
+                JosnSensorsDataAPI.signUp("手机号注册",met_id.getText().toString());
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE_ID){
                 if (!isRefereesIdRight())return;
                 if (!isMobileRight())return;
                 //绑定
+                JosnSensorsDataAPI.signUp("微信注册",met_id.getText().toString());
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_MOBILE){
                 if (!isMobileRight())return;
                 //绑定手机
+                JosnSensorsDataAPI.signUp("微信注册",met_id.getText().toString());
                 ((RegisterAndBindingAct)baseActivity).twoFrag("",mobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
             }else if (mFlag == RegisterAndBindingAct.FLAG_BIND_ID){
                 if (!isRefereesIdRight())return;
                 //绑定id
+                JosnSensorsDataAPI.signUp("微信注册",met_id.getText().toString());
                 ((RegisterAndBindingAct)baseActivity).twoFrag(refereesId,mMobile,picCode,
                         mUniqueSign,mMember_id,mFlag);
 
@@ -689,6 +694,7 @@ public class OnePageFrag extends BaseFragment implements IRegisterAndBindView {
         //登陆成功啦
         SharedPrefUtil.saveSharedUserString("token", content.token);
         SharedPrefUtil.saveSharedUserString("avatar", content.avatar);
+        SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
         SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lay_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_ash"
+    app:mode="follow">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="@color/white"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <com.shunlian.app.widget.empty.NetAndEmptyInterface
+                android:id="@+id/nei_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
+</com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>

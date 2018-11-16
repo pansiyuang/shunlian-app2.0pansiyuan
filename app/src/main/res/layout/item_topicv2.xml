@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_hot_topic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="17dp"
+        android:text="热门话题"
+        android:textColor="@color/value_484848"
+        android:textSize="15sp" />
+
+
+    <RelativeLayout
+        android:id="@+id/llayout_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/miv_select"
+            android:gravity="center_vertical"
+            android:minHeight="64dp"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:text="#话题一"
+                android:textColor="@color/value_484848"
+                android:textSize="15sp" />
+
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mtv_title"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="5dp"
+                android:text="200人参与/300条内容"
+                android:textColor="@color/text_gray2"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:visibility="invisible"
+            android:src="@mipmap/img_shoppingcar_selected_h" />
+    </RelativeLayout>
+
+</LinearLayout>
