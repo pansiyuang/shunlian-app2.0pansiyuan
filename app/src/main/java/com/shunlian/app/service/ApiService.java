@@ -2177,6 +2177,15 @@ public interface ApiService {
     Call<BaseEntity<VouchercenterplEntity>> vouchercenter(@QueryMap Map<String, String> map);
 
     /**
+     * 万用广告弹窗接口
+     *
+     * @return
+     */
+    @GET("adpush/commonad")
+    Call<BaseEntity<AdEntity>> adpush(@QueryMap Map<String, String> map);
+
+
+    /**
      * 品牌特卖详情
      *
      * @return

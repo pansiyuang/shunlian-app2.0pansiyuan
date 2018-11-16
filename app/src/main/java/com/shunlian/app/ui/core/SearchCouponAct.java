@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CouponsAdapter;
 import com.shunlian.app.adapter.NewCouponsAdapter;
+import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.presenter.PGetCoupon;
 import com.shunlian.app.ui.BaseActivity;
@@ -131,6 +132,11 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void setpingData(VouchercenterplEntity vouchercenterplEntity) {
+
+    }
+
+    @Override
+    public void setAd(AdEntity adEntity) {
 
     }
 
