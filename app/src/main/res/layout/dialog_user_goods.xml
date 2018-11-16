@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dialog_top"
+        android:orientation="vertical">
+
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal">
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="已选商品"
+                android:textColor="@color/value_484848"
+                android:textSize="14sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="12dp"
+                android:src="@mipmap/btn_huafei_close" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/value_ECECEC" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_goods"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"/>
+        <TextView
+            android:id="@+id/tv_go_buy"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/xx50"
+            android:text="去结算"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:background="@drawable/rounded_corner_solid_pink_50px"
+            android:layout_height="45dp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+</com.shunlian.app.widget.MyRelativeLayout>

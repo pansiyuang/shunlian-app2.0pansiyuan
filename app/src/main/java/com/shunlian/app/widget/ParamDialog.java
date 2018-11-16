@@ -88,6 +88,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private int currentGoodsType = 0; //0普通商品、1优品、2团购
     private LinkedHashMap<String, GoodsDeatilEntity.Values> linkedHashMap;
 
+    public void setSelectCount(boolean isSelectCount){
+        this.isSelectCount  =isSelectCount;
+    }
     public ParamDialog(Context context, GoodsDeatilEntity goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
