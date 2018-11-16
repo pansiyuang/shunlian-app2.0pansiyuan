@@ -11,6 +11,7 @@ import com.shunlian.app.adapter.AttentionMsgAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.AttentionMsgPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.discover_new.DiscoverMsgActivity;
 import com.shunlian.app.view.IAttentionMsgView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -106,6 +107,7 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
             lay_refresh.setRefreshing(false);
         }
     }
+
     @Override
     public void showDataEmptyView(int request_code) {
 
@@ -114,6 +116,7 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
     @Override
     public void getAttentionMsgList(List<HotBlogsEntity.MemberInfo> list, int page, int totalPage) {
         if (page == 1) {
+            ((DiscoverMsgActivity) getActivity()).showAttentionPage();
             memberInfoList.clear();
         }
         if (!isEmpty(list)) {

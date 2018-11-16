@@ -14,6 +14,7 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.HotBlogPresenter;
@@ -61,6 +62,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     public void onDestroyView() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroyView();
     }
 
@@ -255,7 +257,6 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(RefreshBlogEvent event) {
-        LogUtil.httpLogW("refreshData:" + event.mData.memberId);
         switch (event.mType) {
             case RefreshBlogEvent.ATTENITON_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -294,10 +295,11 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         }
     }
 
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(DefMessageEvent event) {
+        if (hotBlogPresenter != null && event.loginSuccess) {
+            hotBlogPresenter.initPage();
+            hotBlogPresenter.getHotBlogList(true);
+        }
     }
 }

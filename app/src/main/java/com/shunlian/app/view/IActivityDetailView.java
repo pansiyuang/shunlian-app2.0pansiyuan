@@ -19,4 +19,6 @@ public interface IActivityDetailView extends IView {
     void praiseBlog(String blogId);
 
     void shareGoodsSuccess(String blogId,String goodsId);
+
+    void refreshFinish();
 }

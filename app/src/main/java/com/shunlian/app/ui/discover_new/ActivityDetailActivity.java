@@ -27,6 +27,8 @@ import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,6 +48,9 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -83,6 +88,9 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     protected void initData() {
+        NestedSlHeader header = new NestedSlHeader(this);
+        lay_refresh.setRefreshHeaderView(header);
+
         defToolbar();
         EventBus.getDefault().register(this);
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
@@ -148,6 +156,10 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+        lay_refresh.setOnRefreshListener(() -> {
+            mPresent.initPage();
+            mPresent.getActivityDetail(true, currentId);
         });
     }
 
@@ -288,6 +300,13 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             }
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override

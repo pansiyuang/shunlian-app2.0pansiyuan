@@ -352,8 +352,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             miv_first.animate().rotation(0).setDuration(0).start();
             miv_first.animate().rotation(360).setDuration(300).start();
         } else {
-            view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-            view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+            if (view.getId() == R.id.ll_tab_discover) {
+                if (discoverFrag != null && !discoverFrag.isVisible()) {
+                    view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                    view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+                }
+            } else {
+                view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+            }
         }
         if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
