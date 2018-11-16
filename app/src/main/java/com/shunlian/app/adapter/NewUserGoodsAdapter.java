@@ -35,9 +35,11 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
     private IAddShoppingCarListener mCarListener;
     public boolean isShowSelect;
     public String type;
-    public NewUserGoodsAdapter(Context context, List<NewUserGoodsEntity.Goods> lists,String type) {
+    private boolean isNew;
+    public NewUserGoodsAdapter(Context context, List<NewUserGoodsEntity.Goods> lists,String type,boolean isNew) {
         super(context, true, lists);
         this.type = type;
+        this.isNew = isNew;
     }
 
 
@@ -110,12 +112,20 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                     mHolder.tv_shopping_car.setText("加入购物车");
                 }
             }else if(type.equals("2")){
-                mHolder.tv_shopping_car.setText("立即购买");
+                if(isNew) {
+                    mHolder.tv_shopping_car.setText("立即购买");
+                }else{
+                    mHolder.tv_shopping_car.setText("立即分享");
+                }
             }
             mHolder.mtv_discount_price.setText(goods.marker_price);
-            if(position==0){
-                mHolder.tv_usew_desc.setVisibility(View.VISIBLE);
-                mHolder.tv_usew_desc.setText("0元选3件仅当前页面加入购物车有效");
+            if(position==0&&type.equals("1")){
+                if(isNew) {
+                    mHolder.tv_usew_desc.setVisibility(View.VISIBLE);
+                    mHolder.tv_usew_desc.setText("0元选3件仅当前页面加入购物车有效");
+                }else{
+                    mHolder.tv_usew_desc.setVisibility(View.GONE);
+                }
             }else{
                 mHolder.tv_usew_desc.setVisibility(View.GONE);
             }

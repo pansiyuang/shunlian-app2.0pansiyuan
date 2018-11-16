@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.MyPagePresenter;
 import com.shunlian.app.presenter.NewUserGoodsPresenter;
 import com.shunlian.app.presenter.NewUserPagePresenter;
@@ -38,6 +40,7 @@ import com.shunlian.app.ui.setting.PersonalDataAct;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.UserBuyGoodsDialog;
@@ -59,11 +62,12 @@ import butterknife.BindView;
  *新人专享页面
  */
 
-public class NewUserPageActivity extends BaseActivity implements INewUserPageView ,UserBuyGoodsDialog.CartDelGoodListen {
+public class NewUserPageActivity extends BaseActivity implements INewUserPageView ,UserBuyGoodsDialog.CartDelGoodListen ,ShareGoodDialogUtil.OnShareBlogCallBack {
     private StringBuffer orderGoodsIds = new StringBuffer();//提交订单的id
 
     private  List<AdUserEntity.AD> adList;
     private List<NewUserGoodsEntity.Goods> goodsList;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     /**
      * 最大0元够数量
      */
@@ -97,15 +101,27 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @BindView(R.id.tv_go_pay)
     TextView tv_go_pay;
 
+    @BindView(R.id.img_share)
+    ImageView img_share;
+
     @BindView(R.id.kanner)
     MyKanner kanner;
+
+    @BindView(R.id.show_title_info)
+    LinearLayout show_title_info;
+
+    @BindView(R.id.line_user_buy)
+    LinearLayout line_user_buy;
+
     private String[] titles = {"新人专享", "精选商品"};
+    private String[] titlesOld = {"精选商品"};
     private List<BaseFragment> goodsFrags;
     private boolean isDefault = true;
     private  NewUserPagePresenter mPresenter;
     private  UserBuyGoodsDialog userBuyGoodsDialog;
     private NewUserGoodsFrag userGoodFragFrist;
     private NewUserGoodsFrag userGoodFragEnd;
+    private ShareInfoParam shareInfoParam;
     public static void startAct(Context context, String memberId) {
         Intent intent = new Intent(context, NewUserPageActivity.class);
         intent.putExtra("member_id", memberId);
@@ -120,6 +136,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         ImmersionBar.with(NewUserPageActivity.this).fitsSystemWindows(true)
                 .statusBarColor(R.color.pink_color)
                 .statusBarDarkFont(false, 0)
@@ -130,7 +147,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         mPresenter = new NewUserPagePresenter(this, this);
 
         setTabMode(isDefault);
-        initFrags();
         mPresenter.adlist();
     }
 
@@ -149,24 +165,17 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             isDefault = false;
             setTabMode(isDefault);
         });
-        tv_buy_num.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                mPresenter.cartlist(false);
+        tv_buy_num.setOnClickListener(v -> mPresenter.cartlist(false));
+        tv_go_pay.setOnClickListener(v -> {
+            if(CURRENT_NUM==0){
+                Common.staticToast("购物车没有商品信息");
+                return;
             }
+            ConfirmNewUserOrderAct.startAct(NewUserPageActivity.this, ConfirmOrderAct.TYPE_CART);
         });
-        tv_go_pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(CURRENT_NUM==0){
-                    Common.staticToast("购物车没有商品信息");
-                    return;
-                }
-                ConfirmNewUserOrderAct.startAct(NewUserPageActivity.this, ConfirmOrderAct.TYPE_CART);
-            }
+        img_share.setOnClickListener(v -> {
+           shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
         });
-
 
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -192,18 +201,28 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         super.initListener();
     }
 
-    public void initFrags() {
+    public void initFrags(boolean isNew) {
         goodsFrags = new ArrayList<>();
-        for (int i = 0; i < titles.length; i++) {
-            if(i==0) {
-                userGoodFragFrist = NewUserGoodsFrag.getInstance(titles[i],"1");
-                goodsFrags.add(userGoodFragFrist);
-            }else{
-                userGoodFragEnd = NewUserGoodsFrag.getInstance(titles[i],"2");
-                goodsFrags.add(userGoodFragEnd);
+        if(isNew) {
+            line_user_buy.setVisibility(View.VISIBLE);
+            show_title_info.setVisibility(View.VISIBLE);
+            for (int i = 0; i < titles.length; i++) {
+                if (i == 0) {
+                    userGoodFragFrist = NewUserGoodsFrag.getInstance(titles[i], "1",isNew);
+                    goodsFrags.add(userGoodFragFrist);
+                } else {
+                    userGoodFragEnd = NewUserGoodsFrag.getInstance(titles[i], "2",isNew);
+                    goodsFrags.add(userGoodFragEnd);
+                }
             }
+        }else{
+            line_user_buy.setVisibility(View.GONE);
+            show_title_info.setVisibility(View.VISIBLE);
+            ll_left.setVisibility(View.GONE);
+            userGoodFragEnd = NewUserGoodsFrag.getInstance(titlesOld[0], "2",isNew);
+            goodsFrags.add(userGoodFragEnd);
         }
-        viewpager.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titles));
+        viewpager.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld));
         viewpager.setOffscreenPageLimit(goodsFrags.size());
     }
 
@@ -242,8 +261,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
 
     @Override
-    public void bannerList(List<AdUserEntity.AD> adList) {
+    public void bannerList(List<AdUserEntity.AD> adList,boolean isNew) {
         this.adList = adList;
+        initFrags(isNew);
         List<String> strings = new ArrayList<>();
         for(AdUserEntity.AD list:adList) {
             strings.add(list.ad_img);
@@ -324,5 +344,10 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @Override
     public void delGood(NewUserGoodsEntity.Goods goods) {
       mPresenter.deletecart(goods.id);
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+
     }
 }

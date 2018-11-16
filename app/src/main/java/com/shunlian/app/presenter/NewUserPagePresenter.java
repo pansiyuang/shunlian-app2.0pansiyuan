@@ -52,7 +52,7 @@ public class NewUserPagePresenter extends BasePresenter<INewUserPageView> {
             @Override
             public void onSuccess(BaseEntity<AdUserEntity> entity) {
                 super.onSuccess(entity);
-                iView.bannerList(entity.data.list);
+                iView.bannerList(entity.data.list,entity.data.isNew);
             }
         });
 

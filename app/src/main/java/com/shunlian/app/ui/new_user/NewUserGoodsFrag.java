@@ -73,6 +73,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
     private String type;
 
+    private boolean isNew = false;
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -84,11 +85,12 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         return view;
     }
 
-    public static NewUserGoodsFrag getInstance(String comFrom,String type) {
+    public static NewUserGoodsFrag getInstance(String comFrom,String type,boolean isNew) {
         NewUserGoodsFrag commonBlogFrag = new NewUserGoodsFrag();
         Bundle bundle = new Bundle();
         bundle.putString("from", comFrom);
         bundle.putString("type", type);
+        bundle.putBoolean("isNew", isNew);
         commonBlogFrag.setArguments(bundle);
         return commonBlogFrag;
     }
@@ -107,6 +109,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
         currentFrom = getArguments().getString("from");
         type = getArguments().getString("type");
+        isNew = getArguments().getBoolean("isNew");
         goodList = new ArrayList<>();
 
         manager = new LinearLayoutManager(getActivity());
@@ -114,9 +117,15 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         mPresenter = new NewUserGoodsPresenter(baseActivity,  this,type);
 
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new NewUserGoodsAdapter(baseActivity, goodList,type);
+            hotBlogAdapter = new NewUserGoodsAdapter(baseActivity, goodList,type,isNew);
             hotBlogAdapter.setAddShoppingCarListener(this);
-            hotBlogAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(baseActivity, goodList.get(position).id));
+            hotBlogAdapter.setOnItemClickListener((view, position) -> {
+                if(goodList.get(position).status.equals("0")){
+                    Common.staticToast("不好意思啦！亲！该商品已失效了！");
+                }else{
+                    GoodsDetailAct.startAct(baseActivity, goodList.get(position).id);
+                }
+            });
             recycler_list.setAdapter(hotBlogAdapter);
         }
 
@@ -222,6 +231,10 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
     @Override
     public void onGoodsId(View view, int position) {
+        if(goodList.get(position).status.equals("0")){
+            Common.staticToast("不好意思啦！亲！该商品已失效了！");
+            return;
+        }
         if(type.equals("2")){
             GoodsDetailAct.startAct(baseActivity, goodList.get(position).id);
             return;

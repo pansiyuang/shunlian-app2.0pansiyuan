@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface INewUserPageView extends IView {
 
-  void bannerList(List<AdUserEntity.AD> adList);
+  void bannerList(List<AdUserEntity.AD> adList,boolean isNew);
   void goodCartList(List<NewUserGoodsEntity.Goods> goodsList,boolean isFrist);
   void delCart(String cid);
 }

@@ -29,6 +29,15 @@
             android:text="新人专享"
             android:textColor="@color/white"
             android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/img_share"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/xx20"
+            android:layout_marginRight="@dimen/xx10"
+            android:src="@mipmap/icon_xiaodian_fenxiang"/>
     </RelativeLayout>
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -80,6 +89,8 @@
                 android:layout_height="48dp"
                 android:background="@color/white"
                 android:orientation="horizontal"
+                android:id="@+id/show_title_info"
+                android:visibility="gone"
                 app:layout_collapseMode="pin">
 
                 <RelativeLayout
@@ -160,6 +171,8 @@
         android:layout_centerInParent="true"
         android:background="@drawable/rounded_corner_solid_pink_50px"
         android:orientation="horizontal"
+        android:id="@+id/line_user_buy"
+        android:visibility="gone"
         android:layout_height="@dimen/xx120">
         <TextView
             android:id="@+id/tv_buy_num"
