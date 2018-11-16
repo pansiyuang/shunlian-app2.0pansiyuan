@@ -59,7 +59,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private HotVideoBlogPresenter hotVideoBlogPresenter;
 
-    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,String from,String froms) {
+    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,String from,String froms,Dialog dialog) {
         super(context, false, lists);
         mInflater = LayoutInflater.from(context);
         this.isCode=isCode;
