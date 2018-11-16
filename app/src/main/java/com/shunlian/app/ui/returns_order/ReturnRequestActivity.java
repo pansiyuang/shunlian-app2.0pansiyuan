@@ -300,6 +300,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                     }
                 }*/
                 if (!isEmpty(s.toString())) {
+                    LogUtil.httpLogW("totalPrice:" + totalPrice);
                     if (Float.valueOf(s.toString()) > totalPrice) {
                         edt_return_money.setText(totalPrice + "");
                         edt_return_money.setSelection((totalPrice + "").length());

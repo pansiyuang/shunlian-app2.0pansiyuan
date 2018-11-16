@@ -201,15 +201,21 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 });
                 blogViewHolder.rl_video.setVisibility(View.GONE);
             } else {
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) blogViewHolder.miv_video.getLayoutParams();
                 if (!isEmpty(blog.video_thumb)) {
                     int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 190, 190);
 
                     if (params == null || params.length == 0) {
-                        GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, 95), TransformUtil.dip2px(context, 95));
+                        layoutParams.width = layoutParams.height = TransformUtil.dip2px(context, 95);
                     } else {
-                        GlideUtils.getInstance().loadOverrideImage(context, blogViewHolder.miv_video, blog.video_thumb, TransformUtil.dip2px(context, params[0]), TransformUtil.dip2px(context, params[1]));
+                        layoutParams.width = TransformUtil.dip2px(context, params[0]);
+                        layoutParams.height = TransformUtil.dip2px(context, params[1]);
                     }
+                } else {
+                    layoutParams.width = layoutParams.height = TransformUtil.dip2px(context, 95);
                 }
+                GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_video, blog.video_thumb);
+                blogViewHolder.miv_video.setLayoutParams(layoutParams);
                 blogViewHolder.miv_big_icon.setVisibility(View.GONE);
                 blogViewHolder.recycler_list.setVisibility(View.GONE);
                 blogViewHolder.miv_big_icon.setVisibility(View.GONE);
