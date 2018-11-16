@@ -403,6 +403,14 @@ public interface ApiService {
     Call<BaseEntity<ConfirmOrderEntity>> orderBuy(@Body RequestBody body);
 
     /**
+     * 新人专享
+     * @param body
+     * @return
+     */
+    @POST("newexclusive/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> newexclusive(@Body RequestBody body);
+
+    /**
      * 修改购物车
      *
      * @param body
@@ -875,6 +883,14 @@ public interface ApiService {
      */
     @POST("order/checkout")
     Call<BaseEntity<PayOrderEntity>> orderCheckout(@Body RequestBody body);
+
+    /**
+     * 新人专享支付
+     * @param body
+     * @return
+     */
+    @POST("newexclusive/checkout")
+    Call<BaseEntity<PayOrderEntity>> newexclusivePay(@Body RequestBody body);
 
 
     /**

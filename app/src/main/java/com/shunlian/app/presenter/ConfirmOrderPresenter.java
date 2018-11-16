@@ -47,6 +47,28 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
     }
 
     /**
+     * 新人专享
+     */
+    public void newexclusive(String address_id){
+        Map<String,String> map = new HashMap<>();
+        if (!TextUtils.isEmpty(address_id)) {
+            map.put("address_id", address_id);
+        }
+        sortAndMD5(map);
+
+        Call<BaseEntity<ConfirmOrderEntity>>
+                newexclusive = getAddCookieApiService().newexclusive(getRequestBody(map));
+
+        getNetData(true,newexclusive,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
+                super.onSuccess(entity);
+                setDate(entity);
+            }
+        });
+    }
+
+    /**
      * 立即购买接口
      * @param goods_id
      * @param qty
@@ -154,6 +176,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
         }
         iView.stageVoucher(data.user_stage_voucher,data.stage_voucher);
         iView.goldenEggs(data.egg_tip,data.gold_egg,data.egg_reduce);
+        iView.receivingPrompt(data.receiving_prompt);
     }
 
     /**

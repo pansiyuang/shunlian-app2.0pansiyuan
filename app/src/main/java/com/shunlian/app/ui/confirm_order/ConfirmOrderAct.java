@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -89,6 +90,12 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @BindView(R.id.miv_golden_eggs)
     MyImageView miv_golden_eggs;
 
+    @BindView(R.id.ll_tip)
+    LinearLayout ll_tip;
+
+    @BindView(R.id.mtv_tip)
+    MyTextView mtv_tip;
+
     private String mTotalPrice;
     private boolean isOrderBuy = false;//是否直接购买
     private String detail_address;
@@ -111,6 +118,24 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private float mEggReduce;
     public static final String EGGS_TIP = "订单支付金额必须大于1元";//金蛋减免提示
 
+    /**
+     * 新人专享到确认订单
+     */
+    public static void startAct(Context context){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
+            return;
+        }
+        Intent intent = new Intent(context, ConfirmOrderAct.class);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 购物车到确认订单
+     * @param context
+     * @param cart_ids
+     * @param type
+     */
     public static void startAct(Context context,String cart_ids,String type){
         if (!Common.isAlreadyLogin()){
             Common.goGoGo(context,"login");
@@ -122,6 +147,13 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         context.startActivity(intent);
     }
 
+    /**
+     * 商品详情到确认订单
+     * @param context
+     * @param goods_id
+     * @param qty
+     * @param sku_id
+     */
     public static void startAct(Context context,String goods_id,String qty,String sku_id){
         if (!Common.isAlreadyLogin()){
             Common.goGoGo(context,"login");
@@ -178,9 +210,12 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             }else {
                 confirmOrderPresenter.buyCombo(cart_ids,null);
             }
-        }else {
+        }else if (!isEmpty(goods_id)){
             isOrderBuy = true;
             confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,null);
+        }else {
+            isOrderBuy = false;
+            confirmOrderPresenter.newexclusive(null);
         }
 
         recy_view.setLayoutManager(new LinearLayoutManager(this));
@@ -327,6 +362,20 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         }
     }
 
+    /**
+     * 收货提示
+     * @param receiving_prompt
+     */
+    @Override
+    public void receivingPrompt(String receiving_prompt) {
+        if (!isEmpty(receiving_prompt)){
+            visible(ll_tip);
+            mtv_tip.setText(receiving_prompt);
+        }else {
+            gone(ll_tip);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -339,9 +388,12 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 }else {
                     confirmOrderPresenter.buyCombo(cart_ids,addressId);
                 }
-            }else {
+            }else if (!isEmpty(goods_id)){
                 isOrderBuy = true;
                 confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,addressId);
+            }else {
+                isOrderBuy = false;
+                confirmOrderPresenter.newexclusive(addressId);
             }
         }
     }
@@ -384,6 +436,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 params.stage_voucher_id = mStageVoucherId;
                 params.anonymous = isAnonymous?"1":"0";//1匿名 0不匿名
                 params.use_egg = isUserGoldenEggs?"1":"0";//是否使用金蛋 1是 0否
+                if (isEmpty(goods_id) && isEmpty(cart_ids)){
+                    params.isNewExclusive = true;
+                }else {
+                    params.isNewExclusive = false;
+                }
 
                 String paramsStr = "";
                 try {

@@ -42,4 +42,10 @@ public interface IConfirmOrderView extends IView{
      * @param egg_reduce 减多少钱
      */
     default void goldenEggs(String golden_eggs_tip,String golden_eggs_count,String egg_reduce){}
+
+    /**
+     * 收货提示
+     * @param receiving_prompt
+     */
+    default void receivingPrompt(String receiving_prompt){}
 }
