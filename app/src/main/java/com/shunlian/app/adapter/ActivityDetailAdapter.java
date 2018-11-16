@@ -312,15 +312,6 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View viewDialog = inflater.inflate(R.layout.dialog_found_goods, null);
-        Activity activity = (Activity) context;
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-//        int height = display.getHeight();
-        //设置dialog的宽高为屏幕的宽高
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog_new.setContentView(viewDialog, layoutParams);
 
         MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
         MyImageView miv_icon = dialog_new.findViewById(R.id.miv_icon);
@@ -332,8 +323,10 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(context));
+        miv_icon.setOnClickListener(view -> MyPageActivity.startAct(context, blog.member_id));
+        ntv_desc.setOnClickListener(view -> MyPageActivity.startAct(context, blog.member_id));
         DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.id, blog.related_goods, false, quickActions,
-                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""));
+                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""),dialog_new);
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id));
         rv_goods.addItemDecoration(new MVerticalItemDecoration(context, 36, 38, 38));
@@ -597,7 +590,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         });
         boolean checkState = downloadUtils.checkDownLoadFileExists(url);
         if (checkState) {
-            Common.staticToast("已下载过该视频,请勿重复下载!");
+            Common.staticToast("该视频已下截过!");
             return;
         }
         downLoadDialogProgress.showDownLoadDialogProgress(context, new DownLoadDialogProgress.downStateListen() {
