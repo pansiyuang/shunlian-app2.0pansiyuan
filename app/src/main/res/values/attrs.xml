@@ -463,4 +463,29 @@
         <!--文字颜色-->
         <attr name="textColor" format="reference|color" />
     </declare-styleable>
+
+    <!--登录账号-->
+    <attr name="hint_text" format="string" />
+    <attr name="text_size" format="dimension" />
+    <attr name="text_color" format="color" />
+    <attr name="line_color" format="color" />
+    <attr name="hint_text_color" format="color" />
+    <declare-styleable name="AccountControlsWidget">
+        <attr name="hint_text"/>
+        <attr name="text_size"/>
+        <attr name="text_color"/>
+        <attr name="line_color"/>
+        <attr name="hint_text_color"/>
+        <attr name="is_mobile" format="boolean"/>
+    </declare-styleable>
+
+    <!--登录密码-->
+    <declare-styleable name="PwdControlsWidget">
+        <attr name="hint_text"/>
+        <attr name="text_size"/>
+        <attr name="text_color"/>
+        <attr name="line_color"/>
+        <attr name="hint_text_color"/>
+    </declare-styleable>
+
 </resources>

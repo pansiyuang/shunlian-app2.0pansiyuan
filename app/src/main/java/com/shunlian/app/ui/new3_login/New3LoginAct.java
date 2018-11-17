@@ -59,7 +59,8 @@ public class New3LoginAct extends BaseActivity {
                     case SMS_TO_LOGIN:
                         //短信登录
 
-
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.frame_rootView,new LoginMobileFrag()).commit();
 
                         break;
                 }

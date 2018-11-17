@@ -6,43 +6,50 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="22dp"
+        android:text="新用户注册即可领取新人手气红包最高88元"
+        android:textColor="@color/text_gray2"
+        android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="24dp"
+        android:text="手机号登录"
+        android:textColor="@color/value_484848"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+
+    <com.shunlian.app.ui.new3_login.AccountControlsWidget
+        android:id="@+id/mobile"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
+        app:hint_text="请输入手机号"
+        app:hint_text_color="@color/color_value_6c"
+        app:is_mobile="true"
+        app:text_color="@color/value_484848"
+        app:text_size="16sp" />
+
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="10dp"
-        android:maxLines="1"
-        android:text="账号密码登录"
-        android:textColor="@color/value_484848"
-        android:textSize="32sp" />
-
-    <!--手机号-->
-    <com.shunlian.app.ui.new3_login.AccountControlsWidget
-        android:id="@+id/account"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:hint_text="请输入您的用户账号"
-        app:hint_text_color="@color/color_value_6c"
-        app:text_color="@color/value_484848"
-        app:text_size="16sp" />
-
-    <!--密码-->
-    <com.shunlian.app.ui.new3_login.PwdControlsWidget
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"
-        app:hint_text="请输入您的密码"
-        app:hint_text_color="@color/color_value_6c"
-        app:text_color="@color/value_484848"
-        app:text_size="16sp" />
-
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="14dp"
+        android:text="请输入正确手机号"
+        android:textColor="#FB0A3D"
+        android:textSize="12sp"
+        android:visibility="invisible" />
 
     <!--登录按钮-->
     <com.shunlian.app.widget.MyButton
@@ -51,13 +58,14 @@
         android:layout_height="44dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/rounded_corner_solid_pink_50px"
         android:gravity="center"
-        android:text="登录"
+        android:text="下一步"
         android:textColor="@color/white"
         android:textSize="16dp"
         android:textStyle="bold" />
+
 
     <!--登录协议-->
     <LinearLayout

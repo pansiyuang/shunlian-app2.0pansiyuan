@@ -75,8 +75,11 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     @OnClick(R.id.mbtn_login)
     public void mobileLogin(){
-        RegisterAndBindingAct.startAct(this,
-                RegisterAndBindingAct.FLAG_LOGIN,null,null,null);
+        New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+        config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
+        New3LoginAct.startAct(this,config);
+        /*RegisterAndBindingAct.startAct(this,
+                RegisterAndBindingAct.FLAG_LOGIN,null,null,null);*/
         finish();
     }
 
