@@ -683,7 +683,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 2:
-                miv_tab_discover.setImageResource(R.mipmap.tab_3_h);
+                miv_tab_discover.setImageResource(R.mipmap.tab_03);
                 tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 3:
