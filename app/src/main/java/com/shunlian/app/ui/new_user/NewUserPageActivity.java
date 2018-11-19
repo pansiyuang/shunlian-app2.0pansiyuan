@@ -66,8 +66,6 @@ import butterknife.BindView;
  */
 
 public class NewUserPageActivity extends BaseActivity implements INewUserPageView ,UserBuyGoodsDialog.CartDelGoodListen ,ShareGoodDialogUtil.OnShareBlogCallBack {
-    private StringBuffer orderGoodsIds = new StringBuffer();//提交订单的id
-
     private  List<AdUserEntity.AD> adList;
     private List<NewUserGoodsEntity.Goods> goodsList;
     private ShareGoodDialogUtil shareGoodDialogUtil;
@@ -143,6 +141,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        shareInfoParam = new ShareInfoParam();
+        shareInfoParam.isShowTiltle =  false;
         shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         ImmersionBar.with(NewUserPageActivity.this).fitsSystemWindows(true)
                 .statusBarColor(R.color.pink_color)

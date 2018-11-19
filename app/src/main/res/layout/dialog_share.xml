@@ -8,7 +8,7 @@
 
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="255dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/xx25"
         android:layout_alignParentBottom="true"
         android:background="@drawable/rounded_corner_white_8px"
@@ -133,7 +133,7 @@
         <com.shunlian.app.widget.NewTextView
             android:id="@+id/ntv_cancel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:gravity="center"
             android:text="@string/errcode_cancel"
             android:textColor="@color/share_text"
