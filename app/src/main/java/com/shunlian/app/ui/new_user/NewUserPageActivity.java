@@ -144,7 +144,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         shareInfoParam = new ShareInfoParam();
-        shareInfoParam.isShowTiltle =  false;
         shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         ImmersionBar.with(NewUserPageActivity.this).fitsSystemWindows(true)
                 .statusBarColor(R.color.pink_color)

@@ -49,7 +49,7 @@ public class ShareInfoParam implements Serializable {
     public String act_label;//活动开始时间
     public String video_url;//视频地址
 
-    public boolean isShowTiltle = true;
+    public boolean isShowTiltle = false;
     public boolean isSuperiorProduct;
     public String goods_id;//商品id
 

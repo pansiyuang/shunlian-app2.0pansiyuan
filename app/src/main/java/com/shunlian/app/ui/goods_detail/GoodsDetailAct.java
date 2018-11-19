@@ -1210,6 +1210,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         if (mShareInfoParam != null) {
             mShareInfoParam =baseEntity.data;
+            mShareInfoParam.isShowTiltle = true;
             mShareInfoParam.userName = baseEntity.data.userName;
             mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
             mShareInfoParam.shareLink = baseEntity.data.shareLink;

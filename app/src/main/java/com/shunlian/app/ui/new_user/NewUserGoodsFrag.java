@@ -258,7 +258,6 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
      * @param postion
      */
     private void updateShareParm(int postion){
-        shareInfoParam.isShowTiltle = true;
         shareInfoParam.title = goodList.get(postion).title;
         shareInfoParam.price = goodList.get(postion).price;
         shareInfoParam.market_price = goodList.get(postion).marker_price;
