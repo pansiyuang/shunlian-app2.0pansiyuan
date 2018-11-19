@@ -55,6 +55,7 @@ public class ShareInfoParam implements Serializable {
 
     public String pic;
     public String logo;
+    public boolean isSpecial = false;
 
     public List<StoreGoodsListEntity.MData> share_goods;
     @Override

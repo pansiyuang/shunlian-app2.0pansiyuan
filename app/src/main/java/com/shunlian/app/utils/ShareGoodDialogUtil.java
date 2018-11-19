@@ -63,6 +63,14 @@ public class ShareGoodDialogUtil {
             nomalBuildl.getView(R.id.tv_title1).setVisibility(View.VISIBLE);
             nomalBuildl.getView(R.id.tv_title2).setVisibility(View.VISIBLE);
         }
+        if(shareInfoParam.isSpecial){
+            nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.GONE);
+            nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
+        }else{
+            nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.VISIBLE);
+            nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.VISIBLE);
+        }
+
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

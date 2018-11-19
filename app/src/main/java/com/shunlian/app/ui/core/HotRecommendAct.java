@@ -98,58 +98,64 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
     private ShareGoodDialogUtil shareGoodDialogUtil;
     @OnClick(R.id.rl_more)
     public void more() {
-//        quick_actions.setVisibility(View.VISIBLE);
-//        quick_actions.special();
-//        quick_actions.shareInfo(shareInfoParam);
-        if (!Common.isAlreadyLogin()) {
-            Common.goGoGo(this, "login");
-            return;
-        }
-           pAishang.getShareInfo(pAishang.hotpush,hotId,channeId);
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.special(new QuickActions.OnShareItemCallBack() {
+            @Override
+            public void shareItem() {
+           if (!Common.isAlreadyLogin()) {
+              Common.goGoGo(HotRecommendAct.this, "login");
+              return;
+            }
+            pAishang.getShareInfo(pAishang.hotpush,hotId,channeId);
+            }
+        }) ;
+        quick_actions.shareInfo(shareInfoParam);
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginRefresh(DefMessageEvent event){
-        if (event.loginSuccess && pAishang != null){
-            pAishang.getShareInfo(pAishang.hotpush,hotId,channeId);
-        }
+//        if (event.loginSuccess && pAishang != null){
+//            pAishang.getShareInfo(pAishang.hotpush,hotId,channeId);
+//        }
     }
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         shareInfoParam = baseEntity.data;
         shareInfoParam.special_img_url = baseEntity.data.img;
+        shareInfoParam.isSpecial = true;
         shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
     }
 
     @Override
     public void onResume() {
-//        if (Common.isAlreadyLogin()) {
-//            messageCountManager = MessageCountManager.getInstance(baseAct);
-//            if (messageCountManager.isLoad()) {
-//                String s = messageCountManager.setTextCount(tv_msg_count);
-//                if (quick_actions != null)
-//                    quick_actions.setMessageCount(s);
-//            } else {
-//                messageCountManager.initData();
-//            }
-//            messageCountManager.setOnGetMessageListener(this);
-//        }
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(baseAct);
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
         super.onResume();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-//        String s = messageCountManager.setTextCount(tv_msg_count);
-//        if (quick_actions != null)
-//            quick_actions.setMessageCount(s);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-//        String s = messageCountManager.setTextCount(tv_msg_count);
-//        if (quick_actions != null)
-//            quick_actions.setMessageCount(s);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -229,12 +235,12 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         mtv_title.setText("");
         nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
         nei_empty.setButtonText(null);
-        miv_dot.setImageResource(R.mipmap.icon_head_fenxiang_black);
-        RelativeLayout.LayoutParams layoutParamsMore = new RelativeLayout.LayoutParams(DensityUtil.dip2px(this,50),DensityUtil.dip2px(this,50));
-        layoutParamsMore.setMargins(0,0,0,0);
-        layoutParamsMore.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        rl_more.setLayoutParams(layoutParamsMore);
-        miv_dot.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+//        miv_dot.setImageResource(R.mipmap.icon_head_fenxiang_black);
+//        RelativeLayout.LayoutParams layoutParamsMore = new RelativeLayout.LayoutParams(DensityUtil.dip2px(this,50),DensityUtil.dip2px(this,50));
+//        layoutParamsMore.setMargins(0,0,0,0);
+//        layoutParamsMore.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//        rl_more.setLayoutParams(layoutParamsMore);
+//        miv_dot.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT));
     }
 
     @Override

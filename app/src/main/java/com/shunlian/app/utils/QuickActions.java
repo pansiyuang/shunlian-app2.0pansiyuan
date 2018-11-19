@@ -237,7 +237,11 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     return;
                 }
                 mllayout_content.setVisibility(GONE);
-                if (!mPopMenu.isShowing()) {
+                if(shareItemCallBack!=null){
+                    shareItemCallBack.shareItem();
+                    return;
+                }
+                if (mPopMenu!=null&&!mPopMenu.isShowing()) {
                     mPopMenu.show();
                 }
                 break;
@@ -477,12 +481,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 专题页
      */
-    public void special() {
+    public void special(OnShareItemCallBack shareItemCallBack ) {
 //        tag="special";
+        this.shareItemCallBack  = shareItemCallBack;
         setShowItem(1, 2, 3, 6, 7, 8);
-        shareSpecialDialog();
+//        shareSpecialDialog();
     }
 
+    private OnShareItemCallBack shareItemCallBack;
     /**
      * 只能分享微信和复制链接
      */
@@ -1648,5 +1654,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
     public interface OnShareBlogCallBack {
         void shareSuccess(String blogId,String goodsId);
+    }
+
+    public interface OnShareItemCallBack {
+        void shareItem();
     }
 }
