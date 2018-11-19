@@ -20,11 +20,13 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AdUserEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.presenter.BasePresenter;
 import com.shunlian.app.presenter.MyPagePresenter;
 import com.shunlian.app.presenter.NewUserGoodsPresenter;
 import com.shunlian.app.presenter.NewUserPagePresenter;
@@ -177,7 +179,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             goBuyUserGood();
         });
         img_share.setOnClickListener(v -> {
-           shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
+            mPresenter.getShareInfo(mPresenter.new_exclusive);
         });
 
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -370,5 +372,16 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @Override
     public void shareSuccess(String blogId, String goodsId) {
 
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        shareInfoParam.shareLink =baseEntity.data.shareLink;
+        shareInfoParam.title =baseEntity.data.title;
+        shareInfoParam.desc =baseEntity.data.desc;
+        shareInfoParam.shareLink =baseEntity.data.shareLink;
+        shareInfoParam.img =baseEntity.data.logo;
+        shareInfoParam.special_img_url =baseEntity.data.logo;
+        shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
     }
 }

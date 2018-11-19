@@ -52,6 +52,10 @@ public class ShareInfoParam implements Serializable {
     public boolean isShowTiltle = true;
     public boolean isSuperiorProduct;
     public String goods_id;//商品id
+
+    public String pic;
+    public String logo;
+
     public List<StoreGoodsListEntity.MData> share_goods;
     @Override
     public String toString() {
