@@ -247,8 +247,13 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
     public void addCartSuccess(int cartNum,int postion) {
         if(goodList!=null&&goodList.size()>postion){
             goodList.get(postion).is_add_cart = 1;
-            hotBlogAdapter.notifyItemChanged(postion);
             ((NewUserPageActivity)baseActivity).addCartOne();
+            if(NewUserPageActivity.CURRENT_NUM==NewUserPageActivity.MAX_COUNT) {
+                hotBlogAdapter.notifyDataSetChanged();
+            }else{
+                hotBlogAdapter.notifyItemChanged(postion);
+            }
+
         }
     }
 

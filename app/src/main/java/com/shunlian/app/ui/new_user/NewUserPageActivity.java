@@ -3,6 +3,7 @@ package com.shunlian.app.ui.new_user;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
@@ -39,7 +40,9 @@ import com.shunlian.app.ui.setting.AutographAct;
 import com.shunlian.app.ui.setting.PersonalDataAct;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -71,8 +74,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     /**
      * 最大0元够数量
      */
-    private static final int MAX_COUNT = 3;
-    private int CURRENT_NUM = 0;
+    public static final int MAX_COUNT = 3;
+    public static int CURRENT_NUM = 0;
 
     @BindView(R.id.viewpager)
     ViewPager viewpager;
@@ -112,6 +115,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @BindView(R.id.line_user_buy)
     LinearLayout line_user_buy;
+    private boolean isNew = false;
 
     private String[] titles = {"新人专享", "精选商品"};
     private String[] titlesOld = {"精选商品"};
@@ -167,11 +171,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         });
         tv_buy_num.setOnClickListener(v -> mPresenter.cartlist(false));
         tv_go_pay.setOnClickListener(v -> {
-            if(CURRENT_NUM==0){
-                Common.staticToast("购物车没有商品信息");
-                return;
-            }
-            ConfirmNewUserOrderAct.startAct(NewUserPageActivity.this, ConfirmOrderAct.TYPE_CART);
+            goBuyUserGood();
         });
         img_share.setOnClickListener(v -> {
            shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
@@ -202,9 +202,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     }
 
     public void initFrags(boolean isNew) {
+        this.isNew  =  isNew;
         goodsFrags = new ArrayList<>();
         if(isNew) {
-            line_user_buy.setVisibility(View.VISIBLE);
             show_title_info.setVisibility(View.VISIBLE);
             for (int i = 0; i < titles.length; i++) {
                 if (i == 0) {
@@ -216,7 +216,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                 }
             }
         }else{
-            line_user_buy.setVisibility(View.GONE);
             show_title_info.setVisibility(View.VISIBLE);
             ll_left.setVisibility(View.GONE);
             userGoodFragEnd = NewUserGoodsFrag.getInstance(titlesOld[0], "2",isNew);
@@ -280,8 +279,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             if(!isGoBuy) {
                 userBuyGoodsDialog.showGoodsInfo(this.goodsList);
             } else{
-                getOrderIds();
-                ConfirmNewUserOrderAct.startAct(this,  ConfirmOrderAct.TYPE_CART);
+                goBuyUserGood();
             }
 
             CURRENT_NUM = this.goodsList.size();
@@ -290,20 +288,23 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         }
     }
 
-    /**
-     * 结算id
-     */
-    public void getOrderIds() {
-        orderGoodsIds.setLength(0);
-        if (goodsList != null && goodsList.size() != 0) {
-            for (int i = 0; i < goodsList.size(); i++) {
-                orderGoodsIds.append(goodsList.get(i).id);
-                if (i != goodsList.size() - 1) {
-                    orderGoodsIds.append(",");
-                }
-            }
+    private void goBuyUserGood(){
+        if(CURRENT_NUM==0){
+            Common.staticToast("购物车没有商品信息");
+            return;
         }
+        if(MAX_COUNT>CURRENT_NUM) {
+            CommonDialogUtil promptDialog = new CommonDialogUtil(this);
+            promptDialog.defaultCommonDialog("你已经领取了" + CURRENT_NUM + "件商品\n还可以再免费领" + (MAX_COUNT - CURRENT_NUM) + "件商品哦", "去支付", view -> {
+                promptDialog.dismiss();
+                ConfirmOrderAct.startAct(this);
+            }, "再逛逛", view -> promptDialog.dismiss());
+        }else{
+            ConfirmOrderAct.startAct(this);
+        }
+
     }
+
 
     @Override
     public void delCart(String cid) {
@@ -340,10 +341,25 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
      */
     public void updateCartNum(){
         tv_buy_num.setText("已购商品("+CURRENT_NUM+")");
+       if(CURRENT_NUM==0){
+           line_user_buy.setVisibility(View.GONE);
+       }else{
+           line_user_buy.setVisibility(isNew?View.VISIBLE:View.GONE);
+       }
     }
     @Override
     public void delGood(NewUserGoodsEntity.Goods goods) {
-      mPresenter.deletecart(goods.id);
+        CommonDialogUtil promptDialog = new CommonDialogUtil(this);
+            promptDialog.defaultCommonDialog("亲！您真的确定要\n删除这件商品吗？", "确定", view -> {
+                promptDialog.dismiss();
+                mPresenter.deletecart(goods.id);
+
+            }, "取消", view -> promptDialog.dismiss());
+    }
+
+    @Override
+    public void gotoBuy() {
+        goBuyUserGood();
     }
 
     @Override

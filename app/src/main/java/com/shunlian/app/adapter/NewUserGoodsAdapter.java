@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
+import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SwipeMenuLayout;
@@ -107,9 +108,15 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                     mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_da_50px);
                     mHolder.tv_shopping_car.setText("加入购物车");
                 }else{
-                    mHolder.tv_shopping_car.setEnabled(true);
-                    mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
-                    mHolder.tv_shopping_car.setText("加入购物车");
+                    if(NewUserPageActivity.CURRENT_NUM==NewUserPageActivity.MAX_COUNT){
+                        mHolder.tv_shopping_car.setEnabled(false);
+                        mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_da_50px);
+                        mHolder.tv_shopping_car.setText("加入购物车");
+                    }else {
+                        mHolder.tv_shopping_car.setEnabled(true);
+                        mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
+                        mHolder.tv_shopping_car.setText("加入购物车");
+                    }
                 }
             }else if(type.equals("2")){
                 if(isNew) {

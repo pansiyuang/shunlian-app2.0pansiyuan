@@ -93,7 +93,8 @@ public class UserBuyGoodsDialog {
         tv_go_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                nomalBuildl.dismiss();
+                cartDelGoodListenl.gotoBuy();
             }
         });
     }
@@ -104,6 +105,7 @@ public class UserBuyGoodsDialog {
     }
     public interface CartDelGoodListen{
         void delGood(NewUserGoodsEntity.Goods goods);
+        void gotoBuy();
     }
 
 }
