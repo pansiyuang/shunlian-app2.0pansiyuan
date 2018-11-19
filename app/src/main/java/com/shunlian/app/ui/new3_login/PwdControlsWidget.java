@@ -18,7 +18,7 @@ import com.shunlian.app.widget.MyImageView;
 
 /**
  * Created by zhanghe on 2018/11/16.
- * 账号控件
+ * 密码控件
  */
 public class PwdControlsWidget extends RelativeLayout {
 
@@ -44,14 +44,14 @@ public class PwdControlsWidget extends RelativeLayout {
 
     public PwdControlsWidget(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AccountControlsWidget, defStyleAttr, 0);
-        mHintText = a.getString(R.styleable.AccountControlsWidget_hint_text);
-        mHintTextColor = a.getColor(R.styleable.AccountControlsWidget_hint_text_color,
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoginNew3ControlsWidget, defStyleAttr, 0);
+        mHintText = a.getString(R.styleable.LoginNew3ControlsWidget_hint_text);
+        mHintTextColor = a.getColor(R.styleable.LoginNew3ControlsWidget_hint_text_color,
                 Color.parseColor("#484848"));
-        mTextColor = a.getColor(R.styleable.AccountControlsWidget_text_color,
+        mTextColor = a.getColor(R.styleable.LoginNew3ControlsWidget_text_color,
                 Color.parseColor("#484848"));
-        mTextSize = a.getDimension(R.styleable.AccountControlsWidget_text_size, 16f);
-        mLineColor = a.getColor(R.styleable.AccountControlsWidget_line_color, Color.parseColor("#CCCCCC"));
+        mTextSize = a.getDimension(R.styleable.LoginNew3ControlsWidget_text_size, 16f);
+        mLineColor = a.getColor(R.styleable.LoginNew3ControlsWidget_line_color, Color.parseColor("#CCCCCC"));
         a.recycle();
         init(context);
         initListener();
@@ -89,7 +89,7 @@ public class PwdControlsWidget extends RelativeLayout {
         int i = TransformUtil.dip2px(context, 10);
         //显示隐藏密码
         mIVShowPwd = new MyImageView(context);
-        mIVShowPwd.setImageResource(R.mipmap.icon_login_eyes_h);
+        mIVShowPwd.setImageResource(R.mipmap.icon_eyes_close);
         mIVShowPwd.setId(R.id.new3_pwd);
         addView(mIVShowPwd);
         RelativeLayout.LayoutParams mIVShowPwdParams = (LayoutParams) mIVShowPwd.getLayoutParams();
@@ -136,9 +136,9 @@ public class PwdControlsWidget extends RelativeLayout {
             isShowPwd = !isShowPwd;
             if (isShowPwd) {
                 mPwdText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                mIVShowPwd.setImageResource(R.mipmap.icon_login_eyes_n);
+                mIVShowPwd.setImageResource(R.mipmap.icon_eyes_open);
             } else {
-                mIVShowPwd.setImageResource(R.mipmap.icon_login_eyes_h);
+                mIVShowPwd.setImageResource(R.mipmap.icon_eyes_close);
                 mPwdText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
             mPwdText.setSelection(mPwdText.getText().length());

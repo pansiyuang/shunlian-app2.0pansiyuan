@@ -11,6 +11,7 @@ import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyTextView;
 
@@ -76,6 +77,16 @@ public class LoginMobileFrag extends BaseFragment {
     protected void initData() {
         GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
         btnDrawable.setColor(Color.parseColor("#ECECEC"));
+    }
+
+    @OnClick(R.id.mbtn_login)
+    public void next(){
+        String mobile = this.mobile.getText().toString();
+        if (isEmpty(mobile)){
+            Common.staticToast("请输入手机号");
+            return;
+        }
+        ((New3LoginAct)baseActivity).loginSms(2,mobile);
     }
 
     @OnClick(R.id.llayout_login_agreement)

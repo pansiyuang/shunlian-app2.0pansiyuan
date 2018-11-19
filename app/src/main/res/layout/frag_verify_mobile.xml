@@ -11,6 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="22dp"
+        android:drawableLeft="@mipmap/image_redenvelope"
+        android:drawablePadding="6dp"
         android:text="新用户注册即可领取新人手气红包最高88元"
         android:textColor="@color/text_gray2"
         android:textSize="12sp" />
@@ -30,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyTextView
@@ -62,7 +64,7 @@
         android:layout_below="@+id/mtv_mobile"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:text="1234"
         app:box="4"
         app:padding="10dp" />

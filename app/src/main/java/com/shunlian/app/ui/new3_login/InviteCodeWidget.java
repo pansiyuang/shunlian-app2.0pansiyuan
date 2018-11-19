@@ -3,10 +3,12 @@ package com.shunlian.app.ui.new3_login;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -15,16 +17,15 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 
 /**
  * Created by zhanghe on 2018/11/16.
- * 账号控件
+ * 邀请码控件
  */
-public class AccountControlsWidget extends RelativeLayout {
+public class InviteCodeWidget extends RelativeLayout {
 
     private EditText mAccountText;
-    private MyImageView mTipIV;
     private OnTextChangeListener mListener;
     private String mHintText;
     private int mHintTextColor;
@@ -33,15 +34,15 @@ public class AccountControlsWidget extends RelativeLayout {
     private int mLineColor;
     private boolean mIsMobile;
 
-    public AccountControlsWidget(Context context) {
+    public InviteCodeWidget(Context context) {
         this(context, null);
     }
 
-    public AccountControlsWidget(Context context, AttributeSet attrs) {
+    public InviteCodeWidget(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public AccountControlsWidget(Context context, AttributeSet attrs, int defStyleAttr) {
+    public InviteCodeWidget(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoginNew3ControlsWidget, defStyleAttr, 0);
         mHintText = a.getString(R.styleable.LoginNew3ControlsWidget_hint_text);
@@ -59,20 +60,20 @@ public class AccountControlsWidget extends RelativeLayout {
     }
 
     private void init(Context context) {
-        //账号
+        //邀请码
         mAccountText = new EditText(context);
         addView(mAccountText);
-        mAccountText.setTextSize(TypedValue.COMPLEX_UNIT_PX,mTextSize);
+        mAccountText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         mAccountText.setTextColor(mTextColor);
         mAccountText.setMinHeight(TransformUtil.dip2px(context, 15f));
-        RelativeLayout.LayoutParams mAccountParams = (LayoutParams) mAccountText.getLayoutParams();
+        LayoutParams mAccountParams = (LayoutParams) mAccountText.getLayoutParams();
         mAccountParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         mAccountParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         mAccountText.setLayoutParams(mAccountParams);
         mAccountText.setBackgroundDrawable(null);
         mAccountText.setHintTextColor(mHintTextColor);
         mAccountText.setHint(mHintText);
-        if (mIsMobile){
+        if (mIsMobile) {
             mAccountText.setInputType(InputType.TYPE_CLASS_PHONE);
             mAccountText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
         }
@@ -84,24 +85,37 @@ public class AccountControlsWidget extends RelativeLayout {
         mLineView.setBackgroundColor(mLineColor);
         addView(mLineView);
 
-        RelativeLayout.LayoutParams mLineParams = (LayoutParams) mLineView.getLayoutParams();
+        LayoutParams mLineParams = (LayoutParams) mLineView.getLayoutParams();
         mLineParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         mLineParams.height = lineHeight;
         mLineParams.topMargin = TransformUtil.dip2px(context, 16f);
         mLineParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         mLineView.setLayoutParams(mLineParams);
 
-        //删除提示
-        mTipIV = new MyImageView(context);
-        mTipIV.setImageResource(R.mipmap.icon_search_del);
-        addView(mTipIV);
-        RelativeLayout.LayoutParams mTipIVParams = (LayoutParams) mTipIV.getLayoutParams();
-        mTipIVParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        mTipIVParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        mTipIV.setLayoutParams(mTipIVParams);
-        int i = TransformUtil.dip2px(context, 10);
-        mTipIV.setPadding(i, i, i, i);
-        mTipIV.setVisibility(GONE);
+
+        int radius = TransformUtil.dip2px(context, 12);
+        //邀请码攻略
+        int minWidth = TransformUtil.dip2px(context, 78);
+        MyTextView mStrategyTV = new MyTextView(context);
+        mStrategyTV.setText("邀请码攻略");
+        mStrategyTV.setTextSize(12);
+        addView(mStrategyTV);
+        //位置
+        LayoutParams mStrategyParams = (LayoutParams) mStrategyTV.getLayoutParams();
+        mStrategyParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        mStrategyParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        mStrategyTV.setLayoutParams(mStrategyParams);
+        //状态
+        mStrategyTV.setTextColor(Color.parseColor("#3673FB"));
+        mStrategyTV.setGravity(Gravity.CENTER);
+        mStrategyTV.setMinHeight(radius * 2);
+        mStrategyTV.setMinWidth(minWidth);
+        //背景
+        GradientDrawable mStrategyBG = new GradientDrawable();
+        mStrategyBG.setColor(Color.parseColor("#0D3673FB"));
+        mStrategyBG.setCornerRadius(radius);
+        mStrategyTV.setBackgroundDrawable(mStrategyBG);
+
     }
 
 
@@ -113,19 +127,14 @@ public class AccountControlsWidget extends RelativeLayout {
 //                System.out.println(String.format("onTextChanged : s=%s  start=%d  before=%d  count=%d",
 //                 s,start,before,count));
                 if (mListener != null) mListener.onTextChange(s);
-                if (s.length() > 0) {
-                    mTipIV.setVisibility(VISIBLE);
-                } else {
-                    mTipIV.setVisibility(GONE);
-                }
-                if (mIsMobile){//处理手机号
+                if (mIsMobile) {//处理手机号
                     if (count == 1) {
                         int length = s.toString().length();
                         if (length == 3 || length == 8) {
                             mAccountText.setText(s + " ");
                             mAccountText.setSelection(mAccountText.getText().length());
                         }
-                    }else if (count == 0){
+                    } else if (count == 0) {
                         int length = s.toString().length();
                         if (length == 4 || length == 9) {
                             mAccountText.setText(mAccountText.getText().toString().trim());
@@ -134,12 +143,6 @@ public class AccountControlsWidget extends RelativeLayout {
                     }
                 }
             }
-        });
-
-        mTipIV.setOnClickListener(v -> {
-            if (mAccountText != null)
-                mAccountText.setText("");
-            mTipIV.setVisibility(GONE);
         });
     }
 
