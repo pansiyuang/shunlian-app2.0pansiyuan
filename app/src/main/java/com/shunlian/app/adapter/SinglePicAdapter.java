@@ -26,6 +26,7 @@ import butterknife.BindView;
 
 public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
     private int gap, border, recyclerWidth;
+    private boolean isCorner = true;
 
     public SinglePicAdapter(Context context, boolean isShowFooter, List<String> list, int gap, int border) {
         super(context, isShowFooter, list);
@@ -33,10 +34,11 @@ public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
         this.border = border;
     }
 
-    public SinglePicAdapter(Context context, List<String> list, int gap, int width) {
+    public SinglePicAdapter(Context context, List<String> list, int gap, int width, boolean isRound) {
         super(context, false, list);
         this.gap = gap;
         this.recyclerWidth = width;
+        this.isCorner = isRound;
     }
 
     @Override
@@ -47,7 +49,11 @@ public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         MViewHolder viewHolder = (MViewHolder) holder;
-        GlideUtils.getInstance().loadCornerImage(context, viewHolder.miv_pic, lists.get(position), 4);
+        if (isCorner) {
+            GlideUtils.getInstance().loadCornerImage(context, viewHolder.miv_pic, lists.get(position), 4);
+        } else {
+            GlideUtils.getInstance().loadImage(context, viewHolder.miv_pic, lists.get(position));
+        }
     }
 
     @Override

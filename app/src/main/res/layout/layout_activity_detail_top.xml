@@ -70,5 +70,6 @@
         android:padding="16dp"
         android:textColor="@color/text_gray2"
         android:textSize="14sp"
-        FolderTextView:foldLine="4" />
+        FolderTextView:foldLine="4"
+        FolderTextView:tailTextColor="@color/value_3673FB" />
 </RelativeLayout>

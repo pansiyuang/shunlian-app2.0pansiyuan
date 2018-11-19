@@ -180,33 +180,14 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             }
             float alpha = (float) totalDy / layoutHeight;
             immersionBar.statusBarAlpha(alpha).addTag(GoodsDetailAct.class.getName()).init();
-            float v = 1.0f - alpha * 2;
-            if (v <= 0) {
-                v = alpha * 2 - 1;
-                setImg(2, 1);
-            } else {
-                setImg(1, 2);
-            }
-            miv_close.setAlpha(v);
         } else {
             setToolbar();
         }
     }
 
     public void setToolbar() {
-        setImg(2, 1);
         immersionBar.statusBarAlpha(1.0f).addTag(GoodsDetailAct.class.getName()).init();
         miv_close.setAlpha(1.0f);
-    }
-
-    private void setImg(int status, int oldStatus) {
-        if (status != oldStatus) {
-            if (status == 1) {
-                miv_close.setImageResource(R.mipmap.icon_more_fanhui);
-            } else {
-                miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
-            }
-        }
     }
 
     @Override

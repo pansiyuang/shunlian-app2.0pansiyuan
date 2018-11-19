@@ -190,7 +190,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             if (blog.type == 1) { //图文
                 setTextDrawable(blogViewHolder.tv_download, R.mipmap.icon_imagedown_nor);
                 int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
-                SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth);
+                SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth,false);
                 BitmapUtil.discoverImg(blogViewHolder.miv_big_icon, blogViewHolder.recycler_list, singlePicAdapter, blog.pics, (Activity) context
                         , 0, 0, 63, 12, 16, 0, 4, 0);
                 singlePicAdapter.setOnItemClickListener((view, position1) -> {
@@ -611,7 +611,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         });
         boolean checkState = downloadUtils.checkDownLoadFileExists(url);
         if (checkState) {
-            Common.staticToast("该视频已下截过!");
+            Common.staticToast("该视频已下载过!");
             return;
         }
         downLoadDialogProgress.showDownLoadDialogProgress(context, new DownLoadDialogProgress.downStateListen() {

@@ -93,7 +93,7 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
 
             if (blog.type == 1) {
                 int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
-                SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth);
+                SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth,false);
                 BitmapUtil.discoverImg(hotExpertViewHolder.miv_big_icon, hotExpertViewHolder.recycler_list, singlePicAdapter, blog.pics, (Activity) context
                         , 0, 0, 63, 12, 16, 0, 4, 0);
                 singlePicAdapter.setOnItemClickListener((view, position1) -> MyPageActivity.startAct(context, blog.member_id));

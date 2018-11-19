@@ -30,9 +30,8 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
     private OnFocusListener onFocusListener;
     private int hasFocus;
 
-    public AttentionAdapter(Context context, List<HotBlogsEntity.RecomandFocus> lists, int focus) {
+    public AttentionAdapter(Context context, List<HotBlogsEntity.RecomandFocus> lists) {
         super(context, false, lists);
-        hasFocus = focus;
     }
 
     @Override
@@ -42,6 +41,11 @@ public class AttentionAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Recoman
                 return new EmptyViewHolder(LayoutInflater.from(context).inflate(R.layout.empty_attention, parent, false));
         }
         return super.onCreateViewHolder(parent, viewType);
+    }
+
+    public void setHasFocus(int focus){
+        hasFocus = focus;
+        notifyDataSetChanged();
     }
 
     @Override

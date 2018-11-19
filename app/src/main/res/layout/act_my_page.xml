@@ -61,7 +61,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingLeft="30dp"
-            android:paddingRight="10dp"
+            android:paddingRight="16dp"
             android:scaleType="centerCrop"
             android:src="@mipmap/icon_faxian_xiaoxi"
             android:visibility="visible" />
@@ -142,27 +142,34 @@
                                 android:layout_height="65dp"
                                 android:layout_marginLeft="15dp">
 
-                                <TextView
-                                    android:id="@+id/tv_nickname"
+                                <LinearLayout
+                                    android:id="@+id/ll_info"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_marginRight="9dp"
-                                    android:ellipsize="end"
-                                    android:singleLine="true"
-                                    android:textColor="@color/value_343434"
-                                    android:textSize="18sp" />
+                                    android:orientation="vertical">
 
-                                <TextView
-                                    android:id="@+id/tv_signature"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginRight="9dp"
-                                    android:ellipsize="end"
-                                    android:singleLine="true"
-                                    android:textColor="@color/text_gray2"
-                                    android:textSize="13sp" />
+                                    <TextView
+                                        android:id="@+id/tv_nickname"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentTop="true"
+                                        android:layout_marginRight="9dp"
+                                        android:ellipsize="end"
+                                        android:singleLine="true"
+                                        android:textColor="@color/value_343434"
+                                        android:textSize="18sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_signature"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginRight="9dp"
+                                        android:ellipsize="end"
+                                        android:singleLine="true"
+                                        android:textColor="@color/text_gray2"
+                                        android:textSize="13sp" />
+                                </LinearLayout>
 
                                 <com.shunlian.app.widget.MyImageView
                                     android:id="@+id/miv_expert"
