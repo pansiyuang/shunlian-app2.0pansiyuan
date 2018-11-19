@@ -120,6 +120,9 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
     @BindView(R.id.ll_zan)
     LinearLayout ll_zan;
 
+    @BindView(R.id.ll_info)
+    LinearLayout ll_info;
+
     @BindView(R.id.miv_title_right)
     MyImageView miv_title_right;
 
@@ -137,22 +140,29 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
     private int totalDistance;
     private MyPagePresenter mPresenter;
     private int currentUnreadCount;
+    private String currentSelectType;
+    private int appBarScrollDistance;
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 1) {
-                int distance = (int) msg.obj;
-                float alph = Float.valueOf(distance) / totalDistance;
-                miv_title_icon.setAlpha(alph);
-                tv_title_nickname.setAlpha(alph);
+            switch (msg.what) {
+                case 1:
+                    int distance = (int) msg.obj;
+                    float alph = Float.valueOf(distance) / totalDistance;
+                    miv_title_icon.setAlpha(alph);
+                    tv_title_nickname.setAlpha(alph);
 
-                if (distance == 0) {
-                    lay_refresh.setRefreshEnabled(true);
-                } else {
-                    lay_refresh.setRefreshEnabled(false);
-                }
+                    if (distance == 0) {
+                        lay_refresh.setRefreshEnabled(true);
+                    } else {
+                        lay_refresh.setRefreshEnabled(false);
+                    }
+                    break;
+                case 2:
+                    lay_refresh.setRefreshEnabled((boolean) msg.obj);
+                    break;
             }
         }
     };
@@ -217,15 +227,15 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
         mAppbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
 
             totalDistance = TransformUtil.dip2px(MyPageActivity.this, 81);
-            int y = 0;
+            appBarScrollDistance = 0;
             if (verticalOffset < 0) {
-                y = verticalOffset * -1;
+                appBarScrollDistance = verticalOffset * -1;
             }
-            if (y > totalDistance) {
-                y = totalDistance;
+            if (appBarScrollDistance > totalDistance) {
+                appBarScrollDistance = totalDistance;
             }
             Message message = mHandler.obtainMessage(1);
-            message.obj = y;
+            message.obj = appBarScrollDistance;
             mHandler.sendMessage(message);
         });
 
@@ -322,6 +332,9 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
 
             if (memberInfo.expert == 0) {
                 miv_expert.setVisibility(View.GONE);
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) ll_info.getLayoutParams();
+                layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                ll_info.setLayoutParams(layoutParams);
             } else {
                 GlideUtils.getInstance().loadImage(this, miv_expert, memberInfo.expert_icon);
                 miv_expert.setVisibility(View.VISIBLE);
@@ -364,12 +377,14 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
             line_left.setVisibility(View.VISIBLE);
             line_right.setVisibility(View.GONE);
             viewpager.setCurrentItem(0);
+            currentSelectType = "2";
         } else {
             tv_right.setTextColor(getColorResouce(R.color.pink_color));
             tv_left.setTextColor(getColorResouce(R.color.value_484848));
             line_right.setVisibility(View.VISIBLE);
             line_left.setVisibility(View.GONE);
             viewpager.setCurrentItem(1);
+            currentSelectType = "3";
         }
     }
 
@@ -389,6 +404,13 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
         }
     }
 
+    public void setScrollDistance(boolean canRefresh, String type) {
+        if (currentSelectType == type) {
+            Message message = mHandler.obtainMessage(2);
+            message.obj = canRefresh;
+            mHandler.sendMessage(message);
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -418,8 +440,8 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
         currentUnreadCount = hotBlogsEntity.unread;
         if (hotBlogsEntity.member_info != null) {
             currentMember = hotBlogsEntity.member_info;
-            GlideUtils.getInstance().loadCircleAvar(this, miv_icon, currentMember.avatar);
-            GlideUtils.getInstance().loadCircleAvar(this, miv_title_icon, currentMember.avatar);
+//            GlideUtils.getInstance().loadCircleAvar(this, miv_icon, currentMember.avatar);
+//            GlideUtils.getInstance().loadCircleAvar(this, miv_title_icon, currentMember.avatar);
 
             if (currentMember.add_v == 0) {
                 miv_v.setVisibility(View.GONE);

@@ -218,7 +218,7 @@
     <color name="value_F9A31C">#F9A31C</color>
     <color name="value_F1F0F0">#F1F0F0</color>
     <color name="value_f9f9f9">#f9f9f9</color>
-
+    <color name="value_262626">#262626</color>
 
     <!--帮助中心-->
     <color name="value_555555">#555555</color>
@@ -279,6 +279,7 @@
     <color name="value_E70101">#E70101</color>
     <color name="value_00B97A">#00B97A</color>
     <color name="value_F2F8FF">#F2F8FF</color>
+    <color name="value_444444">#444444</color>
 </resources>
 
 

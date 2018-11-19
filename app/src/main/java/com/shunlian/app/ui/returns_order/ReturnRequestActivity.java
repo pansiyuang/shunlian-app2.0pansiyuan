@@ -386,7 +386,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             totalPrice = getTotalPrice(currentInfoEntity.return_price, count);
             tv_freight.setText("您最多能退 ¥ " + totalPrice);
         }
-        edt_return_money.setText(Common.formatFloat(totalPrice));
+        edt_return_money.setText(String.valueOf(totalPrice));
         edt_return_money.setSelection(edt_return_money.getText().length());
     }
 

@@ -93,6 +93,7 @@
         android:paddingLeft="9dp"
         android:paddingRight="9dp"
         android:text="关注"
+        android:gravity="center"
         android:textColor="@color/pink_color"
         android:textSize="14sp" />
 </RelativeLayout>

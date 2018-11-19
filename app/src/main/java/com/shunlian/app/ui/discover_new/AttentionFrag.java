@@ -156,10 +156,11 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
 
         if (blogList.size() == 0 && currentPage == 1) { //没有关注的用户并且当前是第一次获取数据
             if (attentionAdapter == null) {
-                attentionAdapter = new AttentionAdapter(getActivity(), recomandFocusList, hotBlogsEntity.is_have_focus);
+                attentionAdapter = new AttentionAdapter(getActivity(), recomandFocusList);
                 attentionAdapter.setOnFocusListener(this);
             }
             recycler_list.setAdapter(attentionAdapter);
+            attentionAdapter.setHasFocus(hotBlogsEntity.is_have_focus);
         } else {
             if (hotBlogAdapter == null) {
                 hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList,shareGoodDialogUtil);

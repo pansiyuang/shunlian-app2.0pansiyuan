@@ -138,6 +138,12 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                             mPresenter.onRefresh();
                         }
                     }
+                    int position = manager.findFirstVisibleItemPosition();
+                    View firstVisiableChildView = manager.findViewByPosition(position);
+                    int itemHeight = firstVisiableChildView.getHeight();
+                    int totalDistance = (position) * itemHeight - firstVisiableChildView.getTop();
+                    LogUtil.httpLogW("totalDistance:" + totalDistance);
+                    ((MyPageActivity) getActivity()).setScrollDistance(totalDistance > 0 ? false : true, currentType);
                 }
             }
         });

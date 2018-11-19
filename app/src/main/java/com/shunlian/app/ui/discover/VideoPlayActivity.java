@@ -220,7 +220,7 @@ public class VideoPlayActivity extends BaseActivity implements IChosenView {
             if (isShare) {
                 shareArticle();
             } else {
-                Toast.makeText(this, "该视频已下截过!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "该视频已下载过!", Toast.LENGTH_SHORT).show();
             }
         } else {
             if (!httpDialog.isShowing()) {

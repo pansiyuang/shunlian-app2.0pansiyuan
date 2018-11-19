@@ -20,7 +20,7 @@
         android:ellipsize="end"
         android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/miv_photo"
-        android:textColor="@color/share_text"/>
+        android:textColor="@color/value_444444"/>
     <com.shunlian.app.widget.NewTextView
         android:id="@+id/ntv_price"
         android:layout_width="wrap_content"
