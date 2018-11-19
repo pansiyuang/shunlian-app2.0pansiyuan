@@ -19,6 +19,7 @@ import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.CollectionGoodsPresenter;
 import com.shunlian.app.presenter.CommonBlogPresenter;
@@ -29,6 +30,7 @@ import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.ICollectionGoodsView;
 import com.shunlian.app.view.ICollectionStoresView;
 import com.shunlian.app.view.ICommonBlogView;
@@ -52,7 +54,8 @@ import butterknife.BindView;
  */
 
 public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsView,NewUserGoodsAdapter.IAddShoppingCarListener {
-
+    private ShareInfoParam shareInfoParam;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -106,7 +109,8 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         EventBus.getDefault().register(this);
         NestedSlHeader header = new NestedSlHeader(getActivity());
         lay_refresh.setRefreshHeaderView(header);
-
+        shareInfoParam = new ShareInfoParam();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
         currentFrom = getArguments().getString("from");
         type = getArguments().getString("type");
         isNew = getArguments().getBoolean("isNew");
@@ -236,11 +240,33 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
             return;
         }
         if(type.equals("2")){
-            GoodsDetailAct.startAct(baseActivity, goodList.get(position).id);
+            if(isNew) {
+                GoodsDetailAct.startAct(baseActivity, goodList.get(position).id);
+            }else{
+                updateShareParm(position);
+                shareGoodDialogUtil.shareGoodDialog(shareInfoParam,true,false);
+            }
             return;
         }
+
         NewUserGoodsEntity.Goods goods = goodList.get(position);
         mPresenter.getGoodsSku(goods.id,position);
+    }
+
+    /**
+     * 更新分享的参数
+     * @param postion
+     */
+    private void updateShareParm(int postion){
+        shareInfoParam.isShowTiltle = true;
+        shareInfoParam.title = goodList.get(postion).title;
+        shareInfoParam.price = goodList.get(postion).price;
+        shareInfoParam.market_price = goodList.get(postion).marker_price;
+        shareInfoParam.shareLink = goodList.get(postion).thumb;
+        shareInfoParam.img = goodList.get(postion).thumb;
+        shareInfoParam.goods_id = goodList.get(postion).id;
+        shareInfoParam.start_time = "0元3件";
+        shareInfoParam.act_label = "新人专享";
     }
 
     @Override

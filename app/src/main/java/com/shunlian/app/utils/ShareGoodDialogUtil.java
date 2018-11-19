@@ -41,6 +41,7 @@ public class ShareGoodDialogUtil {
     public void setShareInfoParam(ShareInfoParam shareInfoParam){
         this.mShareInfoParam = mShareInfoParam;
     }
+
     //分享商品的diolog
     public void shareGoodDialog(ShareInfoParam shareInfoParam,boolean isGood,boolean isFound) {
         this.mShareInfoParam = shareInfoParam;
@@ -55,6 +56,13 @@ public class ShareGoodDialogUtil {
                 nomalBuildl.dismiss();
             }
         });
+        if(!shareInfoParam.isShowTiltle){
+            nomalBuildl.getView(R.id.tv_title1).setVisibility(View.GONE);
+            nomalBuildl.getView(R.id.tv_title2).setVisibility(View.GONE);
+        }else{
+            nomalBuildl.getView(R.id.tv_title1).setVisibility(View.VISIBLE);
+            nomalBuildl.getView(R.id.tv_title2).setVisibility(View.VISIBLE);
+        }
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -285,7 +293,7 @@ public class ShareGoodDialogUtil {
     }
 
     /**
-     * 创建商品视图
+     * 创建店铺视图
      */
     public void createShopCode() {
         if (!Common.isAlreadyLogin()) {
