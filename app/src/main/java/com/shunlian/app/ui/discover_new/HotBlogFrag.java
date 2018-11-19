@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BigImgEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -21,6 +20,7 @@ import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -40,7 +40,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack, QuickActions.OnShareBlogCallBack {
+public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack, ShareGoodDialogUtil.OnShareBlogCallBack {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -56,12 +56,9 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private LinearLayoutManager manager;
     private ObjectMapper objectMapper;
 
-    QuickActions quick_actions;
-
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @Override
     public void onDestroyView() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroyView();
     }
@@ -75,11 +72,8 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     @Override
     protected void initData() {
         //分享
-        quick_actions = new QuickActions(baseActivity);
-        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
-        decorView.addView(quick_actions);
-        quick_actions.setVisibility(View.INVISIBLE);
-        quick_actions.setOnShareBlogCallBack(this);
+        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
     }
 
     @Override
@@ -146,7 +140,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, hotBlogsEntity.ad_list, quick_actions);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, hotBlogsEntity.ad_list,shareGoodDialogUtil);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }

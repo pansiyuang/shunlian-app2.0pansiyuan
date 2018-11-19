@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CouponAdapter;
 import com.shunlian.app.adapter.CouponsAdapter;
+import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -208,6 +209,11 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
+    public void setAd(AdEntity adEntity) {
+
+    }
+
+    @Override
     public void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total) {
         if (couponsAdapter == null) {
             couponsAdapter = new CouponsAdapter(this, true, mData, pGetCoupon);
@@ -235,6 +241,14 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
                 pGetCoupon.mDatas.get(position).if_get = "1";
                 couponsAdapter.notifyItemChanged(position);
             }
+        }
+    }
+
+    @Override
+    public void getCouponCallBacks(int position, String isGet, int positions) {
+        if ("1".equals(isGet)) {
+            pGetCoupon.mDatas.get(position).goods_data.get(positions).if_get = "1";
+            couponsAdapter.notifyItemChanged(position);
         }
     }
 

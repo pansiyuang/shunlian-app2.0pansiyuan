@@ -68,4 +68,11 @@ public interface ITaskCenterView extends IView {
      * @param got_eggs
      */
     void showGoldEggsNum(String got_eggs);
+
+    /**
+     * 广告弹窗
+     * @param url
+     * @param pop_ad_url
+     */
+    void popAd(String url, TaskHomeEntity.AdUrlBean pop_ad_url);
 }

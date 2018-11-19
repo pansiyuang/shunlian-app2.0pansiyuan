@@ -51,6 +51,9 @@
     <color name="light_orange">#f2ac30</color>
     <color name="light_orange2">#FFB635</color>
     <color name="light_orange3">#f4ed9b</color>
+    <color name="value_F28D27">#F28D27</color>
+    <color name="value_FDEEDF">#FDEEDF</color>
+    <color name="value_FEF9F4">#FEF9F4</color>
     <color name="deep_red">#ae1a1a</color>
     <color name="tab_bar">#f81c05</color>
     <color name="activty_flash">#BE0339</color>
@@ -84,6 +87,7 @@
     <color name="bg_gray_four">#F4F4F4</color>
     <!-- 新版首页颜色值-->
     <color name="new_orange">#ff5b41</color>
+    <color name="value_FFEFAF">#FFEFAF</color>
     <color name="new_gray">#858585</color>
     <color name="new_blue">#2e85fb</color>
     <color name="new_bg_line">#f1f1f1</color>
@@ -107,6 +111,7 @@
     <color name="line_gay">#F0EFEF</color>
     <color name="value_60">#606060</color>
     <color name="value_32">#323232</color>
+    <color name="value_f02348">#f02348</color>
     <color name="value_9B">#9B9B9B</color>
     <color name="value_88">#888888</color>
     <color name="value_20">#202020</color>

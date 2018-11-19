@@ -12,6 +12,7 @@ import com.shunlian.app.bean.CouponListEntity;
 import com.shunlian.app.presenter.CouponListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.core.GetCouponAct;
+import com.shunlian.app.ui.core.NewGetCouponAct;
 import com.shunlian.app.ui.help.HelpSolutionAct;
 import com.shunlian.app.view.ICouponListView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -154,7 +155,7 @@ public class CouponListAct extends BaseActivity implements ICouponListView{
             nei_empty.setImageResource(R.mipmap.img_empty_youhuiquan)
                     .setText("您没有已过期的优惠券")
                     .setButtonText("去领券中心逛逛")
-                    .setOnClickListener((view)-> GetCouponAct.startAct(this));
+                    .setOnClickListener((view)-> NewGetCouponAct.startAct(this));
         }else {
             gone(nei_empty);
             visible(recy_view);

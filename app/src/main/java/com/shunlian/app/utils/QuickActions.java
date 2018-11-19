@@ -237,7 +237,11 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     return;
                 }
                 mllayout_content.setVisibility(GONE);
-                if (!mPopMenu.isShowing()) {
+                if(shareItemCallBack!=null){
+                    shareItemCallBack.shareItem();
+                    return;
+                }
+                if (mPopMenu!=null&&!mPopMenu.isShowing()) {
                     mPopMenu.show();
                 }
                 break;
@@ -477,12 +481,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 专题页
      */
-    public void special() {
+    public void special(OnShareItemCallBack shareItemCallBack ) {
 //        tag="special";
+        this.shareItemCallBack  = shareItemCallBack;
         setShowItem(1, 2, 3, 6, 7, 8);
-        shareSpecialDialog();
+//        shareSpecialDialog();
     }
 
+    private OnShareItemCallBack shareItemCallBack;
     /**
      * 只能分享微信和复制链接
      */
@@ -1192,7 +1198,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         inflate.postDelayed(() -> {
                             Bitmap bitmapByView = getBitmapByView(inflate);
                             if (isShow) {
-                                boolean isSuccess = BitmapUtil.saveImageToAlbumn(mContext, bitmapByView);
+                                boolean isSuccess = BitmapUtil.saveImageToAlbumn(mContext, bitmapByView,false,false);
                                 if (isSuccess) {
 //                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
 //                                dialog.show();
@@ -1326,7 +1332,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         miv_goods_pic.setImageBitmap(resource);
                         inflate.postDelayed(() -> {
                             Bitmap bitmapByView = getBitmapByView(inflate);
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView,false,false);
                             if (isSuccess) {
                                 if (mContext instanceof GoodsDetailAct) {
                                     ((GoodsDetailAct) mContext).moreHideAnim();
@@ -1494,10 +1500,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
     public Bitmap getBitmapByView(View view) {
         Bitmap bitmap = null;
-        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
-                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
-        final Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
+        try {
+            bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+                    view.getMeasuredHeight(), Bitmap.Config.RGB_565);
+            final Canvas canvas = new Canvas(bitmap);
+            view.draw(canvas);
+        }catch (Exception e){
+        }
         return bitmap;
     }
 
@@ -1510,7 +1519,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private void savePic(View inflate) {
         inflate.postDelayed(() -> {
             Bitmap bitmapByView = getBitmapByView(inflate);
-            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView,false,false);
             if (isSuccess) {
                 LogUtil.httpLogW("图片保存成功");
                 SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
@@ -1645,5 +1654,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
     public interface OnShareBlogCallBack {
         void shareSuccess(String blogId,String goodsId);
+    }
+
+    public interface OnShareItemCallBack {
+        void shareItem();
     }
 }

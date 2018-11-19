@@ -399,6 +399,14 @@ public interface ApiService {
     Call<BaseEntity<ConfirmOrderEntity>> orderBuy(@Body RequestBody body);
 
     /**
+     * 新人专享
+     * @param body
+     * @return
+     */
+    @POST("newexclusive/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> newexclusive(@Body RequestBody body);
+
+    /**
      * 修改购物车
      *
      * @param body
@@ -871,6 +879,14 @@ public interface ApiService {
      */
     @POST("order/checkout")
     Call<BaseEntity<PayOrderEntity>> orderCheckout(@Body RequestBody body);
+
+    /**
+     * 新人专享支付
+     * @param body
+     * @return
+     */
+    @POST("newexclusive/checkout")
+    Call<BaseEntity<PayOrderEntity>> newexclusivePay(@Body RequestBody body);
 
 
     /**
@@ -2173,6 +2189,15 @@ public interface ApiService {
     Call<BaseEntity<VouchercenterplEntity>> vouchercenter(@QueryMap Map<String, String> map);
 
     /**
+     * 万用广告弹窗接口
+     *
+     * @return
+     */
+    @GET("adpush/commonad")
+    Call<BaseEntity<AdEntity>> adpush(@QueryMap Map<String, String> map);
+
+
+    /**
      * 品牌特卖详情
      *
      * @return
@@ -2819,4 +2844,43 @@ public interface ApiService {
      @Streaming
      @GET
      Call<ResponseBody> download(@Url String url);
+
+    /**
+     * 新人专享banner
+     */
+    @GET("/newexclusive/adlist")
+    Call<BaseEntity<AdUserEntity>> adlist(@QueryMap Map<String, String> map);
+
+    /**
+     * 新人专享商品
+     * @return
+     */
+    @POST("/newexclusive/goodslist")
+    Call<BaseEntity<NewUserGoodsEntity>> usergoodslist(@QueryMap Map<String, String> map);
+
+    /**
+     * 新人专享添加购物车
+     * @return
+     */
+    @POST("/newexclusive/addcart")
+    Call<BaseEntity<CateEntity>> newuseraddCart(@Body RequestBody body);
+
+    /**
+     * 新人专享购物车商品列表
+     */
+    @GET("/newexclusive/cartlist")
+    Call<BaseEntity<NewUserGoodsEntity>> cartlist(@QueryMap Map<String, String> map);
+    /**
+     * 新人专享删除购物车
+     */
+    @GET("/newexclusive/deletecart")
+    Call<BaseEntity<EmptyEntity>> deletecart(@QueryMap Map<String, String> map);
+    /**
+     * 购物车进入确认订单页
+     *
+     * @param body
+     * @return
+     */
+    @POST("/newexclusive/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> orderNewUserConfirm(@Body RequestBody body);
 }

@@ -32,6 +32,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HourRedDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
@@ -73,11 +74,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     private int second = (int) (System.currentTimeMillis() / 1000);
     private int hotPosition = -1;
 
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
         super(context, isShowFooter, datas);
         this.isFirst = isFirst;
         this.cateGoryFrag = cateGoryFrag;
         this.mergePosition = mergePosition;
+        shareGoodDialogUtil = new ShareGoodDialogUtil(context);
     }
 
     @Override
@@ -516,7 +519,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     fiveHolder.view_line.setVisibility(View.GONE);
                     fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
                     if (!isEmpty(data.content)) {
-                        fiveHolder.mtv_desc.setVisibility(View.VISIBLE);
+                        fiveHolder.mtv_desc.setVisibility(View.GONE);
                         fiveHolder.mtv_desc.setText(data.content);
                     }
                     fiveHolder.mtv_title.setText(data.title);
@@ -534,30 +537,24 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     }
                     if (!TextUtils.isEmpty(data.price)) {
                         SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
-                                getString(R.string.common_yuan), 11);
-                        fiveHolder.mtv_price.setText(priceBuilder);
+                                getString(R.string.common_yuan), 12);
+                        fiveHolder.mtv_price.setText(getString(R.string.common_yuan) + data.price);
                         fiveHolder.mtv_price.setVisibility(View.VISIBLE);
                     } else {
                         fiveHolder.mtv_price.setVisibility(View.GONE);
                     }
-                    fiveHolder.miv_share.setOnClickListener(new View.OnClickListener() {
+                    fiveHolder.mtv_market_price.setStrikethrough();
+                    if (!TextUtils.isEmpty(data.market_price)) {
+                        fiveHolder.mtv_market_price.setText(getString(R.string.common_yuan) + data.market_price);
+                        fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
+                    } else {
+                        fiveHolder.mtv_market_price.setVisibility(View.GONE);
+                    }
+
+                    fiveHolder.mtv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            mShareInfoParam.title = data.share.title;
-                            mShareInfoParam.desc = data.share.content;
-                            mShareInfoParam.img = data.share.logo;
-
-                            if (!Common.isAlreadyLogin()) {
-                                Common.goGoGo(context, "login");
-                                return;
-                            }
-                            if (!isEmpty(data.share.share_url)) {
-                                mShareInfoParam.shareLink = data.share.share_url;
-                                shareStyle2Dialog();
-                            } else {
-                                if (data.url!=null)
-                                cateGoryFrag.getShareInfo(data.url.type, data.url.item_id);
-                            }
+                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                         }
                     });
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
@@ -733,7 +730,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         mShareInfoParam = baseEntity.data;
-        shareStyle2Dialog();
+        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,false);
+//        shareStyle2Dialog();
     }
 
     /**
@@ -984,20 +982,31 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     class FiveHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
-        @BindView(R.id.miv_share)
-        MyImageView miv_share;
+
+        @BindView(R.id.mtv_share)
+        MyTextView mtv_share;
+
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
+
         @BindView(R.id.mtv_desc)
         MyTextView mtv_desc;
+
         @BindView(R.id.mtv_price)
         MyTextView mtv_price;
+
+        @BindView(R.id.mtv_market_price)
+        MyTextView mtv_market_price;
+
         @BindView(R.id.mtv_topic)
         MyTextView mtv_topic;
+
         @BindView(R.id.view_line)
         View view_line;
+
         @BindView(R.id.mllayout_root)
         MyLinearLayout mllayout_root;
+
         @BindView(R.id.mllayout_pingzhi)
         MyLinearLayout mllayout_pingzhi;
 

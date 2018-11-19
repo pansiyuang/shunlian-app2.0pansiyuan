@@ -527,6 +527,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     public final String help = "help";
     public final String store = "store";
     public final String clazz = "class";
+    public final String new_exclusive = "new_exclusive";
     /**
      * 获取分享信息
      * @param type

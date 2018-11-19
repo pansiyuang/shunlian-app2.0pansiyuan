@@ -218,6 +218,12 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                     }
                 }
 
+                if (isEmpty(goods.tag_pic)){
+                    viewHolder.miv_act.setVisibility(View.GONE);
+                }else {
+                    viewHolder.miv_act.setVisibility(View.VISIBLE);
+                    GlideUtils.getInstance().loadImageZheng(context,viewHolder.miv_act,goods.tag_pic);
+                }
                 if (1 == goods.is_sell_out) {
                     viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
                     viewHolder.tv_price.setTextColor(getColor(R.color.value_A0A0A0));
@@ -322,6 +328,9 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         @BindView(R.id.miv_seller_out)
         MyImageView miv_seller_out;
+
+        @BindView(R.id.miv_act)
+        MyImageView miv_act;
 
         @BindView(R.id.tv_title)
         TextView tv_title;

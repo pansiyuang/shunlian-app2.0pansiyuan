@@ -78,15 +78,7 @@
             android:textColor="@color/new_text"
             android:textSize="13sp" />
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_home_share"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="8dp"/>
+
     </com.shunlian.app.widget.MyRelativeLayout>
 
     <com.shunlian.app.widget.MyTextView
@@ -102,18 +94,53 @@
         android:textSize="11sp"
         android:visibility="gone"/>
 
-    <com.shunlian.app.widget.MyTextView
-        android:id="@+id/mtv_price"
+    <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp">
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentLeft="true"
         android:ellipsize="end"
+        android:textStyle="bold"
         android:singleLine="true"
-        android:textColor="@color/new_text"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/pink_color"
         android:textSize="14sp"
-        android:visibility="gone"/>
+        android:text=""
+        android:visibility="gone"
+       />
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_market_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/mtv_price"
+            android:layout_marginTop="11dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/new_gray"
+            android:textSize="12sp"
+            android:text=""
+            android:visibility="gone"/>
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_share"
+            android:layout_width="@dimen/xx250"
+            android:layout_height="@dimen/xx100"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="@string/to_buy"
+            android:background="@drawable/rounded_corner_stroke_pink_4px"
+            android:textColor="@color/pink_color"
+            android:gravity="center"
+            android:textSize="@dimen/xx38"
+          />
+    </com.shunlian.app.widget.MyRelativeLayout>
 </com.shunlian.app.widget.MyLinearLayout>
 
 
