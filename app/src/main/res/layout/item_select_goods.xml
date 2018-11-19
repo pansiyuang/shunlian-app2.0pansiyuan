@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:background="@color/white"
+    android:minHeight="90dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_pic"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/miv_pic"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_toRightOf="@+id/miv_pic"
+        android:maxLines="2"
+        android:textColor="@color/value_484848"
+        android:textSize="15sp" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mtv_title"
+        android:layout_below="@+id/mtv_title"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/pink_color"
+        android:textSize="15sp" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mtv_price"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/rounded_stroke_pink_20px"
+        android:gravity="center"
+        android:minHeight="20dp"
+        android:minWidth="44dp"
+        android:text="添加"
+        android:textColor="@color/pink_color"
+        android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_complete_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mtv_price"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="12dp"
+        android:gravity="center"
+        android:minHeight="20dp"
+        android:minWidth="44dp"
+        android:text="已添加"
+        android:visibility="gone"
+        android:textColor="@color/text_gray2"
+        android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_del"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_title"
+        android:layout_alignParentRight="true"
+        android:paddingTop="8dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="12dp"
+        android:visibility="gone"
+        android:src="@mipmap/icon_common_search_delet" />
+
+</RelativeLayout>

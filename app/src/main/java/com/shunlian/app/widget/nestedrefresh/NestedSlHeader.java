@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.nestedrefresh.base.BaseHeader;
 import com.shunlian.app.widget.refresh.turkey.FirstSetpView;
@@ -149,29 +150,32 @@ public class NestedSlHeader extends BaseHeader {
         switch (state) {
             case DONE:
                 headerView.setPadding(0, -headerViewHeight, 0, 0);
-//                firstSetpView.setVisibility(View.VISIBLE);
+//                firstSetpView.setVisibility(VISIBLE);
                 secondAnimation.stop();
-//                secondStepView.setVisibility(View.GONE);
-//                miv_release.setVisibility(GONE);
+//                secondStepView.setVisibility(INVISIBLE);
+//                miv_release.setVisibility(INVISIBLE);
                 break;
             case RELEASE_TO_REFRESH:
-                firstSetpView.setVisibility(View.GONE);
-                secondStepView.setVisibility(View.GONE);
+                firstSetpView.setVisibility(INVISIBLE);
+                secondStepView.setVisibility(INVISIBLE);
                 miv_release.setVisibility(VISIBLE);
                 secondAnimation.stop();
+
                 break;
             case PULL_TO_REFRESH:
-                firstSetpView.setVisibility(View.VISIBLE);
+                firstSetpView.setVisibility(VISIBLE);
                 secondAnimation.stop();
-                secondStepView.setVisibility(View.GONE);
-                miv_release.setVisibility(GONE);
+                secondStepView.setVisibility(INVISIBLE);
+                miv_release.setVisibility(INVISIBLE);
+
                 break;
             case REFRESHING:
-                firstSetpView.setVisibility(View.GONE);
-                secondStepView.setVisibility(View.VISIBLE);
-                miv_release.setVisibility(GONE);
+                firstSetpView.setVisibility(INVISIBLE);
+                secondStepView.setVisibility(VISIBLE);
+                miv_release.setVisibility(INVISIBLE);
                 secondAnimation.stop();
                 secondAnimation.start();
+
                 break;
             default:
                 break;

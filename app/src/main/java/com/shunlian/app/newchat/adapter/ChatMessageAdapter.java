@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -23,11 +24,13 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -116,10 +119,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     private MemberStatus memberStatus;
     private int chatRole;
 
-    public void mRelease(){
-        if (am!=null)
+    public void mRelease() {
+        if (am != null)
             am.close();
     }
+
     public ChatMessageAdapter(Context context, List<MsgInfo> lists, RecyclerView recyclerView) {
         super(context, false, lists);
         objectMapper = new ObjectMapper();
@@ -427,6 +431,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             rightTxtViewHolder.rl_msg_status.setVisibility(View.GONE);
         }
         rightTxtViewHolder.tv_content.setBackgroundResource(getRightNomalDrawableRes());
+//        rightTxtViewHolder.tv_content.setOnClickListener(v -> showPopupWindow(rightTxtViewHolder.tv_content));
     }
 
     public void handLeftImg(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -1451,5 +1456,23 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             super.updateDrawState(ds);
             ds.setColor(getColor(R.color.white));
         }
+    }
+
+    private void showPopupWindow(View view) {
+        // 一个自定义的布局，作为显示的内容
+        View contentView = LayoutInflater.from(context).inflate(R.layout.pop_withdraw, null, false);
+        // 设置按钮的点击事件
+        final PopupWindow popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        contentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int popupWidth = view.getMeasuredWidth();
+        int popupHeight = view.getMeasuredHeight();
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        LogUtil.httpLogW("view.getWidth():" + view.getWidth() + "  popupWidth:" + popupWidth);
+        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0] + view.getWidth() - popupWidth, location[1] - popupHeight);
     }
 }

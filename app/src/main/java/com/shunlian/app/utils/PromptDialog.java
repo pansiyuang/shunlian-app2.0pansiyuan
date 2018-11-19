@@ -83,6 +83,14 @@ public class PromptDialog {
             tvSure.setBackgroundDrawable(ctx.getResources().getDrawable((drawable)));
         }
     }
+
+    public void setTvSureBGColor(int color){
+        if (tvSure != null) {
+            GradientDrawable background = (GradientDrawable) tvSure.getBackground();
+            background.setColor(color);
+        }
+    }
+
     public void setTvCancleText(CharSequence text) {
         if (tvCancle != null) {
             tvCancle.setText(text);

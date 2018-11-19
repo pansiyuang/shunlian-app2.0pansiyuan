@@ -24,6 +24,7 @@ import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.collection.SearchResultAct;
 import com.shunlian.app.ui.myself_store.GoodsSearchAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -238,6 +239,12 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                             String concat = cacheSharedPrf.concat(text.toString().concat(","));
                             SharedPrefUtil.saveCacheSharedPrf(save_shop_history, concat);
                         }
+                        JosnSensorsDataAPI.isHistory = false;
+                        if(currentKeyWord.equals(text.toString())){
+                            JosnSensorsDataAPI.isRecommend = true;
+                        }else{
+                            JosnSensorsDataAPI.isRecommend = false;
+                        }
                         SearchResultAct.startAct(SearchGoodsActivity.this, text.toString(), currentFlag);
                         finish();
                     }
@@ -271,6 +278,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
 
     @Override
     public void getSearchGoods(final HotSearchEntity entity) {
+
         hotTags.clear();
         histotyTags.clear();
 
@@ -309,6 +317,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                     tv.setTextColor(getColorResouce(R.color.text_gray2));
                 }
                 view.setOnClickListener(view1 -> {
+                    JosnSensorsDataAPI.isHistory = false;
                     HotSearchEntity.HotKeywords hotky = entity.new_hot_keywords.get(position);
                     if (isEmpty(hotky.type)) {
                         return;
@@ -327,11 +336,14 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         historyAdapter = new TagAdapter(histotyTags) {
             @Override
             public View getView(FlowLayout parent, final int position, Object o) {
+                JosnSensorsDataAPI.isHistory = true;
+                JosnSensorsDataAPI.isRecommend = true;
                 final String tagStr = histotyTags.get(position);
                 View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_goods_tag_layout, taglayout_history, false);
                 TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
                 tv.setText(tagStr);
-                view.setOnClickListener(v -> switchToJump(entity.history_list.get(position)));
+                view.setOnClickListener(v ->
+                        switchToJump(entity.history_list.get(position)));
                 return view;
             }
         };

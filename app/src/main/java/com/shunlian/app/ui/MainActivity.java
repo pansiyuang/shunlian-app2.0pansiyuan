@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,13 +29,17 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
+import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.UpdateEntity;
+import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.coupon.CouponListAct;
-import com.shunlian.app.ui.fragment.DiscoverFrag;
+import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
+import com.shunlian.app.ui.fragment.NewDiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
@@ -44,6 +50,7 @@ import com.shunlian.app.ui.h5.H5X5Frag;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -52,6 +59,7 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
+import com.shunlian.app.widget.DiscoveryGuideView;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -59,6 +67,10 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.UpdateDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -124,7 +136,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private MyPlusFrag myPlusFrag;
     private SortFrag sortFrag;
     private H5PlusFrag h5PlusFrag;
-    private DiscoverFrag discoverFrag;
+    //    private DiscoverFrag discoverFrag;
+    private NewDiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
     private PersonalCenterFrag personalCenterFrag;
     private long mExitTime;
@@ -140,10 +153,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
-    private MyLinearLayout mllayout_before,mllayout_after;
-    private NewTextView ntv_get,ntv_aOne,ntv_check,ntv_use;
-    private boolean isGetAward=false;
-
+    private MyLinearLayout mllayout_before, mllayout_after;
+    private NewTextView ntv_get, ntv_aOne, ntv_check, ntv_use;
+    private boolean isGetAward = false;
+    private ObjectMapper objectMapper;
+    private int[] currentLocation;
+    private int currentImgWidth;
+    private boolean isShowGuide = false;
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
 
@@ -168,9 +184,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (isGetAward){
+        if (isGetAward) {
             pMain.getPrizeByRegister();
-            isGetAward=false;
+            isGetAward = false;
         }
         if (!isEmpty(flag) && "nicefocusexperiencecirclematerial".contains(flag)) {
             flag = "";
@@ -185,8 +201,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             view_message.setVisibility(View.GONE);
         } else {
             if (discoverFrag != null)
-                discoverFrag.initMessage(null);
-            mtv_message_count.setVisibility(View.GONE);
+//                discoverFrag.initMessage(null);
+                mtv_message_count.setVisibility(View.GONE);
             view_message.setVisibility(View.VISIBLE);
         }
     }
@@ -196,20 +212,23 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
      */
     @Override
     protected void initData() {
-        if (SharedPrefUtil.getSharedUserBoolean("hide_first",false)){
+        EventBus.getDefault().register(this);
+        objectMapper = new ObjectMapper();
+
+        if (SharedPrefUtil.getSharedUserBoolean("hide_first", false)) {
             miv_hint.setVisibility(View.GONE);
-        }else {
+        } else {
             GlideUtils.getInstance().loadLocal(this, miv_hint, R.drawable.firsts_hint);
             miv_hint.setVisibility(View.VISIBLE);
         }
 
         if (false) {
             ntv_uuid.setVisibility(View.VISIBLE);
-            ntv_uuid.setText("uuid:\n"+ UUID.nameUUIDFromBytes(Build.SERIAL.getBytes()).toString().toUpperCase());
+            ntv_uuid.setText("uuid:\n" + UUID.nameUUIDFromBytes(Build.SERIAL.getBytes()).toString().toUpperCase());
             ntv_uuid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Common.copyText(baseAct,UUID.nameUUIDFromBytes(Build.SERIAL.getBytes()).toString().toUpperCase());
+                    Common.copyText(baseAct, UUID.nameUUIDFromBytes(Build.SERIAL.getBytes()).toString().toUpperCase());
                 }
             });
         }
@@ -339,49 +358,43 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             miv_first.animate().rotation(0).setDuration(0).start();
             miv_first.animate().rotation(360).setDuration(300).start();
         } else {
-            view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-            view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+            if (view.getId() == R.id.ll_tab_discover) {
+                if (discoverFrag != null && !discoverFrag.isVisible()) {
+                    view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                    view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+                }
+            } else {
+                view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+            }
         }
         if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
 //            mtv_message_count.setVisibility(View.GONE);
+
+//            if (!Common.isAlreadyLogin() && discoverFrag != null && discoverFrag.isVisible()) {
+//                LoginAct.startAct(this);
+//                return;
+//            }
+            try {
+                String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
+                HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
+                FindSendPictureTextAct.SendConfig sendConfig = new FindSendPictureTextAct.SendConfig();
+                if (discoverFrag != null && discoverFrag.isVisible()) {
+                    if (baseInfo.white_list == 0) {
+                        sendConfig.isWhiteList = false;
+                    } else {
+                        sendConfig.isWhiteList = true;
+                    }
+                    sendConfig.memberId = baseInfo.member_id;
+                    FindSendPictureTextAct.startAct(this, sendConfig);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (handler == null)
             handler = new Handler();
-
-        switch (view.getId()) {
-            case R.id.ll_tab_main_page:
-
-                if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
-                    cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
-                    if (cateGoryFrag.rv_view != null) {
-                        cateGoryFrag.rv_view.scrollToPosition(0);
-//                                cateGoryFrag.rv_view.smoothScrollToPosition(0);
-                        FirstPageFrag.mAppbar.setExpanded(true);
-                    }
-                } else {
-                    mainPageClick();
-                }
-                break;
-            case R.id.ll_tab_sort:
-                //myPlusClick();
-                sortClick();
-                break;
-            case R.id.ll_tab_discover:
-                discoverClick();
-                break;
-            case R.id.ll_tab_shopping_car:
-//                        CouponMsgAct.startAct(MainActivity.this,"");
-                shoppingCarClick();
-                break;
-            case R.id.ll_tab_person_center:
-                miv_hint.setVisibility(View.GONE);
-                SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
-                personCenterClick();
-                break;
-        }
-//        view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-//        view.animate().scaleX(1).scaleY(1).setDuration(300).start();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -411,7 +424,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         break;
                     case R.id.ll_tab_person_center:
                         miv_hint.setVisibility(View.GONE);
-                        SharedPrefUtil.saveSharedUserBoolean("hide_first",true);
+                        SharedPrefUtil.saveSharedUserBoolean("hide_first", true);
                         personCenterClick();
                         break;
                 }
@@ -513,21 +526,21 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         isFirst = false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (discoverFrag == null) {
-            discoverFrag = (DiscoverFrag) fragmentMap.get(flags[2]);
+            discoverFrag = (NewDiscoverFrag) fragmentMap.get(flags[2]);
             if (discoverFrag == null) {
-                discoverFrag = new DiscoverFrag();
+                discoverFrag = new NewDiscoverFrag();
                 Bundle bundle = new Bundle();
                 bundle.putString("flag", flag);
                 discoverFrag.setArguments(bundle);
                 fragmentMap.put(flags[2], discoverFrag);
             }
         } else {
-            discoverFrag.setArgument(flag);
-            if (Common.isAlreadyLogin()) {
-                discoverFrag.initMessage(data);
-            } else {
-                discoverFrag.initMessage(null);
-            }
+//            discoverFrag.setArgument(flag);
+//            if (Common.isAlreadyLogin()) {
+//                discoverFrag.initMessage(data);
+//            } else {
+//                discoverFrag.initMessage(null);
+//            }
         }
         switchContent(discoverFrag);
         pageIndex = 2;
@@ -682,6 +695,61 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
         }
+//        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
+//        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
+        tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_n));
+        tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_n));
+        tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_n));
+        tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_first.setVisibility(View.GONE);
+        miv_tab_main.setVisibility(View.VISIBLE);
+        tv_tab_main.setVisibility(View.VISIBLE);
+        mtv_message_count.setVisibility(View.GONE);
+
+        RelativeLayout.LayoutParams tvParams = (RelativeLayout.LayoutParams) tv_tab_discover.getLayoutParams();
+        tvParams.setMargins(0, TransformUtil.dip2px(this, 6), 0, TransformUtil.dip2px(this, 4));
+
+        RelativeLayout.LayoutParams ivParams = (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
+        ivParams.setMargins(0, TransformUtil.dip2px(this, 8), 0, 0);
+        switch (pageIndex) {
+            case 0:
+                miv_first.setVisibility(View.VISIBLE);
+                miv_tab_main.setVisibility(View.GONE);
+                tv_tab_main.setVisibility(View.GONE);
+
+//                miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_h));
+//                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 1:
+                miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_h));
+                tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 2:
+                miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
+                tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
+
+                ivParams.setMargins(0, TransformUtil.dip2px(this, -12), 0, 0);
+                tvParams.setMargins(0, 0, 0, 0);
+                mtv_message_count.setVisibility(View.GONE);
+                break;
+            case 3:
+                miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_h));
+                tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 4:
+                miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_h));
+                tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+        }
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -734,6 +802,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
         if (updateDialogV != null) {
             if (updateDialogV.updateDialog != null) {
                 updateDialogV.updateDialog.dismiss();
@@ -822,10 +891,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             ntv_get.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Common.isAlreadyLogin()){
+                    if (Common.isAlreadyLogin()) {
                         pMain.getPrizeByRegister();
-                    }else {
-                        isGetAward=true;
+                    } else {
+                        isGetAward = true;
                         LoginEntryAct.startAct(baseAct);
                     }
 
@@ -892,16 +961,16 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void isShowNew(CommonEntity data) {
-        if ("1".equals(data.show) && !isEmpty(data.prize)&&Float.parseFloat(data.prize)>0)
+        if ("1".equals(data.show) && !isEmpty(data.prize) && Float.parseFloat(data.prize) > 0)
             initDialogs(data.prize);
     }
 
     @Override
     public void getPrize(CommonEntity data) {
-        if (dialog_new!=null){
+        if (dialog_new != null) {
             mllayout_before.setVisibility(View.GONE);
             mllayout_after.setVisibility(View.VISIBLE);
-            SpannableStringBuilder spannableStringBuilders = Common.changeTextSize(data.prize+getStringResouce(R.string.new_yuan) , getStringResouce(R.string.new_yuan), 24);
+            SpannableStringBuilder spannableStringBuilders = Common.changeTextSize(data.prize + getStringResouce(R.string.new_yuan), getStringResouce(R.string.new_yuan), 24);
             ntv_aOne.setText(spannableStringBuilders);
             ntv_get.setVisibility(View.GONE);
             ntv_use.setVisibility(View.VISIBLE);
@@ -909,7 +978,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             ntv_use.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Common.goGoGo(baseAct,data.type,data.item_id);
+                    Common.goGoGo(baseAct, data.type, data.item_id);
                     dialog_new.dismiss();
                 }
             });
@@ -927,7 +996,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void setDiscoveryUnreadCount(CommonEntity data) {
         this.data = data;
         if (mtv_message_count != null) {
-            mtv_message_count.setVisibility(View.VISIBLE);
+            mtv_message_count.setVisibility(View.GONE);
             if (data.total > 99) {
                 mtv_message_count.setText("99+");
             } else if (data.total <= 0) {
@@ -937,18 +1006,52 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             }
         }
         if (discoverFrag != null) {
-            discoverFrag.initMessage(data);
+//            discoverFrag.initMessage(data);
         }
     }
 
     @Override
     public void showFailureView(int request_code) {
-        if (0==request_code&&dialog_new!=null)
+        if (0 == request_code && dialog_new != null)
             dialog_new.dismiss();
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(DiscoveryLocationEvent event) {
+        isShowGuide = SharedPrefUtil.getCacheSharedPrfBoolean("showGuide", false);
+        currentLocation = event.location;
+        currentImgWidth = event.imgWidth;
+        if (currentLocation != null && currentImgWidth != 0 && !isShowGuide) {
+            showGuideView();
+        }
+    }
+
+
+    public void showGuideView() {
+        int[] location2 = new int[2];
+        miv_tab_discover.getLocationInWindow(location2);
+        int bottomImgWidth = miv_tab_discover.getWidth();
+        location2[0] = location2[0] + bottomImgWidth / 2;
+        location2[1] = location2[1] + bottomImgWidth / 2;
+
+        currentLocation[0] = currentLocation[0] + currentImgWidth / 2;
+        currentLocation[1] = currentLocation[1] + currentImgWidth / 2;
+
+        DiscoveryGuideView guide_view = new DiscoveryGuideView(this);
+        guide_view.setOnClickListener(v -> {
+            guide_view.setVisibility(View.GONE);
+        });
+        guide_view.setImageLocation(currentLocation, location2);
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        guide_view.setLayoutParams(layoutParams);
+        decorView.addView(guide_view);
+
+        SharedPrefUtil.saveCacheSharedPrfBoolean("showGuide", true);
     }
 }

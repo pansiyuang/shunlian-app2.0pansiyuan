@@ -16,6 +16,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
+import com.shunlian.app.newchat.util.TimeUtil;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
@@ -48,6 +50,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
@@ -78,6 +81,7 @@ import cn.jzvd.JZMediaManager;
 
 public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetailView, View.OnClickListener {
 
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     public static final String FRAG_GOODS = GoodsDeatilFrag.class.getName();
     public static final String FRAG_COMMENT = CommentFrag.class.getName();
     public static final int GOODS_ID = 0;//商品
@@ -165,9 +169,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
-
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
 
     @BindView(R.id.mtv_want)
     MyTextView mtv_want;
@@ -257,6 +258,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     private void initConstant() {
         fragments = new HashMap();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         int statusBarHeight = ImmersionBar.getStatusBarHeight(this);
         int deviceWidth = DeviceInfoUtil.getDeviceWidth(this);
         //偏移量
@@ -444,7 +446,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 } else {
                     miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
                 }
-                miv_more.setImageResource(R.mipmap.icon_more_gengduo);
+                miv_more.setImageResource(R.mipmap.icon_head_fenxiang);
             } else {
                 miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
                 if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
@@ -452,9 +454,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 } else {
                     miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
                 }
-                miv_more.setImageResource(R.mipmap.icon_more_n);
+                miv_more.setImageResource(R.mipmap.icon_head_fenxiang_black);
             }
         }
+        miv_is_fav.setVisibility(View.GONE);
     }
 
 
@@ -519,28 +522,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void isFavorite(String is_fav) {
         favId = is_fav;
         if (goodsDeatilFrag != null) {
-            int item = goodsDeatilFrag.currentFirstItem;
-            if (item > 0) {
-                if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
-                } else {
-                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
-                }
-            } else {
-                if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
-                } else {
-                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
-                }
-            }
-        } else {
-            if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)) {
-                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
-            } else {
-                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
-            }
+            mGoodsDeatilEntity.is_fav =is_fav;
+            goodsDeatilFrag.updateFav(is_fav);
         }
-
     }
 
     /**
@@ -781,13 +765,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 break;
 
             case R.id.miv_is_fav:
-                if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
-                    goodsDetailPresenter.goodsFavAdd(goodsId);
-                } else {
-                    goodsDetailPresenter.goodsFavRemove(favId);
-                }
                 break;
-
             case R.id.mllayout_car:
                 MainActivity.startAct(this, "shoppingcar");
                 break;
@@ -795,6 +773,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (goodsDetailPresenter != null)
                     goodsDetailPresenter.goodsWant();
                 break;
+        }
+    }
+
+    public void favAddOrRemove(){
+        if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
+            goodsDetailPresenter.goodsFavAdd(goodsId);
+        } else {
+            goodsDetailPresenter.goodsFavRemove(favId);
         }
     }
 
@@ -881,16 +867,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      * 显示分享框
      */
     public void moreAnim() {
-        float alpha = mll_item.getAlpha();
-        if (alpha < 1 && alpha > 0) return;//导航栏没有全部显示的情况下，显示分享框会有透明条
-        immersionBar.statusBarColor(R.color.white).init();
-        visible(mll_share);
-        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
-                -1, Animation.RELATIVE_TO_SELF, 0);
-        animation.setDuration(250);
-        mll_share.setAnimation(animation);
-        mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(this, "login");
+            return;
+        }
+        if(goodsDetailPresenter!=null) {
+            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
+        }
     }
 
     private void addCartAnim() {
@@ -1136,41 +1119,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         moreHideAnim();
     }
 
-    @OnClick(R.id.mtv_weixin_share)
-    public void weChatShare() {
-        if (!Common.isAlreadyLogin()) {
-            sharePrompt();
-            return;
-        }
-        currentQuickAction = 6;
-        moreHideAnim();
-    }
-
-    @OnClick(R.id.mtv_picText_share)
-    public void picTextShare() {
-        if (!Common.isAlreadyLogin()) {
-            sharePrompt();
-            return;
-        }
-        if (goodsDetailPresenter != null) {
-            quick_actions.shareInfo(mShareInfoParam);
-            goodsDetailPresenter.copyText(false);
-            quick_actions.saveshareGoodsPic();
-        }
-    }
-
-    @OnClick(R.id.mtv_copyLink_share)
-    public void copyLinkShare() {
-        if (!Common.isAlreadyLogin()) {
-            sharePrompt();
-            return;
-        }
-        if (goodsDetailPresenter != null) {
-            goodsDetailPresenter.copyText(true);
-        }
-        moreHideAnim();
-    }
-
     public void sharePrompt() {
         Common.goGoGo(this, "login");
         moreHideAnim();
@@ -1201,14 +1149,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 break;
             case 5:
                 Common.goGoGo(this, "help");
-                break;
-            case 6://分享到微信
-                if (goodsDetailPresenter != null) {
-                    WXEntryActivity.startAct(this, "shareFriend",
-                            goodsDetailPresenter.getShareInfoParam());
-                    Constant.SHARE_TYPE = "goods";
-                    Constant.SHARE_ID = goodsId;
-                }
                 break;
         }
         currentQuickAction = -1;
@@ -1244,8 +1184,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         if (goodsDetailPresenter != null) {
             goodsDetailPresenter.detachView();
             goodsDetailPresenter = null;
@@ -1257,7 +1195,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginRefresh(DefMessageEvent event) {
         if (event.loginSuccess && goodsDetailPresenter != null) {
-            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
+//            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1271,13 +1209,36 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         if (mShareInfoParam != null) {
+            mShareInfoParam =baseEntity.data;
+            mShareInfoParam.isShowTiltle = true;
             mShareInfoParam.userName = baseEntity.data.userName;
             mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
             mShareInfoParam.shareLink = baseEntity.data.shareLink;
             mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
+            if(mGoodsDeatilEntity.tt_act!=null&&!"0".equals(mGoodsDeatilEntity.status)){//非下架商品){
+                if(mGoodsDeatilEntity.tt_act.content!=null&&mGoodsDeatilEntity.tt_act.content.length()>2){
+
+                  String stateTime = mGoodsDeatilEntity.tt_act.content.substring(mGoodsDeatilEntity.tt_act.content.length()-2,mGoodsDeatilEntity.tt_act.content.length());
+                  if(stateTime.equals("开始")){
+                      stateTime="开抢";
+                      mShareInfoParam.start_time =TimeUtil.getyMdHmMin(System.currentTimeMillis()+Long.valueOf(mGoodsDeatilEntity.tt_act.time)*1000)
+                              +stateTime;
+                  }else{
+                      mShareInfoParam.start_time =TimeUtil.getyMdHMin(System.currentTimeMillis()+Long.valueOf(mGoodsDeatilEntity.tt_act.time)*1000)
+                              +stateTime;
+                  }
+
+                }
+                mShareInfoParam.act_label = "天天特惠";
+                mShareInfoParam.price = mGoodsDeatilEntity.tt_act.act_price;
+                mShareInfoParam.market_price = mGoodsDeatilEntity.tt_act.market_price;
+            }
             if (goodsDetailPresenter != null) {
                 goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
+                shareGoodDialogUtil.shareGoodDialog(goodsDetailPresenter.getShareInfoParam(),true,false);
             }
         }
+
     }
 }

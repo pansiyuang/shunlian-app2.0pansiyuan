@@ -178,6 +178,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private static final int UNIONPAY_FLAG = 666;
     public static final int PLUGIN_NOT_INSTALLED = -1;
     public static final int PLUGIN_NEED_UPGRADE = 2;
+    private boolean isNewExclusive;
 
     /**
      * 传参使用json格式，减少字段
@@ -302,6 +303,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 mPhoneNumber = params.phoneNum;
                 mTopUpPrice = params.face_price;
                 use_egg = params.use_egg;
+                isNewExclusive = params.isNewExclusive;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -688,7 +690,11 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 
     public void payCommon(String code){
         if (!isEmpty(shop_goods)) {
-            payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, code);
+            if (isNewExclusive){
+                payListPresenter.newexclusivePay(shop_goods, addressId, anonymous,code);
+            }else {
+                payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, code);
+            }
         } else if (!isEmpty(orderId)) {
             payListPresenter.fromOrderListGoPay(orderId, code);
         } else if (!isEmpty(mPhoneNumber)) {//手机充值

@@ -13,14 +13,12 @@ import com.shunlian.app.adapter.ExperienceAdapter;
 import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.presenter.ExperiencePresenter;
 import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IExperienceView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
-import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;

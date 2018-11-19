@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_ash"
+        android:gravity="center_vertical"
+        android:minHeight="66.5dp"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="你2018年9月19日12:12:12发布的心得审核未通过，请调整后重新发布"
+            android:textColor="@color/value_484848"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

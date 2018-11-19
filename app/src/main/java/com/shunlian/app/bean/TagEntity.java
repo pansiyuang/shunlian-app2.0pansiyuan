@@ -10,4 +10,12 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TagEntity {
     public List<String> keyword;
+    public List<Tag> list;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static final class Tag {
+        public String id;
+        public String key_word;
+        public String hot;
+    }
 }
