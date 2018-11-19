@@ -104,6 +104,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @BindView(R.id.tv_go_pay)
     TextView tv_go_pay;
 
+    @BindView(R.id.tv_show_num)
+    TextView tv_show_num;
+
     @BindView(R.id.img_share)
     ImageView img_share;
 
@@ -228,6 +231,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     public void setTabMode(boolean isDefault) {
         if (isDefault) {
+            tv_show_num.setTextColor(getColorResouce(R.color.pink_color));
             tv_left.setTextColor(getColorResouce(R.color.pink_color));
             tv_right.setTextColor(getColorResouce(R.color.value_484848));
             line_left.setVisibility(View.VISIBLE);
@@ -236,6 +240,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         } else {
             tv_right.setTextColor(getColorResouce(R.color.pink_color));
             tv_left.setTextColor(getColorResouce(R.color.value_484848));
+            tv_show_num.setTextColor(getColorResouce(R.color.value_484848));
             line_right.setVisibility(View.VISIBLE);
             line_left.setVisibility(View.GONE);
             viewpager.setCurrentItem(1);

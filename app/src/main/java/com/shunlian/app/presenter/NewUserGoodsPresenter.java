@@ -92,7 +92,7 @@ public class NewUserGoodsPresenter extends BasePresenter<INewUserGoodsView> {
                 NewUserGoodsEntity data = entity.data;
                 currentPage = Integer.parseInt(data.page);
                 LogUtil.zhLogW("currentPage====="+currentPage);
-                if(Integer.parseInt(data.count)<page_size||data.list.size()==0){
+                if(Integer.parseInt(data.count)<=page_size*currentPage){
                     allPage = currentPage;
                 }else{
                     allPage = currentPage+1;
