@@ -17,6 +17,7 @@ import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.ICommonBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
