@@ -1,6 +1,8 @@
 package com.shunlian.app.ui.fragment.first_page;
 
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
@@ -8,10 +10,14 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -28,6 +34,7 @@ import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
@@ -43,6 +50,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -91,6 +100,135 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     private MessageCountManager messageCountManager;
     private MainActivity mainActivity;
     private boolean isRefresh = false;
+
+    @BindView(R.id.lLayout_toast)
+    LinearLayout lLayout_toast;
+    @BindView(R.id.miv_icon)
+    MyImageView miv_icon;
+    @BindView(R.id.tv_info)
+    TextView tv_info;
+    private boolean isStop, misHide, isCrash;
+    private boolean isPause = true;
+    private Runnable runnableA, runnableB, runnableC;
+    private Timer outTimer;
+    private int mposition, size;
+    private static Handler handler;
+
+
+    public void beginToast() {
+        if (isPause) {
+            mposition = 0;
+            isStop = false;
+            pFirstPage.getBubble();
+            isPause = false;
+        }
+    }
+
+    public void stopToast() {
+        if (!isCrash) {
+            isPause = true;
+            isStop = true;
+            if (lLayout_toast != null) {
+                LogUtil.augusLogW("mposition:gone");
+                lLayout_toast.setVisibility(View.GONE);
+            }
+            if (outTimer != null) {
+                LogUtil.augusLogW("mposition:cancel");
+                outTimer.cancel();
+            }
+            if (handler != null) {
+                LogUtil.augusLogW("mposition:remove");
+                if (runnableA != null) {
+                    handler.removeCallbacks(runnableA);
+                }
+                if (runnableB != null) {
+                    handler.removeCallbacks(runnableB);
+                }
+                if (runnableC != null) {
+                    handler.removeCallbacks(runnableC);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopToast();
+    }
+
+    public void startTimer() {
+        if (handler == null) {
+            handler = new Handler();
+        }
+        runnableA = new Runnable() {
+            @Override
+            public void run() {
+                if (!isStop) {
+                    LogUtil.augusLogW("mposition：delayed");
+                    mposition = 0;
+                    pFirstPage.getBubble();
+                }
+            }
+        };
+        handler.postDelayed(runnableA, (7 * size + 1) * 1000);
+    }
+
+    public void startToast(final List<BubbleEntity.Content> datas) {
+        if (outTimer != null) {
+            outTimer.cancel();
+        }
+        outTimer = new Timer();
+        outTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (mposition < datas.size()) {
+                    runnableB = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mposition < datas.size()) {
+                                LogUtil.augusLogW("mposition:" + mposition);
+                                lLayout_toast.setVisibility(View.VISIBLE);
+                                GlideUtils.getInstance().loadCircleAvar(baseContext,miv_icon,datas.get(mposition).avatar);
+                                tv_info.setText(datas.get(mposition).text);
+                                lLayout_toast.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (datas.get(mposition).url!=null)
+                                            Common.goGoGo(baseContext,datas.get(mposition).url.type,datas.get(mposition).url.item_id);
+                                    }
+                                });
+                            }
+                        }
+                    };
+                    if (handler == null) {
+                        if (!isCrash) {
+                            isCrash = true;
+                            Handler mHandler = new Handler(Looper.getMainLooper());
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    isCrash = false;
+                                }
+                            }, (7 * size + 2) * 1000);
+                        }
+                    } else {
+                        handler.post(runnableB);
+                        runnableC = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isStop) {
+                                    lLayout_toast.setVisibility(View.GONE);
+                                    mposition++;
+                                }
+                            }
+                        };
+                        handler.postDelayed(runnableC, 5 * 1000);
+                    }
+                }
+            }
+        }, 0, 7 * 1000);
+    }
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -142,6 +280,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 messageCountManager.initData();
             }
             messageCountManager.setOnGetMessageListener(this);
+        }
+        if (!misHide) {
+            beginToast();
         }
         super.onResume();
     }
@@ -203,7 +344,13 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 if (mainActivity != null) {
                     mainActivity.position = arg0;
                 }
-
+                if (0 == arg0) {
+                    misHide = false;
+                    beginToast();
+                } else {
+                    misHide = true;
+                    stopToast();
+                }
             }
 
             @Override
@@ -335,9 +482,24 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
+    public void setBubble(BubbleEntity data) {
+        size = 2;
+        if (!isEmpty(data.list)) {
+            size = data.list.size();
+            startToast(data.list);
+        }
+        startTimer();
+    }
+
+    @Override
     public void showFailureView(int request_code) {
-        visible(nei_empty);
-        gone(data_coorLayout);
+        if (666==request_code){
+            size = 2;
+            startTimer();
+        }else {
+            visible(nei_empty);
+            gone(data_coorLayout);
+        }
     }
 
     @Override

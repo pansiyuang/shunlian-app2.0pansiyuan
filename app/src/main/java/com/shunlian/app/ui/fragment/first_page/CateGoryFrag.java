@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.FirstPageAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -234,6 +235,11 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
                 }
             }
         }
+    }
+
+    @Override
+    public void setBubble(BubbleEntity data) {
+
     }
 
     public void getShareInfo(String type, String id) {

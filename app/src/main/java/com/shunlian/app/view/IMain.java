@@ -1,6 +1,7 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.bean.AdEntity;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;

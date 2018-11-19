@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.SpannableStringBuilder;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
@@ -43,6 +45,7 @@ import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -60,8 +63,11 @@ import com.shunlian.app.widget.UpdateDialog;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -140,6 +146,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
+
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -749,6 +756,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         personalCenterFrag = null;
     }
 
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //防止app崩溃后造成fragment重叠
@@ -848,6 +856,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         CommondDialog commondDialog = new CommondDialog(this);
         commondDialog.parseCommond();
     }
+
 
     @Override
     public void setContent(GetDataEntity data) {

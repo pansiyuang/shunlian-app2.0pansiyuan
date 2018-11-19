@@ -28,6 +28,7 @@
         android:layout_above="@id/layout_bottom"
         android:layout_alignParentRight="true" />
 
+
     <com.shunlian.app.widget.NewTextView
         android:id="@+id/ntv_uuid"
         android:layout_width="180dp"
