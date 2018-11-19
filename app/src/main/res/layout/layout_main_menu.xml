@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    android:background="@color/value_f02348"
+    android:background="@android:color/transparent"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:orientation="horizontal">
@@ -20,8 +20,8 @@
             android:id="@+id/miv_tab_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-12dp"
-            android:src="@mipmap/tab_01_sel" />
+            android:layout_marginTop="8dp"
+            android:src="@mipmap/tab_1_n" />
 
         <TextView
             android:id="@+id/tv_tab_main"
@@ -30,7 +30,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="6dp"
             android:text="@string/main_page"
-            android:textColor="@color/value_FFEFAF"
+            android:textColor="@color/tab_text_n"
             android:textSize="9sp" />
 
         <com.shunlian.app.widget.MyImageView
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:src="@mipmap/tab_fenlei_p" />
+            android:src="@mipmap/tab_2_n" />
 
         <TextView
             android:id="@+id/tv_tab_sort"
@@ -64,7 +64,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="6dp"
             android:text="@string/sort"
-            android:textColor="@color/value_FFEFAF"
+            android:textColor="@color/tab_text_n"
             android:textSize="9sp" />
     </LinearLayout>
 
@@ -81,34 +81,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:src="@mipmap/tab_faxian_p" />
+            android:layout_marginTop="-12dp"
+            android:src="@mipmap/tab_3_h" />
 
         <TextView
             android:id="@+id/tv_tab_discover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/miv_tab_discover"
+            android:layout_below="@+id/miv_tab_discover"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="4dp"
-            android:layout_marginTop="6dp"
             android:text="@string/discover_center"
-            android:textColor="@color/value_FFEFAF"
+            android:textColor="@color/tab_text_n"
             android:textSize="9sp" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_message_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="6dp"
-            android:layout_marginRight="6dp"
-            android:background="@drawable/rounded_corner_white_100"
+            android:background="@drawable/rounded_corner_pink_100"
             android:gravity="center"
             android:minWidth="16dp"
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
-            android:textColor="@color/pink_color"
+            android:textColor="@color/white"
             android:textSize="8.5sp"
             android:visibility="gone" />
 
@@ -119,7 +117,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="22dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/rounded_corner_white_100"
+            android:background="@drawable/rounded_corner_pink_100"
             android:visibility="gone" />
     </com.shunlian.app.widget.MyRelativeLayout>
 
@@ -136,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:src="@mipmap/tab_gouwuche_p" />
+            android:src="@mipmap/tab_4_n" />
 
         <TextView
             android:id="@+id/tv_shopping_car"
@@ -145,7 +143,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="6dp"
             android:text="@string/shopping_car"
-            android:textColor="@color/value_FFEFAF"
+            android:textColor="@color/tab_text_n"
             android:textSize="9sp" />
     </LinearLayout>
 
@@ -162,7 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:src="@mipmap/tab_gerenzhongxin_p" />
+            android:src="@mipmap/tab_5_n" />
 
         <TextView
             android:id="@+id/tv_person_center"
@@ -171,7 +169,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="6dp"
             android:text="@string/person_center"
-            android:textColor="@color/value_FFEFAF"
+            android:textColor="@color/tab_text_n"
             android:textSize="9sp" />
     </LinearLayout>
 
