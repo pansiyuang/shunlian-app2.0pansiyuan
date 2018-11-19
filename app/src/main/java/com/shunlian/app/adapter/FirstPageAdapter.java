@@ -519,7 +519,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     fiveHolder.view_line.setVisibility(View.GONE);
                     fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
                     if (!isEmpty(data.content)) {
-                        fiveHolder.mtv_desc.setVisibility(View.VISIBLE);
+                        fiveHolder.mtv_desc.setVisibility(View.GONE);
                         fiveHolder.mtv_desc.setText(data.content);
                     }
                     fiveHolder.mtv_title.setText(data.title);
@@ -537,12 +537,20 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     }
                     if (!TextUtils.isEmpty(data.price)) {
                         SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
-                                getString(R.string.common_yuan), 11);
-                        fiveHolder.mtv_price.setText(priceBuilder);
+                                getString(R.string.common_yuan), 12);
+                        fiveHolder.mtv_price.setText(getString(R.string.common_yuan) + data.price);
                         fiveHolder.mtv_price.setVisibility(View.VISIBLE);
                     } else {
                         fiveHolder.mtv_price.setVisibility(View.GONE);
                     }
+                    fiveHolder.mtv_market_price.setStrikethrough();
+                    if (!TextUtils.isEmpty(data.market_price)) {
+                        fiveHolder.mtv_market_price.setText(getString(R.string.common_yuan) + data.market_price);
+                        fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
+                    } else {
+                        fiveHolder.mtv_market_price.setVisibility(View.GONE);
+                    }
+
                     fiveHolder.mtv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -974,20 +982,31 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     class FiveHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
+
         @BindView(R.id.mtv_share)
         MyTextView mtv_share;
+
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
+
         @BindView(R.id.mtv_desc)
         MyTextView mtv_desc;
+
         @BindView(R.id.mtv_price)
         MyTextView mtv_price;
+
+        @BindView(R.id.mtv_market_price)
+        MyTextView mtv_market_price;
+
         @BindView(R.id.mtv_topic)
         MyTextView mtv_topic;
+
         @BindView(R.id.view_line)
         View view_line;
+
         @BindView(R.id.mllayout_root)
         MyLinearLayout mllayout_root;
+
         @BindView(R.id.mllayout_pingzhi)
         MyLinearLayout mllayout_pingzhi;
 

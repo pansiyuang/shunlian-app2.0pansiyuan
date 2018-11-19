@@ -44,7 +44,7 @@ public class GetDataEntity {
         @JsonProperty(value = "data")//关键字重名
         public List<MMData> datass;
         public List<Cate> cates;
-
+        public String  market_price;
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Cate {
             public String id;
