@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -16,9 +15,11 @@ import com.shunlian.app.utils.SwitchHostUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
 
 import java.io.File;
+import java.util.HashMap;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -159,5 +160,10 @@ public class App extends Application {
         };
         //x5内核初始化接口
         QbSdk.initX5Environment(getApplicationContext(),  cb);
+
+        //优化x5内核首次启动卡顿黑屏现象
+        HashMap map = new HashMap();
+        map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+        QbSdk.initTbsSettings(map);
     }
 }
