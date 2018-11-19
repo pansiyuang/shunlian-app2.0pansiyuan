@@ -22,15 +22,10 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+
 import com.shunlian.app.bean.*;
-import com.shunlian.app.newchat.entity.ChatGoodsEntity;
-import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.entity.HistoryEntity;
-import com.shunlian.app.newchat.entity.ReplysetEntity;
-import com.shunlian.app.newchat.entity.ServiceEntity;
-import com.shunlian.app.newchat.entity.StoreMessageEntity;
-import com.shunlian.app.newchat.entity.StoreMsgEntity;
-import com.shunlian.app.newchat.entity.SystemMessageEntity;
+import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.newchat.entity.*;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +42,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 /**
@@ -2664,4 +2660,227 @@ public interface ApiService {
      */
     @GET("tasknewperson/getGoldByWatchVideo")
     Call<BaseEntity<TaskHomeEntity>> getGoldByWatchVideo(@QueryMap Map<String,String> map);
+
+    /**
+     * 获取附近位置
+     * @param body
+     * @return
+     */
+    @POST("discovery/publish/getRelatedPlaces")
+    Call<BaseEntity<NearAddrEntity>> getRelatedPlaces(@Body RequestBody body);
+
+    /**
+     * 获取话题
+     * @param map
+     * @return
+     */
+    @GET("discovery/blogfront/getActivitys")
+    Call<BaseEntity<TopicEntity>>  getTopics(@QueryMap Map<String,String> map);
+
+    /**
+     * 发表博客
+     * @return
+     */
+    @POST("discovery/publish/publish")
+    Call<BaseEntity<CommonEntity>> pubishBlog(@Body RequestBody body);
+
+    /**
+     * 上传视频
+     * @param parts
+     * @return
+     */
+    @Multipart
+    @POST("uploads/uploadVideo")
+    Call<BaseEntity<CommonEntity>> uploadVideo(@Part MultipartBody.Part parts);
+
+    /**
+     *获取草稿
+     * @return
+     */
+    @GET("discovery/publish/getdraft")
+    Call<BaseEntity<BlogDraftEntity>> getDraft(@QueryMap Map<String,String> map);
+
+    /**
+     * 精选列表
+     */
+    @GET("discovery/blogfront/hotblogs")
+    Call<BaseEntity<HotBlogsEntity>> hotblogs(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注列表
+     */
+    @GET("discovery/blogfront/getmyfocusblogs")
+    Call<BaseEntity<HotBlogsEntity>> focusblogs(@QueryMap Map<String, String> map);
+
+    /**
+     * 活动列表
+     */
+    @GET("discovery/blogfront/getActivitys")
+    Call<BaseEntity<DiscoverActivityEntity>> getActivitys(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注/取消关注
+     */
+    @GET("discovery/discoveryuser/focusUser")
+    Call<BaseEntity<EmptyEntity>> focusUser(@QueryMap Map<String, String> map);
+
+    /**
+     * 文章点赞
+     */
+    @GET("discovery/discoveryuser/praise")
+    Call<BaseEntity<EmptyEntity>> praiseBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 周达人榜
+     */
+    @GET("discovery/blogfront/weekExportTopList")
+    Call<BaseEntity<ExpertEntity>> weekExpertList(@QueryMap Map<String, String> map);
+
+    /**
+     * 精选达人榜
+     */
+    @GET("discovery/blogfront/hotExpertTopList")
+    Call<BaseEntity<HotBlogsEntity>> hotExpertTopList(@QueryMap Map<String, String> map);
+
+    /**
+     * 收藏列表/自己发表的文章
+     */
+    @GET("discovery/discoveryuser/getblogs")
+    Call<BaseEntity<HotBlogsEntity>> getblogs(@QueryMap Map<String, String> map);
+
+    /**
+     * 我的粉丝列表
+     */
+    @GET("discovery/discoveryuser/fansList")
+    Call<BaseEntity<MemberEntity>> fansList(@QueryMap Map<String, String> map);
+
+    /**
+     * TA的粉丝列表
+     */
+    @GET("discovery/blogfront/fansList")
+    Call<BaseEntity<MemberEntity>> taFansList(@QueryMap Map<String, String> map);
+
+    /**
+     * 我的关注列表
+     */
+    @GET("discovery/discoveryuser/focusList")
+    Call<BaseEntity<MemberEntity>> focusList(@QueryMap Map<String, String> map);
+
+    /**
+     * TA的关注列表
+     */
+    @GET("discovery/blogfront/focusList")
+    Call<BaseEntity<MemberEntity>> taFocusList(@QueryMap Map<String, String> map);
+
+    /**
+     * 活动详情
+     */
+    @GET("discovery/blogfront/getactivitydetail")
+    Call<BaseEntity<HotBlogsEntity>> getActivityDetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 点赞与分享
+     */
+    @GET("discovery/message/praisesharelist")
+    Call<BaseEntity<ZanShareEntity>> getPraiseShareList(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注消息
+     */
+    @GET("discovery/message/attention")
+    Call<BaseEntity<AttentionMsgEntity>> getAttentionMsg(@QueryMap Map<String, String> map);
+
+    /**
+     * 下载消息
+     */
+    @GET("discovery/message/download")
+    Call<BaseEntity<ZanShareEntity>> getDownloadMsg(@QueryMap Map<String, String> map);
+
+    /**
+     * 通知消息
+     */
+    @GET("discovery/message/notice")
+    Call<BaseEntity<NoticeMsgEntity>> getNoticeMsg(@QueryMap Map<String, String> map);
+
+    /**
+     * 搜索关键词
+     */
+    @GET("discovery/discoveryuser/getHotSearch")
+    Call<BaseEntity<TagEntity>> getHotSearch(@QueryMap Map<String, String> map);
+
+    /**
+     * 关注/取消关注
+     */
+    @GET("/discovery/discoveryuser/downcount")
+    Call<BaseEntity<EmptyEntity>> downCount(@QueryMap Map<String, String> map);
+
+    /**
+     * 搜索达人
+     */
+    @GET("discovery/blogfront/searchExpert")
+    Call<BaseEntity<ExpertEntity>> searchExpert(@QueryMap Map<String, String> map);
+
+    /**
+     * 收藏文章
+     */
+    @GET("discovery/discoveryuser/addFavo")
+    Call<BaseEntity<EmptyEntity>> addFavo(@QueryMap Map<String, String> map);
+
+    /**
+     * 删除文章
+     */
+    @GET("discovery/discoveryuser/removeBlog")
+    Call<BaseEntity<EmptyEntity>> removeBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 未读消息统计
+     */
+    @GET("discovery/message/unreadcount")
+    Call<BaseEntity<CommonEntity>> unreadcount(@QueryMap Map<String, String> map);
+
+    /**
+     * 下载文件
+     */
+     @Streaming
+     @GET
+     Call<ResponseBody> download(@Url String url);
+
+    /**
+     * 新人专享banner
+     */
+    @GET("/newexclusive/adlist")
+    Call<BaseEntity<AdUserEntity>> adlist(@QueryMap Map<String, String> map);
+
+    /**
+     * 新人专享商品
+     * @return
+     */
+    @POST("/newexclusive/goodslist")
+    Call<BaseEntity<NewUserGoodsEntity>> usergoodslist(@QueryMap Map<String, String> map);
+
+    /**
+     * 新人专享添加购物车
+     * @return
+     */
+    @POST("/newexclusive/addcart")
+    Call<BaseEntity<CateEntity>> newuseraddCart(@Body RequestBody body);
+
+    /**
+     * 新人专享购物车商品列表
+     */
+    @GET("/newexclusive/cartlist")
+    Call<BaseEntity<NewUserGoodsEntity>> cartlist(@QueryMap Map<String, String> map);
+    /**
+     * 新人专享删除购物车
+     */
+    @GET("/newexclusive/deletecart")
+    Call<BaseEntity<EmptyEntity>> deletecart(@QueryMap Map<String, String> map);
+    /**
+     * 购物车进入确认订单页
+     *
+     * @param body
+     * @return
+     */
+    @POST("/newexclusive/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> orderNewUserConfirm(@Body RequestBody body);
 }

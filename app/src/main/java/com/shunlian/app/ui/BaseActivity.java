@@ -41,6 +41,9 @@ import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -78,7 +81,7 @@ import pay.PayListActivity;
  * Created by zhang on 2017/4/13 16 : 37.
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected Unbinder unbinder;
     public ImmersionBar immersionBar;
@@ -559,6 +562,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             MainActivity.startAct(baseAct,"");
             Constant.JPUSH=null;
         }
+
         super.finish();
     }
 
@@ -576,4 +580,5 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onLowMemory();
         GlideUtils.getInstance().clearMemory();
     }
+
 }

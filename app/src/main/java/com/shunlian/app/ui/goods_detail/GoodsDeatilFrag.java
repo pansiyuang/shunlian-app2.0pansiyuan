@@ -244,4 +244,10 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             });
         }
     }
+
+    public void updateFav(String is_fav){
+        if(goodsDetailAdapter!=null) {
+              goodsDetailAdapter.notifyDataSetChanged();
+        }
+    }
 }

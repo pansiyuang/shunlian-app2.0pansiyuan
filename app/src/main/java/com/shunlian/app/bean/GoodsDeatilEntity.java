@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String credit;
     public String video;//视频地址
     public String type;// 普通商品0，优品1,团购商品2
+    public String type_tag_pic;// 普通商品0，优品1,团购商品2
     public String get_gold_second;// 获取金蛋的停留时间
 
     public String is_preferential;//店铺优惠  没有值的时候为空字符串
@@ -878,6 +880,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public GoodsInfo goods_info;
         public String sku;                   //购物中的sku
         public String price;                 //价格
+        public String market_price;                 //价格
         public String old_price;                 //套餐原价
         public String left;                  // 剩余数量提醒，  大于等于三的时候不提醒，该值为null
         public List<AllProm> all_prom;
@@ -895,6 +898,8 @@ public class GoodsDeatilEntity implements Parcelable {
         public int type;                     //0普通商品、1优品、2团购
         public int is_sell_out;
         public String sales_desc;
+        public String desc;
+        public int isSuperiorProduct;
         public String self_buy_earn;
         public String free_ship;             //是否 包邮，1是，0否
         public String send_area;             //发货地
@@ -908,6 +913,8 @@ public class GoodsDeatilEntity implements Parcelable {
         public String reduced;
         public String limit_min_buy;//团购商品最少购买数
         public String big_label;//团购商品最少购买数
+        public int share_num;
+        public String share_url;
 
         public Goods() {
         }
@@ -938,6 +945,8 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.price);
             dest.writeString(this.old_price);
             dest.writeString(this.left);
+            dest.writeString(this.market_price);
+            dest.writeString(this.share_url);
             dest.writeTypedList(this.all_prom);
             dest.writeString(this.cate_id);
             dest.writeString(this.cate_name);
@@ -966,6 +975,9 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.reduced);
             dest.writeString(this.limit_min_buy);
             dest.writeString(this.big_label);
+            dest.writeInt(this.share_num);
+            dest.writeInt(this.isSuperiorProduct);
+            dest.writeString(this.desc);
         }
 
         protected Goods(Parcel in) {
@@ -988,6 +1000,8 @@ public class GoodsDeatilEntity implements Parcelable {
             this.price = in.readString();
             this.old_price = in.readString();
             this.left = in.readString();
+            this.market_price = in.readString();
+            this.share_url = in.readString();
             this.all_prom = in.createTypedArrayList(AllProm.CREATOR);
             this.cate_id = in.readString();
             this.cate_name = in.readString();
@@ -1016,6 +1030,9 @@ public class GoodsDeatilEntity implements Parcelable {
             this.reduced = in.readString();
             this.limit_min_buy = in.readString();
             this.big_label = in.readString();
+            this.share_num = in.readInt();
+            this.isSuperiorProduct = in.readInt();
+            this.desc = in.readString();
         }
 
         public static final Creator<Goods> CREATOR = new Creator<Goods>() {
@@ -1441,6 +1458,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.credit);
         dest.writeString(this.video);
         dest.writeString(this.type);
+        dest.writeString(this.type_tag_pic);
         dest.writeString(this.get_gold_second);
         dest.writeString(this.is_preferential);
         dest.writeString(this.member_cart_count);
@@ -1490,6 +1508,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.credit = in.readString();
         this.video = in.readString();
         this.type = in.readString();
+        this.type_tag_pic = in.readString();
         this.get_gold_second = in.readString();
         this.is_preferential = in.readString();
         this.member_cart_count = in.readString();

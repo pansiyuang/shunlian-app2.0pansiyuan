@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.H5CallEntity;
@@ -15,6 +16,7 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PH5;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.IH5View;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,6 +34,7 @@ public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManage
     private PH5 ph5;
     private String specialId;
 
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     public static void startAct(Context context, String url, int mode) {
         Intent intentH5 = new Intent(context, H5SpecialAct.class);
         intentH5.putExtra("url", url);
@@ -46,16 +49,16 @@ public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManage
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
+//        String s = messageCountManager.setTextCount(tv_msg_count);
+//        if (quick_actions != null)
+//            quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
+//        String s = messageCountManager.setTextCount(tv_msg_count);
+//        if (quick_actions != null)
+//            quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -65,17 +68,17 @@ public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManage
 
     @Override
     public void onResume() {
-        if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(this);
-            if (messageCountManager.isLoad()) {
-                String s = messageCountManager.setTextCount(tv_msg_count);
-                if (quick_actions != null)
-                    quick_actions.setMessageCount(s);
-            } else {
-                messageCountManager.initData();
-            }
-            messageCountManager.setOnGetMessageListener(this);
-        }
+//        if (Common.isAlreadyLogin()) {
+//            messageCountManager = MessageCountManager.getInstance(this);
+//            if (messageCountManager.isLoad()) {
+//                String s = messageCountManager.setTextCount(tv_msg_count);
+//                if (quick_actions != null)
+//                    quick_actions.setMessageCount(s);
+//            } else {
+//                messageCountManager.initData();
+//            }
+//            messageCountManager.setOnGetMessageListener(this);
+//        }
         super.onResume();
     }
 
@@ -90,13 +93,16 @@ public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManage
     }
 
     protected void loadUrl() {
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         if (!isEmpty(h5Url)) {
-            visible(rl_title_more);
             if (h5Url.startsWith(InterentTools.H5_HOST + "special")) {
+                visible(rl_title_more);
+                miv_title_more.setImageResource(R.mipmap.icon_home_share);
                 ph5 = new PH5(this, this);
                 specialId = h5Url.substring(h5Url.indexOf("special/") + "special/".length());
                 ph5.getShareInfo(specialId);
             } else if (h5Url.startsWith(InterentTools.H5_HOST + "activity")) {
+                visible(rl_title_more);
                 rl_title_more.setOnClickListener(v -> {
                     quick_actions.setVisibility(View.VISIBLE);
                     quick_actions.activity();
@@ -109,7 +115,7 @@ public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManage
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginRefresh(DefMessageEvent event) {
         if (event.loginSuccess && ph5 != null) {
-            ph5.getShareInfo(ph5.special, specialId);
+//            ph5.getShareInfo(ph5.special, specialId);
         }
     }
 
@@ -128,8 +134,11 @@ public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManage
     public void setShareInfo(ShareEntity shareEntity) {
         if (rl_title_more != null) {
             visible(rl_title_more);
+            if (shareEntity == null || shareEntity.share == null) {
+                rl_title_more.setVisibility(View.GONE);
+            }
             rl_title_more.setOnClickListener(v -> {
-                quick_actions.setVisibility(View.VISIBLE);
+//                quick_actions.setVisibility(View.VISIBLE);
                 if (shareEntity != null && shareEntity.share != null) {
                     shareInfoParam = new ShareInfoParam();
                     shareInfoParam.desc = shareEntity.share.content;
@@ -137,10 +146,12 @@ public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManage
                     shareInfoParam.img = shareEntity.share.pic;
                     shareInfoParam.shareLink = shareEntity.share.share_url;
                     shareInfoParam.special_img_url = shareEntity.share.url;
-                    quick_actions.special();
-                    quick_actions.shareInfo(shareInfoParam);
+                    shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
+//                    quick_actions.special();
+//                    quick_actions.shareInfo(shareInfoParam);
                 } else {
-                    quick_actions.order();
+//                    quick_actions.order();
+//                   rl_title_more.setVisibility(View.GONE);
                 }
             });
         }

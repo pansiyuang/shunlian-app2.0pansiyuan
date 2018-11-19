@@ -3,176 +3,181 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    android:background="@color/value_f02348"
+    android:background="@android:color/transparent"
     android:clipChildren="false"
-    android:clipToPadding="false"
-    android:orientation="horizontal">
+    android:clipToPadding="false">
 
     <LinearLayout
-        android:id="@+id/ll_tab_main_page"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_tab_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-12dp"
-            android:src="@mipmap/tab_01_sel" />
-
-        <TextView
-            android:id="@+id/tv_tab_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="6dp"
-            android:text="@string/main_page"
-            android:textColor="@color/value_FFEFAF"
-            android:textSize="9sp" />
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:src="@mipmap/img_chook_01"
-            android:visibility="gone" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_tab_sort"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_tab_sort"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:src="@mipmap/tab_fenlei_p" />
-
-        <TextView
-            android:id="@+id/tv_tab_sort"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="6dp"
-            android:text="@string/sort"
-            android:textColor="@color/value_FFEFAF"
-            android:textSize="9sp" />
-    </LinearLayout>
-
-    <com.shunlian.app.widget.MyRelativeLayout
-        android:id="@+id/ll_tab_discover"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:background="@color/white"
         android:clipChildren="false"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_tab_discover"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_tab_main_page"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:src="@mipmap/tab_faxian_p" />
-
-        <TextView
-            android:id="@+id/tv_tab_discover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/miv_tab_discover"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="6dp"
-            android:text="@string/discover_center"
-            android:textColor="@color/value_FFEFAF"
-            android:textSize="9sp" />
-
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_message_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="6dp"
-            android:layout_marginRight="6dp"
-            android:background="@drawable/rounded_corner_white_100"
+            android:layout_weight="1"
             android:gravity="center"
-            android:minWidth="16dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:textColor="@color/pink_color"
-            android:textSize="8.5sp"
-            android:visibility="gone" />
+            android:orientation="vertical">
 
-        <View
-            android:id="@+id/view_message"
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="22dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/rounded_corner_white_100"
-            android:visibility="gone" />
-    </com.shunlian.app.widget.MyRelativeLayout>
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_tab_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@mipmap/tab_1_n" />
 
-    <LinearLayout
-        android:id="@+id/ll_tab_shopping_car"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_tab_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="6dp"
+                android:text="@string/main_page"
+                android:textColor="@color/tab_text_n"
+                android:textSize="9sp" />
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_shopping_car"
-            android:layout_width="wrap_content"
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_first"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:src="@mipmap/img_chook_01"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_tab_sort"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:src="@mipmap/tab_gouwuche_p" />
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_shopping_car"
-            android:layout_width="wrap_content"
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_tab_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@mipmap/tab_2_n" />
+
+            <TextView
+                android:id="@+id/tv_tab_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="6dp"
+                android:text="@string/sort"
+                android:textColor="@color/tab_text_n"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/ll_tab_discover"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="6dp"
-            android:text="@string/shopping_car"
-            android:textColor="@color/value_FFEFAF"
-            android:textSize="9sp" />
+            android:layout_weight="1"
+            android:clipChildren="false"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_tab_discover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-12dp"
+                android:background="@mipmap/tab_03" />
+
+            <TextView
+                android:id="@+id/tv_tab_discover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/miv_tab_discover"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="4dp"
+                android:text="@string/discover_center"
+                android:textColor="@color/tab_text_n"
+                android:textSize="9sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_message_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/rounded_corner_pink_100"
+                android:gravity="center"
+                android:minWidth="16dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textColor="@color/white"
+                android:textSize="8.5sp"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/view_message"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="22dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_corner_pink_100"
+                android:visibility="gone" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_tab_shopping_car"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_shopping_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@mipmap/tab_4_n" />
+
+            <TextView
+                android:id="@+id/tv_shopping_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="6dp"
+                android:text="@string/shopping_car"
+                android:textColor="@color/tab_text_n"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_tab_person_center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_person_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@mipmap/tab_5_n" />
+
+            <TextView
+                android:id="@+id/tv_person_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="6dp"
+                android:text="@string/person_center"
+                android:textColor="@color/tab_text_n"
+                android:textSize="9sp" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_tab_person_center"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_person_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:src="@mipmap/tab_gerenzhongxin_p" />
-
-        <TextView
-            android:id="@+id/tv_person_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="6dp"
-            android:text="@string/person_center"
-            android:textColor="@color/value_FFEFAF"
-            android:textSize="9sp" />
-    </LinearLayout>
-
 </LinearLayout>

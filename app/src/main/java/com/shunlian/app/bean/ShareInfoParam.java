@@ -1,10 +1,14 @@
 package com.shunlian.app.bean;
 
+import android.graphics.Bitmap;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.shunlian.app.utils.BitmapUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/5/6 0006.
@@ -21,32 +25,33 @@ public class ShareInfoParam implements Serializable {
     public String img;
     public String photo;
     public String type;
+    public Bitmap bitmap;
     public boolean isCopyTitle;
     //店铺分享
     public String shop_star;
     public String shop_logo;
     public String shop_name;
     public String code_link;
-
+    public String market_price;
     @JsonProperty("nick_name")
     public String userName;//用户名
     @JsonProperty("portrait")
     public String userAvatar;//用户头像
-
+    public String   price;
     public String goodsPrice;//商品价格
 
     public ArrayList<String> downloadPic;//需要下载的图片
 
+    public String blogId;
     //发现
     public String thumb_type;//0小图（左右布局，图在右侧），1大图（上下布局，图是通栏显示）
     public String start_time;//活动开始时间
     public String act_label;//活动开始时间
     public String video_url;//视频地址
 
-    //是否是优品  默认不是
     public boolean isSuperiorProduct;
     public String goods_id;//商品id
-
+    public List<StoreGoodsListEntity.MData> share_goods;
     @Override
     public String toString() {
         return "ShareInfoParam{" +
@@ -63,10 +68,12 @@ public class ShareInfoParam implements Serializable {
                 ", userName='" + userName + '\'' +
                 ", userAvatar='" + userAvatar + '\'' +
                 ", goodsPrice='" + goodsPrice + '\'' +
+                ", goodsPrice='" + price + '\'' +
                 ", downloadPic=" + downloadPic +
                 ", thumb_type='" + thumb_type + '\'' +
                 ", start_time='" + start_time + '\'' +
                 ", act_label='" + act_label + '\'' +
+                ", market_price='" + market_price + '\'' +
                 ", isSuperiorProduct=" + isSuperiorProduct +
                 '}';
     }

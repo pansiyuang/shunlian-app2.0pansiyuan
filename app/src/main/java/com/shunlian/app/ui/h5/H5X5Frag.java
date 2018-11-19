@@ -303,7 +303,6 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
         webSetting.setSaveFormData(false);
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
-
         //x5新增
         webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         webSetting.setSupportZoom(true);
