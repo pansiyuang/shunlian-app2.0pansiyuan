@@ -39,7 +39,7 @@ public class ShareGoodDialogUtil {
     }
 
     public void setShareInfoParam(ShareInfoParam shareInfoParam){
-        this.mShareInfoParam = mShareInfoParam;
+        this.mShareInfoParam = shareInfoParam;
     }
 
     //分享商品的diolog
