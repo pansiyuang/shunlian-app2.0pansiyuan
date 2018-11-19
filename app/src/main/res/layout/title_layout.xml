@@ -217,6 +217,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
+            android:textIsSelectable="true"
             android:textColor="@color/new_text"
             android:textSize="15sp"
             app:tv_control_adapter="true"

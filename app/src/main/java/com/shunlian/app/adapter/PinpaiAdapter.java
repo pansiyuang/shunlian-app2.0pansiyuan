@@ -68,8 +68,12 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
         mHolder.mtv_desc.setText(mHolder.data.slogan);
         int seconds=(int)(System.currentTimeMillis()/1000)-second;
         mHolder.downTime_firsts.cancelDownTimer();
-        mHolder.downTime_firsts.setDownTime(Integer.parseInt(mHolder.data.count_down)-seconds);
-        mHolder.downTime_firsts.startDownTimer();
+        try {
+            mHolder.downTime_firsts.setDownTime(Integer.parseInt(mHolder.data.count_down)-seconds);
+            mHolder.downTime_firsts.startDownTimer();
+        }catch (Exception e){
+
+        }
     }
 
 

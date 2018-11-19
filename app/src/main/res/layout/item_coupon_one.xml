@@ -1,0 +1,285 @@
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner_white_8px"
+    android:orientation="vertical"
+    android:layout_margin="5dp">
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="15"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="2dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_logo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="fitXY" />
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:gravity="center"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/new_text"
+                android:textSize="12sp" />
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="19"
+            android:background="@drawable/rounded_corner_fef9f4_10px">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_use_coupon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/use_coupon"
+                android:gravity="center"
+                android:text="立即使用"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="22dp"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="@color/pink_color"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="16dp"
+                android:layout_toLeftOf="@id/mtv_use_coupon" />
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="10dp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="@color/pink_color"
+                android:textSize="10sp" />
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/ntv_condition"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/mtv_use_coupon"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="@color/pink_color"
+                android:textSize="10sp" />
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="34dp"
+                android:id="@+id/miv_tag"
+                android:scaleType="fitXY"
+                android:layout_height="34dp" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/white_ash" />
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:id="@+id/mllayout_goods"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:gravity="center"
+            android:background="@drawable/rounded_corner_fef9f4_10px"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_img"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="fitXY" />
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/share_text"
+                android:textSize="10sp" />
+
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_corner_fdeedf_4px"
+                    android:padding="2dp"
+                    android:textSize="10sp"
+                    android:text="@string/coupon_keyongquan"
+                    android:textColor="@color/value_F28D27" />
+
+                <com.shunlian.app.widget.NewTextView
+                    android:id="@+id/ntv_price0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="8dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/share_text"
+                    android:textSize="12sp" />
+            </com.shunlian.app.widget.MyRelativeLayout>
+        </com.shunlian.app.widget.MyLinearLayout>
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mllayout_one"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/rounded_corner_fef9f4_10px"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_img1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="fitXY" />
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_desc1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/share_text"
+                android:textSize="10sp" />
+
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_corner_fdeedf_4px"
+                    android:padding="2dp"
+                    android:textSize="10sp"
+                    android:text="@string/coupon_keyongquan"
+                    android:textColor="@color/value_F28D27" />
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="8dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:id="@+id/ntv_price1"
+                    android:textColor="@color/share_text"
+                    android:textSize="12sp" />
+            </com.shunlian.app.widget.MyRelativeLayout>
+        </com.shunlian.app.widget.MyLinearLayout>
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="0dp"
+            android:id="@+id/mllayout_two"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/rounded_corner_fef9f4_10px"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_img2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="fitXY" />
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_desc2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/share_text"
+                android:textSize="10sp" />
+
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_corner_fdeedf_4px"
+                    android:padding="2dp"
+                    android:textSize="10sp"
+                    android:text="@string/coupon_keyongquan"
+                    android:textColor="@color/value_F28D27" />
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="8dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:id="@+id/ntv_price2"
+                    android:textColor="@color/share_text"
+                    android:textSize="12sp" />
+            </com.shunlian.app.widget.MyRelativeLayout>
+        </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyLinearLayout>
+</com.shunlian.app.widget.MyLinearLayout>

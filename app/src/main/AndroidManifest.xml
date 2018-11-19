@@ -239,7 +239,7 @@
         <!--ShunLianPower-->
         <meta-data
             android:name="BUGLY_APP_CHANNEL"
-            android:value="ShunLianPower" />
+            android:value="360" />
         <!-- 配置Bugly调试模式（true或者false） -->
         <meta-data
             android:name="BUGLY_ENABLE_DEBUG"
@@ -299,6 +299,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.core.NewGetCouponAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.more_credit.PhonePaySuccessAct"
             android:exported="false"
             android:label="@string/prepaid_phone_dingdanzhifu"
@@ -309,11 +314,11 @@
             android:exported="false"
             android:label="@string/order_xiangqing"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".ui.start.GuideAct"-->
-            <!--android:exported="false"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />-->
+        <activity
+            android:name=".ui.start.GuideAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".ui.register.TestAct"
             android:exported="false"
@@ -499,6 +504,10 @@
             android:screenOrientation="portrait"
             android:label="H5页面"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--优化x5内核首次启动卡顿黑屏现象-->
+        <service android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+            android:label="dexopt"
+            android:process=":dexopt"/>
         <activity
             android:name=".ui.h5.H5SpecialAct"
             android:exported="false"

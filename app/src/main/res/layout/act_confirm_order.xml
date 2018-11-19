@@ -277,6 +277,33 @@
                     android:src="@mipmap/img_xuanze_n"/>
 
             </RelativeLayout>
+
+            <!--新人专享提示语-->
+            <LinearLayout
+                android:id="@+id/ll_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray_two" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="50dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
             <!--占位-->
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_station"

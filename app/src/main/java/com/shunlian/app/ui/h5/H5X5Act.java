@@ -12,6 +12,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -173,6 +174,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         miv_close.setOnClickListener(this);
     }
 
+
     @Override
     public void onClick(View view) {
         super.onClick(view);
@@ -317,6 +319,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         }, methodName);
     }
 
+
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     protected void initWebView() {
         WebSettings webSetting = mwv_h5.getSettings();
@@ -357,7 +360,8 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             @Override
             public void onPageStarted(WebView webView, String url, Bitmap bitmap) {
                 super.onPageStarted(webView, url, bitmap);
-                LogUtil.zhLogW("=onPageStarted=======" + url);
+                addCookie(url);
+                LogUtil.augusLogW("=onPageStarted=======" + url);
 //                if (!isFinishing() && httpDialog != null) {
 //                    httpDialog.show();
 //                }
@@ -369,6 +373,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                LogUtil.augusLogW("=onPageFinished=======" + url);
                 if (!isFinishing()) {
                     if (!isEmpty(view.getTitle())) {
                         title = view.getTitle();
@@ -386,7 +391,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             @Override
             public void onReceivedSslError(WebView webView, SslErrorHandler handler, SslError error) {
                 super.onReceivedSslError(webView, handler, error);
-                LogUtil.zhLogW("=error=======" + error.getPrimaryError());
+                LogUtil.augusLogW("=error=======" + error.getPrimaryError());
                 handler.proceed();//接受证书
 //                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
 //                    httpDialog.dismiss();
@@ -408,7 +413,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.httpLogW("========h5Url==========" + url);
+                LogUtil.augusLogW("========h5Url==========" + url);
                 if (url.startsWith("alipay")) {
 //                    Log.i("shouldOverrideUrlLoading", "处理自定义scheme");
                     try {
@@ -447,7 +452,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 //                }
 //                return false;
                 } else {
-                    if (!Common.getDomain(h5Url).equals(Common.getDomain(url)))
+//                    if (!Common.getDomain(h5Url).equals(Common.getDomain(url)))
                         addCookie(url);
                     return super.shouldOverrideUrlLoading(view, url);
 //                    return false;
@@ -564,18 +569,19 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
     }
 
     public void addCookie(String url) {
+        String domain = Common.getDomain(url);
+        if (isEmpty(domain))
+            return;
         //add
         String token = SharedPrefUtil.getSharedUserString("token", "");
         String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
 
-        LogUtil.augusLogW("ddd---"+url);
         CookieSyncManager.createInstance(this);
 //        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
 
-        String domain = Common.getDomain(url);
         cookieManager.setCookie(domain, "Client-Type=Android");
         cookieManager.setCookie(domain, "token=" + token);
         cookieManager.setCookie(domain, "User-Agent=" + ua);
@@ -664,6 +670,13 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 //            mwv_h5.removeAllViews();
 //            mwv_h5.destroy();
 //        }
+
+        try{
+            ViewGroup view = (ViewGroup) getWindow().getDecorView();
+            view.removeAllViews();
+        }catch (Exception e){
+
+        }
         super.onDestroy();
     }
 

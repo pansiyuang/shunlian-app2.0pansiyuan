@@ -399,6 +399,14 @@ public interface ApiService {
     Call<BaseEntity<ConfirmOrderEntity>> orderBuy(@Body RequestBody body);
 
     /**
+     * 新人专享
+     * @param body
+     * @return
+     */
+    @POST("newexclusive/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> newexclusive(@Body RequestBody body);
+
+    /**
      * 修改购物车
      *
      * @param body
@@ -871,6 +879,14 @@ public interface ApiService {
      */
     @POST("order/checkout")
     Call<BaseEntity<PayOrderEntity>> orderCheckout(@Body RequestBody body);
+
+    /**
+     * 新人专享支付
+     * @param body
+     * @return
+     */
+    @POST("newexclusive/checkout")
+    Call<BaseEntity<PayOrderEntity>> newexclusivePay(@Body RequestBody body);
 
 
     /**
@@ -2171,6 +2187,15 @@ public interface ApiService {
      */
     @GET("channel/vouchercenter")
     Call<BaseEntity<VouchercenterplEntity>> vouchercenter(@QueryMap Map<String, String> map);
+
+    /**
+     * 万用广告弹窗接口
+     *
+     * @return
+     */
+    @GET("adpush/commonad")
+    Call<BaseEntity<AdEntity>> adpush(@QueryMap Map<String, String> map);
+
 
     /**
      * 品牌特卖详情

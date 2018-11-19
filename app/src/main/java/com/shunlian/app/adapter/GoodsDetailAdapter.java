@@ -934,7 +934,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 });*/
                 //String path = "http://img.v2.shunliandongli.com/msgFile/20180725152719_847.mp4";
                 mHolder.vbw.setBanner(mGoodsEntity.video,
-                        mGoodsEntity.pics,
+                        mGoodsEntity.pics, mGoodsEntity.common_activity!=null?mGoodsEntity.common_activity.tag_pic:"",
                         isEmpty(type)?0:Integer.parseInt(type),
                         videoBannerData);
             }
