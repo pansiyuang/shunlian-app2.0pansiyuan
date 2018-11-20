@@ -116,6 +116,9 @@ public class AddTopicPresenter extends BasePresenter {
                 PagerEntity pager = data.pager;
                 currentPage = Integer.parseInt(pager.page);
                 allPage = Integer.parseInt(pager.total_page);
+                if (currentPage == 1){
+                    itemBeans.clear();
+                }
                 setData(data.list);
                 currentPage++;
             }
@@ -160,10 +163,9 @@ public class AddTopicPresenter extends BasePresenter {
     @Override
     public void onRefresh() {
         super.onRefresh();
-        if (!isLoading) {
-            if (currentPage <= allPage) {
-                requestData(false);
-            }
+        if (!isLoading && currentPage <= allPage) {
+            isLoading = true;
+            requestData(false);
         }
     }
 }
