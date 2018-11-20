@@ -1219,18 +1219,12 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
             mShareInfoParam.isSuperiorProduct = mGoodsDeatilEntity.type.equals("1")?true:false;
             if(mGoodsDeatilEntity.tt_act!=null&&!"0".equals(mGoodsDeatilEntity.status)){//非下架商品){
-                if(mGoodsDeatilEntity.tt_act.content!=null&&mGoodsDeatilEntity.tt_act.content.length()>2){
-
-                  String stateTime = mGoodsDeatilEntity.tt_act.content.substring(mGoodsDeatilEntity.tt_act.content.length()-2,mGoodsDeatilEntity.tt_act.content.length());
-                  if(stateTime.equals("开始")){
-                      stateTime="开抢";
-                      mShareInfoParam.start_time =TimeUtil.getyMdHmMin(System.currentTimeMillis()+20000+Long.valueOf(mGoodsDeatilEntity.tt_act.time)*1000)
-                              +stateTime;
+                if(mGoodsDeatilEntity.tt_act.content!=null){
+                  if(mGoodsDeatilEntity.tt_act.sale.equals("0")){
+                      mShareInfoParam.start_time =mGoodsDeatilEntity.tt_act.end_time;
                   }else{
-                      mShareInfoParam.start_time =TimeUtil.getyMdHMin(System.currentTimeMillis()+20000+Long.valueOf(mGoodsDeatilEntity.tt_act.time)*1000)
-                              +stateTime;
+                      mShareInfoParam.start_time =mGoodsDeatilEntity.tt_act.start_time;
                   }
-
                 }
                 mShareInfoParam.act_label = "天天特惠";
                 mShareInfoParam.price = mGoodsDeatilEntity.tt_act.act_price;

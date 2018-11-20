@@ -274,7 +274,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String percent;
         public String str_surplus_stock;
         public String start_time;
-
+        public String end_time;
         @Override
         public int describeContents() {
             return 0;
