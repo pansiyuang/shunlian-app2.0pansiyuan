@@ -2,7 +2,9 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.utils.Common;
@@ -28,11 +32,17 @@ public class StoreShareBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEnt
     private Context context;
     private List<StoreGoodsListEntity.MData> datas;
 
+    private int successCount = 0;
+    private boolean isCircle = false;
+    private LoadImageCount cloadImageCount;
 
-    public StoreShareBabyAdapter(Context context, boolean isShowFooter, List<StoreGoodsListEntity.MData> datas) {
+    public StoreShareBabyAdapter(Context context, boolean isShowFooter, List<StoreGoodsListEntity.MData> datas,boolean isCircle,LoadImageCount loadImageCount) {
         super(context, isShowFooter, datas);
         this.context = context;
         this.datas = datas;
+        this.isCircle = isCircle;
+        successCount = 0;
+        this.cloadImageCount = loadImageCount;
     }
 
     @Override
@@ -50,7 +60,27 @@ public class StoreShareBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEnt
             oneHolder.mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
             oneHolder.miv_onel.setScaleType(ImageView.ScaleType.FIT_START);
             oneHolder.mtv_pricer.setText(context.getResources().getString(R.string.common_yuan)+data.market_price);
-            GlideUtils.getInstance().loadImage(context,oneHolder.miv_onel,data.thumb);
+            if(!isCircle){
+                GlideUtils.getInstance().loadImage(context,oneHolder.miv_onel,data.thumb);
+            }else {
+                GlideUtils.getInstance().loadBitmapSync(context, data.thumb,
+                        new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource,
+                                                        GlideAnimation<? super Bitmap> glideAnimation) {
+                                oneHolder.miv_onel.setImageBitmap(resource);
+                                successCount++;
+                                if(cloadImageCount!=null){
+                                    cloadImageCount.imageSuccessCount(successCount);
+                                }
+                            }
+
+                            @Override
+                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                super.onLoadFailed(e, errorDrawable);
+                            }
+                        });
+            }
         }
     }
 
@@ -77,6 +107,10 @@ public class StoreShareBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEnt
                 listener.onItemClick(view,getAdapterPosition());
             }
         }
+    }
+
+    public interface LoadImageCount{
+       void imageSuccessCount(int successCount);
     }
 
 }

@@ -11,7 +11,7 @@
         android:layout_alignParentBottom="true">
         <LinearLayout
             android:id="@+id/ll_root"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/yy1080"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_white_8px"
             android:orientation="vertical">
@@ -51,17 +51,114 @@
             </com.shunlian.app.widget.MyLinearLayout>
 
 
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_shop"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/xx30"
                 android:layout_height="@dimen/xx580"
                 android:layout_marginLeft="@dimen/xx30"
-                android:layout_marginRight="@dimen/xx30"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/xx20"
-               />
+                android:orientation="horizontal"
+                android:layout_marginRight="@dimen/xx30">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:layout_marginRight="@dimen/xx20"
+                    android:orientation="vertical">
+                    <com.shunlian.app.widget.MyImageView
+                        android:id="@+id/miv_onel"
+                        android:layout_width="match_parent"
+                        android:layout_height="115dp"
+                        android:scaleType="centerCrop" />
+
+                    <com.shunlian.app.widget.MyTextView
+                        android:id="@+id/mtv_descl"
+                        android:layout_below="@+id/miv_onel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5.5dp"
+                        android:layout_marginRight="5.5dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:textColor="@color/my_gray_three"
+                        android:textSize="12sp" />
+
+
+                    <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_pricel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                           android:layout_below="@+id/mtv_descl"
+                            android:layout_marginBottom="10dp"
+                            android:layout_toRightOf="@id/mtv_yuanl"
+                            android:textColor="@color/pink_color"
+                            android:textSize="15sp" />
+
+                        <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_pricer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/mtv_descl"
+                            android:layout_marginLeft="9dp"
+                            android:layout_toRightOf="@id/mtv_pricel"
+                            android:textColor="@color/share_text"
+                            android:textSize="11sp" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/xx20"
+                    android:orientation="vertical">
+                    <com.shunlian.app.widget.MyImageView
+                        android:id="@+id/miv_onel2"
+                        android:layout_width="match_parent"
+                        android:layout_height="115dp"
+                        android:scaleType="centerCrop" />
+
+                    <com.shunlian.app.widget.MyTextView
+                        android:id="@+id/mtv_descl2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5.5dp"
+                        android:layout_marginRight="5.5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@+id/miv_onel2"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:text=""
+                        android:textColor="@color/my_gray_three"
+                        android:textSize="12sp" />
+
+
+                    <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_pricel2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/mtv_yuanl"
+                            android:textColor="@color/pink_color"
+                            android:layout_below="@+id/mtv_descl2"
+                            android:textSize="15sp" />
+
+                        <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_pricer2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_toRightOf="@id/mtv_pricel2"
+                            android:layout_below="@+id/mtv_descl2"
+                            android:textColor="@color/share_text"
+                            android:textSize="11sp" />
+
+
+                </RelativeLayout>
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"

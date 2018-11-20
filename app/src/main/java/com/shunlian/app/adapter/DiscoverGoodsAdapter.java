@@ -127,7 +127,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                             mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
                             mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
                             shareGoodDialogUtil.setShareInfoParam(mShareInfoParam);
-                            shareGoodDialogUtil.createGoodCode(true);
+                            shareGoodDialogUtil.createGoodCode(true,false);
                         }
                     });
                 }else {

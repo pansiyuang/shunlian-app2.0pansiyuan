@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.multidex.MultiDex;
+import android.util.DisplayMetrics;
+import android.view.Display;
 
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -56,7 +58,7 @@ public class App extends Application {
     private static Context context;
     public static String CACHE_PATH;
     public static String DOWNLOAD_PATH;
-
+    public static int widthPixels = 0;
     public static ActivityHelper getActivityHelper() {
         return mApp.mActivityHelper;
     }
@@ -84,6 +86,8 @@ public class App extends Application {
         super.onCreate();
         mApp = this;
         context = getApplicationContext();
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        widthPixels = dm.widthPixels;
         //初始化bugly,建议在测试阶段建议设置成true，发布时设置为false。
         if (BuildConfig.DEBUG) {
             Constant.BUGLY_ID="9f3fcbbba0";//测试
