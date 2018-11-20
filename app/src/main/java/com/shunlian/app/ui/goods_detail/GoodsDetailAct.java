@@ -1380,9 +1380,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             if(mGoodsDeatilEntity.tt_act!=null&&!"0".equals(mGoodsDeatilEntity.status)){//非下架商品){
                 if(mGoodsDeatilEntity.tt_act.content!=null){
                   if(mGoodsDeatilEntity.tt_act.sale.equals("0")){
-                      mShareInfoParam.start_time =mGoodsDeatilEntity.tt_act.end_time;
-                  }else{
                       mShareInfoParam.start_time =mGoodsDeatilEntity.tt_act.start_time;
+                  }else{
+                      mShareInfoParam.start_time =mGoodsDeatilEntity.tt_act.end_time;
                   }
                 }
                 mShareInfoParam.act_label = "天天特惠";
