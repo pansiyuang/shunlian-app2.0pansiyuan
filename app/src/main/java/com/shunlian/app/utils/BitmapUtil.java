@@ -88,7 +88,7 @@ public class BitmapUtil {
 
         int me = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
         view.measure(me,me);
-        view.layout(0 ,0, (int)App.getContext().getResources().getDimension(R.dimen.xx900), view.getMeasuredHeight());
+        view.layout(0 ,0, (int)App.getContext().getResources().getDimension(R.dimen.xx1080), view.getMeasuredHeight());
         view.buildDrawingCache();
         Bitmap bitmap = view.getDrawingCache();
         return bitmap;
