@@ -7,6 +7,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommentAdapter;
 import com.shunlian.app.adapter.ProbablyLikeAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -72,6 +73,46 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         this.goods_id = goods_id;
         initApi();
         mayBeBuy();
+    }
+
+
+    public void getBubble() {
+        Map<String, String> map = new HashMap<>();
+        map.put("position", "1");
+        sortAndMD5(map);
+
+        Call<BaseEntity<BubbleEntity>> baseEntityCall = getApiService().getBubble(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<BubbleEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<BubbleEntity> entity) {
+                super.onSuccess(entity);
+                BubbleEntity data = entity.data;
+                if (data != null) {
+                    iView.setBubble(data);
+                }else {
+                    iView.showFailureView(666);
+                }
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<BubbleEntity> bubbleEntityBaseEntity) {
+                super.onErrorData(bubbleEntityBaseEntity);
+                iView.showFailureView(666);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                iView.showFailureView(666);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code,message);
+                iView.showFailureView(666);
+            }
+
+        });
     }
 
     @Override

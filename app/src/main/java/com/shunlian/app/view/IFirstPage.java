@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -14,4 +15,5 @@ public interface IFirstPage extends IView {
     void setTab(GetMenuEntity getMenuEntiy);
     void setContent(GetDataEntity getDataEntity);
     void setGoods(List<GoodsDeatilEntity.Goods> mDatas , int page, int allPage);
+    void setBubble(BubbleEntity data);
 }

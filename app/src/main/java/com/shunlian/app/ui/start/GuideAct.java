@@ -56,7 +56,7 @@ public class GuideAct extends MBaseActivity {
 
     protected void initData() {
         mGuideLists = new int[]{R.mipmap.guide_one, R.mipmap.guide_two,
-                R.mipmap.guide_three,R.mipmap.guide_four};
+                R.mipmap.guide_three};
 //        mGuideLists = new int[]{R.mipmap.guide_one, R.mipmap.guide_two,
 //                R.mipmap.guide_three};
         initDot();
@@ -146,8 +146,8 @@ public class GuideAct extends MBaseActivity {
 
         @Override
         public void onPageSelected(int position) {
-            if (position == 3) {
-//            if (position == 2) {
+//            if (position == 3) {
+            if (position == 2) {
                 mrlayout_point.setVisibility(View.GONE);
                 mtv_start.setVisibility(View.VISIBLE);
                 mtv_start.setOnClickListener(new View.OnClickListener() {

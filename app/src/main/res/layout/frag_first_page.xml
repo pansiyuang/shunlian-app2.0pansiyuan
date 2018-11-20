@@ -200,6 +200,36 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:id="@+id/lLayout_toast"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/bg_toast"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="5dp"
+        android:visibility="gone">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/tv_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
 </com.shunlian.app.widget.MyRelativeLayout>
 
 

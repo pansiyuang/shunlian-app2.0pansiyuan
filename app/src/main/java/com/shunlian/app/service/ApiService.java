@@ -2293,6 +2293,14 @@ public interface ApiService {
     Call<BaseEntity<AdEntity>> splashScreen(@QueryMap Map<String, String> map);
 
     /**
+     * 闪屏广告
+     *
+     * @return
+     */
+    @GET("Goods/getBubble")
+    Call<BaseEntity<BubbleEntity>> getBubble(@QueryMap Map<String, String> map);
+
+    /**
      * 验证新人
      *
      * @return

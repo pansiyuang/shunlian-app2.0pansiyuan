@@ -73,9 +73,10 @@ public class AddTopicAct extends BaseActivity implements IView{
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (manager != null && presenter != null){
+                if (manager != null){
                     int lastPosition = manager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == manager.getItemCount()){
+                    if (lastPosition + 1 == manager.getItemCount()
+                            && manager.getItemCount() > 0&& presenter != null){
                         presenter.onRefresh();
                     }
                 }

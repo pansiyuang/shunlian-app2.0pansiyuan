@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
@@ -21,6 +22,7 @@ import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AdUserEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
@@ -44,6 +46,7 @@ import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -60,6 +63,8 @@ import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -129,6 +134,152 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     private NewUserGoodsFrag userGoodFragFrist;
     private NewUserGoodsFrag userGoodFragEnd;
     private ShareInfoParam shareInfoParam;
+
+    @BindView(R.id.lLayout_toast)
+    LinearLayout lLayout_toast;
+    @BindView(R.id.miv_icon)
+    MyImageView miv_icon;
+    @BindView(R.id.tv_info)
+    TextView tv_info;
+    private boolean isStop, isCrash;
+    private boolean isPause = true;
+    private Runnable runnableA, runnableB, runnableC;
+    private Timer outTimer;
+    private int mposition, size;
+    private static Handler handler;
+
+
+    public void beginToast() {
+        if (isPause) {
+            mposition = 0;
+            isStop = false;
+            mPresenter.getBubble();
+            isPause = false;
+        }
+    }
+
+    public void stopToast() {
+        if (!isCrash) {
+            isPause = true;
+            isStop = true;
+            if (lLayout_toast != null) {
+                LogUtil.augusLogW("mposition:gone");
+                lLayout_toast.setVisibility(View.GONE);
+            }
+            if (outTimer != null) {
+                LogUtil.augusLogW("mposition:cancel");
+                outTimer.cancel();
+            }
+            if (handler != null) {
+                LogUtil.augusLogW("mposition:remove");
+                if (runnableA != null) {
+                    handler.removeCallbacks(runnableA);
+                }
+                if (runnableB != null) {
+                    handler.removeCallbacks(runnableB);
+                }
+                if (runnableC != null) {
+                    handler.removeCallbacks(runnableC);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopToast();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        beginToast();
+    }
+
+    @Override
+    public void setBubble(BubbleEntity data) {
+        size = 2;
+        if (!isEmpty(data.list)) {
+            size = data.list.size();
+            startToast(data.list);
+        }
+        startTimer();
+    }
+
+    public void startTimer() {
+        if (handler == null) {
+            handler = new Handler();
+        }
+        runnableA = new Runnable() {
+            @Override
+            public void run() {
+                if (!isStop) {
+                    LogUtil.augusLogW("mposition：delayed");
+                    mposition = 0;
+                    mPresenter.getBubble();
+                }
+            }
+        };
+        handler.postDelayed(runnableA, (7 * size + 1) * 1000);
+    }
+
+    public void startToast(final List<BubbleEntity.Content> datas) {
+        if (outTimer != null) {
+            outTimer.cancel();
+        }
+        outTimer = new Timer();
+        outTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (mposition < datas.size()) {
+                    runnableB = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mposition < datas.size()) {
+                                LogUtil.augusLogW("mposition:" + mposition);
+                                lLayout_toast.setVisibility(View.VISIBLE);
+                                GlideUtils.getInstance().loadCircleAvar(baseAct,miv_icon,datas.get(mposition).avatar);
+                                tv_info.setText(datas.get(mposition).text);
+                                lLayout_toast.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (datas.get(mposition).url!=null)
+                                            Common.goGoGo(baseAct,datas.get(mposition).url.type,datas.get(mposition).url.item_id);
+                                    }
+                                });
+                            }
+                        }
+                    };
+                    if (handler == null) {
+                        if (!isCrash) {
+                            isCrash = true;
+                            Handler mHandler = new Handler(Looper.getMainLooper());
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    isCrash = false;
+                                }
+                            }, (7 * size + 2) * 1000);
+                        }
+                    } else {
+                        handler.post(runnableB);
+                        runnableC = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isStop) {
+                                    lLayout_toast.setVisibility(View.GONE);
+                                    mposition++;
+                                }
+                            }
+                        };
+                        handler.postDelayed(runnableC, 5 * 1000);
+                    }
+                }
+            }
+        }, 0, 7 * 1000);
+    }
+
     public static void startAct(Context context, String memberId) {
         Intent intent = new Intent(context, NewUserPageActivity.class);
         intent.putExtra("member_id", memberId);
@@ -256,7 +407,10 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (666==request_code){
+            size = 2;
+            startTimer();
+        }
     }
 
     @Override

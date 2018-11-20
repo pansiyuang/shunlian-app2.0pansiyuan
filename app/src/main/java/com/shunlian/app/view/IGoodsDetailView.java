@@ -2,6 +2,7 @@ package com.shunlian.app.view;
 
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CommentAdapter;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 
@@ -10,6 +11,8 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
  */
 
 public interface IGoodsDetailView extends IView {
+
+    void setBubble(BubbleEntity data);
 
     /**
      * 商品详情数据
