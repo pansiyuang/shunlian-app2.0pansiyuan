@@ -107,6 +107,7 @@ public class ShareGoodDialogUtil {
         nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEddType();
                 nomalBuildl.dismiss();
                 if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
                     createSpecialCode();
@@ -136,7 +137,7 @@ public class ShareGoodDialogUtil {
             Constant.SHARE_ID = mShareInfoParam.goods_id;
         }else if(mShareInfoParam.egg_type==2){
             Constant.SHARE_TYPE = "store";
-            Constant.SHARE_ID = mShareInfoParam.goods_id;
+            Constant.SHARE_ID = mShareInfoParam.shop_id;
         }else{
             Constant.SHARE_TYPE = "";
         }

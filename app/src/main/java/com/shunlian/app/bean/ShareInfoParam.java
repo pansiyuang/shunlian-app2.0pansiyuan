@@ -29,6 +29,7 @@ public class ShareInfoParam implements Serializable {
     public boolean isCopyTitle;
     //店铺分享
     public String shop_star;
+    public String shop_id;
     public String shop_logo;
     public String shop_name;
     public String code_link;

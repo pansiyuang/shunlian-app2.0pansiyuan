@@ -33,6 +33,7 @@ import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
@@ -50,6 +51,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.ObtainGoldenEggsTip;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -184,6 +186,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private StoreIndexEntity.Head storeHead;
     private List<StoreGoodsListEntity.MData> dataList;
+
+    @BindView(R.id.oget)
+    ObtainGoldenEggsTip oget;
     public static void startAct(Context context, String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
         intent.putExtra("storeId", storeId);
@@ -233,6 +238,14 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 //        String s = messageCountManager.setTextCount(tv_msg_count);
 //        if (quick_actions != null)
 //            quick_actions.setMessageCount(s);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void shareSuccess(ShareInfoEvent event){
+        if (oget != null && event.isShareSuccess && "store".equals(event.type)){
+            oget.setEggsCount(event.eggs_count);
+            oget.show(4000);
+        }
     }
 
     @Override
@@ -803,6 +816,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 shareInfoParam.shop_star = storeHead.star;
                 shareInfoParam.userName = storeHead.nickname;
                 shareInfoParam.userAvatar = storeHead.avatar;
+                shareInfoParam.shop_id = storeId;
                 shareInfoParam.desc = storeHead.decoration_name;
             }
              if(shareInfoParam.share_goods!=null&&shareInfoParam.share_goods.size()>2){

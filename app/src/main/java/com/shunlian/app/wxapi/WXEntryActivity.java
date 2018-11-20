@@ -289,7 +289,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 } else {
                     if (!isEmpty(Constant.SHARE_TYPE)) {
                         if ("goods".equals(Constant.SHARE_TYPE)
-                                || "income".equals(Constant.SHARE_TYPE)) {
+                                || "income".equals(Constant.SHARE_TYPE)|| "store".equals(Constant.SHARE_TYPE)) {
                             //用于分享领金蛋
                             wxEntryPresenter.goodsShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
                         } else if ("article".equals(Constant.SHARE_TYPE)) {
