@@ -31,6 +31,7 @@ import com.shunlian.app.newchat.entity.ServiceEntity;
 import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.newchat.entity.SystemMessageEntity;
+import com.shunlian.app.ui.new3_login.New3LoginEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -183,6 +184,15 @@ public interface ApiService {
      */
     @POST("member/common/sendSmsCode")
     Call<BaseEntity<String>> sendSmsCode(@Body RequestBody requestBody);
+
+    /**
+     * 发送验证码
+     *
+     * @param requestBody
+     * @return
+     */
+    @POST("member/common/sendSmsCode")
+    Call<BaseEntity<New3LoginEntity>> sendSmsCode3(@Body RequestBody requestBody);
 
     /**
      * 获取图形验证码

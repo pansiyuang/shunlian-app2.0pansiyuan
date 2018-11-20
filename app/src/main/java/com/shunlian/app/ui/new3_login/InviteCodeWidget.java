@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
 /**
@@ -25,7 +26,8 @@ import com.shunlian.app.widget.MyTextView;
  */
 public class InviteCodeWidget extends RelativeLayout {
 
-    private EditText mAccountText;
+    private EditText mInviteCodeText;
+    private MyImageView mTipIV;
     private OnTextChangeListener mListener;
     private String mHintText;
     private int mHintTextColor;
@@ -61,21 +63,21 @@ public class InviteCodeWidget extends RelativeLayout {
 
     private void init(Context context) {
         //邀请码
-        mAccountText = new EditText(context);
-        addView(mAccountText);
-        mAccountText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        mAccountText.setTextColor(mTextColor);
-        mAccountText.setMinHeight(TransformUtil.dip2px(context, 15f));
-        LayoutParams mAccountParams = (LayoutParams) mAccountText.getLayoutParams();
+        mInviteCodeText = new EditText(context);
+        addView(mInviteCodeText);
+        mInviteCodeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        mInviteCodeText.setTextColor(mTextColor);
+        mInviteCodeText.setMinHeight(TransformUtil.dip2px(context, 15f));
+        LayoutParams mAccountParams = (LayoutParams) mInviteCodeText.getLayoutParams();
         mAccountParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         mAccountParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        mAccountText.setLayoutParams(mAccountParams);
-        mAccountText.setBackgroundDrawable(null);
-        mAccountText.setHintTextColor(mHintTextColor);
-        mAccountText.setHint(mHintText);
+        mInviteCodeText.setLayoutParams(mAccountParams);
+        mInviteCodeText.setBackgroundDrawable(null);
+        mInviteCodeText.setHintTextColor(mHintTextColor);
+        mInviteCodeText.setHint(mHintText);
         if (mIsMobile) {
-            mAccountText.setInputType(InputType.TYPE_CLASS_PHONE);
-            mAccountText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
+            mInviteCodeText.setInputType(InputType.TYPE_CLASS_PHONE);
+            mInviteCodeText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
         }
 
 
@@ -99,6 +101,7 @@ public class InviteCodeWidget extends RelativeLayout {
         MyTextView mStrategyTV = new MyTextView(context);
         mStrategyTV.setText("邀请码攻略");
         mStrategyTV.setTextSize(12);
+        mStrategyTV.setId(R.id.new3_invite_code);
         addView(mStrategyTV);
         //位置
         LayoutParams mStrategyParams = (LayoutParams) mStrategyTV.getLayoutParams();
@@ -116,32 +119,55 @@ public class InviteCodeWidget extends RelativeLayout {
         mStrategyBG.setCornerRadius(radius);
         mStrategyTV.setBackgroundDrawable(mStrategyBG);
 
+        //删除提示
+        int i = TransformUtil.dip2px(context, 10);
+        mTipIV = new MyImageView(context);
+        mTipIV.setImageResource(R.mipmap.icon_search_del);
+        addView(mTipIV);
+        RelativeLayout.LayoutParams mTipIVParams = (LayoutParams) mTipIV.getLayoutParams();
+        mTipIVParams.addRule(RelativeLayout.LEFT_OF, mStrategyTV.getId());
+        mTipIVParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        mTipIV.setLayoutParams(mTipIVParams);
+        mTipIV.setPadding(i, i, i, i);
+        mTipIV.setVisibility(GONE);
     }
 
 
     private void initListener() {
-        mAccountText.addTextChangedListener(new SimpleTextWatcher() {
+        mInviteCodeText.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
 //                System.out.println(String.format("onTextChanged : s=%s  start=%d  before=%d  count=%d",
 //                 s,start,before,count));
                 if (mListener != null) mListener.onTextChange(s);
+                if (s.length() > 0) {
+                    mTipIV.setVisibility(VISIBLE);
+                } else {
+                    mTipIV.setVisibility(GONE);
+                }
                 if (mIsMobile) {//处理手机号
                     if (count == 1) {
                         int length = s.toString().length();
                         if (length == 3 || length == 8) {
-                            mAccountText.setText(s + " ");
-                            mAccountText.setSelection(mAccountText.getText().length());
+                            mInviteCodeText.setText(s + " ");
+                            mInviteCodeText.setSelection(mInviteCodeText.getText().length());
                         }
                     } else if (count == 0) {
                         int length = s.toString().length();
                         if (length == 4 || length == 9) {
-                            mAccountText.setText(mAccountText.getText().toString().trim());
-                            mAccountText.setSelection(mAccountText.getText().length());
+                            mInviteCodeText.setText(mInviteCodeText.getText().toString().trim());
+                            mInviteCodeText.setSelection(mInviteCodeText.getText().length());
                         }
                     }
                 }
+            }
+        });
+
+        mTipIV.setOnClickListener(v -> {
+            if (mInviteCodeText != null) {
+                mInviteCodeText.setText("");
+                mTipIV.setVisibility(GONE);
             }
         });
     }
@@ -152,8 +178,8 @@ public class InviteCodeWidget extends RelativeLayout {
      * @return
      */
     public CharSequence getText() {
-        if (mAccountText != null) {
-            String text = mAccountText.getText().toString().trim();
+        if (mInviteCodeText != null) {
+            String text = mInviteCodeText.getText().toString().trim();
             text = text.replaceAll(" ", "");
             return text;
         }

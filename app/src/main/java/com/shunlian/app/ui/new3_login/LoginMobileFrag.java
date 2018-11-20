@@ -11,7 +11,6 @@ import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyTextView;
 
@@ -22,7 +21,7 @@ import butterknife.OnClick;
  * Created by zhanghe on 2018/11/17.
  * 手机号登录
  */
-public class LoginMobileFrag extends BaseFragment {
+public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
 
 
     @BindView(R.id.mobile)
@@ -33,6 +32,9 @@ public class LoginMobileFrag extends BaseFragment {
 
     @BindView(R.id.mtv_tip)
     MyTextView mtv_tip;
+    private New3LoginPresenter presenter;
+    //手机号是否注册
+    private boolean isMobileRegister;
 
     /**
      * 设置布局id
@@ -52,8 +54,7 @@ public class LoginMobileFrag extends BaseFragment {
         super.initListener();
         mobile.setOnTextChangeListener(s -> {
             if (!s.toString().startsWith("1")){
-                visible(mtv_tip);
-                mtv_tip.setText("请输入正确手机号");
+                showMobileTip("请输入正确手机号");
             }else {
                 mtv_tip.setVisibility(View.INVISIBLE);
             }
@@ -61,8 +62,12 @@ public class LoginMobileFrag extends BaseFragment {
             if (s.length()<=0)mtv_tip.setVisibility(View.INVISIBLE);
 
             GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
-            if (mobile.getText().length() == 11){
+            String mobile_text = mobile.getText().toString();
+            if (mobile_text.length() == 11){
                 btnDrawable.setColor(getColorResouce(R.color.pink_color));
+                if (presenter != null){
+                    presenter.checkMobile(mobile_text,"1");
+                }
             }else {
                 btnDrawable.setColor(Color.parseColor("#ECECEC"));
             }
@@ -77,21 +82,57 @@ public class LoginMobileFrag extends BaseFragment {
     protected void initData() {
         GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
         btnDrawable.setColor(Color.parseColor("#ECECEC"));
+        presenter = new New3LoginPresenter(baseActivity,this);
     }
 
     @OnClick(R.id.mbtn_login)
     public void next(){
         String mobile = this.mobile.getText().toString();
-        if (isEmpty(mobile)){
-            Common.staticToast("请输入手机号");
-            return;
+        if (isEmpty(mobile) || mobile.length() != 11) return;
+        if (presenter != null){
+            presenter.sendSmsCode(mobile,"");
         }
-        ((New3LoginAct)baseActivity).loginSms(2,mobile);
+        ((New3LoginAct)baseActivity).loginSms(2,mobile,isMobileRegister);
     }
 
     @OnClick(R.id.llayout_login_agreement)
     public void loginAgreement() {
         H5X5Act.startAct(baseActivity, InterentTools.H5_HOST
                 + LoginEntryAct.TERMS_OF_SERVICE, H5X5Act.MODE_SONIC);
+    }
+
+    /**
+     * 手机号是否正确
+     * @param b
+     */
+    @Override
+    public void iSMobileRight(boolean b,String msg) {
+        isMobileRegister = b;
+        if (!b){
+            showMobileTip(msg);
+        }
+    }
+
+    /**
+     * 显示网络请求失败的界面
+     * @param request_code
+     */
+    @Override
+    public void showFailureView(int request_code) {}
+
+    /**
+     * 显示空数据界面
+     * @param request_code
+     */
+    @Override
+    public void showDataEmptyView(int request_code) {}
+
+    /**
+     * 显示手机号提示
+     * @param tip
+     */
+    private void showMobileTip(String tip) {
+        visible(mtv_tip);
+        mtv_tip.setText(tip);
     }
 }

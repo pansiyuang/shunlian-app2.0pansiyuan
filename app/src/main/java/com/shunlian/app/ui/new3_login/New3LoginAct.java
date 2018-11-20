@@ -11,10 +11,13 @@ import android.support.v4.app.FragmentManager;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.widget.MyImageView;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import butterknife.BindView;
 
 /**
  * Created by zhanghe on 2018/11/16.
@@ -22,6 +25,8 @@ import java.util.Map;
  */
 public class New3LoginAct extends BaseActivity {
 
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
 
     private FragmentManager mFragmentManager;
     private Map<String, BaseFragment> fragments;
@@ -37,6 +42,7 @@ public class New3LoginAct extends BaseActivity {
     private LoginMobileFrag mLoginMobileFrag;
     private VerifyMobileFrag mVerifyMobileFrag;
     private InviteCodeFrag mInviteCodeFrag;
+    private int mCurrentPage = 1;
 
     public static void startAct(Context context, LoginConfig config){
         context.startActivity(new Intent(context,New3LoginAct.class)
@@ -51,6 +57,18 @@ public class New3LoginAct extends BaseActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.act_login_new3;
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        miv_close.setOnClickListener(v -> {
+           if (mCurrentPage == 1){
+                finish();
+           }else {
+               loginSms(1,null,false);
+           }
+        });
     }
 
     /**
@@ -78,7 +96,7 @@ public class New3LoginAct extends BaseActivity {
                         break;
                     case SMS_TO_LOGIN:
                         //短信登录
-                        loginSms(1,null);
+                        loginSms(1,null,false);
                         break;
                 }
         }
@@ -99,8 +117,9 @@ public class New3LoginAct extends BaseActivity {
     /**
      * 短信登录
      */
-    public void loginSms(int page,String mobile){
+    public void loginSms(int page,String mobile,boolean isMobileRegister){
         if (page == 1){
+            mCurrentPage = 1;
             mLoginMobileFrag = (LoginMobileFrag) fragments.get(MOBILE_1_LOGIN);
             if (mLoginMobileFrag == null){
                 mLoginMobileFrag = new LoginMobileFrag();
@@ -108,6 +127,7 @@ public class New3LoginAct extends BaseActivity {
             }
             switchContent(mLoginMobileFrag);
         }else if (page == 2){
+            mCurrentPage = 2;
             mVerifyMobileFrag = (VerifyMobileFrag) fragments.get(MOBILE_2_LOGIN);
             if (mVerifyMobileFrag == null){
                 mVerifyMobileFrag = new VerifyMobileFrag();
@@ -115,6 +135,7 @@ public class New3LoginAct extends BaseActivity {
             }
             Bundle bundle = new Bundle();
             bundle.putString("mobile",mobile);
+            bundle.putBoolean("isMobileRegister",isMobileRegister);
             mVerifyMobileFrag.setArguments(bundle);
             switchContent(mVerifyMobileFrag);
         }
@@ -124,6 +145,7 @@ public class New3LoginAct extends BaseActivity {
      * 邀请码
      */
     public void loginInviteCode(){
+        mCurrentPage = 3;
         mInviteCodeFrag = (InviteCodeFrag) fragments.get(INVITE_CODE);
         if (mInviteCodeFrag == null){
             mInviteCodeFrag = new InviteCodeFrag();
@@ -166,6 +188,14 @@ public class New3LoginAct extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mCurrentPage == 1){
+            super.onBackPressed();
+        }else {
+            loginSms(1,null,false);
+        }
+    }
 
     /**
      * 登录配置信息

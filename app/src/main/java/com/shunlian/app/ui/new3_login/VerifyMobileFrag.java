@@ -1,5 +1,7 @@
 package com.shunlian.app.ui.new3_login;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -19,7 +21,7 @@ import butterknife.BindView;
  * 验证手机号
  */
 
-public class VerifyMobileFrag extends BaseFragment {
+public class VerifyMobileFrag extends BaseFragment implements INew3LoginView{
 
     @BindView(R.id.mtv_mobile)
     MyTextView mtv_mobile;
@@ -32,6 +34,10 @@ public class VerifyMobileFrag extends BaseFragment {
 
     private VerifyPicDialog mVerifyPicDialog;
     private CountDownTimer countDownTimer;
+    private boolean isMobileRegister;
+    private New3LoginPresenter presenter;
+    private String mobile;
+
     /**
      * 设置布局id
      *
@@ -55,7 +61,9 @@ public class VerifyMobileFrag extends BaseFragment {
         });
 
         mtv_reset.setOnClickListener(v -> {
-            countDown();
+            if (presenter != null){
+                presenter.getPictureCode();
+            }
         });
     }
 
@@ -65,9 +73,11 @@ public class VerifyMobileFrag extends BaseFragment {
     @Override
     protected void initData() {
         Bundle arguments = getArguments();
-        String mobile = arguments.getString("mobile");
+        mobile = arguments.getString("mobile");
+        isMobileRegister = arguments.getBoolean("isMobileRegister");
         mtv_mobile.setText(mobile);
         countDown();
+        presenter = new New3LoginPresenter(baseActivity,this);
     }
 
     private void countDown() {
@@ -93,17 +103,6 @@ public class VerifyMobileFrag extends BaseFragment {
         countDownTimer.start();
     }
 
-    private void showCode() {
-        mVerifyPicDialog = new VerifyPicDialog(baseActivity);
-        mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
-        mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
-        mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
-            String verifyText = mVerifyPicDialog.getVerifyText();
-            System.out.println("====verifyText========="+verifyText);
-            mVerifyPicDialog.dismiss();
-        }, "取消", v -> mVerifyPicDialog.dismiss()).show();
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -111,5 +110,47 @@ public class VerifyMobileFrag extends BaseFragment {
             countDownTimer.cancel();
             countDownTimer = null;
         }
+    }
+
+    /**
+     * 设置图形验证码
+     *
+     * @param bytes
+     */
+    @Override
+    public void setCode(byte[] bytes) {
+        mVerifyPicDialog = new VerifyPicDialog(baseActivity);
+        mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
+        mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        mVerifyPicDialog.setImagViewCode(bitmap);
+        mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
+            countDown();
+            String verifyText = mVerifyPicDialog.getVerifyText();
+            if (presenter != null){
+                presenter.sendSmsCode(mobile,verifyText);
+            }
+            mVerifyPicDialog.dismiss();
+        }, "取消", v -> mVerifyPicDialog.dismiss()).show();
+    }
+
+    /**
+     * 显示网络请求失败的界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    /**
+     * 显示空数据界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }

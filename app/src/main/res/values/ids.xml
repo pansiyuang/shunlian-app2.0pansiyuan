@@ -2,4 +2,5 @@
 <resources>
   <item type="id" name="bgaqrcode_camera_preview" />
   <item type="id" name="new3_pwd" />
+  <item type="id" name="new3_invite_code" />
 </resources>

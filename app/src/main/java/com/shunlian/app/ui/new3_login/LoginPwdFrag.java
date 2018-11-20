@@ -7,12 +7,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.DispachJump;
+import com.shunlian.app.newchat.util.MessageCountManager;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.h5.H5X5Act;
+import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MyButton;
+import com.tencent.bugly.crashreport.CrashReport;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -22,7 +36,7 @@ import butterknife.OnClick;
  * 密码登录
  */
 
-public class LoginPwdFrag extends BaseFragment {
+public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
 
     @BindView(R.id.account)
     AccountControlsWidget account;
@@ -33,6 +47,8 @@ public class LoginPwdFrag extends BaseFragment {
     @BindView(R.id.mbtn_login)
     MyButton mbtnLogin;
 
+    private New3LoginPresenter presenter;
+    private DispachJump mJump;
     /**
      * 设置布局id
      *
@@ -60,8 +76,8 @@ public class LoginPwdFrag extends BaseFragment {
 
         mbtnLogin.setOnClickListener(v -> {
             if (account != null && password != null){
-                CharSequence accountText = account.getText();
-                CharSequence passwordText = password.getText();
+                String accountText = account.getText().toString();
+                String passwordText = password.getText().toString();
                 if (isEmpty(accountText)){
                     Common.staticToast("账号不能为空");
                     return;
@@ -72,7 +88,9 @@ public class LoginPwdFrag extends BaseFragment {
                     return;
                 }
 
-
+                if (presenter != null){
+                    presenter.loginPwd(accountText,passwordText);
+                }
             }
         });
     }
@@ -82,8 +100,10 @@ public class LoginPwdFrag extends BaseFragment {
      */
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
         btnDrawable.setColor(Color.parseColor("#ECECEC"));
+        presenter = new New3LoginPresenter(baseActivity,this);
     }
 
     @OnClick(R.id.llayout_login_agreement)
@@ -106,5 +126,71 @@ public class LoginPwdFrag extends BaseFragment {
                 btnDrawable.setColor(Color.parseColor("#ECECEC"));
             }
         }
+    }
+
+    @Subscribe(sticky = true)
+    public void eventBus(DispachJump jump) {
+        mJump = jump;
+    }
+
+    /**
+     * 账号密码登录
+     *
+     * @param content
+     */
+    @Override
+    public void accountPwdSuccess(LoginFinishEntity content) {
+        //登陆成功啦
+        SharedPrefUtil.saveSharedUserString("token", content.token);
+        SharedPrefUtil.saveSharedUserString("avatar", content.avatar);
+        SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
+        SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
+        SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
+        CrashReport.setUserId(content.member_id);
+        if (content.tag!=null)
+            SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));
+        JpushUtil.setJPushAlias();
+        //通知登录成功
+        DefMessageEvent event = new DefMessageEvent();
+        event.loginSuccess = true;
+        EventBus.getDefault().post(event);
+
+        EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
+        MessageCountManager.getInstance(getActivity()).initData();
+
+        if (mJump != null){
+            Common.goGoGo(baseActivity,mJump.jumpType,mJump.items);
+        }
+
+        if (!"1".equals(content.is_tag)){
+            SexSelectAct.startAct(baseActivity);
+        }
+        baseActivity.finish();
+    }
+
+    /**
+     * 显示网络请求失败的界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    /**
+     * 显示空数据界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 }

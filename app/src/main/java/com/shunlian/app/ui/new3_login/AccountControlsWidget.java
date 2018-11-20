@@ -110,8 +110,8 @@ public class AccountControlsWidget extends RelativeLayout {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-//                System.out.println(String.format("onTextChanged : s=%s  start=%d  before=%d  count=%d",
-//                 s,start,before,count));
+                //System.out.println(String.format("onTextChanged : s=%s  start=%d  before=%d  count=%d",
+                // s,start,before,count));
                 if (mListener != null) mListener.onTextChange(s);
                 if (s.length() > 0) {
                     mTipIV.setVisibility(VISIBLE);
@@ -125,6 +125,11 @@ public class AccountControlsWidget extends RelativeLayout {
                             mAccountText.setText(s + " ");
                             mAccountText.setSelection(mAccountText.getText().length());
                         }
+                        if (length==4 && s.charAt(3) != ' '){
+                            format(s, 2);
+                        }else if (length==9 && s.charAt(8) != ' '){
+                            format(s, 7);
+                        }
                     }else if (count == 0){
                         int length = s.toString().length();
                         if (length == 4 || length == 9) {
@@ -133,6 +138,18 @@ public class AccountControlsWidget extends RelativeLayout {
                         }
                     }
                 }
+            }
+            //格式化手机号
+            private void format(CharSequence s,int position) {
+                String temp = "";
+                for (int i = 0; i < s.length(); i++) {
+                    temp += s.charAt(i);
+                    if (i == position){
+                        temp += " ";
+                    }
+                }
+                mAccountText.setText(temp);
+                mAccountText.setSelection(mAccountText.getText().length());
             }
         });
 
