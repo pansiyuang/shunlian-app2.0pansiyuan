@@ -122,6 +122,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (!isEmpty(shareInfoParam.shop_name)){
             currTitle=shareInfoParam.shop_name;
             shareInfoParam.img=shareInfoParam.shop_logo;
+            currentDesc = "想要生活有乐趣！打开顺联动力购物去～";
         }else {
             if (!isEmpty(shareInfoParam.title)) {
                 currTitle = shareInfoParam.title;
@@ -131,7 +132,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             if (!isEmpty(shareInfoParam.desc)) {
                 currentDesc = shareInfoParam.desc;
             } else {
-                currentDesc = "顺联动力商城";
+                currentDesc = "要想生活有乐趣！打开顺联动力购物去～";
             }
         }
         if (!isEmpty(shareInfoParam.shareLink)) {

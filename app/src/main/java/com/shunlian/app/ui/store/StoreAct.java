@@ -817,7 +817,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 shareInfoParam.userName = storeHead.nickname;
                 shareInfoParam.userAvatar = storeHead.avatar;
                 shareInfoParam.shop_id = storeId;
-                shareInfoParam.desc = storeHead.decoration_name;
             }
              if(shareInfoParam.share_goods!=null&&shareInfoParam.share_goods.size()>2){
                     shareInfoParam.share_goods = shareInfoParam.share_goods.subList(0,2);
