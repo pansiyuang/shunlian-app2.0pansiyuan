@@ -3,6 +3,7 @@ package com.shunlian.app.adapter;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,30 +103,38 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
             mHolder.mtv_title.setText(goods.title);
             String source = getString(R.string.rmb).concat(goods.price);
             mHolder.mtv_price.setText(Common.changeTextSize(source, getString(R.string.rmb), 12));
+            mHolder.mtv_discount_price.setStrikethrough();
+            if(!TextUtils.isEmpty(goods.market_price)) {
+                mHolder.mtv_discount_price.setVisibility(View.VISIBLE);
+                mHolder.mtv_discount_price.setText(getString(R.string.rmb)+goods.market_price);
+            }else{
+                mHolder.mtv_discount_price.setVisibility(View.GONE);
+            }
             if(type.equals("1")){
-                if(goods.is_add_cart==1) {
-                    mHolder.tv_shopping_car.setEnabled(false);
-                    mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_da_50px);
-                    mHolder.tv_shopping_car.setText("加入购物车");
-                }else{
-                    if(NewUserPageActivity.CURRENT_NUM==NewUserPageActivity.MAX_COUNT){
+                if(isNew) {
+                    if(goods.is_add_cart==1) {
                         mHolder.tv_shopping_car.setEnabled(false);
                         mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_da_50px);
                         mHolder.tv_shopping_car.setText("加入购物车");
-                    }else {
-                        mHolder.tv_shopping_car.setEnabled(true);
-                        mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
-                        mHolder.tv_shopping_car.setText("加入购物车");
+                    }else{
+                        if(NewUserPageActivity.CURRENT_NUM==NewUserPageActivity.MAX_COUNT){
+                            mHolder.tv_shopping_car.setEnabled(false);
+                            mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_da_50px);
+                            mHolder.tv_shopping_car.setText("加入购物车");
+                        }else {
+                            mHolder.tv_shopping_car.setEnabled(true);
+                            mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
+                            mHolder.tv_shopping_car.setText("加入购物车");
+                        }
                     }
-                }
-            }else if(type.equals("2")){
-                if(isNew) {
-                    mHolder.tv_shopping_car.setText("立即购买");
                 }else{
+                    mHolder.tv_shopping_car.setEnabled(true);
+                    mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
                     mHolder.tv_shopping_car.setText("立即分享");
                 }
+            }else if(type.equals("2")){
+                    mHolder.tv_shopping_car.setText("立即购买");
             }
-            mHolder.mtv_discount_price.setText(goods.marker_price);
             if(position==0&&type.equals("1")){
                 if(isNew) {
                     mHolder.tv_usew_desc.setVisibility(View.VISIBLE);

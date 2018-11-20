@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/transparent">
+    android:background="@color/transparent"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="133dp"
-        android:background="@drawable/bg_dialog_top"
         android:gravity="center"
         android:padding="10dp"
+        android:background="@drawable/bg_dialog_top"
         android:orientation="vertical">
 
 
@@ -89,6 +90,7 @@
             android:textColor="@color/value_007AFF"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:background="@color/white"/>
+            android:background="@drawable/bg_dialog_bottomr"
+           />
     </LinearLayout>
 </LinearLayout>

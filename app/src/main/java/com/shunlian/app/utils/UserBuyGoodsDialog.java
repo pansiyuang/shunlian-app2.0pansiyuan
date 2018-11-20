@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ public class UserBuyGoodsDialog {
                 MyImageView miv_goods_pic = holder.getView(R.id.miv_goods_pic);
                 MyTextView mtv_title = holder.getView(R.id.mtv_title);
                 MyTextView mtv_price = holder.getView(R.id.mtv_price);
+                MyTextView mtv_shux = holder.getView(R.id.mtv_shux);
                 MyTextView mtv_discount_price = holder.getView(R.id.mtv_discount_price);
                 MyTextView tv_shopping_car = holder.getView(R.id.tv_shopping_car);
                 holder.getView(R.id.tv_usew_desc).setVisibility(View.GONE);
@@ -78,7 +80,15 @@ public class UserBuyGoodsDialog {
                 String source = context.getString(R.string.rmb).concat(goods.price);
                 mtv_price.setText(Common.changeTextSize(source, context.getString(R.string.rmb), 12));
                 tv_shopping_car.setText("删除");
-                mtv_discount_price.setText(goods.marker_price);
+                mtv_discount_price.setStrikethrough();
+                mtv_discount_price.setText(goods.market_price);
+                if(TextUtils.isEmpty(goods.sku)){
+                    mtv_shux.setVisibility(View.GONE);
+                }else{
+                    mtv_shux.setText(goods.sku);
+                    mtv_shux.setVisibility(View.VISIBLE);
+                }
+
                 tv_shopping_car.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

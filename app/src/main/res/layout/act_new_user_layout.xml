@@ -26,7 +26,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:gravity="center"
-            android:text="新人专享"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="18sp" />
         <ImageView
@@ -87,7 +87,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="@color/white"
+                android:background="@drawable/bg_border_line_bottom"
                 android:orientation="horizontal"
                 android:id="@+id/show_title_info"
                 android:visibility="gone"

@@ -29,7 +29,7 @@ public class NewUserGoodsEntity {
         public String   title;//"简丹 淡水珍珠项链近圆女款白色 相思雨 7-8mm 60cm",//标题
         public String   thumb;//"http://img01.sldlcdn.com/attachment/images/2015/11/x6a4Um30WmY6pmCcwGKgSw0IEwQw9S.jpg?_300x300.jpg",//主图
         public String   price; //价格 新人价格为0
-        public String   marker_price;//市场价
+        public String   market_price;//市场价
         public String   has_option;//是否开启规格1是0否
         public String   status;//状态：1上架0下架
         public String  goods_id;//购物车列表下的商品id

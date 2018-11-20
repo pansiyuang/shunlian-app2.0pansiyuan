@@ -239,18 +239,17 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
             Common.staticToast("不好意思啦！亲！该商品已失效了！");
             return;
         }
-        if(type.equals("2")){
+        if(type.equals("1")){
             if(isNew) {
-                GoodsDetailAct.startAct(baseActivity, goodList.get(position).id);
+                NewUserGoodsEntity.Goods goods = goodList.get(position);
+                mPresenter.getGoodsSku(goods.id,position);
             }else{
                 updateShareParm(position);
                 shareGoodDialogUtil.shareGoodDialog(shareInfoParam,true,false);
             }
             return;
         }
-
-        NewUserGoodsEntity.Goods goods = goodList.get(position);
-        mPresenter.getGoodsSku(goods.id,position);
+        GoodsDetailAct.startAct(baseActivity, goodList.get(position).id);
     }
 
     /**
@@ -260,7 +259,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
     private void updateShareParm(int postion){
         shareInfoParam.title = goodList.get(postion).title;
         shareInfoParam.price = goodList.get(postion).price;
-        shareInfoParam.market_price = goodList.get(postion).marker_price;
+        shareInfoParam.market_price = goodList.get(postion).market_price;
         shareInfoParam.shareLink = goodList.get(postion).thumb;
         shareInfoParam.img = goodList.get(postion).thumb;
         shareInfoParam.goods_id = goodList.get(postion).id;
