@@ -280,11 +280,11 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         }, 0, 7 * 1000);
     }
 
-    public static void startAct(Context context, String memberId) {
-        Intent intent = new Intent(context, NewUserPageActivity.class);
-        intent.putExtra("member_id", memberId);
-        context.startActivity(intent);
-    }
+//    public static void startAct(Context context, String memberId) {
+//        Intent intent = new Intent(context, NewUserPageActivity.class);
+//        intent.putExtra("member_id", memberId);
+//        context.startActivity(intent);
+//    }
 
     @Override
     protected int getLayoutId() {
@@ -309,9 +309,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         mPresenter.adlist();
     }
 
-    public static void startAct(Activity activity) {
-        Intent intent = new Intent(activity, NewUserPageActivity.class);
-         activity.startActivity(intent);
+    public static void startAct(Context context) {
+        Intent intent = new Intent(context, NewUserPageActivity.class);
+        context.startActivity(intent);
     }
 
     @Override
