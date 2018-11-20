@@ -9,10 +9,6 @@ import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.view.IFirstPage;
 
 import java.util.HashMap;
@@ -64,23 +60,29 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
                 BubbleEntity data = entity.data;
                 if (data != null) {
                     iView.setBubble(data);
+                }else {
+                    iView.showFailureView(666);
                 }
             }
 
             @Override
             public void onErrorData(BaseEntity<BubbleEntity> bubbleEntityBaseEntity) {
+                super.onErrorData(bubbleEntityBaseEntity);
                 iView.showFailureView(666);
             }
 
             @Override
             public void onFailure() {
+                super.onFailure();
                 iView.showFailureView(666);
             }
 
             @Override
             public void onErrorCode(int code, String message) {
+                super.onErrorCode(code,message);
                 iView.showFailureView(666);
             }
+
         });
     }
 
@@ -136,6 +138,26 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
             public void onSuccess(BaseEntity<GetMenuEntity> entity) {
                 super.onSuccess(entity);
                 iView.setTab(entity.data);
+                if (entity.data==null)
+                    iView.showDataEmptyView(888);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.showFailureView(888);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                iView.showFailureView(888);
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<GetMenuEntity> getMenuEntityBaseEntity) {
+                super.onErrorData(getMenuEntityBaseEntity);
+                iView.showFailureView(888);
             }
         });
 

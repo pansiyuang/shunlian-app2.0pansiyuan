@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
@@ -26,12 +25,9 @@ import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
-import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
@@ -498,7 +494,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         if (666==request_code){
             size = 2;
             startTimer();
-        }else {
+        }else if (888==request_code){
             visible(nei_empty);
             gone(data_coorLayout);
         }
@@ -506,8 +502,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void showDataEmptyView(int request_code) {
-        visible(nei_empty);
-        gone(data_coorLayout);
+        if (888==request_code){
+            visible(nei_empty);
+            gone(data_coorLayout);
+        }
     }
 
     /**
