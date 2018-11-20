@@ -1217,6 +1217,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mShareInfoParam.desc = baseEntity.data.desc;
             mShareInfoParam.egg_type = 1;
             mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
+            mShareInfoParam.isSuperiorProduct = mGoodsDeatilEntity.type.equals("1")?true:false;
             if(mGoodsDeatilEntity.tt_act!=null&&!"0".equals(mGoodsDeatilEntity.status)){//非下架商品){
                 if(mGoodsDeatilEntity.tt_act.content!=null&&mGoodsDeatilEntity.tt_act.content.length()>2){
 
