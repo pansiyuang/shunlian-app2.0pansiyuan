@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
@@ -48,6 +49,39 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
 
     @Override
     protected void initApi() {
+    }
+
+    public void getBubble() {
+        Map<String, String> map = new HashMap<>();
+        map.put("position", "0");
+        sortAndMD5(map);
+
+        Call<BaseEntity<BubbleEntity>> baseEntityCall = getApiService().getBubble(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<BubbleEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<BubbleEntity> entity) {
+                super.onSuccess(entity);
+                BubbleEntity data = entity.data;
+                if (data != null) {
+                    iView.setBubble(data);
+                }
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<BubbleEntity> bubbleEntityBaseEntity) {
+                iView.showFailureView(666);
+            }
+
+            @Override
+            public void onFailure() {
+                iView.showFailureView(666);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                iView.showFailureView(666);
+            }
+        });
     }
 
     public void resetBaby(String cate_id,String sort_type) {

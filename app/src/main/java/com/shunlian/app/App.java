@@ -1,11 +1,9 @@
 package com.shunlian.app;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.support.multidex.MultiDex;
 
 import com.shunlian.app.utils.Common;
@@ -17,11 +15,11 @@ import com.shunlian.app.utils.SwitchHostUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -52,24 +50,12 @@ import cn.jpush.android.api.JPushInterface;
  * Created by zhang on 2017/4/13 15 : 17.
  */
 
-public class App extends Application implements Application.ActivityLifecycleCallbacks {
-    /**
-     * Sensors Analytics 采集数据的地址
-     */
-    private final static String SA_SERVER_URL = "http://test-zouyuhan.cloud.sensorsdata.cn:8006/sa?project=wangzhuozhou&token=db52d13749514676";
-
+public class App extends Application {
     public static App mApp;
     private ActivityHelper mActivityHelper;
     private static Context context;
     public static String CACHE_PATH;
     public static String DOWNLOAD_PATH;
-
-    //页面名称
-    public static String SCREEN_NAME;
-    //页面标题
-    public static String TITLE;
-    public static long START_INDEX_TIME;
-    public static boolean IS_ENTER_HOME = false;
 
     public static ActivityHelper getActivityHelper() {
         return mApp.mActivityHelper;
@@ -174,44 +160,10 @@ public class App extends Application implements Application.ActivityLifecycleCal
         };
         //x5内核初始化接口
         QbSdk.initX5Environment(getApplicationContext(),  cb);
-        initSensorsDataAPI();
-    }
 
-    /**
-     * 初始化 Sensors Analytics SDK
-     */
-    private void initSensorsDataAPI() {
-    }
-
-
-    @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    public void onActivityStarted(Activity activity) {
-    }
-
-    @Override
-    public void onActivityResumed(Activity activity) {
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityStopped(Activity activity) {
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-    }
-
-    @Override
-    public void onActivityDestroyed(Activity activity) {
+        //优化x5内核首次启动卡顿黑屏现象
+        HashMap map = new HashMap();
+        map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+        QbSdk.initTbsSettings(map);
     }
 }

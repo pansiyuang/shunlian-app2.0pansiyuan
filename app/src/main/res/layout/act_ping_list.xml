@@ -158,6 +158,7 @@
             android:id="@+id/miv_share"
             android:layout_toLeftOf="@id/rl_more"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:layout_marginRight="10dp"
             android:src="@mipmap/icon_home_share_b"/>
         <com.shunlian.app.widget.MyTextView

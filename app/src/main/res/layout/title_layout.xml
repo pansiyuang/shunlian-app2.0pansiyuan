@@ -217,6 +217,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
+            android:textIsSelectable="true"
             android:textColor="@color/new_text"
             android:textSize="15sp"
             app:tv_control_adapter="true"
@@ -256,25 +257,25 @@
 
 
         <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_share"
+            android:id="@+id/miv_fav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/img_xiangqing_fenxiang"
+            android:src="@mipmap/icon_found_quanzi_xin_n"
             app:iv_control_adapter="true"
             app:iv_control_height="28"
             app:iv_control_width="28" />
 
         <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_share"
+            android:id="@+id/mtv_fav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/miv_share"
-            android:paddingTop="5dp"
-            android:text="@string/share"
+            android:layout_below="@+id/miv_fav"
+            android:text="@string/collection"
             android:textColor="@color/new_gray"
-            android:textSize="8sp" />
+            android:layout_marginTop="5dp"
+            android:textSize="7sp" />
     </com.shunlian.app.widget.MyRelativeLayout>
 
     <com.shunlian.app.widget.MyRelativeLayout
@@ -295,7 +296,7 @@
                 android:visibility="gone"
                 app:tv_control_adapter="true"
                 app:tv_margin_bottom="23"
-                app:tv_margin_left="23"
+                app:tv_margin_left="20"
                 app:tv_margin_right="23"
                 app:tv_margin_top="27" />
 

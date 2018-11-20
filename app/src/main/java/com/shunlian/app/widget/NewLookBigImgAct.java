@@ -244,7 +244,7 @@ public class NewLookBigImgAct extends BaseActivity implements QuickActions.OnSha
         rv_goods.setLayoutManager(new LinearLayoutManager(baseAct));
         miv_icon.setOnClickListener(view -> MyPageActivity.startAct(baseAct, blog.member_id));
         ntv_desc.setOnClickListener(view -> MyPageActivity.startAct(baseAct, blog.member_id));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct, blog.id, blog.related_goods, isCode, quick_actions,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(baseAct, blog.id, blog.related_goods, isCode,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""),dialog_new);
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {

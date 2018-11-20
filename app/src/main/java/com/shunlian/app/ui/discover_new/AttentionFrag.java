@@ -9,17 +9,18 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AttentionAdapter;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.adapter.TieziAvarAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.AttentionPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.HorizonItemDecoration;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IAttentionView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -38,7 +39,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/15.
  */
 
-public class AttentionFrag extends BaseLazyFragment implements IAttentionView, HotBlogAdapter.OnAdapterCallBack, AttentionAdapter.OnFocusListener, QuickActions.OnShareBlogCallBack {
+public class AttentionFrag extends BaseLazyFragment implements IAttentionView, HotBlogAdapter.OnAdapterCallBack, AttentionAdapter.OnFocusListener, ShareGoodDialogUtil.OnShareBlogCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -62,12 +63,9 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     private List<HotBlogsEntity.RecomandFocus> recomandFocusList;
     private int focusType; //0 关注blog列表用户,1关注推荐关注用户,2,关注空页面推荐关注用户
 
-    QuickActions quick_actions;
-
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @Override
     public void onDestroyView() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         super.onDestroyView();
     }
 
@@ -80,11 +78,8 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     @Override
     protected void initData() {
         //分享
-        quick_actions = new QuickActions(baseActivity);
-        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
-        decorView.addView(quick_actions);
-        quick_actions.setVisibility(View.INVISIBLE);
-        quick_actions.setOnShareBlogCallBack(this);
+        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
     }
 
     @Override
@@ -145,6 +140,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                     recycler_icons.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(getActivity(), -9)));
                     recycler_icons.setLayoutManager(linearLayoutManager);
                     recycler_icons.setAdapter(tieziAvarAdapter);
+                    tieziAvarAdapter.setOnItemClickListener((view, position) -> HotExpertRankActivity.startActivity(getActivity()));
                 }
                 recycler_icons.setVisibility(View.VISIBLE);
             } else {
@@ -164,11 +160,14 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 attentionAdapter.setOnFocusListener(this);
             }
             recycler_list.setAdapter(attentionAdapter);
+            attentionAdapter.setHasFocus(hotBlogsEntity.is_have_focus);
         } else {
             if (hotBlogAdapter == null) {
-                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList, quick_actions);
+                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList,shareGoodDialogUtil);
                 hotBlogAdapter.setAdapterCallBack(this);
                 hotBlogAdapter.setShowAttention(false);
+            }
+            if (currentPage == 1) {
                 recycler_list.setAdapter(hotBlogAdapter);
             }
             hotBlogAdapter.setPageLoading(currentPage, totalPage);
@@ -200,14 +199,13 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         } else {
                             recomandFocus.focus_status = 0;
                         }
+                        if (hotBlogAdapter != null) {
+                            hotBlogAdapter.MemberAdapterNotifyDataSetChanged();
+                        }
+                        if (attentionAdapter != null) {
+                            attentionAdapter.notifyDataSetChanged();
+                        }
                     }
-                    if (hotBlogAdapter != null) {
-                        hotBlogAdapter.MemberAdapterNotifyDataSetChanged();
-                    }
-                    if (attentionAdapter == null) {
-                        return;
-                    }
-                    attentionAdapter.notifyDataSetChanged();
                 }
                 break;
         }
@@ -335,6 +333,14 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 }
                 hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
                 break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(DefMessageEvent event) {
+        if (mPresenter != null && event.loginSuccess) {
+            mPresenter.initPage();
+            mPresenter.getFocusblogs(true);
         }
     }
 

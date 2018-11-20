@@ -68,6 +68,7 @@ import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.GetCouponAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.core.KouBeiAct;
+import com.shunlian.app.ui.core.NewGetCouponAct;
 import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.coupon.CouponGoodsAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
@@ -306,7 +307,8 @@ public class Common {
                     Common.goGoGo(context,"login");
                     theRelayJump(type,params);
                 } else {
-                    GetCouponAct.startAct(context);
+//                    GetCouponAct.startAct(context);
+                    NewGetCouponAct.startAct(context);
                 }
                 break;
             case "voucher":
@@ -568,7 +570,11 @@ public class Common {
      * @return
      */
     public static int getScreenWidth(Activity ac) {
-        return ac.getWindowManager().getDefaultDisplay().getWidth();
+        if (ac!=null){
+            return ac.getWindowManager().getDefaultDisplay().getWidth();
+        }else {
+           return 720;
+        }
     }
 
 
@@ -988,7 +994,7 @@ public class Common {
      * @return
      */
     public static String getDomain(String url) {
-        if (TextUtils.isEmpty(url))
+        if (TextUtils.isEmpty(url)||!url.startsWith("http"))
             return "";
         try {
             String result = "";
@@ -1351,4 +1357,5 @@ public class Common {
         return false;
 
     }
+
 }

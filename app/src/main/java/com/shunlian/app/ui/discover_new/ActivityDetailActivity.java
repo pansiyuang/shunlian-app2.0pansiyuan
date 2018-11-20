@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ActivityDetailAdapter;
 import com.shunlian.app.bean.BigImgEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
@@ -23,10 +22,12 @@ import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,10 +43,13 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack, QuickActions.OnShareBlogCallBack {
+public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack, ShareGoodDialogUtil.OnShareBlogCallBack {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -55,9 +59,6 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
-
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
 
     public int offset;
     private LinearLayoutManager manager;
@@ -69,7 +70,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private ActivityDetailAdapter mAdapter;
     private ObjectMapper objectMapper;
     private HotBlogsEntity.Detail currentDetail;
-
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @Override
     protected int getLayoutId() {
         return R.layout.act_activity_detail;
@@ -83,7 +84,12 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     protected void initData() {
+        NestedSlHeader header = new NestedSlHeader(this);
+        lay_refresh.setRefreshHeaderView(header);
+
         defToolbar();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
         EventBus.getDefault().register(this);
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
         offset = toolbarParams.height;
@@ -100,8 +106,6 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         recycler_list.setNestedScrollingEnabled(false);
 
         objectMapper = new ObjectMapper();
-
-        quick_actions.setOnShareBlogCallBack(this);
     }
 
 
@@ -149,6 +153,10 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 e.printStackTrace();
             }
         });
+        lay_refresh.setOnRefreshListener(() -> {
+            mPresent.initPage();
+            mPresent.getActivityDetail(true, currentId);
+        });
     }
 
     public void defToolbar() {
@@ -168,33 +176,14 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             }
             float alpha = (float) totalDy / layoutHeight;
             immersionBar.statusBarAlpha(alpha).addTag(GoodsDetailAct.class.getName()).init();
-            float v = 1.0f - alpha * 2;
-            if (v <= 0) {
-                v = alpha * 2 - 1;
-                setImg(2, 1);
-            } else {
-                setImg(1, 2);
-            }
-            miv_close.setAlpha(v);
         } else {
             setToolbar();
         }
     }
 
     public void setToolbar() {
-        setImg(2, 1);
         immersionBar.statusBarAlpha(1.0f).addTag(GoodsDetailAct.class.getName()).init();
         miv_close.setAlpha(1.0f);
-    }
-
-    private void setImg(int status, int oldStatus) {
-        if (status != oldStatus) {
-            if (status == 1) {
-                miv_close.setImageResource(R.mipmap.icon_more_fanhui);
-            } else {
-                miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
-            }
-        }
     }
 
     @Override
@@ -207,7 +196,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             blogList.addAll(list);
         }
         if (mAdapter == null) {
-            mAdapter = new ActivityDetailAdapter(this, blogList, detail, quick_actions);
+            mAdapter = new ActivityDetailAdapter(this, blogList, detail, shareGoodDialogUtil);
             recycler_list.setAdapter(mAdapter);
             mAdapter.setAdapterCallBack(this);
         }
@@ -291,6 +280,13 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
+    }
+
+    @Override
     public void shareSuccess(String blogId, String goodsId) {
         mPresent.goodsShare("blog_goods", blogId, goodsId);
     }
@@ -336,8 +332,6 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

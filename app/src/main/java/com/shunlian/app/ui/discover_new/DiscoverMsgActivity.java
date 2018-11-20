@@ -9,14 +9,19 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
+import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.eventbus_bean.DiscoveryCountEvent;
+import com.shunlian.app.presenter.DiscoverMsgPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.discover_new.discoverMsg.AttentionMsgFrag;
 import com.shunlian.app.ui.discover_new.discoverMsg.DownloadMsgFrag;
 import com.shunlian.app.ui.discover_new.discoverMsg.NoticeMsgFrag;
 import com.shunlian.app.ui.discover_new.discoverMsg.ZanAndShareMsgFrag;
+import com.shunlian.app.view.IDiscoverMsgView;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.mylibrary.ImmersionBar;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +32,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class DiscoverMsgActivity extends BaseActivity {
+public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgView {
 
     @BindView(R.id.rl_zan)
     RelativeLayout rl_zan;
@@ -83,13 +88,18 @@ public class DiscoverMsgActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tv_title;
 
+    @BindView(R.id.line_title)
+    View line_title;
+
     private List<BaseFragment> baseFragmentList;
     private ZanAndShareMsgFrag zanFrag;
     private AttentionMsgFrag attentionMsgFrag;
     private DownloadMsgFrag downloadMsgFrag;
     private NoticeMsgFrag noticeMsgFrag;
+    private DiscoverMsgPresenter mPresenter;
     private String[] titles = {"点赞/分享", "关注", "下载", "通知"};
     private int showType;//0 分享点赞 ,1 关注 2,下载 3,通知
+    private int currentPraiseCount, currentAttentionCount, currentNoticeCount, currentDownloadCount, totalMsgCount;
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, DiscoverMsgActivity.class);
@@ -107,6 +117,9 @@ public class DiscoverMsgActivity extends BaseActivity {
         setStatusBarFontDark();
 
         tv_title.setText("发现消息");
+        line_title.setVisibility(View.GONE);
+        mPresenter = new DiscoverMsgPresenter(this, this);
+        mPresenter.getDiscoverMsg();
         initFrags();
 
         showTab(showType);
@@ -203,5 +216,61 @@ public class DiscoverMsgActivity extends BaseActivity {
                 view_notice.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    public void showPraisePage() {
+        totalMsgCount = totalMsgCount - currentPraiseCount;
+        currentPraiseCount = 0;
+        miv_zan_point.setVisibility(View.GONE);
+
+        EventBus.getDefault().post(new DiscoveryCountEvent(totalMsgCount > 0 ? true : false));
+    }
+
+    public void showAttentionPage() {
+        totalMsgCount = totalMsgCount - currentAttentionCount;
+        currentAttentionCount = 0;
+        miv_attention_point.setVisibility(View.GONE);
+
+        EventBus.getDefault().post(new DiscoveryCountEvent(totalMsgCount > 0 ? true : false));
+    }
+
+    public void showDownloadPage() {
+        totalMsgCount = totalMsgCount - currentDownloadCount;
+        currentDownloadCount = 0;
+        miv_download_point.setVisibility(View.GONE);
+
+        EventBus.getDefault().post(new DiscoveryCountEvent(totalMsgCount > 0 ? true : false));
+    }
+
+    public void showNoticePage() {
+        totalMsgCount = totalMsgCount - currentNoticeCount;
+        currentNoticeCount = 0;
+        miv_notice_point.setVisibility(View.GONE);
+
+        EventBus.getDefault().post(new DiscoveryCountEvent(totalMsgCount > 0 ? true : false));
+    }
+
+    @Override
+    public void getDiscoverMsg(CommonEntity commonEntity) {
+        currentPraiseCount = commonEntity.praise_share;
+        currentAttentionCount = commonEntity.attention;
+        currentDownloadCount = commonEntity.download;
+        currentNoticeCount = commonEntity.notice;
+        totalMsgCount = commonEntity.total;
+
+        miv_zan_point.setVisibility(currentPraiseCount > 0 ? View.VISIBLE : View.GONE);
+        miv_attention_point.setVisibility(currentAttentionCount > 0 ? View.VISIBLE : View.GONE);
+        miv_download_point.setVisibility(currentDownloadCount > 0 ? View.VISIBLE : View.GONE);
+        miv_notice_point.setVisibility(currentNoticeCount > 0 ? View.VISIBLE : View.GONE);
     }
 }

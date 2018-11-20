@@ -18,13 +18,11 @@ import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.ICommonBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
-import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
-import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,7 +37,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView, HotBlogAdapter.OnAdapterCallBack, HotBlogAdapter.OnDelBlogListener, HotBlogAdapter.OnFavoListener, QuickActions.OnShareBlogCallBack {
+public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView, HotBlogAdapter.OnAdapterCallBack, HotBlogAdapter.OnDelBlogListener, HotBlogAdapter.OnFavoListener, ShareGoodDialogUtil.OnShareBlogCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -50,8 +48,6 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
-    QuickActions quick_actions;
-
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
 
@@ -61,11 +57,9 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
     private boolean isMine;
-
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @Override
     public void onDestroyView() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         super.onDestroyView();
     }
 
@@ -88,11 +82,8 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     @Override
     protected void initData() {
         //分享
-        quick_actions = new QuickActions(baseActivity);
-        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
-        decorView.addView(quick_actions);
-        quick_actions.setVisibility(View.INVISIBLE);
-        quick_actions.setOnShareBlogCallBack(this);
+        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
     }
 
     @Override
@@ -101,6 +92,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
         EventBus.getDefault().register(this);
         NestedSlHeader header = new NestedSlHeader(getActivity());
         lay_refresh.setRefreshHeaderView(header);
+        lay_refresh.setRefreshEnabled(false);
 
         currentMemberId = getArguments().getString("member_id");
         currentFrom = getArguments().getString("from");
@@ -147,10 +139,21 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                             mPresenter.onRefresh();
                         }
                     }
+                    int position = manager.findFirstVisibleItemPosition();
+                    View firstVisiableChildView = manager.findViewByPosition(position);
+                    int itemHeight = firstVisiableChildView.getHeight();
+                    int totalDistance = (position) * itemHeight - firstVisiableChildView.getTop();
+                    LogUtil.httpLogW("totalDistance:" + totalDistance);
+                    ((MyPageActivity) getActivity()).setScrollDistance(totalDistance > 0 ? false : true, currentType);
                 }
             }
         });
         super.initListener();
+    }
+
+    public void initPage() {
+        mPresenter.initPage();
+        mPresenter.getBlogList(true, currentMemberId, currentType);
     }
 
     @Override
@@ -165,13 +168,13 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 recycler_list.setVisibility(View.VISIBLE);
                 nestedScrollView.setVisibility(View.GONE);
             }
-            ((MyPageActivity) getActivity()).initInfo(hotBlogsEntity.member_info, hotBlogsEntity.discovery_info);
+            ((MyPageActivity) getActivity()).initInfo(hotBlogsEntity.member_info, hotBlogsEntity.discovery_info, hotBlogsEntity.unread);
         }
         if (!isEmpty(hotBlogsEntity.list)) {
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), quick_actions);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(),shareGoodDialogUtil);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
             hotBlogAdapter.setOnDelListener(this);

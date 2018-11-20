@@ -30,6 +30,8 @@ public class TaskHomeEntity {
 
     public List<SignDaysBean> sign_days;
     public String share_pic_url;
+    public String pop_ad_pic_url;
+    public AdUrlBean pop_ad_url;
 
     @Override
     public String toString() {
