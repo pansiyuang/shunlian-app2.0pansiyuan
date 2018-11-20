@@ -522,6 +522,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         fiveHolder.mtv_desc.setVisibility(View.GONE);
                         fiveHolder.mtv_desc.setText(data.content);
                     }
+
                     fiveHolder.mtv_title.setText(data.title);
                     if (hotPosition == -1)
                         hotPosition = position;
@@ -535,22 +536,31 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             fiveHolder.view_line.setVisibility(View.VISIBLE);
                         }
                     }
-                    if (!TextUtils.isEmpty(data.price)) {
-                        SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
-                                getString(R.string.common_yuan), 12);
-                        fiveHolder.mtv_price.setText(getString(R.string.common_yuan) + data.price);
-                        fiveHolder.mtv_price.setVisibility(View.VISIBLE);
-                    } else {
+                    if(data.url.type.equals("shop")){
+                        fiveHolder.mtv_store_title.setVisibility(View.VISIBLE);
+                        fiveHolder.mtv_title.setVisibility(View.INVISIBLE);
                         fiveHolder.mtv_price.setVisibility(View.GONE);
-                    }
-                    fiveHolder.mtv_market_price.setStrikethrough();
-                    if (!TextUtils.isEmpty(data.market_price)) {
-                        fiveHolder.mtv_market_price.setText(getString(R.string.common_yuan) + data.market_price);
-                        fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
-                    } else {
                         fiveHolder.mtv_market_price.setVisibility(View.GONE);
+                        fiveHolder.mtv_store_title.setText(data.title);
+                    }else {
+                        fiveHolder.mtv_store_title.setVisibility(View.GONE);
+                        fiveHolder.mtv_title.setVisibility(View.VISIBLE);
+                        if (!TextUtils.isEmpty(data.price)) {
+                            SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
+                                    getString(R.string.common_yuan), 12);
+                            fiveHolder.mtv_price.setText(getString(R.string.common_yuan) + data.price);
+                            fiveHolder.mtv_price.setVisibility(View.VISIBLE);
+                        } else {
+                            fiveHolder.mtv_price.setVisibility(View.GONE);
+                        }
+                        fiveHolder.mtv_market_price.setStrikethrough();
+                        if (!TextUtils.isEmpty(data.market_price)) {
+                            fiveHolder.mtv_market_price.setText(getString(R.string.common_yuan) + data.market_price);
+                            fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
+                        } else {
+                            fiveHolder.mtv_market_price.setVisibility(View.GONE);
+                        }
                     }
-
                     fiveHolder.mtv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -988,6 +998,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
+
+        @BindView(R.id.mtv_store_title)
+        MyTextView mtv_store_title;
 
         @BindView(R.id.mtv_desc)
         MyTextView mtv_desc;

@@ -26,7 +26,7 @@ public class ShareInfoParam implements Serializable {
     public String photo;
     public String type;
     public Bitmap bitmap;
-    public boolean isCopyTitle;
+    public boolean isCopyTitle = true;
     //店铺分享
     public String shop_star;
     public String shop_id;
