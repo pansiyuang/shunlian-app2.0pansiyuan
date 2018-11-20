@@ -60,6 +60,7 @@ import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
@@ -85,6 +86,7 @@ import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
+import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.plus.PlusGifDetailAct;
@@ -224,11 +226,18 @@ public class Common {
                 return "CouponGoodsAct";
             case "invite":
                 return "QrCodeAct";
+            case "taskTurnTable":
+                return "LuckWheelPanActivity";
+            case "newuser":
+            case "olduser":
+                return "NewUserPageActivity";
             case "url":
             case "noTitleUrl":
                 return "H5Act";
             case "HTMLShare":
                 return "WXEntryActivity";
+            case "attentionList":
+                return "MainActivity";
             case "submitlogisticsinfo":
                 return "SubmitLogisticsInfoAct";
             case "voucher":
@@ -257,6 +266,9 @@ public class Common {
                 break;
             case "taskSystems":
                 TaskCenterAct.startAct(context);
+                break;
+            case "taskTurnTable":
+                LuckWheelPanActivity.startAct(context);
                 break;
             case "HTMLShare":
                 if (!TextUtils.isEmpty(params[0])){
@@ -479,7 +491,6 @@ public class Common {
                 }
                 break;
             case "chat"://聊天
-
 //               Common.goGoGo(context, toPage, id, id1,id2, id3,id4, id5,id6,to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
 
                 if (TextUtils.isEmpty(token)) {
@@ -504,6 +515,13 @@ public class Common {
                 break;
             case "submitlogisticsinfo"://提交物流信息
                 SubmitLogisticsInfoAct.startAct(context,params[0],SubmitLogisticsInfoAct.APPLY);
+                break;
+            case "newuser"://新人专享
+            case "olduser":
+                NewUserPageActivity.startAct(context);
+                break;
+            case "attentionList"://发现关注列表
+
                 break;
             default://首页
                 MainActivity.startAct(context, "");
