@@ -98,6 +98,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     private MainActivity mainActivity;
     private boolean isRefresh = false;
 
+//   气泡
     @BindView(R.id.lLayout_toast)
     LinearLayout lLayout_toast;
     @BindView(R.id.miv_icon)
@@ -226,6 +227,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             }
         }, 0, 7 * 1000);
     }
+//   气泡
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {

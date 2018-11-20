@@ -5,6 +5,7 @@ import android.content.Context;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AdUserEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
@@ -44,6 +45,44 @@ public class NewUserPagePresenter extends BasePresenter<INewUserPageView> {
 
     }
 
+    public void getBubble() {
+        Map<String, String> map = new HashMap<>();
+        map.put("position", "2");
+        sortAndMD5(map);
+
+        Call<BaseEntity<BubbleEntity>> baseEntityCall = getApiService().getBubble(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<BubbleEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<BubbleEntity> entity) {
+                super.onSuccess(entity);
+                BubbleEntity data = entity.data;
+                if (data != null) {
+                    iView.setBubble(data);
+                }else {
+                    iView.showFailureView(666);
+                }
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<BubbleEntity> bubbleEntityBaseEntity) {
+                super.onErrorData(bubbleEntityBaseEntity);
+                iView.showFailureView(666);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                iView.showFailureView(666);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code,message);
+                iView.showFailureView(666);
+            }
+
+        });
+    }
     public void adlist() {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
