@@ -217,6 +217,12 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         //分享
       if(blog.related_goods!=null&&blog.related_goods.size()>0){
           GoodsDeatilEntity.Goods goods = blog.related_goods.get(0);
+          shareGoodDialogUtil.setOnShareBlogCallBack(new ShareGoodDialogUtil.OnShareBlogCallBack() {
+              @Override
+              public void shareSuccess(String blogId, String goodsId) {
+                  hotBlogPresenter.goodsShare("blog_goods", blogId, goodsId);
+              }
+          });
 //          hotBlogPresenter.getShareInfo(hotBlogPresenter.nice, goods.goods_id);
           mShareInfoParam = new ShareInfoParam();
           mShareInfoParam.blogId =blog.id;

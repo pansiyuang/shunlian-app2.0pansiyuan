@@ -796,6 +796,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 //            shareInfoParam.userAvatar = baseEntity.data.userAvatar;
             if(storeHead!=null) {
                 shareInfoParam.isShowTiltle =true;
+                shareInfoParam.egg_type = 2;
                 shareInfoParam.shareLink = storeHead.share_url;
                 shareInfoParam.shop_logo = storeHead.decoration_logo;
                 shareInfoParam.shop_name = storeHead.decoration_name;

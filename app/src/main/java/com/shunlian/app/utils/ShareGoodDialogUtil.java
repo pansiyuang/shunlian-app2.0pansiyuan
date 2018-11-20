@@ -74,18 +74,15 @@ public class ShareGoodDialogUtil {
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEddType();
                 if(isGood) {
                     WXEntryActivity.startAct(context,
                             "shareFriend", mShareInfoParam);
-                    Constant.SHARE_TYPE = "goods";
-                    Constant.SHARE_ID = mShareInfoParam.goods_id;
                     if(isFound&&mCallBack!=null){
                         mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                     }
                     nomalBuildl.dismiss();
                 }else{
-                    Constant.SHARE_TYPE = "";
-                    Constant.SHARE_ID = "";
                     WXEntryActivity.startAct(context,
                             "shareFriend", mShareInfoParam);
                 }
@@ -94,17 +91,14 @@ public class ShareGoodDialogUtil {
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEddType();
                 if(isGood) {
-                    Constant.SHARE_TYPE = "goods";
-                    Constant.SHARE_ID = mShareInfoParam.goods_id;
                     WXEntryActivity.startAct(context, "shareCircle", shareInfoParam);
                     if(isFound&&mCallBack!=null){
                         mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                     }
                     nomalBuildl.dismiss();
                 }else{
-                    Constant.SHARE_TYPE = "";
-                    Constant.SHARE_ID = "";
                     WXEntryActivity.startAct(context,
                             "shareCircle", mShareInfoParam);
                 }
@@ -136,6 +130,17 @@ public class ShareGoodDialogUtil {
         });
     }
 
+    private void setEddType(){
+        if(mShareInfoParam.egg_type==1){
+            Constant.SHARE_TYPE = "goods";
+            Constant.SHARE_ID = mShareInfoParam.goods_id;
+        }else if(mShareInfoParam.egg_type==2){
+            Constant.SHARE_TYPE = "store";
+            Constant.SHARE_ID = mShareInfoParam.goods_id;
+        }else{
+            Constant.SHARE_TYPE = "";
+        }
+    }
     /**
      * 创建专题图文
      */

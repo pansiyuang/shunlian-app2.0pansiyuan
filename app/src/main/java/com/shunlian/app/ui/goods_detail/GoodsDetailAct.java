@@ -1215,6 +1215,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
             mShareInfoParam.shareLink = baseEntity.data.shareLink;
             mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.egg_type = 1;
             mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
             if(mGoodsDeatilEntity.tt_act!=null&&!"0".equals(mGoodsDeatilEntity.status)){//非下架商品){
                 if(mGoodsDeatilEntity.tt_act.content!=null&&mGoodsDeatilEntity.tt_act.content.length()>2){
@@ -1222,10 +1223,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                   String stateTime = mGoodsDeatilEntity.tt_act.content.substring(mGoodsDeatilEntity.tt_act.content.length()-2,mGoodsDeatilEntity.tt_act.content.length());
                   if(stateTime.equals("开始")){
                       stateTime="开抢";
-                      mShareInfoParam.start_time =TimeUtil.getyMdHmMin(System.currentTimeMillis()+Long.valueOf(mGoodsDeatilEntity.tt_act.time)*1000)
+                      mShareInfoParam.start_time =TimeUtil.getyMdHmMin(System.currentTimeMillis()+20000+Long.valueOf(mGoodsDeatilEntity.tt_act.time)*1000)
                               +stateTime;
                   }else{
-                      mShareInfoParam.start_time =TimeUtil.getyMdHMin(System.currentTimeMillis()+Long.valueOf(mGoodsDeatilEntity.tt_act.time)*1000)
+                      mShareInfoParam.start_time =TimeUtil.getyMdHMin(System.currentTimeMillis()+20000+Long.valueOf(mGoodsDeatilEntity.tt_act.time)*1000)
                               +stateTime;
                   }
 

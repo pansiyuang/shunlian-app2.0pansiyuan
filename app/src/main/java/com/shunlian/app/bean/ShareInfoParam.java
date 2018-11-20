@@ -58,6 +58,7 @@ public class ShareInfoParam implements Serializable {
     public boolean isSpecial = false;
 
     public List<StoreGoodsListEntity.MData> share_goods;
+    public int egg_type = 0;//0:没有金蛋 1：商品详情有金蛋 2：店铺详情有金蛋
     @Override
     public String toString() {
         return "ShareInfoParam{" +
