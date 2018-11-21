@@ -10,5 +10,6 @@ public class WithdrawEntity {
     public String message_type;
     public int status;
     public String msg;
+    public String user_id;
     public String msg_id;
 }

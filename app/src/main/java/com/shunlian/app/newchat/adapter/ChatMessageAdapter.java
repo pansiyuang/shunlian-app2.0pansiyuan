@@ -57,6 +57,7 @@ import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.help.HelpSolutionAct;
@@ -120,6 +121,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     private int chatRole;
     private PopupWindow popupWindow;
     private int popupWidth, popupHeight;
+    private List<MsgInfo> removeList;
 
     public void mRelease() {
         if (am != null)
@@ -133,10 +135,6 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         am = context.getAssets();
 
         patternEmotion = Pattern.compile("\\[([\u4e00-\u9fa5\\w])+\\]");
-    }
-
-    public List<MsgInfo> getMsgData() {
-        return lists;
     }
 
     public void setUser(UserInfoEntity.Info.User user) {
@@ -419,6 +417,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         leftTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text));
         checkTextViewUrl(leftTxtViewHolder.tv_content);
         leftTxtViewHolder.tv_content.setBackgroundResource(getLeftNomalDrawableRes());
+        leftTxtViewHolder.tv_content.setOnLongClickListener(v -> {
+            showPopupWindow(leftTxtViewHolder.tv_content, baseMessage, LEFT_TXT);
+            return false;
+        });
     }
 
     public void handRightTxt(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -1334,13 +1336,27 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         return spannableString;
     }
 
-    public void withdrawMessage(String messageId) {
+    public void withdrawMessage(String messageId, String userId) {
         if (isEmpty(messageId)) {
             return;
         }
-        for (MsgInfo msgInfo : lists) {
+        if (removeList == null) {
+            removeList = new ArrayList<>();
+        } else {
+            removeList.clear();
+        }
+        for (int i = 0; i < lists.size(); i++) {
+            MsgInfo msgInfo = lists.get(i);
             if (messageId.equals(msgInfo.id)) {
-                msgInfo.isWithdraw = true;
+                if (currentUserId.equals(userId)) { //自己撤回的消息则设置是否为撤回消息为true
+                    msgInfo.isWithdraw = true;
+                } else {
+                    if (msgInfo.isAddTime) {//是否新增过时间消息
+                        removeList.add(lists.get(i - 1));
+                    }
+                    removeList.add(msgInfo);
+                    lists.removeAll(removeList); //不是自己撤回的必须删除本条消息 并且删除这条消息的添加的时间消息
+                }
                 notifyDataSetChanged();
                 break;
             }
@@ -1539,6 +1555,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             super.updateDrawState(ds);
             ds.setColor(getColor(R.color.white));
         }
+
     }
 
     private void showPopupWindow(View view, BaseMessage baseMessage, int viewType) {
@@ -1557,32 +1574,50 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             popupWindow.dismiss();
         });
         tvCopy.setOnClickListener(v -> {
-            if (viewType == RIGHT_TXT) {
+            if (viewType == RIGHT_TXT || viewType == LEFT_TXT) {
                 TextMessage textMessage = (TextMessage) baseMessage;
                 TextMessage.TextMessageBody messageBody = textMessage.msg_body;
                 copyTextFromTextView(messageBody.text);
                 popupWindow.dismiss();
             }
         });
-        int leftMargin;
+        int leftMargin = TransformUtil.dip2px(context, 5);
+        view_middle.setVisibility(View.GONE);
         switch (viewType) {
+            case LEFT_TXT:
+                tvWithdraw.setVisibility(View.GONE);
+                tvCopy.setVisibility(View.VISIBLE);
+                break;
             case RIGHT_TXT:
                 tvCopy.setVisibility(View.VISIBLE);
-                view_middle.setVisibility(View.VISIBLE);
-                leftMargin = TransformUtil.dip2px(context, 5);
+                if (memberStatus == MemberStatus.Admin) {
+                    view_middle.setVisibility(View.VISIBLE);
+                    tvWithdraw.setVisibility(View.VISIBLE);
+                } else {
+                    tvWithdraw.setVisibility(View.GONE);
+                }
                 break;
-            default:
+            case RIGHT_IMG:
                 tvCopy.setVisibility(View.GONE);
                 view_middle.setVisibility(View.GONE);
-                leftMargin = TransformUtil.dip2px(context, 5);
+                leftMargin = 0;
+                break;
+            case RIGHT_GOODS:
+                tvCopy.setVisibility(View.GONE);
+                view_middle.setVisibility(View.GONE);
                 break;
         }
+
         popupWindow.getContentView().measure(0, 0);
         popupWidth = popupWindow.getContentView().getMeasuredWidth();
         popupHeight = popupWindow.getContentView().getMeasuredHeight();
 
         int[] location = new int[2];
         view.getLocationOnScreen(location);
-        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0] + view.getWidth() - popupWidth - leftMargin, location[1] - popupHeight);
+        if (viewType == LEFT_TXT) {
+            popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0] + leftMargin, location[1] - popupHeight);
+        } else {
+            popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0] + view.getWidth() - popupWidth - leftMargin, location[1] - popupHeight);
+        }
     }
 }

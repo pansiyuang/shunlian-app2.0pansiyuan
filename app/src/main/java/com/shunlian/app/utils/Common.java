@@ -410,9 +410,9 @@ public class Common {
                 theRelayJump(null,null);
                 LoginEntryAct.startAct(context);
                 break;
-            case "article":
-                ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);
-                break;
+//            case "article":
+//                ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);
+//                break;
             case "artdetails":
                 CommentListAct.startAct((Activity) context, params[0]);
                 break;

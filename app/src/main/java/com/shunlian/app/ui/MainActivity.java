@@ -162,11 +162,19 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private boolean isShowGuide = false;
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
-
+    private String currentDiscoverFlag;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("flag", flag);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void startAct(Context context, String flag,String discoverFlag) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("flag", flag);
+        intent.putExtra("discover_flag", discoverFlag);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -293,6 +301,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         setIntent(intent);
 //        if (!isEmpty(getIntent().getStringExtra("flag")))
         flag = getIntent().getStringExtra("flag");
+        currentDiscoverFlag = getIntent().getStringExtra("discover_flag");
         /*if (TextUtils.isEmpty(flag)) {
             mainPageClick();
         } else {
@@ -302,6 +311,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if ("route_login".equals(flag)) {
             Common.goGoGo(this, "login");
         }
+        discoverFrag.setCurrentPage(currentDiscoverFlag);
         handleJump();
     }
 
