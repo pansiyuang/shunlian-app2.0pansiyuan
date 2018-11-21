@@ -107,10 +107,11 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         am = context.getAssets();
     }
 
-    public void mRelease(){
-        if (am!=null)
+    public void mRelease() {
+        if (am != null)
             am.close();
     }
+
     private void initView() {
         btnAdd.setOnClickListener(this);
         btnSend.setOnClickListener(this);
@@ -377,7 +378,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     private void prepareEmoticon() {
         if (emoji_vp == null) return;
 
-        EmojisVPAdapter emojisVPAdapter = new EmojisVPAdapter(getContext(),am);
+        EmojisVPAdapter emojisVPAdapter = new EmojisVPAdapter(getContext(), am);
         emoji_vp.setAdapter(emojisVPAdapter);
         emojisVPAdapter.setOnEmojiClickListener(this);
 
@@ -447,6 +448,15 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
      */
     public void setText(String text) {
         editText.setText(text);
+        editText.setSelection(text.length());
+    }
+
+    /**
+     * 设置输入框文字
+     */
+    public void setSpannableText(SpannableString text) {
+        editText.setText(text);
+        editText.setSelection(text.length());
     }
 
 
