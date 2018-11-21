@@ -19,7 +19,8 @@ public class MsgInfo {
     public String id;
     public String m_user_id;
     public String msg_id;
-
+    public boolean isWithdraw;
+    public boolean isAddTime;
 
     public MsgInfo() {
     }

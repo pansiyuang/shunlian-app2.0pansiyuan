@@ -364,7 +364,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         goodsFrags = new ArrayList<>();
         if(isNew) {
             tv_head.setText("新人专享");
-            tv_right.setText("商品列表");
+            tv_right.setText("精选商品");
             tv_right.setTextColor(getColorResouce(R.color.text_gray2));
             show_title_info.setVisibility(View.VISIBLE);
             for (int i = 0; i < titles.length; i++) {
@@ -379,6 +379,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         }else{
             setTabMode(true);
             tv_head.setText("邀粉专区");
+            tv_right.setText("商品列表");
             show_title_info.setVisibility(View.VISIBLE);
             ll_left.setVisibility(View.GONE);
             userGoodFragEnd = NewUserGoodsFrag.getInstance(titlesOld[0], "1",isNew);

@@ -223,6 +223,11 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
     }
 
     @Override
+    public void withdrawMessage(String msg) {
+
+    }
+
+    @Override
     public void onLine() {
 
     }

@@ -60,7 +60,7 @@ public class StoreViewUtil {
         if (datas.size() >= 1) {
             StoreGoodsListEntity.MData data = datas.get(0);
             mtv_descl.setText(data.title);
-            mtv_pricel.setText(data.price);
+            mtv_pricel.setText(context.getResources().getString(R.string.common_yuan) +data.price);
             mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
             miv_onel.setScaleType(ImageView.ScaleType.FIT_START);
             mtv_pricer.setText(context.getResources().getString(R.string.common_yuan) + data.market_price);
@@ -89,7 +89,7 @@ public class StoreViewUtil {
         if (datas.size() >= 2) {
             StoreGoodsListEntity.MData data2 = datas.get(1);
             mtv_descl2.setText(data2.title);
-            mtv_pricel2.setText(data2.price);
+            mtv_pricel2.setText(context.getResources().getString(R.string.common_yuan) +data2.price);
             mtv_pricer2.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
             miv_onel2.setScaleType(ImageView.ScaleType.FIT_START);
             mtv_pricer2.setText(context.getResources().getString(R.string.common_yuan) + data2.market_price);

@@ -44,6 +44,9 @@ public class ShareGoodDialogUtil {
 
     //分享商品的diolog
     public void shareGoodDialog(ShareInfoParam shareInfoParam,boolean isGood,boolean isFound) {
+        if(nomalBuildl!=null&&nomalBuildl.isShowing()){
+            nomalBuildl.dismiss();
+        }
         this.mShareInfoParam = shareInfoParam;
         CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottom()
                 .setView(R.layout.dialog_share);
@@ -254,11 +257,11 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_goodsID =  showGoodBuild.findViewById(R.id.mtv_goodsID);
             mtv_goodsID.setText("商品编号:" + mShareInfoParam.goods_id + "(搜索可直达)");
             //显示优品图标
-            MyImageView miv_SuperiorProduct = showGoodBuild.findViewById(R.id.miv_SuperiorProduct);
+            MyTextView mtv_SuperiorProduct = showGoodBuild.findViewById(R.id.mtv_SuperiorProduct);
             if (mShareInfoParam.isSuperiorProduct) {
-                miv_SuperiorProduct.setVisibility(View.VISIBLE);
+                mtv_SuperiorProduct.setVisibility(View.VISIBLE);
             } else {
-                miv_SuperiorProduct.setVisibility(View.GONE);
+                mtv_SuperiorProduct.setVisibility(View.GONE);
             }
 
             LinearLayout  llayout_day =showGoodBuild.findViewById(R.id.llayout_day);

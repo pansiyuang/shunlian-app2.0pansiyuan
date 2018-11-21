@@ -5,54 +5,89 @@
     android:padding="10dp">
     <!--文字-->
     <RelativeLayout
-        android:id="@+id/rl_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/miv_icon">
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_content"
+        <RelativeLayout
+            android:id="@+id/rl_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:autoLink="web"
-            android:linksClickable="true"
-            android:textIsSelectable="true"
-            android:background="@drawable/bg_chat_me"
-            android:maxWidth="260dp"
-            android:textColor="@color/white"
-            android:textSize="17sp" />
-    </RelativeLayout>
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/miv_icon">
 
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:scaleType="centerCrop" />
-
-    <RelativeLayout
-        android:id="@+id/rl_msg_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/rl_message"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/rl_message"
-        android:visibility="visible">
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:autoLink="web"
+                android:background="@drawable/bg_chat_me"
+                android:linksClickable="true"
+                android:maxWidth="260dp"
+                android:textColor="@color/white"
+                android:textIsSelectable="true"
+                android:textSize="17sp" />
+        </RelativeLayout>
 
         <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_status_error"
+            android:id="@+id/miv_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerCrop" />
+
+        <RelativeLayout
+            android:id="@+id/rl_msg_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/audit_icon_d"
-            android:visibility="gone" />
-
-        <ProgressBar
-            android:id="@+id/pb_right"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/rl_message"
             android:layout_marginRight="5dp"
-            android:visibility="visible" />
+            android:layout_toLeftOf="@+id/rl_message"
+            android:visibility="visible">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_status_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/audit_icon_d"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/pb_right"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginRight="5dp"
+                android:visibility="visible" />
+        </RelativeLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_withdraw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="您撤回了一条消息"
+            android:textColor="@color/value_484848"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/rounded_corner_solid_white_24px"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="重新编辑"
+            android:textColor="@color/value_40A5FF"
+            android:textSize="12sp" />
+    </LinearLayout>
 </RelativeLayout>

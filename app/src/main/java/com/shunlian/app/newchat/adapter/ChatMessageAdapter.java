@@ -118,6 +118,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     private UserInfoEntity.Info.User mUser;
     private MemberStatus memberStatus;
     private int chatRole;
+    private PopupWindow popupWindow;
+    private int popupWidth, popupHeight;
 
     public void mRelease() {
         if (am != null)
@@ -131,6 +133,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         am = context.getAssets();
 
         patternEmotion = Pattern.compile("\\[([\u4e00-\u9fa5\\w])+\\]");
+    }
+
+    public List<MsgInfo> getMsgData() {
+        return lists;
     }
 
     public void setUser(UserInfoEntity.Info.User user) {
@@ -171,7 +177,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 if (memberStatus == MemberStatus.Member && "zhuanjie".equals(message.msg_type)) { //判断当前用户身份是用户身份并且当前消息是转接消息，则不显示时间
                     return;
                 }
-                addTimeMessage(msgInfo.send_time, getLastMessageTime(false));
+                addTimeMessage(msgInfo.send_time, getLastMessageTime(false), msgInfo);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,7 +197,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 if (memberStatus == MemberStatus.Member && "zhuanjie".equals(message.msg_type)) { //判断当前用户身份是用户身份并且当前消息是转接消息，则不显示时间
                     return;
                 }
-                addTimeMessage(true, msgInfo.send_time, getLastMessageTime(true));
+                addTimeMessage(true, msgInfo.send_time, getLastMessageTime(true), msgInfo);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -237,6 +243,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         MsgInfo msgInfo = lists.get(position);
         String message = msgInfo.message;
         BaseMessage baseMessage = str2Msg(message);
+        baseMessage.isWithDraw = msgInfo.isWithdraw;
         int sendType = getSendType(baseMessage.from_user_id);
         if (sendType == BaseMessage.VALUE_LEFT) { //左边消息
             switch (baseMessage.msg_type) {
@@ -347,6 +354,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         BaseMessage baseMessage = str2Msg(message);
         baseMessage.id = item.id;
         baseMessage.sendTime = item.send_time;
+        baseMessage.isWithDraw = item.isWithdraw;
         switch (viewType) {
             case LEFT_TXT:
                 handLeftTxt(holder, baseMessage);
@@ -431,7 +439,20 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             rightTxtViewHolder.rl_msg_status.setVisibility(View.GONE);
         }
         rightTxtViewHolder.tv_content.setBackgroundResource(getRightNomalDrawableRes());
-//        rightTxtViewHolder.tv_content.setOnClickListener(v -> showPopupWindow(rightTxtViewHolder.tv_content));
+        rightTxtViewHolder.tv_content.setOnLongClickListener(v -> {
+            showPopupWindow(rightTxtViewHolder.tv_content, baseMessage, RIGHT_TXT);
+            return false;
+        });
+        if (!baseMessage.isWithDraw) {
+            rightTxtViewHolder.rl_content.setVisibility(View.VISIBLE);
+            rightTxtViewHolder.ll_withdraw.setVisibility(View.GONE);
+        } else {
+            rightTxtViewHolder.rl_content.setVisibility(View.GONE);
+            rightTxtViewHolder.ll_withdraw.setVisibility(View.VISIBLE);
+        }
+        rightTxtViewHolder.tv_edit.setOnClickListener(v -> {
+            ((ChatActivity) context).setWithdrawContent(getEmotionContent(messageBody.text));
+        });
     }
 
     public void handLeftImg(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -504,6 +525,19 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         } else {
             rightImgViewHolder.rl_msg_status.setVisibility(View.GONE);
         }
+
+        rightImgViewHolder.miv_img.setOnLongClickListener(v -> {
+            showPopupWindow(rightImgViewHolder.miv_img, baseMessage, RIGHT_IMG);
+            return false;
+        });
+
+        if (!baseMessage.isWithDraw) {
+            rightImgViewHolder.rl_content.setVisibility(View.VISIBLE);
+            rightImgViewHolder.tv_withdraw.setVisibility(View.GONE);
+        } else {
+            rightImgViewHolder.rl_content.setVisibility(View.GONE);
+            rightImgViewHolder.tv_withdraw.setVisibility(View.VISIBLE);
+        }
     }
 
     public void handLeftGoods(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -555,6 +589,19 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             rightGoodsViewHolder.rl_msg_status.setVisibility(View.GONE);
         }
         rightGoodsViewHolder.layout_goods.setBackgroundResource(getRightProductDrawableRes());
+
+        rightGoodsViewHolder.layout_goods.setOnLongClickListener(v -> {
+            showPopupWindow(rightGoodsViewHolder.layout_goods, baseMessage, RIGHT_GOODS);
+            return false;
+        });
+
+        if (!baseMessage.isWithDraw) {
+            rightGoodsViewHolder.rl_content.setVisibility(View.VISIBLE);
+            rightGoodsViewHolder.tv_withdraw.setVisibility(View.GONE);
+        } else {
+            rightGoodsViewHolder.rl_content.setVisibility(View.GONE);
+            rightGoodsViewHolder.tv_withdraw.setVisibility(View.VISIBLE);
+        }
     }
 
     public void handEvaluate(RecyclerView.ViewHolder holder, BaseMessage baseMessage, final MsgInfo msgInfo) {
@@ -785,6 +832,15 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         @BindView(R.id.pb_right)
         ProgressBar pb_right;
 
+        @BindView(R.id.rl_content)
+        RelativeLayout rl_content;
+
+        @BindView(R.id.ll_withdraw)
+        LinearLayout ll_withdraw;
+
+        @BindView(R.id.tv_edit)
+        TextView tv_edit;
+
         public RightTxtViewHolder(View itemView) {
             super(itemView);
         }
@@ -820,6 +876,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
         @BindView(R.id.pb_right)
         ProgressBar pb_right;
+
+        @BindView(R.id.rl_content)
+        RelativeLayout rl_content;
+
+        @BindView(R.id.tv_withdraw)
+        TextView tv_withdraw;
 
 
         public RightImgViewHolder(View itemView) {
@@ -876,6 +938,13 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
         @BindView(R.id.pb_right)
         ProgressBar pb_right;
+
+        @BindView(R.id.rl_content)
+        RelativeLayout rl_content;
+
+        @BindView(R.id.tv_withdraw)
+        TextView tv_withdraw;
+
 
         public RightGoodsViewHolder(View itemView) {
             super(itemView);
@@ -1097,8 +1166,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         return str;
     }
 
-    private void addTimeMessage(long sendTime, long lastmsgTime) {
-        addTimeMessage(false, sendTime, lastmsgTime);
+    private void addTimeMessage(long sendTime, long lastmsgTime, MsgInfo msgInfo) {
+        addTimeMessage(false, sendTime, lastmsgTime, msgInfo);
     }
 
     /**
@@ -1106,14 +1175,14 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
      * @param sendTime    发送时间
      * @param lastmsgTime 上一条消息发送时间
      */
-    private void addTimeMessage(boolean isPre, long sendTime, long lastmsgTime) {
+    private void addTimeMessage(boolean isPre, long sendTime, long lastmsgTime, MsgInfo msgInfo) {
         if (isPre && lastmsgTime - sendTime <= 30 && sendTime != 0) {
             return;
         }
         if (!isPre && sendTime - lastmsgTime <= 30 && lastmsgTime != 0) {
             return;
         }
-
+        msgInfo.isAddTime = true;
         MsgInfo info = new MsgInfo();
         TextMessage textMessage = new TextMessage();
         TextMessage.TextMessageBody textMessageBody = new TextMessage.TextMessageBody();
@@ -1265,7 +1334,20 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         return spannableString;
     }
 
-    public void itemSendComplete(String tagId, int status) {
+    public void withdrawMessage(String messageId) {
+        if (isEmpty(messageId)) {
+            return;
+        }
+        for (MsgInfo msgInfo : lists) {
+            if (messageId.equals(msgInfo.id)) {
+                msgInfo.isWithdraw = true;
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
+    public void itemSendComplete(String tagId, int status, String msgId) {
         for (int i = 0; i < lists.size(); i++) {
             MsgInfo info = lists.get(i);
 
@@ -1279,6 +1361,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
             baseMsg = str2Msg(info.message);
             if (tagId.equals(baseMsg.tag_id)) {
+                info.id = msgId;
+                baseMsg.id = msgId;
                 switch (baseMsg.msg_type) {
                     case "image":
                         imageMsg = (ImageMessage) baseMsg;
@@ -1325,7 +1409,6 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         evaluateMessage.msg_body.evaluate.selectScore = score;
         msgInfo.message = msg2Str(evaluateMessage);
     }
-
 
     public void initEvaluteStatus(int score, int selectScore, EvaluateViewHolder evaluateViewHolder) {
         if (score == 0) {
@@ -1458,21 +1541,48 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         }
     }
 
-    private void showPopupWindow(View view) {
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(context).inflate(R.layout.pop_withdraw, null, false);
+    private void showPopupWindow(View view, BaseMessage baseMessage, int viewType) {
         // 设置按钮的点击事件
-        final PopupWindow popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        View contentView = LayoutInflater.from(context).inflate(R.layout.pop_withdraw, null, false);
+        popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         popupWindow.setTouchable(true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        contentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int popupWidth = view.getMeasuredWidth();
-        int popupHeight = view.getMeasuredHeight();
+        TextView tvWithdraw = contentView.findViewById(R.id.tv_withdraw);
+        TextView tvCopy = contentView.findViewById(R.id.tv_copy);
+        View view_middle = contentView.findViewById(R.id.view_middle);
+        tvWithdraw.setOnClickListener(v -> {
+            ((ChatActivity) context).withdrawMsg(baseMessage.id);
+            popupWindow.dismiss();
+        });
+        tvCopy.setOnClickListener(v -> {
+            if (viewType == RIGHT_TXT) {
+                TextMessage textMessage = (TextMessage) baseMessage;
+                TextMessage.TextMessageBody messageBody = textMessage.msg_body;
+                copyTextFromTextView(messageBody.text);
+                popupWindow.dismiss();
+            }
+        });
+        int leftMargin;
+        switch (viewType) {
+            case RIGHT_TXT:
+                tvCopy.setVisibility(View.VISIBLE);
+                view_middle.setVisibility(View.VISIBLE);
+                leftMargin = TransformUtil.dip2px(context, 5);
+                break;
+            default:
+                tvCopy.setVisibility(View.GONE);
+                view_middle.setVisibility(View.GONE);
+                leftMargin = TransformUtil.dip2px(context, 5);
+                break;
+        }
+        popupWindow.getContentView().measure(0, 0);
+        popupWidth = popupWindow.getContentView().getMeasuredWidth();
+        popupHeight = popupWindow.getContentView().getMeasuredHeight();
+
         int[] location = new int[2];
         view.getLocationOnScreen(location);
-        LogUtil.httpLogW("view.getWidth():" + view.getWidth() + "  popupWidth:" + popupWidth);
-        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0] + view.getWidth() - popupWidth, location[1] - popupHeight);
+        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0] + view.getWidth() - popupWidth - leftMargin, location[1] - popupHeight);
     }
 }

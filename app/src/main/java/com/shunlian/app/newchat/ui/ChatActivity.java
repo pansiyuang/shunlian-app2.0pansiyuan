@@ -6,11 +6,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -42,6 +47,7 @@ import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.OrderMessage;
 import com.shunlian.app.newchat.entity.TextMessage;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
+import com.shunlian.app.newchat.entity.WithdrawEntity;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
@@ -132,6 +138,32 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     private int firstPosition;
     private int refreshViewHeight;
     private String currentSid;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    try {
+                        WithdrawEntity withdrawEntity = objectMapper.readValue((String) msg.obj, WithdrawEntity.class);
+                        Common.staticToast(withdrawEntity.msg);
+                        if (withdrawEntity.status != 0) {
+                            return;
+                        }
+                        mAdapter.withdrawMessage(withdrawEntity.msg_id);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 2:
+                    runOnUiThread(() -> {
+                        if (recycler_chat != null)
+                            recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
+                    });
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     public static void startAct(Context context, ChatMemberEntity.ChatMember chatMember) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -530,7 +562,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         msgInfo.message = mAdapter.msg2Str(imageMessage);
         if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             mAdapter.addMsgInfo(msgInfo);
-            mAdapter.itemSendComplete(currentTagId, MessageStatus.Sending);
+            mAdapter.itemSendComplete(currentTagId, MessageStatus.Sending, null);
             compressImgs(imgPath, imageMessage.tag_id, imageMessage);
         }
     }
@@ -839,6 +871,24 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     /**
+     * 撤回消息
+     */
+
+    public void withdrawMsg(String msgId) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("type", "withdraw");
+            jsonObject.put("msg_id", msgId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
+            mWebsocketClient.send(jsonObject.toString());
+            LogUtil.httpLogW("撤回消息:" + jsonObject.toString());
+        }
+    }
+
+    /**
      * 根据用户ID和时间戳生成唯一一个tagId标识来判断消息发送成功
      */
     public String creatMsgTagId(String useId) {
@@ -933,7 +983,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             imageMessage.msg_body.image = image;
             sendImgMessage(imageMessage);
         } else {
-            mAdapter.itemSendComplete(tagId, MessageStatus.SendFail);
+            mAdapter.itemSendComplete(tagId, MessageStatus.SendFail, null);
         }
     }
 
@@ -1072,6 +1122,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                     readedMsg(chat_m_user_Id);
                     currentSid = msgInfo.sid;
                 }
+                mHandler.sendEmptyMessage(2);
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_RIGHT) {
                 if (baseMessage.from_user_id.equals(currentUserId)) {
                     if (baseMessage.msg_type.equals("evaluate") && mWebsocketClient.getMemberStatus() != MemberStatus.Member) {//当前身份是客服 邀请评价成功
@@ -1079,7 +1130,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                     } else {
                         //tag_id不为空且deviceId相同 是当前手机发送的消息 不同则是其他端发送的消息
                         if (!isEmpty(splitDeviceId(baseMessage.tag_id)) && currentDeviceId.equals(splitDeviceId(baseMessage.tag_id))) {
-                            mAdapter.itemSendComplete(baseMessage.tag_id, MessageStatus.SendSucc);
+                            mAdapter.itemSendComplete(baseMessage.tag_id, MessageStatus.SendSucc, msgInfo.id);
                             baseMessage.setStatus(MessageStatus.SendSucc);
                             msgInfo.message = mAdapter.msg2Str(baseMessage);
                         } else {
@@ -1089,14 +1140,12 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                         }
                     }
                 }
+                mHandler.sendEmptyMessage(2);
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_SYSTEM) {
                 mAdapter.addMsgInfo(msgInfo);
                 readedMsg(chat_m_user_Id);
+                mHandler.sendEmptyMessage(2);
             }
-            runOnUiThread(() -> {
-                if (recycler_chat != null)
-                    recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1128,6 +1177,13 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     @Override
+    public void withdrawMessage(String msg) {
+        Message message = mHandler.obtainMessage(1);
+        message.obj = msg;
+        mHandler.sendMessage(message);
+    }
+
+    @Override
     public void onLine() {
 
     }
@@ -1135,6 +1191,12 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     @Override
     public void logout() {
 
+    }
+
+    public void setWithdrawContent(SpannableString content) {
+        if (!isEmpty(content)) {
+            et_input.setSpannableText(content);
+        }
     }
 
     @Override
