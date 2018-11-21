@@ -33,8 +33,7 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
     @BindView(R.id.mtv_tip)
     MyTextView mtv_tip;
     private New3LoginPresenter presenter;
-    //手机号是否注册
-    private boolean isMobileRegister;
+    private New3LoginAct.LoginConfig mConfig;
 
     /**
      * 设置布局id
@@ -66,7 +65,7 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
             if (mobile_text.length() == 11){
                 btnDrawable.setColor(getColorResouce(R.color.pink_color));
                 if (presenter != null){
-                    presenter.checkMobile(mobile_text,"1");
+                    presenter.checkMobile(mobile_text);
                 }
             }else {
                 btnDrawable.setColor(Color.parseColor("#ECECEC"));
@@ -82,7 +81,12 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
     protected void initData() {
         GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
         btnDrawable.setColor(Color.parseColor("#ECECEC"));
+        mConfig = getArguments().getParcelable("config");
         presenter = new New3LoginPresenter(baseActivity,this);
+    }
+
+    public void initStatus(New3LoginAct.LoginConfig config) {
+        mConfig = config;
     }
 
     @OnClick(R.id.mbtn_login)
@@ -92,7 +96,6 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
         if (presenter != null){
             presenter.sendSmsCode(mobile,"");
         }
-        ((New3LoginAct)baseActivity).loginSms(2,mobile,isMobileRegister);
     }
 
     @OnClick(R.id.llayout_login_agreement)
@@ -107,8 +110,10 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     public void iSMobileRight(boolean b,String msg) {
-        isMobileRegister = b;
-        if (!b){
+        if (b){
+            if (mConfig != null)
+            mConfig.isMobileRegister = "1".equals(msg);
+        }else {
             showMobileTip(msg);
         }
     }
@@ -126,6 +131,18 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     public void showDataEmptyView(int request_code) {}
+
+    @Override
+    public void smsCode(String state,String message) {
+        if (!isEmpty(state)){
+            String mobile = this.mobile.getText().toString();
+            if (mConfig != null) {
+                mConfig.mobile = mobile;
+                mConfig.showPictureCode = state;
+            }
+            ((New3LoginAct)baseActivity).loginSms(2,mConfig);
+        }
+    }
 
     /**
      * 显示手机号提示

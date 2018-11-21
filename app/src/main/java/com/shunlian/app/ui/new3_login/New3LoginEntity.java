@@ -12,6 +12,6 @@ public class New3LoginEntity {
     /**
      * 为1时，需要输入图形验证码
      */
-    public String vcode_status;
+    public String status;
 
 }

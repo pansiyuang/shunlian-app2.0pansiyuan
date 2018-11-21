@@ -54,10 +54,22 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="15dp"
-                android:background="@color/pink_color"
                 android:scaleType="fitXY" />
 
         </LinearLayout>
+        <!--图形验证码提示-->
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="请输入正确手机号"
+            android:drawableLeft="@mipmap/image_exclamation"
+            android:drawablePadding="4dp"
+            android:textColor="#FB0A3D"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_avatar"
@@ -70,7 +82,6 @@
             app:iv_control_adapter="true"
             app:iv_control_height="100"
             app:iv_control_width="100"
-            app:iv_margin_right="20"
             app:iv_margin_top="40" />
 
         <com.shunlian.app.widget.MyTextView

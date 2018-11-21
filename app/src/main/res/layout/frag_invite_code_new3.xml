@@ -23,6 +23,7 @@
 
 
     <com.shunlian.app.ui.new3_login.InviteCodeWidget
+        android:id="@+id/invite_code"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="20dp"

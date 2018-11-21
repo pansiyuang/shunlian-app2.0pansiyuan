@@ -49,6 +49,7 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
 
     private New3LoginPresenter presenter;
     private DispachJump mJump;
+
     /**
      * 设置布局id
      *

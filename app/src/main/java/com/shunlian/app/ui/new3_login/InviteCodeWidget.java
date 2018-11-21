@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -130,6 +131,21 @@ public class InviteCodeWidget extends RelativeLayout {
         mTipIV.setLayoutParams(mTipIVParams);
         mTipIV.setPadding(i, i, i, i);
         mTipIV.setVisibility(GONE);
+    }
+
+
+    public void setInviteCodeText(String codeText){
+        if (TextUtils.isEmpty(codeText) && mInviteCodeText != null){
+            mInviteCodeText.setText("");
+            return;
+        }
+        if (mInviteCodeText != null){
+            mInviteCodeText.setText(codeText);
+            mInviteCodeText.setEnabled(false);
+        }
+        if (mTipIV != null){
+            mTipIV.setVisibility(GONE);
+        }
     }
 
 

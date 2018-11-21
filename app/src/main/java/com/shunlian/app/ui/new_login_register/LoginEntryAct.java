@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.shunlian.app.R;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.presenter.TestWXLoginPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
@@ -33,7 +34,7 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     /***************登录条款************/
     public static final String TERMS_OF_SERVICE = "agreement/1";
-    //private TestWXLoginPresenter presenter;
+    private TestWXLoginPresenter presenter;
 
     @BindView(R.id.mtv_pwd_login)
     MyTextView mtv_pwd_login;
@@ -65,15 +66,15 @@ public class LoginEntryAct extends BaseActivity implements IView{
 
     @OnClick(R.id.llayout_wechat_login)
     public void wechatLogin(){
-        WXLogin();
-        /*if (presenter == null) {
+//        WXLogin();
+        if (presenter == null) {
             presenter = new TestWXLoginPresenter(this, this);
         }else {
             presenter.initApi();
-        }*/
+        }
     }
 
-    @OnClick(R.id.mbtn_login)
+    @OnClick({R.id.mbtn_login,R.id.mtv_register})
     public void mobileLogin(){
         New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
         config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;

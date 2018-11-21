@@ -25,7 +25,7 @@ import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
-import com.shunlian.app.ui.new_login_register.RegisterAndBindingAct;
+import com.shunlian.app.ui.new3_login.New3LoginAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -346,18 +346,29 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String member_id = wxLoginEntity.member_id;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {//绑定手机号不需要推荐人
-                RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);
+                /*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);*/
+                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
+                config.status = status;
+                New3LoginAct.startAct(this,config);
                 mYFinish();
             } else if ("1".equals(status)) {//登录成功
                 loginSuccess(entity, wxLoginEntity);
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
-                RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);
+                /*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);*/
+                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
+                config.status = status;
+                New3LoginAct.startAct(this,config);
                 mYFinish();
             }else if ("4".equals(status)){//绑定推荐人
-                RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);
+                /*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);*/
+                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
+                New3LoginAct.startAct(this,config);
                 mYFinish();
             }
         } else {

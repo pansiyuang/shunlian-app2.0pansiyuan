@@ -186,13 +186,12 @@ public interface ApiService {
     Call<BaseEntity<String>> sendSmsCode(@Body RequestBody requestBody);
 
     /**
-     * 发送验证码
-     *
+     * 检查短信验证码
      * @param requestBody
      * @return
      */
-    @POST("member/common/sendSmsCode")
-    Call<BaseEntity<New3LoginEntity>> sendSmsCode3(@Body RequestBody requestBody);
+    @POST("member/common/checkMobileCode")
+    Call<BaseEntity<String>> checkNew3LoginSmsCode(@Body RequestBody requestBody);
 
     /**
      * 获取图形验证码
@@ -288,6 +287,14 @@ public interface ApiService {
      */
     @GET("member/register/checkMobile")
     Call<BaseEntity<String>> checkMobile(@QueryMap Map<String, String> map);
+
+    /**
+     * 检验手机号是否注册
+     * @param map
+     * @return
+     */
+    @GET("member/register/checkMobileStatus")
+    Call<BaseEntity<New3LoginEntity>> checkMobileNews(@QueryMap Map<String, String> map);
 
     /**
      * 商品详情

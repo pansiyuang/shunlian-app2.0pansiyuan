@@ -1,9 +1,11 @@
 package com.shunlian.app.ui.new3_login;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.presenter.BasePresenter;
 
@@ -52,6 +54,109 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
     }
 
     /**
+     *
+     * @param mobile 手机号
+     * @param mobile_code 短信验证码
+     * @param code 推荐人id
+     * @param unique_sign 微信登录code
+     */
+    public void register(String mobile,String mobile_code,String code,String unique_sign){
+        Map<String,String> map = new HashMap<>();
+        if (!TextUtils.isEmpty(unique_sign)){
+            map.put("unique_sign",unique_sign);
+        }
+        map.put("mobile",mobile);
+        map.put("mobile_code",mobile_code);
+        map.put("code",code);
+        sortAndMD5(map);
+
+        Call<BaseEntity<LoginFinishEntity>>
+                register = getSaveCookieApiService().new_register(getRequestBody(map));
+        getNetData(true,register, new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
+                super.onSuccess(entity);
+                iView.loginMobileSuccess(entity.data);
+            }
+        });
+    }
+
+    /**
+     * 邀请码详情
+     * @param id
+     */
+    public void codeDetail(String id){
+        Map<String,String> map = new HashMap<>();
+        map.put("code",id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<MemberCodeListEntity>>
+                baseEntityCall = getApiService().codeInfo(map);
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback
+                <BaseEntity<MemberCodeListEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<MemberCodeListEntity> entity) {
+                super.onSuccess(entity);
+                iView.codeInfo(entity.data);
+            }
+        });
+    }
+
+    /**
+     * 检验短信验证码
+     * @param mobile
+     * @param smsCode
+     */
+    public void checkSmsCode(String mobile,String smsCode){
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", mobile);
+        map.put("mobile_code", smsCode);
+        sortAndMD5(map);
+
+        Call<BaseEntity<String>>
+                requestBodyCall = getSaveCookieApiService().checkNew3LoginSmsCode(getRequestBody(map));
+
+        getNetData(true,requestBodyCall,new SimpleNetDataCallback<BaseEntity<String>>(){
+            @Override
+            public void onSuccess(BaseEntity<String> entity) {
+                super.onSuccess(entity);
+                iView.checkSmsCode(null,entity.data);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.checkSmsCode(message,null);
+            }
+        });
+    }
+
+    /**
+     * 手机号登录
+     * @param mobile
+     * @param code
+     */
+    public void loginMobile(String mobile, String code) {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", "mobile");
+        map.put("mobile", mobile);
+        map.put("code", code);
+        sortAndMD5(map);
+
+        Call<BaseEntity<LoginFinishEntity>>
+                requestBodyCall = getSaveCookieApiService().login(getRequestBody(map));
+
+        getNetData(true,requestBodyCall,new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
+                super.onSuccess(entity);
+                iView.loginMobileSuccess(entity.data);
+            }
+        });
+    }
+
+    /**
      * 密码登录
      * @param username
      * @param password
@@ -79,17 +184,16 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
     /**
      * 登录时检验手机号是否注册，仅用手机验证码登录
      */
-    public void checkMobile(String mobile,String type){
+    public void checkMobile(String mobile){
         Map<String,String> map = new HashMap<>();
         map.put("mobile",mobile);
-        map.put("type",type);
         sortAndMD5(map);
-        Call<BaseEntity<String>> baseEntityCall = getApiService().checkMobile(map);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<String>>(){
+        Call<BaseEntity<New3LoginEntity>> baseEntityCall = getApiService().checkMobileNews(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<New3LoginEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<String> entity) {
+            public void onSuccess(BaseEntity<New3LoginEntity> entity) {
                 super.onSuccess(entity);
-                iView.iSMobileRight(true,entity.message);
+                iView.iSMobileRight(true,entity.data.status);
             }
 
             @Override
@@ -117,13 +221,13 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
             @Override
             public void onSuccess(BaseEntity<String> entity) {
                 super.onSuccess(entity);
-                iView.smsCode(entity.message);
+                iView.smsCode(entity.data,null);
             }
 
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                iView.smsCode(null);
+                iView.smsCode(null,message);
             }
         });
     }

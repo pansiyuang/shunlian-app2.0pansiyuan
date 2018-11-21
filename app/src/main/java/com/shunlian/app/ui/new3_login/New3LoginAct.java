@@ -43,6 +43,7 @@ public class New3LoginAct extends BaseActivity {
     private VerifyMobileFrag mVerifyMobileFrag;
     private InviteCodeFrag mInviteCodeFrag;
     private int mCurrentPage = 1;
+    private LoginConfig mConfig;
 
     public static void startAct(Context context, LoginConfig config){
         context.startActivity(new Intent(context,New3LoginAct.class)
@@ -66,7 +67,7 @@ public class New3LoginAct extends BaseActivity {
            if (mCurrentPage == 1){
                 finish();
            }else {
-               loginSms(1,null,false);
+               loginSms(1, mConfig);
            }
         });
     }
@@ -78,14 +79,13 @@ public class New3LoginAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        LoginConfig mConfig = getIntent().getParcelableExtra("config");
+        mConfig = getIntent().getParcelableExtra("config");
         if (mConfig != null){
             fragments = new HashMap<>();
             mFragmentManager = getSupportFragmentManager();
             if (!isEmpty(mConfig.status))
             {
-
-
+                loginSms(1, mConfig);
             }
             else
 
@@ -96,7 +96,11 @@ public class New3LoginAct extends BaseActivity {
                         break;
                     case SMS_TO_LOGIN:
                         //短信登录
-                        loginSms(1,null,false);
+                        loginSms(1, mConfig);
+                        break;
+                    case BIND_INVITE_CODE:
+                        //绑定推荐人
+                        loginInviteCode(mConfig);
                         break;
                 }
         }
@@ -117,13 +121,18 @@ public class New3LoginAct extends BaseActivity {
     /**
      * 短信登录
      */
-    public void loginSms(int page,String mobile,boolean isMobileRegister){
+    public void loginSms(int page, LoginConfig config){
         if (page == 1){
             mCurrentPage = 1;
             mLoginMobileFrag = (LoginMobileFrag) fragments.get(MOBILE_1_LOGIN);
             if (mLoginMobileFrag == null){
                 mLoginMobileFrag = new LoginMobileFrag();
                 fragments.put(MOBILE_1_LOGIN,mLoginMobileFrag);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("config", this.mConfig);
+                mLoginMobileFrag.setArguments(bundle);
+            }else {
+                mLoginMobileFrag.initStatus(this.mConfig);
             }
             switchContent(mLoginMobileFrag);
         }else if (page == 2){
@@ -132,11 +141,12 @@ public class New3LoginAct extends BaseActivity {
             if (mVerifyMobileFrag == null){
                 mVerifyMobileFrag = new VerifyMobileFrag();
                 fragments.put(MOBILE_2_LOGIN,mVerifyMobileFrag);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("config", config);
+                mVerifyMobileFrag.setArguments(bundle);
+            }else {
+                mVerifyMobileFrag.initStatus(config);
             }
-            Bundle bundle = new Bundle();
-            bundle.putString("mobile",mobile);
-            bundle.putBoolean("isMobileRegister",isMobileRegister);
-            mVerifyMobileFrag.setArguments(bundle);
             switchContent(mVerifyMobileFrag);
         }
     }
@@ -144,12 +154,17 @@ public class New3LoginAct extends BaseActivity {
     /**
      * 邀请码
      */
-    public void loginInviteCode(){
+    public void loginInviteCode(LoginConfig config){
         mCurrentPage = 3;
         mInviteCodeFrag = (InviteCodeFrag) fragments.get(INVITE_CODE);
         if (mInviteCodeFrag == null){
             mInviteCodeFrag = new InviteCodeFrag();
             fragments.put(INVITE_CODE,mInviteCodeFrag);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("config", config);
+            mInviteCodeFrag.setArguments(bundle);
+        }else {
+            mInviteCodeFrag.initStatus(config);
         }
         switchContent(mInviteCodeFrag);
     }
@@ -193,7 +208,7 @@ public class New3LoginAct extends BaseActivity {
         if (mCurrentPage == 1){
             super.onBackPressed();
         }else {
-            loginSms(1,null,false);
+            loginSms(1, mConfig);
         }
     }
 
@@ -203,9 +218,14 @@ public class New3LoginAct extends BaseActivity {
     public static class LoginConfig implements Parcelable {
 
         //登录状态
-        public String status;
-
-        public LOGIN_MODE login_mode;
+        public String status;//微信登录状态 0和3绑定手机号需要推荐人  2绑定手机号不需要推荐人  4绑定推荐人
+        public String unique_sign;//微信登录openid
+        public String member_id;
+        public String mobile;//手机号
+        public String smsCode;//短信验证码
+        public boolean isMobileRegister;//手机号是否注册
+        public String showPictureCode;//显示图像验证码
+        public LOGIN_MODE login_mode;//登录模式
 
         public enum LOGIN_MODE{
 
@@ -217,7 +237,11 @@ public class New3LoginAct extends BaseActivity {
             /**
              * 短信登录
              */
-            SMS_TO_LOGIN
+            SMS_TO_LOGIN,
+            /**
+             * 绑定邀请码
+             */
+            BIND_INVITE_CODE
         }
 
         public LoginConfig() {
@@ -231,11 +255,23 @@ public class New3LoginAct extends BaseActivity {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.status);
+            dest.writeString(this.unique_sign);
+            dest.writeString(this.member_id);
+            dest.writeString(this.mobile);
+            dest.writeString(this.smsCode);
+            dest.writeByte(this.isMobileRegister ? (byte) 1 : (byte) 0);
+            dest.writeString(this.showPictureCode);
             dest.writeInt(this.login_mode == null ? -1 : this.login_mode.ordinal());
         }
 
         protected LoginConfig(Parcel in) {
             this.status = in.readString();
+            this.unique_sign = in.readString();
+            this.member_id = in.readString();
+            this.mobile = in.readString();
+            this.smsCode = in.readString();
+            this.isMobileRegister = in.readByte() != 0;
+            this.showPictureCode = in.readString();
             int tmpLogin_mode = in.readInt();
             this.login_mode = tmpLogin_mode == -1 ? null : LOGIN_MODE.values()[tmpLogin_mode];
         }

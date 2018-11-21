@@ -15,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.MemberCodeListEntity;
+import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -39,6 +42,7 @@ public class VerifyPicDialog {
     private LinearLayout ll_invite_code;
     private LinearLayout ll_root;
     private TextView tv_message;
+    private TextView mtv_tip;
 
     public VerifyPicDialog(Activity ctx) {
         this.ctx = ctx;
@@ -61,11 +65,22 @@ public class VerifyPicDialog {
         ll_invite_code = logoutDialog.findViewById(R.id.ll_invite_code);
         ll_root = logoutDialog.findViewById(R.id.ll_root);
         tv_message = logoutDialog.findViewById(R.id.tv_message);
+        mtv_tip = logoutDialog.findViewById(R.id.mtv_tip);
 
         GradientDrawable background = (GradientDrawable) tvSure.getBackground();
         int i = TransformUtil.dip2px(ctx, 5);
         float[] radii = {0,0,0,0,i,i,0,0};
         background.setCornerRadii(radii);
+
+        ed_verify.addTextChangedListener(new SimpleTextWatcher(){
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                super.onTextChanged(s, start, before, count);
+                if (s.length() == 0 && mtv_tip != null){
+                    mtv_tip.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     /**
@@ -99,6 +114,29 @@ public class VerifyPicDialog {
     public void setMessage(String msg){
         if (tv_message != null){
             tv_message.setText(msg);
+        }
+    }
+
+    public void setPicTip(String tip){
+        if (mtv_tip != null){
+            mtv_tip.setVisibility(View.VISIBLE);
+            mtv_tip.setText(tip);
+        }
+    }
+
+    /**
+     * 推荐人详情
+     * @param bean
+     */
+    public void setMemberDetail(MemberCodeListEntity.ListBean bean){
+        if (mtv_nickname != null){
+            mtv_nickname.setText(bean.nickname);
+        }
+        if (mtv_invite_code != null){
+            mtv_invite_code.setText(bean.code);
+        }
+        if (miv_avatar != null){
+            GlideUtils.getInstance().loadCircleHeadImage(ctx,miv_avatar,bean.avatar);
         }
     }
     /**
