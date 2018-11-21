@@ -37,7 +37,7 @@
             android:layout_alignParentRight="true"
             android:padding="@dimen/xx20"
             android:layout_marginRight="@dimen/xx10"
-            android:src="@mipmap/icon_xiaodian_fenxiang"/>
+            android:src="@mipmap/icon_stork_share"/>
     </RelativeLayout>
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
