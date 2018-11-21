@@ -75,6 +75,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     private int hotPosition = -1;
 
     private ShareGoodDialogUtil shareGoodDialogUtil;
+
     public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
         super(context, isShowFooter, datas);
         this.isFirst = isFirst;
@@ -183,7 +184,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                     @Override
                                     public void onItemClick(int position) {
 
-                                        if (data.datass.get(position).url!=null)
+                                        if (data.datass.get(position).url != null)
                                             Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
                                     }
                                 });
@@ -202,15 +203,15 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         twoHolder.rv_nav.setBackgroundColor(Color.parseColor(data.bg_color));
                     }
 //                        if (twoHolder.firstNavyAdapter==null){
-                    twoHolder.firstNavyAdapter=new FirstNavyAdapter(context,false,data.datass,data.text_color);
-                    twoHolder.rv_nav.setLayoutManager(new GridLayoutManager(context,data.datass.size()>5?5:data.datass.size()));
+                    twoHolder.firstNavyAdapter = new FirstNavyAdapter(context, false, data.datass, data.text_color);
+                    twoHolder.rv_nav.setLayoutManager(new GridLayoutManager(context, data.datass.size() > 5 ? 5 : data.datass.size()));
                     twoHolder.rv_nav.setNestedScrollingEnabled(false);
                     twoHolder.rv_nav.setAdapter(twoHolder.firstNavyAdapter);
                     twoHolder.firstNavyAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            if (data.datass.get(position).url!=null)
-                            Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
+                            if (data.datass.get(position).url != null)
+                                Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
                         }
                     });
 //                        }else {
@@ -293,8 +294,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_one.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(0).url!=null)
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        if (data.datass.get(0).url != null)
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
                                 break;
@@ -309,15 +310,15 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_twol.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(0).url!=null)
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        if (data.datass.get(0).url != null)
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_twor.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(1).url!=null)
-                                        Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+                                        if (data.datass.get(1).url != null)
+                                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
                                     }
                                 });
                                 break;
@@ -333,22 +334,22 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_threel.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(0).url!=null)
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        if (data.datass.get(0).url != null)
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_threem.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(1).url!=null)
-                                        Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+                                        if (data.datass.get(1).url != null)
+                                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_threer.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(2).url!=null)
-                                        Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
+                                        if (data.datass.get(2).url != null)
+                                            Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
                                     }
                                 });
                                 break;
@@ -365,29 +366,29 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_four1.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(0).url!=null)
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        if (data.datass.get(0).url != null)
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_four2.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(1).url!=null)
-                                        Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+                                        if (data.datass.get(1).url != null)
+                                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_four3.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(2).url!=null)
-                                        Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
+                                        if (data.datass.get(2).url != null)
+                                            Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_four4.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(3).url!=null)
-                                        Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id, data.datass.get(3).url.channe_id);
+                                        if (data.datass.get(3).url != null)
+                                            Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id, data.datass.get(3).url.channe_id);
                                     }
                                 });
                                 break;
@@ -403,22 +404,22 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 threeHolder.miv_fivel.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(0).url!=null)
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        if (data.datass.get(0).url != null)
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_fivet.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(1).url!=null)
-                                        Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+                                        if (data.datass.get(1).url != null)
+                                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
                                     }
                                 });
                                 threeHolder.miv_fiveb.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (data.datass.get(2).url!=null)
-                                        Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
+                                        if (data.datass.get(2).url != null)
+                                            Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
                                     }
                                 });
                                 break;
@@ -536,13 +537,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             fiveHolder.view_line.setVisibility(View.VISIBLE);
                         }
                     }
-                    if(data.url.type.equals("shop")){
+                    if (data.url.type.equals("shop")) {
                         fiveHolder.mtv_store_title.setVisibility(View.VISIBLE);
                         fiveHolder.mtv_title.setVisibility(View.INVISIBLE);
                         fiveHolder.mtv_price.setVisibility(View.GONE);
                         fiveHolder.mtv_market_price.setVisibility(View.GONE);
                         fiveHolder.mtv_store_title.setText(data.title);
-                    }else {
+                    } else {
                         fiveHolder.mtv_store_title.setVisibility(View.GONE);
                         fiveHolder.mtv_title.setVisibility(View.VISIBLE);
                         if (!TextUtils.isEmpty(data.price)) {
@@ -570,8 +571,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (data.url!=null)
-                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            if (data.url != null)
+                                Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                         }
                     });
                 }
@@ -604,8 +605,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (data.url!=null)
-                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            if (data.url != null)
+                                Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                         }
                     });
 //                        if (sixHolder.firstHorizonAdapter == null) {
@@ -650,30 +651,30 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                 if (holder instanceof EightHolder) {
                     EightHolder eightHolder = (EightHolder) holder;
                     List<GetDataEntity.MData.Cate> data = lists.get(position).cates;
-//                        if (eightHolder.firstCategoryMenuAdapter == null) {
+                    if (eightHolder.firstCategoryMenuAdapter == null) {
 //                        cateGoryFrag.cate_id = data.get(0).id;
 //                        cateGoryFrag.pFirstPage.resetBaby(cateGoryFrag.cate_id);
-                    eightHolder.firstCategoryMenuAdapter = new FirstCategoryMenuAdapter(context, false, data, isFirst);
-                    if (isFirst)
-                        eightHolder.rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
-                    eightHolder.firstCategoryMenuAdapter.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            if (cateGoryFrag != null && cateGoryFrag.rv_view != null && cateGoryFrag.rv_view.getScrollState() == 0) {
-                                eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
-                                eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
-                                cateGoryFrag.cate_id = data.get(position).id;
-                                cateGoryFrag.sort_type = data.get(position).sort_type;
-                                if (cateGoryFrag.pFirstPage != null)
-                                    cateGoryFrag.pFirstPage.resetBaby(data.get(position).id,data.get(position).sort_type);
+                        eightHolder.firstCategoryMenuAdapter = new FirstCategoryMenuAdapter(context, false, data, isFirst);
+                        if (isFirst)
+                            eightHolder.rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
+                        eightHolder.firstCategoryMenuAdapter.setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                if (cateGoryFrag != null && cateGoryFrag.rv_view != null && cateGoryFrag.rv_view.getScrollState() == 0) {
+                                    eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
+                                    eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
+                                    cateGoryFrag.cate_id = data.get(position).id;
+                                    cateGoryFrag.sort_type = data.get(position).sort_type;
+                                    if (cateGoryFrag.pFirstPage != null)
+                                        cateGoryFrag.pFirstPage.resetBaby(data.get(position).id, data.get(position).sort_type);
+                                }
                             }
-                        }
-                    });
-                    eightHolder.rv_categoryMenu.setAdapter(eightHolder.firstCategoryMenuAdapter);
-                    eightHolder.rv_categoryMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-//                        } else {
-//                            eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
-//                        }
+                        });
+                        eightHolder.rv_categoryMenu.setAdapter(eightHolder.firstCategoryMenuAdapter);
+                        eightHolder.rv_categoryMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                    } else {
+                        eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
+                    }
                     if (isFirst) {
                         eightHolder.mtv_meiri.setVisibility(View.GONE);
                         eightHolder.rv_categoryMenu.setBackgroundColor(getColor(R.color.white));
@@ -694,7 +695,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
                         tenHolder.mtv_price.setText(spannableStringBuilder);
                     }
-                    if (tenHolder.mllayout_tag!=null)
+                    if (tenHolder.mllayout_tag != null)
                         tenHolder.mllayout_tag.removeAllViews();
                     tenHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -740,7 +741,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         mShareInfoParam = baseEntity.data;
-        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,false);
+        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, false);
 //        shareStyle2Dialog();
     }
 
@@ -828,11 +829,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         TenHolder(View itemView) {
             super(itemView);
-            mllayout_root= (MyLinearLayout) itemView.findViewById(R.id.mllayout_root);
-            miv_photo= (MyImageView) itemView.findViewById(R.id.miv_photo);
-            mtv_title= (MyTextView) itemView.findViewById(R.id.mtv_title);
-            mllayout_tag= (MyLinearLayout) itemView.findViewById(R.id.mllayout_tag);
-            mtv_price= (MyTextView) itemView.findViewById(R.id.mtv_price);
+            mllayout_root = (MyLinearLayout) itemView.findViewById(R.id.mllayout_root);
+            miv_photo = (MyImageView) itemView.findViewById(R.id.miv_photo);
+            mtv_title = (MyTextView) itemView.findViewById(R.id.mtv_title);
+            mllayout_tag = (MyLinearLayout) itemView.findViewById(R.id.mllayout_tag);
+            mtv_price = (MyTextView) itemView.findViewById(R.id.mtv_price);
             int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth / 2, picWidth / 2);
             miv_photo.setLayoutParams(params);
@@ -973,8 +974,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         FourHolder(View itemView) {
             super(itemView);
             int picWidth = Common.getScreenWidth((Activity) context);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth*226 /360);
-            params.setMargins(0,TransformUtil.dip2px(context, 10),0,0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth * 226 / 360);
+            params.setMargins(0, TransformUtil.dip2px(context, 10), 0, 0);
             mllayout_root.setLayoutParams(params);
             downTime_first.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
