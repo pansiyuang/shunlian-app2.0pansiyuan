@@ -74,7 +74,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
      * @return
      */
     private EasyWebsocketClient(Context context) {
-        mContext= context.getApplicationContext();
+        mContext = context.getApplicationContext();
     }
 
     public static EasyWebsocketClient getInstance(Context context) {
@@ -283,6 +283,13 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                             }
                         }
                         StatusEntity logout = objectMapper.readValue(message, StatusEntity.class);
+                        break;
+                    case "withdraw_status"://消息撤回
+                        if (!isEmpty(messageReceiveListeners)) {
+                            for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                                listener.withdrawMessage(message);
+                            }
+                        }
                         break;
                 }
         } catch (Exception e) {
@@ -755,6 +762,8 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         void transferMessage(String msg);
 
         void transferMemberAdd(String msg);
+
+        void withdrawMessage(String msg);
 
         void onLine();
 

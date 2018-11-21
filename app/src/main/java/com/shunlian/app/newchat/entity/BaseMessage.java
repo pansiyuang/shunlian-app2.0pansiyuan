@@ -37,6 +37,7 @@ public class BaseMessage {
     private int sendType;
     private int uReadNum;
     private int status = MessageStatus.SendSucc;
+    public boolean isWithDraw; //是否是撤回的消息
 
     public int getuReadNum() {
         return uReadNum;

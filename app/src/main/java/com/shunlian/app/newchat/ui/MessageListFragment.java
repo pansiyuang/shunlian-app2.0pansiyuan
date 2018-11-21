@@ -324,6 +324,11 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     }
 
     @Override
+    public void withdrawMessage(String msg) {
+
+    }
+
+    @Override
     public void onLine() {
 
     }

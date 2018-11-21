@@ -185,7 +185,11 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
     @Override
     public void onItemClick(View view, int position) {
         ChatMemberEntity.ChatMember chatMember = chatMemberList.get(position);
-        ChatManager.getInstance(this).init().StoreChatToMember(chatMember);
+        if (mClient.isSeller()) {
+            ChatManager.getInstance(this).init().StoreChatToMember(chatMember);
+        } else if (mClient.isAdmin()) {
+            ChatManager.getInstance(this).init().PlatformChatToMember(chatMember);
+        }
     }
 
     public void resetData() {
@@ -269,6 +273,11 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void withdrawMessage(String msg) {
+
     }
 
     @Override
