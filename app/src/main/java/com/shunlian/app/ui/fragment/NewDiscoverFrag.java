@@ -84,6 +84,8 @@ public class NewDiscoverFrag extends BaseFragment {
     private String[] titles = {"关注", "精选", "活动"};
     private HotBlogsEntity.BaseInfo currentBaseInfo;
     private CommonLazyPagerAdapter mAdapter;
+    private boolean isInit;
+    private int defaultPage = 1;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -99,6 +101,18 @@ public class NewDiscoverFrag extends BaseFragment {
                     .statusBarColor(R.color.white)
                     .statusBarDarkFont(true, 0.2f)
                     .init();
+        }
+    }
+
+    public void setCurrentPage(String flag) {
+        switch (flag) {
+            case "attentionList":
+                if (isInit) {
+                    view_pager.setCurrentItem(0);
+                } else {
+                    defaultPage = 0;
+                }
+                break;
         }
     }
 
@@ -184,8 +198,9 @@ public class NewDiscoverFrag extends BaseFragment {
         mAdapter = new CommonLazyPagerAdapter(getChildFragmentManager(), goodsFrags, titles);
         view_pager.setAdapter(mAdapter);
         view_pager.setOffscreenPageLimit(3);
-        view_pager.setCurrentItem(1);
-        showTab(1);
+        view_pager.setCurrentItem(defaultPage);
+        showTab(defaultPage);
+        isInit = true;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -145,11 +145,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 case 1:
                     try {
                         WithdrawEntity withdrawEntity = objectMapper.readValue((String) msg.obj, WithdrawEntity.class);
-                        Common.staticToast(withdrawEntity.msg);
                         if (withdrawEntity.status != 0) {
+                            Common.staticToast(withdrawEntity.msg);
                             return;
                         }
-                        mAdapter.withdrawMessage(withdrawEntity.msg_id);
+                        mAdapter.withdrawMessage(withdrawEntity.msg_id, withdrawEntity.user_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -884,7 +884,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         }
         if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             mWebsocketClient.send(jsonObject.toString());
-            LogUtil.httpLogW("撤回消息:" + jsonObject.toString());
         }
     }
 
