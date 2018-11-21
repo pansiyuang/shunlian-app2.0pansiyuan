@@ -148,16 +148,18 @@
                         android:lineSpacingExtra="@dimen/xx10"
                         android:textColor="@color/black"
                         android:textSize="@dimen/xx42" />
-                        <com.shunlian.app.widget.MyImageView
-                            android:id="@+id/miv_SuperiorProduct"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_SuperiorProduct"
+                            android:layout_width="@dimen/xx100"
+                            android:layout_height="@dimen/xx60"
                             android:layout_marginTop="6dp"
-                            android:src="@mipmap/img_plus_youping_xiao"
+                            android:text="自营"
+                            android:gravity="center"
+                            android:background="@color/pink_color"
+                            android:textSize="@dimen/xx38"
+                            android:textColor="@color/white"
                             android:visibility="gone"
-                            app:iv_control_adapter="true"
-                            app:iv_control_height="40"
-                            app:iv_control_width="40" />
+                          />
                 <LinearLayout
                     android:id="@+id/llayout_day"
                     android:layout_width="wrap_content"
