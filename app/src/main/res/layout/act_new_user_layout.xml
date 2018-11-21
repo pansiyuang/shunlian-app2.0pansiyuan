@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:padding="15dp"
+            android:padding="10dp"
             android:src="@mipmap/icon_common_back_white" />
         <TextView
             android:id="@+id/tv_head"
@@ -31,12 +31,12 @@
             android:textSize="18sp" />
         <ImageView
             android:id="@+id/img_share"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/xx100"
+            android:layout_height="@dimen/xx160"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:padding="@dimen/xx20"
-            android:layout_marginRight="@dimen/xx10"
+            android:padding="@dimen/xx25"
+            android:layout_marginRight="@dimen/xx20"
             android:src="@mipmap/icon_stork_share"/>
     </RelativeLayout>
     <android.support.design.widget.CoordinatorLayout

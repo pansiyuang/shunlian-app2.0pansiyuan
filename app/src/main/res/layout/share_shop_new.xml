@@ -91,9 +91,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                            android:layout_below="@+id/mtv_descl"
-                            android:layout_marginBottom="10dp"
+                            android:layout_marginBottom="9dp"
+                         android:layout_alignParentBottom="true"
                             android:layout_toRightOf="@id/mtv_yuanl"
                             android:textColor="@color/pink_color"
+                        android:gravity="center"
                             android:textSize="15sp" />
 
                         <com.shunlian.app.widget.MyTextView
@@ -101,6 +103,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/mtv_descl"
+                            android:layout_marginBottom="10dp"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
                             android:layout_marginLeft="9dp"
                             android:layout_toRightOf="@id/mtv_pricel"
                             android:textColor="@color/share_text"
@@ -143,6 +148,9 @@
                             android:layout_toRightOf="@id/mtv_yuanl"
                             android:textColor="@color/pink_color"
                             android:layout_below="@+id/mtv_descl2"
+                        android:layout_marginBottom="9dp"
+                        android:gravity="center"
+                        android:layout_alignParentBottom="true"
                             android:textSize="15sp" />
 
                         <com.shunlian.app.widget.MyTextView
@@ -153,6 +161,9 @@
                             android:layout_toRightOf="@id/mtv_pricel2"
                             android:layout_below="@+id/mtv_descl2"
                             android:textColor="@color/share_text"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:layout_alignParentBottom="true"
                             android:textSize="11sp" />
 
 

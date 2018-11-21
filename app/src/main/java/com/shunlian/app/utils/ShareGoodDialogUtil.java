@@ -44,6 +44,9 @@ public class ShareGoodDialogUtil {
 
     //分享商品的diolog
     public void shareGoodDialog(ShareInfoParam shareInfoParam,boolean isGood,boolean isFound) {
+        if(nomalBuildl!=null&&nomalBuildl.isShowing()){
+            nomalBuildl.dismiss();
+        }
         this.mShareInfoParam = shareInfoParam;
         CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottom()
                 .setView(R.layout.dialog_share);

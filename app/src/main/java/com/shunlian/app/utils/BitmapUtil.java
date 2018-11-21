@@ -85,10 +85,10 @@ public class BitmapUtil {
 //                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
 //        final Canvas canvas = new Canvas(bitmap);
 //        view.draw(canvas);
-
-        int me = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
-        view.measure(me,me);
-        view.layout(0 ,0, (int)App.getContext().getResources().getDimension(R.dimen.xx1080), view.getMeasuredHeight());
+        int measuredWidth = View.MeasureSpec.makeMeasureSpec(App.widthPixels, View.MeasureSpec.EXACTLY);
+        int me = View.MeasureSpec.makeMeasureSpec(App.hightPixels,View.MeasureSpec.UNSPECIFIED);
+        view.measure(measuredWidth,me);
+        view.layout(0 ,0, view.getMeasuredWidth(), view.getMeasuredHeight());
         view.buildDrawingCache();
         Bitmap bitmap = view.getDrawingCache();
         return bitmap;
