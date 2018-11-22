@@ -332,7 +332,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             goBuyUserGood();
         });
         img_share.setOnClickListener(v -> {
-            mPresenter.getShareInfo(mPresenter.new_exclusive);
+            mPresenter.getNewUserShareInfo();
         });
 
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -538,12 +538,11 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        shareInfoParam.shareLink =baseEntity.data.shareLink;
+        shareInfoParam.shareLink =baseEntity.data.link;
         shareInfoParam.title =baseEntity.data.title;
         shareInfoParam.desc =baseEntity.data.desc;
-        shareInfoParam.shareLink =baseEntity.data.shareLink;
-        shareInfoParam.img =baseEntity.data.logo;
-        shareInfoParam.special_img_url =baseEntity.data.logo;
+        shareInfoParam.img =baseEntity.data.imgdefalt;
+        shareInfoParam.special_img_url =baseEntity.data.imgdefalt;
         shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
     }
 }
