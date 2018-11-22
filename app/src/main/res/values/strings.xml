@@ -882,4 +882,9 @@
     <string name="find_my_topic">#我的话题</string>
     <string name="find_add_location">添加位置</string>
     <string name="find_associated_goods">关联商品(%d/%d)</string>
+
+    <!-- 新版发现-->
+    <string name="ready_to_unFocus">确定取消关注%s吗？</string>
+    <string name="give_up">放弃</string>
+    <string name="unfollow">取消关注</string>
 </resources>

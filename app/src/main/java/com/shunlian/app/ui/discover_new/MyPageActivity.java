@@ -220,7 +220,7 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
 
         tv_attention.setOnClickListener(v -> {
             if (currentMember != null) {
-                ((CommonBlogFrag) commonBlogFrag).toFocusUser(currentMember.is_focus, currentMemberId);
+                ((CommonBlogFrag) commonBlogFrag).toFocusUser(currentMember.is_focus, currentMemberId,currentMember.nickname);
             }
         });
 

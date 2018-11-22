@@ -631,7 +631,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         }else if(i==R.id.line_down){
             downFileStart();
         }else if(i==R.id.tv_user_attent){
-            parseAttent.updateAttent(blog.is_focus==1);
+            parseAttent.updateAttent(blog.is_focus == 1, blog.nickname);
         }else if(i==R.id.include_good){
             if (blog.related_goods.size() == 1) {
                 parseAttent.startGoodInfo();
@@ -1230,7 +1230,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         /**点赞取消点赞*/
         void updateParse(boolean isParse);
         /**关注取消关注*/
-        void updateAttent(boolean isAttent);
+        void updateAttent(boolean isAttent,String nickName);
         /**下载视频成功回调*/
         void downVideo();
         /**分享内容成功回调*/

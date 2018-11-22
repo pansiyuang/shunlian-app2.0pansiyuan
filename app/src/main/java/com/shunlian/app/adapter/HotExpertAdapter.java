@@ -78,7 +78,7 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
 
             hotExpertViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
-                    mCallBack.toFocusUser(blog.is_focus, blog.member_id);
+                    mCallBack.toFocusUser(blog.is_focus, blog.member_id,blog.nickname);
                 }
             });
 //            hotExpertViewHolder.tv_zan.setOnClickListener(v -> {
@@ -176,7 +176,7 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
     }
 
     public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
+        void toFocusUser(int isFocus, String memberId,String nickName);
 
         void toPraiseBlog(String blogId);
     }

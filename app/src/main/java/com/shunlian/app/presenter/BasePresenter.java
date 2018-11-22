@@ -551,4 +551,20 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                     }
                 });
     }
+
+    /**
+     * 获取新人专享分享信息
+     */
+    public void getNewUserShareInfo(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<ShareInfoParam>> baseEntityCall = getAddCookieApiService().shareNewUserInfo(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<ShareInfoParam>>(){
+            @Override
+            public void onSuccess(BaseEntity<ShareInfoParam> entity) {
+                super.onSuccess(entity);
+                iView.shareInfo(entity);
+            }
+        });
+    }
 }
