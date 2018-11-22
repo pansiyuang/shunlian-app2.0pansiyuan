@@ -225,6 +225,7 @@ public class New3LoginAct extends BaseActivity {
         public String smsCode;//短信验证码
         public boolean isMobileRegister;//手机号是否注册
         public String showPictureCode;//显示图像验证码
+        public String invite_code;//邀请码
         public LOGIN_MODE login_mode;//登录模式
 
         public enum LOGIN_MODE{
@@ -261,6 +262,7 @@ public class New3LoginAct extends BaseActivity {
             dest.writeString(this.smsCode);
             dest.writeByte(this.isMobileRegister ? (byte) 1 : (byte) 0);
             dest.writeString(this.showPictureCode);
+            dest.writeString(this.invite_code);
             dest.writeInt(this.login_mode == null ? -1 : this.login_mode.ordinal());
         }
 
@@ -272,6 +274,7 @@ public class New3LoginAct extends BaseActivity {
             this.smsCode = in.readString();
             this.isMobileRegister = in.readByte() != 0;
             this.showPictureCode = in.readString();
+            this.invite_code = in.readString();
             int tmpLogin_mode = in.readInt();
             this.login_mode = tmpLogin_mode == -1 ? null : LOGIN_MODE.values()[tmpLogin_mode];
         }

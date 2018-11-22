@@ -138,11 +138,16 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
         mVerifyPicDialog.showState(2);
         mVerifyPicDialog.setMemberDetail(bean.info);
         mVerifyPicDialog.setSureAndCancleListener("确认绑定", v -> {
-            mVerifyPicDialog.dismiss();
+            String code = invite_code.getText().toString();
             if (presenter != null && mConfig != null){
-                String code = invite_code.getText().toString();
-                presenter.register(mConfig.mobile,mConfig.smsCode,code,mConfig.unique_sign);
+                if ("4".equals(mConfig.status)){//绑定导购员
+                    mConfig.invite_code = code;
+                    ((New3LoginAct)baseActivity).loginSms(2,mConfig);
+                }else {
+                    presenter.register(mConfig.mobile, mConfig.smsCode, code, mConfig.unique_sign);
+                }
             }
+            mVerifyPicDialog.dismiss();
         }, "取消", v -> mVerifyPicDialog.dismiss()).show();
     }
 
