@@ -305,6 +305,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             layoutParams.height = i;
             layoutParams.topMargin = dp2px(70);
             layoutParams.leftMargin = i / 5;
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             switch (params[0]){
                 case 1:
                     imageView.setImageResource(R.mipmap.img_plus_youping_xiao);
