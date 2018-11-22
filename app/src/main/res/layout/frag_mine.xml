@@ -930,7 +930,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/white">
+                        android:background="@color/white"
+                        android:visibility="gone">
 
                         <com.shunlian.app.widget.MyImageView
                             android:layout_width="3dp"
@@ -974,6 +975,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="190dp"
                         android:layout_marginTop="0.5dp"
+                        android:visibility="gone"
                         android:background="@color/white">
 
                         <com.shunlian.app.widget.MyLinearLayout
