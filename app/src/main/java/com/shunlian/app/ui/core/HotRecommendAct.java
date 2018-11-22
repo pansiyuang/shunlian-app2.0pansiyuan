@@ -125,6 +125,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         shareInfoParam = baseEntity.data;
         shareInfoParam.special_img_url = baseEntity.data.img;
         shareInfoParam.isSpecial = true;
+        quick_actions.setVisibility(View.GONE);
         shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
     }
 

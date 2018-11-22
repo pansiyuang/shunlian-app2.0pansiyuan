@@ -236,7 +236,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                             }, "取消", (view) -> promptDialog.dismiss()).show();*/
                     return;
                 }
-                mllayout_content.setVisibility(GONE);
+//                mllayout_content.setVisibility(GONE);
                 if(shareItemCallBack!=null){
                     shareItemCallBack.shareItem();
                     return;

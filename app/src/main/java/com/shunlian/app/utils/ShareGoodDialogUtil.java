@@ -68,7 +68,7 @@ public class ShareGoodDialogUtil {
         }
         if(shareInfoParam.isSpecial){
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.GONE);
-//            nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
+            nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
         }else{
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.VISIBLE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.VISIBLE);
@@ -95,20 +95,18 @@ public class ShareGoodDialogUtil {
             @Override
             public void onClick(View v) {
                 setEddType();
-                if(isGood) {
-                    createGoodCode(isFound,true);
-                }else{
-                    createShopCode(true);
+                nomalBuildl.dismiss();
+                if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
+                    createSpecialCode( false);
+                    return;
                 }
                 if(isGood) {
-//                    WXEntryActivity.startAct(context, "shareCircle", shareInfoParam);
+                    createGoodCode(isFound,true);
                     if(isFound&&mCallBack!=null){
                         mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                     }
-                    nomalBuildl.dismiss();
                 }else{
-//                    WXEntryActivity.startAct(context,
-//                            "shareCircle", mShareInfoParam);
+                    createShopCode(true);
                 }
             }
         });
@@ -118,7 +116,7 @@ public class ShareGoodDialogUtil {
                 setEddType();
                 nomalBuildl.dismiss();
                 if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
-                    createSpecialCode();
+                    createSpecialCode(true);
                     return;
                 }
                 if(isGood) {
@@ -153,14 +151,16 @@ public class ShareGoodDialogUtil {
     /**
      * 创建专题图文
      */
-    private void createSpecialCode() {
+    private void createSpecialCode(boolean isShow) {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_special_new, null, false);
             CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle()
                     .setView(inflate);
             showSpecialBuild = nomalBuild.create();
             showSpecialBuild.setCancelable(false);
-            showSpecialBuild.show();
+            if(isShow) {
+                showSpecialBuild.show();
+            }
             MyImageView miv_close = showSpecialBuild.findViewById(R.id.miv_close);
             MyLinearLayout mllayout_save = showSpecialBuild.findViewById(R.id.mllayout_save);
             MyLinearLayout  mllayout_wexin = showSpecialBuild.findViewById(R.id.mllayout_wexin);
@@ -173,13 +173,34 @@ public class ShareGoodDialogUtil {
             miv_code.setImageBitmap(qrImage);
 
             tv_title_name.setText(mShareInfoParam.title);
-           GlideUtils.getInstance().loadImageZheng(context, imv_special_pic, mShareInfoParam.img);
+
 
            if(mShareInfoParam.desc!=null){
                tv_title_desc.setText(mShareInfoParam.desc);
            }
-           showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
-           showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
+           if(isShow) {
+               GlideUtils.getInstance().loadImageZheng(context, imv_special_pic, mShareInfoParam.img);
+               showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
+               showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
+           }else{
+               showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
+               showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+               miv_close.setVisibility(View.GONE);
+               GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
+                       new SimpleTarget<Bitmap>() {
+                           @Override
+                           public void onResourceReady(Bitmap resource,
+                                                       GlideAnimation<? super Bitmap> glideAnimation) {
+                               imv_special_pic.setImageBitmap(resource);
+                               Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                               BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,false);
+                           }
+                           @Override
+                           public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                               super.onLoadFailed(e, errorDrawable);
+                           }
+                       });
+           }
             miv_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
