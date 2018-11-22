@@ -19,6 +19,7 @@ import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SubmitGoodsEntity;
+import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -30,6 +31,8 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyNestedScrollView;
 import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +120,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private ObjectMapper mOM;
     private float mEggReduce;
     public static final String EGGS_TIP = "订单支付金额必须大于1元";//金蛋减免提示
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     /**
      * 新人专享到确认订单
