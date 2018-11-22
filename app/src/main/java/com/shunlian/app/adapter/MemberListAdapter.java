@@ -70,7 +70,7 @@ public class MemberListAdapter extends BaseRecyclerAdapter<MemberEntity.Member> 
 
             memberViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
-                    mCallBack.toFocusUser(member.focus_status, member.member_id);
+                    mCallBack.toFocusUser(member.focus_status, member.member_id,member.nickname);
                 }
             });
         }
@@ -103,6 +103,6 @@ public class MemberListAdapter extends BaseRecyclerAdapter<MemberEntity.Member> 
     }
 
     public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
+        void toFocusUser(int isFocus, String memberId,String nickName);
     }
 }

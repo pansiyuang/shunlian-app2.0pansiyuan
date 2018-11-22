@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new;
 
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -14,12 +15,11 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
@@ -55,8 +55,9 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
     private ObjectMapper objectMapper;
-
+    private PromptDialog promptDialog;
     private ShareGoodDialogUtil shareGoodDialogUtil;
+
     @Override
     public void onDestroyView() {
         EventBus.getDefault().unregister(this);
@@ -140,7 +141,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, hotBlogsEntity.ad_list,shareGoodDialogUtil);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, hotBlogsEntity.ad_list, shareGoodDialogUtil);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }
@@ -204,12 +205,26 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId) {
-        hotBlogPresenter.focusUser(isFocus, memberId);
+    public void toFocusUser(int isFocus, String memberId, String nickName) {
+        if (isFocus == 1) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(getActivity());
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        hotBlogPresenter.focusUser(isFocus, memberId);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
+            hotBlogPresenter.focusUser(isFocus, memberId);
+        }
     }
 
     @Override
-    public void toFocusMember(int isFocus, String memberId) {
+    public void toFocusMember(int isFocus, String memberId, String nickName) {
     }
 
     @Override

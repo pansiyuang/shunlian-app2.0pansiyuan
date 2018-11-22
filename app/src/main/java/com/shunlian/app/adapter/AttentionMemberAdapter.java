@@ -55,7 +55,7 @@ public class AttentionMemberAdapter extends BaseRecyclerAdapter<HotBlogsEntity.R
 
             memberViewHolder.tv_attention.setOnClickListener(v -> {
                 if (onFocusListener != null) {
-                    onFocusListener.onFocus(recomandFocus.focus_status, recomandFocus.member_id);
+                    onFocusListener.onFocus(recomandFocus.focus_status, recomandFocus.member_id,recomandFocus.nickname);
                 }
             });
 
@@ -99,6 +99,6 @@ public class AttentionMemberAdapter extends BaseRecyclerAdapter<HotBlogsEntity.R
 
     public interface OnFocusListener {
 
-        void onFocus(int isFocus, String memberId);
+        void onFocus(int isFocus, String memberId,String nickName);
     }
 }

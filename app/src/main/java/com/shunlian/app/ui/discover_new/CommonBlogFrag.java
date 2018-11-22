@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,13 +12,13 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BigImgEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.ICommonBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -58,6 +59,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     private LinearLayoutManager manager;
     private boolean isMine;
     private ShareGoodDialogUtil shareGoodDialogUtil;
+    private PromptDialog promptDialog;
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -243,14 +245,26 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId) {
-        if (mPresenter != null) {
+    public void toFocusUser(int isFocus, String memberId,String nickName) {
+        if (isFocus == 1) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(getActivity());
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        mPresenter.focusUser(isFocus, memberId);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
             mPresenter.focusUser(isFocus, memberId);
         }
     }
 
     @Override
-    public void toFocusMember(int isFocus, String memberId) {
+    public void toFocusMember(int isFocus, String memberId,String nickName) {
     }
 
     @Override

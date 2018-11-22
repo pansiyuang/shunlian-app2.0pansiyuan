@@ -311,7 +311,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if ("route_login".equals(flag)) {
             Common.goGoGo(this, "login");
         }
-        discoverFrag.setCurrentPage(currentDiscoverFlag);
+        if (discoverFrag != null) {
+            discoverFrag.setCurrentPage(currentDiscoverFlag);
+        }
         handleJump();
     }
 

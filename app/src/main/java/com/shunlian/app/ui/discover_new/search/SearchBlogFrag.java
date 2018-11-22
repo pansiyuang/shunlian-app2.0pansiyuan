@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new.search;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.IHotBlogView;
@@ -49,7 +51,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     private List<BigImgEntity.Blog> blogList;
     private HotBlogAdapter hotBlogAdapter;
     private String currentKeyword;
-
+    private PromptDialog promptDialog;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     @Override
     public void onDestroyView() {
@@ -211,12 +213,26 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId) {
-        mPresenter.focusUser(isFocus, memberId);
+    public void toFocusUser(int isFocus, String memberId,String nickName) {
+        if (isFocus == 1) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(getActivity());
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        mPresenter.focusUser(isFocus, memberId);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
+            mPresenter.focusUser(isFocus, memberId);
+        }
     }
 
     @Override
-    public void toFocusMember(int isFocus, String memberId) {
+    public void toFocusMember(int isFocus, String memberId,String nickName) {
 
     }
 
