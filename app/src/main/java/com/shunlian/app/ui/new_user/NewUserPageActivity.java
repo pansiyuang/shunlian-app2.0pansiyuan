@@ -199,6 +199,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshPayData(UserPaySuccessEvent event) {
         if (event!=null && event.isSuccess&&!event.isFragmet) {
+            CURRENT_NUM=0;
             isEvent = true;
             mPresenter.adlist();
         }
