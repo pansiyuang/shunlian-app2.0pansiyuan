@@ -28,7 +28,7 @@ public class ChatManager {
     private HttpDialog httpDialog;
 
     private ChatManager(Context context) {
-        mContext = context.getApplicationContext();
+        mContext = context;
     }
 
     public static ChatManager getInstance(Context context) {
@@ -67,6 +67,7 @@ public class ChatManager {
         return this;
     }
 
+    //切换身份跳转聊天
     public void resetPushMode() {
         isPush = false;
     }

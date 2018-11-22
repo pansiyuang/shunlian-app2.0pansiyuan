@@ -79,6 +79,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     public void getBubble() {
         Map<String, String> map = new HashMap<>();
         map.put("position", "1");
+        map.put("goods_id", goods_id);
         sortAndMD5(map);
 
         Call<BaseEntity<BubbleEntity>> baseEntityCall = getApiService().getBubble(map);

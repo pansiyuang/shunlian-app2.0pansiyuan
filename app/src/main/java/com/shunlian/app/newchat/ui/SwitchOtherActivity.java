@@ -240,6 +240,11 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
     }
 
     @Override
+    public void withdrawMessage(String msg) {
+
+    }
+
+    @Override
     public void onLine() {
 
     }
