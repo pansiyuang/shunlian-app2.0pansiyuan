@@ -42,8 +42,4 @@ public class CommonLazyPagerAdapter extends FragmentPagerAdapter {
         return titles[position];
     }
 
-//    @Override
-//    public int getItemPosition(@NonNull Object object) {
-//        return POSITION_NONE;
-//    }
 }

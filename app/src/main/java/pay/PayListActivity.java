@@ -209,6 +209,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             OrderDetailAct.startAct(PayListActivity.this, order_id);
         }
         mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT, 100);
+        userPaySuccessEvent(false);
     }
 
     /*

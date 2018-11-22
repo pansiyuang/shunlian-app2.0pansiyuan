@@ -28,6 +28,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
+import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
@@ -398,7 +399,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public void scan() {
 //        H5X5Act.startAct(baseContext,"http://soft.imtt.qq.com/browser/tes/feedback.html",H5X5Act.MODE_SONIC);
 //        H5X5Act.startAct(baseContext,"https://plus.mengtianvip.com/plus",H5X5Act.MODE_SONIC);
-        NewUserPageActivity.startAct(baseActivity);
+        ZXingDemoAct.startAct(baseActivity, false, 0);
     }
 
     @OnClick(R.id.mllayout_search)

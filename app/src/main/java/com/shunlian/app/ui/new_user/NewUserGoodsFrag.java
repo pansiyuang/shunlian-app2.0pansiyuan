@@ -28,9 +28,12 @@ import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.presenter.NewUserGoodsPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.ICollectionGoodsView;
@@ -294,6 +297,15 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
             }
 
         }
+    }
+
+    @Override
+    public void showNoPayDialog(String msg) {
+        CommonDialogUtil promptDialog = new CommonDialogUtil(baseActivity);
+        promptDialog.defaultCommonDialog(msg, "去支付", view -> {
+            promptDialog.dismiss();
+            MyOrderAct.startAct(baseContext, 2);
+        }, "再逛逛", view -> promptDialog.dismiss());
     }
 
     public void updateCartGoods(NewUserGoodsEntity.Goods goodsList) {
