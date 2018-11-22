@@ -740,8 +740,12 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                         .setSureAndCancleListener("确认用余额支付吗？\n￥" + price,
                                 getString(R.string.SelectRecommendAct_sure), (v) -> {
                                     if (!isEmpty(shop_goods)) {
-                                        payListPresenter.orderCheckout(shop_goods,
-                                                addressId, stageVoucherId, anonymous, use_egg, pay_types.code);
+                                        if (isNewExclusive){
+                                            payListPresenter.newexclusivePay(shop_goods, addressId, anonymous,pay_types.code);
+                                        }else {
+                                            payListPresenter.orderCheckout(shop_goods,
+                                                    addressId, stageVoucherId, anonymous, use_egg, pay_types.code);
+                                        }
                                     } else if (!isEmpty(orderId)) {
                                         payListPresenter.fromOrderListGoPay(orderId,
                                                 pay_types.code);

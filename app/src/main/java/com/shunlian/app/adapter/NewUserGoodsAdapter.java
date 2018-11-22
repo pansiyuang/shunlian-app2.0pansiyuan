@@ -45,6 +45,10 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
     }
 
 
+    public void updateTypeUser(String type,boolean isNew){
+        this.type = type;
+        this.isNew = isNew;
+    }
     /**
      * 子类需要实现的holder
      *

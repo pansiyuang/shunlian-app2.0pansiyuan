@@ -68,7 +68,7 @@ public class ShareGoodDialogUtil {
         }
         if(shareInfoParam.isSpecial){
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.GONE);
-            nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
+//            nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
         }else{
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.VISIBLE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.VISIBLE);
