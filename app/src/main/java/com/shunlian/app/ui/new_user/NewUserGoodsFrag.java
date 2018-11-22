@@ -78,7 +78,6 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
     private String type;
 
-    private boolean isNew = false;
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -87,6 +86,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.frag_new_user, null, false);
+
         return view;
     }
 
@@ -102,7 +102,6 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
     @Override
     protected void initData() {
-
     }
 
     @Override
@@ -115,7 +114,6 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
         currentFrom = getArguments().getString("from");
         type = getArguments().getString("type");
-        isNew = getArguments().getBoolean("isNew");
         goodList = new ArrayList<>();
 
         manager = new LinearLayoutManager(getActivity());
@@ -123,7 +121,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         mPresenter = new NewUserGoodsPresenter(baseActivity,  this,type);
 
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new NewUserGoodsAdapter(baseActivity, goodList,type,isNew);
+            hotBlogAdapter = new NewUserGoodsAdapter(baseActivity, goodList,type,NewUserPageActivity.isNew);
             hotBlogAdapter.setAddShoppingCarListener(this);
             hotBlogAdapter.setOnItemClickListener((view, position) -> {
                 if(goodList.get(position).status.equals("0")){
@@ -145,6 +143,10 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
                 }
             }
         }
+    }
+
+    public void updateTypeUser(String type,boolean isNew){
+        this.type = type;
     }
     @Override
     protected void initListener() {
@@ -210,7 +212,9 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
     public void userGoodsList(int currentPage, int totalPage, List<NewUserGoodsEntity.Goods> collectionGoodsLists) {
         if (currentPage == 1) {
             goodList.clear();
-
+            if(hotBlogAdapter!=null){
+                hotBlogAdapter.updateTypeUser(type,NewUserPageActivity.isNew);
+            }
             if (isEmpty(collectionGoodsLists)) {
                 recycler_list.setVisibility(View.GONE);
                 nestedScrollView.setVisibility(View.VISIBLE);
@@ -251,7 +255,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
             return;
         }
         if(type.equals("1")){
-            if(isNew) {
+            if(NewUserPageActivity.isNew) {
                 NewUserGoodsEntity.Goods goods = goodList.get(position);
                 mPresenter.getGoodsSku(goods.id,position);
             }else{
