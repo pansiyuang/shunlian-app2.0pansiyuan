@@ -9,11 +9,13 @@ import com.shunlian.app.presenter.TestWXLoginPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
+import com.shunlian.app.ui.new3_login.INew3LoginView;
 import com.shunlian.app.ui.new3_login.New3LoginAct;
+import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
+import com.shunlian.app.ui.new3_login.New3LoginPresenter;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.SharedPrefUtil;
-import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.MyTextView;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -30,11 +32,11 @@ import butterknife.OnClick;
  * Created by zhanghe on 2018/7/20.
  */
 
-public class LoginEntryAct extends BaseActivity implements IView{
+public class LoginEntryAct extends BaseActivity implements INew3LoginView{
 
     /***************登录条款************/
     public static final String TERMS_OF_SERVICE = "agreement/1";
-    private TestWXLoginPresenter presenter;
+    private TestWXLoginPresenter presenterTest;
 
     @BindView(R.id.mtv_pwd_login)
     MyTextView mtv_pwd_login;
@@ -62,15 +64,17 @@ public class LoginEntryAct extends BaseActivity implements IView{
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         EventBus.getDefault().register(this);
+        New3LoginPresenter presenter = new New3LoginPresenter(this,this);
+        presenter.loginInfoTip();
     }
 
     @OnClick(R.id.llayout_wechat_login)
     public void wechatLogin(){
 //        WXLogin();
-        if (presenter == null) {
-            presenter = new TestWXLoginPresenter(this, this);
+        if (presenterTest == null) {
+            presenterTest = new TestWXLoginPresenter(this, this);
         }else {
-            presenter.initApi();
+            presenterTest.initApi();
         }
     }
 
@@ -107,6 +111,11 @@ public class LoginEntryAct extends BaseActivity implements IView{
      */
     @Override
     public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void setLoginInfoTip(New3LoginInfoTipEntity data) {
 
     }
 

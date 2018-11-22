@@ -16,9 +16,12 @@ import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyButton;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -29,6 +32,8 @@ import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.shunlian.app.ui.new3_login.New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
 
 /**
  * Created by zhanghe on 2018/11/19.
@@ -45,6 +50,15 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
 
     @BindView(R.id.invite_code)
     InviteCodeWidget invite_code;
+
+    @BindView(R.id.mtv_InviteTip)
+    MyTextView mtv_InviteTip;
+
+    @BindView(R.id.miv_coupon)
+    MyImageView miv_coupon;
+
+    @BindView(R.id.mtv_tip)
+    MyTextView mtv_tip;
 
     private VerifyPicDialog mVerifyPicDialog;
     private New3LoginPresenter presenter;
@@ -74,6 +88,9 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
             }else {
                 btnDrawable.setColor(Color.parseColor("#ECECEC"));
             }
+            if (isEmpty(sequence)){
+                mtv_tip.setVisibility(View.INVISIBLE);
+            }
         });
     }
 
@@ -85,11 +102,8 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
         EventBus.getDefault().register(this);
         GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
         btnDrawable.setColor(Color.parseColor("#ECECEC"));
-
-        mtvRule.setText("邀请码规则:\n" +
-                "1：可联系您的好友获取顺联动力邀请码\n" +
-                "2：一个用户只能绑定一个邀请码，绑定后不得修改");
-
+        presenter = new New3LoginPresenter(baseActivity,this);
+        presenter.loginInfoTip();
         //如果有推荐人，直接填写推荐人
         String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
         if (!isEmpty(inviteCode)){
@@ -97,7 +111,6 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
         }
 
         mConfig = getArguments().getParcelable("config");
-        presenter = new New3LoginPresenter(baseActivity,this);
     }
 
     public void initStatus(New3LoginAct.LoginConfig config) {
@@ -130,25 +143,52 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
      * @param bean
      */
     @Override
-    public void codeInfo(MemberCodeListEntity bean) {
-        mVerifyPicDialog = new VerifyPicDialog(baseActivity);
-        mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
-        mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
-        mVerifyPicDialog.setMessage("请确认您的导购专员");
-        mVerifyPicDialog.showState(2);
-        mVerifyPicDialog.setMemberDetail(bean.info);
-        mVerifyPicDialog.setSureAndCancleListener("确认绑定", v -> {
-            String code = invite_code.getText().toString();
-            if (presenter != null && mConfig != null){
-                if ("4".equals(mConfig.status)){//绑定导购员
-                    mConfig.invite_code = code;
-                    ((New3LoginAct)baseActivity).loginSms(2,mConfig);
-                }else {
-                    presenter.register(mConfig.mobile, mConfig.smsCode, code, mConfig.unique_sign);
+    public void codeInfo(MemberCodeListEntity bean,String error) {
+        if (bean != null) {
+            mVerifyPicDialog = new VerifyPicDialog(baseActivity);
+            mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
+            mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
+            mVerifyPicDialog.setMessage("请确认您的导购专员");
+            mVerifyPicDialog.showState(2);
+            mVerifyPicDialog.setMemberDetail(bean.info);
+            mVerifyPicDialog.setSureAndCancleListener("确认绑定", v -> {
+                String code = invite_code.getText().toString();
+                if (presenter != null && mConfig != null) {
+                    if (mConfig.login_mode == BIND_INVITE_CODE) {//绑定导购员
+                        mConfig.invite_code = code;
+                        ((New3LoginAct) baseActivity).loginSms(2, mConfig);
+                    } else {
+                        presenter.register(mConfig.mobile, mConfig.smsCode, code, mConfig.unique_sign);
+                    }
                 }
+                mVerifyPicDialog.dismiss();
+            }, "取消", v -> mVerifyPicDialog.dismiss()).show();
+        }else {
+            mtv_tip.setText(error);
+            mtv_tip.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void setLoginInfoTip(New3LoginInfoTipEntity data) {
+        if (data != null){
+            if (mtv_InviteTip != null)mtv_InviteTip.setText(data.incite_code_title);
+            if (miv_coupon != null){
+                String w = Common.getURLParameterValue(data.voucher, "w");
+                String h = Common.getURLParameterValue(data.voucher, "h");
+                int rh = TransformUtil.dip2px(baseActivity, 105);
+                int ww = Integer.parseInt(w);
+                int hh = Integer.parseInt(h);
+                int rw = (int) (ww * rh * 1.0f / hh + 0.5f);
+                GlideUtils.getInstance().loadOverrideImage(baseActivity,miv_coupon,data.voucher,rw,rh);
             }
-            mVerifyPicDialog.dismiss();
-        }, "取消", v -> mVerifyPicDialog.dismiss()).show();
+            if (mtvRule != null && data.incite_code_rule != null){
+                mtvRule.setText(data.incite_code_rule.content);
+            }
+            if (invite_code != null){
+                invite_code.setStrategyUrl(data.incite_code_url);
+            }
+        }
     }
 
     /**

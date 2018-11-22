@@ -29,16 +29,17 @@ public interface INew3LoginView extends IView {
 
     /**
      * 短信验证码
-     * @param message
+     * @param showPictureCode 1显示图像验证码
+     * @param error 错误信息
      */
-    default void smsCode(String state,String message){}
+    default void smsCode(int showPictureCode,String error){}
 
     /**
      * 检查短信验证码
-     * @param msg
-     * @param vcode_status
+     * @param showPictureCode 1显示图像验证码
+     * @param error 错误信息
      */
-    default void checkSmsCode(String msg,String vcode_status){}
+    default void checkSmsCode(int showPictureCode,String error){}
 
     /**
      * 登录成功
@@ -50,5 +51,11 @@ public interface INew3LoginView extends IView {
      * 邀请码详情
      * @param bean
      */
-    default void codeInfo(MemberCodeListEntity bean){}
+    default void codeInfo(MemberCodeListEntity bean,String error){}
+
+    /**
+     * 登录信息
+     * @param data
+     */
+    default void setLoginInfoTip(New3LoginInfoTipEntity data){}
 }

@@ -74,7 +74,7 @@ public class TestWXLoginPresenter extends BasePresenter {
                 String mobile = wxLoginEntity.mobile;
                 String member_id = wxLoginEntity.member_id;
                 String status = wxLoginEntity.status;
-                status = "4";
+                //status = "4";
                 if ("2".equals(status)) {//绑定手机号不需要推荐人
                     /*RegisterAndBindingAct.startAct(context,
                             RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);*/

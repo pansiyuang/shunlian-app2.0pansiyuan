@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -36,6 +37,8 @@ public class InviteCodeWidget extends RelativeLayout {
     private float mTextSize;
     private int mLineColor;
     private boolean mIsMobile;
+    private MyTextView mStrategyTV;
+    private String mStrategyUrl;
 
     public InviteCodeWidget(Context context) {
         this(context, null);
@@ -99,7 +102,7 @@ public class InviteCodeWidget extends RelativeLayout {
         int radius = TransformUtil.dip2px(context, 12);
         //邀请码攻略
         int minWidth = TransformUtil.dip2px(context, 78);
-        MyTextView mStrategyTV = new MyTextView(context);
+        mStrategyTV = new MyTextView(context);
         mStrategyTV.setText("邀请码攻略");
         mStrategyTV.setTextSize(12);
         mStrategyTV.setId(R.id.new3_invite_code);
@@ -186,6 +189,12 @@ public class InviteCodeWidget extends RelativeLayout {
                 mTipIV.setVisibility(GONE);
             }
         });
+
+        mStrategyTV.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(mStrategyUrl)){
+                H5X5Act.startAct(getContext(), mStrategyUrl, H5X5Act.MODE_SONIC);
+            }
+        });
     }
 
     /**
@@ -200,6 +209,14 @@ public class InviteCodeWidget extends RelativeLayout {
             return text;
         }
         return "";
+    }
+
+    /**
+     * 设置攻略地址
+     * @param url
+     */
+    public void setStrategyUrl(String url){
+        this.mStrategyUrl = url;
     }
 
     /**

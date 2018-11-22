@@ -8,17 +8,19 @@
 
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_InviteTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
         android:layout_marginTop="20dp"
-        android:text="继续填写好友邀请码，即可得无门槛红包哦！"
         android:textColor="@color/value_484848"
         android:textSize="15sp" />
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_coupon"
-        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
         android:layout_height="105dp" />
 
 
@@ -42,7 +44,6 @@
         android:layout_marginTop="14dp"
         android:drawableLeft="@mipmap/image_exclamation"
         android:drawablePadding="4dp"
-        android:text="请输入正确手机号"
         android:textColor="#FB0A3D"
         android:textSize="12sp"
         android:visibility="invisible" />

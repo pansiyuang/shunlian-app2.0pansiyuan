@@ -23,7 +23,7 @@ import butterknife.BindView;
  * Created by zhanghe on 2018/11/16.
  * 第三版登录 包括（账号密码登录   短信验证登录）
  */
-public class New3LoginAct extends BaseActivity {
+public class New3LoginAct extends BaseActivity{
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -155,7 +155,11 @@ public class New3LoginAct extends BaseActivity {
      * 邀请码
      */
     public void loginInviteCode(LoginConfig config){
-        mCurrentPage = 3;
+        if (config.login_mode == LoginConfig.LOGIN_MODE.BIND_INVITE_CODE){
+            mCurrentPage = 1;
+        }else {
+            mCurrentPage = 3;
+        }
         mInviteCodeFrag = (InviteCodeFrag) fragments.get(INVITE_CODE);
         if (mInviteCodeFrag == null){
             mInviteCodeFrag = new InviteCodeFrag();
@@ -224,7 +228,7 @@ public class New3LoginAct extends BaseActivity {
         public String mobile;//手机号
         public String smsCode;//短信验证码
         public boolean isMobileRegister;//手机号是否注册
-        public String showPictureCode;//显示图像验证码
+        public boolean showPictureCode;//是否显示图像验证码
         public String invite_code;//邀请码
         public LOGIN_MODE login_mode;//登录模式
 
@@ -261,7 +265,7 @@ public class New3LoginAct extends BaseActivity {
             dest.writeString(this.mobile);
             dest.writeString(this.smsCode);
             dest.writeByte(this.isMobileRegister ? (byte) 1 : (byte) 0);
-            dest.writeString(this.showPictureCode);
+            dest.writeByte(this.showPictureCode ? (byte) 1 : (byte) 0);
             dest.writeString(this.invite_code);
             dest.writeInt(this.login_mode == null ? -1 : this.login_mode.ordinal());
         }
@@ -273,7 +277,7 @@ public class New3LoginAct extends BaseActivity {
             this.mobile = in.readString();
             this.smsCode = in.readString();
             this.isMobileRegister = in.readByte() != 0;
-            this.showPictureCode = in.readString();
+            this.showPictureCode = in.readByte() != 0;
             this.invite_code = in.readString();
             int tmpLogin_mode = in.readInt();
             this.login_mode = tmpLogin_mode == -1 ? null : LOGIN_MODE.values()[tmpLogin_mode];

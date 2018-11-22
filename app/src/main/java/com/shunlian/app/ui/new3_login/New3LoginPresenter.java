@@ -55,6 +55,23 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
     }
 
     /**
+     * 登录界面提示信息
+     */
+    public void loginInfoTip(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<New3LoginInfoTipEntity>> baseEntityCall = getApiService().loginInfoTip(map);
+        getNetData(true,baseEntityCall,new
+                SimpleNetDataCallback<BaseEntity<New3LoginInfoTipEntity>>(){
+                    @Override
+                    public void onSuccess(BaseEntity<New3LoginInfoTipEntity> entity) {
+                        super.onSuccess(entity);
+                        iView.setLoginInfoTip(entity.data);
+                    }
+                });
+    }
+
+    /**
      * 绑定导购员
      * @param member_id
      * @param code
@@ -128,7 +145,13 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
             @Override
             public void onSuccess(BaseEntity<MemberCodeListEntity> entity) {
                 super.onSuccess(entity);
-                iView.codeInfo(entity.data);
+                iView.codeInfo(entity.data,null);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.codeInfo(null,message);
             }
         });
     }
@@ -151,13 +174,17 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
             @Override
             public void onSuccess(BaseEntity<String> entity) {
                 super.onSuccess(entity);
-                iView.checkSmsCode(null,entity.data);
+                iView.checkSmsCode(0,null);
             }
 
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                iView.checkSmsCode(message,null);
+                int state = 2;
+                if (code == 1003){//1003代表要弹出图形验证码
+                    state = 1;
+                }
+                iView.checkSmsCode(state,message);
             }
         });
     }
@@ -251,13 +278,15 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
             @Override
             public void onSuccess(BaseEntity<String> entity) {
                 super.onSuccess(entity);
-                iView.smsCode(entity.data,null);
+                iView.smsCode(0,null);
             }
 
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                iView.smsCode(null,message);
+                int isShow = 2;
+                if (code == 1003)isShow = 1;
+                iView.smsCode(isShow,message);
             }
         });
     }

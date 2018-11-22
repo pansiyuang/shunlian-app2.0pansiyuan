@@ -32,6 +32,7 @@ import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.newchat.entity.SystemMessageEntity;
 import com.shunlian.app.ui.new3_login.New3LoginEntity;
+import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -2665,4 +2666,12 @@ public interface ApiService {
      */
     @GET("tasknewperson/getGoldByWatchVideo")
     Call<BaseEntity<TaskHomeEntity>> getGoldByWatchVideo(@QueryMap Map<String,String> map);
+
+    /**
+     * 登录界面提示信息
+     * @param map
+     * @return
+     */
+    @GET("member/login/info")
+    Call<BaseEntity<New3LoginInfoTipEntity>> loginInfoTip(@QueryMap Map<String,String> map);
 }

@@ -7,13 +7,13 @@
     android:orientation="vertical">
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_smsLoginTip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="22dp"
         android:drawableLeft="@mipmap/image_redenvelope"
         android:drawablePadding="6dp"
-        android:text="新用户注册即可领取新人手气红包最高88元"
         android:textColor="@color/text_gray2"
         android:textSize="12sp" />
 

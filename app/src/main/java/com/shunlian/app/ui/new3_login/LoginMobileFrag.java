@@ -32,6 +32,10 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
 
     @BindView(R.id.mtv_tip)
     MyTextView mtv_tip;
+
+    @BindView(R.id.mtv_mobileLoginTip)
+    MyTextView mtv_mobileLoginTip;
+
     private New3LoginPresenter presenter;
     private New3LoginAct.LoginConfig mConfig;
 
@@ -81,8 +85,9 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
     protected void initData() {
         GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
         btnDrawable.setColor(Color.parseColor("#ECECEC"));
-        mConfig = getArguments().getParcelable("config");
         presenter = new New3LoginPresenter(baseActivity,this);
+        presenter.loginInfoTip();
+        mConfig = getArguments().getParcelable("config");
     }
 
     public void initStatus(New3LoginAct.LoginConfig config) {
@@ -138,16 +143,32 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     public void showDataEmptyView(int request_code) {}
-
+    /**
+     * 短信验证码
+     * @param showPictureCode 1显示图像验证码 0 1都要跳界面
+     * @param error 错误信息
+     */
     @Override
-    public void smsCode(String state,String message) {
-        if (!isEmpty(state)){
+    public void smsCode(int showPictureCode,String error) {
+        if (showPictureCode != 2){
             String mobile = this.mobile.getText().toString();
             if (mConfig != null) {
                 mConfig.mobile = mobile;
-                mConfig.showPictureCode = state;
+                mConfig.showPictureCode = showPictureCode == 1;
             }
             ((New3LoginAct)baseActivity).loginSms(2,mConfig);
+        }
+    }
+
+    @Override
+    public void setLoginInfoTip(New3LoginInfoTipEntity data) {
+        if (data != null && mtv_mobileLoginTip != null){
+            if (!isEmpty(data.login_title)) {
+                mtv_mobileLoginTip.setText(data.login_title);
+                visible(mtv_mobileLoginTip);
+            }else {
+                gone(mtv_mobileLoginTip);
+            }
         }
     }
 
