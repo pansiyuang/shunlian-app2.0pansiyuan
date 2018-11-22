@@ -28,7 +28,6 @@
                     android:id="@+id/imv_special_pic"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/img_special"
                     android:scaleType="fitXY"/>
                 <LinearLayout
                     android:layout_width="@dimen/xx460"
@@ -47,7 +46,6 @@
                         android:id="@+id/mtv_prompt"
                         android:layout_width="@dimen/xx360"
                         android:layout_height="wrap_content"
-                        android:text="长按识别图中二维码，查看更多信息"
                         android:layout_marginTop="@dimen/xx16"
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -59,7 +57,6 @@
                     android:id="@+id/tv_title_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="超值好货就在顺联APP,还有更多精彩..."
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_alignParentBottom="true"
@@ -71,7 +68,6 @@
                     android:id="@+id/tv_title_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textStyle="bold"

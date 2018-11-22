@@ -399,7 +399,6 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 //        H5X5Act.startAct(baseContext,"http://soft.imtt.qq.com/browser/tes/feedback.html",H5X5Act.MODE_SONIC);
 //        H5X5Act.startAct(baseContext,"https://plus.mengtianvip.com/plus",H5X5Act.MODE_SONIC);
         NewUserPageActivity.startAct(baseActivity);
-
     }
 
     @OnClick(R.id.mllayout_search)
