@@ -28,6 +28,8 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.ArticleEvent;
+import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.presenter.BasePresenter;
 import com.shunlian.app.presenter.MyPagePresenter;
 import com.shunlian.app.presenter.NewUserGoodsPresenter;
@@ -61,6 +63,10 @@ import com.shunlian.app.widget.banner.Kanner;
 import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.mylibrary.ImmersionBar;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -76,6 +82,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     private  List<AdUserEntity.AD> adList;
     private List<NewUserGoodsEntity.Goods> goodsList;
     private ShareGoodDialogUtil shareGoodDialogUtil;
+    private boolean isEvent =false;
+    private  CommonLazyPagerAdapter commonLazyPagerAdapter;
     /**
      * 最大0元够数量
      */
@@ -188,6 +196,14 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshPayData(UserPaySuccessEvent event) {
+        if (event!=null && event.isSuccess&&!event.isFragmet) {
+            isEvent = true;
+            mPresenter.adlist();
+        }
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -297,6 +313,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        EventBus.getDefault().register(this);
         shareInfoParam = new ShareInfoParam();
         shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         ImmersionBar.with(NewUserPageActivity.this).fitsSystemWindows(true)
@@ -307,7 +324,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         userBuyGoodsDialog = new UserBuyGoodsDialog(this);
         userBuyGoodsDialog.setCartDelGoodListen(this);
         mPresenter = new NewUserPagePresenter(this, this);
-
+        goodsFrags = new ArrayList<>();
+         commonLazyPagerAdapter = new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld);
+        viewpager.setAdapter(commonLazyPagerAdapter);
         setTabMode(isDefault);
         mPresenter.adlist();
     }
@@ -361,8 +380,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     public void initFrags(boolean isNew) {
         this.isNew  =  isNew;
-        goodsFrags = new ArrayList<>();
-        if(isNew) {
+        goodsFrags.clear();
+        if(this.isNew) {
             tv_head.setText("新人专享");
             tv_right.setText("精选商品");
             tv_right.setTextColor(getColorResouce(R.color.text_gray2));
@@ -385,8 +404,10 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             userGoodFragEnd = NewUserGoodsFrag.getInstance(titlesOld[0], "1",isNew);
             goodsFrags.add(userGoodFragEnd);
         }
-        viewpager.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld));
-        viewpager.setOffscreenPageLimit(goodsFrags.size());
+        commonLazyPagerAdapter.notifyDataSetChanged();
+        if(isEvent){
+            EventBus.getDefault().post(new UserPaySuccessEvent(true,true));
+        }
     }
 
 
@@ -544,5 +565,11 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         shareInfoParam.img =baseEntity.data.imgdefalt;
         shareInfoParam.special_img_url =baseEntity.data.imgdefalt;
         shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

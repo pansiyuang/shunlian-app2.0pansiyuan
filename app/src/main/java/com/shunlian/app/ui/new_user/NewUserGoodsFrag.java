@@ -22,6 +22,7 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
+import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.presenter.CollectionGoodsPresenter;
 import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.presenter.NewUserGoodsPresenter;
@@ -135,7 +136,16 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         }
 
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshPayData(UserPaySuccessEvent event) {
+        if (event!=null && event.isSuccess&&event.isFragmet) {
+            if (mPresenter != null) {
+                if (mPresenter != null) {
+                    mPresenter.refreshData();
+                }
+            }
+        }
+    }
     @Override
     protected void initListener() {
         lay_refresh.setOnRefreshListener(() -> {

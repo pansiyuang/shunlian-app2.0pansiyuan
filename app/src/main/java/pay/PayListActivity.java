@@ -29,6 +29,7 @@ import com.shunlian.app.adapter.PayListAdapter;
 import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
+import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.presenter.PayListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
@@ -226,6 +227,14 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             PaySuccessAct.startAct(this, order_id, price, pay_sn, false);
         }
         mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT, 100);
+        userPaySuccessEvent(true);
+    }
+
+    /**
+     * 新用户页面刷新
+     */
+    private void userPaySuccessEvent(boolean isPaySuccess){
+        EventBus.getDefault().post(new UserPaySuccessEvent(isPaySuccess));
     }
 
     /**
