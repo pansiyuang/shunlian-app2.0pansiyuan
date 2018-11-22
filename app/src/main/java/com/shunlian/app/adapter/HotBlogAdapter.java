@@ -388,7 +388,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
             blogViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
-                    mCallBack.toFocusUser(blog.is_focus, blog.member_id);
+                    mCallBack.toFocusUser(blog.is_focus, blog.member_id,blog.nickname);
                 }
             });
 
@@ -503,9 +503,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             blogViewHolder.recylcer_attention.setLayoutManager(manager);
             blogViewHolder.recylcer_attention.setAdapter(attentionMemberAdapter);
             blogViewHolder.rl_attention.setVisibility(View.VISIBLE);
-            attentionMemberAdapter.setOnFocusListener((isFocus, memberId) -> {
+            attentionMemberAdapter.setOnFocusListener((isFocus, memberId,nickName) -> {
                 if (mCallBack != null) {
-                    mCallBack.toFocusMember(isFocus, memberId);
+                    mCallBack.toFocusMember(isFocus, memberId,nickName);
                 }
             });
             attentionMemberAdapter.setOnItemClickListener((view, position) -> MyPageActivity.startAct(context, list.get(position).member_id));
@@ -647,9 +647,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     }
 
     public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
+        void toFocusUser(int isFocus, String memberId,String nickName);
 
-        void toFocusMember(int isFocus, String memberId);
+        void toFocusMember(int isFocus, String memberId,String nickName);
 
         void toPraiseBlog(String blogId);
 

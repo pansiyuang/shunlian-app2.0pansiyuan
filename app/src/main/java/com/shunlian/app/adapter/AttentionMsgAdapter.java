@@ -90,6 +90,6 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
     }
 
     public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
+        void toFocusUser(int isFocus, String memberId,String nickName);
     }
 }
