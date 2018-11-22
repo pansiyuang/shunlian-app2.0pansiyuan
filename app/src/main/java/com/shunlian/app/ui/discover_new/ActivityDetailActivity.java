@@ -2,6 +2,7 @@ package com.shunlian.app.ui.discover_new;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -22,6 +23,7 @@ import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
@@ -71,6 +73,8 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private ObjectMapper objectMapper;
     private HotBlogsEntity.Detail currentDetail;
     private ShareGoodDialogUtil shareGoodDialogUtil;
+    private PromptDialog promptDialog;
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_activity_detail;
@@ -250,8 +254,22 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId) {
-        mPresent.focusUser(isFocus, memberId);
+    public void toFocusUser(int isFocus, String memberId, String nickName) {
+        if (isFocus == 1) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(this);
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        mPresent.focusUser(isFocus, memberId);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
+            mPresent.focusUser(isFocus, memberId);
+        }
     }
 
     @Override

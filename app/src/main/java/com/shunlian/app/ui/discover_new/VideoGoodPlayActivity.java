@@ -3,6 +3,7 @@ package com.shunlian.app.ui.discover_new;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -30,6 +31,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -67,6 +69,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     private HotVideoBlogPresenter hotBlogPresenter;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private ShareInfoParam mShareInfoParam;
+    private PromptDialog promptDialog;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_goods_video_play;
@@ -196,9 +199,23 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
     }
 
     @Override
-    public void updateAttent(boolean isAttent) {
+    public void updateAttent(boolean isAttent,String nickName) {
         //取消关注和关注
-        hotBlogPresenter.focusUser(isAttent?1:0,blog.member_id);
+        if (isAttent) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(this);
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        hotBlogPresenter.focusUser(1,blog.member_id);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
+            hotBlogPresenter.focusUser(0, blog.member_id);
+        }
     }
 
     @Override

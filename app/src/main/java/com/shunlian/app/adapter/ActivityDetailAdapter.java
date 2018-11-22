@@ -278,7 +278,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
             blogViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
-                    mCallBack.toFocusUser(blog.is_focus, blog.member_id);
+                    mCallBack.toFocusUser(blog.is_focus, blog.member_id,blog.nickname);
                 }
             });
 
@@ -556,7 +556,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
     }
 
     public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
+        void toFocusUser(int isFocus, String memberId,String nickName);
 
         void toPraiseBlog(String blogId);
 

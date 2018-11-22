@@ -23,8 +23,11 @@ public class ShareInfoParam implements Serializable {
     public String desc;
     @JsonProperty("pic")
     public String img;
+    @JsonProperty("img")
+    public String imgdefalt;
     public String photo;
     public String type;
+    public String link;
     public Bitmap bitmap;
     public boolean isCopyTitle = true;
     //店铺分享

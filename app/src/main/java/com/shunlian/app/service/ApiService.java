@@ -2891,4 +2891,12 @@ public interface ApiService {
      */
     @POST("/newexclusive/buy")
     Call<BaseEntity<ConfirmOrderEntity>> orderNewUserConfirm(@Body RequestBody body);
+
+    /**
+     * 分享信息
+     * @param map
+     * @return
+     */
+    @GET("/newexclusive/sharepage")
+    Call<BaseEntity<ShareInfoParam>> shareNewUserInfo(@QueryMap Map<String, String> map);
 }

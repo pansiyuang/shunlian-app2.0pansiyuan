@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CollectionGoodsAdapter;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.adapter.NewUserGoodsAdapter;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
@@ -21,6 +22,7 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
+import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.presenter.CollectionGoodsPresenter;
 import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.presenter.NewUserGoodsPresenter;
@@ -134,7 +136,16 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         }
 
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshPayData(UserPaySuccessEvent event) {
+        if (event!=null && event.isSuccess&&event.isFragmet) {
+            if (mPresenter != null) {
+                if (mPresenter != null) {
+                    mPresenter.refreshData();
+                }
+            }
+        }
+    }
     @Override
     protected void initListener() {
         lay_refresh.setOnRefreshListener(() -> {
@@ -245,7 +256,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
                 mPresenter.getGoodsSku(goods.id,position);
             }else{
                 updateShareParm(position);
-                shareGoodDialogUtil.shareGoodDialog(shareInfoParam,true,false);
+                mPresenter.getShareInfo(mPresenter.new_exclusive,goodList.get(position).id);
             }
             return;
         }
@@ -290,5 +301,18 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
                    }
                }
            }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        shareInfoParam.title = baseEntity.data.title;
+        shareInfoParam.price = baseEntity.data.price;
+        shareInfoParam.market_price = baseEntity.data.market_price;
+        shareInfoParam.shareLink = baseEntity.data.shareLink;
+        shareInfoParam.img = baseEntity.data.img;
+        shareInfoParam.desc = baseEntity.data.desc;
+        shareInfoParam.start_time = "0元3件";
+        shareInfoParam.act_label = "新人专享";
+        shareGoodDialogUtil.shareGoodDialog(shareInfoParam,true,false);
     }
 }
