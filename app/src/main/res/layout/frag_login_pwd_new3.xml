@@ -85,4 +85,20 @@
 
     </LinearLayout>
 
+
+    <!--快捷登录-->
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_def_login"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_gravity="bottom"
+        android:background="#66fb0036"
+        android:gravity="center"
+        android:text="快捷登录"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:visibility="visible" />
 </LinearLayout>

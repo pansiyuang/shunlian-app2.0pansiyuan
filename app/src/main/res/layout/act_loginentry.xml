@@ -22,14 +22,14 @@
         android:src="@mipmap/logo_s" />
 
     <!--这是视频-->
-    <View
-        android:id="@+id/video"
+    <com.shunlian.app.widget.SmallVideoPlayer
+        android:id="@+id/customVideoPlayer"
         android:layout_width="match_parent"
-        android:background="@color/new_text"
         android:layout_below="@+id/miv_sldl"
         android:layout_marginTop="26dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:visibility="invisible"
         android:layout_height="160dp"/>
 
 

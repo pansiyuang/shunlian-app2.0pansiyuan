@@ -15,8 +15,11 @@ import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 import com.shunlian.app.ui.new3_login.New3LoginPresenter;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.widget.CustomVideoPlayer;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.SmallVideoPlayer;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -41,6 +44,11 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
     @BindView(R.id.mtv_pwd_login)
     MyTextView mtv_pwd_login;
 
+    @BindView(R.id.customVideoPlayer)
+    SmallVideoPlayer customVideoPlayer;
+    //是否要释放
+    private boolean isRelease;
+
     public static void startAct(Context context){
         Intent intent = new Intent(context, LoginEntryAct.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -56,6 +64,14 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
         return R.layout.act_loginentry;
     }
 
+    @Override
+    protected void initListener() {
+        super.initListener();
+        if (customVideoPlayer != null){
+            customVideoPlayer.setOnClickListener(v -> customVideoPlayer.startVideo());
+        }
+    }
+
     /**
      * 初始化数据
      */
@@ -66,6 +82,12 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
         EventBus.getDefault().register(this);
         New3LoginPresenter presenter = new New3LoginPresenter(this,this);
         presenter.loginInfoTip();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SmallVideoPlayer.goOnPlayOnPause();
     }
 
     @OnClick(R.id.llayout_wechat_login)
@@ -116,7 +138,27 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
 
     @Override
     public void setLoginInfoTip(New3LoginInfoTipEntity data) {
-
+        if (data != null){
+            New3LoginInfoTipEntity.AdBean ad = data.ad;
+            if (ad != null){
+                visible(customVideoPlayer);
+                customVideoPlayer.onlyLook();
+                /*int rw = DeviceInfoUtil.getDeviceWidth(this) - TransformUtil.dip2px(this, 40);
+                int rh = TransformUtil.dip2px(this, 160);
+                int[] ints = TransformUtil.countRealWH(this, rw, rh);
+                ViewGroup.LayoutParams layoutParams = customVideoPlayer.getLayoutParams();
+                layoutParams.width = ints[0];
+                layoutParams.height = ints[1];
+                customVideoPlayer.setLayoutParams(layoutParams);*/
+                String image = ad.image;
+                New3LoginInfoTipEntity.LinkBean link = ad.link;
+                if (!isEmpty(image)) {
+                    GlideUtils.getInstance().loadImage(this, customVideoPlayer.thumbImageView, image);
+                }
+                customVideoPlayer.setUp(link.item_id, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
+                isRelease = true;
+            }
+        }
     }
 
     /**
@@ -131,6 +173,11 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
 
     @Override
     protected void onDestroy() {
+        if (customVideoPlayer != null && isRelease){
+            customVideoPlayer.onAutoCompletion();
+            customVideoPlayer.release();
+            customVideoPlayer = null;
+        }
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }

@@ -77,22 +77,14 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         super.initListener();
         input_code.setOnCompleteListener(content -> {
             mSmsCode = content;
-            if (presenter != null) {
-                if (mConfig != null && mConfig.isMobileRegister) {
-                    presenter.loginMobile(mConfig.mobile, content);
-                } else {
-                    presenter.checkSmsCode(mConfig.mobile, content);
-                }
+            if (presenter != null && mConfig != null) {
+                presenter.checkSmsCode(mConfig.mobile, content);
             }
         });
 
         mtv_reset.setOnClickListener(v -> {
-            if (presenter != null && mConfig != null && "3".equals(mConfig.showPictureCode)) {
-                presenter.getPictureCode();
-            } else {
-                if (presenter != null && mConfig != null) {
-                    presenter.sendSmsCode(mConfig.mobile, "");
-                }
+            if (presenter != null && mConfig != null) {
+                presenter.sendSmsCode(mConfig.mobile, "");
             }
         });
     }
@@ -120,11 +112,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
     private void dispatchApi() {
         if (mConfig != null) {
             mtv_mobile.setText(mConfig.mobile);
-            if (mConfig.showPictureCode) {
-                presenter.getPictureCode();
-            } else {
-                countDown();
-            }
+            countDown();
             if (mConfig.login_mode == BIND_INVITE_CODE && presenter != null) {//绑定邀请码
                 presenter.sendSmsCode(mConfig.mobile, "");
             }
@@ -181,7 +169,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
             String verifyText = mVerifyPicDialog.getVerifyText();
             if (presenter != null && mConfig != null) {
-                presenter.sendSmsCode(mConfig.mobile, verifyText);
+                presenter.checkPictureCode(mConfig.mobile,verifyText);
             }
         }, "取消", v -> mVerifyPicDialog.dismiss()).show();
     }
@@ -194,6 +182,29 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
                 visible(mtv_smsLoginTip);
             }else {
                 gone(mtv_smsLoginTip);
+            }
+        }
+    }
+
+    /**
+     * 检验图形验证码
+     * @param error
+     */
+    @Override
+    public void checkPictureCode(String error) {
+        if (isEmpty(error)){
+            if (mVerifyPicDialog != null){
+                mVerifyPicDialog.dismiss();
+            }
+            if (presenter != null && mConfig != null){
+                presenter.checkSmsCode(mConfig.mobile,mSmsCode);
+            }
+        }else {
+            if (mVerifyPicDialog != null){
+                mVerifyPicDialog.setPicTip(error);
+                if (presenter != null){
+                    presenter.getPictureCode();
+                }
             }
         }
     }
@@ -220,12 +231,9 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
 
     @Override
     public void smsCode(int showPictureCode,String error) {
-        if (showPictureCode == 0 && mVerifyPicDialog != null) {
-            mVerifyPicDialog.dismiss();
+        if (showPictureCode == 0) {
             input_code.clearAll();
             countDown();
-        } else if (showPictureCode == 1 && !isEmpty(error) && mVerifyPicDialog != null) {
-            mVerifyPicDialog.setPicTip(error);
         }
     }
     /**
@@ -236,12 +244,16 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
     @Override
     public void checkSmsCode(int showPictureCode,String error) {
         if (showPictureCode == 1 && presenter != null) {
-            if (mConfig != null) mConfig.showPictureCode = showPictureCode == 1;
             presenter.getPictureCode();
         } else if (showPictureCode == 0 && mConfig != null) {
-            if ("0".equals(mConfig.status) || "3".equals(mConfig.status) || !mConfig.isMobileRegister) {//绑定手机号和导购员
+            if (isEmpty(mConfig.status) && mConfig.isMobileRegister) {
+                presenter.loginMobile(mConfig.mobile, mSmsCode);//登录
+
+            }else if ("0".equals(mConfig.status) || "3".equals(mConfig.status)
+                    || !mConfig.isMobileRegister) {//绑定手机号和导购员
                 mConfig.smsCode = mSmsCode;
                 ((New3LoginAct) baseActivity).loginInviteCode(mConfig);
+
             } else if ("2".equals(mConfig.status)) {
                 if (presenter != null) {//绑定手机号
                     presenter.register(mConfig.mobile, mSmsCode, "", mConfig.unique_sign);

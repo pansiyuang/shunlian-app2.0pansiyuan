@@ -227,7 +227,7 @@ public interface ApiService {
      * @return
      */
     @POST("member/Common/checkCode")
-    Call<ResponseBody> checkCode(@Body RequestBody requestBody);
+    Call<BaseEntity<EmptyEntity>> checkCode(@Body RequestBody requestBody);
 
     /**
      * 刷新token

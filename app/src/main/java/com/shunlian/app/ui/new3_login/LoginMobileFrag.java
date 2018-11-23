@@ -96,6 +96,7 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
 
     @OnClick(R.id.mbtn_login)
     public void next(){
+        mbtnLogin.setEnabled(false);
         String mobile = this.mobile.getText().toString();
         if (isEmpty(mobile) || mobile.length() != 11) return;
         if (mConfig != null && !isEmpty(mConfig.status) && mConfig.isMobileRegister){
@@ -150,11 +151,11 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     public void smsCode(int showPictureCode,String error) {
-        if (showPictureCode != 2){
+        mbtnLogin.setEnabled(true);
+        if (showPictureCode == 0){
             String mobile = this.mobile.getText().toString();
             if (mConfig != null) {
                 mConfig.mobile = mobile;
-                mConfig.showPictureCode = showPictureCode == 1;
             }
             ((New3LoginAct)baseActivity).loginSms(2,mConfig);
         }

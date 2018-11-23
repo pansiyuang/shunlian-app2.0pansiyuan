@@ -66,6 +66,8 @@ public class New3LoginAct extends BaseActivity{
         miv_close.setOnClickListener(v -> {
            if (mCurrentPage == 1){
                 finish();
+           }else if (mConfig != null && mConfig.login_mode == LoginConfig.LOGIN_MODE.BIND_INVITE_CODE){
+               loginInviteCode(mConfig);
            }else {
                loginSms(1, mConfig);
            }
@@ -211,6 +213,9 @@ public class New3LoginAct extends BaseActivity{
     public void onBackPressed() {
         if (mCurrentPage == 1){
             super.onBackPressed();
+        }else if (mConfig != null && mConfig.login_mode
+                == LoginConfig.LOGIN_MODE.BIND_INVITE_CODE){
+            loginInviteCode(mConfig);
         }else {
             loginSms(1, mConfig);
         }
@@ -228,7 +233,6 @@ public class New3LoginAct extends BaseActivity{
         public String mobile;//手机号
         public String smsCode;//短信验证码
         public boolean isMobileRegister;//手机号是否注册
-        public boolean showPictureCode;//是否显示图像验证码
         public String invite_code;//邀请码
         public LOGIN_MODE login_mode;//登录模式
 
@@ -265,7 +269,6 @@ public class New3LoginAct extends BaseActivity{
             dest.writeString(this.mobile);
             dest.writeString(this.smsCode);
             dest.writeByte(this.isMobileRegister ? (byte) 1 : (byte) 0);
-            dest.writeByte(this.showPictureCode ? (byte) 1 : (byte) 0);
             dest.writeString(this.invite_code);
             dest.writeInt(this.login_mode == null ? -1 : this.login_mode.ordinal());
         }
@@ -277,7 +280,6 @@ public class New3LoginAct extends BaseActivity{
             this.mobile = in.readString();
             this.smsCode = in.readString();
             this.isMobileRegister = in.readByte() != 0;
-            this.showPictureCode = in.readByte() != 0;
             this.invite_code = in.readString();
             int tmpLogin_mode = in.readInt();
             this.login_mode = tmpLogin_mode == -1 ? null : LOGIN_MODE.values()[tmpLogin_mode];

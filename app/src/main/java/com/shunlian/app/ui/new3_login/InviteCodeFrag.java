@@ -119,6 +119,8 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
         String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
         if (!isEmpty(inviteCode)){
             invite_code.setInviteCodeText(inviteCode);
+        }else if (mConfig != null && !isEmpty(mConfig.invite_code)){
+
         }else {
             invite_code.setInviteCodeText("");
         }

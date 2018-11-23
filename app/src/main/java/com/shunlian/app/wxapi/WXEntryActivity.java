@@ -351,6 +351,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
                 config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
                 config.status = status;
+                config.unique_sign = unique_sign;
+                config.member_id = member_id;
                 New3LoginAct.startAct(this,config);
                 mYFinish();
             } else if ("1".equals(status)) {//登录成功
@@ -361,6 +363,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
                 config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
                 config.status = status;
+                config.unique_sign = unique_sign;
+                config.member_id = member_id;
                 New3LoginAct.startAct(this,config);
                 mYFinish();
             }else if ("4".equals(status)){//绑定推荐人
@@ -368,6 +372,9 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                         RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);*/
                 New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
                 config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
+                config.unique_sign = unique_sign;
+                config.member_id = member_id;
+                config.mobile = mobile;
                 New3LoginAct.startAct(this,config);
                 mYFinish();
             }

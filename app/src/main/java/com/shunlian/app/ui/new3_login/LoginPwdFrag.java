@@ -1,11 +1,14 @@
 package com.shunlian.app.ui.new3_login;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -21,6 +24,8 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MyButton;
+import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.SelectAccountDialog;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,8 +52,12 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
     @BindView(R.id.mbtn_login)
     MyButton mbtnLogin;
 
+    @BindView(R.id.mtv_def_login)
+    MyTextView mtv_def_login;
+
     private New3LoginPresenter presenter;
     private DispachJump mJump;
+    private VerifyPicDialog mVerifyPicDialog;
 
     /**
      * 设置布局id
@@ -67,33 +76,31 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
     @Override
     protected void initListener() {
         super.initListener();
-        account.setOnTextChangeListener(sequence -> {
-            changeState();
-        });
+        account.setOnTextChangeListener(sequence -> changeState());
 
-        password.setOnTextChangeListener(sequence -> {
-            changeState();
-        });
+        password.setOnTextChangeListener(sequence -> changeState());
 
-        mbtnLogin.setOnClickListener(v -> {
-            if (account != null && password != null){
-                String accountText = account.getText().toString();
-                String passwordText = password.getText().toString();
-                if (isEmpty(accountText)){
-                    Common.staticToast("账号不能为空");
-                    return;
-                }
+        mbtnLogin.setOnClickListener(v -> login());
+    }
 
-                if (isEmpty(passwordText)){
-                    Common.staticToast("密码不能为空");
-                    return;
-                }
-
-                if (presenter != null){
-                    presenter.loginPwd(accountText,passwordText);
-                }
+    private void login() {
+        if (account != null && password != null){
+            String accountText = account.getText().toString();
+            String passwordText = password.getText().toString();
+            if (isEmpty(accountText)){
+                Common.staticToast("账号不能为空");
+                return;
             }
-        });
+
+            if (isEmpty(passwordText)){
+                Common.staticToast("密码不能为空");
+                return;
+            }
+
+            if (presenter != null){
+                presenter.loginPwd(accountText,passwordText);
+            }
+        }
     }
 
     /**
@@ -105,6 +112,21 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
         GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
         btnDrawable.setColor(Color.parseColor("#ECECEC"));
         presenter = new New3LoginPresenter(baseActivity,this);
+
+        if (BuildConfig.DEBUG){
+            visible(mtv_def_login);
+        }
+    }
+
+    @OnClick(R.id.mtv_def_login)
+    public void defLogin(){
+        SelectAccountDialog selectAccountDialog=new SelectAccountDialog(this);
+        selectAccountDialog.setCanceledOnTouchOutside(true);
+        selectAccountDialog.setDefLoginListener((account, pwd) -> {
+            if (presenter != null)
+                presenter.loginPwd(account, pwd);
+        });
+        selectAccountDialog.show();
     }
 
     @OnClick(R.id.llayout_login_agreement)
@@ -129,6 +151,51 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
         }
     }
 
+    /**
+     * 设置图形验证码
+     *
+     * @param bytes
+     */
+    @Override
+    public void setCode(byte[] bytes) {
+        if (mVerifyPicDialog == null) {
+            mVerifyPicDialog = new VerifyPicDialog(baseActivity);
+            mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
+            mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
+        }
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        mVerifyPicDialog.setImagViewCode(bitmap);
+        mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
+            String verifyText = mVerifyPicDialog.getVerifyText();
+            if (presenter != null) {
+                String accounts = account.getText().toString();
+                presenter.checkPictureCode(accounts,verifyText);
+            }
+        }, "取消", v -> mVerifyPicDialog.dismiss()).show();
+    }
+
+
+    /**
+     * 检验图形验证码
+     * @param error
+     */
+    @Override
+    public void checkPictureCode(String error) {
+        if (isEmpty(error)){
+            if (mVerifyPicDialog != null){
+                mVerifyPicDialog.dismiss();
+            }
+            login();
+        }else {
+            if (mVerifyPicDialog != null){
+                mVerifyPicDialog.setPicTip(error);
+                if (presenter != null){
+                    presenter.getPictureCode();
+                }
+            }
+        }
+    }
+
     @Subscribe(sticky = true)
     public void eventBus(DispachJump jump) {
         mJump = jump;
@@ -141,6 +208,10 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     public void accountPwdSuccess(LoginFinishEntity content) {
+        if (content == null && presenter != null){
+            presenter.getPictureCode();
+            return;
+        }
         //登陆成功啦
         SharedPrefUtil.saveSharedUserString("token", content.token);
         SharedPrefUtil.saveSharedUserString("avatar", content.avatar);

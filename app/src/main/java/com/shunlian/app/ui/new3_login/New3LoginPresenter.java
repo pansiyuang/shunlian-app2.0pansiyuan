@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -52,6 +53,33 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
     @Override
     protected void initApi() {
 
+    }
+
+    /**
+     * 图形验证码验证
+     * @param picCode
+     */
+    public void checkPictureCode(String mobile,String picCode){
+        Map<String,String> map = new HashMap<>();
+        map.put("mobile",mobile);
+        map.put("vcode",picCode);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().checkCode(getRequestBody(map));
+        getNetData(true,baseEntityCall,new
+                SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+                    @Override
+                    public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                        super.onSuccess(entity);
+                        iView.checkPictureCode(null);
+                    }
+
+                    @Override
+                    public void onErrorCode(int code, String message) {
+                        super.onErrorCode(code, message);
+                        iView.checkPictureCode(message);
+                    }
+                });
     }
 
     /**
@@ -233,6 +261,14 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
             public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
                 super.onSuccess(entity);
                 iView.accountPwdSuccess(entity.data);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                if (code == 1003){
+                    iView.accountPwdSuccess(null);
+                }
             }
         });
     }

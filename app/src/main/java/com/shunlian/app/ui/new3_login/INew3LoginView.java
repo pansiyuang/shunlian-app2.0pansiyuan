@@ -58,4 +58,10 @@ public interface INew3LoginView extends IView {
      * @param data
      */
     default void setLoginInfoTip(New3LoginInfoTipEntity data){}
+
+    /**
+     * 检验图形验证码
+     * @param message
+     */
+    default void checkPictureCode(String message){}
 }
