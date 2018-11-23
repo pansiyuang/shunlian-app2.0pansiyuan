@@ -565,7 +565,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         shareInfoParam.shareLink =baseEntity.data.link;
         shareInfoParam.title =baseEntity.data.title;
-        shareInfoParam.desc =baseEntity.data.desc;
+        shareInfoParam.desc =baseEntity.data.content;
         shareInfoParam.img =baseEntity.data.imgdefalt;
         shareInfoParam.special_img_url =baseEntity.data.imgdefalt;
         shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);

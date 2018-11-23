@@ -54,33 +54,33 @@
             android:id="@+id/miv_sign_state1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_renwu_yiqiandao" />
+            android:src="@mipmap/icon_renwu_weiqiandao" />
 
         <View
             android:id="@+id/view_line1"
             android:layout_width="0dp"
             android:layout_height="4dp"
             android:layout_weight="1"
-            android:background="@color/pink_color" />
+            android:background="#EFEFEF" />
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_sign_state2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_renwu_yiqiandao" />
+            android:src="@mipmap/icon_renwu_weiqiandao" />
 
         <View
             android:id="@+id/view_line2"
             android:layout_width="0dp"
             android:layout_height="4dp"
             android:layout_weight="1"
-            android:background="@color/pink_color" />
+            android:background="#EFEFEF" />
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_sign_state3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_renwu_yiqiandao" />
+            android:src="@mipmap/icon_renwu_weiqiandao" />
 
         <View
             android:id="@+id/view_line3"

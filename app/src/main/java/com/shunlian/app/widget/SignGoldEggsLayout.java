@@ -52,6 +52,8 @@ public class SignGoldEggsLayout extends LinearLayout {
 
     @BindView(R.id.view_line1)
     View view_line;
+    @BindView(R.id.view_line2)
+    View view_line2;
     private int gray;
     private int pink;
     //private List<TaskHomeEntity.SignDaysBean> mSignDaysBeans;
@@ -153,19 +155,34 @@ public class SignGoldEggsLayout extends LinearLayout {
                 }
 
                 if (i < 3){
-                    if ("1".equals(bean.sign_status)){//已签到
-                        miv_sign_state.get(i).setImageResource(i==2?
-                                R.mipmap.icon_renwu_yiqiandao_s:R.mipmap.icon_renwu_yiqiandao);
-                    }else if ("0".equals(bean.sign_status)){//可以签到
-                        miv_sign_state.get(i).setImageResource(R.mipmap.btn_renwu_qiandao);
-                        scaleAnim(miv_sign_state.get(i));
-                        if (i == 2){
-                            isCanSign = true;
-                            sign_date = bean.date;
+                    if(i==1){
+                        if ("1".equals(bean.sign_status))
+                        {
+                            view_line.setBackgroundColor(pink);
+                        }else{
+                            view_line.setBackgroundColor(gray);
                         }
+                    }else if(i==2){
+                        if ("1".equals(bean.sign_status))
+                        {
+                            view_line2.setBackgroundColor(pink);
+                        }else{
+                            view_line2.setBackgroundColor(gray);
+                        }
+                    }
+                    if ("1".equals(bean.sign_status)){//已签到
+                        miv_sign_state.get(i).setImageResource(R.mipmap.icon_renwu_yiqiandao);
+//                        miv_sign_state.get(i).setImageResource(i==2?
+//                                R.mipmap.icon_renwu_yiqiandao_s:R.mipmap.icon_renwu_yiqiandao);
+                    }else if ("0".equals(bean.sign_status)){//可以签到
+                        miv_sign_state.get(i).setImageResource(R.mipmap.icon_renwu_weiqiandao);
+//                        scaleAnim(miv_sign_state.get(i));
+//                        if (i == 2){
+//                            isCanSign = true;
+//                            sign_date = bean.date;
+//                        }
                     }else {//不能签到，或者错过签到
                         miv_sign_state.get(i).setImageResource(R.mipmap.icon_renwu_weiqiandao);
-                        view_line.setBackgroundColor(i == 1 ? gray : pink);
                     }
                 }
             }
@@ -174,17 +191,18 @@ public class SignGoldEggsLayout extends LinearLayout {
 
     @OnClick(R.id.miv_sign_state3)
     public void sign(){
-        if (isCanSign){
-            GoldEggsTaskEvent event = new GoldEggsTaskEvent();
-            event.isClickSign = true;
-            event.sign_date = sign_date;
-            EventBus.getDefault().post(event);
-        }
+//        if (isCanSign){
+//            GoldEggsTaskEvent event = new GoldEggsTaskEvent();
+//            event.isClickSign = true;
+//            event.sign_date = sign_date;
+//            EventBus.getDefault().post(event);
+//        }
     }
 
     public void signSuccess(){
         if (!isEmpty(miv_sign_state) && miv_sign_state.size() == 3){
             miv_sign_state.get(2).setImageResource(R.mipmap.icon_renwu_yiqiandao_s);
+            view_line2.setBackgroundColor(pink);
             isCanSign = false;
         }
     }

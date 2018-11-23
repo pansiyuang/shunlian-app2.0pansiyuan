@@ -78,13 +78,13 @@ public class ShareGoodDialogUtil {
             @Override
             public void onClick(View v) {
                 setEddType();
+                nomalBuildl.dismiss();
                 if(isGood) {
                     WXEntryActivity.startAct(context,
                             "shareFriend", mShareInfoParam);
                     if(isFound&&mCallBack!=null){
                         mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                     }
-                    nomalBuildl.dismiss();
                 }else{
                     WXEntryActivity.startAct(context,
                             "shareFriend", mShareInfoParam);
@@ -149,6 +149,7 @@ public class ShareGoodDialogUtil {
         }
     }
     /**
+     * isShow 是否可见 不可见直接分享朋友圈
      * 创建专题图文
      */
     private void createSpecialCode(boolean isShow) {
@@ -227,6 +228,7 @@ public class ShareGoodDialogUtil {
         });
     }
     /**
+     * isCircleShare 是否直接分享到朋友圈
      * 创建商品视图
      */
     public void createGoodCode(boolean isFound,boolean isCircleShare) {
@@ -359,6 +361,7 @@ public class ShareGoodDialogUtil {
     }
 
     /**
+     * isCircleShare 是否直接分享到朋友圈
      * 创建店铺视图
      */
     public void createShopCode(boolean isCircleShare) {
@@ -430,22 +433,22 @@ public class ShareGoodDialogUtil {
         }
     }
 
-    private void goodsPic(View inflate,String img,boolean isShow,boolean isCircleShare) {
+    private void goodsPic(View inflate,String img,boolean isShowSaveToast,boolean isCircleShare) {
         GlideUtils.getInstance().loadBitmapSync(context, img,
                 new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                        if (isShow) {
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
+                        if (isShowSaveToast) {
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,isCircleShare);
                             if (isSuccess) {
                                 Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
                             } else {
                                 Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
                             }
                         } else {
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,true);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,isCircleShare);
                             if (!isSuccess)
                                 Common.staticToast("分享失败");
                         }
@@ -453,16 +456,19 @@ public class ShareGoodDialogUtil {
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        if (isShow) {
+                        if (isShowSaveToast) {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,isCircleShare);
                             if (isSuccess) {
                                 Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
                             } else {
                                 Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
                             }
                         } else {
-                            Common.staticToast("分享失败");
+                            Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,isCircleShare);
+                            if (!isSuccess)
+                                Common.staticToast("分享失败");
                         }
                     }
                 });

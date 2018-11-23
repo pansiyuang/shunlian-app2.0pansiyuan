@@ -65,7 +65,7 @@ import butterknife.OnClick;
  */
 
 public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
-
+    public List<TaskHomeEntity.SignDaysBean> sign_days;
     @BindView(R.id.mtv_eggs_count)
     MyTextView mtv_eggs_count;
 
@@ -86,6 +86,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @BindView(R.id.mtv_day_task)
     MyTextView mtvDayTask;
+
+    @BindView(R.id.tv_sign_unit)
+    MyTextView tv_sign_unit;
 
     @BindView(R.id.view_day_task)
     View viewDayTask;
@@ -193,6 +196,19 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         gd.setCornerRadius(i*10);
         gd.setColor(getColorResouce(R.color.transparent));
         mtv_user.setBackgroundDrawable(gd);
+    }
+
+    /**
+     * 签到规则
+     */
+    @OnClick(R.id.rlayout_sign)
+    public void signPostSend() {
+        GoldEggsTaskEvent event = new GoldEggsTaskEvent();
+        if(sign_days!=null&&sign_days.size()>3) {
+            event.isClickSign = true;
+            event.sign_date = sign_days.get(2).date;
+            EventBus.getDefault().post(event);
+        }
     }
 
     @Override
@@ -534,9 +550,20 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      * 签到
      */
     @Override
-    public void setSignData(List<TaskHomeEntity.SignDaysBean> list) {
+    public void setSignData(List<TaskHomeEntity.SignDaysBean> list,String sign_continue_num) {
         if (sgel != null)
+            sign_days = list;
             sgel.setData(list);
+
+            //判断连续签到次数和当前是否签到
+        if(list!=null&&list.size()>3){
+            if (mtvSignDay != null&&!list.get(2).sign_status.equals("1")){
+                mtvSignDay.setText("签到");
+            }else {
+                mtvSignDay.setText(sign_continue_num);
+            }
+        }
+
     }
 
     /**
@@ -570,6 +597,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                 mPresenter.updateItem(mPresenter.getUpdatePosition(), "1");
         }
     }
+
+
 
     /*
     常见问题弹窗
