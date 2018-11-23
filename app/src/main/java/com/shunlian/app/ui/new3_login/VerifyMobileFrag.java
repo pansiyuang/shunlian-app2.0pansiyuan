@@ -31,6 +31,7 @@ import java.util.HashSet;
 import butterknife.BindView;
 
 import static com.shunlian.app.ui.new3_login.New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
+import static com.shunlian.app.ui.new3_login.New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
 
 /**
  * Created by zhanghe on 2018/11/17.
@@ -246,7 +247,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         if (showPictureCode == 1 && presenter != null) {
             presenter.getPictureCode();
         } else if (showPictureCode == 0 && mConfig != null) {
-            if (isEmpty(mConfig.status) && mConfig.isMobileRegister) {
+            if (isEmpty(mConfig.status) && mConfig.isMobileRegister && mConfig.login_mode == SMS_TO_LOGIN) {
                 presenter.loginMobile(mConfig.mobile, mSmsCode);//登录
 
             }else if ("0".equals(mConfig.status) || "3".equals(mConfig.status)
