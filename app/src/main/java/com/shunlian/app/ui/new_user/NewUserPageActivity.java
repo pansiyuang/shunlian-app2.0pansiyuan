@@ -384,10 +384,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     public void initFrags(boolean isNew) {
         this.isNew  =  isNew;
         goodsFrags.clear();
-        if(isEvent){
-            isNew = false;
-            this.isNew = false;
-        }
         if(this.isNew) {
             tv_head.setText("新人专享");
             tv_right.setText("精选商品");
