@@ -179,7 +179,6 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         mVerifyPicDialog.setImagViewCode(bitmap);
         mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
-            countDown();
             String verifyText = mVerifyPicDialog.getVerifyText();
             if (presenter != null && mConfig != null) {
                 presenter.sendSmsCode(mConfig.mobile, verifyText);
@@ -224,6 +223,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         if (showPictureCode == 0 && mVerifyPicDialog != null) {
             mVerifyPicDialog.dismiss();
             input_code.clearAll();
+            countDown();
         } else if (showPictureCode == 1 && !isEmpty(error) && mVerifyPicDialog != null) {
             mVerifyPicDialog.setPicTip(error);
         }

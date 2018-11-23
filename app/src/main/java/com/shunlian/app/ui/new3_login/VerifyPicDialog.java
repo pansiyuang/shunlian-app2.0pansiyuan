@@ -276,6 +276,9 @@ public class VerifyPicDialog {
     public void setImagViewCode(Bitmap bitmap){
         if (miv_pic_code != null){
             miv_pic_code.setImageBitmap(bitmap);
+            if (ed_verify != null){
+                ed_verify.setText("");
+            }
         }
     }
 
