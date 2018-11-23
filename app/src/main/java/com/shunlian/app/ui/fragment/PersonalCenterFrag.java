@@ -673,8 +673,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mtv_mids.setTextColor(getColorResouce(R.color.new_text));
 
 
-        mrlayout_paihang.setVisibility(View.VISIBLE);
-        mllayout_paihang.setVisibility(View.VISIBLE);
+//        mrlayout_paihang.setVisibility(View.VISIBLE);
+//        mllayout_paihang.setVisibility(View.VISIBLE);
         mlLayout_member.setVisibility(View.GONE);
         mllayout_mid.setVisibility(View.GONE);
 

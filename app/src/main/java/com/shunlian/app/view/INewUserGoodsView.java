@@ -33,4 +33,9 @@ public interface INewUserGoodsView extends IView {
      */
     void addCartSuccess(int cartNum,int postion);
 
+    /**
+     * 显示未支付的订单
+     */
+    void showNoPayDialog(String msg);
+
 }

@@ -134,7 +134,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @BindView(R.id.line_user_buy)
     LinearLayout line_user_buy;
-    private boolean isNew = false;
+    public static boolean isNew = false;
 
     private String[] titles = {"新人专享", "精选商品"};
     private String[] titlesOld = {"精选商品"};
@@ -202,6 +202,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             CURRENT_NUM=0;
             isEvent = true;
             mPresenter.adlist();
+        }else if(event!=null && !event.isSuccess&&!event.isFragmet){
+            line_user_buy.setVisibility(View.GONE);
         }
     }
 
@@ -403,6 +405,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             show_title_info.setVisibility(View.VISIBLE);
             ll_left.setVisibility(View.GONE);
             userGoodFragEnd = NewUserGoodsFrag.getInstance(titlesOld[0], "1",isNew);
+            userGoodFragEnd.updateTypeUser("1",isNew);
             goodsFrags.add(userGoodFragEnd);
         }
         commonLazyPagerAdapter.notifyDataSetChanged();

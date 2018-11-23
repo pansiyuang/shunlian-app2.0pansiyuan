@@ -82,6 +82,7 @@ public class StoreViewUtil {
                             @Override
                             public void onLoadFailed(Exception e, Drawable errorDrawable) {
                                 super.onLoadFailed(e, errorDrawable);
+                                Common.staticToast("图片没有加载成功不能分享朋友圈");
                             }
                         });
             }
@@ -111,6 +112,7 @@ public class StoreViewUtil {
                             @Override
                             public void onLoadFailed(Exception e, Drawable errorDrawable) {
                                 super.onLoadFailed(e, errorDrawable);
+                                Common.staticToast("图片没有加载成功不能分享朋友圈");
                             }
                         });
             }

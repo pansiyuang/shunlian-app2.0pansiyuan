@@ -100,6 +100,9 @@ public class NewUserGoodsPresenter extends BasePresenter<INewUserGoodsView> {
                 iView.userGoodsList(currentPage, allPage, data.list);
                 if(currentPage==1){
                     iView.refreshFinish();
+                    if(!TextUtils.isEmpty(data.unpaid)) {
+                        iView.showNoPayDialog(data.unpaid);
+                    }
                     if(type.equals("1")) {
                         ((NewUserPageActivity) context).initCartNum(data.cartTotal);
                     }

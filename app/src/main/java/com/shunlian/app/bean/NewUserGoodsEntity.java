@@ -9,7 +9,7 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NewUserGoodsEntity {
-
+    public String unpaid;
     public List<Goods> list;
     public String total_page;
     public String count;
