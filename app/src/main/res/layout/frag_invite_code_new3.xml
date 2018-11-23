@@ -16,7 +16,7 @@
         android:textColor="@color/value_484848"
         android:textSize="15sp" />
 
-    <com.shunlian.app.widget.MyImageView
+    <ImageView
         android:id="@+id/miv_coupon"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"

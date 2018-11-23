@@ -5,6 +5,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
@@ -21,7 +22,6 @@ import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyButton;
-import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -55,7 +55,7 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     MyTextView mtv_InviteTip;
 
     @BindView(R.id.miv_coupon)
-    MyImageView miv_coupon;
+    ImageView miv_coupon;
 
     @BindView(R.id.mtv_tip)
     MyTextView mtv_tip;

@@ -99,7 +99,8 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
         mbtnLogin.setEnabled(false);
         String mobile = this.mobile.getText().toString();
         if (isEmpty(mobile) || mobile.length() != 11) return;
-        if (mConfig != null && !isEmpty(mConfig.status) && mConfig.isMobileRegister){
+        if (mConfig != null && !isEmpty(mConfig.status) &&
+                "2".equals(mConfig.status) && mConfig.isMobileRegister){
             return;
         }
         if (presenter != null){
@@ -122,7 +123,8 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
         if (b){
             if (mConfig != null) {
                 mConfig.isMobileRegister = "1".equals(msg);
-                if (!isEmpty(mConfig.status) && mConfig.isMobileRegister){
+                if (!isEmpty(mConfig.status) &&
+                        "2".equals(mConfig.status) && mConfig.isMobileRegister){
                     showMobileTip("该手机号已注册");
                 }
             }

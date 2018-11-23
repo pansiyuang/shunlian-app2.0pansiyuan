@@ -114,6 +114,7 @@ public class TestWXLoginPresenter extends BasePresenter {
                     config.unique_sign = unique_sign;
                     config.member_id = member_id;
                     config.mobile = mobile;
+                    config.isMobileRegister = true;
                     New3LoginAct.startAct(context,config);
 
                 }

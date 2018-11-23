@@ -254,11 +254,11 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
                 mConfig.smsCode = mSmsCode;
                 ((New3LoginAct) baseActivity).loginInviteCode(mConfig);
 
-            } else if ("2".equals(mConfig.status)) {
+            }else if ("2".equals(mConfig.status)) {
                 if (presenter != null) {//绑定手机号
                     presenter.register(mConfig.mobile, mSmsCode, "", mConfig.unique_sign);
                 }
-            } else if (mConfig.login_mode == BIND_INVITE_CODE) {
+            }else if (mConfig.login_mode == BIND_INVITE_CODE) {
                 if (presenter != null) {//绑定导购员
                     presenter.bindShareid(mConfig.member_id, mConfig.invite_code, mConfig.mobile, mSmsCode);
                 }

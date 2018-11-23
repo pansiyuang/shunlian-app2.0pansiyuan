@@ -375,6 +375,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 config.unique_sign = unique_sign;
                 config.member_id = member_id;
                 config.mobile = mobile;
+                config.isMobileRegister = true;
                 New3LoginAct.startAct(this,config);
                 mYFinish();
             }
