@@ -762,6 +762,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      * @param alipayRequest
      */
     public void alipay(final String alipayRequest) {
+        if(isEmpty(alipayRequest)){
+            return;
+        }
         Runnable payRunnable = new Runnable() {
             @Override
             public void run() {

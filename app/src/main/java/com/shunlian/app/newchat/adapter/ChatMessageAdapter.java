@@ -111,6 +111,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public static final int TRANSFER_MSG = 16;
     public static final int SYS_TEXT = 17;
 
+
     private final ObjectMapper objectMapper;
     private RecyclerView recycler;
     private AssetManager am;

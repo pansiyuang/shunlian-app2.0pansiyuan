@@ -455,8 +455,9 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
      * 设置输入框文字
      */
     public void setSpannableText(SpannableString text) {
-        editText.setText(text);
-        editText.setSelection(text.length());
+        String str = editText.getText().toString();
+        editText.setText(str + text);
+        editText.setSelection((str + text).length());
     }
 
 

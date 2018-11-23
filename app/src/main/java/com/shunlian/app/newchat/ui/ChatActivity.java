@@ -1133,9 +1133,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                             baseMessage.setStatus(MessageStatus.SendSucc);
                             msgInfo.message = mAdapter.msg2Str(baseMessage);
                         } else {
-                            if (msgInfo.m_user_id.equals(chat_m_user_Id)) { //判断服务Id是否一致
-                                mAdapter.addMsgInfo(msgInfo);
-                            }
+                            mAdapter.addMsgInfo(msgInfo);
                         }
                     }
                 }
