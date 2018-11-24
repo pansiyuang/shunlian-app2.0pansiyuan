@@ -724,6 +724,9 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     }
 
+    /**
+     * 仅用来播放
+     */
     public void onlyLook(){
         isOnlyPlay = true;
     }

@@ -15,8 +15,10 @@ import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 import com.shunlian.app.ui.new3_login.New3LoginPresenter;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CustomVideoPlayer;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.SmallVideoPlayer;
@@ -143,9 +145,9 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
             if (ad != null){
                 visible(customVideoPlayer);
                 customVideoPlayer.onlyLook();
-                /*int rw = DeviceInfoUtil.getDeviceWidth(this) - TransformUtil.dip2px(this, 40);
+                int rw = DeviceInfoUtil.getDeviceWidth(this) - TransformUtil.dip2px(this, 40);
                 int rh = TransformUtil.dip2px(this, 160);
-                int[] ints = TransformUtil.countRealWH(this, rw, rh);
+                /*int[] ints = TransformUtil.countRealWH(this, rw, rh);
                 ViewGroup.LayoutParams layoutParams = customVideoPlayer.getLayoutParams();
                 layoutParams.width = ints[0];
                 layoutParams.height = ints[1];
@@ -153,7 +155,7 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
                 String image = ad.image;
                 New3LoginInfoTipEntity.LinkBean link = ad.link;
                 if (!isEmpty(image)) {
-                    GlideUtils.getInstance().loadImage(this, customVideoPlayer.thumbImageView, image);
+                    GlideUtils.getInstance().loadOverrideImage(this, customVideoPlayer.thumbImageView,image,rw,rh);
                 }
                 customVideoPlayer.setUp(link.item_id, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
                 isRelease = true;

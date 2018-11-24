@@ -26,6 +26,7 @@ import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.UpdateEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -56,6 +57,10 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.UpdateDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -189,6 +194,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
      */
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         if (SharedPrefUtil.getSharedUserBoolean("hide_first",false)){
             miv_hint.setVisibility(View.GONE);
         }else {
@@ -745,6 +751,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         discoverFrag = null;
         cateGoryFrag = null;
         personalCenterFrag = null;
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -939,5 +946,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event) {
+        if (event.loginSuccess && pMain != null) {
+            pMain.isShowNewPersonPrize();
+        }
     }
 }
