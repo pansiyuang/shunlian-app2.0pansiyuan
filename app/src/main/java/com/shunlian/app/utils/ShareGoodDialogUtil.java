@@ -294,10 +294,10 @@ public class ShareGoodDialogUtil {
                 mtv_act_label.setText(mShareInfoParam.act_label);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
-            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 120);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-            layoutParams.width = width;
-            layoutParams.height = width;
+//            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 120);
+//            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+//            layoutParams.width = width;
+//            layoutParams.height = width;
 //
 //            GlideUtils.getInstance().loadLocal(context, miv_goods_pic, R.mipmap.img_bangzhu_fou);
 //            GlideUtils.getInstance().loadCircleAvar(context,miv_goods_pic,SharedPrefUtil.getSharedUserString("nickname", ""));
