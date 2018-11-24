@@ -5,8 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.google.zxing.common.StringUtils;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -441,14 +438,14 @@ public class ShareGoodDialogUtil {
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
                         if (isShowSaveToast) {
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,isCircleShare);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,!isCircleShare);
                             if (isSuccess) {
                                 Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
                             } else {
                                 Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
                             }
                         } else {
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,isCircleShare);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,!isCircleShare);
                             if (!isSuccess)
                                 Common.staticToast("分享失败");
                         }
@@ -458,7 +455,7 @@ public class ShareGoodDialogUtil {
                         super.onLoadFailed(e, errorDrawable);
                         if (isShowSaveToast) {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,isCircleShare);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,!isCircleShare);
                             if (isSuccess) {
                                 Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
                             } else {
@@ -466,7 +463,7 @@ public class ShareGoodDialogUtil {
                             }
                         } else {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,isCircleShare);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,!isCircleShare);
                             if (!isSuccess)
                                 Common.staticToast("分享失败");
                         }
