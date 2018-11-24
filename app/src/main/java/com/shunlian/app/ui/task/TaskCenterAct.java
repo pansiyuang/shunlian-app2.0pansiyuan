@@ -13,6 +13,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -32,6 +33,7 @@ import com.shunlian.app.eventbus_bean.GoldEggsTaskEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -139,6 +141,10 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     private int mPicWidth;
     public static final String TASK_AD_KEY = "task_ad_key";
 
+    /**
+     * 常见问题url
+     */
+    private String question;
     public static void startAct(Context context) {
         Intent intent = new Intent(context, TaskCenterAct.class);
         if (!(context instanceof Activity))
@@ -245,8 +251,11 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @OnClick(R.id.mtv_question)
     public void question() {
-        if (dialog_qr != null)
-            dialog_qr.show();
+        if(!TextUtils.isEmpty(question)) {
+            H5X5Act.startAct(this, question, H5X5Act.MODE_SONIC);
+        }
+//        if (dialog_qr != null)
+//            dialog_qr.show();
     }
 
     /**
@@ -513,13 +522,15 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         mAdUrl = url;
     }
 
+
     /**
      * @param question 常见问题
      * @param rule     签到规则
      */
     @Override
     public void setTip(String question, String rule) {
-        initQRDialog(question);
+        this.question = question;
+//        initQRDialog(question);
         initRuleDialog(rule);
     }
 
