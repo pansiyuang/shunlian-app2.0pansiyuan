@@ -112,7 +112,18 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
 
     private void dispatchApi() {
         if (mConfig != null) {
-            mtv_mobile.setText(mConfig.mobile);
+            if (!isEmpty(mConfig.mobile) && mConfig.mobile.length() == 11){
+                String temp = "";//130 0756 2706
+                for (int i = 0; i < mConfig.mobile.length(); i++) {
+                    temp += mConfig.mobile.charAt(i);
+                    if (i == 2 || i == 6){
+                        temp += " ";
+                    }
+                }
+                mtv_mobile.setText(temp);
+            }else {
+                mtv_mobile.setText(mConfig.mobile);
+            }
             countDown();
             if (mConfig.login_mode == BIND_INVITE_CODE && presenter != null) {//绑定邀请码
                 presenter.sendSmsCode(mConfig.mobile, "");

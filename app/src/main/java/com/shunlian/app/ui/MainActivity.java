@@ -166,10 +166,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (isGetAward){
+        /*if (isGetAward){
             pMain.getPrizeByRegister();
             isGetAward=false;
-        }
+        }*/
         if (!isEmpty(flag) && "nicefocusexperiencecirclematerial".contains(flag)) {
             flag = "";
         } else {
@@ -822,7 +822,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     if (Common.isAlreadyLogin()){
                         pMain.getPrizeByRegister();
                     }else {
-                        isGetAward=true;
+//                        isGetAward=true;
                         LoginEntryAct.startAct(baseAct);
                     }
 

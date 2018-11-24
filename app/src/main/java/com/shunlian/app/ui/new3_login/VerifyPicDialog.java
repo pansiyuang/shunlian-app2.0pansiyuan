@@ -76,7 +76,7 @@ public class VerifyPicDialog {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-                if (s.length() == 0 && mtv_tip != null){
+                if (s.length() > 0 && mtv_tip != null){
                     mtv_tip.setVisibility(View.GONE);
                 }
             }

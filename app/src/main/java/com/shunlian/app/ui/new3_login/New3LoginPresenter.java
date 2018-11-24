@@ -66,7 +66,7 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
         sortAndMD5(map);
 
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().checkCode(getRequestBody(map));
-        getNetData(true,baseEntityCall,new
+        getNetData(baseEntityCall,new
                 SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
                     @Override
                     public void onSuccess(BaseEntity<EmptyEntity> entity) {
