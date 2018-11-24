@@ -76,7 +76,11 @@ public class NewUserGoodsPresenter extends BasePresenter<INewUserGoodsView> {
 
     private void userGoodsList(int netFail ,boolean isShowLoading, String type) {
         Map<String, String> map = new HashMap<>();
-        map.put("type", type);
+        if(NewUserPageActivity.isNew) {
+            map.put("type", type);
+        }else{
+            map.put("type", "1");
+        }
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(page_size));
         sortAndMD5(map);
