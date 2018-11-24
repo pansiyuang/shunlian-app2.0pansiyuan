@@ -201,7 +201,7 @@ public class SignGoldEggsLayout extends LinearLayout {
 
     public void signSuccess(){
         if (!isEmpty(miv_sign_state) && miv_sign_state.size() == 3){
-            miv_sign_state.get(2).setImageResource(R.mipmap.icon_renwu_yiqiandao_s);
+            miv_sign_state.get(2).setImageResource(R.mipmap.icon_renwu_yiqiandao);
             view_line2.setBackgroundColor(pink);
             isCanSign = false;
         }
