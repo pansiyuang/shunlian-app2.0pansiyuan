@@ -119,10 +119,11 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
      * @param b
      */
     @Override
-    public void iSMobileRight(boolean b,String msg) {
+    public void iSMobileRight(boolean b,String msg,String shareid) {
         if (b){
             if (mConfig != null) {
                 mConfig.isMobileRegister = "1".equals(msg);
+                mConfig.invite_code = shareid;
                 if (!isEmpty(mConfig.status) &&
                         "2".equals(mConfig.status) && mConfig.isMobileRegister){
                     showMobileTip("该手机号已注册");

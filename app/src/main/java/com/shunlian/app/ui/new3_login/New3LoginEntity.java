@@ -13,5 +13,8 @@ public class New3LoginEntity {
      * 为1时，需要输入图形验证码
      */
     public String status;
-
+    /**
+     * 邀请码
+     */
+    public String shareid;
 }

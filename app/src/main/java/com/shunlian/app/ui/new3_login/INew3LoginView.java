@@ -24,8 +24,10 @@ public interface INew3LoginView extends IView {
     /**
      * 手机号是否正确
      * @param b
+     * @param msg
+     * @param shareid 邀请码
      */
-    default void iSMobileRight(boolean b,String msg){}
+    default void iSMobileRight(boolean b,String msg,String shareid){}
 
     /**
      * 短信验证码

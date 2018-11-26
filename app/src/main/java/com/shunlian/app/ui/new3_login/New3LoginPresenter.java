@@ -195,12 +195,12 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
         map.put("mobile_code", smsCode);
         sortAndMD5(map);
 
-        Call<BaseEntity<String>>
+        Call<BaseEntity<EmptyEntity>>
                 requestBodyCall = getSaveCookieApiService().checkNew3LoginSmsCode(getRequestBody(map));
 
-        getNetData(true,requestBodyCall,new SimpleNetDataCallback<BaseEntity<String>>(){
+        getNetData(true,requestBodyCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<String> entity) {
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.checkSmsCode(0,null);
             }
@@ -286,13 +286,13 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
             @Override
             public void onSuccess(BaseEntity<New3LoginEntity> entity) {
                 super.onSuccess(entity);
-                iView.iSMobileRight(true,entity.data.status);
+                iView.iSMobileRight(true,entity.data.status,entity.data.shareid);
             }
 
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                iView.iSMobileRight(false,message);
+                iView.iSMobileRight(false,message,null);
             }
         });
     }

@@ -256,16 +256,12 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
     @Override
     public void checkSmsCode(int showPictureCode,String error) {
         if (showPictureCode == 1 && presenter != null) {
-            presenter.getPictureCode();
+            presenter.getPictureCode();//获取图形验证码
+        }else if (showPictureCode == 2){
+            input_code.clearAll();//短信验证码输入错误清空输入内容
         } else if (showPictureCode == 0 && mConfig != null) {
             if (isEmpty(mConfig.status) && mConfig.isMobileRegister && mConfig.login_mode == SMS_TO_LOGIN) {
                 presenter.loginMobile(mConfig.mobile, mSmsCode);//登录
-
-            }else if ("0".equals(mConfig.status) || "3".equals(mConfig.status)
-                    || !mConfig.isMobileRegister) {//绑定手机号和导购员
-                mConfig.smsCode = mSmsCode;
-                ((New3LoginAct) baseActivity).loginInviteCode(mConfig);
-
             }else if ("2".equals(mConfig.status)) {
                 if (presenter != null) {//绑定手机号
                     presenter.register(mConfig.mobile, mSmsCode, "", mConfig.unique_sign);
@@ -273,6 +269,16 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
             }else if (mConfig.login_mode == BIND_INVITE_CODE) {
                 if (presenter != null) {//绑定导购员
                     presenter.bindShareid(mConfig.member_id, mConfig.invite_code, mConfig.mobile, mSmsCode);
+                }
+            }else if ("0".equals(mConfig.status) || "3".equals(mConfig.status)
+                    || (!mConfig.isMobileRegister && isEmpty(mConfig.status))) {//绑定手机号和导购员
+                mConfig.smsCode = mSmsCode;
+                if ("0".equals(mConfig.invite_code)){
+                    ((New3LoginAct) baseActivity).loginInviteCode(mConfig);
+                }else {//微信绑定有上级的手机号，不需要手动绑定上级
+                    if (presenter != null) {
+                        presenter.register(mConfig.mobile, mSmsCode, "", mConfig.unique_sign);
+                    }
                 }
             }
         }

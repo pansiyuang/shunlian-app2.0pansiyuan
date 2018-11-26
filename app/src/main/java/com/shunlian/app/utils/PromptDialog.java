@@ -3,6 +3,7 @@ package com.shunlian.app.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
@@ -49,6 +50,7 @@ public class PromptDialog {
         int i = TransformUtil.dip2px(ctx, 5);
         float[] radii = {0,0,0,0,i,i,0,0};
         background.setCornerRadii(radii);
+        background.setColor(Color.parseColor("#fb0036"));
     }
 
     public void setTvSureText(CharSequence text) {

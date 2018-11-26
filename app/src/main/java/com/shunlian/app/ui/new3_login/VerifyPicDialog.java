@@ -7,15 +7,19 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.MemberCodeListEntity;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
@@ -49,6 +53,11 @@ public class VerifyPicDialog {
         logoutDialog = new Dialog(ctx, R.style.Mydialog);
         logoutDialog.setContentView(R.layout.dialog_verify_pic);
         initView(logoutDialog);
+        Window window = logoutDialog.getWindow();
+        window.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = (int) (DeviceInfoUtil.getDeviceWidth(ctx)*0.72f);
+        logoutDialog.getWindow().setAttributes(params);
         setCancelable(false);
     }
 

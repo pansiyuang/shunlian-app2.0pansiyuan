@@ -23,8 +23,6 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.*;
-import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.newchat.entity.*;
 import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
@@ -195,7 +193,7 @@ public interface ApiService {
      * @return
      */
     @POST("member/common/checkMobileCode")
-    Call<BaseEntity<String>> checkNew3LoginSmsCode(@Body RequestBody requestBody);
+    Call<BaseEntity<EmptyEntity>> checkNew3LoginSmsCode(@Body RequestBody requestBody);
 
     /**
      * 获取图形验证码
