@@ -48,6 +48,8 @@ import com.shunlian.app.widget.MyWebView;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.SignGoldEggsLayout;
+import com.shunlian.app.widget.banner.BaseBanner;
+import com.shunlian.app.widget.banner.MyKanner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -55,6 +57,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,8 +77,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @BindView(R.id.miv_golden_eggs)
     MyImageView miv_golden_eggs;
 
-    @BindView(R.id.miv_pic)
-    MyImageView mivPic;
+    @BindView(R.id.kanner)
+    MyKanner kanner;
 
     @BindView(R.id.mtv_new_task)
     MyTextView mtvNewTask;
@@ -477,49 +480,65 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      * @param urlBean
      */
     @Override
-    public void setPic(String url, TaskHomeEntity.AdUrlBean urlBean) {
-        if (URLUtil.isNetworkUrl(url)) {
-            if (url.equals(mAdUrl))return;
-            visible(mivPic);
-
-            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url)) {
-                Matcher m = p.matcher(url);
-                int w = 0;
-                int h = 0;
-                if (m.find()) {
-                    w = Integer.parseInt(m.group(2));
-                } else {
-                    w = 672;
-                }
-                if (m.find()) {
-                    h = Integer.parseInt(m.group(2));
-                } else {
-                    h = 200;
-                }
-
-                int i = (int) (mPicWidth * h * 1.0f / w);
-                int radius = TransformUtil.dip2px(this, 5f);
-                GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        Bitmap source = BitmapUtil.scaleBitmap(resource, mPicWidth, i);
-                        if (source != null) {
-                            Bitmap bitmap = BitmapUtil.roundCropBitmap(source, radius);
-                            mivPic.setImageBitmap(bitmap);
+    public void setPic(String url, TaskHomeEntity.AdUrlBean urlBean, List<TaskHomeEntity.AdUrlRollBean> adUrlRollBean) {
+        if(adUrlRollBean!=null&&adUrlRollBean.size()>0){
+              visible(kanner);
+            List<String> strings = new ArrayList<>();
+            for (int i = 0; i < adUrlRollBean.size(); i++) {
+                strings.add(adUrlRollBean.get(i).ad_pic_url);
+                if (i >= adUrlRollBean.size() - 1) {
+                    kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
+                    kanner.setBanner(strings);
+                    kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Common.goGoGo(baseAct, adUrlRollBean.get(position).ad_url.type, adUrlRollBean.get(position).ad_url.item_id);
                         }
-                    }
-                });
-            }
-
-            mivPic.setOnClickListener(v -> {
-                if (urlBean != null) {
-                    Common.goGoGo(this, urlBean.type, urlBean.item_id);
+                    });
                 }
-            });
-        } else {
-            gone(mivPic);
+            }
+        }else{
+             gone(kanner);
         }
-        mAdUrl = url;
+//            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url))
+//        }{
+//                Matcher m = p.matcher(url);
+//                int w = 0;
+//                int h = 0;
+//                if (m.find()) {
+//                    w = Integer.parseInt(m.group(2));
+//                } else {
+//                    w = 672;
+//                }
+//                if (m.find()) {
+//                    h = Integer.parseInt(m.group(2));
+//                } else {
+//                    h = 200;
+//                }
+//
+//                int i = (int) (mPicWidth * h * 1.0f / w);
+//                int radius = TransformUtil.dip2px(this, 5f);
+//                GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        Bitmap source = BitmapUtil.scaleBitmap(resource, mPicWidth, i);
+//                        if (source != null) {
+//                            Bitmap bitmap = BitmapUtil.roundCropBitmap(source, radius);
+//                            mivPic.setImageBitmap(bitmap);
+//                        }
+//                    }
+//                });
+//            }
+
+//            mivPic.setOnClickListener(v -> {
+//                if (urlBean != null) {
+//                    Common.goGoGo(this, urlBean.type, urlBean.item_id);
+//                }
+//            });
+//        } else {
+//            gone(mivPic);
+//        }
+//        mAdUrl = url;
     }
 
 
@@ -570,7 +589,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         if(list!=null&&list.size()>3){
             if (mtvSignDay != null&&!list.get(2).sign_status.equals("1")){
                 mtvSignDay.setText("签到");
+                mtvSignState.setText("未签到");
             }else {
+                mtvSignState.setText("已签到");
                 mtvSignDay.setText(sign_continue_num);
             }
         }
@@ -585,6 +606,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void signEgg(SignEggEntity signEggEntity) {
         initDialog(signEggEntity);
+        mtvSignState.setText("已签到");
         if (mtv_eggs_count != null) mtv_eggs_count.setText(signEggEntity.gold_egg);
         if (mtvSignDay != null) mtvSignDay.setText(signEggEntity.sign_continue_num);
         if (sgel != null) sgel.signSuccess();

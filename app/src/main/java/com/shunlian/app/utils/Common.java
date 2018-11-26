@@ -30,12 +30,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
@@ -49,8 +52,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -697,6 +702,54 @@ public class Common {
         String regular = "^(?!\\d+$)(?![a-zA-Z]+$)(?![^a-zA-Z0-9]+$)[[^a-zA-Z0-9]+\\w]{8,16}$";
         boolean matches = Pattern.matches(regular, pwd);
         return matches;
+    }
+
+    private static Toast toastAnim;
+    private static LottieAnimationView animation_view;
+
+    public static void staticAnimToast(String content,String desc,String jsonAnim) {
+        if (TextUtils.isEmpty(content))
+            return;
+        if (toastAnim == null) {
+            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast_anim_json, null);
+            mtv_toast =  v.findViewById(R.id.mtv_toasts);
+            mtv_desc=  v.findViewById(R.id.mtv_desc);
+            animation_view=  v.findViewById(R.id.animation_view);
+            mtv_toast.setText(content);
+            mtv_desc.setText(desc);
+            toastAnim = new Toast(getApplicationContext());
+//            LinearLayout.LayoutParams vlp = new LinearLayout.LayoutParams(App.widthPixels,
+//                    App.hightPixels);
+//            vlp.setMargins(0, 0, 0, 0);
+//            show_toast.setLayoutParams(vlp);
+//            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
+            toastAnim.setDuration(Toast.LENGTH_SHORT);
+            toastAnim.setView(v);
+            toastAnim.setGravity(Gravity.FILL, 0, 0);
+            showAnimJsonFile(jsonAnim,"images/img_3.png");
+        } else {
+            mtv_toast.setText(content);
+            mtv_desc.setText(desc);
+            showAnimJsonFile(jsonAnim,"images/img_3.png");
+        }
+        toastAnim.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        toastAnim.show();
+    }
+
+    private static void showAnimJsonFile(String jsonAnim,String defaultImage){
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                animation_view.setAnimation(jsonAnim);//在assets目录下的动画json文件名。
+                animation_view.loop(false);//设置动画循环播放
+                animation_view.setImageAssetsFolder("images/");//assets目录下的子目录，存放动画所需的图片
+                animation_view.playAnimation();//播放动画
+            } else {
+                AssetManager assets = getApplicationContext().getAssets();
+                animation_view.setImageBitmap(BitmapFactory.decodeStream(assets.open(defaultImage)));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void staticToast(String content) {
