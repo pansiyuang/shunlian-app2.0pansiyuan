@@ -216,7 +216,10 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         if (currentPage == 1) {
             goodList.clear();
             if(hotBlogAdapter!=null){
-                hotBlogAdapter.updateTypeUser(type,NewUserPageActivity.isNew);
+                if(!NewUserPageActivity.isNew){
+                    type="1";
+                }
+                hotBlogAdapter.updateTypeUser(!NewUserPageActivity.isNew?"1":type,NewUserPageActivity.isNew);
             }
             if (isEmpty(collectionGoodsLists)) {
                 recycler_list.setVisibility(View.GONE);

@@ -55,7 +55,7 @@ public interface ITaskCenterView extends IView {
     /**
      * 签到
      */
-    void setSignData(List<TaskHomeEntity.SignDaysBean> list);
+    void setSignData(List<TaskHomeEntity.SignDaysBean> list,String sign_continue_num);
 
     /**
      * 签到成功
