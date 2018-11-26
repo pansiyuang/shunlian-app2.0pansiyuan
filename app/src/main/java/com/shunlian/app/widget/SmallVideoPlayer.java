@@ -87,10 +87,12 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     protected ProgressBar mDialogBrightnessProgressBar;
     protected TextView mDialogBrightnessTextView;
 
-    protected LinearLayout closeVolumeControl;
-    protected ImageView closeVideo;
-    protected ImageView voiceControl;
     protected ImageView iv_download;
+    private LinearLayout closeVolumeControl;
+    private ImageView closeVideo;
+    private ImageView voiceControl;
+    //只播放的意思是不能控制视频进度和全屏等任何操作
+    private boolean isOnlyPlay;
 
     public SmallVideoPlayer(Context context) {
         super(context);
@@ -388,6 +390,9 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (isOnlyPlay){
+            return true;
+        }
         int id = v.getId();
         if (id == cn.jzvd.R.id.surface_container) {
             switch (event.getAction()) {
@@ -718,6 +723,13 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                 break;
         }
 
+    }
+
+    /**
+     * 仅用来播放
+     */
+    public void onlyLook(){
+        isOnlyPlay = true;
     }
 
     public void changeUiToComplete() {

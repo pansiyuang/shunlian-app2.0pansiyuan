@@ -22,10 +22,19 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
-
 import com.shunlian.app.bean.*;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.newchat.entity.*;
+import com.shunlian.app.newchat.entity.ChatGoodsEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.entity.HistoryEntity;
+import com.shunlian.app.newchat.entity.ReplysetEntity;
+import com.shunlian.app.newchat.entity.ServiceEntity;
+import com.shunlian.app.newchat.entity.StoreMessageEntity;
+import com.shunlian.app.newchat.entity.StoreMsgEntity;
+import com.shunlian.app.newchat.entity.SystemMessageEntity;
+import com.shunlian.app.ui.new3_login.New3LoginEntity;
+import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -181,6 +190,14 @@ public interface ApiService {
     Call<BaseEntity<String>> sendSmsCode(@Body RequestBody requestBody);
 
     /**
+     * 检查短信验证码
+     * @param requestBody
+     * @return
+     */
+    @POST("member/common/checkMobileCode")
+    Call<BaseEntity<String>> checkNew3LoginSmsCode(@Body RequestBody requestBody);
+
+    /**
      * 获取图形验证码
      *
      * @return
@@ -213,7 +230,7 @@ public interface ApiService {
      * @return
      */
     @POST("member/Common/checkCode")
-    Call<ResponseBody> checkCode(@Body RequestBody requestBody);
+    Call<BaseEntity<EmptyEntity>> checkCode(@Body RequestBody requestBody);
 
     /**
      * 刷新token
@@ -274,6 +291,14 @@ public interface ApiService {
      */
     @GET("member/register/checkMobile")
     Call<BaseEntity<String>> checkMobile(@QueryMap Map<String, String> map);
+
+    /**
+     * 检验手机号是否注册
+     * @param map
+     * @return
+     */
+    @GET("member/register/checkMobileStatus")
+    Call<BaseEntity<New3LoginEntity>> checkMobileNews(@QueryMap Map<String, String> map);
 
     /**
      * 商品详情
@@ -2899,4 +2924,12 @@ public interface ApiService {
      */
     @GET("/newexclusive/sharepage")
     Call<BaseEntity<ShareInfoParam>> shareNewUserInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 登录界面提示信息
+     * @param map
+     * @return
+     */
+    @GET("member/login/info")
+    Call<BaseEntity<New3LoginInfoTipEntity>> loginInfoTip(@QueryMap Map<String,String> map);
 }

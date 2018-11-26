@@ -31,6 +31,7 @@ import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.UpdateEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -192,10 +193,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (isGetAward) {
+        /*if (isGetAward){
             pMain.getPrizeByRegister();
-            isGetAward = false;
-        }
+            isGetAward=false;
+        }*/
         if (!isEmpty(flag) && "nicefocusexperiencecirclematerial".contains(flag)) {
             flag = "";
         } else {
@@ -220,6 +221,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
      */
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
+        if (SharedPrefUtil.getSharedUserBoolean("hide_first",false)){
         EventBus.getDefault().register(this);
         objectMapper = new ObjectMapper();
 
@@ -814,7 +817,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
         if (updateDialogV != null) {
             if (updateDialogV.updateDialog != null) {
                 updateDialogV.updateDialog.dismiss();
@@ -835,8 +837,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         discoverFrag = null;
         cateGoryFrag = null;
         personalCenterFrag = null;
+        EventBus.getDefault().unregister(this);
     }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -906,7 +908,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     if (Common.isAlreadyLogin()) {
                         pMain.getPrizeByRegister();
                     } else {
-                        isGetAward = true;
+//                      isGetAward=true;
                         LoginEntryAct.startAct(baseAct);
                     }
 
@@ -1065,5 +1067,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         decorView.addView(guide_view);
 
         SharedPrefUtil.saveCacheSharedPrfBoolean("showGuide", true);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event) {
+        if (event.loginSuccess && pMain != null) {
+            pMain.isShowNewPersonPrize();
+        }
     }
 }
