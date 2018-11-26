@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MsgInfo {
     public int uid;
-    public int kid;
+    public String kid;
     public int user_id;
     public String sid;
     public int type;

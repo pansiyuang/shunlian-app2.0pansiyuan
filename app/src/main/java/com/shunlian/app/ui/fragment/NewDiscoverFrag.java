@@ -105,10 +105,15 @@ public class NewDiscoverFrag extends BaseFragment {
     }
 
     public void setCurrentPage(String flag) {
+        if (isEmpty(flag)) {
+            return;
+        }
         switch (flag) {
             case "attentionList":
                 if (isInit) {
-                    view_pager.setCurrentItem(0);
+                    if (view_pager != null) {
+                        view_pager.setCurrentItem(0);
+                    }
                 } else {
                     defaultPage = 0;
                 }
