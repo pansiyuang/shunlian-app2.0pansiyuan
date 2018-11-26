@@ -88,9 +88,9 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     protected TextView mDialogBrightnessTextView;
 
     protected ImageView iv_download;
-    private LinearLayout closeVolumeControl;
-    private ImageView closeVideo;
-    private ImageView voiceControl;
+    protected LinearLayout closeVolumeControl;
+    protected ImageView closeVideo;
+    protected ImageView voiceControl;
     //只播放的意思是不能控制视频进度和全屏等任何操作
     private boolean isOnlyPlay;
 

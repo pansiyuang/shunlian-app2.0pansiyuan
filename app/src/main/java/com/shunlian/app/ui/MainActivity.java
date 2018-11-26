@@ -193,7 +193,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        /*if (isGetAward){
+        /*if (isGetAward){//新人优惠券手动领取
             pMain.getPrizeByRegister();
             isGetAward=false;
         }*/
@@ -222,10 +222,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
-        if (SharedPrefUtil.getSharedUserBoolean("hide_first",false)){
-        EventBus.getDefault().register(this);
         objectMapper = new ObjectMapper();
-
         if (SharedPrefUtil.getSharedUserBoolean("hide_first", false)) {
             miv_hint.setVisibility(View.GONE);
         } else {
@@ -271,7 +268,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        }else {
 //            gone(ll_tab_sort);
 //        }
-    }
+        }
+
 
 
     @Override
