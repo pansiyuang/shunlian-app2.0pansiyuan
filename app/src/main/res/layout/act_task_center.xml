@@ -265,15 +265,17 @@
             </RelativeLayout>
 
             <!--广告-->
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_pic"
+
+            <com.shunlian.app.widget.banner.MyKanner
+                android:id="@+id/kanner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/yy450"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:layout_marginTop="16dp"
-                android:adjustViewBounds="true"/>
-
+                android:layout_marginTop="17dp"
+                app:bb_delay="5"
+                app:bb_period="3"
+                app:bb_scale="0.5" />
             <!--任务列表-->
             <LinearLayout
                 android:layout_width="match_parent"

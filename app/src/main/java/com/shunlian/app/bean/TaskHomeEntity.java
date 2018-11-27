@@ -1,5 +1,6 @@
 package com.shunlian.app.bean;
 
+import com.airbnb.lottie.L;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class TaskHomeEntity {
     public String ad_pic_url;
 
     public AdUrlBean ad_url;
+
+    public List<AdUrlRollBean> ad_roll;
 
     public String faq_url;
     public String task_status;//0表示当前可以领取  1表示当前不能领取
@@ -80,6 +83,18 @@ public class TaskHomeEntity {
                     ", sign_status='" + sign_status + '\'' +
                     ", gold_num='" + gold_num + '\'' +
                     '}';
+        }
+    }
+
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class AdUrlRollBean {
+        public AdUrlBean ad_url;
+        public String ad_pic_url; //没有字段或空字符串，不显示
+
+        @Override
+        public String toString() {
+            return ad_url+"ad_url"+"/ad_pic_url"+ad_pic_url;
         }
     }
 }

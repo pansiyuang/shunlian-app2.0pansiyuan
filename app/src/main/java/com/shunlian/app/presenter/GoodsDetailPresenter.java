@@ -745,8 +745,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 if (isEmpty(entity.data.gold_num) || "0".equals(entity.data.gold_num))return;
                 String title = "你已经停留%s秒";
                 String desc = "恭喜你获得%s金蛋";
-                Common.staticToasts(context,String.format(title,mgoldSecond),
-                        String.format(desc,entity.data.gold_num),R.mipmap.icon_common_duihao);
+//                Common.staticToasts(context,String.format(title,mgoldSecond),
+//                        String.format(desc,entity.data.gold_num),R.mipmap.icon_common_duihao);
+                Common.staticAnimToast(String.format(title,mgoldSecond),
+                        String.format(desc,entity.data.gold_num),"eggs_good.json");
             }
         });
     }

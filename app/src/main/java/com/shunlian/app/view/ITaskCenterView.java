@@ -36,7 +36,7 @@ public interface ITaskCenterView extends IView {
      * @param url
      * @param urlBean
      */
-    void setPic(String url, TaskHomeEntity.AdUrlBean urlBean);
+    void setPic(String url, TaskHomeEntity.AdUrlBean urlBean, List<TaskHomeEntity.AdUrlRollBean> adUrlRollBean);
 
     /**
      *
