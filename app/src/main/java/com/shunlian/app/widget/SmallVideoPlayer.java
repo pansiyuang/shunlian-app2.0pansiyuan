@@ -189,6 +189,25 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         }
     }
 
+    /**
+     * 仅仅暂停视频，按钮不显示出来
+     */
+    public static void goOnlyPause() {
+        try {
+            if (JZVideoPlayerManager.getCurrentJzvd() != null) {
+                JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
+                if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
+                } else {
+                    JZMediaManager.pause();
+                }
+            }
+        }catch (Exception e){
+
+        }
+    }
+
     public static void onChildViewAttachedToWindow(View view, int jzvdId) {
         if (JZVideoPlayerManager.getCurrentJzvd() != null &&
                 JZVideoPlayerManager.getCurrentJzvd().currentScreen == JZVideoPlayer.SCREEN_WINDOW_TINY) {

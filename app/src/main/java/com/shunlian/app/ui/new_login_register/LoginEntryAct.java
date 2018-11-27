@@ -90,7 +90,7 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
     @Override
     protected void onPause() {
         super.onPause();
-        SmallVideoPlayer.goOnPlayOnPause();
+        SmallVideoPlayer.goOnlyPause();
     }
 
     @OnClick(R.id.llayout_wechat_login)

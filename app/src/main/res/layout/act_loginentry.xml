@@ -25,12 +25,12 @@
     <com.shunlian.app.widget.SmallVideoPlayer
         android:id="@+id/customVideoPlayer"
         android:layout_width="match_parent"
+        android:layout_height="160dp"
         android:layout_below="@+id/miv_sldl"
-        android:layout_marginTop="26dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:visibility="invisible"
-        android:layout_height="160dp"/>
+        android:layout_marginTop="26dp"
+        android:visibility="invisible" />
 
 
     <!--微信登录-->

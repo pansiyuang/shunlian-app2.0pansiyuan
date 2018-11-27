@@ -89,7 +89,7 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
         Map<String,String> map = new HashMap<>();
         sortAndMD5(map);
         Call<BaseEntity<New3LoginInfoTipEntity>> baseEntityCall = getApiService().loginInfoTip(map);
-        getNetData(true,baseEntityCall,new
+        getNetData(false,baseEntityCall,new
                 SimpleNetDataCallback<BaseEntity<New3LoginInfoTipEntity>>(){
                     @Override
                     public void onSuccess(BaseEntity<New3LoginInfoTipEntity> entity) {
