@@ -99,7 +99,7 @@ public class VerifyPicDialog {
     public void showState(int state){
         ViewGroup.LayoutParams layoutParams = ll_root.getLayoutParams();
         if (1 == state){
-            layoutParams.height = TransformUtil.dip2px(ctx,144);
+            layoutParams.height = TransformUtil.dip2px(ctx,150);
             visible(ll_verify);
             gone(miv_avatar,mtv_nickname,ll_invite_code);
         }else if (2 == state){

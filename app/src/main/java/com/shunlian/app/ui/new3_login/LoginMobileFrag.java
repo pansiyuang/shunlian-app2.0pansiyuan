@@ -11,6 +11,7 @@ import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyTextView;
 
@@ -96,7 +97,9 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
 
     @OnClick(R.id.mbtn_login)
     public void next(){
-        mbtnLogin.setEnabled(false);
+        if (MyOnClickListener.isFastClick()){
+            return;
+        }
         String mobile = this.mobile.getText().toString();
         if (isEmpty(mobile) || mobile.length() != 11) return;
         if (mConfig != null && !isEmpty(mConfig.status) &&
@@ -156,7 +159,6 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     public void smsCode(int showPictureCode,String error) {
-        mbtnLogin.setEnabled(true);
         if (showPictureCode == 0){
             String mobile = this.mobile.getText().toString();
             if (mConfig != null) {

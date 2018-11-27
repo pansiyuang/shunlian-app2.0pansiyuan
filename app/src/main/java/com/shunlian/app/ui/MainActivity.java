@@ -881,7 +881,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     public void initDialogs(String prize) {
-        if (dialog_new == null) {
+//        if (dialog_new == null) {
             dialog_new = new Dialog(this, R.style.popAd);
             dialog_new.setContentView(R.layout.dialog_new);
             MyImageView miv_close = (MyImageView) dialog_new.findViewById(R.id.miv_close);
@@ -914,7 +914,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             });
 
             dialog_new.setCancelable(false);
-        }
+//        }
         dialog_new.show();
     }
 
