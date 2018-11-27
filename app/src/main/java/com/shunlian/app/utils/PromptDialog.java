@@ -6,8 +6,11 @@ import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -44,6 +47,13 @@ public class PromptDialog {
         tv_messages = (TextView) logoutDialog.findViewById(R.id.tv_messages);
         mtv_describe = (MyTextView) logoutDialog.findViewById(R.id.mtv_describe);
         view_line = logoutDialog.findViewById(R.id.view_line);
+
+        Window dialogWindow = logoutDialog.getWindow();
+        WindowManager m = ctx.getWindowManager();
+        Display d = m.getDefaultDisplay();
+        WindowManager.LayoutParams p = dialogWindow.getAttributes();
+        p.width = (int) (d.getWidth() * 0.75);
+        dialogWindow.setAttributes(p);
 
         GradientDrawable background = (GradientDrawable) tvSure.getBackground();
         int i = TransformUtil.dip2px(ctx, 5);
