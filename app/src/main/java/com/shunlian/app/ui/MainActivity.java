@@ -909,7 +909,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //                      isGetAward=true;
                         LoginEntryAct.startAct(baseAct);
                     }
-
+                    dialog_new.dismiss();
                 }
             });
 

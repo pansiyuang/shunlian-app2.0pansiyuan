@@ -394,7 +394,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     private void loginSuccess(BaseEntity<WXLoginEntity> entity, WXLoginEntity wxLoginEntity) {
-        Common.staticToast(entity.message);
+        //Common.staticToast(entity.message);
         SharedPrefUtil.saveSharedUserString("token", wxLoginEntity.token);
         SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);

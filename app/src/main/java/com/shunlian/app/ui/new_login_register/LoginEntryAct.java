@@ -2,6 +2,7 @@ package com.shunlian.app.ui.new_login_register;
 
 import android.content.Context;
 import android.content.Intent;
+import android.widget.ImageView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -155,7 +156,10 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
                 String image = ad.image;
                 New3LoginInfoTipEntity.LinkBean link = ad.link;
                 if (!isEmpty(image)) {
-                    GlideUtils.getInstance().loadOverrideImage(this, customVideoPlayer.thumbImageView,image,rw,rh);
+                    customVideoPlayer.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    GlideUtils.getInstance().loadOverrideImage(this,
+                            R.mipmap.img_default_find_articlelist2,
+                            customVideoPlayer.thumbImageView,image,rw,rh);
                 }
                 customVideoPlayer.setUp(link.item_id, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
                 isRelease = true;

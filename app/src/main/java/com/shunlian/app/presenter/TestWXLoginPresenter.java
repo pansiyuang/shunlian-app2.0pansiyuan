@@ -74,7 +74,7 @@ public class TestWXLoginPresenter extends BasePresenter {
                 String mobile = wxLoginEntity.mobile;
                 String member_id = wxLoginEntity.member_id;
                 String status = wxLoginEntity.status;
-                //status = "4";
+                //status = "3";
                 if ("2".equals(status)) {//绑定手机号不需要推荐人
                     /*RegisterAndBindingAct.startAct(context,
                             RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);*/
@@ -154,7 +154,7 @@ public class TestWXLoginPresenter extends BasePresenter {
     }*/
 
     private void loginSuccess(BaseEntity<WXLoginEntity> entity, WXLoginEntity wxLoginEntity) {
-        Common.staticToast(entity.message);
+        //Common.staticToast(entity.message);
 
         //登陆成功啦
         SharedPrefUtil.saveSharedUserString("token", wxLoginEntity.token);

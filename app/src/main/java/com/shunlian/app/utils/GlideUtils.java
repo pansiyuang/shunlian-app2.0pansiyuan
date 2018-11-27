@@ -185,11 +185,15 @@ public class GlideUtils {
      * @param heightSize
      */
     public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize) {
+        loadOverrideImage(context,R.mipmap.img_default_common,imageView,imgUrl,withSize,heightSize);
+    }
+
+    public void loadOverrideImage(Context context, int resourceId, ImageView imageView,
+                                  String imgUrl, int withSize, int heightSize){
         if (imageView == null||withSize<=0||heightSize<=0) return;
         Glide.with(context)
                 .load(imgUrl)
-//                .error(R.mipmap.img_default_common)
-                .placeholder(R.mipmap.img_default_common)
+                .placeholder(resourceId)
                 .crossFade()
                 .dontAnimate()
                 .priority(Priority.NORMAL) //下载的优先级

@@ -730,6 +730,8 @@ public class SmallVideoPlayer extends JZVideoPlayer {
      */
     public void onlyLook(){
         isOnlyPlay = true;
+        bottomContainer.setVisibility(GONE);
+        closeVolumeControl.setVisibility(GONE);
     }
 
     public void changeUiToComplete() {
