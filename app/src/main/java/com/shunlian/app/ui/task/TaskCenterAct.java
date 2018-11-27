@@ -290,6 +290,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                 }
             });
             va.start();
+        }else{
+            mPresenter.goldegglimit();
         }
     }
 
