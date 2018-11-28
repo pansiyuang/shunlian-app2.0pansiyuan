@@ -98,6 +98,8 @@ public final class Constant {
     public static boolean ISBALANCE=false;
 
     public static final String PLUS_ADD = H5_HOST+"plus";
+    public static final int BUBBLE_DUR =8;
+    public static final int BUBBLE_SHOW =4;
     public static  String SHARE_LINK = "";
     public static  String ZHIFUBAOURL=H5_HOST+"agreement/5";
 
