@@ -723,7 +723,7 @@ public class Common {
 //            vlp.setMargins(0, 0, 0, 0);
 //            show_toast.setLayoutParams(vlp);
 //            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
-            toastAnim.setDuration(Toast.LENGTH_SHORT);
+            toastAnim.setDuration(Toast.LENGTH_LONG);
             toastAnim.setView(v);
             toastAnim.setGravity(Gravity.FILL, 0, 0);
             showAnimJsonFile(jsonAnim,"images/img_3.png");
