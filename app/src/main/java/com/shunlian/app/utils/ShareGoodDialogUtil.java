@@ -274,7 +274,7 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_nickname = showGoodBuild.findViewById(R.id.mtv_nickname);
            TextView mtv_market_price = showGoodBuild.findViewById(R.id.mtv_market_price);
             mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
-            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("nickname", ""));
+            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
             MyImageView miv_code =  showGoodBuild.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(context, 92.5f);
             Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
@@ -408,7 +408,7 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_nickname = showShopBuild.findViewById(R.id.mtv_nickname);
 
             mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
-            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("nickname", ""));
+            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
             GlideUtils.getInstance().loadImageZheng(context, miv_store, mShareInfoParam.shop_logo);
             MyImageView miv_code =  showShopBuild.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(context, 92.5f);
