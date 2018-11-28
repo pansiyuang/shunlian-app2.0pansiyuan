@@ -162,18 +162,7 @@ public class ShareGoodDialogUtil {
             MyImageView miv_close = showSpecialBuild.findViewById(R.id.miv_close);
             MyLinearLayout mllayout_save = showSpecialBuild.findViewById(R.id.mllayout_save);
             MyLinearLayout  mllayout_wexin = showSpecialBuild.findViewById(R.id.mllayout_wexin);
-//            MyTextView tv_title_name =  showSpecialBuild.findViewById(R.id.tv_title_name);
-//            MyTextView tv_title_desc =  showSpecialBuild.findViewById(R.id.tv_title_desc);
-//            MyImageView miv_code =  showSpecialBuild.findViewById(R.id.miv_code);
            ImageView imv_special_pic =  showSpecialBuild.findViewById(R.id.imv_special_pic);
-//            int i = TransformUtil.dip2px(context, 92.5f);
-//            Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
-//            miv_code.setImageBitmap(qrImage);
-
-//            tv_title_name.setText(mShareInfoParam.title);
-//           if(mShareInfoParam.desc!=null){
-//               tv_title_desc.setText(mShareInfoParam.desc);
-//           }
            if(isShow) {
                GlideUtils.getInstance().loadImageZheng(context, imv_special_pic, mShareInfoParam.img);
                showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
@@ -188,8 +177,7 @@ public class ShareGoodDialogUtil {
                            public void onResourceReady(Bitmap resource,
                                                        GlideAnimation<? super Bitmap> glideAnimation) {
                                imv_special_pic.setImageBitmap(resource);
-                               Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                               BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,false);
+                               BitmapUtil.saveImageToAlbumn(context, resource,true,false);
                            }
                            @Override
                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
@@ -209,8 +197,27 @@ public class ShareGoodDialogUtil {
                     showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                     miv_close.setVisibility(View.GONE);
+                    GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
+                            new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource,
+                                                            GlideAnimation<? super Bitmap> glideAnimation) {
+                                    if(resource!=null) {
+                                        boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, resource, false, false);
+                                        if (isSuccess) {
+                                            Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
+                                        } else {
+                                            Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                    super.onLoadFailed(e, errorDrawable);
+                                }
+                            });
                     showSpecialBuild.dismiss();
-                    goodsPic(inflate,mShareInfoParam.img,true,false);
+//                    goodsPic(inflate,mShareInfoParam.img,true,false);
                 }
             });
          mllayout_wexin.setOnClickListener(new View.OnClickListener() {
@@ -219,8 +226,27 @@ public class ShareGoodDialogUtil {
                 showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                 showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                 miv_close.setVisibility(View.GONE);
+                GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
+                        new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource,
+                                                        GlideAnimation<? super Bitmap> glideAnimation) {
+                                if(resource!=null) {
+                                    boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, resource, true, true);
+                                    if (isSuccess) {
+                                        Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
+                                    } else {
+                                        Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                super.onLoadFailed(e, errorDrawable);
+                            }
+                        });
                 showSpecialBuild.dismiss();
-                goodsPic(inflate,mShareInfoParam.shop_logo,false,false);
+//                goodsPic(inflate,mShareInfoParam.shop_logo,false,false);
             }
         });
     }
@@ -248,7 +274,7 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_nickname = showGoodBuild.findViewById(R.id.mtv_nickname);
            TextView mtv_market_price = showGoodBuild.findViewById(R.id.mtv_market_price);
             mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
-            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("nickname", ""));
+            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
             MyImageView miv_code =  showGoodBuild.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(context, 92.5f);
             Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
@@ -382,7 +408,7 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_nickname = showShopBuild.findViewById(R.id.mtv_nickname);
 
             mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
-            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("nickname", ""));
+            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
             GlideUtils.getInstance().loadImageZheng(context, miv_store, mShareInfoParam.shop_logo);
             MyImageView miv_code =  showShopBuild.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(context, 92.5f);
