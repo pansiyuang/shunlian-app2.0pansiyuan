@@ -14,6 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_white_8px"
+            android:paddingLeft="@dimen/xx60"
+            android:paddingRight="@dimen/xx60"
             android:orientation="vertical">
 
 
@@ -22,13 +24,13 @@
                 android:layout_height="@dimen/yy1200"
                 android:paddingLeft="@dimen/xx30"
                 android:paddingRight="@dimen/xx30"
-                android:layout_marginTop="@dimen/xx60"
+                android:layout_marginTop="@dimen/xx30"
                 android:paddingBottom="@dimen/xx10">
                 <ImageView
                     android:id="@+id/imv_special_pic"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="fitXY"/>
+                    android:scaleType="fitCenter"/>
                 <LinearLayout
                     android:layout_width="@dimen/xx460"
                     android:layout_height="@dimen/xx460"
