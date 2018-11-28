@@ -198,6 +198,8 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
                 promptDialog = new PromptDialog(this);
                 promptDialog.setTvSureBGColor(Color.WHITE);
                 promptDialog.setTvSureColor(R.color.pink_color);
+                promptDialog.setTvCancleIsBold(false);
+                promptDialog.setTvSureIsBold(false);
             }
             promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
                     getStringResouce(R.string.unfollow), view -> {

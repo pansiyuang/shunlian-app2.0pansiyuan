@@ -97,7 +97,7 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
     private DownloadMsgFrag downloadMsgFrag;
     private NoticeMsgFrag noticeMsgFrag;
     private DiscoverMsgPresenter mPresenter;
-    private String[] titles = {"点赞/分享", "关注", "下载", "通知"};
+    private String[] titles = {"分享", "关注", "下载", "通知"};
     private int showType;//0 分享点赞 ,1 关注 2,下载 3,通知
     private int currentPraiseCount, currentAttentionCount, currentNoticeCount, currentDownloadCount, totalMsgCount;
 

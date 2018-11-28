@@ -299,7 +299,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }
             }
         };
-        handler.postDelayed(runnableA, (7 * size + 1) * 1000);
+        handler.postDelayed(runnableA, ((Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR)* size + 1) * 1000);
     }
 
     public void startToast(final List<BubbleEntity.Content> datas) {
@@ -338,7 +338,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                                 public void run() {
                                     isCrash = false;
                                 }
-                            }, (7 * size + 2) * 1000);
+                            }, ((Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR)  * size + 2) * 1000);
                         }
                     } else {
                         handler.post(runnableB);
@@ -351,11 +351,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                                 }
                             }
                         };
-                        handler.postDelayed(runnableC, 5 * 1000);
+                        handler.postDelayed(runnableC, Constant.BUBBLE_SHOW  * 1000);
                     }
                 }
             }
-        }, 0, 7 * 1000);
+        }, 0, (Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR)  * 1000);
     }
 
     public static void startAct(Context context, String goodsId) {
