@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.presenter.TestWXLoginPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
@@ -42,7 +41,7 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
 
     /***************登录条款************/
     public static final String TERMS_OF_SERVICE = "agreement/1";
-    private TestWXLoginPresenter presenterTest;
+    //private TestWXLoginPresenter presenterTest;
 
     @BindView(R.id.mtv_pwd_login)
     MyTextView mtv_pwd_login;
@@ -95,12 +94,12 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
 
     @OnClick(R.id.llayout_wechat_login)
     public void wechatLogin(){
-//        WXLogin();
-        if (presenterTest == null) {
+        WXLogin();
+        /*if (presenterTest == null) {
             presenterTest = new TestWXLoginPresenter(this, this);
         }else {
             presenterTest.initApi();
-        }
+        }*/
     }
 
     @OnClick({R.id.mbtn_login,R.id.mtv_register})
