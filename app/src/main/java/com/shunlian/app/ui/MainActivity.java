@@ -46,6 +46,7 @@ import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.h5.H5X5Frag;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
@@ -163,6 +164,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
     private String currentDiscoverFlag;
+    private PromptDialog promptDialog;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -171,7 +173,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         context.startActivity(intent);
     }
 
-    public static void startAct(Context context, String flag,String discoverFlag) {
+    public static void startAct(Context context, String flag, String discoverFlag) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("flag", flag);
         intent.putExtra("discover_flag", discoverFlag);
@@ -399,7 +401,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         sendConfig.isWhiteList = true;
                     }
                     sendConfig.memberId = baseInfo.member_id;
-                    FindSendPictureTextAct.startAct(this, sendConfig);
+
+                    if (Common.isPlus()) {
+                        FindSendPictureTextAct.startAct(this, sendConfig);
+                    } else {
+                        initHintDialog();
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -442,6 +449,20 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 }
             }
         }, 300);
+    }
+
+    public void initHintDialog() {
+        if (promptDialog == null) {
+            promptDialog = new PromptDialog(this);
+            promptDialog.setTvCancleIsBold(false);
+            promptDialog.setTvSureIsBold(false);
+            promptDialog.setTvSureColor(R.color.pink_color);
+            promptDialog.setTvSureBGColor(Color.WHITE);
+        }
+        promptDialog.setSureAndCancleListener("亲，您还不是PLUS会员哦,现在开通享7大专属权益", "立即开通", view -> {
+            promptDialog.dismiss();
+            H5X5Act.startAct(MainActivity.this, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+        }, getStringResouce(R.string.errcode_cancel), view -> promptDialog.dismiss()).show();
     }
 
     public void mainPageClick() {
