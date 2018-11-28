@@ -97,8 +97,7 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
     private DownloadMsgFrag downloadMsgFrag;
     private NoticeMsgFrag noticeMsgFrag;
     private DiscoverMsgPresenter mPresenter;
-    private String[] titles = { "关注", "下载", "通知"};
-//    private String[] titles = {"点赞/分享", "关注", "下载", "通知"};
+    private String[] titles = {"分享", "关注", "下载", "通知"};
     private int showType;//0 分享点赞 ,1 关注 2,下载 3,通知
     private int currentPraiseCount, currentAttentionCount, currentNoticeCount, currentDownloadCount, totalMsgCount;
 
@@ -129,23 +128,23 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
 
     @Override
     protected void initListener() {
-//        rl_zan.setOnClickListener(v -> {
-//            showType = 0;
-//            showTab(showType);
-//            viewpager.setCurrentItem(showType);
-//        });
-        rl_attention.setOnClickListener(v -> {
+        rl_zan.setOnClickListener(v -> {
             showType = 0;
             showTab(showType);
             viewpager.setCurrentItem(showType);
         });
-        rl_download.setOnClickListener(v -> {
+        rl_attention.setOnClickListener(v -> {
             showType = 1;
             showTab(showType);
             viewpager.setCurrentItem(showType);
         });
-        rl_notice.setOnClickListener(v -> {
+        rl_download.setOnClickListener(v -> {
             showType = 2;
+            showTab(showType);
+            viewpager.setCurrentItem(showType);
+        });
+        rl_notice.setOnClickListener(v -> {
+            showType = 3;
             showTab(showType);
             viewpager.setCurrentItem(showType);
         });
@@ -200,19 +199,19 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
         view_notice.setVisibility(View.INVISIBLE);
 
         switch (tab) {
-//            case 0:
-//                tv_zan.setTextColor(getColorResouce(R.color.pink_color));
-//                view_zan.setVisibility(View.VISIBLE);
-//                break;
             case 0:
+                tv_zan.setTextColor(getColorResouce(R.color.pink_color));
+                view_zan.setVisibility(View.VISIBLE);
+                break;
+            case 1:
                 tv_attention.setTextColor(getColorResouce(R.color.pink_color));
                 view_attention.setVisibility(View.VISIBLE);
                 break;
-            case 1:
+            case 2:
                 tv_download.setTextColor(getColorResouce(R.color.pink_color));
                 view_download.setVisibility(View.VISIBLE);
                 break;
-            case 2:
+            case 3:
                 tv_notice.setTextColor(getColorResouce(R.color.pink_color));
                 view_notice.setVisibility(View.VISIBLE);
                 break;
