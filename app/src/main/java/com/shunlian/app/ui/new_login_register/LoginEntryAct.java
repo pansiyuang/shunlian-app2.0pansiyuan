@@ -70,7 +70,10 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
     protected void initListener() {
         super.initListener();
         if (customVideoPlayer != null){
-            customVideoPlayer.setOnClickListener(v -> customVideoPlayer.startVideo());
+            customVideoPlayer.setOnClickListener(v -> {
+                customVideoPlayer.startVideo();
+                isRelease = true;
+            });
         }
     }
 
@@ -143,8 +146,6 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
         if (data != null){
             New3LoginInfoTipEntity.AdBean ad = data.ad;
             if (ad != null){
-                visible(customVideoPlayer);
-                customVideoPlayer.onlyLook();
                 int rw = DeviceInfoUtil.getDeviceWidth(this) - TransformUtil.dip2px(this, 40);
                 int rh = TransformUtil.dip2px(this, 160);
                 /*int[] ints = TransformUtil.countRealWH(this, rw, rh);
@@ -160,8 +161,11 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
                             R.mipmap.img_default_find_articlelist2,
                             customVideoPlayer.thumbImageView,image,rw,rh);
                 }
-                customVideoPlayer.setUp(link.item_id, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
-                isRelease = true;
+                if (link != null && !isEmpty(link.item_id)) {
+                    customVideoPlayer.setUp(link.item_id, CustomVideoPlayer.SCREEN_WINDOW_NORMAL, "");
+                    visible(customVideoPlayer);
+                    customVideoPlayer.onlyLook();
+                }
             }
         }
     }
