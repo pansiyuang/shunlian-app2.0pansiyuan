@@ -48,6 +48,7 @@ import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.h5.H5X5Frag;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -386,15 +387,18 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             view_message.setVisibility(View.GONE);
 //            mtv_message_count.setVisibility(View.GONE);
 
-//            if (!Common.isAlreadyLogin() && discoverFrag != null && discoverFrag.isVisible()) {
-//                LoginAct.startAct(this);
-//                return;
-//            }
             try {
-                String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
-                HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
-                FindSendPictureTextAct.SendConfig sendConfig = new FindSendPictureTextAct.SendConfig();
                 if (discoverFrag != null && discoverFrag.isVisible()) {
+
+                    if (!Common.isAlreadyLogin()) {
+                        Common.goGoGo(this,"login");
+                        return;
+                    }
+
+                    String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
+                    HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
+                    FindSendPictureTextAct.SendConfig sendConfig = new FindSendPictureTextAct.SendConfig();
+
                     if (baseInfo.white_list == 0) {
                         sendConfig.isWhiteList = false;
                     } else {
