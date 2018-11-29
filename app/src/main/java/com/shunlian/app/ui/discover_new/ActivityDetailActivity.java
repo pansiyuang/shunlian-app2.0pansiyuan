@@ -19,9 +19,12 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -72,7 +75,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private ObjectMapper objectMapper;
     private HotBlogsEntity.Detail currentDetail;
     private ShareGoodDialogUtil shareGoodDialogUtil;
-    private PromptDialog promptDialog;
+    private PromptDialog promptDialog, plusDialog;
 
     @Override
     protected int getLayoutId() {
@@ -135,6 +138,10 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         miv_join.setOnClickListener(v -> {
             if (!Common.isAlreadyLogin()) {
                 Common.goGoGo(this, "login");
+                return;
+            }
+            if (!Common.isPlus()) {
+                initHintDialog();
                 return;
             }
             try {
@@ -347,6 +354,20 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 mAdapter.notifyDataSetChanged();
                 break;
         }
+    }
+
+    public void initHintDialog() {
+        if (plusDialog == null) {
+            plusDialog = new PromptDialog(this);
+            plusDialog.setTvCancleIsBold(false);
+            plusDialog.setTvSureIsBold(false);
+            plusDialog.setTvSureColor(R.color.pink_color);
+            plusDialog.setTvSureBGColor(Color.WHITE);
+        }
+        plusDialog.setSureAndCancleListener("亲，您还不是PLUS会员哦,现在开通享7大专属权益", "立即开通", view -> {
+            plusDialog.dismiss();
+            H5X5Act.startAct(ActivityDetailActivity.this, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+        }, getStringResouce(R.string.errcode_cancel), view -> plusDialog.dismiss()).show();
     }
 
     @Override
