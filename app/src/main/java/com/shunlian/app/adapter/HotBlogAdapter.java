@@ -321,6 +321,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                         mShareInfoParam.userName = SharedPrefUtil.getSharedUserString("nickname", "");
                         mShareInfoParam.userAvatar = SharedPrefUtil.getSharedUserString("avatar", "");
                         shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
+                        shareGoodDialogUtil.setShareGoods();
                     }
                 });
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
