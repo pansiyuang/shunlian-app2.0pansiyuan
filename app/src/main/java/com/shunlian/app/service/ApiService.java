@@ -2842,7 +2842,7 @@ public interface ApiService {
     /**
      * 关注/取消关注
      */
-    @GET("/discovery/discoveryuser/downcount")
+    @GET("discovery/discoveryuser/downcount")
     Call<BaseEntity<EmptyEntity>> downCount(@QueryMap Map<String, String> map);
 
     /**
@@ -2879,32 +2879,32 @@ public interface ApiService {
     /**
      * 新人专享banner
      */
-    @GET("/newexclusive/adlist")
+    @GET("newexclusive/adlist")
     Call<BaseEntity<AdUserEntity>> adlist(@QueryMap Map<String, String> map);
 
     /**
      * 新人专享商品
      * @return
      */
-    @POST("/newexclusive/goodslist")
+    @POST("newexclusive/goodslist")
     Call<BaseEntity<NewUserGoodsEntity>> usergoodslist(@QueryMap Map<String, String> map);
 
     /**
      * 新人专享添加购物车
      * @return
      */
-    @POST("/newexclusive/addcart")
+    @POST("newexclusive/addcart")
     Call<BaseEntity<CateEntity>> newuseraddCart(@Body RequestBody body);
 
     /**
      * 新人专享购物车商品列表
      */
-    @GET("/newexclusive/cartlist")
+    @GET("newexclusive/cartlist")
     Call<BaseEntity<NewUserGoodsEntity>> cartlist(@QueryMap Map<String, String> map);
     /**
      * 新人专享删除购物车
      */
-    @GET("/newexclusive/deletecart")
+    @GET("newexclusive/deletecart")
     Call<BaseEntity<EmptyEntity>> deletecart(@QueryMap Map<String, String> map);
     /**
      * 购物车进入确认订单页
@@ -2912,7 +2912,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/newexclusive/buy")
+    @POST("newexclusive/buy")
     Call<BaseEntity<ConfirmOrderEntity>> orderNewUserConfirm(@Body RequestBody body);
 
     /**
@@ -2920,7 +2920,7 @@ public interface ApiService {
      * @param map
      * @return
      */
-    @GET("/newexclusive/sharepage")
+    @GET("newexclusive/sharepage")
     Call<BaseEntity<ShareInfoParam>> shareNewUserInfo(@QueryMap Map<String, String> map);
 
     /**
