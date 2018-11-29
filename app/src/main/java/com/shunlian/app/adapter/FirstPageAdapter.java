@@ -537,7 +537,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             fiveHolder.view_line.setVisibility(View.VISIBLE);
                         }
                     }
-                    if (data.url.type.equals("shop")) {
+                    if (data.url.type.equals("shop")||data.url.type.equals("special")) {
                         fiveHolder.mtv_store_title.setVisibility(View.VISIBLE);
                         fiveHolder.mtv_title.setVisibility(View.INVISIBLE);
                         fiveHolder.mtv_price.setVisibility(View.GONE);

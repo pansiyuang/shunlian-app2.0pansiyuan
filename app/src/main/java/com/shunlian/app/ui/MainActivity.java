@@ -932,7 +932,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         pMain.getPrizeByRegister();
                     } else {
 //                      isGetAward=true;
-                        LoginEntryAct.startAct(baseAct);
+                        Common.goGoGo(baseAct,"login");
                         dialog_new.dismiss();
                     }
                 }
