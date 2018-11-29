@@ -1389,6 +1389,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 mShareInfoParam.price = mGoodsDeatilEntity.tt_act.act_price;
                 mShareInfoParam.market_price = mGoodsDeatilEntity.tt_act.market_price;
             }
+            if(mShareInfoParam.price==null&&mGoodsDeatilEntity.price!=null){
+                mShareInfoParam.price= mGoodsDeatilEntity.price;
+            }
             if (goodsDetailPresenter != null) {
                 goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
                 shareGoodDialogUtil.shareGoodDialog(goodsDetailPresenter.getShareInfoParam(),true,false);
