@@ -135,7 +135,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         });
         miv_join.setOnClickListener(v -> {
             if (!Common.isAlreadyLogin()) {
-                LoginAct.startAct(ActivityDetailActivity.this);
+                Common.goGoGo(this, "login");
                 return;
             }
             try {
