@@ -209,7 +209,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blog.is_focus = focus;
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
     }
 
     @Override
@@ -220,7 +220,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blog.praise_num++;
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
     }
 
     @Override
@@ -230,7 +230,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blog.down_num++;
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
     }
 
     @Override
@@ -311,7 +311,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blogList.remove(i);
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
         if (isEmpty(blogList)) {
             recycler_list.setVisibility(View.GONE);
             nestedScrollView.setVisibility(View.VISIBLE);
@@ -330,7 +330,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                 blog.total_share_num++;
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -342,7 +342,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                         blog.is_focus = event.mData.is_focus;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
                 break;
             case RefreshBlogEvent.PRAISE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -351,7 +351,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                         blog.praise_num++;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
                 break;
             case RefreshBlogEvent.SHARE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -359,7 +359,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                         blog.total_share_num++;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
                 break;
             case RefreshBlogEvent.DOWNLOAD_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -367,7 +367,7 @@ public class CommonBlogFrag extends BaseLazyFragment implements ICommonBlogView,
                         blog.down_num++;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
                 break;
         }
     }

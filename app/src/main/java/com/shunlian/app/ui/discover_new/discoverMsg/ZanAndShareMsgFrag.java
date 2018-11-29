@@ -115,7 +115,7 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
     @Override
     public void getMsgList(List<ZanShareEntity.Msg> list, int page, int totalPage) {
         if (page == 1) {
-            ((DiscoverMsgActivity) getActivity()).showPraisePage();
+//            ((DiscoverMsgActivity) getActivity()).showPraisePage();
             msgList.clear();
         }
         if (!isEmpty(list)) {
