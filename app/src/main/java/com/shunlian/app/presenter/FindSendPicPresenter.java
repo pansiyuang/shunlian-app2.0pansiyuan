@@ -44,6 +44,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
     private Call<BaseEntity<UploadPicEntity>> uploadPicCall;
     private Call<BaseEntity<CommonEntity>> uploadVideoCall;
     private ArrayList<ImageVideo> mImgList = new ArrayList();
+    private ArrayList<ImageVideo> mTempList = new ArrayList();
     private SingleImgAdapterV2 mImgAdapter;
     private int index = 0;//递归压缩图片下标
     private byte[] mBitmapBytes;
@@ -202,11 +203,20 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
                 UploadPicEntity uploadPicEntity = entity.data;
                 if (uploadPicEntity != null) {
                     for (int i = 0; i < uploadPicEntity.relativePath.size(); i++) {
-                        mImgList.get(i).url = uploadPicEntity.relativePath.get(i);
+                        mTempList.get(i).url = uploadPicEntity.relativePath.get(i);
                     }
+                    mImgList.addAll(mTempList);
                     if (mImgAdapter != null)
                         mImgAdapter.notifyDataSetChanged();
                 }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                if (mTempList != null) mTempList.clear();
+                if (mImgAdapter != null)
+                    mImgAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -326,6 +336,9 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
     public void reducePics(List<String> list){
         if (isEmpty(list))return;
         index = 0;
+        if (mTempList == null)
+            mTempList = new ArrayList<>();
+        mTempList.clear();
         compress(index,list);
     }
 
@@ -345,12 +358,13 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
                 ImageVideo imageEntity = new ImageVideo();
                 imageEntity.path = list.get(index);
                 imageEntity.file = file;
-                mImgList.add(imageEntity);
+                //mImgList.add(imageEntity);
+                mTempList.add(imageEntity);
                 index++;
                 if (index < list.size()){
                     compress(index,list);
                 }else {
-                    uploadPic(mImgList, "find_send");//上传图片
+                    uploadPic(mTempList, "find_send");//上传图片
                 }
             }
             @Override
