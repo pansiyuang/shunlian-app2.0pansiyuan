@@ -26,6 +26,7 @@ import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
@@ -63,6 +64,9 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     public int offset;
     private LinearLayoutManager manager;
@@ -212,7 +216,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             blogList.addAll(list);
         }
         if (mAdapter == null) {
-            mAdapter = new ActivityDetailAdapter(this, blogList, detail, shareGoodDialogUtil);
+            mAdapter = new ActivityDetailAdapter(this, blogList, detail, shareGoodDialogUtil,quick_actions);
             recycler_list.setAdapter(mAdapter);
             mAdapter.setAdapterCallBack(this);
         }

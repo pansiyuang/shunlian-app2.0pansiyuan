@@ -70,7 +70,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
     private HotBlogsEntity.Detail mDetail;
     private TieziAvarAdapter tieziAvarAdapter;
     private BlogBottomDialog blogBottomDialog;
-    private QuickActions quickActions;
+    private QuickActions actions;
     private SaveImgDialog saveImgDialog;
     private DownLoadDialogProgress downLoadDialogProgress;
     private DownloadUtils downloadUtils;
@@ -92,10 +92,11 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         }
     };
 
-    public ActivityDetailAdapter(Context context, List<BigImgEntity.Blog> lists, HotBlogsEntity.Detail detail,ShareGoodDialogUtil mShareGoodDialogUtil) {
+    public ActivityDetailAdapter(Context context, List<BigImgEntity.Blog> lists, HotBlogsEntity.Detail detail,ShareGoodDialogUtil mShareGoodDialogUtil ,QuickActions quick_actions) {
         super(context, true, lists);
         this.mDetail = detail;
         this.shareGoodDialogUtil = mShareGoodDialogUtil;
+        actions = quick_actions;
     }
 
     @Override
@@ -194,7 +195,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                     }
                 });
                 blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
-                blogViewHolder.tv_share_count.setOnClickListener(view -> quickActions.shareDiscoverDialog(blog.id, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+                blogViewHolder.tv_share_count.setOnClickListener(view -> actions.shareDiscoverDialog(blog.id, goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
                         1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", "")));
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
             } else {
