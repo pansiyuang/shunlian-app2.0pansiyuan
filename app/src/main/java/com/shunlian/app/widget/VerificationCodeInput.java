@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 
 import java.util.ArrayList;
@@ -238,6 +239,12 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
             View childAt = getChildAt(i);
             if (childAt instanceof EditText){
                 ((EditText)childAt).setText("");
+                if (i == 0){
+                    childAt.setFocusable(true);
+                    childAt.setFocusableInTouchMode(true);
+                    childAt.requestFocus();
+                    Common.showKeyboard(childAt);
+                }
             }
         }
     }

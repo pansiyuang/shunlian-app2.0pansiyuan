@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_root"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/bg_dialog_top"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:text="图形验证码"
+            android:textColor="@color/new_text"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/ll_verify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <EditText
+                android:id="@+id/ed_verify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="请输入图形验证码"
+                android:inputType="number"
+                android:maxLength="4"
+                android:minHeight="30dp"
+                android:minWidth="80dp"
+                android:textColor="@color/value_484848"
+                android:textColorHint="@color/color_value_6c"
+                android:textSize="16sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_pic_code"
+                android:layout_width="78dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="15dp"
+                android:scaleType="fitXY" />
+
+        </LinearLayout>
+        <!--图形验证码提示-->
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="请输入正确手机号"
+            android:drawableLeft="@mipmap/image_exclamation"
+            android:drawablePadding="4dp"
+            android:textColor="#FB0A3D"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            android:src="@mipmap/img_set_defaulthead"
+            app:iv_control_adapter="true"
+            app:iv_control_height="100"
+            app:iv_control_width="100"
+            app:iv_margin_top="40" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Immanuel Kant"
+            android:visibility="gone"
+            android:textColor="@color/value_484848"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/ll_invite_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="邀请码"
+                android:background="@null"
+                android:textColor="@color/text_gray2"
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_invite_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8453632"
+                android:background="@null"
+                android:textColor="@color/value_484848"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/my_line_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@null"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_dialog_bottoml"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/new_text"
+            android:textSize="15sp" />
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/my_line_gray" />
+
+        <TextView
+            android:id="@+id/tv_sure"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_dialog_bottomrs"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</LinearLayout>

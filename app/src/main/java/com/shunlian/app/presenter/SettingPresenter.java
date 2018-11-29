@@ -58,6 +58,7 @@ public class SettingPresenter extends BasePresenter<ISettingView> {
                 iView.pushSwitch(data.push_on);
                 iView.aboutUrl(data.about_url);
                 iView.downAppQRCode(data.qr_img_for_app_down);
+                iView.isSetPwd(data.if_pwd_set);
             }
         });
     }

@@ -168,7 +168,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
                 }
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0,blogList.size(),blogList);
     }
 
     @Override
@@ -179,7 +179,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
                 blog.praise_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0,blogList.size(),blogList);
     }
 
     @Override
@@ -189,7 +189,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
                 blog.down_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0,blogList.size(),blogList);
     }
 
 
@@ -261,6 +261,6 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
                 blog.total_share_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0,blogList.size(),blogList);
     }
 }
