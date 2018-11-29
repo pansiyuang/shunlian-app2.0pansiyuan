@@ -28,6 +28,7 @@ import com.shunlian.app.adapter.DiscoverGoodsAdapter;
 import com.shunlian.app.adapter.OperateAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.LookBigImgPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -40,6 +41,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILookBigImgView;
 import com.shunlian.app.widget.photoview.HackyViewPager;
@@ -84,7 +86,8 @@ public class NewLookBigImgAct extends BaseActivity implements QuickActions.OnSha
     private LookBigImgPresenter mPresenter;
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
-
+    private ShareInfoParam mShareInfoParam;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     public static void startAct(Context context, BigImgEntity entity) {
         Intent intent = new Intent(context, NewLookBigImgAct.class);
         intent.putExtra("data", entity);
@@ -114,6 +117,7 @@ public class NewLookBigImgAct extends BaseActivity implements QuickActions.OnSha
      */
     @Override
     protected void initData() {
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         activity = this;
         entity = getIntent().getParcelableExtra("data");
         if (entity != null) {
@@ -165,9 +169,21 @@ public class NewLookBigImgAct extends BaseActivity implements QuickActions.OnSha
                 public void onClick(View view) {
                     if (entity.blog.related_goods.size() == 1) {
                         GoodsDeatilEntity.Goods goods = entity.blog.related_goods.get(0);
-                        quick_actions.createCode(goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
-                                1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""),
-                                SharedPrefUtil.getSharedUserString("avatar", ""));
+                        mShareInfoParam = new ShareInfoParam();
+                        mShareInfoParam.blogId =entity.blog.id;
+                        mShareInfoParam.shareLink=goods.share_url;
+                        mShareInfoParam.title =goods.title;
+                        mShareInfoParam.desc =goods.desc;
+                        mShareInfoParam.goods_id =goods.goods_id;
+                        mShareInfoParam.price =goods.price;
+                        mShareInfoParam.market_price =goods.market_price;
+                        mShareInfoParam.img =goods.thumb;
+                        mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
+                        shareGoodDialogUtil.setShareInfoParam(mShareInfoParam);
+                        shareGoodDialogUtil.createGoodCode(true,false);
+//                        quick_actions.createCode(goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
+//                                1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""),
+//                                SharedPrefUtil.getSharedUserString("avatar", ""));
                     } else {
                         initDialog(entity.blog, true);
                     }
