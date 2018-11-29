@@ -185,7 +185,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     runnableB = new Runnable() {
                         @Override
                         public void run() {
-                            if (mposition < datas.size()) {
+                            if (mposition < datas.size()&&lLayout_toast!=null) {
                                 LogUtil.augusLogW("mposition:" + mposition);
                                 lLayout_toast.setVisibility(View.VISIBLE);
                                 GlideUtils.getInstance().loadCircleAvar(baseContext,miv_icon,datas.get(mposition).avatar);
@@ -216,7 +216,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                         runnableC = new Runnable() {
                             @Override
                             public void run() {
-                                if (!isStop) {
+                                if (!isStop&&lLayout_toast!=null) {
                                     lLayout_toast.setVisibility(View.GONE);
                                     mposition++;
                                 }
