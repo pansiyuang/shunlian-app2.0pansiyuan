@@ -291,7 +291,7 @@ public class ShareGoodDialogUtil {
             if (!TextUtils.isEmpty(mShareInfoParam.market_price)) {
                 mtv_market_price.setVisibility(View.VISIBLE);
                 mtv_market_price.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG);
-                mtv_market_price.setText(mShareInfoParam.market_price);
+                mtv_market_price.setText("￥" + mShareInfoParam.market_price);
             }else{
                 mtv_market_price.setVisibility(View.VISIBLE);
             }
