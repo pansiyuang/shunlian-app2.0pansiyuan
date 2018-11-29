@@ -314,7 +314,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     runnableB = new Runnable() {
                         @Override
                         public void run() {
-                            if (mposition < datas.size()&&lLayout_toast!=null) {
+                            if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null) {
                                 LogUtil.augusLogW("mposition:" + mposition);
                                 lLayout_toast.setVisibility(View.VISIBLE);
                                 GlideUtils.getInstance().loadCircleAvar(baseAct,miv_icon,datas.get(mposition).avatar);

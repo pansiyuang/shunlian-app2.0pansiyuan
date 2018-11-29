@@ -610,6 +610,12 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
             sonicSessionClient.destroy();
             sonicSessionClient = null;
         }
+        try{
+            ViewGroup view = (ViewGroup) getActivity().getWindow().getDecorView();
+            view.removeAllViews();
+        }catch (Exception e){
+
+        }
         super.onDestroy();
     }
 
@@ -657,7 +663,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
     /**
      * 截取商品id
      *
-    * @param url
+    * @param
      * @return
      */
 //    private String interceptId(String url) {
