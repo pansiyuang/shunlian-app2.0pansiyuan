@@ -218,6 +218,7 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
         SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
+        SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
         CrashReport.setUserId(content.member_id);
         if (content.tag!=null)
             SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));
