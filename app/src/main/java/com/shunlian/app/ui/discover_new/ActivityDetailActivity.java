@@ -132,6 +132,12 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         setToolbar();
                         totalDy = layoutHeight;
                     }
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 2 == manager.getItemCount()) {
+                        if (mPresent != null) {
+                            mPresent.onRefresh();
+                        }
+                    }
                 }
             }
         });
