@@ -225,13 +225,14 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         if (JZVideoPlayerManager.getCurrentJzvd() != null &&
                 JZVideoPlayerManager.getCurrentJzvd().currentScreen !=
                         JZVideoPlayer.SCREEN_WINDOW_TINY) {
-            SmallVideoPlayer
-                    videoPlayer = (SmallVideoPlayer) JZVideoPlayerManager.getCurrentJzvd();
-            if (view instanceof ViewGroup && ((ViewGroup) view).indexOfChild(videoPlayer) != -1) {
-                if (videoPlayer.currentState == JZVideoPlayer.CURRENT_STATE_PAUSE) {
-                    JZVideoPlayer.releaseAllVideos();
-                } else {
-                    videoPlayer.startWindowTiny();
+            if (JZVideoPlayerManager.getCurrentJzvd() instanceof SmallVideoPlayer) {
+                SmallVideoPlayer videoPlayer = (SmallVideoPlayer) JZVideoPlayerManager.getCurrentJzvd();
+                if (view instanceof ViewGroup && ((ViewGroup) view).indexOfChild(videoPlayer) != -1) {
+                    if (videoPlayer.currentState == JZVideoPlayer.CURRENT_STATE_PAUSE) {
+                        JZVideoPlayer.releaseAllVideos();
+                    } else {
+                        videoPlayer.startWindowTiny();
+                    }
                 }
             }
         }
