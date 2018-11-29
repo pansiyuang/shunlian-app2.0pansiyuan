@@ -17,7 +17,6 @@ import com.shunlian.app.ui.discover_new.AttentionFrag;
 import com.shunlian.app.ui.discover_new.HotBlogFrag;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.search.DiscoverSearchActivity;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -147,7 +146,7 @@ public class NewDiscoverFrag extends BaseFragment {
             if (!isEmpty(member_id) && Common.isAlreadyLogin()) {
                 MyPageActivity.startAct(getActivity(), member_id);
             } else {
-                LoginAct.startAct(getActivity());
+                Common.goGoGo(getActivity(), "login");
             }
         });
         miv_search.setOnClickListener(v -> {
@@ -156,7 +155,7 @@ public class NewDiscoverFrag extends BaseFragment {
 
         ll_attention.setOnClickListener(v -> {
             if (!Common.isAlreadyLogin()) {
-                LoginAct.startAct(getActivity());
+                Common.goGoGo(getActivity(), "login");
             } else {
                 showTab(0);
                 view_pager.setCurrentItem(0);
