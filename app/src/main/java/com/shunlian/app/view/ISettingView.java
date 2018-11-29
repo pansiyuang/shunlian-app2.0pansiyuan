@@ -22,4 +22,10 @@ public interface ISettingView extends IView {
      * @param appQRCode
      */
     void downAppQRCode(String appQRCode);
+
+    /**
+     * 是否设置密码
+     * @param if_pwd_set 0未设置 1已设置
+     */
+    default void isSetPwd(String if_pwd_set){}
 }

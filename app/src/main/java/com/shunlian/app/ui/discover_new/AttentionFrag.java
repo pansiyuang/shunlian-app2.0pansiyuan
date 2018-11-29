@@ -190,7 +190,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         }
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
                 break;
             case 1:
             case 2:
@@ -221,7 +221,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 blog.praise_num++;
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
     }
 
     @Override
@@ -231,7 +231,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 blog.down_num++;
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
     }
 
 
@@ -323,7 +323,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 blog.total_share_num++;
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
     }
 
     @Override
@@ -340,7 +340,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         blog.is_focus = event.mData.is_focus;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
                 break;
             case RefreshBlogEvent.PRAISE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -349,7 +349,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         blog.praise_num++;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
                 break;
             case RefreshBlogEvent.SHARE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -357,7 +357,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         blog.total_share_num++;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
                 break;
             case RefreshBlogEvent.DOWNLOAD_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -365,7 +365,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         blog.down_num++;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size());
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
                 break;
         }
     }

@@ -34,18 +34,6 @@ import butterknife.BindView;
 
 public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgView {
 
-    @BindView(R.id.rl_zan)
-    RelativeLayout rl_zan;
-
-    @BindView(R.id.tv_zan)
-    TextView tv_zan;
-
-    @BindView(R.id.view_zan)
-    View view_zan;
-
-    @BindView(R.id.miv_zan_point)
-    MyImageView miv_zan_point;
-
     @BindView(R.id.rl_attention)
     RelativeLayout rl_attention;
 
@@ -92,14 +80,13 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
     View line_title;
 
     private List<BaseFragment> baseFragmentList;
-    private ZanAndShareMsgFrag zanFrag;
     private AttentionMsgFrag attentionMsgFrag;
     private DownloadMsgFrag downloadMsgFrag;
     private NoticeMsgFrag noticeMsgFrag;
     private DiscoverMsgPresenter mPresenter;
-    private String[] titles = {"分享", "关注", "下载", "通知"};
-    private int showType;//0 分享点赞 ,1 关注 2,下载 3,通知
-    private int currentPraiseCount, currentAttentionCount, currentNoticeCount, currentDownloadCount, totalMsgCount;
+    private String[] titles = {"关注", "下载", "通知"};
+    private int showType;//0 关注 1,下载 2,通知
+    private int currentAttentionCount, currentNoticeCount, currentDownloadCount, totalMsgCount;
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, DiscoverMsgActivity.class);
@@ -128,23 +115,18 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
 
     @Override
     protected void initListener() {
-        rl_zan.setOnClickListener(v -> {
+        rl_attention.setOnClickListener(v -> {
             showType = 0;
             showTab(showType);
             viewpager.setCurrentItem(showType);
         });
-        rl_attention.setOnClickListener(v -> {
+        rl_download.setOnClickListener(v -> {
             showType = 1;
             showTab(showType);
             viewpager.setCurrentItem(showType);
         });
-        rl_download.setOnClickListener(v -> {
-            showType = 2;
-            showTab(showType);
-            viewpager.setCurrentItem(showType);
-        });
         rl_notice.setOnClickListener(v -> {
-            showType = 3;
+            showType = 2;
             showTab(showType);
             viewpager.setCurrentItem(showType);
         });
@@ -173,12 +155,10 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
 
         baseFragmentList = new ArrayList<>();
 
-        zanFrag = new ZanAndShareMsgFrag();
         attentionMsgFrag = new AttentionMsgFrag();
         downloadMsgFrag = new DownloadMsgFrag();
         noticeMsgFrag = new NoticeMsgFrag();
 
-        baseFragmentList.add(zanFrag);
         baseFragmentList.add(attentionMsgFrag);
         baseFragmentList.add(downloadMsgFrag);
         baseFragmentList.add(noticeMsgFrag);
@@ -188,30 +168,24 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
     }
 
     public void showTab(int tab) {
-        tv_zan.setTextColor(getColorResouce(R.color.value_484848));
         tv_attention.setTextColor(getColorResouce(R.color.value_484848));
         tv_download.setTextColor(getColorResouce(R.color.value_484848));
         tv_notice.setTextColor(getColorResouce(R.color.value_484848));
 
-        view_zan.setVisibility(View.INVISIBLE);
         view_attention.setVisibility(View.INVISIBLE);
         view_download.setVisibility(View.INVISIBLE);
         view_notice.setVisibility(View.INVISIBLE);
 
         switch (tab) {
             case 0:
-                tv_zan.setTextColor(getColorResouce(R.color.pink_color));
-                view_zan.setVisibility(View.VISIBLE);
-                break;
-            case 1:
                 tv_attention.setTextColor(getColorResouce(R.color.pink_color));
                 view_attention.setVisibility(View.VISIBLE);
                 break;
-            case 2:
+            case 1:
                 tv_download.setTextColor(getColorResouce(R.color.pink_color));
                 view_download.setVisibility(View.VISIBLE);
                 break;
-            case 3:
+            case 2:
                 tv_notice.setTextColor(getColorResouce(R.color.pink_color));
                 view_notice.setVisibility(View.VISIBLE);
                 break;
@@ -226,14 +200,6 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
     @Override
     public void showDataEmptyView(int request_code) {
 
-    }
-
-    public void showPraisePage() {
-        totalMsgCount = totalMsgCount - currentPraiseCount;
-        currentPraiseCount = 0;
-        miv_zan_point.setVisibility(View.GONE);
-
-        EventBus.getDefault().post(new DiscoveryCountEvent(totalMsgCount > 0 ? true : false));
     }
 
     public void showAttentionPage() {
@@ -262,13 +228,11 @@ public class DiscoverMsgActivity extends BaseActivity implements IDiscoverMsgVie
 
     @Override
     public void getDiscoverMsg(CommonEntity commonEntity) {
-        currentPraiseCount = commonEntity.praise_share;
         currentAttentionCount = commonEntity.attention;
         currentDownloadCount = commonEntity.download;
         currentNoticeCount = commonEntity.notice;
         totalMsgCount = commonEntity.total;
 
-        miv_zan_point.setVisibility(currentPraiseCount > 0 ? View.VISIBLE : View.GONE);
         miv_attention_point.setVisibility(currentAttentionCount > 0 ? View.VISIBLE : View.GONE);
         miv_download_point.setVisibility(currentDownloadCount > 0 ? View.VISIBLE : View.GONE);
         miv_notice_point.setVisibility(currentNoticeCount > 0 ? View.VISIBLE : View.GONE);

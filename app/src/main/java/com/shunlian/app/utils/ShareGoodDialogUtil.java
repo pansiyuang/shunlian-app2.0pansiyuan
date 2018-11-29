@@ -80,7 +80,7 @@ public class ShareGoodDialogUtil {
                     WXEntryActivity.startAct(context,
                             "shareFriend", mShareInfoParam);
                     if(isFound&&mCallBack!=null){
-                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
+//                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                     }
                 }else{
                     WXEntryActivity.startAct(context,
@@ -100,7 +100,7 @@ public class ShareGoodDialogUtil {
                 if(isGood) {
                     createGoodCode(isFound,true);
                     if(isFound&&mCallBack!=null){
-                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
+//                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                     }
                 }else{
                     createShopCode(true);
@@ -132,6 +132,12 @@ public class ShareGoodDialogUtil {
                 nomalBuildl.dismiss();
             }
         });
+    }
+
+    public void setShareGoods() {
+        if (mCallBack != null) {
+            mCallBack.shareSuccess(mShareInfoParam.blogId, mShareInfoParam.goods_id);
+        }
     }
 
     private void setEddType(){

@@ -1099,6 +1099,9 @@
             android:theme="@style/wx"
             android:label="微信支付回调"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.new3_login.New3LoginAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.find_send.FindSendPictureTextAct"
             android:exported="false"
             android:screenOrientation="portrait"/>

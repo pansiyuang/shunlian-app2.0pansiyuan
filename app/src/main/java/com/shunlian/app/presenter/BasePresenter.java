@@ -437,7 +437,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     private <T> boolean interceptApi(Call call, BaseEntity<T> body){
         String url = call.request().url().toString();
         //LogUtil.longW("interceptApi=============url=".concat(url));
-        if (!TextUtils.isEmpty(url) && (url.contains("order/checkout") || url.contains("order/payinorderlist"))){
+        if (!TextUtils.isEmpty(url) && (url.contains("order/checkout")
+                || url.contains("order/payinorderlist")
+                || url.contains("newexclusive/checkout"))){
             T data = body.data;
             if (data != null && data instanceof PayOrderEntity){
                 PayOrderEntity entity = (PayOrderEntity) data;

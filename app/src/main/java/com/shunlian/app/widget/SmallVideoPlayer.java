@@ -87,10 +87,12 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     protected ProgressBar mDialogBrightnessProgressBar;
     protected TextView mDialogBrightnessTextView;
 
+    protected ImageView iv_download;
     protected LinearLayout closeVolumeControl;
     protected ImageView closeVideo;
     protected ImageView voiceControl;
-    protected ImageView iv_download;
+    //只播放的意思是不能控制视频进度和全屏等任何操作
+    private boolean isOnlyPlay;
 
     public SmallVideoPlayer(Context context) {
         super(context);
@@ -179,6 +181,25 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                     //releaseAllVideos();
                 } else {
                     jzvd.onStatePause();
+                    JZMediaManager.pause();
+                }
+            }
+        }catch (Exception e){
+
+        }
+    }
+
+    /**
+     * 仅仅暂停视频，按钮不显示出来
+     */
+    public static void goOnlyPause() {
+        try {
+            if (JZVideoPlayerManager.getCurrentJzvd() != null) {
+                JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
+                if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
+                } else {
                     JZMediaManager.pause();
                 }
             }
@@ -388,6 +409,9 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (isOnlyPlay){
+            return true;
+        }
         int id = v.getId();
         if (id == cn.jzvd.R.id.surface_container) {
             switch (event.getAction()) {
@@ -718,6 +742,15 @@ public class SmallVideoPlayer extends JZVideoPlayer {
                 break;
         }
 
+    }
+
+    /**
+     * 仅用来播放
+     */
+    public void onlyLook(){
+        isOnlyPlay = true;
+        bottomContainer.setVisibility(GONE);
+        closeVolumeControl.setVisibility(GONE);
     }
 
     public void changeUiToComplete() {
