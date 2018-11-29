@@ -100,5 +100,5 @@
         android:text="快捷登录"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:visibility="visible" />
+        android:visibility="gone" />
 </LinearLayout>

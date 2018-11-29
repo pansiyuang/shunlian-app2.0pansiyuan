@@ -98,14 +98,14 @@
                     android:orientation="vertical">
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_code"
-                        android:layout_width="@dimen/yy240"
+                        android:layout_width="@dimen/yy260"
                         android:layout_height="@dimen/yy240"
                         android:layout_gravity="right"
                         android:layout_centerVertical="true"
                      />
                     <com.shunlian.app.widget.MyTextView
                         android:id="@+id/mtv_prompt"
-                        android:layout_width="@dimen/xx240"
+                        android:layout_width="@dimen/xx260"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/xx16"
                         android:text="长按识别二维码"
@@ -180,20 +180,22 @@
                         android:background="@drawable/edge_pink_1px"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
+                        android:gravity="center_vertical"
                         android:text="03月15日 18:00开抢"
                         android:textColor="@color/pink_color"
-                        android:textSize="11sp" />
+                        android:textSize="10sp" />
 
                     <com.shunlian.app.widget.MyTextView
                         android:id="@+id/mtv_act_label"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@color/pink_color"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/white"
                         android:text="天天特惠"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
