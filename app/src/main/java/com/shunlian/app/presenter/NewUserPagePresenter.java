@@ -9,6 +9,7 @@ import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMyPageView;
@@ -18,6 +19,7 @@ import com.shunlian.app.view.INewUserPageView;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 
 /**

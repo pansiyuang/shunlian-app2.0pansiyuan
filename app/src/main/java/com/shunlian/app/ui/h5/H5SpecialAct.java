@@ -143,7 +143,7 @@ public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManage
                     shareInfoParam = new ShareInfoParam();
                     shareInfoParam.desc = shareEntity.share.content;
                     shareInfoParam.title = shareEntity.share.title;
-                    shareInfoParam.img = shareEntity.share.pic;
+                    shareInfoParam.img = shareEntity.share.url;
                     shareInfoParam.shareLink = shareEntity.share.share_url;
                     shareInfoParam.special_img_url = shareEntity.share.url;
                     shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);

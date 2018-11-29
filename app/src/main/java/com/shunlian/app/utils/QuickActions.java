@@ -656,9 +656,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 //            }
 
             //显示优品图标
-            MyImageView miv_SuperiorProduct = (MyImageView) dialog_new.findViewById(R.id.miv_SuperiorProduct);
+            MyTextView miv_SuperiorProduct = (MyTextView) dialog_new.findViewById(R.id.mtv_SuperiorProduct);
             if (isSuperiorProduct) {
                 miv_SuperiorProduct.setVisibility(View.VISIBLE);
+                miv_SuperiorProduct.setText("自营");
             } else {
                 miv_SuperiorProduct.setVisibility(View.GONE);
             }
