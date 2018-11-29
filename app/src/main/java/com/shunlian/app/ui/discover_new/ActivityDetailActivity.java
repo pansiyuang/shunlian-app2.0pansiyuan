@@ -232,7 +232,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -242,7 +242,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 blog.down_num++;
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -253,7 +253,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 blog.praise_num++;
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -309,7 +309,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 blog.total_share_num++;
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -333,7 +333,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         blog.is_focus = event.mData.is_focus;
                     }
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case RefreshBlogEvent.PRAISE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -342,7 +342,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         blog.praise_num++;
                     }
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case RefreshBlogEvent.SHARE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -350,7 +350,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         blog.total_share_num++;
                     }
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case RefreshBlogEvent.DOWNLOAD_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -358,7 +358,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         blog.down_num++;
                     }
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
         }
     }
