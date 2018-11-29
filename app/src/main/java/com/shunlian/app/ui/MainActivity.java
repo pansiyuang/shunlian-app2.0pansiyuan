@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.SpannableStringBuilder;
@@ -24,7 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
-import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
@@ -34,7 +32,6 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
-import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -49,13 +46,9 @@ import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.h5.H5X5Frag;
-import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -78,11 +71,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -932,7 +922,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         pMain.getPrizeByRegister();
                     } else {
 //                      isGetAward=true;
-                        LoginEntryAct.startAct(baseAct);
+                        Common.goGoGo(baseAct,"login");
                         dialog_new.dismiss();
                     }
                 }

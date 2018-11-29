@@ -21,7 +21,6 @@ import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
@@ -135,7 +134,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         });
         miv_join.setOnClickListener(v -> {
             if (!Common.isAlreadyLogin()) {
-                LoginAct.startAct(ActivityDetailActivity.this);
+                Common.goGoGo(this, "login");
                 return;
             }
             try {
