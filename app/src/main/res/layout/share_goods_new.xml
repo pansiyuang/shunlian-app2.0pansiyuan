@@ -25,20 +25,26 @@
                 android:orientation="horizontal"
                 android:visibility="visible">
 
+                <LinearLayout
+                    android:layout_width="@dimen/xx760"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_height="30dp">
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_user_head"
                     android:layout_width="@dimen/xx60"
                     android:layout_height="17dp"
                     android:layout_marginLeft="@dimen/xx30" />
-
-
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/xx12"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
+                </LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/xx60">
