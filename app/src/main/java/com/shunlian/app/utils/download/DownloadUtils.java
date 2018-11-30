@@ -188,7 +188,7 @@ public class DownloadUtils {
                 msg.what=1;
                 msg.arg1 = (int) (100 * currentLength / totalLength);
                 handerProgress.sendMessage(msg);
-                if(currentLength!=0) {
+                if(currentLength!=0&&totalLength!=0) {
                     downloadListener.onProgress((int) (100 * currentLength / totalLength));
                 }else{
                     downloadListener.onProgress(0);
