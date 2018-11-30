@@ -12,13 +12,13 @@
         <LinearLayout
             android:id="@+id/ll_root"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/yy1600"
+            android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_white_8px"
             android:paddingLeft="@dimen/xx50"
             android:paddingRight="@dimen/xx50"
             android:orientation="vertical">
 
-            <com.shunlian.app.widget.MyLinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/xx110"
                 android:gravity="center_vertical"
@@ -29,6 +29,9 @@
                     android:layout_width="@dimen/xx760"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                   android:layout_alignLeft="@+id/right"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
                     android:layout_height="30dp">
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_user_head"
@@ -41,22 +44,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/xx12"
                     android:singleLine="true"
+                    android:text=""
                     android:ellipsize="end"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
                 </LinearLayout>
                 <RelativeLayout
+                    android:id="@+id/right"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/xx60">
-                    <com.shunlian.app.widget.MyImageView
-                        android:layout_width="@dimen/xx140"
-                        android:layout_height="@dimen/xx36"
+                    android:paddingRight="@dimen/xx20"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_width="@dimen/yy208"
+                        android:layout_height="@dimen/yy44"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/xx30"
                         android:layout_centerVertical="true"
+                        android:scaleType="fitXY"
                         android:src="@mipmap/img_share_logo" />
                 </RelativeLayout>
-            </com.shunlian.app.widget.MyLinearLayout>
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -92,11 +98,10 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/yy330"
+                android:layout_height="@dimen/yy335"
                 android:paddingLeft="@dimen/xx30"
-                android:paddingRight="@dimen/xx30"
-                android:layout_marginTop="@dimen/xx50"
-                android:paddingBottom="@dimen/xx10">
+                android:layout_marginTop="@dimen/xx20"
+               >
                 <LinearLayout
                     android:layout_width="@dimen/xx260"
                     android:layout_height="match_parent"
@@ -104,19 +109,18 @@
                     android:orientation="vertical">
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_code"
-                        android:layout_width="@dimen/yy260"
-                        android:layout_height="@dimen/yy240"
-                        android:layout_gravity="right"
-                        android:layout_centerVertical="true"
+                        android:layout_width="@dimen/xx220"
+                        android:layout_height="@dimen/xx220"
+                        android:layout_gravity="center_horizontal"
+                        android:scaleType="fitXY"
                      />
                     <com.shunlian.app.widget.MyTextView
                         android:id="@+id/mtv_prompt"
-                        android:layout_width="@dimen/xx260"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/xx16"
                         android:text="长按识别二维码"
                         android:layout_marginTop="@dimen/xx16"
-                        android:layout_gravity="right"
+                        android:layout_gravity="center"
                         android:gravity="center"
                         android:textColor="@color/my_gray_one"
                         android:textSize="@dimen/xx22" />
@@ -124,7 +128,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/xx320"
+                    android:layout_marginRight="@dimen/xx280"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -173,8 +177,8 @@
                 <LinearLayout
                     android:id="@+id/llayout_day"
                     android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_height="@dimen/yy40"
+                    android:layout_marginTop="@dimen/yy10"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:visibility="gone">
@@ -194,13 +198,14 @@
                     <com.shunlian.app.widget.MyTextView
                         android:id="@+id/mtv_act_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="283dp"
                         android:background="@color/pink_color"
+                        android:gravity="center"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/white"
                         android:text="天天特惠"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -221,7 +226,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="12dp"
                 android:id="@+id/line_share_line"
                 android:background="@color/light_gray_three" />
 
@@ -229,6 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/xx230"
                 android:id="@+id/line_share_boottom"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <com.shunlian.app.widget.MyLinearLayout

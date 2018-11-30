@@ -23,15 +23,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
+import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -77,6 +80,7 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
+import retrofit2.Call;
 
 public class MainActivity extends BaseActivity implements MessageCountManager.OnGetMessageListener, IMain {
     private static final String[] flags = {"mainPage", "myPlus", "discover", "shoppingcar", "personCenter"};
@@ -365,6 +369,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             miv_first.animate().rotation(360).setDuration(300).start();
         } else {
             if (view.getId() == R.id.ll_tab_discover) {
+                loadUserInfo();
                 if (discoverFrag != null && !discoverFrag.isVisible()) {
                     view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
                     view.animate().scaleX(1).scaleY(1).setDuration(300).start();
@@ -1087,5 +1092,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (event.loginSuccess && pMain != null) {
             pMain.isShowNewPersonPrize();
         }
+    }
+
+    /**
+     * 处理网络请求
+     */
+    public void loadUserInfo() {
+        if (!Common.isAlreadyLogin()) {
+            return;
+        }
+        pMain.loginUserInfo();
     }
 }

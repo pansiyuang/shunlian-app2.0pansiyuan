@@ -41,6 +41,10 @@ public class ShareGoodDialogUtil {
 
     //分享商品的diolog
     public void shareGoodDialog(ShareInfoParam shareInfoParam,boolean isGood,boolean isFound) {
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(context, "login");
+            return;
+        }
         if(nomalBuildl!=null&&nomalBuildl.isShowing()){
             nomalBuildl.dismiss();
         }
@@ -348,6 +352,9 @@ public class ShareGoodDialogUtil {
                                                         GlideAnimation<? super Bitmap> glideAnimation) {
                                 miv_goods_pic.setImageBitmap(resource);
                                 Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                                if(bitmapByView==null){
+                                    return;
+                                }
                                 BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
                             }
                             @Override
@@ -428,6 +435,9 @@ public class ShareGoodDialogUtil {
                     public void imageSuccessCount(int successCount) {
                         if(successCount==mShareInfoParam.share_goods.size()){
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            if(bitmapByView==null){
+                                return;
+                            }
                             BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
                         }
                     }
@@ -454,6 +464,7 @@ public class ShareGoodDialogUtil {
                 public void onClick(View view) {
                     showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    showShopBuild.getView(R.id.line_share_boottom).setMinimumHeight(0);
                     miv_close.setVisibility(View.GONE);
                     showShopBuild.dismiss();
                     goodsPic(inflate,mShareInfoParam.shop_logo,true,false);
@@ -469,7 +480,10 @@ public class ShareGoodDialogUtil {
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                        if (isShowSaveToast) {
+                            if(bitmapByView==null){
+                                return;
+                            }
+                          if (isShowSaveToast) {
                             boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,!isCircleShare);
                             if (isSuccess) {
                                 Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
@@ -487,6 +501,9 @@ public class ShareGoodDialogUtil {
                         super.onLoadFailed(e, errorDrawable);
                         if (isShowSaveToast) {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            if(bitmapByView==null){
+                                return;
+                            }
                             boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,!isCircleShare);
                             if (isSuccess) {
                                 Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
@@ -495,6 +512,9 @@ public class ShareGoodDialogUtil {
                             }
                         } else {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            if(bitmapByView==null){
+                                return;
+                            }
                             boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,!isCircleShare);
                             if (!isSuccess)
                                 Common.staticToast("分享失败");
