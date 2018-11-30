@@ -301,6 +301,7 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
     public void setNickname(String nickname) {
         if (!isEmpty(nickname)){
             mtv_nickname.setText(nickname);
+            SharedPrefUtil.saveSharedUserString("nickname", nickname);
         }
 
     }
