@@ -26,7 +26,7 @@
                 android:visibility="visible">
 
             <LinearLayout
-                    android:layout_width="@dimen/xx760"
+                    android:layout_width="@dimen/xx720"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                 android:layout_alignLeft="@+id/right"
@@ -46,12 +46,13 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textColor="@color/new_text"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
                 </LinearLayout>
                 <RelativeLayout
-                    android:layout_width="match_parent"
                     android:id="@+id/right"
-                    android:paddingRight="@dimen/xx30"
+                    android:paddingRight="@dimen/xx20"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/yy228"
                     android:layout_height="match_parent">
                     <ImageView
                         android:layout_width="@dimen/yy208"
