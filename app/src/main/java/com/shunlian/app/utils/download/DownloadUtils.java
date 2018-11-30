@@ -188,7 +188,11 @@ public class DownloadUtils {
                 msg.what=1;
                 msg.arg1 = (int) (100 * currentLength / totalLength);
                 handerProgress.sendMessage(msg);
-                downloadListener.onProgress((int) (100 * currentLength / totalLength));
+                if(currentLength!=0) {
+                    downloadListener.onProgress((int) (100 * currentLength / totalLength));
+                }else{
+                    downloadListener.onProgress(0);
+                }
             }
             //下载完成，并返回保存的文件路径
             Message msgfinfish = handerProgress.obtainMessage();
