@@ -29,6 +29,7 @@
                     android:layout_width="@dimen/xx720"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"
                 android:layout_alignLeft="@+id/right"
                 android:layout_centerVertical="true"
                     android:layout_height="30dp">
