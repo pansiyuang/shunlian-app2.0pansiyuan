@@ -58,7 +58,7 @@ public class GlideUtils {
     }
 
     public void loadImage(Context context, ImageView imageView, String imgUrl, @DrawableRes int placeholder) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                    .error(R.mipmap.error)
@@ -71,13 +71,13 @@ public class GlideUtils {
                 .into(imageView);
     }
     public void loadLocal(Context context, ImageView imageView,int resource) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(resource)
                 .into(imageView);
     }
     public void loadImageZheng(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                    .error(R.mipmap.error)
@@ -92,7 +92,7 @@ public class GlideUtils {
     }
 
     public void loadImageChang(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                    .error(R.mipmap.error)
@@ -106,7 +106,7 @@ public class GlideUtils {
     }
 
     public void loadImageShu(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                    .error(R.mipmap.error)
@@ -129,7 +129,7 @@ public class GlideUtils {
      */
 
     public void loadImage(Context context, ImageView imageView, String imgUrl, boolean isFade) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         if (isFade) {
             Glide.with(context)
                     .load(imgUrl)
@@ -164,6 +164,7 @@ public class GlideUtils {
      * @param imgUrl    图片地址
      */
     public void loadThumbnailImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -190,7 +191,7 @@ public class GlideUtils {
 
     public void loadOverrideImage(Context context, int resourceId, ImageView imageView,
                                   String imgUrl, int withSize, int heightSize){
-        if (imageView == null||withSize<=0||heightSize<=0) return;
+        if (imageView == null||withSize<=0||heightSize<=0||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .placeholder(resourceId)
@@ -210,6 +211,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadBlurImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -229,7 +231,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadCircleImage(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -250,7 +252,7 @@ public class GlideUtils {
      */
     public void loadCornerImageSize(Context context, ImageView imageView, String imgUrl,
                                     int radius,int width,int height) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .crossFade()
@@ -264,7 +266,7 @@ public class GlideUtils {
     }
 
     public void loadCircleAvar(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -277,7 +279,7 @@ public class GlideUtils {
     }
 
     public void loadCircleImage(Context context, ImageView imageView, String imgUrl, @DrawableRes int placeholder) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -297,6 +299,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadBlurCircleImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -318,6 +321,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadCornerImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -338,7 +342,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadCornerImage(Context context, ImageView imageView, String imgUrl, int radius) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -360,6 +364,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadBlurCornerImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -381,6 +386,7 @@ public class GlideUtils {
      * @param target
      */
     public void loadBitmapSync(Context context, String imgUrl, SimpleTarget<Bitmap> target) {
+        if (context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .asBitmap()
@@ -397,6 +403,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadGifImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .asGif()
@@ -416,6 +423,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadGifThumbnailImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .asGif()
@@ -433,6 +441,7 @@ public class GlideUtils {
      */
 
     public void loadBgImage(Context context, final View view, String imgUrl, @DrawableRes int placeholder) {
+        if (context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .asBitmap()
@@ -450,6 +459,7 @@ public class GlideUtils {
 
 
     public void loadBgImageZheng(Context context, final View view, String imgUrl) {
+        if (context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .asBitmap()
@@ -466,6 +476,7 @@ public class GlideUtils {
     }
 
     public void loadBgImageChang(Context context, final View view, String imgUrl) {
+        if (context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .asBitmap()
@@ -482,6 +493,7 @@ public class GlideUtils {
     }
 
     public void loadBgImageShu(Context context, final View view, String imgUrl) {
+        if (context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .asBitmap()
@@ -502,6 +514,7 @@ public class GlideUtils {
      */
 
     public void loadBgImage(Context context, final View view, String imgUrl) {
+        if (context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .asBitmap()
@@ -522,7 +535,7 @@ public class GlideUtils {
      */
 
     public void loadLocalImageWithView(Context context, @DrawableRes int resourceId, ImageView view) {
-        if (view == null) return;
+        if (view == null||context==null) return;
         Glide.with(context).
                 load(resourceId).
                 into(view);
@@ -533,6 +546,7 @@ public class GlideUtils {
      */
 
     public void loadFileImageWithView(Context context, File file, ImageView view) {
+        if (view == null||context==null) return;
         Glide.with(context).
                 load(file).
                 into(view);
@@ -559,6 +573,7 @@ public class GlideUtils {
 
     //Glide保存图片
     public void savePicture(final Context context, String url) {
+        if (context==null) return;
         Glide.with(context).load(url).asBitmap().into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -581,7 +596,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void findFollowList(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 //.error(R.mipmap.error)
@@ -602,7 +617,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void communityBanner(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 //.error(R.mipmap.error)
@@ -623,7 +638,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void communityTopPic(Context context, ImageView imageView, String imgUrl, int radius,boolean isCorp) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 //.error(R.mipmap.error)
@@ -648,7 +663,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadCircleHeadImage(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .error(R.mipmap.img_set_defaulthead)
@@ -672,7 +687,7 @@ public class GlideUtils {
      * @param imgUrl    图片地址
      */
     public void veryLongPicLoadImage(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null) return;
+        if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
                 .error(R.mipmap.img_default_productdetails_activetips)

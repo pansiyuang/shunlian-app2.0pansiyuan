@@ -118,6 +118,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         if (isPause) {
             mposition = 0;
             isStop = false;
+            if (pFirstPage!=null)
             pFirstPage.getBubble();
             isPause = false;
         }
@@ -166,6 +167,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 if (!isStop) {
                     LogUtil.augusLogW("mposition：delayed");
                     mposition = 0;
+                    if (pFirstPage!=null)
                     pFirstPage.getBubble();
                 }
             }
@@ -185,10 +187,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     runnableB = new Runnable() {
                         @Override
                         public void run() {
-                            if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null) {
+                            if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseActivity.isFinishing()) {
                                 LogUtil.augusLogW("mposition:" + mposition);
                                 lLayout_toast.setVisibility(View.VISIBLE);
-                                GlideUtils.getInstance().loadCircleAvar(baseContext,miv_icon,datas.get(mposition).avatar);
+                                GlideUtils.getInstance().loadCircleAvar(baseActivity,miv_icon,datas.get(mposition).avatar);
                                 tv_info.setText(datas.get(mposition).text);
                                 lLayout_toast.setOnClickListener(new View.OnClickListener() {
                                     @Override
