@@ -319,7 +319,6 @@ public class ShareGoodDialogUtil {
             }
 
             LinearLayout  llayout_day =showGoodBuild.findViewById(R.id.llayout_day);
-
             MyTextView mtv_time  = showGoodBuild.findViewById(R.id.mtv_time);
             MyTextView mtv_act_label  = showGoodBuild.findViewById(R.id.mtv_act_label);
             if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
@@ -330,13 +329,6 @@ public class ShareGoodDialogUtil {
                 mtv_act_label.setText(mShareInfoParam.act_label);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
-//            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 120);
-//            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-//            layoutParams.width = width;
-//            layoutParams.height = width;
-//
-//            GlideUtils.getInstance().loadLocal(context, miv_goods_pic, R.mipmap.img_bangzhu_fou);
-//            GlideUtils.getInstance().loadCircleAvar(context,miv_goods_pic,SharedPrefUtil.getSharedUserString("nickname", ""));
             if(!isCircleShare) {
                 GlideUtils.getInstance().loadImageZheng(context, miv_goods_pic, mShareInfoParam.img);
                 showGoodBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);

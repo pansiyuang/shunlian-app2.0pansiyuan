@@ -26,7 +26,7 @@
                 android:visibility="visible">
 
                 <LinearLayout
-                    android:layout_width="@dimen/xx760"
+                    android:layout_width="@dimen/xx720"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                    android:layout_alignLeft="@+id/right"
@@ -47,11 +47,12 @@
                     android:text=""
                     android:ellipsize="end"
                     android:textColor="@color/new_text"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
                 </LinearLayout>
                 <RelativeLayout
                     android:id="@+id/right"
-                    android:layout_width="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/yy228"
                     android:paddingRight="@dimen/xx20"
                     android:layout_height="match_parent">
                     <ImageView
@@ -197,14 +198,13 @@
 
                     <com.shunlian.app.widget.MyTextView
                         android:id="@+id/mtv_act_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="283dp"
+                        android:layout_width="@dimen/xx155"
+                        android:layout_height="match_parent"
                         android:background="@color/pink_color"
                         android:gravity="center"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
+                        android:paddingLeft="@dimen/xx5"
+                        android:paddingRight="@dimen/xx5"
                         android:text="天天特惠"
-                        android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="10sp"
                         android:textStyle="bold" />
