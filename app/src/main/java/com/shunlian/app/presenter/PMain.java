@@ -119,6 +119,10 @@ public class PMain extends BasePresenter<IMain> {
                 PersonalDataEntity data = entity.data;
                 SharedPrefUtil.saveSharedUserString("nickname", data.nickname);
                 SharedPrefUtil.saveSharedUserString("avatar", data.avatar);
+//                SharedPrefUtil.saveSharedUserString("token", data.token);
+//                SharedPrefUtil.saveSharedUserString("plus_role", data.plus_role);
+//                SharedPrefUtil.saveSharedUserString("refresh_token", data.refresh_token);
+//                SharedPrefUtil.saveSharedUserString("member_id", data.member_id);
             }
         });
     }
