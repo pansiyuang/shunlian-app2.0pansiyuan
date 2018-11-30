@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -54,6 +55,15 @@ public class StoreViewUtil {
         mtv_descl2 =  showShopBuild.findViewById(R.id.mtv_descl2);
         mtv_pricel2 =  showShopBuild.findViewById(R.id.mtv_pricel2);
         mtv_pricer2 =  showShopBuild.findViewById(R.id.mtv_pricer2);
+
+        int width = Common.getScreenWidth((Activity) context)/2 - TransformUtil.dip2px(context, 70);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_onel.getLayoutParams();
+        layoutParams.width = width;
+        layoutParams.height = width;
+
+        RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) miv_onel2.getLayoutParams();
+        layoutParams2.width = width;
+        layoutParams2.height = width;
     }
 
     public void showStoreGoodView() {

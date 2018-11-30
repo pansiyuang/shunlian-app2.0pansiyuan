@@ -22,6 +22,7 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.dialog.CommonDialog;
 import com.shunlian.app.wxapi.WXEntryActivity;
+import com.zh.chartlibrary.common.DensityUtil;
 
 public class ShareGoodDialogUtil {
     private ShareInfoParam mShareInfoParam;
@@ -289,7 +290,6 @@ public class ShareGoodDialogUtil {
             int i = TransformUtil.dip2px(context, 92.5f);
             Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
             miv_code.setImageBitmap(qrImage);
-
             MyTextView mtv_title =  showGoodBuild.findViewById(R.id.mtv_title);
             mtv_title.setText(mShareInfoParam.title);
             if (!TextUtils.isEmpty(mShareInfoParam.market_price)) {
@@ -310,6 +310,8 @@ public class ShareGoodDialogUtil {
             mtv_price.setText("￥" + mShareInfoParam.price);
             MyTextView mtv_goodsID =  showGoodBuild.findViewById(R.id.mtv_goodsID);
             mtv_goodsID.setText("商品编号:" + mShareInfoParam.goods_id + "(搜索可直达)");
+
+
             //显示优品图标
             MyTextView mtv_SuperiorProduct = showGoodBuild.findViewById(R.id.mtv_SuperiorProduct);
             if (mShareInfoParam.isSuperiorProduct) {
@@ -329,6 +331,11 @@ public class ShareGoodDialogUtil {
                 mtv_act_label.setText(mShareInfoParam.act_label);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
+            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 80);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+            layoutParams.width = width;
+            layoutParams.height = width;
+
             if(!isCircleShare) {
                 GlideUtils.getInstance().loadImageZheng(context, miv_goods_pic, mShareInfoParam.img);
                 showGoodBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
