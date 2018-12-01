@@ -245,9 +245,9 @@ public class ShareGoodDialogUtil {
                                 if(resource!=null) {
                                     boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, resource, true, true);
                                     if (isSuccess) {
-                                        Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
+                                        Common.staticToast("分享成功");
                                     } else {
-                                        Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
+                                        Common.staticToast("分享失败");
                                     }
                                 }
                             }
