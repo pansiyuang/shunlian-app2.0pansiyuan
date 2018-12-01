@@ -349,6 +349,11 @@ public class ShareGoodDialogUtil {
                             @Override
                             public void onResourceReady(Bitmap resource,
                                                         GlideAnimation<? super Bitmap> glideAnimation) {
+                                int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
+                                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+                                layoutParams.width = width;
+                                layoutParams.height = width;
+
                                 miv_goods_pic.setImageBitmap(resource);
                                 Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
                                 if(bitmapByView==null){
@@ -372,6 +377,7 @@ public class ShareGoodDialogUtil {
             mllayout_wexin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                     miv_close.setVisibility(View.GONE);
@@ -385,6 +391,10 @@ public class ShareGoodDialogUtil {
             mllayout_save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+                    layoutParams.width = width;
+                    layoutParams.height = width;
                     showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                     miv_close.setVisibility(View.GONE);
