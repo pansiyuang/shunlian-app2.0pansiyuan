@@ -243,12 +243,7 @@ public class ShareGoodDialogUtil {
                             public void onResourceReady(Bitmap resource,
                                                         GlideAnimation<? super Bitmap> glideAnimation) {
                                 if(resource!=null) {
-                                    boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, resource, true, true);
-                                    if (isSuccess) {
-                                        Common.staticToast("分享成功");
-                                    } else {
-                                        Common.staticToast("分享失败");
-                                    }
+                                     BitmapUtil.saveImageToAlbumn(context, resource, true, true);
                                 }
                             }
                             @Override
