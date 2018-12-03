@@ -341,6 +341,11 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @Override
     protected void initListener() {
+        if(!Common.isAlreadyLogin()){
+            finish();
+            Common.goGoGo(this, "login");
+            return;
+        }
         ll_left.setOnClickListener(v -> {
             isDefault = true;
             setTabMode(isDefault);
