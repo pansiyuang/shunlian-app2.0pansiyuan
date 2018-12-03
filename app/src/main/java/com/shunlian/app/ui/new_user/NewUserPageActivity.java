@@ -416,6 +416,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
 
     public void setTabMode(boolean isDefault) {
+        if (tv_show_num==null)
+            return;
         if (isDefault) {
             tv_show_num.setTextColor(getColorResouce(R.color.pink_color));
             tv_left.setTextColor(getColorResouce(R.color.pink_color));

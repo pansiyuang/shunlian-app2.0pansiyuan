@@ -240,16 +240,18 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                             SharedPrefUtil.saveCacheSharedPrf(save_shop_history, concat);
                         }
                         JosnSensorsDataAPI.isHistory = false;
-                        if(currentKeyWord.equals(text.toString())){
-                            JosnSensorsDataAPI.isRecommend = true;
-                        }else{
-                            JosnSensorsDataAPI.isRecommend = false;
+                        if (currentKeyWord!=null){
+                            if(currentKeyWord.equals(text.toString())){
+                                JosnSensorsDataAPI.isRecommend = true;
+                            }else{
+                                JosnSensorsDataAPI.isRecommend = false;
+                            }
                         }
                         SearchResultAct.startAct(SearchGoodsActivity.this, text.toString(), currentFlag);
                         finish();
                     }
                     return true;
-                } else {
+                } else if (text!=null){
                     switchToJump(text.toString());
                     return true;
                 }
