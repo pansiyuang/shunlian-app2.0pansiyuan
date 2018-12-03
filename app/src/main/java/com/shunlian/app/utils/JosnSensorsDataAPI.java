@@ -71,7 +71,7 @@ public class JosnSensorsDataAPI {
             JSONObject properties = new JSONObject();
             properties.put("nowTime", nowTime);
 //            properties.put("bannerLocation", bannerLocation);
-            properties.put("gooId", gooId);
+            properties.put("goodId", gooId);
             properties.put("goodName", goodName);
             properties.put("rank", rank);
             SensorsDataAPI.sharedInstance().track("fristQualityHotClick", properties);
