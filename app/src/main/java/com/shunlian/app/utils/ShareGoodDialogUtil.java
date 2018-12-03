@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -174,6 +175,9 @@ public class ShareGoodDialogUtil {
             MyLinearLayout mllayout_save = showSpecialBuild.findViewById(R.id.mllayout_save);
             MyLinearLayout  mllayout_wexin = showSpecialBuild.findViewById(R.id.mllayout_wexin);
            ImageView imv_special_pic =  showSpecialBuild.findViewById(R.id.imv_special_pic);
+           RelativeLayout img_hight=  showSpecialBuild.findViewById(R.id.img_hight);
+           LinearLayout.LayoutParams layoutParams =( (LinearLayout.LayoutParams)img_hight.getLayoutParams());
+          layoutParams.height = DensityUtil.getScreenHeight(context)*3/5;
            if(isShow) {
                GlideUtils.getInstance().loadImageZheng(context, imv_special_pic, mShareInfoParam.img);
                showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
@@ -243,12 +247,7 @@ public class ShareGoodDialogUtil {
                             public void onResourceReady(Bitmap resource,
                                                         GlideAnimation<? super Bitmap> glideAnimation) {
                                 if(resource!=null) {
-                                    boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, resource, true, true);
-                                    if (isSuccess) {
-                                        Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
-                                    } else {
-                                        Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
-                                    }
+                                     BitmapUtil.saveImageToAlbumn(context, resource, true, true);
                                 }
                             }
                             @Override
