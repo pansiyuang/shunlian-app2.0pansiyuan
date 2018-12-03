@@ -330,6 +330,12 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                     SharedPrefUtil.saveSharedUserString("token", data.token);
                     SharedPrefUtil.saveSharedUserString("plus_role", data.plus_role);
                     SharedPrefUtil.saveSharedUserString("refresh_token", data.refresh_token);
+                    if (!isEmpty(data.member_id))
+                    SharedPrefUtil.saveSharedUserString("member_id", data.member_id);
+                    if (!isEmpty(data.avatar))
+                    SharedPrefUtil.saveSharedUserString("avatar", data.avatar);
+                    if (!isEmpty(data.nickname))
+                    SharedPrefUtil.saveSharedUserString("nickname", data.nickname);
                     getNetData(emptyCode,failureCode,isLoading,clone,callback);
                 }
             }

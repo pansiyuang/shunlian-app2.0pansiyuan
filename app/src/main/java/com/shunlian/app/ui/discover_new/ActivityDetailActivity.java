@@ -26,6 +26,7 @@ import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
@@ -231,7 +232,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -241,7 +242,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 blog.down_num++;
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -252,7 +253,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 blog.praise_num++;
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -308,7 +309,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 blog.total_share_num++;
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -332,7 +333,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         blog.is_focus = event.mData.is_focus;
                     }
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case RefreshBlogEvent.PRAISE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -341,7 +342,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         blog.praise_num++;
                     }
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case RefreshBlogEvent.SHARE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -349,7 +350,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         blog.total_share_num++;
                     }
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case RefreshBlogEvent.DOWNLOAD_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -357,7 +358,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         blog.down_num++;
                     }
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
         }
     }

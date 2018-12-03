@@ -22,6 +22,7 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.dialog.CommonDialog;
 import com.shunlian.app.wxapi.WXEntryActivity;
+import com.zh.chartlibrary.common.DensityUtil;
 
 public class ShareGoodDialogUtil {
     private ShareInfoParam mShareInfoParam;
@@ -41,6 +42,10 @@ public class ShareGoodDialogUtil {
 
     //分享商品的diolog
     public void shareGoodDialog(ShareInfoParam shareInfoParam,boolean isGood,boolean isFound) {
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(context, "login");
+            return;
+        }
         if(nomalBuildl!=null&&nomalBuildl.isShowing()){
             nomalBuildl.dismiss();
         }
@@ -285,7 +290,6 @@ public class ShareGoodDialogUtil {
             int i = TransformUtil.dip2px(context, 92.5f);
             Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
             miv_code.setImageBitmap(qrImage);
-
             MyTextView mtv_title =  showGoodBuild.findViewById(R.id.mtv_title);
             mtv_title.setText(mShareInfoParam.title);
             if (!TextUtils.isEmpty(mShareInfoParam.market_price)) {
@@ -306,6 +310,8 @@ public class ShareGoodDialogUtil {
             mtv_price.setText("￥" + mShareInfoParam.price);
             MyTextView mtv_goodsID =  showGoodBuild.findViewById(R.id.mtv_goodsID);
             mtv_goodsID.setText("商品编号:" + mShareInfoParam.goods_id + "(搜索可直达)");
+
+
             //显示优品图标
             MyTextView mtv_SuperiorProduct = showGoodBuild.findViewById(R.id.mtv_SuperiorProduct);
             if (mShareInfoParam.isSuperiorProduct) {
@@ -315,7 +321,6 @@ public class ShareGoodDialogUtil {
             }
 
             LinearLayout  llayout_day =showGoodBuild.findViewById(R.id.llayout_day);
-
             MyTextView mtv_time  = showGoodBuild.findViewById(R.id.mtv_time);
             MyTextView mtv_act_label  = showGoodBuild.findViewById(R.id.mtv_act_label);
             if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
@@ -326,13 +331,11 @@ public class ShareGoodDialogUtil {
                 mtv_act_label.setText(mShareInfoParam.act_label);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
-//            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 120);
-//            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-//            layoutParams.width = width;
-//            layoutParams.height = width;
-//
-//            GlideUtils.getInstance().loadLocal(context, miv_goods_pic, R.mipmap.img_bangzhu_fou);
-//            GlideUtils.getInstance().loadCircleAvar(context,miv_goods_pic,SharedPrefUtil.getSharedUserString("nickname", ""));
+            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 80);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+            layoutParams.width = width;
+            layoutParams.height = width;
+
             if(!isCircleShare) {
                 GlideUtils.getInstance().loadImageZheng(context, miv_goods_pic, mShareInfoParam.img);
                 showGoodBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
@@ -346,8 +349,16 @@ public class ShareGoodDialogUtil {
                             @Override
                             public void onResourceReady(Bitmap resource,
                                                         GlideAnimation<? super Bitmap> glideAnimation) {
+                                int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
+                                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+                                layoutParams.width = width;
+                                layoutParams.height = width;
+
                                 miv_goods_pic.setImageBitmap(resource);
                                 Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                                if(bitmapByView==null){
+                                    return;
+                                }
                                 BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
                             }
                             @Override
@@ -366,6 +377,10 @@ public class ShareGoodDialogUtil {
             mllayout_wexin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+                    layoutParams.width = width;
+                    layoutParams.height = width;
                     showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                     miv_close.setVisibility(View.GONE);
@@ -379,6 +394,10 @@ public class ShareGoodDialogUtil {
             mllayout_save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+                    layoutParams.width = width;
+                    layoutParams.height = width;
                     showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                     miv_close.setVisibility(View.GONE);
@@ -428,6 +447,9 @@ public class ShareGoodDialogUtil {
                     public void imageSuccessCount(int successCount) {
                         if(successCount==mShareInfoParam.share_goods.size()){
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            if(bitmapByView==null){
+                                return;
+                            }
                             BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
                         }
                     }
@@ -454,6 +476,7 @@ public class ShareGoodDialogUtil {
                 public void onClick(View view) {
                     showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                     showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                    showShopBuild.getView(R.id.line_share_boottom).setMinimumHeight(0);
                     miv_close.setVisibility(View.GONE);
                     showShopBuild.dismiss();
                     goodsPic(inflate,mShareInfoParam.shop_logo,true,false);
@@ -469,7 +492,10 @@ public class ShareGoodDialogUtil {
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                        if (isShowSaveToast) {
+                            if(bitmapByView==null){
+                                return;
+                            }
+                          if (isShowSaveToast) {
                             boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,!isCircleShare);
                             if (isSuccess) {
                                 Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
@@ -487,6 +513,9 @@ public class ShareGoodDialogUtil {
                         super.onLoadFailed(e, errorDrawable);
                         if (isShowSaveToast) {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            if(bitmapByView==null){
+                                return;
+                            }
                             boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,false,!isCircleShare);
                             if (isSuccess) {
                                 Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
@@ -495,6 +524,9 @@ public class ShareGoodDialogUtil {
                             }
                         } else {
                             Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            if(bitmapByView==null){
+                                return;
+                            }
                             boolean isSuccess = BitmapUtil.saveImageToAlbumn(context, bitmapByView,true,!isCircleShare);
                             if (!isSuccess)
                                 Common.staticToast("分享失败");

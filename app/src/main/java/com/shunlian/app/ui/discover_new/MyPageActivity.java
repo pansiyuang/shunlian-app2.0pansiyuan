@@ -147,6 +147,7 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (lay_refresh==null)return;
             switch (msg.what) {
                 case 1:
                     int distance = (int) msg.obj;
