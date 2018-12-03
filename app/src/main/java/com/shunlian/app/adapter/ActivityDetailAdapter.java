@@ -41,7 +41,6 @@ import com.shunlian.app.utils.HorizonItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
-import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
