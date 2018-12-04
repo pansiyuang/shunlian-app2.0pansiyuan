@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
@@ -444,6 +445,7 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         SharedPrefUtil.saveSharedUserString("avatar", content.avatar);
         SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
         SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
+        SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(content.member_id);
         EasyWebsocketClient.getInstance(baseActivity).initChat(); //初始化聊天
 //        if (content.tag!=null)

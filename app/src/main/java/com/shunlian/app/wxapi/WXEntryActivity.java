@@ -14,6 +14,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -401,6 +402,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         SharedPrefUtil.saveSharedUserString("avatar", wxLoginEntity.avatar);
         SharedPrefUtil.saveSharedUserString("nickname", wxLoginEntity.nickname);
         SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
+        SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(wxLoginEntity.member_id);
         if (wxLoginEntity.tag != null)
             SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(wxLoginEntity.tag));

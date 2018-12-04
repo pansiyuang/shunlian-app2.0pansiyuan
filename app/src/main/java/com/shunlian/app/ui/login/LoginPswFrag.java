@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
@@ -189,6 +190,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
+        SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(content.member_id);
         if (content.tag != null)
             SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));

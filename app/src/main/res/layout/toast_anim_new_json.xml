@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/transparent"
+ >
+
+    <RelativeLayout
+        android:id="@+id/show_toast"
+        android:layout_width="250dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="80dp"
+        android:layout_alignParentRight="true"
+        android:background="@color/transparent"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_cacheStrategy="none"
+        android:scaleType="centerCrop" />
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="35dp"
+            android:layout_marginLeft="5dp"
+            android:textSize="14sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:src="@mipmap/img_0"/>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_toasts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:visibility="gone"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/my_yellow"
+            android:textSize="16sp" />
+    </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
+
