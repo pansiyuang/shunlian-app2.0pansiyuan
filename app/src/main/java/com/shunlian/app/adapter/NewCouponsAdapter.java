@@ -362,7 +362,7 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
 
     }
 
-    public class ThreeHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
+    public class ThreeHolder extends BaseRecyclerViewHolders implements View.OnClickListener {
 
         @BindView(R.id.ntv_price)
         NewTextView ntv_price;

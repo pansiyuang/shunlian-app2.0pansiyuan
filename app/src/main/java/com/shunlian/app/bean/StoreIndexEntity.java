@@ -142,6 +142,7 @@ public class StoreIndexEntity {
             public String thumb;
             public String price;
             public String type;
+            public String keyword;
             public String sales;
             public List<String> label;
             public String store_id;

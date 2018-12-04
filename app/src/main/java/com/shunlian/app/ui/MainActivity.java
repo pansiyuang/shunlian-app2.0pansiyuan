@@ -1101,6 +1101,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (!Common.isAlreadyLogin()) {
             return;
         }
+        if (pMain!=null)
         pMain.loginUserInfo();
     }
 }

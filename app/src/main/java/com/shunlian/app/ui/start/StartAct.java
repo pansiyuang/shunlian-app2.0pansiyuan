@@ -115,7 +115,6 @@ public class StartAct extends MBaseActivity implements IMain {
                 isFirstJudge();
             }
         }, 3 * 1000);
-        loadUserInfo();
     }
 
     /**
@@ -276,6 +275,7 @@ public class StartAct extends MBaseActivity implements IMain {
             }else {
                 pMain.getSplashAD();
                 pMain.getMenuData();
+                loadUserInfo();
 //                pMain.entryInfo();
             }
         }
@@ -324,6 +324,7 @@ public class StartAct extends MBaseActivity implements IMain {
         if (!Common.isAlreadyLogin()) {
             return;
         }
+        if (pMain!=null)
         pMain.loginUserInfo();
     }
 
