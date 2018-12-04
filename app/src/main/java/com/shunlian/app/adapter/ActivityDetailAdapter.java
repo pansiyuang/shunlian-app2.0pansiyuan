@@ -312,16 +312,24 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             }
 
             blogViewHolder.tv_attention.setOnClickListener(v -> {
-                if (mCallBack != null) {
-                    mCallBack.toFocusUser(blog.is_focus, blog.member_id, blog.nickname);
+                if (Common.isAlreadyLogin()) {
+                    if (mCallBack != null) {
+                        mCallBack.toFocusUser(blog.is_focus, blog.member_id, blog.nickname);
+                    }
+                } else {
+                    Common.goGoGo(context, "login");
                 }
             });
 
             blogViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
 
             blogViewHolder.tv_zan.setOnClickListener(v -> {
-                if (mCallBack != null) {
-                    mCallBack.toPraiseBlog(blog.id);
+                if (Common.isAlreadyLogin()) {
+                    if (mCallBack != null) {
+                        mCallBack.toPraiseBlog(blog.id);
+                    }
+                } else {
+                    Common.goGoGo(context, "login");
                 }
             });
 
@@ -355,7 +363,13 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 ActivityDetailActivity.startAct(context, blog.activity_id);
             });
 
-            blogViewHolder.tv_download.setOnClickListener(v -> readyToDownLoad(blog));
+            blogViewHolder.tv_download.setOnClickListener(v -> {
+                if (Common.isAlreadyLogin()) {
+                    readyToDownLoad(blog);
+                } else {
+                    Common.goGoGo(context, "login");
+                }
+            });
         }
     }
 
