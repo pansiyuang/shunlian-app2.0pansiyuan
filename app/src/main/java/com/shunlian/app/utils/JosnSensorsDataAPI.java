@@ -16,12 +16,11 @@ public class JosnSensorsDataAPI {
                                          String bannerID,String url,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("pageType", pageType);
-//            properties.put("bannerLocation", bannerLocation);
+            properties.put("bannerBelongs", pageType);
             properties.put("bannerName", bannerName);
             properties.put("bannerID", bannerID);
-            properties.put("url", url);
-            properties.put("rank", rank);
+            properties.put("bannerURL", url);
+            properties.put("bannerRank", rank);
             SensorsDataAPI.sharedInstance().track("bannerClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -36,9 +35,9 @@ public class JosnSensorsDataAPI {
             JSONObject properties = new JSONObject();
             properties.put("iconName", iconName);
 //            properties.put("bannerLocation", bannerLocation);
-            properties.put("goTiltle", goTiltle);
-            properties.put("rank", rank);
-            SensorsDataAPI.sharedInstance().track("fristIconClick", properties);
+            properties.put("iconURL", goTiltle);
+            properties.put("iconRank", rank);
+            SensorsDataAPI.sharedInstance().track("iconClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -51,13 +50,12 @@ public class JosnSensorsDataAPI {
     public static void fristQualityHotClick(String mouleType,String goType,String itemId,String channe_id ,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("mouleType", mouleType);
+            properties.put("pzrtType", mouleType);
 //            properties.put("bannerLocation", bannerLocation);
-            properties.put("goTiltle", goType);
-            properties.put("itemId", itemId);
-            properties.put("channe_id", channe_id);
-            properties.put("rank", rank);
-            SensorsDataAPI.sharedInstance().track("fristQualityHotClick", properties);
+            properties.put("pzrtURL", itemId+":"+channe_id);
+            properties.put("pzrtLocationName", rank);
+            properties.put("pzrtRank", rank);
+            SensorsDataAPI.sharedInstance().track("pzrtClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -69,12 +67,12 @@ public class JosnSensorsDataAPI {
     public static void daydayGoodClick(String nowTime,String gooId,String goodName,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("nowTime", nowTime);
+            properties.put("ttthNowTime", nowTime);
 //            properties.put("bannerLocation", bannerLocation);
-            properties.put("goodId", gooId);
-            properties.put("goodName", goodName);
-            properties.put("rank", rank);
-            SensorsDataAPI.sharedInstance().track("fristQualityHotClick", properties);
+            properties.put("ttthGoodId", gooId);
+            properties.put("ttthGoodName", goodName);
+            properties.put("ttthGoodRank", rank);
+            SensorsDataAPI.sharedInstance().track("ttthGoodsClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -87,11 +85,11 @@ public class JosnSensorsDataAPI {
     public static void pinpaiStoreClick(String storeId,String storeName,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("storeId", storeId);
+            properties.put("pptmStoreId", storeId);
 //            properties.put("bannerLocation", bannerLocation);
-            properties.put("storeName", storeName);
-            properties.put("rank", rank);
-            SensorsDataAPI.sharedInstance().track("pinpaiStoreClick", properties);
+            properties.put("pptmStoreName", storeName);
+            properties.put("pptmStoreRank", rank);
+            SensorsDataAPI.sharedInstance().track("pptmStoreClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -104,12 +102,12 @@ public class JosnSensorsDataAPI {
     public static void pinpaiStoreGoodClick(String storeId,String storeName,String goodId,String goodName,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("storeId", storeId);
-            properties.put("storeName", storeName);
-            properties.put("goodId", goodId);
-            properties.put("goodName", goodName);
-            properties.put("rank", rank);
-            SensorsDataAPI.sharedInstance().track("pinpaiStoreGoodClick", properties);
+            properties.put("pptmStoreId", storeId);
+            properties.put("pptmStoreName", storeName);
+            properties.put("pptmStoreGoodId", goodId);
+            properties.put("pptmStoreGoodName", goodName);
+            properties.put("pptmStoreGoodRank", rank);
+            SensorsDataAPI.sharedInstance().track("pptmStoreGoodsClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -122,11 +120,11 @@ public class JosnSensorsDataAPI {
     public static void loveNewGoodClick(String channelName,String goodId,String goodName,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("channelName", channelName);
-            properties.put("goodId", goodId);
-            properties.put("goodName", goodName);
-            properties.put("rank", rank);
-            SensorsDataAPI.sharedInstance().track("loveNewGoodClick", properties);
+            properties.put("asxpChannelName", channelName);
+            properties.put("asxpDoodId", goodId);
+            properties.put("asxpGoodName", goodName);
+            properties.put("asxpGoodRank", rank);
+            SensorsDataAPI.sharedInstance().track("asxpGoodsClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -139,11 +137,11 @@ public class JosnSensorsDataAPI {
     public static void koubeiGoodClick(String channelName,String goodId,String goodName,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("channelName", channelName);
-            properties.put("goodId", goodId);
-            properties.put("goodName", goodName);
-            properties.put("rank", rank);
-            SensorsDataAPI.sharedInstance().track("koubeiGoodClick", properties);
+            properties.put("kbrxFirstChannelName", channelName);
+            properties.put("kbrxGoodId", goodId);
+            properties.put("kbrxGoodName", goodName);
+            properties.put("kbrxGoodRank", rank);
+            SensorsDataAPI.sharedInstance().track("kbrxGoodsClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -172,12 +170,12 @@ public class JosnSensorsDataAPI {
     public static void channelGoodClick(String homeChannel,String indexChannel,String goodId,String goodName,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("homeChannel", homeChannel);
-            properties.put("indexChannel", indexChannel);
-            properties.put("goodId", goodId);
-            properties.put("goodName", goodName);
-            properties.put("rank", rank);
-            SensorsDataAPI.sharedInstance().track("channelGoodClick", properties);
+            properties.put("pdBelongs", homeChannel);
+            properties.put("pdType", indexChannel);
+            properties.put("pdGoodId", goodId);
+            properties.put("pdGoodName", goodName);
+            properties.put("pdGoodRank", rank);
+            SensorsDataAPI.sharedInstance().track("pdGoodsClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -187,13 +185,13 @@ public class JosnSensorsDataAPI {
      * @return
      */
     public static void login(String loginMethod){
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("loginMethod", loginMethod);
-            SensorsDataAPI.sharedInstance().track("login", properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject properties = new JSONObject();
+//            properties.put("loginMethod", loginMethod);
+//            SensorsDataAPI.sharedInstance().track("login", properties);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**
@@ -201,14 +199,14 @@ public class JosnSensorsDataAPI {
      * @return
      */
     public static void signUp(String signUpMethod,String code){
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("signUpMethod", signUpMethod);
-            properties.put("code", code);
-            SensorsDataAPI.sharedInstance().track("signUp", properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject properties = new JSONObject();
+//            properties.put("signUpMethod", signUpMethod);
+//            properties.put("code", code);
+//            SensorsDataAPI.sharedInstance().track("signUp", properties);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**
@@ -236,14 +234,14 @@ public class JosnSensorsDataAPI {
                                        String secondCommodity,String pricePerCommodity,String storeID,String storeName){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("preseat", preseat);
-            properties.put("commodityID", commodityID);
-            properties.put("commodityName", commodityName);
-            properties.put("firstCommodity", firstCommodity);
-            properties.put("secondCommodity", secondCommodity);
-            properties.put("pricePerCommodity", pricePerCommodity);
-            properties.put("storeID", storeID);
-            properties.put("storeName", storeName);
+            properties.put("from", preseat);
+            properties.put("goods_id", commodityID);
+            properties.put("goods_title", commodityName);
+            properties.put("cate1", firstCommodity);
+            properties.put("cate2", secondCommodity);
+            properties.put("price", pricePerCommodity);
+            properties.put("store_id", storeID);
+            properties.put("store_name", storeName);
             SensorsDataAPI.sharedInstance().track("commodityDetail", properties);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -256,19 +254,19 @@ public class JosnSensorsDataAPI {
      */
     public static void addToShoppingcart(String preseat,String commodityID,String commodityName,String firstCommodity,
                                        String secondCommodity,String commodityNumber,String addToShoppingcart){
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("preseat", preseat);
-            properties.put("commodityID", commodityID);
-            properties.put("commodityName", commodityName);
-            properties.put("firstCommodity", firstCommodity);
-            properties.put("secondCommodity", secondCommodity);
-            properties.put("commodityNumber", commodityNumber);
-            properties.put("addToShoppingcart", addToShoppingcart);
-            SensorsDataAPI.sharedInstance().track("addToShoppingcart", properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject properties = new JSONObject();
+//            properties.put("preseat", preseat);
+//            properties.put("commodityID", commodityID);
+//            properties.put("commodityName", commodityName);
+//            properties.put("firstCommodity", firstCommodity);
+//            properties.put("secondCommodity", secondCommodity);
+//            properties.put("commodityNumber", commodityNumber);
+//            properties.put("addToShoppingcart", addToShoppingcart);
+//            SensorsDataAPI.sharedInstance().track("addToShoppingcart", properties);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**
@@ -277,24 +275,24 @@ public class JosnSensorsDataAPI {
      */
     public static void submitOrder(String orderID,String orderAmount,String addressId,String transportationCosts,String discountId
                         ,String IntegralDiscountAmount){
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("orderID", orderID);
-            properties.put("orderAmount", orderAmount);
-            properties.put("addressId", addressId);
-//            properties.put("receiverProvince", receiverProvince);
-//            properties.put("receiverCity", receiverCity);
-//            properties.put("receiverArea", receiverArea);
-            properties.put("transportationCosts", transportationCosts);
-            properties.put("discountId", discountId);
-//            properties.put("discountAmount", discountAmount);
-//            properties.put("ifUseLntegral", ifUseLntegral);
-//            properties.put("numberOfLntegral", numberOfLntegral);
-            properties.put("IntegralDiscountAmount", IntegralDiscountAmount);
-            SensorsDataAPI.sharedInstance().track("submitOrder", properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject properties = new JSONObject();
+//            properties.put("orderID", orderID);
+//            properties.put("orderAmount", orderAmount);
+//            properties.put("addressId", addressId);
+////            properties.put("receiverProvince", receiverProvince);
+////            properties.put("receiverCity", receiverCity);
+////            properties.put("receiverArea", receiverArea);
+//            properties.put("transportationCosts", transportationCosts);
+//            properties.put("discountId", discountId);
+////            properties.put("discountAmount", discountAmount);
+////            properties.put("ifUseLntegral", ifUseLntegral);
+////            properties.put("numberOfLntegral", numberOfLntegral);
+//            properties.put("IntegralDiscountAmount", IntegralDiscountAmount);
+//            SensorsDataAPI.sharedInstance().track("submitOrder", properties);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**
@@ -303,23 +301,23 @@ public class JosnSensorsDataAPI {
      */
     public static void cancelPayOrder(String orderID,String orderAmount,String actualPaymentAmount,String paymentMethod,String ifUseDiscount
             ,String IntegralDiscountAmount){
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("orderID", orderID);
-            properties.put("orderAmount", orderAmount);
-            properties.put("actualPaymentAmount", actualPaymentAmount);
-//            properties.put("receiverProvince", receiverProvince);
-//            properties.put("receiverCity", receiverCity);
-//            properties.put("receiverArea", receiverArea);
-            properties.put("paymentMethod", paymentMethod);
-            properties.put("ifUseDiscount", ifUseDiscount);
-//            properties.put("discountAmount", discountAmount);
-//            properties.put("ifUseLntegral", ifUseLntegral);
-//            properties.put("numberOfLntegral", numberOfLntegral);
-            properties.put("IntegralDiscountAmount", IntegralDiscountAmount);
-            SensorsDataAPI.sharedInstance().track("cancelPayOrder", properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject properties = new JSONObject();
+//            properties.put("orderID", orderID);
+//            properties.put("orderAmount", orderAmount);
+//            properties.put("actualPaymentAmount", actualPaymentAmount);
+////            properties.put("receiverProvince", receiverProvince);
+////            properties.put("receiverCity", receiverCity);
+////            properties.put("receiverArea", receiverArea);
+//            properties.put("paymentMethod", paymentMethod);
+//            properties.put("ifUseDiscount", ifUseDiscount);
+////            properties.put("discountAmount", discountAmount);
+////            properties.put("ifUseLntegral", ifUseLntegral);
+////            properties.put("numberOfLntegral", numberOfLntegral);
+//            properties.put("IntegralDiscountAmount", IntegralDiscountAmount);
+//            SensorsDataAPI.sharedInstance().track("cancelPayOrder", properties);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 }
