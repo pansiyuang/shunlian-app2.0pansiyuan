@@ -14,6 +14,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -118,6 +119,13 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_bananer, mStore.head_banner);
             viewHolder.miv_bananer.setVisibility(View.VISIBLE);
             viewHolder.ll_score.setVisibility(View.GONE);
+
+            int screenWidth = DeviceInfoUtil.getDeviceWidth(context);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) viewHolder.miv_bananer.getLayoutParams();
+            layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+            double height = screenWidth / 750d * 260;
+            layoutParams.height = (int) Math.round(height);
+            viewHolder.miv_bananer.setLayoutParams(layoutParams);
         } else {
             viewHolder.miv_bananer.setVisibility(View.GONE);
             viewHolder.ll_score.setVisibility(View.VISIBLE);
@@ -210,6 +218,12 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                     }
                 }
 
+                if (isEmpty(goods.tag_pic)){
+                    viewHolder.miv_act.setVisibility(View.GONE);
+                }else {
+                    viewHolder.miv_act.setVisibility(View.VISIBLE);
+                    GlideUtils.getInstance().loadImageZheng(context,viewHolder.miv_act,goods.tag_pic);
+                }
                 if (1 == goods.is_sell_out) {
                     viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
                     viewHolder.tv_price.setTextColor(getColor(R.color.value_A0A0A0));
@@ -314,6 +328,9 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         @BindView(R.id.miv_seller_out)
         MyImageView miv_seller_out;
+
+        @BindView(R.id.miv_act)
+        MyImageView miv_act;
 
         @BindView(R.id.tv_title)
         TextView tv_title;

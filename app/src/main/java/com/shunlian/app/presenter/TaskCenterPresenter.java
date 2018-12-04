@@ -145,9 +145,10 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                         iView.setGoldEggsCount(data.gold_egg);
                         iView.obtainDownTime(data.gold_egg_second, data.gold_egg_total_second,data.task_status);
                         iView.setSignContinueNum(data.sign_continue_num);
-                        iView.setPic(data.ad_pic_url, data.ad_url);
+                        iView.setPic(data.ad_pic_url, data.ad_url,data.ad_roll);
                         iView.setTip(data.faq_url, data.rule_url);
-                        iView.setSignData(data.sign_days);
+                        iView.setSignData(data.sign_days,data.sign_continue_num);
+                        iView.popAd(data.pop_ad_pic_url,data.pop_ad_url);
                         //LogUtil.zhLogW("TaskHomeEntity:>>>>"+data.toString());
                     }
                 });

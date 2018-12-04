@@ -134,10 +134,9 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
                 GlideUtils.getInstance().loadImage(context, viewHolder.miv_img, imgUrl);
             }
         } else {
-            gone(viewHolder.miv_del,viewHolder.mtv_video_duration);
-            visible(viewHolder.mtv_max);
-            viewHolder.mtv_max.setText("(最多" + mConfig.max_count + "张)");
-            GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_tupian, viewHolder.miv_img);
+            gone(viewHolder.miv_del,viewHolder.mtv_video_duration,viewHolder.mtv_max);
+            viewHolder.miv_img.setImageResource(R.mipmap.icon_found_xinde_addimg);
+            //GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.icon_found_xinde_addimg, viewHolder.miv_img);
         }
         viewHolder.miv_del.setOnClickListener(v -> {
             ImageVideo imageEntity = lists.get(position);
@@ -173,6 +172,13 @@ public class SingleImgAdapterV2 extends BaseRecyclerAdapter<ImageVideo> {
 
         public SingleImgHolderV2(View itemView) {
             super(itemView);
+            gone(mtv_max);
+            miv_del.setImageResource(R.mipmap.icon_del_found);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,RelativeLayout.TRUE);
+            miv_del.setLayoutParams(params);
+
             AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams
                     (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.width = (screenWidth - TransformUtil.dip2px(context, 20 + (4 * 4))) / 5;

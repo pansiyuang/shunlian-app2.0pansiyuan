@@ -40,6 +40,16 @@ import com.shunlian.app.widget.WebViewProgressBar;
 import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.mylibrary.ImmersionBar;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
+import com.tencent.smtt.sdk.CookieManager;
+import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.tencent.sonic.sdk.SonicCacheInterceptor;
 import com.tencent.sonic.sdk.SonicConfig;
 import com.tencent.sonic.sdk.SonicConstants;
@@ -48,16 +58,6 @@ import com.tencent.sonic.sdk.SonicSession;
 import com.tencent.sonic.sdk.SonicSessionConfig;
 import com.tencent.sonic.sdk.SonicSessionConnection;
 import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
-import com.tencent.smtt.sdk.ValueCallback;
-import com.tencent.smtt.sdk.WebChromeClient;
-import com.tencent.smtt.sdk.WebSettings;
-import com.tencent.smtt.sdk.WebView;
-import com.tencent.smtt.sdk.WebViewClient;
-import com.tencent.smtt.sdk.CookieSyncManager;
-import com.tencent.smtt.sdk.CookieManager;
-import com.tencent.smtt.export.external.interfaces.SslError;
-import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
-import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -323,6 +323,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+//                addCookie(url);
                 LogUtil.zhLogW("=onPageStarted=======" + url);
 //                if (!isFinishing() && httpDialog != null) {
 //                    httpDialog.show();
@@ -335,6 +336,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                LogUtil.augusLogW("=onPageFinished=======" + url);
                 if (!activity.isFinishing()) {
                     if (!isEmpty(view.getTitle())) {
                         title = view.getTitle();
@@ -351,7 +353,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
 
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                LogUtil.zhLogW("=error=======" + error.getPrimaryError());
+                LogUtil.augusLogW("=error=======" + error.getPrimaryError());
                 handler.proceed();//接受证书
 //                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
 //                    httpDialog.dismiss();
@@ -372,7 +374,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.httpLogW("========h5Url==========" + url);
+                LogUtil.augusLogW("========h5Url==========" + url);
                 if (url.startsWith("alipay")) {
 //                    Log.i("shouldOverrideUrlLoading", "处理自定义scheme");
                     try {
@@ -406,6 +408,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
                     analysisUrl(url);
                     return true;
                 } else {
+//                    addCookie(url);
                     return super.shouldOverrideUrlLoading(view, url);
 //                    1、 默认返回：return super.shouldOverrideUrlLoading(view, url); 这个返回的方法会调用父类方法，
 // 也就是跳转至手机浏览器，平时写webview一般都在方法里面写 webView.loadUrl(url);  然后把这个返回值改成下面的false。 搜索
@@ -490,7 +493,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
                 return true;
             }
         });
-        addCookie();
+        addCookie(h5Url);
         mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString() + " " + SharedPrefUtil
 //        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
                 .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
@@ -513,14 +516,17 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
             mwv_h5.loadUrl(h5Url, setWebviewHeader());
             beforeUrl = h5Url;
         } else if (isSecond) {
-            addCookie();
+            addCookie(h5Url);
             if (!member_id.equals(SharedPrefUtil.getSharedUserString("member_id", "")))
                 mwv_h5.reload();
         }
         member_id = SharedPrefUtil.getSharedUserString("member_id", "");
     }
 
-    public void addCookie() {
+    public void addCookie(String url) {
+        String domain = Common.getDomain(url);
+        if (isEmpty(domain))
+            return;
         //add
         String token = SharedPrefUtil.getSharedUserString("token", "");
         String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
@@ -532,7 +538,6 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
 
-        String domain = Common.getDomain(h5Url);
         cookieManager.setCookie(domain, "Client-Type=Android");
         cookieManager.setCookie(domain, "token=" + token);
         cookieManager.setCookie(domain, "User-Agent=" + ua);
@@ -605,6 +610,12 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
             sonicSessionClient.destroy();
             sonicSessionClient = null;
         }
+        try{
+            ViewGroup view = (ViewGroup) getActivity().getWindow().getDecorView();
+            view.removeAllViews();
+        }catch (Exception e){
+
+        }
         super.onDestroy();
     }
 
@@ -652,7 +663,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
     /**
      * 截取商品id
      *
-    * @param url
+    * @param
      * @return
      */
 //    private String interceptId(String url) {

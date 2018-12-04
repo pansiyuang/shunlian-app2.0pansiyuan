@@ -176,7 +176,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         mRetryBtn = findViewById(cn.jzvd.R.id.retry_btn);
         mRetryLayout = findViewById(cn.jzvd.R.id.retry_layout);
         topContainer.setVisibility(VISIBLE);
-        fullscreenButton.setVisibility(VISIBLE);
+        fullscreenButton.setVisibility(GONE);
         playControl = findViewById(R.id.iv_play_control);
         playControl.setVisibility(VISIBLE);
         line_good_info = findViewById(R.id.line_good_info);
@@ -221,12 +221,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
                         image_user_head.setImageResource(R.mipmap.img_set_defaulthead);
                     }
                 });
-             if(blog.is_self==1){
-//                 tv_user_attent.setVisibility(GONE);
                  setAttentStateView();
-             }else {
-                 setAttentStateView();
-             }
            if(blog.related_goods!=null&&blog.related_goods.size()>0) {
                GlideUtils.getInstance().loadCornerImage(getContext(), img_goods_icon, blog.related_goods.get(0).thumb, 4);
                if(blog.related_goods.get(0).title!=null)
@@ -248,8 +243,10 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
     public void setParseStateView(){
         if(blog.is_praise==1) {//已点赞
             image_dianzai_state.setImageResource(R.mipmap.icon_dianzan_sel);
+            tv_dianzan.setTextColor(getResources().getColor(R.color.pink_color));
         }else{
             image_dianzai_state.setImageResource(R.mipmap.icon_dianzan_good);
+            tv_dianzan.setTextColor(getResources().getColor(R.color.white));
         }
         tv_dianzan.setText(blog.praise_num+"");
     }
@@ -262,10 +259,15 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
             tv_user_attent.setText(blog.is_focus == 0 ? "关注" : "已关注");
             tv_user_attent.setVisibility(VISIBLE);
         }else{
+            tv_user_attent.setText(blog.is_focus == 0 ? "关注" : "已关注");
             tv_user_attent.setVisibility(VISIBLE);
         }
+        if(blog.is_self==1){
+            tv_user_attent.setVisibility(GONE);
+        }
+
         tv_user_attent.setTextColor(blog.is_focus==0?getResources().getColor(R.color.deep_red):getResources().getColor(R.color.value_878B8A));
-        tv_user_attent.setBackgroundResource(blog.is_focus==0?R.drawable.rounded_rectangle_stroke_22px:R.drawable.rounded_rectangle_gray_22px);
+        tv_user_attent.setBackgroundResource(blog.is_focus==0?R.drawable.rounded_rectangle_stroke_22px:R.color.transparent);
     }
 
     /**
@@ -620,16 +622,16 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         }else if (i == cn.jzvd.R.id.iv_voice){
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,0,0);
         }else if (i == cn.jzvd.R.id.iv_download){
-            readToDownLoad();
+            downFileStart();
         }else if(i==R.id.line_dianzan){
             if(blog.is_praise==0) {
                 parseAttent.updateParse(blog.is_praise == 1);
             }
         }else if(i==R.id.line_share){
         }else if(i==R.id.line_down){
-            readToDownLoad();
+            downFileStart();
         }else if(i==R.id.tv_user_attent){
-            parseAttent.updateAttent(blog.is_focus==1);
+            parseAttent.updateAttent(blog.is_focus == 1, blog.nickname);
         }else if(i==R.id.include_good){
             if (blog.related_goods.size() == 1) {
                 parseAttent.startGoodInfo();
@@ -1154,99 +1156,50 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         }
     }
 
-    public String dirName;
     public String currentUrl;
-    String fileName = "";
-
-    public void readToDownLoad() {
-       boolean checkState = checkDownLoadFileExists();
-        if (checkState) {
-            Common.staticToast("已下载过该视频,请勿重复下载!");
-        } else {
-            downFileStart();
-        }
-    }
-
 
     private void downFileStart(){
-        downLoadVideo();
-        downLoadDialogProgress.showDownLoadDialogProgress(getContext(), new DownLoadDialogProgress.downStateListen() {
-            @Override
-            public void cancelDownLoad() {
-                downloadUtils.setCancel(true);
-            }
-
-            @Override
-            public void fileDownLoad() {
-                downloadUtils.download(currentUrl,fileName);
-            }
-        }, !NetworkUtils.isWifiConnected(getContext()));
-    }
-    /**
-     * 检查下载的文件是否存在
-     * @return
-     */
-    public boolean checkDownLoadFileExists(){
-        dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                .getAbsolutePath()+"/Camera";
-        File file = new File(dirName);
-        // 文件夹不存在时创建
-        if (!file.exists()) {
-            dirName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                    .getAbsolutePath();
-            file = new File(dirName);
-            if (!file.exists())
-                file.mkdirs();
-        }
-        // 下载后的文件名
-
-        if (!TextUtils.isEmpty(currentUrl)) {
-            int i = currentUrl.lastIndexOf("/"); // 取的最后一个斜杠后的字符串为名
-            fileName = dirName + currentUrl.substring(i, currentUrl.length());
-        }else {
-            fileName = dirName+ "/shunlian"+System.currentTimeMillis()+".mp4";
-        }
-        LogUtil.httpLogW("文件名:" + fileName);
-        File file1 = new File(fileName);
-        if (file1.exists()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public void downLoadVideo() {
         downloadUtils = new DownloadUtils(new JsDownloadListener() {
             @Override
             public void onStartDownload() {
-
             }
-
             @Override
             public void onProgress(int progress) {
-                Log.d("下载","进度："+progress);
                 downLoadDialogProgress.showProgress(progress);
             }
-
             @Override
             public void onFinishDownload(String filePath,boolean isCancel) {
-                if(!isCancel) {
-                    saveVideoFile(filePath);
-                }else{
-                    File file1 = new File(filePath);
-                    if(file1.exists()){
-                        file1.delete();
-                    }
-                }
+                if(!isCancel)
                 downLoadDialogProgress.downLoadSuccess();
             }
-
             @Override
             public void onFail(String errorInfo) {
                 downLoadDialogProgress.dissMissDialog();
             }
+            @Override
+            public void onFinishEnd() {
+                parseAttent.downVideo();
+            }
         });
+        boolean checkState = downloadUtils.checkDownLoadFileExists(currentUrl);
+        if (checkState) {
+            Common.staticToast("已下载过该视频,请勿重复下载!");
+            return;
+        }
+        downLoadDialogProgress.showDownLoadDialogProgress(getContext(), new DownLoadDialogProgress.downStateListen() {
+            @Override
+            public void cancelDownLoad() {
+                downloadUtils.setCancel(true);
+                parseAttent.downVideo();
+            }
+
+            @Override
+            public void fileDownLoad() {
+                downloadUtils.download(currentUrl,downloadUtils.fileName);
+            }
+        }, !NetworkUtils.isWifiConnected(getContext()));
     }
+
 
     public void saveVideoFile(String fileDir) {
         //strDir视频路径
@@ -1277,7 +1230,7 @@ public class GoodVideoPlayer extends JZVideoPlayer  {
         /**点赞取消点赞*/
         void updateParse(boolean isParse);
         /**关注取消关注*/
-        void updateAttent(boolean isAttent);
+        void updateAttent(boolean isAttent,String nickName);
         /**下载视频成功回调*/
         void downVideo();
         /**分享内容成功回调*/

@@ -9,6 +9,8 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CouponListEntity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -83,7 +85,12 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
         mHolder.mtv_limit.setText(goods_scope);*/
         gone(mHolder.mtv_limit);
         mHolder.mtv_overdue.setText(voucherList.expire_after);
-
+        if (!isEmpty(voucherList.tag)) {
+            visible(mHolder.miv_label);
+            GlideUtils.getInstance().loadImage(context, mHolder.miv_label, voucherList.tag);
+        }else {
+            gone(mHolder.miv_label);
+        }
     }
 
     private void changeState(String state, CouponListHolder mHolder, String text, String expired){
@@ -169,6 +176,9 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
 
         @BindView(R.id.rlayout_root)
         RelativeLayout rlayout_root;
+
+        @BindView(R.id.miv_label)
+        MyImageView miv_label;
 
         public CouponListHolder(View itemView) {
             super(itemView);

@@ -108,7 +108,11 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
         mHolder.mtv_desc.setText(content.content);
         String concat = getString(R.string.rmb).concat(content.money);
         mHolder.mtv_coupon_den.setText(concat);
-        mHolder.mtv_full_cut.setText("满" + content.condition + "可用");
+        if (!isEmpty(content.condition) && Float.parseFloat(content.condition) > 0){
+            mHolder.mtv_full_cut.setText("满" + content.condition + "可用");
+        }else {
+            mHolder.mtv_full_cut.setText("无门槛");
+        }
         mHolder.mtv_vail_time.setText("有效期：" + content.expire);
         mHolder.mtv_remark.setText(content.remark);
     }

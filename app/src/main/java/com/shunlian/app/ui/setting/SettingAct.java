@@ -91,6 +91,7 @@ public class SettingAct extends BaseActivity implements ISettingView {
     private SettingPresenter presenter;
     private String mAboutUrl;
     private String mAppQRCode;
+    private String mIsSetPwd;
 
 
     public static void startAct(Context context) {
@@ -175,7 +176,7 @@ public class SettingAct extends BaseActivity implements ISettingView {
                 MyCommentAct.startAct(this);
                 break;
             case R.id.mtv_user_security:
-                UserSecurityAct.startAct(this);
+                UserSecurityAct.startAct(this,mIsSetPwd);
                 break;
             case R.id.llayout_clear:
                 if (!isEmpty(mtv_count.getText())) {
@@ -258,6 +259,16 @@ public class SettingAct extends BaseActivity implements ISettingView {
     @Override
     public void aboutUrl(String about_url) {
         mAboutUrl = about_url + "?versioncode=" + mtv_app_version.getText();
+    }
+
+    /**
+     * 是否设置密码
+     *
+     * @param if_pwd_set 0未设置 1已设置
+     */
+    @Override
+    public void isSetPwd(String if_pwd_set) {
+        mIsSetPwd = if_pwd_set;
     }
 
     /**

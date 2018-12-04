@@ -296,7 +296,11 @@ public class FolderTextView extends TextView {
      * @return Layout
      */
     private Layout makeTextLayout(String text) {
-        return new StaticLayout(text, getPaint(), getWidth() - getPaddingLeft() - getPaddingRight(), Layout.Alignment
+        int width = getWidth() - getPaddingLeft() - getPaddingRight();
+        if (width < 0) {
+            width = 0;
+        }
+        return new StaticLayout(text, getPaint(), width, Layout.Alignment
                 .ALIGN_NORMAL, mLineSpacingMultiplier, mLineSpacingExtra, true);
     }
 

@@ -2,6 +2,7 @@ package com.shunlian.app.ui.discover_new;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -15,17 +16,28 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.ActivityDetailAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.mylibrary.ImmersionBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +48,13 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack {
+public class ActivityDetailActivity extends BaseActivity implements IActivityDetailView, ActivityDetailAdapter.OnAdapterCallBack, ShareGoodDialogUtil.OnShareBlogCallBack {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -49,9 +64,6 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
-
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
 
     public int offset;
     private LinearLayoutManager manager;
@@ -63,6 +75,8 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private ActivityDetailAdapter mAdapter;
     private ObjectMapper objectMapper;
     private HotBlogsEntity.Detail currentDetail;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
+    private PromptDialog promptDialog, plusDialog;
 
     @Override
     protected int getLayoutId() {
@@ -77,8 +91,13 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     protected void initData() {
-        defToolbar();
+        NestedSlHeader header = new NestedSlHeader(this);
+        lay_refresh.setRefreshHeaderView(header);
 
+        defToolbar();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
+        EventBus.getDefault().register(this);
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
         offset = toolbarParams.height;
 
@@ -114,12 +133,22 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                         setToolbar();
                         totalDy = layoutHeight;
                     }
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 2 == manager.getItemCount()) {
+                        if (mPresent != null) {
+                            mPresent.onRefresh();
+                        }
+                    }
                 }
             }
         });
         miv_join.setOnClickListener(v -> {
             if (!Common.isAlreadyLogin()) {
-                LoginAct.startAct(ActivityDetailActivity.this);
+                Common.goGoGo(this, "login");
+                return;
+            }
+            if (!Common.isPlus()) {
+                initHintDialog();
                 return;
             }
             try {
@@ -132,12 +161,18 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                     sendConfig.isWhiteList = true;
                 }
                 sendConfig.activityID = currentId;
-                sendConfig.activityTitle = currentDetail.title;
+                if (!isEmpty(currentDetail.title)) {
+                    sendConfig.activityTitle = "#" + currentDetail.title + "#";
+                }
                 sendConfig.memberId = baseInfo.member_id;
                 FindSendPictureTextAct.startAct(ActivityDetailActivity.this, sendConfig);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+        lay_refresh.setOnRefreshListener(() -> {
+            mPresent.initPage();
+            mPresent.getActivityDetail(true, currentId);
         });
     }
 
@@ -151,40 +186,21 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     public void setBgColor(int totalDy) {
-        ImmersionBar immersionBar = ImmersionBar.with(this).addViewSupportTransformColor(toolbar, R.color.white);
+        ImmersionBar immersionBar = ImmersionBar.with(this).addViewSupportTransformColor(toolbar, R.color.transparent);
         if (totalDy <= layoutHeight) {
             if (totalDy <= 0) {
                 totalDy = 0;
             }
             float alpha = (float) totalDy / layoutHeight;
             immersionBar.statusBarAlpha(alpha).addTag(GoodsDetailAct.class.getName()).init();
-            float v = 1.0f - alpha * 2;
-            if (v <= 0) {
-                v = alpha * 2 - 1;
-                setImg(2, 1);
-            } else {
-                setImg(1, 2);
-            }
-            miv_close.setAlpha(v);
         } else {
             setToolbar();
         }
     }
 
     public void setToolbar() {
-        setImg(2, 1);
         immersionBar.statusBarAlpha(1.0f).addTag(GoodsDetailAct.class.getName()).init();
         miv_close.setAlpha(1.0f);
-    }
-
-    private void setImg(int status, int oldStatus) {
-        if (status != oldStatus) {
-            if (status == 1) {
-                miv_close.setImageResource(R.mipmap.icon_more_fanhui);
-            } else {
-                miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
-            }
-        }
     }
 
     @Override
@@ -197,7 +213,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             blogList.addAll(list);
         }
         if (mAdapter == null) {
-            mAdapter = new ActivityDetailAdapter(this, blogList, detail, quick_actions);
+            mAdapter = new ActivityDetailAdapter(this, blogList, detail, shareGoodDialogUtil);
             recycler_list.setAdapter(mAdapter);
             mAdapter.setAdapterCallBack(this);
         }
@@ -216,7 +232,17 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+    }
+
+    @Override
+    public void downCountSuccess(String blogId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.down_num++;
+            }
+        }
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -227,7 +253,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 blog.praise_num++;
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -241,8 +267,24 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId) {
-        mPresent.focusUser(isFocus, memberId);
+    public void toFocusUser(int isFocus, String memberId, String nickName) {
+        if (isFocus == 1) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(this);
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+                promptDialog.setTvCancleIsBold(false);
+                promptDialog.setTvSureIsBold(false);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        mPresent.focusUser(isFocus, memberId);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
+            mPresent.focusUser(isFocus, memberId);
+        }
     }
 
     @Override
@@ -251,14 +293,93 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
+    public void toDown(String blogId) {
+        mPresent.downCount(blogId);
+    }
+
+    @Override
     public void OnTopSize(int height) {
         layoutHeight = height - offset - ImmersionBar.getStatusBarHeight(this);
     }
 
     @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.total_share_num++;
+            }
+        }
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+    }
+
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        mPresent.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(RefreshBlogEvent event) {
+        switch (event.mType) {
+            case RefreshBlogEvent.ATTENITON_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.memberId.equals(blog.member_id)) {
+                        blog.is_focus = event.mData.is_focus;
+                    }
+                }
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+                break;
+            case RefreshBlogEvent.PRAISE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.is_praise = event.mData.is_praise;
+                        blog.praise_num++;
+                    }
+                }
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+                break;
+            case RefreshBlogEvent.SHARE_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.total_share_num++;
+                    }
+                }
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+                break;
+            case RefreshBlogEvent.DOWNLOAD_TYPE:
+                for (BigImgEntity.Blog blog : blogList) {
+                    if (event.mData.blogId.equals(blog.id)) {
+                        blog.down_num++;
+                    }
+                }
+                mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+                break;
+        }
+    }
+
+    public void initHintDialog() {
+        if (plusDialog == null) {
+            plusDialog = new PromptDialog(this);
+            plusDialog.setTvCancleIsBold(false);
+            plusDialog.setTvSureIsBold(false);
+            plusDialog.setTvSureColor(R.color.pink_color);
+            plusDialog.setTvSureBGColor(Color.WHITE);
+        }
+        plusDialog.setSureAndCancleListener("亲，您还不是PLUS会员哦,现在开通享7大专属权益", "立即开通", view -> {
+            plusDialog.dismiss();
+            H5X5Act.startAct(ActivityDetailActivity.this, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+        }, getStringResouce(R.string.errcode_cancel), view -> plusDialog.dismiss()).show();
+    }
+
+    @Override
     protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

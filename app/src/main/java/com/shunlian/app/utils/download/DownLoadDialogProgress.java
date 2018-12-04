@@ -10,11 +10,12 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CBProgressBar;
+import com.shunlian.app.widget.circle.DrawHookView;
 import com.shunlian.app.widget.dialog.CommonDialog;
 
 
 public class DownLoadDialogProgress {
-    private long time = 300;
+    private long time = 1500;
     private CommonDialog nomalBuildl;
     private TextView tv_down_2g;
     private CBProgressBar cbProgressBar;
@@ -24,6 +25,7 @@ public class DownLoadDialogProgress {
     private LinearLayout tv_down_success;
     private View bottom_view;
     private LinearLayout down_bottom;
+    private DrawHookView draw_hook;
     public void showProgress(int progress){
         cbProgressBar.setProgress(progress);
     };
@@ -46,13 +48,14 @@ public class DownLoadDialogProgress {
         tv_down_success.setVisibility(View.VISIBLE);
         bottom_view.setVisibility(View.GONE);
         down_bottom.setVisibility(View.INVISIBLE);
+        draw_hook.setInitData();
+        draw_hook.invalidate();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 nomalBuildl.dismiss();
             }
         },time);
-
     };
     public void dissMissDialog(){
         if(nomalBuildl!=null&&nomalBuildl.isShowing()){
@@ -64,7 +67,7 @@ public class DownLoadDialogProgress {
             return;
         }
         if(nomalBuildl==null) {
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context).setWidth((int) TransformUtil.dip2px(context, 250f))
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context).setWidth((int) TransformUtil.dip2px(context, 250f)).loadAniamtion()
                     .setView(R.layout.dialog_down_file);
             nomalBuild.setOnClickListener(R.id.tv_down_calcel, new View.OnClickListener() {
                 @Override
@@ -86,6 +89,7 @@ public class DownLoadDialogProgress {
         tv_down_success= nomalBuildl.getView(R.id.tv_down_success);
         bottom_view = nomalBuildl.getView(R.id.bottom_view);
         down_bottom = nomalBuildl.getView(R.id.down_bottom);
+        draw_hook= nomalBuildl.getView(R.id.draw_hook);
         cbProgressBar.setProgress(0);
         bottom_view.setVisibility(View.VISIBLE);
         down_bottom.setVisibility(View.VISIBLE);
@@ -96,37 +100,41 @@ public class DownLoadDialogProgress {
             tv_down_ok.setVisibility(View.VISIBLE);
             tv_down_success.setVisibility(View.GONE);
         }else{
-            tv_down_2g.setVisibility(View.GONE);
-            tv_ready_down.setVisibility(View.VISIBLE);
-            cbProgressBar.setVisibility(View.GONE);
-            show_line.setVisibility(View.GONE);
-            tv_down_success.setVisibility(View.GONE);
-            tv_down_ok.setVisibility(View.GONE);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    showStartDown();
-                    stateListen.fileDownLoad();
-                }
-            },time);
+//            tv_down_2g.setVisibility(View.GONE);
+//            tv_ready_down.setVisibility(View.VISIBLE);
+//            cbProgressBar.setVisibility(View.GONE);
+//            show_line.setVisibility(View.GONE);
+//            tv_down_success.setVisibility(View.GONE);
+//            tv_down_ok.setVisibility(View.GONE);
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    showStartDown();
+//                    stateListen.fileDownLoad();
+//                }
+//            },time);
+            showStartDown();
+            stateListen.fileDownLoad();
 
         }
         tv_down_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_down_2g.setVisibility(View.GONE);
-                tv_ready_down.setVisibility(View.VISIBLE);
-                cbProgressBar.setVisibility(View.GONE);
-                show_line.setVisibility(View.GONE);
-                tv_down_success.setVisibility(View.GONE);
-                tv_down_ok.setVisibility(View.GONE);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        showStartDown();
-                        stateListen.fileDownLoad();
-                    }
-                },time);
+                showStartDown();
+                stateListen.fileDownLoad();
+//                tv_down_2g.setVisibility(View.GONE);
+//                tv_ready_down.setVisibility(View.VISIBLE);
+//                cbProgressBar.setVisibility(View.GONE);
+//                show_line.setVisibility(View.GONE);
+//                tv_down_success.setVisibility(View.GONE);
+//                tv_down_ok.setVisibility(View.GONE);
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        showStartDown();
+//                        stateListen.fileDownLoad();
+//                    }
+//                },time);
             }
         });
 

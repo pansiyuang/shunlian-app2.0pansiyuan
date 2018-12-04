@@ -12,6 +12,7 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ZanShareEntity;
 import com.shunlian.app.presenter.ZanSharePresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.discover_new.DiscoverMsgActivity;
 import com.shunlian.app.view.IZanShareView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -94,7 +95,7 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
         mPresenter.getZanShareList(true);
 
         nei_empty.setImageResource(R.mipmap.img_empty_common)
-                .setText("还没有关注你的粉丝哟")
+                .setText("还没有人给你分享哦")
                 .setButtonText(null);
     }
 
@@ -114,6 +115,7 @@ public class ZanAndShareMsgFrag extends BaseLazyFragment implements IZanShareVie
     @Override
     public void getMsgList(List<ZanShareEntity.Msg> list, int page, int totalPage) {
         if (page == 1) {
+//            ((DiscoverMsgActivity) getActivity()).showPraisePage();
             msgList.clear();
         }
         if (!isEmpty(list)) {

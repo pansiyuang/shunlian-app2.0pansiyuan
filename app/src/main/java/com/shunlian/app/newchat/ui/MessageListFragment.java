@@ -119,10 +119,10 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         msgs.add(sysMsg);
 
         //添加头条消息
-        MessageListEntity.Msg topicMsg = new MessageListEntity.Msg();
-        topicMsg.type = "5";
-        topicMsg.title = "头条";
-        msgs.add(topicMsg);
+//        MessageListEntity.Msg topicMsg = new MessageListEntity.Msg();
+//        topicMsg.type = "5";
+//        topicMsg.title = "头条";
+//        msgs.add(topicMsg);
 
         if (mClient.isBindAdmin()) { //平台客服
             MessageListEntity.Msg msg = new MessageListEntity.Msg();
@@ -320,6 +320,11 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void transferMemberAdd(String msg) {
+
+    }
+
+    @Override
+    public void withdrawMessage(String msg) {
 
     }
 

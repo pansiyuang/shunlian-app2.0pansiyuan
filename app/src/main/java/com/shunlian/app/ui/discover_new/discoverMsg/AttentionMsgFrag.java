@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new.discoverMsg;
 
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import com.shunlian.app.adapter.AttentionMsgAdapter;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.AttentionMsgPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.discover_new.DiscoverMsgActivity;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IAttentionMsgView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -42,6 +45,7 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
     private LinearLayoutManager manager;
     private AttentionMsgAdapter mAdapter;
     private List<HotBlogsEntity.MemberInfo> memberInfoList;
+    private PromptDialog promptDialog;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -106,6 +110,7 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
             lay_refresh.setRefreshing(false);
         }
     }
+
     @Override
     public void showDataEmptyView(int request_code) {
 
@@ -114,6 +119,7 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
     @Override
     public void getAttentionMsgList(List<HotBlogsEntity.MemberInfo> list, int page, int totalPage) {
         if (page == 1) {
+            ((DiscoverMsgActivity) getActivity()).showAttentionPage();
             memberInfoList.clear();
         }
         if (!isEmpty(list)) {
@@ -152,8 +158,24 @@ public class AttentionMsgFrag extends BaseLazyFragment implements IAttentionMsgV
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId) {
-        mPresenter.focusUser(isFocus, memberId);
+    public void toFocusUser(int isFocus, String memberId,String nickName) {
+        if (isFocus == 1) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(getActivity());
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+                promptDialog.setTvCancleIsBold(false);
+                promptDialog.setTvSureIsBold(false);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        mPresenter.focusUser(isFocus, memberId);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
+            mPresenter.focusUser(isFocus, memberId);
+        }
     }
 
 

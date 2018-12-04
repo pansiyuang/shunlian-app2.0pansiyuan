@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -19,17 +18,81 @@
             android:layout_centerVertical="true"
             android:scaleType="centerCrop" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:tabGravity="center"
-            app:tabIndicatorColor="@color/pink_color"
-            app:tabIndicatorHeight="2dp"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/pink_color"
-            app:tabTextColor="@color/value_484848"></android.support.design.widget.TabLayout>
+            android:layout_centerInParent="true">
+
+            <LinearLayout
+                android:id="@+id/ll_attention"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_attention"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="关注"
+                    android:textColor="@color/value_484848"
+                    android:textSize="15sp" />
+
+                <View
+                    android:id="@+id/view_attention"
+                    android:layout_width="30dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8.5dp"
+                    android:background="@color/pink_color"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_blog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_blog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="精选"
+                    android:textColor="@color/pink_color"
+                    android:textSize="15sp" />
+
+                <View
+                    android:id="@+id/view_blog"
+                    android:layout_width="30dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8.5dp"
+                    android:background="@color/pink_color" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动"
+                    android:textColor="@color/value_484848"
+                    android:textSize="15sp" />
+
+                <View
+                    android:id="@+id/view_activity"
+                    android:layout_width="30dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8.5dp"
+                    android:background="@color/pink_color"
+                    android:visibility="invisible" />
+            </LinearLayout>
+        </LinearLayout>
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_search"
@@ -41,8 +104,12 @@
             android:src="@mipmap/icon_found_sousuo" />
     </RelativeLayout>
 
-    <android.support.v4.view.ViewPager
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/value_ECECEC" />
+    <com.shunlian.app.widget.LazyViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+        android:layout_height="match_parent" />
 </LinearLayout>

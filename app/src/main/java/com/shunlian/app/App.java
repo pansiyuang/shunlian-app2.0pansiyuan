@@ -1,12 +1,12 @@
 package com.shunlian.app;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.support.multidex.MultiDex;
+import android.util.DisplayMetrics;
+import android.view.Display;
 
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.utils.Common;
@@ -18,11 +18,11 @@ import com.shunlian.app.utils.SwitchHostUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -53,7 +53,7 @@ import cn.jpush.android.api.JPushInterface;
  * Created by zhang on 2017/4/13 15 : 17.
  */
 
-public class App extends Application implements Application.ActivityLifecycleCallbacks {
+public class App extends Application {
     /**
      * Sensors Analytics 采集数据的地址
      */
@@ -64,14 +64,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
     private static Context context;
     public static String CACHE_PATH;
     public static String DOWNLOAD_PATH;
-
-    //页面名称
-    public static String SCREEN_NAME;
-    //页面标题
-    public static String TITLE;
-    public static long START_INDEX_TIME;
-    public static boolean IS_ENTER_HOME = false;
-
+    public static int widthPixels = 0;
+    public static int hightPixels = 0;
     public static ActivityHelper getActivityHelper() {
         return mApp.mActivityHelper;
     }
@@ -99,6 +93,9 @@ public class App extends Application implements Application.ActivityLifecycleCal
         super.onCreate();
         mApp = this;
         context = getApplicationContext();
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        widthPixels = dm.widthPixels;
+        hightPixels = dm.heightPixels;
         //初始化bugly,建议在测试阶段建议设置成true，发布时设置为false。
         if (BuildConfig.DEBUG) {
             Constant.BUGLY_ID="9f3fcbbba0";//测试
@@ -175,6 +172,10 @@ public class App extends Application implements Application.ActivityLifecycleCal
         };
         //x5内核初始化接口
         QbSdk.initX5Environment(getApplicationContext(),  cb);
+        //优化x5内核首次启动卡顿黑屏现象
+        HashMap map = new HashMap();
+        map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+        QbSdk.initTbsSettings(map);
         initSensorsDataAPI();
     }
 
@@ -201,35 +202,4 @@ public class App extends Application implements Application.ActivityLifecycleCal
         registerActivityLifecycleCallbacks(this);
     }
 
-
-    @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    public void onActivityStarted(Activity activity) {
-    }
-
-    @Override
-    public void onActivityResumed(Activity activity) {
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityStopped(Activity activity) {
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-    }
-
-    @Override
-    public void onActivityDestroyed(Activity activity) {
-    }
 }

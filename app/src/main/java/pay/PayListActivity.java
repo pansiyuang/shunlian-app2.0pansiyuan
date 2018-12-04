@@ -29,6 +29,7 @@ import com.shunlian.app.adapter.PayListAdapter;
 import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
+import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.presenter.PayListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
@@ -178,6 +179,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private static final int UNIONPAY_FLAG = 666;
     public static final int PLUGIN_NOT_INSTALLED = -1;
     public static final int PLUGIN_NEED_UPGRADE = 2;
+    private boolean isNewExclusive;
 
     /**
      * 传参使用json格式，减少字段
@@ -207,6 +209,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             OrderDetailAct.startAct(PayListActivity.this, order_id);
         }
         mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT, 100);
+        userPaySuccessEvent(false);
     }
 
     /*
@@ -225,6 +228,14 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             PaySuccessAct.startAct(this, order_id, price, pay_sn, false);
         }
         mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT, 100);
+        userPaySuccessEvent(true);
+    }
+
+    /**
+     * 新用户页面刷新
+     */
+    private void userPaySuccessEvent(boolean isPaySuccess){
+        EventBus.getDefault().post(new UserPaySuccessEvent(isPaySuccess));
     }
 
     /**
@@ -302,6 +313,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 mPhoneNumber = params.phoneNum;
                 mTopUpPrice = params.face_price;
                 use_egg = params.use_egg;
+                isNewExclusive = params.isNewExclusive;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -688,7 +700,11 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 
     public void payCommon(String code){
         if (!isEmpty(shop_goods)) {
-            payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, code);
+            if (isNewExclusive){
+                payListPresenter.newexclusivePay(shop_goods, addressId, anonymous,code);
+            }else {
+                payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, code);
+            }
         } else if (!isEmpty(orderId)) {
             payListPresenter.fromOrderListGoPay(orderId, code);
         } else if (!isEmpty(mPhoneNumber)) {//手机充值
@@ -725,8 +741,12 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                         .setSureAndCancleListener("确认用余额支付吗？\n￥" + price,
                                 getString(R.string.SelectRecommendAct_sure), (v) -> {
                                     if (!isEmpty(shop_goods)) {
-                                        payListPresenter.orderCheckout(shop_goods,
-                                                addressId, stageVoucherId, anonymous, use_egg, pay_types.code);
+                                        if (isNewExclusive){
+                                            payListPresenter.newexclusivePay(shop_goods, addressId, anonymous,pay_types.code);
+                                        }else {
+                                            payListPresenter.orderCheckout(shop_goods,
+                                                    addressId, stageVoucherId, anonymous, use_egg, pay_types.code);
+                                        }
                                     } else if (!isEmpty(orderId)) {
                                         payListPresenter.fromOrderListGoPay(orderId,
                                                 pay_types.code);
@@ -747,6 +767,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      * @param alipayRequest
      */
     public void alipay(final String alipayRequest) {
+        if(isEmpty(alipayRequest)){
+            return;
+        }
         Runnable payRunnable = new Runnable() {
             @Override
             public void run() {

@@ -87,10 +87,12 @@ public class SmallVideoPlayer extends JZVideoPlayer {
     protected ProgressBar mDialogBrightnessProgressBar;
     protected TextView mDialogBrightnessTextView;
 
+    protected ImageView iv_download;
     protected LinearLayout closeVolumeControl;
     protected ImageView closeVideo;
     protected ImageView voiceControl;
-    protected ImageView iv_download;
+    //只播放的意思是不能控制视频进度和全屏等任何操作
+    private boolean isOnlyPlay;
 
     public SmallVideoPlayer(Context context) {
         super(context);
@@ -187,6 +189,25 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         }
     }
 
+    /**
+     * 仅仅暂停视频，按钮不显示出来
+     */
+    public static void goOnlyPause() {
+        try {
+            if (JZVideoPlayerManager.getCurrentJzvd() != null) {
+                JZVideoPlayer jzvd = JZVideoPlayerManager.getCurrentJzvd();
+                if (jzvd.currentState == JZVideoPlayer.CURRENT_STATE_AUTO_COMPLETE ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_NORMAL ||
+                        jzvd.currentState == JZVideoPlayer.CURRENT_STATE_ERROR) {
+                } else {
+                    JZMediaManager.pause();
+                }
+            }
+        }catch (Exception e){
+
+        }
+    }
+
     public static void onChildViewAttachedToWindow(View view, int jzvdId) {
         if (JZVideoPlayerManager.getCurrentJzvd() != null &&
                 JZVideoPlayerManager.getCurrentJzvd().currentScreen == JZVideoPlayer.SCREEN_WINDOW_TINY) {
@@ -204,13 +225,14 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         if (JZVideoPlayerManager.getCurrentJzvd() != null &&
                 JZVideoPlayerManager.getCurrentJzvd().currentScreen !=
                         JZVideoPlayer.SCREEN_WINDOW_TINY) {
-            SmallVideoPlayer
-                    videoPlayer = (SmallVideoPlayer) JZVideoPlayerManager.getCurrentJzvd();
-            if (view instanceof ViewGroup && ((ViewGroup) view).indexOfChild(videoPlayer) != -1) {
-                if (videoPlayer.currentState == JZVideoPlayer.CURRENT_STATE_PAUSE) {
-                    JZVideoPlayer.releaseAllVideos();
-                } else {
-                    videoPlayer.startWindowTiny();
+            if (JZVideoPlayerManager.getCurrentJzvd() instanceof SmallVideoPlayer) {
+                SmallVideoPlayer videoPlayer = (SmallVideoPlayer) JZVideoPlayerManager.getCurrentJzvd();
+                if (view instanceof ViewGroup && ((ViewGroup) view).indexOfChild(videoPlayer) != -1) {
+                    if (videoPlayer.currentState == JZVideoPlayer.CURRENT_STATE_PAUSE) {
+                        JZVideoPlayer.releaseAllVideos();
+                    } else {
+                        videoPlayer.startWindowTiny();
+                    }
                 }
             }
         }
@@ -388,6 +410,9 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (isOnlyPlay){
+            return true;
+        }
         int id = v.getId();
         if (id == cn.jzvd.R.id.surface_container) {
             switch (event.getAction()) {
@@ -720,6 +745,15 @@ public class SmallVideoPlayer extends JZVideoPlayer {
 
     }
 
+    /**
+     * 仅用来播放
+     */
+    public void onlyLook(){
+        isOnlyPlay = true;
+        bottomContainer.setVisibility(GONE);
+        closeVolumeControl.setVisibility(GONE);
+    }
+
     public void changeUiToComplete() {
         switch (currentScreen) {
             case SCREEN_WINDOW_NORMAL:
@@ -1008,7 +1042,7 @@ public class SmallVideoPlayer extends JZVideoPlayer {
         LogUtil.httpLogW("文件名:" + fileName);
         File file1 = new File(fileName);
         if (file1.exists()) {
-            Common.staticToast("已下载过该视频,请勿重复下载!");
+            Common.staticToast("该视频已下载过!");
         } else {
             new Thread(() -> downLoadVideo(fileName)).start();
         }

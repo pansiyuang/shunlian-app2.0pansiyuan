@@ -28,11 +28,15 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.shunlian.app.App;
+import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SinglePicAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.wxapi.WXEntryActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -73,6 +77,30 @@ public class BitmapUtil {
         // 得到新的图片
         Bitmap newBitMap = Bitmap.createBitmap(bitMap, 0, 0, width, height, matrix, true);
         return newBitMap;
+    }
+
+    public static Bitmap getBitmapByView(View view) {
+//        Bitmap bitmap = null;
+//        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+//                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
+//        final Canvas canvas = new Canvas(bitmap);
+//        canvas.drawColor(Color.WHITE);
+//        view.draw(canvas);
+
+//        int measuredWidth = View.MeasureSpec.makeMeasureSpec(App.widthPixels, View.MeasureSpec.EXACTLY);
+//        int me = View.MeasureSpec.makeMeasureSpec(App.hightPixels,View.MeasureSpec.EXACTLY);
+//        view.measure(measuredWidth,me);
+//        view.layout(0 ,0, view.getMeasuredWidth(), view.getMeasuredHeight());
+//        view.buildDrawingCache();
+//        Bitmap bitmap = view.getDrawingCache();
+
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+        return bitmap;
     }
 
     public static byte[] getImage(String path) throws Exception {
@@ -325,7 +353,7 @@ public class BitmapUtil {
         return bitmap;
     }
 
-    public static boolean saveImageToAlbumn(Context context, Bitmap bmp) {
+    public static boolean saveImageToAlbumn(Context context, Bitmap bmp,boolean isShare,boolean isFriend) {
 
         if (!Common.hasSD()) {
             Common.staticToast("没有sd卡");
@@ -354,12 +382,18 @@ public class BitmapUtil {
                 // 其次把文件插入到系统图库
                 String path = MediaStore.Images.Media
                         .insertImage(context.getContentResolver(),
-                                file.getAbsolutePath(), fileName, null);
+                                file.getAbsolutePath(), fileName, System.currentTimeMillis()+"");
                 if (TextUtils.isEmpty(path)) return false;
                 // 最后通知图库更新
-                fileUri = new File(path);
+                fileUri = new File(getRealPathFromURI(Uri.parse(path),context));
                 context.sendBroadcast(new
                         Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
+//                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(path)));
+                if(isShare) {
+                    ShareInfoParam shareInfoParam = new ShareInfoParam();
+                    shareInfoParam.photo = file.getAbsolutePath();
+                    WXEntryActivity.startAct(context, isFriend ? "shareFriend" : "shareCircle", shareInfoParam);
+                }
                 return true;
             } else {
                 return false;
@@ -375,6 +409,17 @@ public class BitmapUtil {
             fos = null;
         }
         return false;
+    }
+
+    //得到绝对地址
+    private static String getRealPathFromURI(Uri contentUri,Context context) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String fileStr = cursor.getString(column_index);
+        cursor.close();
+        return fileStr;
     }
 
     public static boolean saveImageToAlbumn(Context context, Bitmap bmp, String photoName) {
@@ -557,7 +602,17 @@ public class BitmapUtil {
         float scaleHeight = ((float) newHeight) / height;
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
+
+        if (origin.isRecycled()){
+            return null;
+        }
+
+        Bitmap newBM = null;
+        try {
+            newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
+        }catch (Exception e){
+            return null;
+        }
         if (!origin.isRecycled()) {
             origin.recycle();
         }

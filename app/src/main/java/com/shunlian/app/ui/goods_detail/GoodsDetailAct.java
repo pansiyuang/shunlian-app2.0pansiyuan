@@ -11,12 +11,14 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,12 +28,15 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CommentAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -39,6 +44,7 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
+import com.shunlian.app.newchat.util.TimeUtil;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
@@ -48,9 +54,12 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
@@ -68,7 +77,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,6 +93,7 @@ import cn.jzvd.JZMediaManager;
 
 public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetailView, View.OnClickListener {
 
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     public static final String FRAG_GOODS = GoodsDeatilFrag.class.getName();
     public static final String FRAG_COMMENT = CommentFrag.class.getName();
     public static final int GOODS_ID = 0;//商品
@@ -169,9 +182,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
-
     @BindView(R.id.mtv_want)
     MyTextView mtv_want;
 
@@ -205,6 +215,154 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private FragmentManager mFragmentManager;
     private Handler mHandler;
     private Runnable mGoldEggsDowntime;
+
+    @BindView(R.id.lLayout_toast)
+    LinearLayout lLayout_toast;
+    @BindView(R.id.miv_icon)
+    MyImageView miv_icon;
+    @BindView(R.id.tv_info)
+    TextView tv_info;
+    private boolean isStop, isCrash;
+    private boolean isPause = true;
+    private Runnable runnableA, runnableB, runnableC;
+    private Timer outTimer;
+    private int mposition, size;
+    private static Handler handler;
+
+
+    public void beginToast() {
+        if (isPause) {
+            mposition = 0;
+            isStop = false;
+            if (goodsDetailPresenter!=null)
+            goodsDetailPresenter.getBubble();
+            isPause = false;
+        }
+    }
+
+    public void stopToast() {
+        if (!isCrash) {
+            isPause = true;
+            isStop = true;
+            if (lLayout_toast != null) {
+                LogUtil.augusLogW("mposition:gone");
+                lLayout_toast.setVisibility(View.GONE);
+            }
+            if (outTimer != null) {
+                LogUtil.augusLogW("mposition:cancel");
+                outTimer.cancel();
+            }
+            if (handler != null) {
+                LogUtil.augusLogW("mposition:remove");
+                if (runnableA != null) {
+                    handler.removeCallbacks(runnableA);
+                }
+                if (runnableB != null) {
+                    handler.removeCallbacks(runnableB);
+                }
+                if (runnableC != null) {
+                    handler.removeCallbacks(runnableC);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopToast();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        beginToast();
+    }
+
+    @Override
+    public void setBubble(BubbleEntity data) {
+        size = 2;
+        if (!isEmpty(data.list)) {
+            size = data.list.size();
+            startToast(data.list);
+        }
+        startTimer();
+    }
+
+    public void startTimer() {
+        if (handler == null) {
+            handler = new Handler();
+        }
+        runnableA = new Runnable() {
+            @Override
+            public void run() {
+                if (!isStop) {
+                    LogUtil.augusLogW("mposition：delayed");
+                    mposition = 0;
+                    if (goodsDetailPresenter!=null)
+                    goodsDetailPresenter.getBubble();
+                }
+            }
+        };
+        handler.postDelayed(runnableA, ((Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR)* size + 1) * 1000);
+    }
+
+    public void startToast(final List<BubbleEntity.Content> datas) {
+        if (outTimer != null) {
+            outTimer.cancel();
+        }
+        outTimer = new Timer();
+        outTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (mposition < datas.size()) {
+                    runnableB = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseAct.isFinishing()) {
+                                LogUtil.augusLogW("mposition:" + mposition);
+                                lLayout_toast.setVisibility(View.VISIBLE);
+                                GlideUtils.getInstance().loadCircleAvar(baseAct,miv_icon,datas.get(mposition).avatar);
+                                tv_info.setText(datas.get(mposition).text);
+                                lLayout_toast.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (datas.get(mposition).url!=null)
+                                            Common.goGoGo(baseAct,datas.get(mposition).url.type,datas.get(mposition).url.item_id);
+                                    }
+                                });
+                            }
+                        }
+                    };
+                    if (handler == null) {
+                        if (!isCrash) {
+                            isCrash = true;
+                            Handler mHandler = new Handler(Looper.getMainLooper());
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    isCrash = false;
+                                }
+                            }, ((Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR)  * size + 2) * 1000);
+                        }
+                    } else {
+                        handler.post(runnableB);
+                        runnableC = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isStop&&lLayout_toast!=null) {
+                                    lLayout_toast.setVisibility(View.GONE);
+                                    mposition++;
+                                }
+                            }
+                        };
+                        handler.postDelayed(runnableC, Constant.BUBBLE_SHOW  * 1000);
+                    }
+                }
+            }
+        }, 0, (Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR)  * 1000);
+    }
+
     public static String goTitleType = "";
     public static void startAct(Context context, String goodsId) {
         Intent intent = new Intent(context, GoodsDetailAct.class);
@@ -261,6 +419,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     private void initConstant() {
         fragments = new HashMap();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         int statusBarHeight = ImmersionBar.getStatusBarHeight(this);
         int deviceWidth = DeviceInfoUtil.getDeviceWidth(this);
         //偏移量
@@ -448,7 +607,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 } else {
                     miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
                 }
-                miv_more.setImageResource(R.mipmap.icon_more_gengduo);
+                miv_more.setImageResource(R.mipmap.icon_head_fenxiang);
             } else {
                 miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
                 if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
@@ -456,9 +615,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 } else {
                     miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
                 }
-                miv_more.setImageResource(R.mipmap.icon_more_n);
+                miv_more.setImageResource(R.mipmap.icon_head_fenxiang_black);
             }
         }
+        miv_is_fav.setVisibility(View.GONE);
     }
 
 
@@ -466,10 +626,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void showFailureView(int rquest_code) {
         if (goodsDeatilFrag != null && rquest_code == 100)
             goodsDeatilFrag.onFailure();
+        if (666==rquest_code){
+            size = 2;
+            startTimer();
+        }
     }
 
     @Override
     public void showDataEmptyView(int rquest_code) {
+
     }
 
     @Override
@@ -526,28 +691,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void isFavorite(String is_fav) {
         favId = is_fav;
         if (goodsDeatilFrag != null) {
-            int item = goodsDeatilFrag.currentFirstItem;
-            if (item > 0) {
-                if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
-                } else {
-                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
-                }
-            } else {
-                if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
-                } else {
-                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
-                }
-            }
-        } else {
-            if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)) {
-                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
-            } else {
-                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
-            }
+            mGoodsDeatilEntity.is_fav =is_fav;
+            goodsDeatilFrag.updateFav(is_fav);
         }
-
     }
 
     /**
@@ -791,13 +937,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 break;
 
             case R.id.miv_is_fav:
-                if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
-                    goodsDetailPresenter.goodsFavAdd(goodsId);
-                } else {
-                    goodsDetailPresenter.goodsFavRemove(favId);
-                }
                 break;
-
             case R.id.mllayout_car:
                 MainActivity.startAct(this, "shoppingcar");
                 break;
@@ -805,6 +945,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (goodsDetailPresenter != null)
                     goodsDetailPresenter.goodsWant();
                 break;
+        }
+    }
+
+    public void favAddOrRemove(){
+        if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
+            goodsDetailPresenter.goodsFavAdd(goodsId);
+        } else {
+            goodsDetailPresenter.goodsFavRemove(favId);
         }
     }
 
@@ -891,16 +1039,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      * 显示分享框
      */
     public void moreAnim() {
-        float alpha = mll_item.getAlpha();
-        if (alpha < 1 && alpha > 0) return;//导航栏没有全部显示的情况下，显示分享框会有透明条
-        immersionBar.statusBarColor(R.color.white).init();
-        visible(mll_share);
-        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
-                -1, Animation.RELATIVE_TO_SELF, 0);
-        animation.setDuration(250);
-        mll_share.setAnimation(animation);
-        mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(this, "login");
+            return;
+        }
+        if(goodsDetailPresenter!=null) {
+            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
+        }
     }
 
     private void addCartAnim() {
@@ -1146,41 +1291,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         moreHideAnim();
     }
 
-    @OnClick(R.id.mtv_weixin_share)
-    public void weChatShare() {
-        if (!Common.isAlreadyLogin()) {
-            sharePrompt();
-            return;
-        }
-        currentQuickAction = 6;
-        moreHideAnim();
-    }
-
-    @OnClick(R.id.mtv_picText_share)
-    public void picTextShare() {
-        if (!Common.isAlreadyLogin()) {
-            sharePrompt();
-            return;
-        }
-        if (goodsDetailPresenter != null) {
-            quick_actions.shareInfo(mShareInfoParam);
-            goodsDetailPresenter.copyText(false);
-            quick_actions.saveshareGoodsPic();
-        }
-    }
-
-    @OnClick(R.id.mtv_copyLink_share)
-    public void copyLinkShare() {
-        if (!Common.isAlreadyLogin()) {
-            sharePrompt();
-            return;
-        }
-        if (goodsDetailPresenter != null) {
-            goodsDetailPresenter.copyText(true);
-        }
-        moreHideAnim();
-    }
-
     public void sharePrompt() {
         Common.goGoGo(this, "login");
         moreHideAnim();
@@ -1211,14 +1321,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 break;
             case 5:
                 Common.goGoGo(this, "help");
-                break;
-            case 6://分享到微信
-                if (goodsDetailPresenter != null) {
-                    WXEntryActivity.startAct(this, "shareFriend",
-                            goodsDetailPresenter.getShareInfoParam());
-                    Constant.SHARE_TYPE = "goods";
-                    Constant.SHARE_ID = goodsId;
-                }
                 break;
         }
         currentQuickAction = -1;
@@ -1254,8 +1356,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         if (goodsDetailPresenter != null) {
             goodsDetailPresenter.detachView();
             goodsDetailPresenter = null;
@@ -1267,7 +1367,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginRefresh(DefMessageEvent event) {
         if (event.loginSuccess && goodsDetailPresenter != null) {
-            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
+//            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods, goodsId);
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1281,13 +1381,35 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         if (mShareInfoParam != null) {
+            mShareInfoParam =baseEntity.data;
+            mShareInfoParam.isShowTiltle = false;
             mShareInfoParam.userName = baseEntity.data.userName;
             mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
             mShareInfoParam.shareLink = baseEntity.data.shareLink;
             mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.egg_type = 1;
+            mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
+            mShareInfoParam.isSuperiorProduct = mGoodsDeatilEntity.type.equals("1")?true:false;
+            if(mGoodsDeatilEntity.tt_act!=null&&!"0".equals(mGoodsDeatilEntity.status)){//非下架商品){
+                if(mGoodsDeatilEntity.tt_act.content!=null){
+                  if(mGoodsDeatilEntity.tt_act.sale.equals("0")){
+                      mShareInfoParam.start_time =mGoodsDeatilEntity.tt_act.start_time;
+                  }else{
+                      mShareInfoParam.start_time =mGoodsDeatilEntity.tt_act.end_time;
+                  }
+                }
+                mShareInfoParam.act_label = "天天特惠";
+                mShareInfoParam.price = mGoodsDeatilEntity.tt_act.act_price;
+                mShareInfoParam.market_price = mGoodsDeatilEntity.tt_act.market_price;
+            }
+            if(mShareInfoParam.price==null&&mGoodsDeatilEntity.price!=null){
+                mShareInfoParam.price= mGoodsDeatilEntity.price;
+            }
             if (goodsDetailPresenter != null) {
                 goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
+                shareGoodDialogUtil.shareGoodDialog(goodsDetailPresenter.getShareInfoParam(),true,false);
             }
         }
+
     }
 }

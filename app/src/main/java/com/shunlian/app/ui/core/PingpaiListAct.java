@@ -25,6 +25,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.timer.DayRedBlackDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.IPingList;
@@ -108,7 +109,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     private ShareInfoParam mShareInfoParam=new ShareInfoParam();
     private CorePingEntity.Share share;
 
-
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @OnClick(R.id.rl_more)
     public void more() {
         quick_actions.setVisibility(View.VISIBLE);
@@ -194,7 +195,8 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                     mShareInfoParam.desc = share.content;
                     mShareInfoParam.img = share.logo;
                     mShareInfoParam.shareLink = share.share_url;
-                    shareStyle2Dialog();
+                    mShareInfoParam.isSpecial = true;
+                    shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,false,false);
                 }
                 break;
         }
@@ -213,8 +215,9 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
         mShareInfoParam.img = baseEntity.data.userAvatar;
         mShareInfoParam.shareLink = baseEntity.data.shareLink;
         mShareInfoParam.title = baseEntity.data.title;
-
-        shareStyle2Dialog();
+        mShareInfoParam.isSpecial = true;
+        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,false,false);
+//        shareStyle2Dialog();
     }
 
     /**
@@ -250,6 +253,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     @Override
     protected void initListener() {
         super.initListener();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         miv_arrow.setOnClickListener(this);
         miv_share.setOnClickListener(this);
         msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {

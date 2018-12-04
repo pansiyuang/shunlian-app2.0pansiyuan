@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:id="@+id/title_bar"
+        android:background="@color/pink_color">
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:padding="10dp"
+            android:src="@mipmap/icon_common_back_white" />
+        <TextView
+            android:id="@+id/tv_head"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="9dp"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/img_share"
+            android:layout_width="@dimen/xx100"
+            android:layout_height="@dimen/xx160"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/xx25"
+            android:layout_marginRight="@dimen/xx20"
+            android:src="@mipmap/icon_stork_share"/>
+    </RelativeLayout>
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/title_bar"
+        android:layout_height="match_parent">
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           >
+            <!--app:layout_scrollFlags="scroll|enterAlways"-->
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/yy582"
+                    app:layout_collapseMode="parallax"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+                    <View
+                        android:background="@color/pink_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/yy276" />
+                    <View
+                        android:background="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/yy276" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/yy30"
+                          android:background="@color/white_ash"></View>
+                </LinearLayout>
+                <com.shunlian.app.widget.banner.MyKanner
+                    android:id="@+id/kanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/yy480"
+                    android:layout_marginTop="@dimen/yy42"
+                    android:layout_marginLeft="@dimen/yy48"
+                    android:layout_marginRight="@dimen/yy48"
+                    app:bb_delay="5"
+                    app:bb_period="3"
+                    app:bb_scale="0.999" />
+            </android.support.design.widget.CollapsingToolbarLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_border_line_bottom"
+                android:orientation="horizontal"
+                android:id="@+id/show_title_info"
+                android:visibility="gone"
+                app:layout_collapseMode="pin">
+
+                <RelativeLayout
+                    android:id="@+id/ll_left"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="新人专享"
+                        android:textColor="@color/pink_color"
+                        android:textSize="15sp" />
+
+                    <View
+                        android:id="@+id/line_left"
+                        android:layout_width="30dp"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/tv_left"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="7dp"
+                        android:background="@color/pink_color" />
+                    <TextView
+                        android:id="@+id/tv_show_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/tv_left"
+                        android:layout_centerInParent="true"
+                        android:text="(0元3件)"
+                        android:textColor="@color/pink_color"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ll_right"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="精选商品"
+                        android:textColor="@color/text_gray2"
+                        android:textSize="15sp" />
+
+                    <View
+                        android:id="@+id/line_right"
+                        android:layout_width="30dp"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/tv_right"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="7dp"
+                        android:background="@color/pink_color"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </android.support.design.widget.AppBarLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/xx780"
+        android:layout_marginBottom="@dimen/yy60"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rounded_corner_solid_pink_50px"
+        android:orientation="horizontal"
+        android:id="@+id/line_user_buy"
+        android:visibility="gone"
+        android:layout_height="@dimen/xx120">
+        <TextView
+            android:id="@+id/tv_buy_num"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="已购商品(3)"
+            android:paddingLeft="@dimen/xx20"
+            android:textSize="14sp"/>
+        <View
+            android:layout_width="0.5dp"
+            android:layout_marginTop="@dimen/xx20"
+            android:layout_marginBottom="@dimen/xx20"
+            android:layout_height="match_parent"
+            android:background="@color/white"></View>
+        <TextView
+            android:id="@+id/tv_go_pay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="去结算"
+            android:textSize="14sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lLayout_toast"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/bg_toast"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="5dp"
+        android:visibility="gone">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/tv_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+</RelativeLayout>

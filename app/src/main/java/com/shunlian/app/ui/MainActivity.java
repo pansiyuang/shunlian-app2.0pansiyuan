@@ -16,21 +16,25 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.UpdateEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
-import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -43,15 +47,15 @@ import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.h5.H5X5Frag;
-import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.app.widget.DiscoveryGuideView;
@@ -76,6 +80,7 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
+import retrofit2.Call;
 
 public class MainActivity extends BaseActivity implements MessageCountManager.OnGetMessageListener, IMain {
     private static final String[] flags = {"mainPage", "myPlus", "discover", "shoppingcar", "personCenter"};
@@ -151,12 +156,23 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private ObjectMapper objectMapper;
     private int[] currentLocation;
     private int currentImgWidth;
+    private boolean isShowGuide = false;
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
+    private String currentDiscoverFlag;
+    private PromptDialog promptDialog;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("flag", flag);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void startAct(Context context, String flag, String discoverFlag) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("flag", flag);
+        intent.putExtra("discover_flag", discoverFlag);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -174,10 +190,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (isGetAward) {
+        /*if (isGetAward){//新人优惠券手动领取
             pMain.getPrizeByRegister();
-            isGetAward = false;
-        }
+            isGetAward=false;
+        }*/
         if (!isEmpty(flag) && "nicefocusexperiencecirclematerial".contains(flag)) {
             flag = "";
         } else {
@@ -204,7 +220,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     protected void initData() {
         EventBus.getDefault().register(this);
         objectMapper = new ObjectMapper();
-
         if (SharedPrefUtil.getSharedUserBoolean("hide_first", false)) {
             miv_hint.setVisibility(View.GONE);
         } else {
@@ -250,7 +265,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        }else {
 //            gone(ll_tab_sort);
 //        }
-    }
+        loadUserInfo();
+        }
+
 
 
     @Override
@@ -283,6 +300,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         setIntent(intent);
 //        if (!isEmpty(getIntent().getStringExtra("flag")))
         flag = getIntent().getStringExtra("flag");
+        currentDiscoverFlag = getIntent().getStringExtra("discover_flag");
         /*if (TextUtils.isEmpty(flag)) {
             mainPageClick();
         } else {
@@ -291,6 +309,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         switch2jump(flag);
         if ("route_login".equals(flag)) {
             Common.goGoGo(this, "login");
+        }
+        if (discoverFrag != null) {
+            discoverFrag.setCurrentPage(currentDiscoverFlag);
         }
         handleJump();
     }
@@ -348,29 +369,44 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             miv_first.animate().rotation(0).setDuration(0).start();
             miv_first.animate().rotation(360).setDuration(300).start();
         } else {
-            view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-            view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+            if (view.getId() == R.id.ll_tab_discover) {
+                if (discoverFrag != null && !discoverFrag.isVisible()) {
+                    view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                    view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+                }
+            } else {
+                view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+            }
         }
         if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
 //            mtv_message_count.setVisibility(View.GONE);
 
-//            if (!Common.isAlreadyLogin() && discoverFrag != null && discoverFrag.isVisible()) {
-//                LoginAct.startAct(this);
-//                return;
-//            }
             try {
-                String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
-                HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
-                FindSendPictureTextAct.SendConfig sendConfig = new FindSendPictureTextAct.SendConfig();
                 if (discoverFrag != null && discoverFrag.isVisible()) {
+
+                    if (!Common.isAlreadyLogin()) {
+                        Common.goGoGo(this,"login");
+                        return;
+                    }
+
+                    String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
+                    HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
+                    FindSendPictureTextAct.SendConfig sendConfig = new FindSendPictureTextAct.SendConfig();
+
                     if (baseInfo.white_list == 0) {
                         sendConfig.isWhiteList = false;
                     } else {
                         sendConfig.isWhiteList = true;
                     }
                     sendConfig.memberId = baseInfo.member_id;
-                    FindSendPictureTextAct.startAct(this, sendConfig);
+
+                    if (Common.isPlus()) {
+                        FindSendPictureTextAct.startAct(this, sendConfig);
+                    } else {
+                        initHintDialog();
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -413,6 +449,20 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 }
             }
         }, 300);
+    }
+
+    public void initHintDialog() {
+        if (promptDialog == null) {
+            promptDialog = new PromptDialog(this);
+            promptDialog.setTvCancleIsBold(false);
+            promptDialog.setTvSureIsBold(false);
+            promptDialog.setTvSureColor(R.color.pink_color);
+            promptDialog.setTvSureBGColor(Color.WHITE);
+        }
+        promptDialog.setSureAndCancleListener("亲，您还不是PLUS会员哦,现在开通享7大专属权益", "立即开通", view -> {
+            promptDialog.dismiss();
+            H5X5Act.startAct(MainActivity.this, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+        }, getStringResouce(R.string.errcode_cancel), view -> promptDialog.dismiss()).show();
     }
 
     public void mainPageClick() {
@@ -579,13 +629,112 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     private void chageTabItem(int pageIndex) {
+//        双十一活动
+//        RelativeLayout.LayoutParams layoutParams_discover= (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
+//        RelativeLayout.LayoutParams layoutParams_message_count= (RelativeLayout.LayoutParams) mtv_message_count.getLayoutParams();
+//        LinearLayout.LayoutParams layoutParams_main= (LinearLayout.LayoutParams) miv_tab_main.getLayoutParams();
+//        LinearLayout.LayoutParams layoutParams_sort= (LinearLayout.LayoutParams) miv_tab_sort.getLayoutParams();
+//        LinearLayout.LayoutParams layoutParams_shopping_car= (LinearLayout.LayoutParams) miv_shopping_car.getLayoutParams();
+//        LinearLayout.LayoutParams layoutParams_person_center= (LinearLayout.LayoutParams) miv_person_center.getLayoutParams();
+//        int topOne= -TransformUtil.dip2px(baseAct,12);
+//        int topTwo= TransformUtil.dip2px(baseAct,8);
+//        int topThree= -TransformUtil.dip2px(baseAct,10);
+//        int topFour= TransformUtil.dip2px(baseAct,6);
+//
+//
+//        layoutParams_message_count.setMargins(0,topFour,topTwo,0);
+//        miv_tab_discover.setImageResource(R.mipmap.tab_faxian_p);
+//        layoutParams_discover.setMargins(0,topTwo,0,0);
+//
+//        miv_tab_main.setImageResource(R.mipmap.tab_shouye_p);
+//        layoutParams_main.setMargins(0,topTwo,0,0);
+//
+//        miv_tab_sort.setImageResource(R.mipmap.tab_fenlei_p);
+//        layoutParams_sort.setMargins(0,topTwo,0,0);
+//
+//        miv_shopping_car.setImageResource(R.mipmap.tab_gouwuche_p);
+//        layoutParams_shopping_car.setMargins(0,topTwo,0,0);
+//
+//        miv_person_center.setImageResource(R.mipmap.tab_gerenzhongxin_p);
+//        layoutParams_person_center.setMargins(0,topTwo,0,0);
+//
+//        switch (pageIndex) {
+//            case 0:
+//                miv_tab_main.setImageResource(R.mipmap.tab_01_sel);
+//                layoutParams_main.setMargins(0,topOne,0,0);
+//                break;
+//            case 1:
+//                miv_tab_sort.setImageResource(R.mipmap.tab_02_sel);
+//                layoutParams_sort.setMargins(0,topOne,0,0);
+//                break;
+//            case 2:
+//                miv_tab_discover.setImageResource(R.mipmap.tab_03_sel);
+//                layoutParams_discover.setMargins(0,topOne,0,0);
+//                layoutParams_message_count.setMargins(0,topThree,topFour,0);
+//                break;
+//            case 3:
+//                miv_shopping_car.setImageResource(R.mipmap.tab_04_sel);
+//                layoutParams_shopping_car.setMargins(0,topOne,0,0);
+//                break;
+//            case 4:
+//                miv_person_center.setImageResource(R.mipmap.tab_05_sel);
+//                layoutParams_person_center.setMargins(0,topOne,0,0);
+//                break;
+//        }
+        //        双十一活动
+
+        miv_tab_main.setImageResource(R.mipmap.tab_1_n);
+        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_tab_sort.setImageResource(R.mipmap.tab_2_n);
+        tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_tab_discover.setImageResource(R.mipmap.tab_3_n);
+        tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_shopping_car.setImageResource(R.mipmap.tab_4_n);
+        tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_person_center.setImageResource(R.mipmap.tab_5_n);
+        tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_first.setVisibility(View.GONE);
+        miv_tab_main.setVisibility(View.VISIBLE);
+        tv_tab_main.setVisibility(View.VISIBLE);
+
+        switch (pageIndex) {
+            case 0:
+                miv_first.setVisibility(View.VISIBLE);
+                miv_tab_main.setVisibility(View.GONE);
+                tv_tab_main.setVisibility(View.GONE);
+
+//                miv_tab_main.setImageResource(getResources().getDrawable(R.mipmap.tab_1_h));
+//                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 1:
+                miv_tab_sort.setImageResource(R.mipmap.tab_2_h);
+                tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 2:
+                miv_tab_discover.setImageResource(R.mipmap.tab_03);
+                tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 3:
+                miv_shopping_car.setImageResource(R.mipmap.tab_4_h);
+                tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 4:
+                miv_person_center.setImageResource(R.mipmap.tab_5_h);
+                tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+        }
 //        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
 //        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
 
         miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
         tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
+        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_n));
         tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
 
         miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_n));
@@ -597,7 +746,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         miv_first.setVisibility(View.GONE);
         miv_tab_main.setVisibility(View.VISIBLE);
         tv_tab_main.setVisibility(View.VISIBLE);
+        mtv_message_count.setVisibility(View.GONE);
 
+        RelativeLayout.LayoutParams tvParams = (RelativeLayout.LayoutParams) tv_tab_discover.getLayoutParams();
+        tvParams.setMargins(0, TransformUtil.dip2px(this, 6), 0, TransformUtil.dip2px(this, 4));
+
+        RelativeLayout.LayoutParams ivParams = (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
+        ivParams.setMargins(0, TransformUtil.dip2px(this, 8), 0, 0);
         switch (pageIndex) {
             case 0:
                 miv_first.setVisibility(View.VISIBLE);
@@ -614,6 +769,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             case 2:
                 miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
                 tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
+
+                ivParams.setMargins(0, TransformUtil.dip2px(this, -12), 0, 0);
+                tvParams.setMargins(0, 0, 0, 0);
+                mtv_message_count.setVisibility(View.GONE);
                 break;
             case 3:
                 miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_h));
@@ -676,7 +835,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
         if (updateDialogV != null) {
             if (updateDialogV.updateDialog != null) {
                 updateDialogV.updateDialog.dismiss();
@@ -697,6 +855,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         discoverFrag = null;
         cateGoryFrag = null;
         personalCenterFrag = null;
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -742,7 +901,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     public void initDialogs(String prize) {
-        if (dialog_new == null) {
+//        if (dialog_new == null) {
             dialog_new = new Dialog(this, R.style.popAd);
             dialog_new.setContentView(R.layout.dialog_new);
             MyImageView miv_close = (MyImageView) dialog_new.findViewById(R.id.miv_close);
@@ -767,15 +926,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     if (Common.isAlreadyLogin()) {
                         pMain.getPrizeByRegister();
                     } else {
-                        isGetAward = true;
-                        LoginEntryAct.startAct(baseAct);
+//                      isGetAward=true;
+                        Common.goGoGo(baseAct,"login");
+                        dialog_new.dismiss();
                     }
-
                 }
             });
 
             dialog_new.setCancelable(false);
-        }
+//        }
         dialog_new.show();
     }
 
@@ -798,6 +957,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         CommondDialog commondDialog = new CommondDialog(this);
         commondDialog.parseCommond();
     }
+
 
     @Override
     public void setContent(GetDataEntity data) {
@@ -868,7 +1028,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void setDiscoveryUnreadCount(CommonEntity data) {
         this.data = data;
         if (mtv_message_count != null) {
-            mtv_message_count.setVisibility(View.VISIBLE);
+            mtv_message_count.setVisibility(View.GONE);
             if (data.total > 99) {
                 mtv_message_count.setText("99+");
             } else if (data.total <= 0) {
@@ -895,11 +1055,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(DiscoveryLocationEvent event) {
+        isShowGuide = SharedPrefUtil.getCacheSharedPrfBoolean("showGuide", false);
         currentLocation = event.location;
         currentImgWidth = event.imgWidth;
-        LogUtil.httpLogW("refreshData:" + currentImgWidth);
-        if (currentLocation != null && currentImgWidth != 0) {
-            LogUtil.httpLogW("showGuideView");
+        if (currentLocation != null && currentImgWidth != 0 && !isShowGuide) {
             showGuideView();
         }
     }
@@ -916,8 +1075,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         currentLocation[1] = currentLocation[1] + currentImgWidth / 2;
 
         DiscoveryGuideView guide_view = new DiscoveryGuideView(this);
-        guide_view.setBackgroundColor(Color.BLACK);
-        guide_view.setAlpha(0.7f);
         guide_view.setOnClickListener(v -> {
             guide_view.setVisibility(View.GONE);
         });
@@ -926,5 +1083,24 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         guide_view.setLayoutParams(layoutParams);
         decorView.addView(guide_view);
+
+        SharedPrefUtil.saveCacheSharedPrfBoolean("showGuide", true);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event) {
+        if (event.loginSuccess && pMain != null) {
+            pMain.isShowNewPersonPrize();
+        }
+    }
+
+    /**
+     * 处理网络请求
+     */
+    public void loadUserInfo() {
+        if (!Common.isAlreadyLogin()) {
+            return;
+        }
+        pMain.loginUserInfo();
     }
 }

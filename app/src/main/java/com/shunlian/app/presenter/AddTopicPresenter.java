@@ -11,6 +11,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.PagerEntity;
 import com.shunlian.app.bean.TopicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.find_send.AddTopicAct;
 import com.shunlian.app.view.IView;
 
 import java.util.ArrayList;
@@ -44,10 +45,12 @@ public class AddTopicPresenter extends BasePresenter {
             ((Activity) context).finish();
         }
     };
+    private String mID;
 
 
-    public AddTopicPresenter(Context context, IView iView) {
+    public AddTopicPresenter(Context context, IView iView, String id) {
         super(context, iView);
+        this.mID = id;
         initApi();
     }
 
@@ -113,6 +116,9 @@ public class AddTopicPresenter extends BasePresenter {
                 PagerEntity pager = data.pager;
                 currentPage = Integer.parseInt(pager.page);
                 allPage = Integer.parseInt(pager.total_page);
+                if (currentPage == 1){
+                    itemBeans.clear();
+                }
                 setData(data.list);
                 currentPage++;
             }
@@ -136,14 +142,16 @@ public class AddTopicPresenter extends BasePresenter {
             itemBeans.addAll(list);
 
         if (adaper == null) {
-            adaper = new TopicAdaper(context, itemBeans);
+            adaper = new TopicAdaper(context, itemBeans,mID);
             if (iView != null) {
                 iView.setAdapter(adaper);
             }
 
             adaper.setOnItemClickListener((view, position) -> {
                 adaper.item_id = position;
-                adaper.notifyDataSetChanged();
+                adaper.notifyItemRangeChanged(0,itemBeans.size(),itemBeans);
+                if (context != null && context instanceof AddTopicAct)
+                ((AddTopicAct)context).hideNotSelect();
                 mHandler.sendEmptyMessageDelayed(position, 400);
             });
         } else {
@@ -155,10 +163,9 @@ public class AddTopicPresenter extends BasePresenter {
     @Override
     public void onRefresh() {
         super.onRefresh();
-        if (!isLoading) {
-            if (currentPage <= allPage) {
-                requestData(false);
-            }
+        if (!isLoading && currentPage <= allPage) {
+            isLoading = true;
+            requestData(false);
         }
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:FolderTextView="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -10,18 +11,19 @@
         android:layout_height="144dp"
         android:scaleType="centerCrop" />
 
-    <RelativeLayout
-        android:id="@+id/rl_top"
+    <LinearLayout
+        android:id="@+id/ll_top"
         android:layout_width="match_parent"
         android:layout_height="144dp"
-        android:background="#4D000000">
+        android:background="#4D000000"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="53dp"
             android:ellipsize="end"
             android:paddingLeft="35dp"
             android:paddingRight="35dp"
@@ -56,18 +58,18 @@
                 android:textColor="@color/white"
                 android:textSize="12sp" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
-    <TextView
+    <com.shunlian.app.widget.FolderTextView
         android:id="@+id/tv_activity_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_top"
+        android:layout_below="@+id/ll_top"
         android:layout_marginBottom="12dp"
         android:background="@color/white"
-        android:ellipsize="end"
-        android:maxLines="3"
         android:padding="16dp"
         android:textColor="@color/text_gray2"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        FolderTextView:foldLine="4"
+        FolderTextView:tailTextColor="@color/value_3673FB" />
 </RelativeLayout>

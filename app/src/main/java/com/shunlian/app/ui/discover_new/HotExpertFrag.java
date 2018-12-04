@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new;
 
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.HotExpertPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IHotExpertView;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class HotExpertFrag extends BaseLazyFragment implements IHotExpertView, H
     private HotExpertAdapter mAdapter;
     private LinearLayoutManager manager;
     private List<BigImgEntity.Blog> blogList;
-
+    private PromptDialog promptDialog;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.frag_hot_expert, null, false);
@@ -110,8 +112,24 @@ public class HotExpertFrag extends BaseLazyFragment implements IHotExpertView, H
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId) {
-        mPresenter.focusUser(isFocus, memberId);
+    public void toFocusUser(int isFocus, String memberId,String nickName) {
+        if (isFocus == 1) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(getActivity());
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+                promptDialog.setTvCancleIsBold(false);
+                promptDialog.setTvSureIsBold(false);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        mPresenter.focusUser(isFocus, memberId);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
+            mPresenter.focusUser(isFocus, memberId);
+        }
     }
 
     @Override

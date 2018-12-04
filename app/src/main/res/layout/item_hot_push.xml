@@ -23,7 +23,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
         android:ellipsize="end"
-        android:lines="2"
+        android:lines="1"
         android:textColor="@color/new_text"
         android:textSize="13sp" />
     <com.shunlian.app.widget.MyLinearLayout

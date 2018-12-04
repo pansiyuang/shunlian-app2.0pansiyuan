@@ -30,12 +30,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
@@ -49,8 +52,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -60,6 +65,7 @@ import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
@@ -68,6 +74,7 @@ import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.GetCouponAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.core.KouBeiAct;
+import com.shunlian.app.ui.core.NewGetCouponAct;
 import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.coupon.CouponGoodsAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
@@ -84,6 +91,7 @@ import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
+import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.plus.PlusGifDetailAct;
@@ -223,11 +231,18 @@ public class Common {
                 return "CouponGoodsAct";
             case "invite":
                 return "QrCodeAct";
+            case "taskTurnTable":
+                return "LuckWheelPanActivity";
+            case "newuser":
+            case "olduser":
+                return "NewUserPageActivity";
             case "url":
             case "noTitleUrl":
                 return "H5Act";
             case "HTMLShare":
                 return "WXEntryActivity";
+            case "attentionList":
+                return "MainActivity";
             case "submitlogisticsinfo":
                 return "SubmitLogisticsInfoAct";
             case "voucher":
@@ -256,6 +271,9 @@ public class Common {
                 break;
             case "taskSystems":
                 TaskCenterAct.startAct(context);
+                break;
+            case "taskTurnTable":
+                LuckWheelPanActivity.startAct(context);
                 break;
             case "HTMLShare":
                 if (!TextUtils.isEmpty(params[0])){
@@ -306,7 +324,8 @@ public class Common {
                     Common.goGoGo(context,"login");
                     theRelayJump(type,params);
                 } else {
-                    GetCouponAct.startAct(context);
+//                    GetCouponAct.startAct(context);
+                    NewGetCouponAct.startAct(context);
                 }
                 break;
             case "voucher":
@@ -396,9 +415,9 @@ public class Common {
                 theRelayJump(null,null);
                 LoginEntryAct.startAct(context);
                 break;
-            case "article":
-                ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);
-                break;
+//            case "article":
+//                ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);
+//                break;
             case "artdetails":
                 CommentListAct.startAct((Activity) context, params[0]);
                 break;
@@ -477,7 +496,6 @@ public class Common {
                 }
                 break;
             case "chat"://聊天
-
 //               Common.goGoGo(context, toPage, id, id1,id2, id3,id4, id5,id6,to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
 
                 if (TextUtils.isEmpty(token)) {
@@ -502,6 +520,13 @@ public class Common {
                 break;
             case "submitlogisticsinfo"://提交物流信息
                 SubmitLogisticsInfoAct.startAct(context,params[0],SubmitLogisticsInfoAct.APPLY);
+                break;
+            case "newuser"://新人专享
+            case "olduser":
+                NewUserPageActivity.startAct(context);
+                break;
+            case "attentionList"://发现关注列表
+
                 break;
             default://首页
                 MainActivity.startAct(context, "");
@@ -568,7 +593,11 @@ public class Common {
      * @return
      */
     public static int getScreenWidth(Activity ac) {
-        return ac.getWindowManager().getDefaultDisplay().getWidth();
+        if (ac!=null){
+            return ac.getWindowManager().getDefaultDisplay().getWidth();
+        }else {
+           return 720;
+        }
     }
 
 
@@ -673,6 +702,54 @@ public class Common {
         String regular = "^(?!\\d+$)(?![a-zA-Z]+$)(?![^a-zA-Z0-9]+$)[[^a-zA-Z0-9]+\\w]{8,16}$";
         boolean matches = Pattern.matches(regular, pwd);
         return matches;
+    }
+
+    private static Toast toastAnim;
+    private static LottieAnimationView animation_view;
+
+    public static void staticAnimToast(String content,String desc,String jsonAnim) {
+        if (TextUtils.isEmpty(content))
+            return;
+        if (toastAnim == null) {
+            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast_anim_json, null);
+            mtv_toast =  v.findViewById(R.id.mtv_toasts);
+            mtv_desc=  v.findViewById(R.id.mtv_desc);
+            animation_view=  v.findViewById(R.id.animation_view);
+            mtv_toast.setText(content);
+            mtv_desc.setText(desc);
+            toastAnim = new Toast(getApplicationContext());
+//            LinearLayout.LayoutParams vlp = new LinearLayout.LayoutParams(App.widthPixels,
+//                    App.hightPixels);
+//            vlp.setMargins(0, 0, 0, 0);
+//            show_toast.setLayoutParams(vlp);
+//            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
+            toastAnim.setDuration(Toast.LENGTH_LONG);
+            toastAnim.setView(v);
+            toastAnim.setGravity(Gravity.FILL, 0, 0);
+            showAnimJsonFile(jsonAnim,"images/img_3.png");
+        } else {
+            mtv_toast.setText(content);
+            mtv_desc.setText(desc);
+            showAnimJsonFile(jsonAnim,"images/img_3.png");
+        }
+        toastAnim.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        toastAnim.show();
+    }
+
+    private static void showAnimJsonFile(String jsonAnim,String defaultImage){
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                animation_view.setAnimation(jsonAnim);//在assets目录下的动画json文件名。
+                animation_view.loop(false);//设置动画循环播放
+                animation_view.setImageAssetsFolder("images/");//assets目录下的子目录，存放动画所需的图片
+                animation_view.playAnimation();//播放动画
+            } else {
+                AssetManager assets = getApplicationContext().getAssets();
+                animation_view.setImageBitmap(BitmapFactory.decodeStream(assets.open(defaultImage)));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void staticToast(String content) {
@@ -988,7 +1065,7 @@ public class Common {
      * @return
      */
     public static String getDomain(String url) {
-        if (TextUtils.isEmpty(url))
+        if (TextUtils.isEmpty(url)||!url.startsWith("http"))
             return "";
         try {
             String result = "";
@@ -1351,4 +1428,5 @@ public class Common {
         return false;
 
     }
+
 }

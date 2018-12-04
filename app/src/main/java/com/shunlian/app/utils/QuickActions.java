@@ -114,6 +114,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private ShareInfoParam mShareInfoParam;
     private String shareType = "", shareId = "";
     private Handler mHandler;
+    private OnShareBlogCallBack mCallBack;
     //    private String tag="";
 
 
@@ -235,8 +236,12 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                             }, "取消", (view) -> promptDialog.dismiss()).show();*/
                     return;
                 }
-                mllayout_content.setVisibility(GONE);
-                if (!mPopMenu.isShowing()) {
+//                mllayout_content.setVisibility(GONE);
+                if(shareItemCallBack!=null){
+                    shareItemCallBack.shareItem();
+                    return;
+                }
+                if (mPopMenu!=null&&!mPopMenu.isShowing()) {
                     mPopMenu.show();
                 }
                 break;
@@ -476,12 +481,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 专题页
      */
-    public void special() {
+    public void special(OnShareItemCallBack shareItemCallBack ) {
 //        tag="special";
+        this.shareItemCallBack  = shareItemCallBack;
         setShowItem(1, 2, 3, 6, 7, 8);
-        shareSpecialDialog();
+//        shareSpecialDialog();
     }
 
+    private OnShareItemCallBack shareItemCallBack;
     /**
      * 只能分享微信和复制链接
      */
@@ -649,9 +656,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 //            }
 
             //显示优品图标
-            MyImageView miv_SuperiorProduct = (MyImageView) dialog_new.findViewById(R.id.miv_SuperiorProduct);
+            MyTextView miv_SuperiorProduct = (MyTextView) dialog_new.findViewById(R.id.mtv_SuperiorProduct);
             if (isSuperiorProduct) {
                 miv_SuperiorProduct.setVisibility(View.VISIBLE);
+                miv_SuperiorProduct.setText("自营");
             } else {
                 miv_SuperiorProduct.setVisibility(View.GONE);
             }
@@ -689,7 +697,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
     public CommonDialog nomalBuildl;
 //    发现对话框
-    public void shareDiscoverDialog(String shareLink, String title, String desc, String price, String goodsId, String thumb,
+    public void shareDiscoverDialog(String blodId,String shareLink, String title, String desc, String price, String goodsId, String thumb,
                                     boolean isSuperiorProduct, String from, String froms) {
 
         mShareInfoParam = new ShareInfoParam();
@@ -707,6 +715,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new OnClickListener() {
@@ -715,6 +726,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 WXEntryActivity.startAct(getContext(),
                         "shareFriend", mShareInfoParam);
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, new OnClickListener() {
@@ -722,6 +736,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             public void onClick(View v) {
                 saveshareGoodsPic(false,shareLink, title, desc, price, goodsId, thumb, isSuperiorProduct, false, from, froms);
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new OnClickListener() {
@@ -730,6 +747,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 createCode(shareLink, title, desc, price, goodsId, thumb,
                 isSuperiorProduct, from, froms);
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new OnClickListener() {
@@ -737,6 +757,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             public void onClick(View v) {
                 copyText(true);
                 nomalBuildl.dismiss();
+                if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
+                    mCallBack.shareSuccess(blodId, goodsId);
+                }
             }
         });
 
@@ -1176,7 +1199,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         inflate.postDelayed(() -> {
                             Bitmap bitmapByView = getBitmapByView(inflate);
                             if (isShow) {
-                                boolean isSuccess = BitmapUtil.saveImageToAlbumn(mContext, bitmapByView);
+                                boolean isSuccess = BitmapUtil.saveImageToAlbumn(mContext, bitmapByView,false,false);
                                 if (isSuccess) {
 //                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
 //                                dialog.show();
@@ -1310,7 +1333,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         miv_goods_pic.setImageBitmap(resource);
                         inflate.postDelayed(() -> {
                             Bitmap bitmapByView = getBitmapByView(inflate);
-                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView,false,false);
                             if (isSuccess) {
                                 if (mContext instanceof GoodsDetailAct) {
                                     ((GoodsDetailAct) mContext).moreHideAnim();
@@ -1478,10 +1501,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
     public Bitmap getBitmapByView(View view) {
         Bitmap bitmap = null;
-        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
-                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
-        final Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
+        try {
+            bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+                    view.getMeasuredHeight(), Bitmap.Config.RGB_565);
+            final Canvas canvas = new Canvas(bitmap);
+            view.draw(canvas);
+        }catch (Exception e){
+        }
         return bitmap;
     }
 
@@ -1494,7 +1520,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private void savePic(View inflate) {
         inflate.postDelayed(() -> {
             Bitmap bitmapByView = getBitmapByView(inflate);
-            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView,false,false);
             if (isSuccess) {
                 LogUtil.httpLogW("图片保存成功");
                 SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext, shareType, shareId);
@@ -1621,5 +1647,17 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     }, getResources().getString(R.string.errcode_cancel), v -> promptDialog.dismiss());
             promptDialog.show();
         });
+    }
+
+    public void setOnShareBlogCallBack(OnShareBlogCallBack callBack) {
+        this.mCallBack = callBack;
+    }
+
+    public interface OnShareBlogCallBack {
+        void shareSuccess(String blogId,String goodsId);
+    }
+
+    public interface OnShareItemCallBack {
+        void shareItem();
     }
 }

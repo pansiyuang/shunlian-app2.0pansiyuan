@@ -36,7 +36,7 @@ public interface ITaskCenterView extends IView {
      * @param url
      * @param urlBean
      */
-    void setPic(String url, TaskHomeEntity.AdUrlBean urlBean);
+    void setPic(String url, TaskHomeEntity.AdUrlBean urlBean, List<TaskHomeEntity.AdUrlRollBean> adUrlRollBean);
 
     /**
      *
@@ -55,7 +55,7 @@ public interface ITaskCenterView extends IView {
     /**
      * 签到
      */
-    void setSignData(List<TaskHomeEntity.SignDaysBean> list);
+    void setSignData(List<TaskHomeEntity.SignDaysBean> list,String sign_continue_num);
 
     /**
      * 签到成功
@@ -68,4 +68,11 @@ public interface ITaskCenterView extends IView {
      * @param got_eggs
      */
     void showGoldEggsNum(String got_eggs);
+
+    /**
+     * 广告弹窗
+     * @param url
+     * @param pop_ad_url
+     */
+    void popAd(String url, TaskHomeEntity.AdUrlBean pop_ad_url);
 }

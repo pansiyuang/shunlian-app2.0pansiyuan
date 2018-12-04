@@ -50,6 +50,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -58,7 +59,6 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="顾城"
                 android:textColor="@color/value_343434"
                 android:textSize="15sp" />
 
@@ -78,7 +78,6 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="黑夜给了我黑色的眼睛，我却用它寻找..."
             android:textColor="@color/text_gray2"
             android:textSize="12sp" />
     </LinearLayout>
@@ -87,15 +86,14 @@
     <TextView
         android:id="@+id/tv_attention"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@drawable/rounded_corner_stroke_pink_20px"
-        android:paddingBottom="2dp"
         android:paddingLeft="9dp"
         android:paddingRight="9dp"
-        android:paddingTop="2dp"
         android:text="关注"
+        android:gravity="center"
         android:textColor="@color/pink_color"
         android:textSize="14sp" />
 </RelativeLayout>

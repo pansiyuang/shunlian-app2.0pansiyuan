@@ -39,6 +39,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String credit;
     public String video;//视频地址
     public String type;// 普通商品0，优品1,团购商品2
+    public String type_tag_pic;// 普通商品0，优品1,团购商品2
     public String get_gold_second;// 获取金蛋的停留时间
 
     public String is_preferential;//店铺优惠  没有值的时候为空字符串
@@ -132,6 +133,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String detail_pic;
         public String if_act_price;
         public String if_time;
+        public String tag_pic;
         public String actprice;
         public String activity_status;
         public String start_remain_seconds;
@@ -151,6 +153,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.if_act_price);
             dest.writeString(this.if_time);
             dest.writeString(this.actprice);
+            dest.writeString(this.tag_pic);
             dest.writeString(this.activity_status);
             dest.writeString(this.start_remain_seconds);
             dest.writeString(this.end_remain_seconds);
@@ -167,6 +170,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.if_act_price = in.readString();
             this.if_time = in.readString();
             this.actprice = in.readString();
+            this.tag_pic = in.readString();
             this.activity_status = in.readString();
             this.start_remain_seconds = in.readString();
             this.end_remain_seconds = in.readString();
@@ -283,7 +287,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String percent;
         public String str_surplus_stock;
         public String start_time;
-
+        public String end_time;
         @Override
         public int describeContents() {
             return 0;
@@ -873,6 +877,7 @@ public class GoodsDeatilEntity implements Parcelable {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Goods implements Parcelable {
         public String id;
+        public String tag_pic;
         public String cart_id;                  //是否被编辑
         public String store_id;              //店铺id
         public String store_name;            //店铺名字
@@ -936,6 +941,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.id);
             dest.writeString(this.cart_id);
+            dest.writeString(this.tag_pic);
             dest.writeString(this.store_id);
             dest.writeString(this.store_name);
             dest.writeString(this.goods_id);
@@ -990,6 +996,7 @@ public class GoodsDeatilEntity implements Parcelable {
         protected Goods(Parcel in) {
             this.id = in.readString();
             this.cart_id = in.readString();
+            this.tag_pic = in.readString();
             this.store_id = in.readString();
             this.store_name = in.readString();
             this.goods_id = in.readString();
@@ -1464,6 +1471,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.credit);
         dest.writeString(this.video);
         dest.writeString(this.type);
+        dest.writeString(this.type_tag_pic);
         dest.writeString(this.get_gold_second);
         dest.writeString(this.is_preferential);
         dest.writeString(this.member_cart_count);
@@ -1513,6 +1521,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.credit = in.readString();
         this.video = in.readString();
         this.type = in.readString();
+        this.type_tag_pic = in.readString();
         this.get_gold_second = in.readString();
         this.is_preferential = in.readString();
         this.member_cart_count = in.readString();

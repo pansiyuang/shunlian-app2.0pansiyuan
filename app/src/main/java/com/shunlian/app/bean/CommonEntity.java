@@ -46,6 +46,7 @@ public class CommonEntity {
     public String qr_img_for_app_down;//下载app
     public String push_on;//接收推送，1是，0否
     public String about_url;//关于的h5介绍页面（APP）
+    public String if_pwd_set;//是否设置密码
 
     //IM
     public String user_id;//通过店铺Id获取客服管理的userId
@@ -80,6 +81,12 @@ public class CommonEntity {
     public String item_id;
 
     public String name;
+
+    //发现未读消息统计
+    public int praise_share;
+    public int attention;
+    public int notice;
+    public int download;
 
     @Override
     public String toString() {

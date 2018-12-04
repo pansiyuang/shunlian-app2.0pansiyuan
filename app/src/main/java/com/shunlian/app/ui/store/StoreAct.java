@@ -33,6 +33,7 @@ import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
@@ -43,12 +44,14 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.StoreView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.ObtainGoldenEggsTip;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -156,8 +159,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     MyRelativeLayout mrlayout_sort;
     @BindView(R.id.mrlayout_sorts)
     MyRelativeLayout mrlayout_sorts;
-    @BindView(R.id.rl_more)
-    RelativeLayout rl_more;
+    @BindView(R.id.rl_share)
+    RelativeLayout rl_share;
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
     @BindView(R.id.tv_msg_count)
@@ -180,7 +183,12 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private GridLayoutManager babyManager, discountManager;
     private ShareInfoParam shareInfoParam;
     private List<GoodsDeatilEntity.Voucher> vouchers;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
+    private StoreIndexEntity.Head storeHead;
+    private List<StoreGoodsListEntity.MData> dataList;
 
+    @BindView(R.id.oget)
+    ObtainGoldenEggsTip oget;
     public static void startAct(Context context, String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
         intent.putExtra("storeId", storeId);
@@ -188,11 +196,18 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         context.startActivity(intent);
     }
 
-    @OnClick(R.id.rl_more)
+    @OnClick(R.id.rl_share)
     public void more() {
-        quick_actions.setVisibility(View.VISIBLE);
-        quick_actions.shareInfo(shareInfoParam);
-        quick_actions.shop();
+//        quick_actions.setVisibility(View.VISIBLE);
+//        quick_actions.shareInfo(shareInfoParam);
+//        quick_actions.shop();
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(this, "login");
+            return;
+        }
+        if(storePresenter!=null) {
+            storePresenter.getShareInfo(storePresenter.store, storeId);
+        }
     }
 
     @Override
@@ -200,9 +215,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         if (Common.isAlreadyLogin()) {
             messageCountManager = MessageCountManager.getInstance(baseAct);
             if (messageCountManager.isLoad()) {
-                String s = messageCountManager.setTextCount(tv_msg_count);
-                if (quick_actions != null)
-                    quick_actions.setMessageCount(s);
+//                String s = messageCountManager.setTextCount(tv_msg_count);
+//                if (quick_actions != null)
+//                    quick_actions.setMessageCount(s);
             } else {
                 messageCountManager.initData();
             }
@@ -213,16 +228,24 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
+//        String s = messageCountManager.setTextCount(tv_msg_count);
+//        if (quick_actions != null)
+//            quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
+//        String s = messageCountManager.setTextCount(tv_msg_count);
+//        if (quick_actions != null)
+//            quick_actions.setMessageCount(s);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void shareSuccess(ShareInfoEvent event){
+        if (oget != null && event.isShareSuccess && "store".equals(event.type)){
+            oget.setEggsCount(event.eggs_count);
+            oget.show(4000);
+        }
     }
 
     @Override
@@ -246,6 +269,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     protected void initListener() {
         super.initListener();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         mtv_attention.setOnClickListener(this);
         mrlayout_stores.setOnClickListener(this);
         mrlayout_baby.setOnClickListener(this);
@@ -542,6 +566,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     public void storeBaby(final List<StoreGoodsListEntity.MData> mDataList, int allPage, final int page) {
+        if(mDataList!=null){
+            dataList = mDataList;
+        }
         if (storeBabyAdapter == null) {
             storeBabyAdapter = new StoreBabyAdapter(this, true, mDataList);
             babyManager = new GridLayoutManager(this, 2);
@@ -631,14 +658,15 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         mtv_babyNum.setText(head.goods_count);
         mtv_discountNum.setText(head.promotion_count);
         mtv_newNum.setText(head.new_count);
-        shareInfoParam = new ShareInfoParam();
-        shareInfoParam.shareLink = head.share_url;
-        shareInfoParam.shop_logo = head.decoration_logo;
-        shareInfoParam.shop_name = head.decoration_name;
-        shareInfoParam.shop_star = head.star;
-        shareInfoParam.userName = head.nickname;
-        shareInfoParam.userAvatar = head.avatar;
-        shareInfoParam.desc = head.decoration_name;
+        storeHead = head;
+//        shareInfoParam = new ShareInfoParam();
+//        shareInfoParam.shareLink = head.share_url;
+//        shareInfoParam.shop_logo = head.decoration_logo;
+//        shareInfoParam.shop_name = head.decoration_name;
+//        shareInfoParam.shop_star = head.star;
+//        shareInfoParam.userName = head.nickname;
+//        shareInfoParam.userAvatar = head.avatar;
+//        shareInfoParam.desc = head.decoration_name;
     }
 
     @Override
@@ -774,11 +802,26 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        shareInfoParam = baseEntity.data;
         if (shareInfoParam != null) {
-            shareInfoParam.shareLink = baseEntity.data.shareLink;
-            shareInfoParam.userName = baseEntity.data.userName;
-            shareInfoParam.userAvatar = baseEntity.data.userAvatar;
-            shareInfoParam.desc = baseEntity.data.desc;
+//            shareInfoParam.shareLink = baseEntity.data.shareLink;
+//            shareInfoParam.userName = baseEntity.data.userName;
+//            shareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            if(storeHead!=null) {
+                shareInfoParam.isShowTiltle =false;
+//                shareInfoParam.egg_type = 2;
+                shareInfoParam.shareLink = storeHead.share_url;
+                shareInfoParam.shop_logo = storeHead.decoration_logo;
+                shareInfoParam.shop_name = storeHead.decoration_name;
+                shareInfoParam.shop_star = storeHead.star;
+                shareInfoParam.userName = storeHead.nickname;
+                shareInfoParam.userAvatar = storeHead.avatar;
+                shareInfoParam.shop_id = storeId;
+            }
+             if(shareInfoParam.share_goods!=null&&shareInfoParam.share_goods.size()>2){
+                    shareInfoParam.share_goods = shareInfoParam.share_goods.subList(0,2);
+            }
+            shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
         }
     }
 }

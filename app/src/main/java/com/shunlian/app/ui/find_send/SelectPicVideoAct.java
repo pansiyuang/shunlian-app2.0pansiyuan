@@ -35,7 +35,7 @@ import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.photoview.HackyViewPager;
+import com.shunlian.mylibrary.ImmersionBar;
 import com.zh.smallmediarecordlib.RecordedActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,9 +75,6 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
 
     @BindView(R.id.rlayout_root)
     RelativeLayout rlayout_root;
-
-    @BindView(R.id.view_pager)
-    HackyViewPager view_pager;
 
     private int value_484848;
     private int pink_color;
@@ -227,29 +224,34 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     boolean isComplete = data.getBooleanExtra("isComplete", false);
                     if (isComplete) {//图片
                         if (pics_path != null) {
-                            if (mSelectResultList == null) {
-                                mSelectResultList = new ArrayList<>();
-                            }
+                            listClear();
                             mSelectResultList.addAll(pics_path);
                             complete();
                         } else {//视频
-                            if (mSelectResultList == null) {
-                                mSelectResultList = new ArrayList<>();
-                            }
-                            mSelectResultList.clear();
+                            listClear();
                             mSelectResultList.add(video);
                             complete();
                         }
                     } else {
                         if (pics_path != null) {
-                            mSelectResultList.clear();
+                            listClear();
                             mSelectResultList.addAll(pics_path);
+                            if (mImageVideoAdapter != null){
+                                mImageVideoAdapter.notifyDataSetChanged();
+                            }
                             tv_complete.setText(String.format(format, mSelectResultList.size(), maxCount));
                         }
                     }
                     break;
             }
         }
+    }
+
+    private void listClear() {
+        if (mSelectResultList == null) {
+            mSelectResultList = new ArrayList<>();
+        }
+        mSelectResultList.clear();
     }
 
 
@@ -304,10 +306,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
      * @param currentPhotoPath
      */
     private void resultLocalUrl(String currentPhotoPath) {
-        if (mSelectResultList == null) {
-            mSelectResultList = new ArrayList<>();
-        }
-        mSelectResultList.clear();
+        listClear();
         mSelectResultList.add(currentPhotoPath);
         Intent intent = new Intent();
         intent.putExtra(EXTRA_RESULT, mSelectResultList);
@@ -441,21 +440,24 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
     private void createPopupFolderList() {
 
         mFolderPopupWindow = new ListPopupWindow(this);
-        mFolderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mFolderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         mFolderPopupWindow.setAdapter(mFolderAdapter);
         mFolderPopupWindow.setContentWidth(ListPopupWindow.MATCH_PARENT);
         mFolderPopupWindow.setWidth(ListPopupWindow.MATCH_PARENT);
 
         // 计算ListPopupWindow内容的高度(忽略mPopupAnchorView.height)，R.layout.item_foloer
-        int folderItemViewHeight = TransformUtil.dip2px(this, 92);
-        int folderViewHeight = mFolderAdapter.getCount() * folderItemViewHeight;
+        //int folderItemViewHeight = TransformUtil.dip2px(this, 92);
+        //int folderViewHeight = mFolderAdapter.getCount() * folderItemViewHeight;
 
+        int titleHeight = TransformUtil.dip2px(this, 44);
         int screenHeigh = getResources().getDisplayMetrics().heightPixels;
-        if (folderViewHeight >= screenHeigh) {
-            mFolderPopupWindow.setHeight(Math.round(screenHeigh * 0.6f));
+        mFolderPopupWindow.setHeight(Math.round(screenHeigh - titleHeight - ImmersionBar.getStatusBarHeight(this)));
+        /*if (folderViewHeight >= screenHeigh) {
         } else {
             mFolderPopupWindow.setHeight(ListPopupWindow.WRAP_CONTENT);
-        }
+        }*/
+
+        //mFolderPopupWindow.setHeight(ListPopupWindow.WRAP_CONTENT);
 
         mFolderPopupWindow.setAnchorView(rlayout_root);
         mFolderPopupWindow.setModal(true);
@@ -543,6 +545,12 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                 mImageVideoAdapter = new LoaderLocalImgVideoAdapter(this, mImageVideos);
                 recy_view.setAdapter(mImageVideoAdapter);
                 mImageVideoAdapter.setOnItemClickListener((view, position) -> {
+                    ImageVideo imageVideo = mImageVideos.get(position);
+                    if ((maxCount != 9 && isMP4Path(imageVideo.path)) ||
+                            (maxCount == 9 && isMP4Path(imageVideo.path) && !isEmpty(mSelectResultList))){
+                        Common.staticToast("图片和视频不能同时选择");
+                        return;
+                    }
                     EventBus.getDefault().postSticky(mImageVideos);
                     BrowseImageVideoAct.BuildConfig config = new BrowseImageVideoAct.BuildConfig();
                     config.max_count = maxCount;
@@ -550,7 +558,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                     config.position = position;
                     config.isShowImageVideo = false;
                     config.isOnlyBrowse = false;
-                    //config.selectResultList = mSelectResultList;
+                    config.selectResultList = mSelectResultList;
                     BrowseImageVideoAct.startAct(this, config, BrowseImageVideoAct.REQUEST_CODE);
                 });
                 mImageVideoAdapter.setOnSelectionListener((position, oldSelection) -> {
@@ -576,16 +584,19 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
         if (oldSelection) {
             mSelectResultList.add(imageVideo.path);
             if (isCanSelect() == -1) {
+                imageVideo.isSelect = !oldSelection;
                 mSelectResultList.remove(imageVideo.path);
                 Common.staticToast("图片和视频不能同时选择");
                 return false;
             } else if (isCanSelect() == -2) {
+                imageVideo.isSelect = !oldSelection;
                 mSelectResultList.remove(imageVideo.path);
                 Common.staticToast("只能选择一个视频");
                 return false;
             }
             count = mSelectResultList.size();
             if (count > maxCount) {
+                imageVideo.isSelect = !oldSelection;
                 mSelectResultList.remove(imageVideo.path);
                 Common.staticToast(String.format("您最多只能选择%d张图片", maxCount));
                 return false;

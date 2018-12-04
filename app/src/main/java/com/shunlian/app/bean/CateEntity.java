@@ -13,7 +13,7 @@ public class CateEntity {
     public String hint;
     public String sub_amount;
     public String sub_count;
-
+    public int cartTotal;
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Cate {
         public String cate_id;

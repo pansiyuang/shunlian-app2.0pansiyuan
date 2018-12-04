@@ -162,12 +162,11 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         mtv_count.setText(String.format(text_format,0,MAX_TEXT_COUNT));
         presenter = new FindSendPicPresenter(this, this);
 
-        mtvToolbarTitle.setText("发布图文");
+        mtvToolbarTitle.setText("发布心得");
         if (mConfig != null && !isEmpty(mConfig.activityTitle)){
             mtv_topic.setText(mConfig.activityTitle);
             topic_id = mConfig.activityID;
             miv_tip.setVisibility(View.INVISIBLE);
-            mtvToolbarTitle.setText("发布心得");
         }else {//从活动进发布页不加载草稿
             presenter.initApi();
         }
@@ -175,6 +174,8 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         gone(mrlayoutToolbarMore);
         visible(mtvToolbarRight);
         mtvToolbarRight.setText("发布");
+        associated();
+
         mtvToolbarRight.setTextColor(getColorResouce(R.color.pink_color));
 
         /********商品列表*********/
@@ -211,7 +212,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     @OnClick(R.id.rlayout_topic)
     public void addTopic() {
         if (!(mConfig != null && !isEmpty(mConfig.activityID))){
-            AddTopicAct.startAct(this, ADDTOPIC_REQUEST_CODE);
+            AddTopicAct.startAct(this,topic_id, ADDTOPIC_REQUEST_CODE);
         }
     }
 
@@ -482,9 +483,10 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
      */
     private void associated(){
         if (isEmpty(mGoodsLists)){
-            mtv_associated_goods.setText(getStringResouce(R.string.find_associated_goods));
+            mtv_associated_goods.setText(String.format(getStringResouce(R.string.find_associated_goods),
+                    0,MAX_ASSOCIATED_GOODS));
         }else {
-            String format = getStringResouce(R.string.find_associated_goods) + "(%d/%d)";
+            String format = getStringResouce(R.string.find_associated_goods);
             mtv_associated_goods.setText(String.format(format, mGoodsLists.size(), MAX_ASSOCIATED_GOODS));
         }
     }

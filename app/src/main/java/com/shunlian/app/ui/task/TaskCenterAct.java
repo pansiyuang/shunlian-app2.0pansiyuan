@@ -13,9 +13,12 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.webkit.URLUtil;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -30,10 +33,12 @@ import com.shunlian.app.eventbus_bean.GoldEggsTaskEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ITaskCenterView;
 import com.shunlian.app.widget.DowntimeLayout;
@@ -43,6 +48,8 @@ import com.shunlian.app.widget.MyWebView;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.SignGoldEggsLayout;
+import com.shunlian.app.widget.banner.BaseBanner;
+import com.shunlian.app.widget.banner.MyKanner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,6 +57,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,15 +70,15 @@ import butterknife.OnClick;
  */
 
 public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
-
+    public List<TaskHomeEntity.SignDaysBean> sign_days;
     @BindView(R.id.mtv_eggs_count)
     MyTextView mtv_eggs_count;
 
     @BindView(R.id.miv_golden_eggs)
     MyImageView miv_golden_eggs;
 
-    @BindView(R.id.miv_pic)
-    MyImageView mivPic;
+    @BindView(R.id.kanner)
+    MyKanner kanner;
 
     @BindView(R.id.mtv_new_task)
     MyTextView mtvNewTask;
@@ -83,6 +91,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @BindView(R.id.mtv_day_task)
     MyTextView mtvDayTask;
+
+    @BindView(R.id.tv_sign_unit)
+    MyTextView tv_sign_unit;
 
     @BindView(R.id.view_day_task)
     View viewDayTask;
@@ -120,6 +131,9 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @BindView(R.id.miv_airbubble)
     MyImageView miv_airbubble;
 
+    @BindView(R.id.mtv_user)
+    MyTextView mtv_user;
+
     int pick_color;
 
     int v48;
@@ -128,7 +142,12 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     private Dialog dialog_rule, dialog_qr;
     private String mAdUrl;
     private int mPicWidth;
+    public static final String TASK_AD_KEY = "task_ad_key";
 
+    /**
+     * 常见问题url
+     */
+    private String question;
     public static void startAct(Context context) {
         Intent intent = new Intent(context, TaskCenterAct.class);
         if (!(context instanceof Activity))
@@ -179,6 +198,26 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
         mPicWidth = DeviceInfoUtil.getDeviceWidth(this)
                 - TransformUtil.dip2px(this,24);
+
+        GradientDrawable gd = new GradientDrawable();
+        int i = TransformUtil.dip2px(this, 1);
+        gd.setStroke(i,getColorResouce(R.color.white_ash));
+        gd.setCornerRadius(i*10);
+        gd.setColor(getColorResouce(R.color.transparent));
+        mtv_user.setBackgroundDrawable(gd);
+    }
+
+    /**
+     * 签到规则
+     */
+    @OnClick(R.id.rlayout_sign)
+    public void signPostSend() {
+        GoldEggsTaskEvent event = new GoldEggsTaskEvent();
+        if(sign_days!=null&&sign_days.size()>3) {
+            event.isClickSign = true;
+            event.sign_date = sign_days.get(2).date;
+            EventBus.getDefault().post(event);
+        }
     }
 
     @Override
@@ -215,8 +254,11 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @OnClick(R.id.mtv_question)
     public void question() {
-        if (dialog_qr != null)
-            dialog_qr.show();
+        if(!TextUtils.isEmpty(question)) {
+            H5X5Act.startAct(this, question, H5X5Act.MODE_SONIC);
+        }
+//        if (dialog_qr != null)
+//            dialog_qr.show();
     }
 
     /**
@@ -248,6 +290,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                 }
             });
             va.start();
+        }else{
+            mPresenter.goldegglimit();
         }
     }
 
@@ -419,6 +463,16 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
+    @Override
+    public void popAd(String url, TaskHomeEntity.AdUrlBean pop_ad_url) {
+        if (isEmpty(url))return;
+        String cache_url = SharedPrefUtil.getCacheSharedPrf(TASK_AD_KEY, "");
+        if (!cache_url.equals(url)){
+            adDialog(url,pop_ad_url);
+            SharedPrefUtil.saveCacheSharedPrf(TASK_AD_KEY,url);
+        }
+    }
+
     private String re = "(w=|h=)(\\d+)";
     private Pattern p = Pattern.compile(re);
     /**
@@ -428,50 +482,67 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      * @param urlBean
      */
     @Override
-    public void setPic(String url, TaskHomeEntity.AdUrlBean urlBean) {
-        if (URLUtil.isNetworkUrl(url)) {
-            if (url.equals(mAdUrl))return;
-            visible(mivPic);
-
-            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url)) {
-                Matcher m = p.matcher(url);
-                int w = 0;
-                int h = 0;
-                if (m.find()) {
-                    w = Integer.parseInt(m.group(2));
-                } else {
-                    w = 672;
-                }
-                if (m.find()) {
-                    h = Integer.parseInt(m.group(2));
-                } else {
-                    h = 200;
-                }
-
-                int i = (int) (mPicWidth * h * 1.0f / w);
-                int radius = TransformUtil.dip2px(this, 5f);
-                GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        Bitmap source = BitmapUtil.scaleBitmap(resource, mPicWidth, i);
-                        if (source != null) {
-                            Bitmap bitmap = BitmapUtil.roundCropBitmap(source, radius);
-                            mivPic.setImageBitmap(bitmap);
+    public void setPic(String url, TaskHomeEntity.AdUrlBean urlBean, List<TaskHomeEntity.AdUrlRollBean> adUrlRollBean) {
+        if(adUrlRollBean!=null&&adUrlRollBean.size()>0){
+              visible(kanner);
+            List<String> strings = new ArrayList<>();
+            for (int i = 0; i < adUrlRollBean.size(); i++) {
+                strings.add(adUrlRollBean.get(i).ad_pic_url);
+                if (i >= adUrlRollBean.size() - 1) {
+                    kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
+                    kanner.setBanner(strings);
+                    kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Common.goGoGo(baseAct, adUrlRollBean.get(position).ad_url.type, adUrlRollBean.get(position).ad_url.item_id);
                         }
-                    }
-                });
-            }
-
-            mivPic.setOnClickListener(v -> {
-                if (urlBean != null) {
-                    Common.goGoGo(this, urlBean.type, urlBean.item_id);
+                    });
                 }
-            });
-        } else {
-            gone(mivPic);
+            }
+        }else{
+             gone(kanner);
         }
-        mAdUrl = url;
+//            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url))
+//        }{
+//                Matcher m = p.matcher(url);
+//                int w = 0;
+//                int h = 0;
+//                if (m.find()) {
+//                    w = Integer.parseInt(m.group(2));
+//                } else {
+//                    w = 672;
+//                }
+//                if (m.find()) {
+//                    h = Integer.parseInt(m.group(2));
+//                } else {
+//                    h = 200;
+//                }
+//
+//                int i = (int) (mPicWidth * h * 1.0f / w);
+//                int radius = TransformUtil.dip2px(this, 5f);
+//                GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        Bitmap source = BitmapUtil.scaleBitmap(resource, mPicWidth, i);
+//                        if (source != null) {
+//                            Bitmap bitmap = BitmapUtil.roundCropBitmap(source, radius);
+//                            mivPic.setImageBitmap(bitmap);
+//                        }
+//                    }
+//                });
+//            }
+
+//            mivPic.setOnClickListener(v -> {
+//                if (urlBean != null) {
+//                    Common.goGoGo(this, urlBean.type, urlBean.item_id);
+//                }
+//            });
+//        } else {
+//            gone(mivPic);
+//        }
+//        mAdUrl = url;
     }
+
 
     /**
      * @param question 常见问题
@@ -479,7 +550,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setTip(String question, String rule) {
-        initQRDialog(question);
+        this.question = question;
+//        initQRDialog(question);
         initRuleDialog(rule);
     }
 
@@ -510,9 +582,22 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      * 签到
      */
     @Override
-    public void setSignData(List<TaskHomeEntity.SignDaysBean> list) {
+    public void setSignData(List<TaskHomeEntity.SignDaysBean> list,String sign_continue_num) {
         if (sgel != null)
+            sign_days = list;
             sgel.setData(list);
+
+            //判断连续签到次数和当前是否签到
+        if(list!=null&&list.size()>3){
+            if (mtvSignDay != null&&!list.get(2).sign_status.equals("1")){
+                mtvSignDay.setText("签到");
+                mtvSignState.setText("未签到");
+            }else {
+                mtvSignState.setText("已签到");
+                mtvSignDay.setText(sign_continue_num);
+            }
+        }
+
     }
 
     /**
@@ -523,6 +608,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void signEgg(SignEggEntity signEggEntity) {
         initDialog(signEggEntity);
+        mtvSignState.setText("已签到");
         if (mtv_eggs_count != null) mtv_eggs_count.setText(signEggEntity.gold_egg);
         if (mtvSignDay != null) mtvSignDay.setText(signEggEntity.sign_continue_num);
         if (sgel != null) sgel.signSuccess();
@@ -546,6 +632,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                 mPresenter.updateItem(mPresenter.getUpdatePosition(), "1");
         }
     }
+
+
 
     /*
     常见问题弹窗
@@ -613,6 +701,62 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         ntv_hint.setText(String.format(getStringResouce(R.string.mission_gongxininhuode), data.gold_num));
         dialog_ad.setCancelable(false);
 //        }
+        dialog_ad.show();
+    }
+
+
+    public void adDialog(String url, TaskHomeEntity.AdUrlBean urlBean) {
+        Dialog dialog_ad = new Dialog(this, R.style.popAd);
+        dialog_ad.setContentView(R.layout.ad_task);
+        LinearLayout ll_root = dialog_ad.findViewById(R.id.ll_root);
+        ViewGroup.LayoutParams layoutParams = ll_root.getLayoutParams();
+        layoutParams.width = DeviceInfoUtil.getDeviceWidth(this);
+        layoutParams.height = DeviceInfoUtil.getDeviceHeight(this);
+        ll_root.setLayoutParams(layoutParams);
+        MyImageView miv_close = dialog_ad.findViewById(R.id.miv_close);
+        ImageView miv_pic = dialog_ad.findViewById(R.id.miv_pic);
+        if (URLUtil.isNetworkUrl(url)) {
+            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url)) {
+                Matcher m = p.matcher(url);
+                int w = 0;
+                int h = 0;
+                if (m.find()) {
+                    w = Integer.parseInt(m.group(2));
+                } else {
+                    w = 600;
+                }
+                if (m.find()) {
+                    h = Integer.parseInt(m.group(2));
+                } else {
+                    h = 690;
+                }
+
+                int r_w = TransformUtil.countRealWidth(this, 600);
+                int i = (int) (r_w * h * 1.0f / w);
+                GlideUtils.getInstance().loadOverrideImage(this, miv_pic, url,r_w,i);
+
+                /*int radius = TransformUtil.dip2px(this, 4f);
+                GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        Bitmap source = BitmapUtil.scaleBitmap(resource, r_w, i);
+                        if (source != null) {
+                            Bitmap bitmap = BitmapUtil.roundCropBitmap(source, radius);
+                            miv_pic.setImageBitmap(bitmap);
+                        }
+                    }
+                });*/
+            }
+        }
+
+        miv_pic.setOnClickListener(v -> {
+            if (dialog_ad != null)dialog_ad.dismiss();
+            if (urlBean != null) {
+                Common.goGoGo(this, urlBean.type, urlBean.item_id);
+            }
+        });
+        miv_close.setOnClickListener(view -> dialog_ad.dismiss());
+        dialog_ad.setCancelable(false);
         dialog_ad.show();
     }
 

@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new.search;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,11 +11,14 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.IHotBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -31,7 +35,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/24.
  */
 
-public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack {
+public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBlogAdapter.OnAdapterCallBack, ShareGoodDialogUtil.OnShareBlogCallBack {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -47,13 +51,10 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     private List<BigImgEntity.Blog> blogList;
     private HotBlogAdapter hotBlogAdapter;
     private String currentKeyword;
-
-    QuickActions quick_actions;
-
+    private PromptDialog promptDialog;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     @Override
     public void onDestroyView() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         super.onDestroyView();
     }
 
@@ -66,10 +67,8 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     @Override
     protected void initData() {
         //分享
-        quick_actions = new QuickActions(baseActivity);
-        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
-        decorView.addView(quick_actions);
-        quick_actions.setVisibility(View.INVISIBLE);
+        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
     }
 
     public static SearchBlogFrag getInstance(String str) {
@@ -150,7 +149,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), quick_actions);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(),shareGoodDialogUtil);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }
@@ -169,7 +168,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
                 }
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0,blogList.size(),blogList);
     }
 
     @Override
@@ -180,8 +179,19 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
                 blog.praise_num++;
             }
         }
-        hotBlogAdapter.notifyDataSetChanged();
+        hotBlogAdapter.notifyItemRangeChanged(0,blogList.size(),blogList);
     }
+
+    @Override
+    public void downCountSuccess(String blogId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.down_num++;
+            }
+        }
+        hotBlogAdapter.notifyItemRangeChanged(0,blogList.size(),blogList);
+    }
+
 
     @Override
     public void refreshFinish() {
@@ -203,17 +213,54 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId) {
-        mPresenter.focusUser(isFocus, memberId);
+    public void toFocusUser(int isFocus, String memberId,String nickName) {
+        if (isFocus == 1) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(getActivity());
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+                promptDialog.setTvCancleIsBold(false);
+                promptDialog.setTvSureIsBold(false);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        mPresenter.focusUser(isFocus, memberId);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
+            mPresenter.focusUser(isFocus, memberId);
+        }
     }
 
     @Override
-    public void toFocusMember(int isFocus, String memberId) {
+    public void toFocusMember(int isFocus, String memberId,String nickName) {
 
     }
 
     @Override
     public void toPraiseBlog(String blogId) {
         mPresenter.praiseBlos(blogId);
+    }
+
+    @Override
+    public void toDown(String blogId) {
+        mPresenter.downCount(blogId);
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+        mPresenter.goodsShare("blog_goods", blogId, goodsId);
+    }
+
+
+    @Override
+    public void shareGoodsSuccess(String blogId, String goodsId) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (blogId.equals(blog.id)) {
+                blog.total_share_num++;
+            }
+        }
+        hotBlogAdapter.notifyItemRangeChanged(0,blogList.size(),blogList);
     }
 }

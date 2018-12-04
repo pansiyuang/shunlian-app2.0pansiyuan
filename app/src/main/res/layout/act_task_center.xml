@@ -112,11 +112,14 @@
                     android:id="@+id/mtv_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/mtv_count"
-                    android:paddingTop="20dp"
-                    android:paddingRight="20dp"
+                    android:minWidth="49dp"
+                    android:gravity="center"
+                    android:minHeight="20dp"
+                    android:layout_alignBottom="@+id/mtv_eggs_count"
                     android:layout_toRightOf="@+id/mtv_eggs_count"
                     android:text="去使用"
+                    android:layout_marginBottom="9dp"
+                    android:layout_marginLeft="5dp"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
@@ -218,16 +221,18 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 android:text="0"
-                                android:textColor="@color/value_484848"
-                                android:textSize="30sp" />
+                                android:textColor="@color/pink_color"
+                                android:textSize="22sp" />
 
                             <com.shunlian.app.widget.MyTextView
+                                android:id="@+id/tv_sign_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignBottom="@+id/mtv_sign_day"
                                 android:layout_marginBottom="5dp"
                                 android:layout_toRightOf="@+id/mtv_sign_day"
                                 android:text="天"
+                                android:visibility="gone"
                                 android:textColor="@color/value_484848"
                                 android:textSize="10sp" />
 
@@ -260,15 +265,17 @@
             </RelativeLayout>
 
             <!--广告-->
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_pic"
+
+            <com.shunlian.app.widget.banner.MyKanner
+                android:id="@+id/kanner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/yy450"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:layout_marginTop="16dp"
-                android:adjustViewBounds="true"/>
-
+                android:layout_marginTop="17dp"
+                app:bb_delay="5"
+                app:bb_period="3"
+                app:bb_scale="0.5" />
             <!--任务列表-->
             <LinearLayout
                 android:layout_width="match_parent"

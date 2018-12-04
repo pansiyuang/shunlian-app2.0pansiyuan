@@ -30,7 +30,7 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        return new AttentionMsgViewHolder(LayoutInflater.from(context).inflate(R.layout.item_my_fans, parent, false));
+        return new AttentionMsgViewHolder(LayoutInflater.from(context).inflate(R.layout.item_attention_msg, parent, false));
     }
 
     @Override
@@ -40,10 +40,6 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
             HotBlogsEntity.MemberInfo memberInfo = lists.get(position);
             GlideUtils.getInstance().loadCircleAvar(context, attentionMsgViewHolder.miv_icon, memberInfo.avatar);
             attentionMsgViewHolder.tv_name.setText(memberInfo.nickname);
-
-            attentionMsgViewHolder.tv_attention.setBackgroundDrawable(null);
-            attentionMsgViewHolder.tv_attention.setText("关注了你");
-            attentionMsgViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
 
             if (memberInfo.add_v == 1) {
                 attentionMsgViewHolder.miv_v.setVisibility(View.VISIBLE);
@@ -57,6 +53,13 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
                 GlideUtils.getInstance().loadImage(context, attentionMsgViewHolder.miv_expert, memberInfo.expert_icon);
             } else {
                 attentionMsgViewHolder.miv_expert.setVisibility(View.GONE);
+            }
+
+            if (isEmpty(memberInfo.signature)) {
+                attentionMsgViewHolder.tv_signature.setVisibility(View.GONE);
+            } else {
+                attentionMsgViewHolder.tv_signature.setText(memberInfo.signature);
+                attentionMsgViewHolder.tv_signature.setVisibility(View.VISIBLE);
             }
 
             attentionMsgViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, memberInfo.member_id));
@@ -80,6 +83,9 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
         @BindView(R.id.tv_attention)
         TextView tv_attention;
 
+        @BindView(R.id.tv_signature)
+        TextView tv_signature;
+
         public AttentionMsgViewHolder(View itemView) {
             super(itemView);
         }
@@ -90,6 +96,6 @@ public class AttentionMsgAdapter extends BaseRecyclerAdapter<HotBlogsEntity.Memb
     }
 
     public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId);
+        void toFocusUser(int isFocus, String memberId, String nickName);
     }
 }

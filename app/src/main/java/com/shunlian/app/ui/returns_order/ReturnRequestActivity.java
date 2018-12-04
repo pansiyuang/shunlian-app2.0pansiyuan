@@ -40,6 +40,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -300,6 +301,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                     }
                 }*/
                 if (!isEmpty(s.toString())) {
+                    LogUtil.httpLogW("totalPrice:" + totalPrice);
                     if (Float.valueOf(s.toString()) > totalPrice) {
                         edt_return_money.setText(totalPrice + "");
                         edt_return_money.setSelection((totalPrice + "").length());
@@ -377,16 +379,25 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 totalPrice = (Float.valueOf(currentInfoEntity.real_amount));
                 tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice) + freePrice);
             } else {
-                totalPrice = count * (Float.valueOf(currentInfoEntity.return_price));
-                tv_freight.setText("您最多能退 ¥ " +  Common.formatFloat(totalPrice));
+                totalPrice = getTotalPrice(currentInfoEntity.return_price, count);
+                tv_freight.setText("您最多能退 ¥ " + totalPrice);
             }
-
         } else {
-            totalPrice = count * (Float.valueOf(currentInfoEntity.return_price));
-            tv_freight.setText("您最多能退 ¥ " +  Common.formatFloat(totalPrice));
+            totalPrice = getTotalPrice(currentInfoEntity.return_price, count);
+            tv_freight.setText("您最多能退 ¥ " + totalPrice);
         }
-        edt_return_money.setText(Common.formatFloat(totalPrice));
+        edt_return_money.setText(String.valueOf(totalPrice));
         edt_return_money.setSelection(edt_return_money.getText().length());
+    }
+
+    public float getTotalPrice(String price, int count) {
+        if (isEmpty(price) || count == 0) {
+            return 0;
+        }
+        BigDecimal b2 = new BigDecimal(price);
+        BigDecimal b1 = new BigDecimal(count);
+        String str = Common.formatFloat(b2.multiply(b1).floatValue());
+        return Float.parseFloat(str);
     }
 
     private List<ImageEntity> getImageEntityList() {

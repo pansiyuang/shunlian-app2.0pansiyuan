@@ -122,6 +122,13 @@
 
     <!--优惠券-->
     <string name="coupon_youxiaoqi">有效期：</string>
+    <string name="coupon_lingquanzhongxin">领券中心</string>
+    <string name="coupon_pintaiyouhui">平台优惠券</string>
+    <string name="coupon_shangjia">商家优惠券</string>
+    <string name="coupon_lijishiyong">立即使用</string>
+    <string name="coupon_keyongquan">可用券</string>
+    <string name="coupon_sousuoyouhuiquan">搜索优惠券</string>
+    <string name="coupon_shunliandongli">顺联动力优惠券</string>
 
     <!--店铺-->
     <string name="store_search">搜索店铺内商品</string>
@@ -409,7 +416,8 @@
 
     <string name="all_image">所有图片</string>
     <string name="operate_baocuntupian">保存图片</string>
-    <string name="operate_tupianyibaocun">图片已保存，请在手机相册中查看</string>
+    <!--<string name="operate_tupianyibaocun">图片已保存，请在手机相册中查看</string>-->
+    <string name="operate_tupianyibaocun">保存成功</string>
     <string name="operate_tupianbaocunshibai">图片保存失败</string>
     <string name="preview">预览</string>
     <string name="msg_no_camera">无法启用系统相机</string>
@@ -827,7 +835,8 @@
     <string name="plus_group_count">当前总订单数</string>
     <string name="plus_group_month_money">本月销售额</string>
     <string name="plus_group_month_count">本月订单数</string>
-    <string name="super_product">优品</string>
+    <string name="super_product">自营</string>
+    <!--<string name="super_product">优品</string>-->
     <string name="gif_bag_list">礼包列表</string>
     <string name="to_buy">立即购买</string>
     <string name="plus_product_detail">PLUS礼包详情</string>
@@ -873,5 +882,10 @@
     <string name="find_add_topic">添加话题</string>
     <string name="find_my_topic">#我的话题</string>
     <string name="find_add_location">添加位置</string>
-    <string name="find_associated_goods">关联商品</string>
+    <string name="find_associated_goods">关联商品(%d/%d)</string>
+
+    <!-- 新版发现-->
+    <string name="ready_to_unFocus">确定取消关注%s吗？</string>
+    <string name="give_up">放弃</string>
+    <string name="unfollow">取消关注</string>
 </resources>

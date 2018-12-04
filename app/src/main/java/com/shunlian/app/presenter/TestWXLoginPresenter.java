@@ -11,9 +11,8 @@ import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
-import com.shunlian.app.ui.new_login_register.RegisterAndBindingAct;
+import com.shunlian.app.ui.new3_login.New3LoginAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
@@ -75,10 +74,18 @@ public class TestWXLoginPresenter extends BasePresenter {
                 String mobile = wxLoginEntity.mobile;
                 String member_id = wxLoginEntity.member_id;
                 String status = wxLoginEntity.status;
+                //status = "3";
                 if ("2".equals(status)) {//绑定手机号不需要推荐人
+                    /*RegisterAndBindingAct.startAct(context,
+                            RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);*/
 
-                    RegisterAndBindingAct.startAct(context,
-                            RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);
+
+                    New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                    config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
+                    config.status = status;
+                    config.unique_sign = unique_sign;
+                    config.member_id = member_id;
+                    New3LoginAct.startAct(context,config);
 
                 } else if ("1".equals(status)) {
 
@@ -86,13 +93,30 @@ public class TestWXLoginPresenter extends BasePresenter {
 
                 } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
 
-                    RegisterAndBindingAct.startAct(context,
-                            RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);
+                    /*RegisterAndBindingAct.startAct(context,
+                            RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);*/
+
+
+                    New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                    config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
+                    config.status = status;
+                    config.unique_sign = unique_sign;
+                    config.member_id = member_id;
+                    New3LoginAct.startAct(context,config);
 
                 }else if ("4".equals(status)){//绑定推荐人
+                    /*RegisterAndBindingAct.startAct(context,
+                            RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);*/
 
-                    RegisterAndBindingAct.startAct(context,
-                            RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);
+
+                    New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                    config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
+                    config.unique_sign = unique_sign;
+                    config.member_id = member_id;
+                    config.mobile = mobile;
+                    config.isMobileRegister = true;
+                    New3LoginAct.startAct(context,config);
+
                 }
 
                 ((Activity)context).finish();
@@ -130,7 +154,7 @@ public class TestWXLoginPresenter extends BasePresenter {
     }*/
 
     private void loginSuccess(BaseEntity<WXLoginEntity> entity, WXLoginEntity wxLoginEntity) {
-        Common.staticToast(entity.message);
+        //Common.staticToast(entity.message);
 
         //登陆成功啦
         SharedPrefUtil.saveSharedUserString("token", wxLoginEntity.token);

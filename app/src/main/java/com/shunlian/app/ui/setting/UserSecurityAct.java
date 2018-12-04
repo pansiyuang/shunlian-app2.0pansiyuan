@@ -13,7 +13,6 @@ import com.shunlian.app.ui.setting.change_user.ModifyAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IChangeUserView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -43,8 +42,12 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
     @BindView(R.id.mtv_user)
     MyTextView mtv_user;
 
-    public static void startAct(Context context) {
-        context.startActivity(new Intent(context, UserSecurityAct.class));
+    @BindView(R.id.mtv_pwd_setting)
+    MyTextView mtv_pwd_setting;
+
+    public static void startAct(Context context, String isSetPwd) {
+        context.startActivity(new Intent(context, UserSecurityAct.class)
+        .putExtra("isSetPwd",isSetPwd));
     }
 
     /**
@@ -71,6 +74,12 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        String mIsSetPwd = getIntent().getStringExtra("isSetPwd");
+        if ("1".equals(mIsSetPwd)){
+            mtv_pwd_setting.setText("已设置");
+        }else {
+            mtv_pwd_setting.setText("未设置");
+        }
         mtv_toolbar_title.setText("设置");
         gone(mrlayout_toolbar_more);
 

@@ -22,10 +22,17 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
-
 import com.shunlian.app.bean.*;
-import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.newchat.entity.*;
+import com.shunlian.app.newchat.entity.ChatGoodsEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.entity.HistoryEntity;
+import com.shunlian.app.newchat.entity.ReplysetEntity;
+import com.shunlian.app.newchat.entity.ServiceEntity;
+import com.shunlian.app.newchat.entity.StoreMessageEntity;
+import com.shunlian.app.newchat.entity.StoreMsgEntity;
+import com.shunlian.app.newchat.entity.SystemMessageEntity;
+import com.shunlian.app.ui.new3_login.New3LoginEntity;
+import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -181,6 +188,14 @@ public interface ApiService {
     Call<BaseEntity<String>> sendSmsCode(@Body RequestBody requestBody);
 
     /**
+     * 检查短信验证码
+     * @param requestBody
+     * @return
+     */
+    @POST("member/common/checkMobileCode")
+    Call<BaseEntity<EmptyEntity>> checkNew3LoginSmsCode(@Body RequestBody requestBody);
+
+    /**
      * 获取图形验证码
      *
      * @return
@@ -213,7 +228,7 @@ public interface ApiService {
      * @return
      */
     @POST("member/Common/checkCode")
-    Call<ResponseBody> checkCode(@Body RequestBody requestBody);
+    Call<BaseEntity<EmptyEntity>> checkCode(@Body RequestBody requestBody);
 
     /**
      * 刷新token
@@ -274,6 +289,14 @@ public interface ApiService {
      */
     @GET("member/register/checkMobile")
     Call<BaseEntity<String>> checkMobile(@QueryMap Map<String, String> map);
+
+    /**
+     * 检验手机号是否注册
+     * @param map
+     * @return
+     */
+    @GET("member/register/checkMobileStatus")
+    Call<BaseEntity<New3LoginEntity>> checkMobileNews(@QueryMap Map<String, String> map);
 
     /**
      * 商品详情
@@ -397,6 +420,14 @@ public interface ApiService {
      */
     @POST("order/buy")
     Call<BaseEntity<ConfirmOrderEntity>> orderBuy(@Body RequestBody body);
+
+    /**
+     * 新人专享
+     * @param body
+     * @return
+     */
+    @POST("newexclusive/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> newexclusive(@Body RequestBody body);
 
     /**
      * 修改购物车
@@ -871,6 +902,14 @@ public interface ApiService {
      */
     @POST("order/checkout")
     Call<BaseEntity<PayOrderEntity>> orderCheckout(@Body RequestBody body);
+
+    /**
+     * 新人专享支付
+     * @param body
+     * @return
+     */
+    @POST("newexclusive/checkout")
+    Call<BaseEntity<PayOrderEntity>> newexclusivePay(@Body RequestBody body);
 
 
     /**
@@ -2173,6 +2212,15 @@ public interface ApiService {
     Call<BaseEntity<VouchercenterplEntity>> vouchercenter(@QueryMap Map<String, String> map);
 
     /**
+     * 万用广告弹窗接口
+     *
+     * @return
+     */
+    @GET("adpush/commonad")
+    Call<BaseEntity<AdEntity>> adpush(@QueryMap Map<String, String> map);
+
+
+    /**
      * 品牌特卖详情
      *
      * @return
@@ -2266,6 +2314,14 @@ public interface ApiService {
      */
     @GET("adpush/splashScreen")
     Call<BaseEntity<AdEntity>> splashScreen(@QueryMap Map<String, String> map);
+
+    /**
+     * 闪屏广告
+     *
+     * @return
+     */
+    @GET("Goods/getBubble")
+    Call<BaseEntity<BubbleEntity>> getBubble(@QueryMap Map<String, String> map);
 
     /**
      * 验证新人
@@ -2786,7 +2842,7 @@ public interface ApiService {
     /**
      * 关注/取消关注
      */
-    @GET("/discovery/discoveryuser/downcount")
+    @GET("discovery/discoveryuser/downcount")
     Call<BaseEntity<EmptyEntity>> downCount(@QueryMap Map<String, String> map);
 
     /**
@@ -2802,10 +2858,16 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> addFavo(@QueryMap Map<String, String> map);
 
     /**
-     * 收藏文章
+     * 删除文章
      */
     @GET("discovery/discoveryuser/removeBlog")
     Call<BaseEntity<EmptyEntity>> removeBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 未读消息统计
+     */
+    @GET("discovery/message/unreadcount")
+    Call<BaseEntity<CommonEntity>> unreadcount(@QueryMap Map<String, String> map);
 
     /**
      * 下载文件
@@ -2813,4 +2875,59 @@ public interface ApiService {
      @Streaming
      @GET
      Call<ResponseBody> download(@Url String url);
+
+    /**
+     * 新人专享banner
+     */
+    @GET("newexclusive/adlist")
+    Call<BaseEntity<AdUserEntity>> adlist(@QueryMap Map<String, String> map);
+
+    /**
+     * 新人专享商品
+     * @return
+     */
+    @POST("newexclusive/goodslist")
+    Call<BaseEntity<NewUserGoodsEntity>> usergoodslist(@QueryMap Map<String, String> map);
+
+    /**
+     * 新人专享添加购物车
+     * @return
+     */
+    @POST("newexclusive/addcart")
+    Call<BaseEntity<CateEntity>> newuseraddCart(@Body RequestBody body);
+
+    /**
+     * 新人专享购物车商品列表
+     */
+    @GET("newexclusive/cartlist")
+    Call<BaseEntity<NewUserGoodsEntity>> cartlist(@QueryMap Map<String, String> map);
+    /**
+     * 新人专享删除购物车
+     */
+    @GET("newexclusive/deletecart")
+    Call<BaseEntity<EmptyEntity>> deletecart(@QueryMap Map<String, String> map);
+    /**
+     * 购物车进入确认订单页
+     *
+     * @param body
+     * @return
+     */
+    @POST("newexclusive/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> orderNewUserConfirm(@Body RequestBody body);
+
+    /**
+     * 分享信息
+     * @param map
+     * @return
+     */
+    @GET("newexclusive/sharepage")
+    Call<BaseEntity<ShareInfoParam>> shareNewUserInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 登录界面提示信息
+     * @param map
+     * @return
+     */
+    @GET("member/login/info")
+    Call<BaseEntity<New3LoginInfoTipEntity>> loginInfoTip(@QueryMap Map<String,String> map);
 }

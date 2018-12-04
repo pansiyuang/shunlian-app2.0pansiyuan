@@ -5,18 +5,13 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.CommonEntity;
-import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
 import com.shunlian.app.bean.RecommendEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IShoppingCarView;
-import com.shunlian.app.view.IView;
 
 import java.util.ArrayList;
 import java.util.HashMap;

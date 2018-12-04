@@ -25,11 +25,10 @@ import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
-import com.shunlian.app.ui.new_login_register.RegisterAndBindingAct;
+import com.shunlian.app.ui.new3_login.New3LoginAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -123,6 +122,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (!isEmpty(shareInfoParam.shop_name)){
             currTitle=shareInfoParam.shop_name;
             shareInfoParam.img=shareInfoParam.shop_logo;
+            currentDesc = "想要生活有乐趣！打开顺联动力购物去～";
         }else {
             if (!isEmpty(shareInfoParam.title)) {
                 currTitle = shareInfoParam.title;
@@ -132,7 +132,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             if (!isEmpty(shareInfoParam.desc)) {
                 currentDesc = shareInfoParam.desc;
             } else {
-                currentDesc = "顺联动力商城";
+                currentDesc = "要想生活有乐趣！打开顺联动力购物去～";
             }
         }
         if (!isEmpty(shareInfoParam.shareLink)) {
@@ -290,7 +290,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 } else {
                     if (!isEmpty(Constant.SHARE_TYPE)) {
                         if ("goods".equals(Constant.SHARE_TYPE)
-                                || "income".equals(Constant.SHARE_TYPE)) {
+                                || "income".equals(Constant.SHARE_TYPE)|| "store".equals(Constant.SHARE_TYPE)) {
                             //用于分享领金蛋
                             wxEntryPresenter.goodsShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
                         } else if ("article".equals(Constant.SHARE_TYPE)) {
@@ -355,19 +355,37 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String member_id = wxLoginEntity.member_id;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {//绑定手机号不需要推荐人
-                RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);
+                /*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);*/
+                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
+                config.status = status;
+                config.unique_sign = unique_sign;
+                config.member_id = member_id;
+                New3LoginAct.startAct(this,config);
                 mYFinish();
             } else if ("1".equals(status)) {//登录成功
-                JosnSensorsDataAPI.login("微信登录");
                 loginSuccess(entity, wxLoginEntity);
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
-                RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);
+                /*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);*/
+                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
+                config.status = status;
+                config.unique_sign = unique_sign;
+                config.member_id = member_id;
+                New3LoginAct.startAct(this,config);
                 mYFinish();
             }else if ("4".equals(status)){//绑定推荐人
-                RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);
+                /*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);*/
+                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
+                config.unique_sign = unique_sign;
+                config.member_id = member_id;
+                config.mobile = mobile;
+                config.isMobileRegister = true;
+                New3LoginAct.startAct(this,config);
                 mYFinish();
             }
         } else {
@@ -376,7 +394,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     private void loginSuccess(BaseEntity<WXLoginEntity> entity, WXLoginEntity wxLoginEntity) {
-        Common.staticToast(entity.message);
+        //Common.staticToast(entity.message);
         SharedPrefUtil.saveSharedUserString("token", wxLoginEntity.token);
         SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);

@@ -330,6 +330,12 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                     SharedPrefUtil.saveSharedUserString("token", data.token);
                     SharedPrefUtil.saveSharedUserString("plus_role", data.plus_role);
                     SharedPrefUtil.saveSharedUserString("refresh_token", data.refresh_token);
+                    if (!isEmpty(data.member_id))
+                    SharedPrefUtil.saveSharedUserString("member_id", data.member_id);
+                    if (!isEmpty(data.avatar))
+                    SharedPrefUtil.saveSharedUserString("avatar", data.avatar);
+                    if (!isEmpty(data.nickname))
+                    SharedPrefUtil.saveSharedUserString("nickname", data.nickname);
                     getNetData(emptyCode,failureCode,isLoading,clone,callback);
                 }
             }
@@ -437,7 +443,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     private <T> boolean interceptApi(Call call, BaseEntity<T> body){
         String url = call.request().url().toString();
         //LogUtil.longW("interceptApi=============url=".concat(url));
-        if (!TextUtils.isEmpty(url) && (url.contains("order/checkout") || url.contains("order/payinorderlist"))){
+        if (!TextUtils.isEmpty(url) && (url.contains("order/checkout")
+                || url.contains("order/payinorderlist")
+                || url.contains("newexclusive/checkout"))){
             T data = body.data;
             if (data != null && data instanceof PayOrderEntity){
                 PayOrderEntity entity = (PayOrderEntity) data;
@@ -527,6 +535,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     public final String help = "help";
     public final String store = "store";
     public final String clazz = "class";
+    public final String new_exclusive = "new_exclusive";
     /**
      * 获取分享信息
      * @param type
@@ -549,5 +558,21 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                         iView.shareInfo(entity);
                     }
                 });
+    }
+
+    /**
+     * 获取新人专享分享信息
+     */
+    public void getNewUserShareInfo(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<ShareInfoParam>> baseEntityCall = getAddCookieApiService().shareNewUserInfo(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<ShareInfoParam>>(){
+            @Override
+            public void onSuccess(BaseEntity<ShareInfoParam> entity) {
+                super.onSuccess(entity);
+                iView.shareInfo(entity);
+            }
+        });
     }
 }

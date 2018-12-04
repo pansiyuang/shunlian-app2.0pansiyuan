@@ -25,6 +25,12 @@ public class DownLoadImageThread extends Thread {
         this.pics = data;
     }
 
+    public DownLoadImageThread(Context context, ArrayList<String> data, MyCallBack myCallBack) {
+        mContext = context;
+        this.pics = data;
+        this.myCallBack = myCallBack;
+    }
+
     public DownLoadImageThread(Activity activity, String pic, MyCallBack myCallBack) {
         mContext = activity;
         this.pic = pic;
@@ -46,12 +52,13 @@ public class DownLoadImageThread extends Thread {
                 byte[] b = BitmapUtil.getImage(pics.get(i));
                 if (b != null) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-                    BitmapUtil.saveImageToAlbumn(mContext, bitmap);
+                    BitmapUtil.saveImageToAlbumn(mContext, bitmap,false,false);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        myCallBack.successBack();
     }
 
     private void saveSplitePic(String pic) {
@@ -59,7 +66,7 @@ public class DownLoadImageThread extends Thread {
             byte[] b = BitmapUtil.getImage(pic);
             if (b != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-                BitmapUtil.saveImageToAlbumn(mContext, bitmap);
+                BitmapUtil.saveImageToAlbumn(mContext, bitmap,false,false);
             }
             myCallBack.successBack();
         } catch (Exception e) {

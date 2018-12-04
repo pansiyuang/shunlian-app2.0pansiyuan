@@ -471,4 +471,15 @@
         <attr name="tailTextColor" format="color" />
         <attr name="canFoldAgain" format="boolean" />
     </declare-styleable>
+
+    <!--登录账号-->
+    <declare-styleable name="LoginNew3ControlsWidget">
+        <attr name="hint_text" format="string" />
+        <attr name="text_size" format="dimension" />
+        <attr name="text_color" format="color" />
+        <attr name="line_color" format="color" />
+        <attr name="hint_text_color" format="color" />
+        <attr name="is_mobile" format="boolean"/>
+    </declare-styleable>
+
 </resources>

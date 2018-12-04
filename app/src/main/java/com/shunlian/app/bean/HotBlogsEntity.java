@@ -13,12 +13,14 @@ public class HotBlogsEntity {
     public Pager pager;
     public List<BigImgEntity.Blog> list;
     public List<Ad> ad_list;
+    public int is_have_focus;
     public List<String> expert_list;
     public List<RecomandFocus> recomand_focus_list;
     public DiscoveryInfo discovery_info;
     public MemberInfo member_info;
     public Detail detail;
     public BaseInfo base_info;
+    public int unread;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Pager {

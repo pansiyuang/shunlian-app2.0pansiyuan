@@ -2,6 +2,7 @@ package com.shunlian.app.ui.discover_new;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.shunlian.app.adapter.MemberListAdapter;
 import com.shunlian.app.bean.MemberEntity;
 import com.shunlian.app.presenter.AttentionMemberPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IAttentionMemberView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -47,6 +49,7 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
     private List<MemberEntity.Member> memberList;
     private MemberListAdapter mAdapter;
     private String currentMemberId;
+    private PromptDialog promptDialog;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, AttentionMemberActivity.class);
@@ -189,7 +192,23 @@ public class AttentionMemberActivity extends BaseActivity implements IAttentionM
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId) {
-        mPresenter.focusUser(isFocus, memberId);
+    public void toFocusUser(int isFocus, String memberId,String nickName) {
+        if (isFocus == 1) {
+            if (promptDialog == null) {
+                promptDialog = new PromptDialog(this);
+                promptDialog.setTvSureBGColor(Color.WHITE);
+                promptDialog.setTvSureColor(R.color.pink_color);
+                promptDialog.setTvCancleIsBold(false);
+                promptDialog.setTvSureIsBold(false);
+            }
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.ready_to_unFocus), nickName),
+                    getStringResouce(R.string.unfollow), view -> {
+                        mPresenter.focusUser(isFocus, memberId);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.give_up), view -> promptDialog.dismiss()
+            ).show();
+        } else {
+            mPresenter.focusUser(isFocus, memberId);
+        }
     }
 }

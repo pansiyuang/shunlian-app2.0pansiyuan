@@ -467,7 +467,7 @@
             android:src="@mipmap/icon_common_back_white" />
 
         <com.shunlian.app.widget.MyRelativeLayout
-            android:id="@+id/rl_more"
+            android:id="@+id/rl_share"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -476,24 +476,25 @@
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_dot"
-                android:layout_width="wrap_content"
-                android:layout_height="4dp"
-                android:layout_centerInParent="true"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_alignParentRight="true"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/icon_common_more_white" />
+                android:src="@mipmap/icon_home_share_b" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/tv_msg_count"
-                android:layout_width="16dp"
-                android:layout_height="12dp"
-                android:layout_above="@id/miv_dot"
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:layout_below="@id/miv_dot"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="1dp"
-                android:background="@drawable/bg_message_more_red"
                 android:gravity="center"
+                android:layout_marginTop="1dp"
+                android:text="@string/share"
                 android:textColor="@color/white"
-                android:textSize="9sp"
-                android:visibility="gone" />
+                android:textSize="10sp"
+                />
         </com.shunlian.app.widget.MyRelativeLayout>
         <com.shunlian.app.widget.MyRelativeLayout
             android:id="@+id/mrlayout_sort"
@@ -501,7 +502,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/rl_more">
+            android:layout_toLeftOf="@id/rl_share">
 
             <com.shunlian.app.widget.MyImageView
                 android:layout_width="20dp"
@@ -642,5 +643,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+    <!--分享提示金蛋数量-->
+    <com.shunlian.app.widget.ObtainGoldenEggsTip
+        android:id="@+id/oget"
+        android:layout_centerInParent="true"
+        android:minWidth="160dp"
+        android:minHeight="115dp"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>
