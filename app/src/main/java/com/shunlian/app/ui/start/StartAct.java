@@ -190,13 +190,13 @@ public class StartAct extends MBaseActivity implements IMain {
             SharedPrefUtil.saveCacheSharedPrfBoolean("isFirst", false);
 //            SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
 //            暂时关闭引导页
-            GuideAct.startAct(this);
-//            if (isAD){
-//                ADAct.startAct(baseAct,data);
-//            }else {
+//            GuideAct.startAct(this);
+            if (isAD){
+                ADAct.startAct(baseAct,data);
+            }else {
 //                Constant.IS_GUIDE = false;
-//                MainActivity.startAct(this, "");
-//            }
+                MainActivity.startAct(this, "");
+            }
         } else {
             if (isAD){
                 ADAct.startAct(baseAct,data);
