@@ -141,8 +141,12 @@ public class ShareGoodDialogUtil {
     }
 
     public void setShareGoods() {
-        if (mCallBack != null) {
-            mCallBack.shareSuccess(mShareInfoParam.blogId, mShareInfoParam.goods_id);
+        if(Common.isAlreadyLogin()){
+            if (mCallBack != null) {
+                mCallBack.shareSuccess(mShareInfoParam.blogId, mShareInfoParam.goods_id);
+            }
+        }else {
+            Common.goGoGo(context,"login");
         }
     }
 
