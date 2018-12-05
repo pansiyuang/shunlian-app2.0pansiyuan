@@ -777,21 +777,15 @@ public class Common {
             ex_desc.setText(desc);
         }
         exToast.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-//        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(ex_animation_view, "alpha", 0f, 1f);
-//        objectAnimator.setDuration(300);
-//        objectAnimator.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                super.onAnimationEnd(animation);
-//
-//            }});
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(ex_desc, "alpha", 0f, 1f);
+        objectAnimator.setDuration(300);
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showAnimExJsonFile(jsonAnim,"images/img_11.png");
+            }});
          exToast.show();
-        try {
-            showAnimExJsonFile(jsonAnim,"images/img_11.png");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-//        objectAnimator.start();
+        objectAnimator.start();
     }
 
     private  Handler handler = new Handler(){
@@ -807,7 +801,6 @@ public class Common {
                 ex_animation_view.setAnimation(jsonAnim);//在assets目录下的动画json文件名。
                 ex_animation_view.loop(false);//设置动画循环播放
                 ex_animation_view.setImageAssetsFolder("images/");//assets目录下的子目录，存放动画所需的图片
-                Thread.sleep(200);
                 ex_animation_view.playAnimation();//播放动画
             } else {
                 AssetManager assets = getApplicationContext().getAssets();
