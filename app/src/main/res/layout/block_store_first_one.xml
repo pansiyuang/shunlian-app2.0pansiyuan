@@ -43,7 +43,7 @@
                 android:id="@+id/miv_onel"
                 android:layout_width="match_parent"
                 android:layout_height="177.5dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="@mipmap/icon_login_logo"/>
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_descl"
@@ -103,7 +103,7 @@
                 android:id="@+id/miv_oner"
                 android:layout_width="match_parent"
                 android:layout_height="177.5dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="@mipmap/icon_login_logo"/>
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_descr"

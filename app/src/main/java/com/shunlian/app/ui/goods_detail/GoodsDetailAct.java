@@ -231,6 +231,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (isPause) {
             mposition = 0;
             isStop = false;
+            if (goodsDetailPresenter!=null)
             goodsDetailPresenter.getBubble();
             isPause = false;
         }
@@ -295,6 +296,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (!isStop) {
                     LogUtil.augusLogW("mposition：delayed");
                     mposition = 0;
+                    if (goodsDetailPresenter!=null)
                     goodsDetailPresenter.getBubble();
                 }
             }
@@ -314,7 +316,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     runnableB = new Runnable() {
                         @Override
                         public void run() {
-                            if (mposition < datas.size()) {
+                            if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseAct.isFinishing()) {
                                 LogUtil.augusLogW("mposition:" + mposition);
                                 lLayout_toast.setVisibility(View.VISIBLE);
                                 GlideUtils.getInstance().loadCircleAvar(baseAct,miv_icon,datas.get(mposition).avatar);
@@ -345,7 +347,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                         runnableC = new Runnable() {
                             @Override
                             public void run() {
-                                if (!isStop) {
+                                if (!isStop&&lLayout_toast!=null) {
                                     lLayout_toast.setVisibility(View.GONE);
                                     mposition++;
                                 }

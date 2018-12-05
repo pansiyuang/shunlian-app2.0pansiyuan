@@ -20,6 +20,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.presenter.FavoBlogPresenter;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IFavBlogView;
 
 import java.util.ArrayList;
@@ -110,10 +111,14 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
     }
 
     public void toFavoBlog(int isFavo, String blogId) {
-        if (mPresenter == null) {
-            mPresenter = new FavoBlogPresenter(getContext(), this);
+        if (Common.isAlreadyLogin()) {
+            if (mPresenter == null) {
+                mPresenter = new FavoBlogPresenter(getContext(), this);
+            }
+            mPresenter.FavoBlog(isFavo, blogId);
+        }else{
+            Common.goGoGo(getContext(), "login");
         }
-        mPresenter.FavoBlog(isFavo, blogId);
     }
 
     public void destory() {

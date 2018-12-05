@@ -84,13 +84,22 @@ public class BitmapUtil {
 //        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
 //                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
 //        final Canvas canvas = new Canvas(bitmap);
+//        canvas.drawColor(Color.WHITE);
 //        view.draw(canvas);
-        int measuredWidth = View.MeasureSpec.makeMeasureSpec(App.widthPixels, View.MeasureSpec.EXACTLY);
-        int me = View.MeasureSpec.makeMeasureSpec(App.hightPixels,View.MeasureSpec.UNSPECIFIED);
-        view.measure(measuredWidth,me);
-        view.layout(0 ,0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
-        Bitmap bitmap = view.getDrawingCache();
+
+//        int measuredWidth = View.MeasureSpec.makeMeasureSpec(App.widthPixels, View.MeasureSpec.EXACTLY);
+//        int me = View.MeasureSpec.makeMeasureSpec(App.hightPixels,View.MeasureSpec.EXACTLY);
+//        view.measure(measuredWidth,me);
+//        view.layout(0 ,0, view.getMeasuredWidth(), view.getMeasuredHeight());
+//        view.buildDrawingCache();
+//        Bitmap bitmap = view.getDrawingCache();
+
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
         return bitmap;
     }
 

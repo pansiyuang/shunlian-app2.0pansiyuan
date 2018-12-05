@@ -399,14 +399,22 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             }
 
             blogViewHolder.tv_attention.setOnClickListener(v -> {
-                if (mCallBack != null) {
-                    mCallBack.toFocusUser(blog.is_focus, blog.member_id, blog.nickname);
+                if (Common.isAlreadyLogin()) {
+                    if (mCallBack != null) {
+                        mCallBack.toFocusUser(blog.is_focus, blog.member_id, blog.nickname);
+                    }
+                } else {
+                    Common.goGoGo(context, "login");
                 }
             });
 
             blogViewHolder.tv_zan.setOnClickListener(v -> {
-                if (mCallBack != null) {
-                    mCallBack.toPraiseBlog(blog.id);
+                if (Common.isAlreadyLogin()) {
+                    if (mCallBack != null) {
+                        mCallBack.toPraiseBlog(blog.id);
+                    }
+                } else {
+                    Common.goGoGo(context, "login");
                 }
             });
 
@@ -453,8 +461,13 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 ActivityDetailActivity.startAct(context, blog.activity_id);
             });
 
-            blogViewHolder.tv_download.setOnClickListener(v -> readyToDownLoad(blog));
-
+            blogViewHolder.tv_download.setOnClickListener(v -> {
+                if (Common.isAlreadyLogin()) {
+                    readyToDownLoad(blog);
+                } else {
+                    Common.goGoGo(context, "login");
+                }
+            });
             if (!showAttention) {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
             }
@@ -516,8 +529,12 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             blogViewHolder.recylcer_attention.setAdapter(attentionMemberAdapter);
             blogViewHolder.rl_attention.setVisibility(View.VISIBLE);
             attentionMemberAdapter.setOnFocusListener((isFocus, memberId, nickName) -> {
-                if (mCallBack != null) {
-                    mCallBack.toFocusMember(isFocus, memberId, nickName);
+                if (Common.isAlreadyLogin()) {
+                    if (mCallBack != null) {
+                        mCallBack.toFocusMember(isFocus, memberId, nickName);
+                    }
+                } else {
+                    Common.goGoGo(context, "login");
                 }
             });
             attentionMemberAdapter.setOnItemClickListener((view, position) -> MyPageActivity.startAct(context, list.get(position).member_id));

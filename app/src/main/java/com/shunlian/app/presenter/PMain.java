@@ -9,10 +9,12 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
+import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.PunishEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
 
 import java.util.HashMap;
@@ -102,6 +104,28 @@ public class PMain extends BasePresenter<IMain> {
         });
     }
 
+    /**
+     * 处理网络请求
+     */
+    public void loginUserInfo() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+
+        Call<BaseEntity<PersonalDataEntity>> baseEntityCall = getApiService().personalData(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<PersonalDataEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<PersonalDataEntity> entity) {
+                super.onSuccess(entity);
+                PersonalDataEntity data = entity.data;
+                SharedPrefUtil.saveSharedUserString("nickname", data.nickname);
+                SharedPrefUtil.saveSharedUserString("avatar", data.avatar);
+//                SharedPrefUtil.saveSharedUserString("token", data.token);
+//                SharedPrefUtil.saveSharedUserString("plus_role", data.plus_role);
+//                SharedPrefUtil.saveSharedUserString("refresh_token", data.refresh_token);
+//                SharedPrefUtil.saveSharedUserString("member_id", data.member_id);
+            }
+        });
+    }
 
     public void getSplashAD() {
         Map<String, String> map = new HashMap<>();

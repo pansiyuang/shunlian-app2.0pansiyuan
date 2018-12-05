@@ -14,17 +14,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_white_8px"
-            android:paddingLeft="@dimen/xx60"
-            android:paddingRight="@dimen/xx60"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:orientation="vertical">
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/yy1200"
-                android:paddingLeft="@dimen/xx30"
-                android:paddingRight="@dimen/xx30"
-                android:layout_marginTop="@dimen/xx30"
+                android:id="@+id/img_hight"
+                android:layout_height="450dp"
+                android:layout_marginTop="10dp"
                 android:paddingBottom="@dimen/xx10">
                 <ImageView
                     android:id="@+id/imv_special_pic"
@@ -142,8 +140,8 @@
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_below="@id/ll_root"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"

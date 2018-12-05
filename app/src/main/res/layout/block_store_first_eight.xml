@@ -28,7 +28,7 @@
             android:id="@+id/miv_eightl"
             android:layout_width="match_parent"
             android:layout_height="173dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:layout_marginRight="3dp"
             android:src="@mipmap/icon_login_logo"
             android:layout_marginTop="5dp"/>
@@ -70,7 +70,7 @@
             android:id="@+id/miv_eightm"
             android:layout_width="match_parent"
             android:layout_height="173dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:layout_marginLeft="1.5dp"
             android:layout_marginRight="1.5dp"
             android:layout_marginTop="5dp"
@@ -112,7 +112,7 @@
             android:id="@+id/miv_eightr"
             android:layout_width="match_parent"
             android:layout_height="173dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:layout_marginLeft="3dp"
             android:layout_marginTop="5dp"
             android:src="@mipmap/icon_login_logo" />
