@@ -308,20 +308,20 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mShareInfoParam = new ShareInfoParam();
-                        mShareInfoParam.blogId = blog.id;
-                        mShareInfoParam.shareLink = goods.share_url;
-                        mShareInfoParam.title = goods.title;
-                        mShareInfoParam.desc = goods.desc;
-                        mShareInfoParam.goods_id = goods.goods_id;
-                        mShareInfoParam.price = goods.price;
-                        mShareInfoParam.market_price = goods.market_price;
-                        mShareInfoParam.img = goods.thumb;
-                        mShareInfoParam.isSuperiorProduct = (goods.isSuperiorProduct == 1 ? true : false);
-                        mShareInfoParam.userName = SharedPrefUtil.getSharedUserString("nickname", "");
-                        mShareInfoParam.userAvatar = SharedPrefUtil.getSharedUserString("avatar", "");
-                        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
-                        shareGoodDialogUtil.setShareGoods();
+                            mShareInfoParam = new ShareInfoParam();
+                            mShareInfoParam.blogId = blog.id;
+                            mShareInfoParam.shareLink = goods.share_url;
+                            mShareInfoParam.title = goods.title;
+                            mShareInfoParam.desc = goods.desc;
+                            mShareInfoParam.goods_id = goods.goods_id;
+                            mShareInfoParam.price = goods.price;
+                            mShareInfoParam.market_price = goods.market_price;
+                            mShareInfoParam.img = goods.thumb;
+                            mShareInfoParam.isSuperiorProduct = (goods.isSuperiorProduct == 1 ? true : false);
+                            mShareInfoParam.userName = SharedPrefUtil.getSharedUserString("nickname", "");
+                            mShareInfoParam.userAvatar = SharedPrefUtil.getSharedUserString("avatar", "");
+                            shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
+                            shareGoodDialogUtil.setShareGoods();
                     }
                 });
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
@@ -377,11 +377,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             }
 
             if (blog.is_praise == 1) {
-                blogViewHolder.tv_zan.setClickable(false);
                 setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.pink_color));
             } else {
-                blogViewHolder.tv_zan.setClickable(true);
                 setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
             }
@@ -509,7 +507,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.id, blog.related_goods, false,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""), dialog_new);
         rv_goods.setAdapter(discoverGoodsAdapter);
-        discoverGoodsAdapter.setOnItemClickListener((view, position) -> GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id));
+        discoverGoodsAdapter.setOnItemClickListener((view, position) -> {
+                GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id);
+        });
         rv_goods.addItemDecoration(new MVerticalItemDecoration(context, 36, 38, 38));
         dialog_new.setCancelable(false);
         dialog_new.show();
