@@ -766,7 +766,7 @@ public class Common {
             ex_desc=  v.findViewById(R.id.mtv_desc);
             ex_animation_view=  v.findViewById(R.id.animation_view);
             ex_desc.setText(content);
-            exToast =  ExToast.makeText(getApplicationContext(),"",3);
+            exToast =  ExToast.makeText(getApplicationContext(),"",2);
             exToast.setView(v);
             exToast.setAnimations(R.style.ClickToast);
             exToast.setGravity(Gravity.FILL, 0, 0);
