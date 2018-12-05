@@ -66,7 +66,7 @@ public class ExToast {
         isShow = true;
         //判断duration，如果大于#LENGTH_ALWAYS 则设置消失时间
         if (mDuration > LENGTH_ALWAYS) {
-            handler.postDelayed(hideRunnable, (int)mDuration * 1000);
+            handler.postDelayed(hideRunnable, (int)(mDuration * 1000));
         }
     }
 
