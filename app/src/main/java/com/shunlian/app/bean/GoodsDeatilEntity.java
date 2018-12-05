@@ -55,7 +55,8 @@ public class GoodsDeatilEntity implements Parcelable {
     public ArrayList<ActivityDetail> full_cut;//满减
     public ArrayList<ActivityDetail> full_discount;//满折
     public ArrayList<ActivityDetail> buy_gift;//买赠
-
+    public String cate_1_name;//一级分类
+    public String cate_2_name;//二级分类
 
     public ArrayList<Voucher> voucher;
 

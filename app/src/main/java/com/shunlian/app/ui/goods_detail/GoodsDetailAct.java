@@ -677,7 +677,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
         mShareInfoParam = goodsDetailPresenter.getShareInfoParam();
         JosnSensorsDataAPI.commodityDetail(GoodsDetailAct.goTitleType,goodsDeatilEntity.id,goodsDeatilEntity.title,
-                GoodsDeatilEntity.getAttrsInfo(true,goodsDeatilEntity.attrs),  GoodsDeatilEntity.getAttrsInfo(false,goodsDeatilEntity.attrs),
+                goodsDeatilEntity.cate_1_name, goodsDeatilEntity.cate_2_name,
                 goodsDeatilEntity.price,goodsDeatilEntity.store_info.store_id,goodsDeatilEntity.store_info.decoration_name);
     }
 
