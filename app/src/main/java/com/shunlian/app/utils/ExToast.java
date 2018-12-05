@@ -24,7 +24,7 @@ public class ExToast {
 
     private Toast toast;
     private Context mContext;
-    private int mDuration = LENGTH_SHORT;
+    private float mDuration = LENGTH_SHORT;
     private int animations = -1;
     private boolean isShow = false;
 
@@ -66,7 +66,7 @@ public class ExToast {
         isShow = true;
         //判断duration，如果大于#LENGTH_ALWAYS 则设置消失时间
         if (mDuration > LENGTH_ALWAYS) {
-            handler.postDelayed(hideRunnable, mDuration * 1000);
+            handler.postDelayed(hideRunnable, (int)mDuration * 1000);
         }
     }
 
@@ -104,7 +104,7 @@ public class ExToast {
         mDuration = duration;
     }
 
-    public int getDuration() {
+    public float getDuration() {
         return mDuration;
     }
 
@@ -136,7 +136,7 @@ public class ExToast {
         return toast.getYOffset();
     }
 
-    public static ExToast makeText(Context context, CharSequence text, int duration) {
+    public static ExToast makeText(Context context, CharSequence text, float duration) {
         Toast toast = Toast.makeText(context,text,Toast.LENGTH_SHORT);
         ExToast exToast = new ExToast(context);
         exToast.toast = toast;
