@@ -554,7 +554,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     public void storeFirst(List<StoreIndexEntity.Body> bodies) {
         if (storeFirstAdapter == null) {
-            storeFirstAdapter = new StoreFirstAdapter(this, true, bodies);
+            storeFirstAdapter = new StoreFirstAdapter(this, true, bodies,storeId);
             LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             rv_first.setLayoutManager(firstManager);
             rv_first.setAdapter(storeFirstAdapter);

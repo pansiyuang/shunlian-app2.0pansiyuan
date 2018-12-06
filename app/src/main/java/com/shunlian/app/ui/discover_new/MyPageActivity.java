@@ -21,6 +21,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.setting.AutographAct;
 import com.shunlian.app.ui.setting.PersonalDataAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -169,9 +170,13 @@ public class MyPageActivity extends BaseActivity implements IMyPageView {
     };
 
     public static void startAct(Context context, String memberId) {
-        Intent intent = new Intent(context, MyPageActivity.class);
-        intent.putExtra("member_id", memberId);
-        context.startActivity(intent);
+        if(Common.isAlreadyLogin()){
+            Intent intent = new Intent(context, MyPageActivity.class);
+            intent.putExtra("member_id", memberId);
+            context.startActivity(intent);
+        }else{
+            Common.goGoGo(context,"login");
+        }
     }
 
     @Override

@@ -167,8 +167,8 @@ public class StoreSearchAct extends BaseActivity implements View.OnClickListener
             case R.id.mtv_key:
                 edt_goods_search.setVisibility(View.VISIBLE);
                 mrlayout_search.setVisibility(View.GONE);
-                pStoreSearch.sc1="";
-                pStoreSearch.sc2="";
+                pStoreSearch.sc1 = "";
+                pStoreSearch.sc2 = "";
                 break;
         }
         if (rv_baby.getScrollState() == 0) {
@@ -269,16 +269,17 @@ public class StoreSearchAct extends BaseActivity implements View.OnClickListener
         sc2 = getIntent().getStringExtra("sc2");
         scName = getIntent().getStringExtra("scName");
         pStoreSearch = new PStoreSearch(this, this, storeId, sc1, sc2);
-        if (!TextUtils.isEmpty(scName)) {
-            mll_menu.setVisibility(View.VISIBLE);
-            mtv_key.setText(scName + " ×");
-            mrlayout_search.setVisibility(View.VISIBLE);
-            edt_goods_search.setVisibility(View.GONE);
+        edt_goods_search.setVisibility(View.VISIBLE);
+        mrlayout_search.setVisibility(View.GONE);
+        mll_menu.setVisibility(View.GONE);
+        if (!TextUtils.isEmpty(scName)||!TextUtils.isEmpty(sc2)) {
+            if (!TextUtils.isEmpty(scName)){
+                mll_menu.setVisibility(View.VISIBLE);
+                mtv_key.setText(scName + " ×");
+                mrlayout_search.setVisibility(View.VISIBLE);
+                edt_goods_search.setVisibility(View.GONE);
+            }
             pStoreSearch.resetBaby("default", "");
-        } else {
-            edt_goods_search.setVisibility(View.VISIBLE);
-            mrlayout_search.setVisibility(View.GONE);
-            mll_menu.setVisibility(View.GONE);
         }
     }
 
@@ -309,11 +310,11 @@ public class StoreSearchAct extends BaseActivity implements View.OnClickListener
         } else {
             storeBabyAdapter.notifyDataSetChanged();
         }
-        if (mDataList!=null&&mDataList.size()>0){
+        if (mDataList != null && mDataList.size() > 0) {
             rv_baby.setVisibility(View.VISIBLE);
             mll_menu.setVisibility(View.VISIBLE);
             mtv_nomore.setVisibility(View.GONE);
-        }else {
+        } else {
             mll_menu.setVisibility(View.GONE);
             rv_baby.setVisibility(View.GONE);
             mtv_nomore.setVisibility(View.VISIBLE);

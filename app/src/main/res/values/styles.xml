@@ -311,7 +311,7 @@
     </style>
 
     <style name="ClickToast" parent="@android:style/Animation.Toast">
-        <item name="android:windowEnterAnimation">@anim/anim_toast_in</item>
-        <item name="android:windowExitAnimation">@anim/anim_toast_out</item>
+        <item name="android:windowEnterAnimation">@anim/anim_toast_right_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_toast_right_out</item>
     </style>
 </resources>
