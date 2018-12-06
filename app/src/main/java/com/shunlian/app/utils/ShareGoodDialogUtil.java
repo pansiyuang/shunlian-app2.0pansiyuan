@@ -92,6 +92,9 @@ public class ShareGoodDialogUtil {
                     WXEntryActivity.startAct(context,
                             "shareFriend", mShareInfoParam);
                 }
+                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"微信好友");
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, new View.OnClickListener() {
@@ -111,6 +114,9 @@ public class ShareGoodDialogUtil {
                 }else{
                     createShopCode(true);
                 }
+                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"朋友圈");
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new View.OnClickListener() {
@@ -127,8 +133,10 @@ public class ShareGoodDialogUtil {
                 }else{
                     createShopCode(false);
                 }
+                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"图文");
+                }
             }
-
 
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new View.OnClickListener() {
@@ -136,6 +144,9 @@ public class ShareGoodDialogUtil {
             public void onClick(View v) {
                 Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, true);
                 nomalBuildl.dismiss();
+                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"复制链接");
+                }
             }
         });
     }

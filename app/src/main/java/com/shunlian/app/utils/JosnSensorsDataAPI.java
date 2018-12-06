@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JosnSensorsDataAPI {
+    public static int currentPageMain = 1;
     public static boolean isRecommend = false;
     public static boolean isHistory = false;
     /**
@@ -186,6 +187,30 @@ public class JosnSensorsDataAPI {
             e.printStackTrace();
         }
     }
+
+
+    /**
+     * 频道页商品点击
+     * @return
+     */
+    public static void shareGoodClick(String goods_id,String goods_title,
+                                      String cate1,String cate2,String price,String store_id,
+                                      String store_name,String goodName){
+        try {
+            JSONObject properties = new JSONObject();
+            properties.put("goods_id", goods_id);
+            properties.put("goods_title", goods_title);
+            properties.put("cate1", cate1!=null?cate1:"");
+            properties.put("cate2", cate2!=null?cate2:"");
+            properties.put("price", price);
+            properties.put("store_id", store_id!=null?store_id:"");
+            properties.put("store_name", store_name!=null?store_name:"");
+            properties.put("shareMethod", goodName);
+            SensorsDataAPI.sharedInstance().track("share", properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * 登录
      * @return
@@ -236,11 +261,23 @@ public class JosnSensorsDataAPI {
      * 商品信息
      * @return
      */
-    public static void commodityDetail(String preseat,String commodityID,String commodityName,String firstCommodity,
+    public static void commodityDetail(String from,String commodityID,String commodityName,String firstCommodity,
                                        String secondCommodity,String pricePerCommodity,String storeID,String storeName){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("from", preseat);
+            if(from.equals("首页")&&currentPageMain==1){
+                properties.put("from", from);
+            }else if(from.equals("首页")&&currentPageMain==2){
+                properties.put("from", "首页分类");
+            }else if(from.equals("首页")&&currentPageMain==3){
+                properties.put("from", "首页发现");
+            }else if(from.equals("首页")&&currentPageMain==4){
+                properties.put("from", "首页购物车");
+            }else if(from.equals("首页")&&currentPageMain==5){
+                properties.put("from", "首页我的");
+            }else {
+                properties.put("from", from);
+            }
             properties.put("goods_id", commodityID);
             properties.put("goods_title", commodityName);
             properties.put("cate1", firstCommodity);
@@ -275,55 +312,6 @@ public class JosnSensorsDataAPI {
 //        }
     }
 
-    /**
-     * 提交订单
-     * @return
-     */
-    public static void submitOrder(String orderID,String orderAmount,String addressId,String transportationCosts,String discountId
-                        ,String IntegralDiscountAmount){
-//        try {
-//            JSONObject properties = new JSONObject();
-//            properties.put("orderID", orderID);
-//            properties.put("orderAmount", orderAmount);
-//            properties.put("addressId", addressId);
-////            properties.put("receiverProvince", receiverProvince);
-////            properties.put("receiverCity", receiverCity);
-////            properties.put("receiverArea", receiverArea);
-//            properties.put("transportationCosts", transportationCosts);
-//            properties.put("discountId", discountId);
-////            properties.put("discountAmount", discountAmount);
-////            properties.put("ifUseLntegral", ifUseLntegral);
-////            properties.put("numberOfLntegral", numberOfLntegral);
-//            properties.put("IntegralDiscountAmount", IntegralDiscountAmount);
-//            SensorsDataAPI.sharedInstance().track("submitOrder", properties);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-    }
 
-    /**
-     * 取消订单
-     * @return
-     */
-    public static void cancelPayOrder(String orderID,String orderAmount,String actualPaymentAmount,String paymentMethod,String ifUseDiscount
-            ,String IntegralDiscountAmount){
-//        try {
-//            JSONObject properties = new JSONObject();
-//            properties.put("orderID", orderID);
-//            properties.put("orderAmount", orderAmount);
-//            properties.put("actualPaymentAmount", actualPaymentAmount);
-////            properties.put("receiverProvince", receiverProvince);
-////            properties.put("receiverCity", receiverCity);
-////            properties.put("receiverArea", receiverArea);
-//            properties.put("paymentMethod", paymentMethod);
-//            properties.put("ifUseDiscount", ifUseDiscount);
-////            properties.put("discountAmount", discountAmount);
-////            properties.put("ifUseLntegral", ifUseLntegral);
-////            properties.put("numberOfLntegral", numberOfLntegral);
-//            properties.put("IntegralDiscountAmount", IntegralDiscountAmount);
-//            SensorsDataAPI.sharedInstance().track("cancelPayOrder", properties);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-    }
+
 }
