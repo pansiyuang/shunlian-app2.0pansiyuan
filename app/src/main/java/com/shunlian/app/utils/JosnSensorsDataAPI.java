@@ -17,9 +17,15 @@ public class JosnSensorsDataAPI {
         try {
             JSONObject properties = new JSONObject();
             properties.put("bannerBelongs", pageType);
-            properties.put("bannerName", bannerName);
+//            properties.put("bannerName", bannerName);
             properties.put("bannerID", bannerID);
-            properties.put("bannerURL", url);
+            if(bannerName!=null&&bannerName.equals("goods")&&!url.contains("商品")){
+                properties.put("bannerURL", "商品："+url);
+            }else if(bannerName!=null&&bannerName.equals("shop")&&!url.contains("店铺")){
+                properties.put("bannerURL", "店铺："+url);
+            }else {
+                properties.put("bannerURL", url);
+            }
             properties.put("bannerRank", rank);
             SensorsDataAPI.sharedInstance().track("bannerClick", properties);
         } catch (JSONException e) {
