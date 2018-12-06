@@ -707,7 +707,7 @@ public class Common {
         return matches;
     }
 
-    private static ExToast exToast;
+    private static Toast exToast;
     private static LottieAnimationView ex_animation_view;
 
     private static Toast toastAnim;
@@ -746,9 +746,8 @@ public class Common {
             ex_desc=  v.findViewById(R.id.mtv_desc);
             ex_animation_view=  v.findViewById(R.id.animation_view);
             ex_desc.setText(content);
-            exToast =  ExToast.makeText(getApplicationContext(),"",3);
+            exToast =  new Toast(getApplicationContext());
             exToast.setView(v);
-            exToast.setAnimations(R.style.ClickToast);
             exToast.setGravity(Gravity.FILL, 0, 0);
         } else {
             ex_desc.setText(desc);
