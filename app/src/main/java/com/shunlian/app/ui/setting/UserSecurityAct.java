@@ -8,11 +8,14 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.ChangeUserPresenter;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.setting.change_user.ModifyAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IChangeUserView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -45,6 +48,12 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
     @BindView(R.id.mtv_pwd_setting)
     MyTextView mtv_pwd_setting;
 
+    @BindView(R.id.view_test)
+    View view_test;
+
+    long time=0;
+    int clickCounts=0;
+
     public static void startAct(Context context, String isSetPwd) {
         context.startActivity(new Intent(context, UserSecurityAct.class)
         .putExtra("isSetPwd",isSetPwd));
@@ -65,6 +74,7 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
         super.initListener();
         llayout_login_user.setOnClickListener(this);
         llayout_login_pwd.setOnClickListener(this);
+        view_test.setOnClickListener(this);
     }
 
     /**
@@ -113,9 +123,36 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
             case R.id.llayout_login_pwd:
                 ModifyAct.startAct(this,false,true,null);
                 break;
+            case R.id.view_test:
+                clickStyle();
+                break;
         }
     }
 
+    private void clickStyle() {
+        if (time == 0) {
+            time = System.currentTimeMillis();
+            clickCounts = 0;
+        } else {
+            if (System.currentTimeMillis() - time < 1000)    //计算两次单击的时间差
+            {
+                clickCounts++;
+//                if (clickCounts == 4) {
+//                    time = System.currentTimeMillis();
+//                    Common.staticToast("再按2次就可以进入测试页面了");
+//                    LogUtil.augusLogW("dddfhj---"+clickCounts);
+//                }  else
+                    if (clickCounts == 6) {
+                    H5X5Act.startAct(baseAct, InterentTools.HTTPADDR+"share/test",H5X5Act.MODE_SONIC);
+                    time = System.currentTimeMillis();
+                    clickCounts = 0;
+                }
+            } else {
+                time = System.currentTimeMillis();
+                clickCounts = 0;
+            }
+        }
+    }
     /**
      * 显示网络请求失败的界面
      *
