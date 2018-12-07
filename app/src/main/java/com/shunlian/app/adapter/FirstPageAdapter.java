@@ -581,6 +581,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                             if(isFirst){
                                 JosnSensorsDataAPI.fristQualityHotClick("小图",data.url.type,data.url.item_id,data.url.channe_id,position);
+                            }else{
+                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"精选活动",data.datass.get(position).url.item_id,data.datass.get(position).title,position);
                             }
                         }
                     });
