@@ -48,7 +48,6 @@ import static com.shunlian.app.utils.DeviceInfoUtil.getDeviceHeight;
 public class ParamDialog extends Dialog implements View.OnClickListener {
 
     public boolean isSelectCount = true;//默认可以选择数量
-    public boolean isDefaultMode = true;
     @BindView(R.id.iv_dialogPhoto)
     MyImageView iv_dialogPhoto;
     @BindView(R.id.dia_tv_price)
@@ -504,13 +503,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     public void setOnGoodsBuyCallBack(OnGoodsBuyCallBack buyCallBack) {
         this.goodsBuyCallBack = buyCallBack;
 
-        if (isDefaultMode) {
-            ll_complete.setVisibility(View.GONE);
-            btn_complete.setVisibility(View.VISIBLE);
-        } else {
-            ll_complete.setVisibility(View.VISIBLE);
-            btn_complete.setVisibility(View.GONE);
-        }
+        ll_complete.setVisibility(View.VISIBLE);
+        btn_complete.setVisibility(View.GONE);
     }
 
     public interface OnGoodsBuyCallBack {
