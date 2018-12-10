@@ -33,7 +33,7 @@ import butterknife.BindView;
 
 public class CateGoryFrag extends BaseFragment implements IFirstPage {
     public PFirstPage pFirstPage;
-    public String cate_id, sort_type;
+    public String cate_id, sort_type,cate_name;
     public List<GetDataEntity.MData> mDatass = new ArrayList<>();
     public List<GetDataEntity.MData> mDatasss = new ArrayList<>();
     public List<GetDataEntity.MData> mDatassss = new ArrayList<>();
@@ -192,6 +192,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         if (!isEmpty(mDatass) && !isEmpty(mDatass.get(mDatass.size() - 1).cates)) {
             cate_id = mDatass.get(mDatass.size() - 1).cates.get(0).id;
             sort_type = mDatass.get(mDatass.size() - 1).cates.get(0).sort_type;
+            cate_name = mDatass.get(mDatass.size() - 1).cates.get(0).name;
             pFirstPage.resetBaby(cate_id, sort_type);
         }
 

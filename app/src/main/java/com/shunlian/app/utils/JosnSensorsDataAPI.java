@@ -34,7 +34,7 @@ public class JosnSensorsDataAPI {
         }
     }
     /**
-     * 点击banner事件统计
+     * 点击icon事件统计
      * @return
      */
     public static void fristIconClick(String iconName,String goTiltle,int rank){
@@ -51,7 +51,26 @@ public class JosnSensorsDataAPI {
     }
 
     /**
-     * 品质热推点击
+     * 频道页商品点击
+     * @return
+     */
+    public static void channelGoodClick(String homeChannel,String indexChannel,String goodId,String goodName,int rank){
+        try {
+            JSONObject properties = new JSONObject();
+            properties.put("pdBelongs", homeChannel);
+            properties.put("pdType", indexChannel);
+            properties.put("pdGoodId", goodId);
+            properties.put("pdGoodName", goodName);
+            properties.put("pdGoodRank", rank);
+            SensorsDataAPI.sharedInstance().track("pdGoodsClick", properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 品质热推和精选活动点击
      * @return
      */
     public static void fristQualityHotClick(String mouleType,String goType,String itemId,String channe_id ,int rank){
@@ -59,14 +78,24 @@ public class JosnSensorsDataAPI {
             JSONObject properties = new JSONObject();
             properties.put("pzrtType", mouleType);
 //            properties.put("bannerLocation", bannerLocation);
-            properties.put("pzrtURL", itemId+":"+channe_id);
-            properties.put("pzrtLocationName", rank);
+            if(goType.equals("goods")) {
+                properties.put("pzrtURL",  "商品:" + itemId);
+            }else if(goType.equals("shop")){
+                properties.put("pzrtURL",  "店铺:" + itemId);
+            }else if(goType.equals("hotpush")){
+                properties.put("pzrtURL",  "专场:" + channe_id);
+            }
+            else{
+                properties.put("pzrtURL",  "url:" + itemId);
+            }
+            properties.put("pzrtName", channe_id);
             properties.put("pzrtRank", rank);
             SensorsDataAPI.sharedInstance().track("pzrtClick", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
     /**
      * 天天特惠商品点击
      * @return
@@ -154,43 +183,9 @@ public class JosnSensorsDataAPI {
         }
     }
 
-    /**
-     * 优品商品点击
-     * @return
-     */
-    public static void youpinGoodClick(String type,String goodId,String goodName,int rank){
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("type", type);
-            properties.put("goodId", goodId);
-            properties.put("goodName", goodName);
-            properties.put("rank", rank);
-            SensorsDataAPI.sharedInstance().track("youpinGoodClick", properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-    /**
-     * 频道页商品点击
-     * @return
-     */
-    public static void channelGoodClick(String homeChannel,String indexChannel,String goodId,String goodName,int rank){
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("pdBelongs", homeChannel);
-            properties.put("pdType", indexChannel);
-            properties.put("pdGoodId", goodId);
-            properties.put("pdGoodName", goodName);
-            properties.put("pdGoodRank", rank);
-            SensorsDataAPI.sharedInstance().track("pdGoodsClick", properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     /**
-     * 频道页商品点击
+     * 商品点详情页统计
      * @return
      */
     public static void shareGoodClick(String goods_id,String goods_title,
@@ -208,6 +203,23 @@ public class JosnSensorsDataAPI {
             properties.put("shareMethod", goodName);
             SensorsDataAPI.sharedInstance().track("share", properties);
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 优品商品点击
+     * @return
+     */
+    public static void youpinGoodClick(String type,String goodId,String goodName,int rank){
+        try {
+//            JSONObject properties = new JSONObject();
+//            properties.put("type", type);
+//            properties.put("goodId", goodId);
+//            properties.put("goodName", goodName);
+//            properties.put("rank", rank);
+//            SensorsDataAPI.sharedInstance().track("youpinGoodClick", properties);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

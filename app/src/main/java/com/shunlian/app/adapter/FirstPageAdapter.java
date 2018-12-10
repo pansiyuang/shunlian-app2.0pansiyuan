@@ -590,13 +590,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                                 Common.goGoGo(context, "login");
                                 return;
                             }
-                            mShareInfoParam.desc = data.name;
-                            mShareInfoParam.price = data.price;
-                            mShareInfoParam.market_price = data.market_price;
+
                             mShareInfoParam.goods_id = data.url.item_id;
                             mShareInfoParam.share_buy_earn = data.share_buy_earn;
-                            mShareInfoParam.title = data.title;
-                            basePresenter.getShareInfo(basePresenter.home,data.url.item_id);
+                            basePresenter.getShareInfo(basePresenter.goods,data.url.item_id);
 //                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                         }
                     });
@@ -606,9 +603,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                             if (data.url != null)
                                 Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                             if(isFirst){
-                                JosnSensorsDataAPI.fristQualityHotClick("小图",data.url.type,data.url.item_id,data.url.channe_id,position);
+                                JosnSensorsDataAPI.fristQualityHotClick("大图",data.url.type,data.url.item_id,data.title,position);
                             }else{
-                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"精选活动",data.datass.get(position).url.item_id,data.datass.get(position).title,position);
+                                JosnSensorsDataAPI.fristQualityHotClick("大图",data.url.type,data.url.item_id,data.title,position);
                             }
                         }
                     });
@@ -645,9 +642,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                             if (data.url != null){
                                 Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                                 if(isFirst){
-                                    JosnSensorsDataAPI.fristQualityHotClick("大图",data.url.type,data.url.item_id,data.url.channe_id,position);
+                                    JosnSensorsDataAPI.fristQualityHotClick("大图带商品",data.url.type,data.url.item_id,data.name,position);
                                 }else{
-                                    JosnSensorsDataAPI.channelGoodClick(chinnel_name,"精选活动",data.datass.get(position).url.item_id,data.datass.get(position).title,position);
+                                    JosnSensorsDataAPI.fristQualityHotClick("大图带商品",data.url.type,data.url.item_id,data.name,position);
                                 }
                             }
                         }
@@ -663,9 +660,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                         public void onItemClick(View view, int position) {
                             GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
                             if(isFirst){
-                                JosnSensorsDataAPI.fristQualityHotClick("大图",data.url.type,data.url.item_id,data.url.channe_id,position);
+                                JosnSensorsDataAPI.fristQualityHotClick("大图带商品",data.datass.get(position).url.type,data.datass.get(position).url.item_id,data.datass.get(position).title,position);
                             }else{
-                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"精选活动",data.datass.get(position).url.item_id,data.datass.get(position).title,position);
+                                JosnSensorsDataAPI.fristQualityHotClick("大图带商品",data.datass.get(position).url.type,data.datass.get(position).url.item_id,data.datass.get(position).title,position);
                             }
                         }
                     });
@@ -713,6 +710,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                                     eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
                                     eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
                                     cateGoryFrag.cate_id = data.get(position).id;
+                                    cateGoryFrag.cate_name = data.get(position).name;
                                     cateGoryFrag.sort_type = data.get(position).sort_type;
                                     if (cateGoryFrag.pFirstPage != null)
                                         cateGoryFrag.pFirstPage.resetBaby(data.get(position).id, data.get(position).sort_type);
@@ -751,7 +749,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                         public void onClick(View view) {
                             GoodsDetailAct.startAct(context, goods.id);
                             if(!isFirst){
-                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"热销榜单",goods.id,goods.title,position);
+                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"热销榜单-"+cateGoryFrag!=null&&cateGoryFrag.cate_name!=null?cateGoryFrag.cate_name:"",goods.id,goods.title,position);
+                            }else{
+                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"今日推荐",goods.id,goods.title,position);
                             }
                         }
                     });
@@ -809,6 +809,12 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         mShareInfoParam.shareLink = baseEntity.data.shareLink;
         mShareInfoParam.img = baseEntity.data.img;
+        mShareInfoParam.desc = baseEntity.data.desc;
+        mShareInfoParam.price = baseEntity.data.price;
+        mShareInfoParam.market_price = baseEntity.data.market_price;
+        if(!TextUtils.isEmpty(baseEntity.data.share_buy_earn))
+        mShareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+        mShareInfoParam.title = baseEntity.data.title;
         shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, false);
     }
 
