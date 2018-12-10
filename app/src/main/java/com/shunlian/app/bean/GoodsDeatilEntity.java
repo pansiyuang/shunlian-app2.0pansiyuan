@@ -26,6 +26,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String area;
     public String market_price;
     public String price;
+    public String share_buy_earn;
     public String max_price;
     public String stock;
     public String thumb;
@@ -914,6 +915,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String sales_desc;
         public String desc;
         public int isSuperiorProduct;
+        public String share_buy_earn;
         public String self_buy_earn;
         public String free_ship;             //是否 包邮，1是，0否
         public String send_area;             //发货地

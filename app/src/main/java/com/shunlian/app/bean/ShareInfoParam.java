@@ -58,7 +58,7 @@ public class ShareInfoParam implements Serializable {
     public boolean isShowTiltle = false;
     public boolean isSuperiorProduct;
     public String goods_id;//商品id
-
+    public String  share_buy_earn;
     public String pic;
     public String logo;
     public boolean isSpecial = false;

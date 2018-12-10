@@ -21,6 +21,8 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.presenter.BasePresenter;
+import com.shunlian.app.presenter.EmptyPresenter;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.KouBeiAct;
@@ -37,6 +39,7 @@ import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HourRedDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
+import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -58,7 +61,7 @@ import butterknife.BindView;
  * Created by augus on 2017/11/13 0013.
  */
 
-public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
+public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> implements IView {
     private static final int TYPE9 = 9;//轮播
     private static final int TYPE2 = 2;//导航
     private static final int TYPE3 = 3;//会场
@@ -75,6 +78,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     private int second = (int) (System.currentTimeMillis() / 1000);
     private int hotPosition = -1;
 
+    private EmptyPresenter basePresenter;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private String chinnel_name;
     public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition,String chinnel_name) {
@@ -84,6 +88,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         this.mergePosition = mergePosition;
         shareGoodDialogUtil = new ShareGoodDialogUtil(context);
         this.chinnel_name =chinnel_name;
+        basePresenter = new EmptyPresenter(context,this);
     }
 
     @Override
@@ -585,6 +590,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 Common.goGoGo(context, "login");
                                 return;
                             }
+                            mShareInfoParam.desc = data.name;
+                            mShareInfoParam.price = data.price;
+                            mShareInfoParam.market_price = data.market_price;
+                            mShareInfoParam.goods_id = data.url.item_id;
+                            mShareInfoParam.share_buy_earn = data.share_buy_earn;
+                            mShareInfoParam.title = data.title;
+                            basePresenter.getShareInfo(basePresenter.home,data.url.item_id);
 //                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                         }
                     });
@@ -681,8 +693,6 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             }
                         }
                     });
-//                        }
-//                        sevenHolder.firstHorizonAdapter.notifyDataSetChanged();
                     sevenHolder.rv_goods.setFocusable(false);
                 }
                 break;
@@ -785,46 +795,21 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
     }
 
-    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        mShareInfoParam = baseEntity.data;
-        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, false);
-//        shareStyle2Dialog();
+    @Override
+    public void showFailureView(int request_code) {
+
     }
 
-    /**
-     * 分享微信和复制链接
-     */
-    public void shareStyle2Dialog() {
-        PopMenu mPopMenu = new PopMenu.Builder().attachToActivity((Activity) context)
-                .addMenuItem(new PopMenuItem("微信", getDrawable(R.mipmap.icon_weixin)))
-                .addMenuItem(new PopMenuItem("复制链接", getDrawable(R.mipmap.icon_lianjie)))
-                .setOnItemClickListener(new PopMenuItemCallback() {
-                    @Override
-                    public void onItemClick(PopMenu popMenu, int position) {
-                        switch (position) {
-                            case 0:
-                                WXEntryActivity.startAct(context,
-                                        "shareFriend", mShareInfoParam);
-                                break;
-                            case 1:
-                                Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.desc, true);
-                                break;
-                        }
-                    }
+    @Override
+    public void showDataEmptyView(int request_code) {
 
-                    @Override
-                    public void onHideCallback(Activity mActivity) {
-                        ImmersionBar.with(mActivity).fitsSystemWindows(true)
-                                .statusBarColor(R.color.pink_color)
-                                .statusBarDarkFont(false, 0)
-                                .init();
-                        Constant.IS_FIRST_SHARE = false;
-                    }
-                }).build();
-        if (!mPopMenu.isShowing()) {
-            Constant.IS_FIRST_SHARE = true;
-            mPopMenu.show();
-        }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        mShareInfoParam.shareLink = baseEntity.data.shareLink;
+        mShareInfoParam.img = baseEntity.data.img;
+        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, false);
     }
 
     public TextView creatTextTag(String content, int colorRes, Drawable drawable, TenHolder tenHolder) {

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.zxing.common.StringUtils;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -69,7 +70,15 @@ public class ShareGoodDialogUtil {
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.VISIBLE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.VISIBLE);
         }
-        nomalBuildl.getView(R.id.tv_price_state).setVisibility(View.GONE);
+        TextView tv_price_state =  nomalBuildl.getView(R.id.tv_price_state);
+        LinearLayout line_share_title =  nomalBuildl.getView(R.id.line_share_title);
+
+        if (!TextUtils.isEmpty(mShareInfoParam.share_buy_earn)&&isGood){
+            line_share_title.setVisibility(View.VISIBLE);
+            tv_price_state.setText("赚"+mShareInfoParam.share_buy_earn);
+        }else {
+            line_share_title.setVisibility(View.GONE);
+        }
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
