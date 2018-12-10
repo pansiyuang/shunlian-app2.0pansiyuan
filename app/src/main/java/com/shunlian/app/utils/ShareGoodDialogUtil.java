@@ -62,13 +62,6 @@ public class ShareGoodDialogUtil {
                 nomalBuildl.dismiss();
             }
         });
-        if(!shareInfoParam.isShowTiltle){
-            nomalBuildl.getView(R.id.tv_title1).setVisibility(View.GONE);
-            nomalBuildl.getView(R.id.tv_title2).setVisibility(View.GONE);
-        }else{
-            nomalBuildl.getView(R.id.tv_title1).setVisibility(View.VISIBLE);
-            nomalBuildl.getView(R.id.tv_title2).setVisibility(View.VISIBLE);
-        }
         if(shareInfoParam.isSpecial){
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.GONE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
@@ -76,7 +69,7 @@ public class ShareGoodDialogUtil {
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.VISIBLE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.VISIBLE);
         }
-
+        nomalBuildl.getView(R.id.tv_price_state).setVisibility(View.GONE);
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +86,8 @@ public class ShareGoodDialogUtil {
                             "shareFriend", mShareInfoParam);
                 }
                 if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"微信好友");
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                            mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"微信好友");
                 }
             }
         });
@@ -115,7 +109,8 @@ public class ShareGoodDialogUtil {
                     createShopCode(true);
                 }
                 if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"朋友圈");
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                            mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"朋友圈");
                 }
             }
         });
@@ -134,7 +129,8 @@ public class ShareGoodDialogUtil {
                     createShopCode(false);
                 }
                 if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"图文");
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,
+                            mShareInfoParam.store_id,mShareInfoParam.store_name,"图文");
                 }
             }
 
@@ -145,7 +141,8 @@ public class ShareGoodDialogUtil {
                 Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, true);
                 nomalBuildl.dismiss();
                 if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"复制链接");
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                            mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"复制链接");
                 }
             }
         });

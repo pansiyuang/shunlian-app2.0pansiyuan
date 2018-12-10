@@ -20,15 +20,31 @@
         android:textSize="13sp"
         android:layout_marginTop="10dp"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_price"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:lines="1"
         android:textColor="@color/new_text"
-        android:textSize="14sp"
-        android:layout_marginTop="10dp"/>
+        android:textSize="11sp"
+        />
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_earn_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:layout_marginLeft="4dp"
+            android:textColor="@color/pink_color"
+            android:textSize="11sp"
+            android:visibility="gone"
+           />
+    </LinearLayout>
 </com.shunlian.app.widget.MyLinearLayout>
 
 

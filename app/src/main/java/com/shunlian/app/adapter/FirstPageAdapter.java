@@ -515,7 +515,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20);
                     int height = picWidth * 158 / 340;
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
-                    params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10), 0);
+                    params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10),  TransformUtil.dip2px(context, 15));
                     if (fiveHolder.miv_photo != null) {
                         fiveHolder.miv_photo.setLayoutParams(params);
                         GlideUtils.getInstance().loadBgImageChang(context, fiveHolder.miv_photo, data.pic);
@@ -545,13 +545,18 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if ((data.url!=null&&data.url.type!=null)&&
                             (data.url.type.equals("shop")||data.url.type.equals("special"))) {
                         fiveHolder.mtv_store_title.setVisibility(View.VISIBLE);
-                        fiveHolder.mtv_title.setVisibility(View.INVISIBLE);
+                        fiveHolder.mtv_title.setVisibility(View.GONE);
                         fiveHolder.mtv_price.setVisibility(View.GONE);
                         fiveHolder.mtv_market_price.setVisibility(View.GONE);
                         fiveHolder.mtv_store_title.setText(data.title);
+                        fiveHolder.mtv_share.setText("立即购买");
+                        fiveHolder.mtv_buy.setVisibility(View.GONE);
+                        fiveHolder.mtv_buy_num.setVisibility(View.GONE);
                     } else {
+                        fiveHolder.mtv_buy.setVisibility(View.VISIBLE);
                         fiveHolder.mtv_store_title.setVisibility(View.GONE);
                         fiveHolder.mtv_title.setVisibility(View.VISIBLE);
+                        fiveHolder.mtv_share.setText("分享赚");
                         if (!TextUtils.isEmpty(data.price)) {
                             SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
                                     getString(R.string.common_yuan), 12);
@@ -560,18 +565,27 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         } else {
                             fiveHolder.mtv_price.setVisibility(View.GONE);
                         }
-                        fiveHolder.mtv_market_price.setStrikethrough();
-                        if (!TextUtils.isEmpty(data.market_price)) {
-                            fiveHolder.mtv_market_price.setText(getString(R.string.common_yuan) + data.market_price);
+                        if (!TextUtils.isEmpty(data.self_buy_earn)) {
+                            fiveHolder.mtv_market_price.setText(data.self_buy_earn);
                             fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
                         } else {
                             fiveHolder.mtv_market_price.setVisibility(View.GONE);
+                        }
+                        if (!TextUtils.isEmpty(data.content)) {
+                            fiveHolder.mtv_buy_num.setText(data.content);
+                            fiveHolder.mtv_buy_num.setVisibility(View.VISIBLE);
+                        } else {
+                            fiveHolder.mtv_buy_num.setVisibility(View.GONE);
                         }
                     }
                     fiveHolder.mtv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            if(!Common.isAlreadyLogin()){
+                                Common.goGoGo(context, "login");
+                                return;
+                            }
+//                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                         }
                     });
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
@@ -1028,6 +1042,12 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         @BindView(R.id.mtv_share)
         MyTextView mtv_share;
+
+        @BindView(R.id.mtv_buy_num)
+        MyTextView mtv_buy_num;
+
+        @BindView(R.id.mtv_buy)
+        MyTextView mtv_buy;
 
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;

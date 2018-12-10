@@ -45,6 +45,8 @@ public class GetDataEntity {
         public List<MMData> datass;
         public List<Cate> cates;
         public String  market_price;
+        public String  share_buy_earn;
+        public String self_buy_earn;
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Cate {
             public String id;
@@ -86,8 +88,8 @@ public class GetDataEntity {
             public String title;
             public String url_name;
             public String thumb_tmp;
-
-
+            public String  share_buy_earn;
+            public String self_buy_earn;
         }
     }
     @JsonIgnoreProperties(ignoreUnknown = true)
