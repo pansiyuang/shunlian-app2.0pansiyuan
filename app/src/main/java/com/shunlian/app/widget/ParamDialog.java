@@ -249,9 +249,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 dia_tv_price.setText("¥" + goodsDeatilEntity.price);
             }
             totalStock = Integer.valueOf(goodsDeatilEntity.stock);
-            if (!TextUtils.isEmpty(goodsDeatilEntity.self_buy_earn)) {
-                dia_tv_earn.setText(goodsDeatilEntity.self_buy_earn);
-            }
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
         }
@@ -260,9 +257,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             totalStock = Integer.valueOf(mGoods.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, mGoods.thumb);
-            if (!TextUtils.isEmpty(mGoods.self_buy_earn)) {
-                dia_tv_earn.setText(mGoods.self_buy_earn);
-            }
         }
 
         if (productDetailEntity != null) {
@@ -270,9 +264,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             totalStock = Integer.valueOf(productDetailEntity.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, productDetailEntity.thumb);
-            if (!TextUtils.isEmpty(productDetailEntity.self_buy_earn)) {
-                dia_tv_earn.setText(productDetailEntity.self_buy_earn);
-            }
         }
 
         if (specs == null || specs.size() == 0) {
@@ -570,7 +561,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                             }
                             if (checkLinkmap(false) != null) {
                                 GoodsDeatilEntity.Sku s = checkLinkmap(false);
-
+                                if (!TextUtils.isEmpty(s.self_buy_earn)) {
+                                    dia_tv_earn.setText(s.self_buy_earn);
+                                }
                                 GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, s.thumb);
                                 dia_tv_price.setText("¥" + s.price);
                                 totalStock = Integer.valueOf(s.stock);
