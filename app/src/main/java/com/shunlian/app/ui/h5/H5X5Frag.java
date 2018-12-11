@@ -305,8 +305,8 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
         webSetting.setLoadWithOverviewMode(true);
         //x5新增
         webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        webSetting.setSupportZoom(true);
-        webSetting.setBuiltInZoomControls(true);
+        webSetting.setSupportZoom(false);
+        webSetting.setBuiltInZoomControls(false);
         webSetting.setSupportMultipleWindows(false);
         webSetting.setGeolocationEnabled(true);
         webSetting.setDatabasePath(baseContext.getDir("databases", 0).getPath());
