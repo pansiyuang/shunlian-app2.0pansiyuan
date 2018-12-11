@@ -82,6 +82,11 @@ public class GoodsDeatilEntity implements Parcelable {
         public String title;
         public String content;
         public UrlType url;
+        public ArrayList<String> title_highlight;
+        public ArrayList<String> content_highlight;
+
+        public PlusDoor() {
+        }
 
         @Override
         public int describeContents() {
@@ -94,9 +99,8 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.title);
             dest.writeString(this.content);
             dest.writeParcelable(this.url, flags);
-        }
-
-        public PlusDoor() {
+            dest.writeStringList(this.title_highlight);
+            dest.writeStringList(this.content_highlight);
         }
 
         protected PlusDoor(Parcel in) {
@@ -104,6 +108,8 @@ public class GoodsDeatilEntity implements Parcelable {
             this.title = in.readString();
             this.content = in.readString();
             this.url = in.readParcelable(UrlType.class.getClassLoader());
+            this.title_highlight = in.createStringArrayList();
+            this.content_highlight = in.createStringArrayList();
         }
 
         public static final Creator<PlusDoor> CREATOR = new Creator<PlusDoor>() {
