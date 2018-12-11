@@ -163,21 +163,20 @@
             android:layout_toRightOf="@id/miv_img"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textSize="15sp" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_priceM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/mtv_number"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/mtv_priceA"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/share_text"
-            android:textSize="11sp" />
+            android:textColor="@color/pink_color"
+            android:textSize="12sp" />
     </com.shunlian.app.widget.MyRelativeLayout>
 
     <View

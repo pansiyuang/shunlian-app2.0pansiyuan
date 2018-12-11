@@ -21,6 +21,7 @@ public class CoreNewsEntity {
         public String title;
         public String thumb;
         public String price;
+        public String self_buy_earn;
         public String is_new;
         public String is_hot;
         public String is_recommend;
