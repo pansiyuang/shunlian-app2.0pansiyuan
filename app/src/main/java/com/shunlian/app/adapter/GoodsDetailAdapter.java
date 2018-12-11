@@ -4,14 +4,17 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
@@ -55,7 +58,7 @@ import static com.shunlian.app.utils.Common.getResources;
  * Created by Administrator on 2017/11/17.
  */
 
-public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements ParamDialog.OnSelectCallBack {
+public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements ParamDialog.OnGoodsBuyCallBack/*ParamDialog.OnSelectCallBack*/ {
     /*
         轮播
      */
@@ -122,7 +125,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         mGoodsEntity = entity;
         recyclerDialog = new RecyclerDialog(context);
         paramDialog = new ParamDialog(context, mGoodsEntity);
-        paramDialog.setOnSelectCallBack(this);
+//        paramDialog.setOnSelectCallBack(this);
+        paramDialog.setOnGoodsBuyCallBack(this);
         mDeviceWidth = DeviceInfoUtil.getDeviceWidth(context);
         act_start = System.currentTimeMillis();
 
@@ -333,20 +337,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             } else {
                 mHolder.mtv_quality_goods.setVisibility(View.GONE);
             }
-
-            if (isEmpty(store_info.hot)) {
-                gone(mHolder.mll_self_hot);
-            } else {
-                visible(mHolder.mll_self_hot);
-            }
-
-            if (isEmpty(store_info.push)) {
-                gone(mHolder.mll_self_push);
-            } else {
-                visible(mHolder.mll_self_push);
-            }
-
-            setStoreOtherGoods(mHolder.recy_view, store_info.hot);
         }
     }
 
@@ -597,9 +587,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 }
             }
               if (TextUtils.isEmpty(mGoodsEntity.is_fav) || "0".equals(mGoodsEntity.is_fav)) {
-                    mHolder.miv_fav.setImageResource(R.mipmap.icon_found_quanzi_xin_n);
+                    mHolder.miv_fav.setImageResource(R.mipmap.icon_heart_nor);
                 } else {
-                   mHolder.miv_fav.setImageResource(R.mipmap.icon_found_quanzi_xin_h);
+                   mHolder.miv_fav.setImageResource(R.mipmap.icon_heart_sel);
                 }
             if (pref_length != 0) {
                 mHolder.mtv_title.setText(Common.getPlaceholder(pref_length) + title);
@@ -998,24 +988,34 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         }
     }
 
-    @Override
-    public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
+    //@Override
+    public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count,boolean isAddcart) {
 //        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
         if (tv_select_param != null && sku != null)
             tv_select_param.setText(getString(R.string.selection)+"  "+sku.name);
 
         if (context instanceof GoodsDetailAct) {
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
-            goodsDetailAct.selectGoodsInfo(sku, count);
+            goodsDetailAct.selectGoodsInfo(sku, count,isAddcart);
         }
     }
 
-    @Override
+    //@Override
     public void closeDialog() {
         if (context instanceof GoodsDetailAct) {
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
             goodsDetailAct.closeParamsDialog();
         }
+    }
+
+    @Override
+    public void onAddCar(GoodsDeatilEntity.Sku sku, int count) {
+        onSelectComplete(sku,count,true);
+    }
+
+    @Override
+    public void onBuyNow(GoodsDeatilEntity.Sku sku, int count) {
+        onSelectComplete(sku,count,false);
     }
 
     /**
@@ -1113,9 +1113,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_act_title)
         MyTextView mtv_act_title;
 
-        /*@BindView(R.id.mllayout_common_price)
-        MyLinearLayout mllayout_common_price;*/
-
         @BindView(R.id.miv_pref)
         MyImageView miv_pref;
 
@@ -1124,15 +1121,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mrlayout_preBgR)
         MyRelativeLayout mrlayout_preBgR;
-
-        /*@BindView(R.id.mtv_follow_count)
-        MyTextView mtv_follow_count;*/
-
-        /*@BindView(R.id.seekbar_grow)
-        ProgressBar seekbar_grow;*/
-
-        /*@BindView(R.id.mtv_desc)
-        MyTextView mtv_desc;*/
 
         @BindView(R.id.mtv_act)
         MyTextView mtv_act;
@@ -1195,6 +1183,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.miv_fav)
         MyImageView miv_fav;
 
+        @BindView(R.id.ll_fav)
+        LinearLayout ll_fav;
+
         @BindView(R.id.rlayout_plus_tip)
         MyRelativeLayout rlayout_plus_tip;
 
@@ -1207,11 +1198,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         public TitleHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
+
+            TransformUtil.expandViewTouchDelegate(ll_fav,40,40,40,40);
+
             if (isEmpty(mGoodsEntity.self_buy_earn)) {
                 gone(mtv_prefPrice);
             } else {
                 visible(mtv_prefPrice);
-                mtv_prefPrice.setText("赚 "+getString(R.string.rmb) + mGoodsEntity.self_buy_earn);
+                mtv_prefPrice.setText(getString(R.string.rmb) + mGoodsEntity.self_buy_earn);
             }
 
             if (mGoodsEntity.plus_door != null){
@@ -1241,7 +1235,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
         }
 
-        @OnClick({R.id.miv_fav, R.id.mtv_fav})
+        @OnClick({R.id.ll_fav})
         public void share() {
             miv_hint.setVisibility(View.GONE);
 //            SharedPrefUtil.saveSharedUserBoolean("hide_goods",true);
@@ -1360,7 +1354,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.tv_select_param)
         MyTextView tv_select_param;
 
-        @BindView(R.id.mtv_reason)
+        /*@BindView(R.id.mtv_reason)
         MyTextView mtv_reason;
 
         @BindView(R.id.mtv_send_time)
@@ -1370,16 +1364,22 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         MyImageView miv_reason;
 
         @BindView(R.id.miv_send_time)
-        MyImageView miv_send_time;
+        MyImageView miv_send_time;*/
 
-        @BindView(R.id.mtv_certified_products)
+        /*@BindView(R.id.mtv_certified_products)
         MyTextView mtv_certified_products;
 
         @BindView(R.id.miv_certified_products)
-        MyImageView miv_certified_products;
+        MyImageView miv_certified_products;*/
 
         @BindView(R.id.view_params)
         View view_params;
+
+        @BindView(R.id.tab_layout)
+        TabLayout tab_layout;
+
+        @BindView(R.id.rlayout_service)
+        RelativeLayout rlayout_service;
 
         public ParamAttrsHolder(View itemView) {
             super(itemView);
@@ -1391,9 +1391,23 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 gone(mtv_params, view_params);
             }
 
+            if (!isEmpty(mGoodsEntity.return_7)){
+                tab_layout.addTab(tab_layout.newTab()
+                        .setCustomView(getView(mGoodsEntity.return_7)));
+            }
+            if (!isEmpty(mGoodsEntity.send_time)){
+                tab_layout.addTab(tab_layout.newTab()
+                        .setCustomView(getView(mGoodsEntity.send_time)));
+            }
+            if (!isEmpty(mGoodsEntity.quality_guarantee)){
+                tab_layout.addTab(tab_layout.newTab()
+                        .setCustomView(getView(mGoodsEntity.quality_guarantee)));
+            }
+
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
-            if (!isEmpty(mGoodsEntity.return_7)) {
+
+            /*if (!isEmpty(mGoodsEntity.return_7)) {
                 mtv_reason.setText(mGoodsEntity.return_7);
                 visible(miv_reason, mtv_reason);
             } else {
@@ -1412,8 +1426,32 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 visible(miv_certified_products, mtv_certified_products);
             } else {
                 gone(miv_certified_products, mtv_certified_products);
-            }
+            }*/
 
+        }
+
+        private View getView(String s){
+
+            LinearLayout layout = new LinearLayout(context);
+            layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            layout.setGravity(Gravity.CENTER);
+            MyImageView iv = new MyImageView(context);
+            iv.setImageResource(R.mipmap.img_xiangqing_baozhang);
+            layout.addView(iv);
+
+            MyTextView tv = new MyTextView(context);
+            tv.setTextColor(Color.parseColor("#767676"));
+            tv.setTextSize(12);
+            int i = TransformUtil.dip2px(context, 2);
+            tv.setPadding(i,0,0,0);
+            tv.setSingleLine();
+            tv.setEllipsize(TextUtils.TruncateAt.END);
+            tv.setText(s);
+
+            layout.addView(tv);
+
+            return layout;
         }
 
         /**
@@ -1427,7 +1465,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 case R.id.tv_select_param:
                     if (paramDialog == null) {
                         paramDialog = new ParamDialog(context, mGoodsEntity);
-                        paramDialog.setOnSelectCallBack(GoodsDetailAdapter.this);
+                        paramDialog.setOnGoodsBuyCallBack(GoodsDetailAdapter.this);
                     }
                     if (paramDialog != null && !paramDialog.isShowing()) {
                         paramDialog.show();
@@ -1511,29 +1549,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_quality_satisfy)
         MyTextView mtv_quality_satisfy;
 
-        @BindView(R.id.mll_self_hot)
-        MyLinearLayout mll_self_hot;
-
-        @BindView(R.id.mll_self_push)
-        MyLinearLayout mll_self_push;
-
-        @BindView(R.id.view_self_push)
-        View view_self_push;
-
-        @BindView(R.id.view_self_hot)
-        View view_self_hot;
-
-        @BindView(R.id.mtv_self_push)
-        MyTextView mtv_self_push;
-
-        @BindView(R.id.mtv_self_hot)
-        MyTextView mtv_self_hot;
-
         @BindView(R.id.mtv_quality_goods)
         MyTextView mtv_quality_goods;
-
-//        @BindView(R.id.ratingBar1)
-//        FiveStarBar ratingBar1;
 
         @BindView(R.id.mtv_collection)
         MyTextView mtv_collection;
@@ -1544,17 +1561,21 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.miv_starBar)
         MyImageView miv_starBar;
 
+        @BindView(R.id.tab_layout)
+        TabLayout tab_layout;
+
+        private ArrayList<GoodsDeatilEntity.StoreInfo.ActItem> push_goods;
+
         public StoreGoodsHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(true);
             mtv_collection.setOnClickListener(this);
-            mll_self_hot.setOnClickListener(this);
-            mll_self_push.setOnClickListener(this);
             miv_shop_head.setOnClickListener(this);
             mtv_store_name.setOnClickListener(this);
             mtv_quality_goods.setOnClickListener(this);
             miv_starBar.setOnClickListener(this);
             recy_view.setFocusable(false);
+            setStorePush();
         }
 
         public void setCollectionState(int state) {
@@ -1602,16 +1623,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     }
                     isAttentionShop = !isAttentionShop;
                     break;
-                case R.id.mll_self_hot:
-                    if (!isEmpty(store_info.push)) {
-                        setState(1);
-                        setStoreOtherGoods(recy_view, store_info.hot);
-                    }
-                    break;
-                case R.id.mll_self_push:
-                    setState(2);
-                    setStoreOtherGoods(recy_view, store_info.push);
-                    break;
                 case R.id.miv_starBar:
                 case R.id.miv_shop_head:
                 case R.id.mtv_store_name:
@@ -1621,15 +1632,33 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
         }
 
-        private void setState(int state) {
-            mtv_self_hot.setTextColor(state == 1 ? getResources().getColor(R.color.new_text)
-                    : getResources().getColor(R.color.value_88));
-
-            mtv_self_push.setTextColor(state == 2 ? getResources().getColor(R.color.new_text)
-                    : getResources().getColor(R.color.value_88));
-
-            view_self_hot.setVisibility(state == 1 ? View.VISIBLE : View.INVISIBLE);
-            view_self_push.setVisibility(state == 2 ? View.VISIBLE : View.INVISIBLE);
+        private void setStorePush() {
+            //设置店主推荐商品
+            GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
+            if (store_info != null && !isEmpty(store_info.push_goods)){
+                visible(tab_layout);
+                push_goods = store_info.push_goods;
+                for (int i = 0; i < push_goods.size(); i++) {
+                    tab_layout.addTab(tab_layout.newTab());
+                    TabLayout.Tab tabAt = tab_layout.getTabAt(i);
+                    tabAt.setText(push_goods.get(i).title);
+                    tabAt.setTag(i);
+                }
+                setStoreOtherGoods(recy_view,push_goods.get(0).data);
+                tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        int tag = (int) tab.getTag();
+                        setStoreOtherGoods(recy_view, push_goods.get(tag).data);
+                    }
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {}
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {}
+                });
+            }else {
+                gone(tab_layout);
+            }
         }
     }
 
