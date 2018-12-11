@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -25,6 +26,7 @@ import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISortFragView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,6 +61,12 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.lLayout_sort)
+    LinearLayout lLayout_sort;
 
     private SortFragPresenter presenter;
     private MessageCountManager messageCountManager;
@@ -140,7 +148,15 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
      */
     @Override
     public void showFailureView(int request_code) {
-
+        if (nei_empty != null){
+            visible(nei_empty);
+            gone(lLayout_sort);
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                if (presenter != null){
+                    presenter.attachView();
+                }
+            });
+        }
     }
 
     /**
@@ -207,6 +223,8 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
      */
     @Override
     public void categoryAll(final List<SortFragEntity.Toplist> categoryList) {
+        gone(nei_empty);
+        visible(lLayout_sort);
         if (isEmpty(categoryList)) {
             return;
         }

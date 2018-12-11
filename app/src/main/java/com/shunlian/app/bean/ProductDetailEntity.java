@@ -21,6 +21,7 @@ public class ProductDetailEntity {
     public List<String> pics;
     public String has_option;
     public Detail detail;
+    public String self_buy_earn;
     public List<GoodsDeatilEntity.Specs> specs;
     public List<GoodsDeatilEntity.Sku> sku;
 

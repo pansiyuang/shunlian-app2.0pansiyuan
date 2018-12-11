@@ -113,6 +113,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -969,6 +970,33 @@ public class Common {
             return ssb;
         } else {
             ssb.setSpan(colorSpan, i, i + changeStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
+    }
+
+    /**
+     * 更改源字符串的颜色
+     *
+     * @param source    源字符串
+     * @param changeStr 需要改变颜色的字符串
+     * @param color     变化的颜色
+     * @return
+     */
+    public static SpannableStringBuilder changeColor(String source, ArrayList<String> changeStr, @ColorInt int color) {
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        if (changeStr != null && changeStr.size() > 0){
+            for (String str: changeStr) {
+                if (TextUtils.isEmpty(str))continue;
+                int i = source.indexOf(str);
+                if (i != -1)
+                ssb.setSpan(colorSpan, i, i + str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }else {
+            return ssb;
         }
         return ssb;
     }

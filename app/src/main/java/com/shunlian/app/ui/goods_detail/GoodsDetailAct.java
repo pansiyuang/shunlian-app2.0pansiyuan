@@ -44,13 +44,11 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
-import com.shunlian.app.newchat.util.TimeUtil;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
-import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -58,7 +56,6 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -68,7 +65,6 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.RollNumView;
-import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -872,9 +868,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }*/
                 //需求更改：每次加入购物车都需要选择属性
                 goodsDeatilFrag.showParamDialog();
-                JosnSensorsDataAPI.addToShoppingcart(GoodsDetailAct.goTitleType,mGoodsDeatilEntity.id,mGoodsDeatilEntity.title,
-                        GoodsDeatilEntity.getAttrsInfo(true,mGoodsDeatilEntity.attrs),  GoodsDeatilEntity.getAttrsInfo(false,mGoodsDeatilEntity.attrs),
-                        mGoodsDeatilEntity.store_info.goods_count,"商品详情加入");
+//                JosnSensorsDataAPI.addToShoppingcart(GoodsDetailAct.goTitleType,mGoodsDeatilEntity.id,mGoodsDeatilEntity.title,
+//                        GoodsDeatilEntity.getAttrsInfo(true,mGoodsDeatilEntity.attrs),  GoodsDeatilEntity.getAttrsInfo(false,mGoodsDeatilEntity.attrs),
+//                        mGoodsDeatilEntity.store_info.goods_count,"商品详情加入");
                 break;
             case R.id.miv_more:
                 moreAnim();
@@ -1247,7 +1243,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @OnClick(R.id.mllayout_store)
     public void jumpStore() {
-        StoreAct.startAct(this, store_id);
+        //StoreAct.startAct(this, store_id);
     }
 
     public void getCouchers(String id) {
@@ -1416,5 +1412,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             }
         }
 
+    }
+
+    @Override
+    public void selfBuyAndShareBuyBottomBtn(String self_buy, String share_buy) {
+        String selfFromat = "省钱购\n"+self_buy;
+        String shareFromat = "分享赚\n"+share_buy;
+        mtv_add_car.setText(Common.changeTextSize(selfFromat,self_buy,10));
+        mtv_buy_immediately.setText(Common.changeTextSize(shareFromat,share_buy,10));
     }
 }
