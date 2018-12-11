@@ -18,6 +18,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.MemberUserAdapter;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -110,9 +112,6 @@ public class MemberPageActivity extends BaseActivity{
                 .statusBarColor(R.color.transparent)
                 .statusBarDarkFont(false)
                 .init();
-//        setStatusBarColor(R.color.value_3e3e3e);
-//        setStatusBarFontDark();
-
         memberUserAdapter = new MemberUserAdapter(this,lists);
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
@@ -160,6 +159,9 @@ public class MemberPageActivity extends BaseActivity{
         });
         line_search.setOnClickListener(this);
         tv_title_right.setOnClickListener(this);
+        tv_sett_state.setOnClickListener(this);
+        tv_copy_num.setOnClickListener(this);
+        GlideUtils.getInstance().loadCircleAvar(this,img_user_head,"https://static.veer.com/veer/static/resources/FourPack/2018-12-03/d9738f6321324d51a78e567fdfeabc63.jpg");
     }
 
     @Override
@@ -173,7 +175,12 @@ public class MemberPageActivity extends BaseActivity{
            SearchMemberActivity.startAct(this);
        }else if(view.getId()==R.id.tv_title_right){
             ShoppingGuideActivity.startAct(this);
-        }
+        }else if(view.getId()==R.id.tv_sett_state){
+           SettingMemberActivity.startAct(this);
+       }else if(view.getId()==R.id.tv_copy_num){
+           Common.copyText(this,"拷贝成功");
+           Common.staticToast("复制邀请码成功");
+       }
     }
 
     @Override

@@ -1213,6 +1213,11 @@
             android:exported="true"
             android:label="我的导购"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.member.SettingMemberActivity"
+            android:exported="true"
+            android:label="设置二维码"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

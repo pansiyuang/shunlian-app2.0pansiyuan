@@ -67,7 +67,8 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.Go
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MemberHolder) {
             MemberHolder mHolder = (MemberHolder) holder;
-            NewUserGoodsEntity.Goods goods = lists.get(position);
+            GlideUtils.getInstance().loadCircleAvar(context,mHolder.miv_member_pic,
+                    "https://static.veer.com/veer/static/resources/FourPack/2018-12-03/d9738f6321324d51a78e567fdfeabc63.jpg");
         }
     }
 
