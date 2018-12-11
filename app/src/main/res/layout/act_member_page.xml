@@ -181,7 +181,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:gravity="center"
-                        android:text="会议管理"
+                        android:text="会员管理"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
