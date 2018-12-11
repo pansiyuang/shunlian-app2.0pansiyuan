@@ -30,7 +30,7 @@ public class SortFragPresenter extends BasePresenter<ISortFragView> {
      */
     @Override
     public void attachView() {
-
+        initApi();
     }
 
     /**
@@ -49,7 +49,8 @@ public class SortFragPresenter extends BasePresenter<ISortFragView> {
         Map<String,String> map = new HashMap<>();
         sortAndMD5(map);
         baseEntityCall = getApiService().categoryAll(map);
-        getNetData(true, baseEntityCall,new SimpleNetDataCallback<BaseEntity<SortFragEntity>>(){
+        getNetData(0,100,true, baseEntityCall,new
+                SimpleNetDataCallback<BaseEntity<SortFragEntity>>(){
             @Override
             public void onSuccess(BaseEntity<SortFragEntity> entity) {
                 super.onSuccess(entity);

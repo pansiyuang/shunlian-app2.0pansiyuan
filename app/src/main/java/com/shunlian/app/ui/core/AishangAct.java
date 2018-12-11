@@ -27,6 +27,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IAishang;
@@ -182,6 +183,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
                     kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                         @Override
                         public void onItemClick(int position) {
+                            JosnSensorsDataAPI.bannerClick(getTitle().toString(),coreNewEntity.banner_list.get(position).type,coreNewEntity.banner_list.get(position).id,coreNewEntity.banner_list.get(position).item_id,position);
                             Common.goGoGo(baseAct, coreNewEntity.banner_list.get(position).type, coreNewEntity.banner_list.get(position).item_id);
                         }
                     });
@@ -259,6 +261,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
             aiMoreAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+                    JosnSensorsDataAPI.loveNewGoodClick(cate_name,mData.get(position).id,mData.get(position).title,position);
                     GoodsDetailAct.startAct(baseAct, mData.get(position).id);
                 }
             });

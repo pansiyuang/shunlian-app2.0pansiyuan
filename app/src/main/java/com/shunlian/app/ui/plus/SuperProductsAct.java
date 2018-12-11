@@ -16,6 +16,7 @@ import com.shunlian.app.bean.SuperProductEntity;
 import com.shunlian.app.presenter.SuperproductPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISuperProductView;
 
@@ -86,6 +87,7 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView,
             mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+                    JosnSensorsDataAPI.youpinGoodClick(mData.get(position).url.type,mData.get(position).url.item_id,mData.get(position).title,position);
                     Common.goGoGo(baseAct,mData.get(position).url.type,mData.get(position).url.item_id);
                 }
             });

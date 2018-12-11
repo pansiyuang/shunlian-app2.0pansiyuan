@@ -275,7 +275,7 @@
                         android:layout_width="@dimen/xx120"
                         android:layout_height="@dimen/xx120"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/icon_saveimage" />
+                        android:src="@mipmap/icon_erweimass" />
 
                     <com.shunlian.app.widget.NewTextView
                         android:layout_width="wrap_content"

@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,6 @@ import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
-import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
 import com.shunlian.app.widget.MyImageView;
@@ -608,7 +608,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
 
             mHolder.mtv_price.setText(mGoodsEntity.price);
-            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb)+mGoodsEntity.market_price);
+            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb)+"原价："+mGoodsEntity.market_price);
             String shipping_fee = mGoodsEntity.shipping_fee;
             if (!isEmpty(shipping_fee) && !"0".equals(shipping_fee)) {
                 mHolder.mtv_free_shipping.setText(String.format(getString(R.string.not_mail), shipping_fee));
@@ -1186,25 +1186,50 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_special_title)
         MyTextView mtv_special_title;
 
-        @BindView(R.id.llayout_plus)
-        LinearLayout llayout_plus;
-
-        @BindView(R.id.mtv_plus_prefPrice)
-        MyTextView mtv_plus_prefPrice;
+        @BindView(R.id.mtv_prefPrice)
+        MyTextView mtv_prefPrice;
 
         @BindView(R.id.mtv_want)
         MyTextView mtv_want;
 
         @BindView(R.id.miv_fav)
         MyImageView miv_fav;
+
+        @BindView(R.id.rlayout_plus_tip)
+        MyRelativeLayout rlayout_plus_tip;
+
+        @BindView(R.id.mtv_plus_title)
+        MyTextView mtv_plus_title;
+
+        @BindView(R.id.mtv_plus_des)
+        MyTextView mtv_plus_des;
+
         public TitleHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
             if (isEmpty(mGoodsEntity.self_buy_earn)) {
-                gone(llayout_plus);
+                gone(mtv_prefPrice);
             } else {
-                visible(llayout_plus);
-                mtv_plus_prefPrice.setText(getString(R.string.rmb) + mGoodsEntity.self_buy_earn);
+                visible(mtv_prefPrice);
+                mtv_prefPrice.setText("赚 "+getString(R.string.rmb) + mGoodsEntity.self_buy_earn);
+            }
+
+            if (mGoodsEntity.plus_door != null){
+                GoodsDeatilEntity.PlusDoor plus_door = mGoodsEntity.plus_door;
+                if (isEmpty(plus_door.title)){
+                    gone(rlayout_plus_tip);
+                }else {
+                    visible(rlayout_plus_tip);
+                    SpannableStringBuilder title_sp
+                            = Common.changeColor(plus_door.title, plus_door.title_highlight, getColor(R.color.pink_color));
+                    mtv_plus_title.setText(title_sp);
+
+                    SpannableStringBuilder content_sp
+                            = Common.changeColor(plus_door.content, plus_door.content_highlight, getColor(R.color.pink_color));
+                    mtv_plus_des.setText(content_sp);
+                }
+            }else {
+                gone(rlayout_plus_tip);
             }
         }
 

@@ -125,7 +125,7 @@
                         android:layout_width="@dimen/xx120"
                         android:layout_height="@dimen/xx120"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/icon_saveimage" />
+                        android:src="@mipmap/icon_erweimass" />
 
                     <com.shunlian.app.widget.NewTextView
                         android:layout_width="wrap_content"
@@ -140,8 +140,8 @@
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_below="@id/ll_root"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"

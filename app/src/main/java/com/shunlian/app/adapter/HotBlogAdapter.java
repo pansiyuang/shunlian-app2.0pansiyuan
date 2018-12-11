@@ -317,6 +317,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                             mShareInfoParam.price = goods.price;
                             mShareInfoParam.market_price = goods.market_price;
                             mShareInfoParam.img = goods.thumb;
+                             mShareInfoParam.share_buy_earn = goods.share_buy_earn;
                             mShareInfoParam.isSuperiorProduct = (goods.isSuperiorProduct == 1 ? true : false);
                             mShareInfoParam.userName = SharedPrefUtil.getSharedUserString("nickname", "");
                             mShareInfoParam.userAvatar = SharedPrefUtil.getSharedUserString("avatar", "");

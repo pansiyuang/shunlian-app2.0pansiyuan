@@ -145,17 +145,17 @@ public class RecordedActivity extends BaseActivity implements View.OnClickListen
 
 
     private void initView() {
-        surfaceView = findViewById(R.id.record_surfaceView);
-        mRecordControl = findViewById(R.id.record_control);
-        iv_change_flash = findViewById(R.id.iv_change_flash);
-        iv_change_camera = findViewById(R.id.iv_change_camera);
-        rl_bottom = findViewById(R.id.rl_bottom);
-        rl_top = findViewById(R.id.rl_top);
-        vv_play = findViewById(R.id.vv_play);
-        tv_hint = findViewById(R.id.tv_hint);
-        iv_back = findViewById(R.id.iv_back);
-        iv_finish = findViewById(R.id.iv_finish);
-        iv_close = findViewById(R.id.iv_close);
+        surfaceView = (FocusSurfaceView)findViewById(R.id.record_surfaceView);
+        mRecordControl = (RecordedButton)findViewById(R.id.record_control);
+        iv_change_flash = (ImageView) findViewById(R.id.iv_change_flash);
+        iv_change_camera = (ImageView) findViewById(R.id.iv_change_camera);
+        rl_bottom = (RelativeLayout) findViewById(R.id.rl_bottom);
+        rl_top = (RelativeLayout) findViewById(R.id.rl_top);
+        vv_play = (MyVideoView) findViewById(R.id.vv_play);
+        tv_hint = (TextView) findViewById(R.id.tv_hint);
+        iv_back = (ImageView)findViewById(R.id.iv_back);
+        iv_finish = (ImageView)findViewById(R.id.iv_finish);
+        iv_close = (ImageView)findViewById(R.id.iv_close);
     }
 
     private void initData() {

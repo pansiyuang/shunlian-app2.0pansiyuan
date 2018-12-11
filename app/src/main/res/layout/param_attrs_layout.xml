@@ -53,6 +53,8 @@
         app:ll_control_adapter="true"
         app:ll_margin_left="23">
 
+
+
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_reason"
             android:layout_width="wrap_content"
@@ -69,7 +71,6 @@
             app:tv_margin_right="30"
             app:tv_margin_left="10" />
 
-
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_certified_products"
             android:layout_width="wrap_content"
@@ -85,7 +86,6 @@
             app:tv_control_adapter="true"
             app:tv_margin_right="30"
             app:tv_margin_left="10" />
-
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_send_time"

@@ -93,4 +93,11 @@ public interface IGoodsDetailView extends IView {
      * 停留获得金蛋
      */
     default void stayObtainEggs(int time){}
+
+    /**
+     * 底部导航
+     * @param self_buy 自购
+     * @param share_buy 分享赚
+     */
+    default void selfBuyAndShareBuyBottomBtn(String self_buy,String share_buy){}
 }

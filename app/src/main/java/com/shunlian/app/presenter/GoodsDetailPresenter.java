@@ -185,6 +185,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         mgoldSecond = data.get_gold_second;
                         iView.stayObtainEggs(Integer.parseInt(mgoldSecond));
                     }
+                    //底部导航，分享赚，自购
+                    iView.selfBuyAndShareBuyBottomBtn(data.self_buy_earn_btn,data.share_buy_earn_btn);
                 }
             }
 
