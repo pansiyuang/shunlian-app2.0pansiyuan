@@ -1198,6 +1198,11 @@
             android:exported="true"
             android:label="新人确认订单"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.member.MemberPageActivity"
+            android:exported="true"
+            android:label="会员管理"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
