@@ -131,7 +131,6 @@
         android:layout_marginRight="5dp"
         android:layout_alignParentLeft="true"
         android:ellipsize="end"
-        android:textStyle="bold"
         android:singleLine="true"
         android:layout_alignParentBottom="true"
         android:textColor="@color/value_484848"
@@ -150,8 +149,7 @@
             android:singleLine="true"
             android:layout_alignParentBottom="true"
             android:textColor="@color/pink_color"
-            android:textStyle="bold"
-            android:textSize="12sp"
+            android:textSize="11sp"
             android:text=""
             android:visibility="gone"/>
         <com.shunlian.app.widget.MyTextView

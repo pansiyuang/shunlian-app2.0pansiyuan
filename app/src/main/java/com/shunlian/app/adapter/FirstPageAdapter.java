@@ -570,12 +570,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                         } else {
                             fiveHolder.mtv_price.setVisibility(View.GONE);
                         }
-                        if (!TextUtils.isEmpty(data.self_buy_earn)) {
-                            fiveHolder.mtv_market_price.setText(data.self_buy_earn);
-                            fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
-                        } else {
-                            fiveHolder.mtv_market_price.setVisibility(View.GONE);
-                        }
+                        fiveHolder.mtv_market_price.setEarnMoney(data.self_buy_earn,14);
+//                        if (!TextUtils.isEmpty(data.self_buy_earn)) {
+//                            fiveHolder.mtv_market_price.setText(data.self_buy_earn);
+//                            fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
+//                        } else {
+//                            fiveHolder.mtv_market_price.setVisibility(View.GONE);
+//                        }
                         if (!TextUtils.isEmpty(data.content)) {
                             fiveHolder.mtv_buy_num.setText(data.content);
                             fiveHolder.mtv_buy_num.setVisibility(View.VISIBLE);
@@ -675,6 +676,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                     SevenHolder sevenHolder = (SevenHolder) holder;
                     GetDataEntity.MData data = lists.get(position);
 //                        if (sevenHolder.firstHorizonAdapter == null) {
+                    if (isEmpty(data.datass)){
+                        sevenHolder.mtv_xianshi.setVisibility(View.GONE);
+                        sevenHolder.rv_goods.setVisibility(View.GONE);
+                    }else {
+                        sevenHolder.mtv_xianshi.setVisibility(View.VISIBLE);
+                        sevenHolder.rv_goods.setVisibility(View.VISIBLE);
+                    }
                     sevenHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, true);
                     sevenHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                     sevenHolder.rv_goods.setAdapter(sevenHolder.firstHorizonAdapter);
@@ -1090,6 +1098,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
     class SevenHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.rv_goods)
         RecyclerView rv_goods;
+
+        @BindView(R.id.mtv_xianshi)
+        MyTextView mtv_xianshi;
         private FirstHorizonAdapter firstHorizonAdapter;
 
         SevenHolder(View itemView) {
