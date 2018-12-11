@@ -71,6 +71,7 @@ public class GoodsDeatilEntity implements Parcelable {
     //分享信息
     public UserInfo user_info;
     public String self_buy_earn;//自购赚多少，该字段有返回时才前台显示（该字段有可能不返回）
+    public String share_buy_earn;
     public String share_buy_earn_btn;
     public String self_buy_earn_btn;
     public PlusDoor plus_door;
@@ -1542,6 +1543,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeParcelable(this.activity, flags);
         dest.writeParcelable(this.user_info, flags);
         dest.writeString(this.self_buy_earn);
+        dest.writeString(this.share_buy_earn);
         dest.writeString(this.share_buy_earn_btn);
         dest.writeString(this.self_buy_earn_btn);
         dest.writeParcelable(this.plus_door, flags);
@@ -1595,6 +1597,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.activity = in.readParcelable(Act.class.getClassLoader());
         this.user_info = in.readParcelable(UserInfo.class.getClassLoader());
         this.self_buy_earn = in.readString();
+        this.share_buy_earn = in.readString();
         this.share_buy_earn_btn = in.readString();
         this.self_buy_earn_btn = in.readString();
         this.plus_door = in.readParcelable(PlusDoor.class.getClassLoader());
