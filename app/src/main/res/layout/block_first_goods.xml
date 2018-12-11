@@ -7,6 +7,7 @@
     android:background="@color/white">
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_xianshi"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:gravity="center"

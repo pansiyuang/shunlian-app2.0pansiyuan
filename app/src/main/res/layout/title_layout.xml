@@ -376,6 +376,7 @@
             android:background="@color/my_gray_one" />
 
         <LinearLayout
+            android:id="@+id/ll_fav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -386,7 +387,7 @@
                 android:id="@+id/miv_fav"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/icon_found_quanzi_xin_n"
+                android:src="@mipmap/icon_heart_nor"
                 app:iv_control_adapter="true"
                 app:iv_control_height="28"
                 app:iv_control_width="28" />
@@ -518,8 +519,10 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginLeft="8dp"
                     android:text="PLUS会员"
+                    android:drawableLeft="@mipmap/icon_plus_01"
                     android:textColor="#343434"
                     android:textSize="14sp"
+                    android:drawablePadding="5dp"
                     android:textStyle="bold" />
 
 

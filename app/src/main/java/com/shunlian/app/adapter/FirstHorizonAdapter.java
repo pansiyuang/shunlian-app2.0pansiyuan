@@ -52,12 +52,13 @@ public class FirstHorizonAdapter extends BaseRecyclerAdapter<GetDataEntity.MData
                 mHolder.mtv_earn_price.setVisibility(View.GONE);
             } else {
                 mHolder.mtv_title.setVisibility(View.GONE);
-                if (!TextUtils.isEmpty(data.self_buy_earn)) {
-                    mHolder.mtv_earn_price.setText(data.self_buy_earn);
-                    mHolder.mtv_earn_price.setVisibility(View.VISIBLE);
-                } else {
-                    mHolder.mtv_earn_price.setVisibility(View.GONE);
-                }
+                mHolder.mtv_earn_price.setEarnMoney(data.self_buy_earn,11);
+//                if (!TextUtils.isEmpty(data.self_buy_earn)) {
+//                    mHolder.mtv_earn_price.setText(data.self_buy_earn);
+//                    mHolder.mtv_earn_price.setVisibility(View.VISIBLE);
+//                } else {
+//                    mHolder.mtv_earn_price.setVisibility(View.GONE);
+//                }
             }
             GlideUtils.getInstance().loadImageZheng(context, mHolder.miv_photo, data.thumb);
         } catch (Exception e) {

@@ -48,6 +48,7 @@
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
+        android:visibility="gone"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:ll_control_adapter="true"
@@ -103,6 +104,46 @@
             app:tv_margin_left="10" />
 
     </com.shunlian.app.widget.MyLinearLayout>
+
+    <!--商家承诺 服务-->
+    <RelativeLayout
+        android:id="@+id/rlayout_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="35dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="服务"
+            android:layout_centerVertical="true"
+            android:textColor="@color/value_484848"
+            android:textSize="14sp" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tabMaxWidth="200dp"
+            app:tabMinWidth="16dp"
+            app:tabMode="scrollable"
+            app:tabBackground="@color/transparent"
+            app:tabIndicatorColor="@color/transparent"
+            android:layout_toRightOf="@+id/mtv_service" />
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/img_common_viewarrow_1" />
+
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

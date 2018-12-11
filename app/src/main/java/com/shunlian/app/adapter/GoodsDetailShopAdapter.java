@@ -50,6 +50,21 @@ public class GoodsDetailShopAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
             SpannableStringBuilder spannableStringBuilder = Common.
                     changeTextSize(getString(R.string.rmb).concat(item.price), getString(R.string.rmb), 12);
             mHoler.mtv_price.setText(spannableStringBuilder);
+
+            if (isEmpty(item.tag)){
+                gone(mHoler.miv_tag);
+            }else {
+                visible(mHoler.miv_tag);
+                GlideUtils.getInstance().loadOverrideImage(context,mHoler.miv_tag,item.tag,
+                        56,56);
+            }
+
+            if (isEmpty(item.self_buy_earn)){
+                gone(mHoler.mtv_earn_much);
+            }else {
+                visible(mHoler.mtv_earn_much);
+                mHoler.mtv_earn_much.setText(item.self_buy_earn);
+            }
         }
     }
 
@@ -63,6 +78,12 @@ public class GoodsDetailShopAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
 
         @BindView(R.id.miv_shop_head)
         MyImageView miv_shop_head;
+
+        @BindView(R.id.miv_tag)
+        MyImageView miv_tag;
+
+        @BindView(R.id.mtv_earn_much)
+        MyTextView mtv_earn_much;
 
         public GoodsDetailShopHolder(View itemView) {
             super(itemView);

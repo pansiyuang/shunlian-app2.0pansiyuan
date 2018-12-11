@@ -343,8 +343,8 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 //        SensorsDataAPI.sharedInstance().showUpX5WebView(mwv_h5,true);
         //x5新增
         webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        webSetting.setSupportZoom(true);
-        webSetting.setBuiltInZoomControls(true);
+        webSetting.setSupportZoom(false);
+        webSetting.setBuiltInZoomControls(false);
         webSetting.setSupportMultipleWindows(false);
         webSetting.setGeolocationEnabled(true);
         webSetting.setDatabasePath(this.getDir("databases", 0).getPath());

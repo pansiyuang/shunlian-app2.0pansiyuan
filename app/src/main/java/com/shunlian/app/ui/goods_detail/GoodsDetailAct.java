@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -201,8 +202,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private boolean isStopAnimation;
     private int goodsCount;//商品数量
     private int offset;//导航栏先从透明到完全显示的偏移量
-    private boolean isAddcart = false;//是否加入购物车
-    private boolean isNowBuy = false;//是否立即购买
+    //private boolean isAddcart = false;//是否加入购物车
+    //private boolean isNowBuy = false;//是否立即购买
     private String favId;//收藏商品id
     private int num;//加入购物车的商品数量
     private int currentQuickAction = -1;//当前快速点击位置
@@ -315,7 +316,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     runnableB = new Runnable() {
                         @Override
                         public void run() {
-                            if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseAct.isFinishing()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct.isDestroyed()) {
+                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
+                            }else if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseAct.isFinishing()) {
                                 LogUtil.augusLogW("mposition:" + mposition);
                                 lLayout_toast.setVisibility(View.VISIBLE);
                                 GlideUtils.getInstance().loadCircleAvar(baseAct,miv_icon,datas.get(mposition).avatar);
@@ -859,7 +862,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     Common.goGoGo(this, "login");
                     return;
                 }
-                isAddcart = true;
+                //isAddcart = true;
                 /*if (goodsCount == 0){//此流程：如果选过商品属性，不需要勾选
                     goodsDeatilFrag.showParamDialog();
                 }else {
@@ -914,8 +917,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }
                 String buyText = mtv_buy_immediately.getText().toString();
                 if (getStringResouce(R.string.now_buy).equals(buyText)||getStringResouce(R.string.goods_tuangoupifa).equals(buyText)) {//立刻购买或者团购批发
-                    isNowBuy = true;
-                    goodsDeatilFrag.showParamDialog();
+                    //isNowBuy = true;
+                    //goodsDeatilFrag.showParamDialog();
                     /*if (goodsCount == 0){
                         goodsDeatilFrag.showParamDialog();
                     }else {
@@ -1220,25 +1223,27 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      * @param sku
      * @param count
      */
-    public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count) {
+    public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count,boolean isAddcart) {
         //this.sku = sku;
         goodsCount = count;
         //LogUtil.zhLogW("=goodsCount=========="+goodsCount);
         if (isAddcart) {
-            isAddcart = false;
+            //isAddcart = false;
             rnview.setVisibility(View.VISIBLE);
             goodsDetailPresenter.addCart(goodsId, sku == null ? "" : sku.id, String.valueOf(goodsCount));
-        }
-
-        if (isNowBuy) {
-            isNowBuy = false;
+        }else {
             ConfirmOrderAct.startAct(this, goodsId, String.valueOf(goodsCount), sku == null ? "" : sku.id);
         }
+
+        /*if (isNowBuy) {
+            isNowBuy = false;
+            ConfirmOrderAct.startAct(this, goodsId, String.valueOf(goodsCount), sku == null ? "" : sku.id);
+        }*/
     }
 
     public void closeParamsDialog(){
-        isAddcart = false;
-        isNowBuy = false;
+        //isAddcart = false;
+        //isNowBuy = false;
     }
 
     @OnClick(R.id.mllayout_store)
