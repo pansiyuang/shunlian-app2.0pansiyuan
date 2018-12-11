@@ -654,7 +654,6 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                     sixHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                     sixHolder.rv_goods.setAdapter(sixHolder.firstHorizonAdapter);
                     sixHolder.rv_goods.setNestedScrollingEnabled(false);
-                    sixHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
                     sixHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
@@ -680,7 +679,6 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                     sevenHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                     sevenHolder.rv_goods.setAdapter(sevenHolder.firstHorizonAdapter);
                     sevenHolder.rv_goods.setNestedScrollingEnabled(false);
-                    sevenHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
                     sevenHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
@@ -701,8 +699,6 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
 //                        cateGoryFrag.cate_id = data.get(0).id;
 //                        cateGoryFrag.pFirstPage.resetBaby(cateGoryFrag.cate_id);
                         eightHolder.firstCategoryMenuAdapter = new FirstCategoryMenuAdapter(context, false, data, isFirst);
-                        if (isFirst)
-                            eightHolder.rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
                         eightHolder.firstCategoryMenuAdapter.setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
@@ -1087,6 +1083,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
 
         SixHolder(View itemView) {
             super(itemView);
+            rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
         }
     }
 
@@ -1097,6 +1094,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
 
         SevenHolder(View itemView) {
             super(itemView);
+            rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
         }
     }
 
@@ -1109,6 +1107,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
 
         EightHolder(View itemView) {
             super(itemView);
+            if (isFirst)
+                rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
         }
     }
 
