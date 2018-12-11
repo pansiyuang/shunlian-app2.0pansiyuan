@@ -35,6 +35,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String return_7;
     public String send_time;
     public String quality_guarantee;
+    public ArrayList<SimpTitle> services;
     public String credit;
     public String video;//视频地址
     public String type;// 普通商品0，优品1,团购商品2
@@ -78,12 +79,45 @@ public class GoodsDeatilEntity implements Parcelable {
     public String self_buy_earn_btn;
     public PlusDoor plus_door;
 
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static  class PlusDoor implements Parcelable {
-        public String is_plus;
+    public static class SimpTitle implements Parcelable {
         public String title;
         public String content;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.title);
+            dest.writeString(this.content);
+        }
+
+        public SimpTitle() {
+        }
+
+        protected SimpTitle(Parcel in) {
+            this.title = in.readString();
+            this.content = in.readString();
+        }
+
+        public static final Creator<SimpTitle> CREATOR = new Creator<SimpTitle>() {
+            @Override
+            public SimpTitle createFromParcel(Parcel source) {
+                return new SimpTitle(source);
+            }
+
+            @Override
+            public SimpTitle[] newArray(int size) {
+                return new SimpTitle[size];
+            }
+        };
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class PlusDoor extends SimpTitle implements Parcelable {
+        public String is_plus;
         public UrlType url;
         public ArrayList<String> title_highlight;
         public ArrayList<String> content_highlight;
@@ -99,8 +133,6 @@ public class GoodsDeatilEntity implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.is_plus);
-            dest.writeString(this.title);
-            dest.writeString(this.content);
             dest.writeParcelable(this.url, flags);
             dest.writeStringList(this.title_highlight);
             dest.writeStringList(this.content_highlight);
@@ -108,8 +140,6 @@ public class GoodsDeatilEntity implements Parcelable {
 
         protected PlusDoor(Parcel in) {
             this.is_plus = in.readString();
-            this.title = in.readString();
-            this.content = in.readString();
             this.url = in.readParcelable(UrlType.class.getClassLoader());
             this.title_highlight = in.createStringArrayList();
             this.content_highlight = in.createStringArrayList();
@@ -1571,6 +1601,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.return_7);
         dest.writeString(this.send_time);
         dest.writeString(this.quality_guarantee);
+        dest.writeTypedList(this.services);
         dest.writeString(this.credit);
         dest.writeString(this.video);
         dest.writeString(this.type);
@@ -1588,6 +1619,8 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeTypedList(this.full_cut);
         dest.writeTypedList(this.full_discount);
         dest.writeTypedList(this.buy_gift);
+        dest.writeString(this.cate_1_name);
+        dest.writeString(this.cate_2_name);
         dest.writeTypedList(this.voucher);
         dest.writeParcelable(this.store_info, flags);
         dest.writeTypedList(this.combo);
@@ -1625,6 +1658,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.return_7 = in.readString();
         this.send_time = in.readString();
         this.quality_guarantee = in.readString();
+        this.services = in.createTypedArrayList(SimpTitle.CREATOR);
         this.credit = in.readString();
         this.video = in.readString();
         this.type = in.readString();
@@ -1642,6 +1676,8 @@ public class GoodsDeatilEntity implements Parcelable {
         this.full_cut = in.createTypedArrayList(ActivityDetail.CREATOR);
         this.full_discount = in.createTypedArrayList(ActivityDetail.CREATOR);
         this.buy_gift = in.createTypedArrayList(ActivityDetail.CREATOR);
+        this.cate_1_name = in.readString();
+        this.cate_2_name = in.readString();
         this.voucher = in.createTypedArrayList(Voucher.CREATOR);
         this.store_info = in.readParcelable(StoreInfo.class.getClassLoader());
         this.combo = in.createTypedArrayList(Combo.CREATOR);

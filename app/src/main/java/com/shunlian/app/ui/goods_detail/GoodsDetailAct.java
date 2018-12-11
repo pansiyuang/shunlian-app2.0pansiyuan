@@ -19,8 +19,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -916,7 +914,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     return;
                 }
                 String buyText = mtv_buy_immediately.getText().toString();
-                if (getStringResouce(R.string.now_buy).equals(buyText)||getStringResouce(R.string.goods_tuangoupifa).equals(buyText)) {//立刻购买或者团购批发
+                if (buyText.contains("分享赚")) {//立刻购买或者团购批发
                     //isNowBuy = true;
                     //goodsDeatilFrag.showParamDialog();
                     /*if (goodsCount == 0){
@@ -925,6 +923,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                         ConfirmOrderAct.startAct(this,goodsId,String
                         .valueOf(goodsCount),sku==null?"":sku.id);
                     }*/
+                    moreAnim();
                 } else {
                     //设置提醒
                     if (getStringResouce(R.string.day_setting_remind).equals(buyText)) {//设置提醒

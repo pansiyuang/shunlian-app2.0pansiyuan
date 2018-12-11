@@ -31,6 +31,7 @@ import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
+import com.shunlian.app.widget.GoodsServiceDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -1380,6 +1381,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.rlayout_service)
         RelativeLayout rlayout_service;
+        private GoodsServiceDialog serviceDialog;
 
         public ParamAttrsHolder(View itemView) {
             super(itemView);
@@ -1406,7 +1408,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
-
+            rlayout_service.setOnClickListener(this);
             /*if (!isEmpty(mGoodsEntity.return_7)) {
                 mtv_reason.setText(mGoodsEntity.return_7);
                 visible(miv_reason, mtv_reason);
@@ -1479,6 +1481,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         recyclerDialog.setAttributes(mGoodsEntity.attrs);
                         recyclerDialog.show();
                     }
+                    break;
+                case R.id.rlayout_service:
+                    if (serviceDialog == null) {
+                        serviceDialog = new GoodsServiceDialog(context);
+                        serviceDialog.setServiceContent(mGoodsEntity.services);
+                    }
+                    serviceDialog.show();
                     break;
             }
         }
