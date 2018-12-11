@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.fragment.first_page;
 
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.AppBarLayout;
@@ -187,7 +188,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     runnableB = new Runnable() {
                         @Override
                         public void run() {
-                            if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseActivity.isFinishing()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity.isDestroyed()) {
+                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
+                            }else if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseActivity.isFinishing()) {
                                 LogUtil.augusLogW("mposition:" + mposition);
                                 lLayout_toast.setVisibility(View.VISIBLE);
                                 GlideUtils.getInstance().loadCircleAvar(baseActivity,miv_icon,datas.get(mposition).avatar);

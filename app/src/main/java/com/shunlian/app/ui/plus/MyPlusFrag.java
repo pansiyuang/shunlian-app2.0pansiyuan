@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.plus;
 
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
@@ -511,7 +512,9 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
             public void run() {
                 if (position < datas.size()) {
                     runnableB = () -> {
-                        if (position < datas.size()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity.isDestroyed()) {
+                            throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
+                        }else if (position < datas.size()) {
                             lLayout_toast.setVisibility(View.VISIBLE);
                             GlideUtils.getInstance().loadCircleImage(getActivity(), miv_toast_icon, datas.get(position).avatar);
                             tv_info.setText(datas.get(position).sentence);
