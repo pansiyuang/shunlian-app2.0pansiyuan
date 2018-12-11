@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:id="@+id/title_bar"
+        android:background="@drawable/bg_border_line_bottom"
+        >
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:padding="10dp"
+            android:src="@mipmap/icon_common_back_black" />
+        <TextView
+            android:id="@+id/tv_head"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="9dp"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="center"
+            android:text="我的导购"
+            android:textColor="@color/value_484848"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/relt_empty_guide"
+        android:layout_below="@+id/title_bar"
+        android:visibility="gone"
+        >
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_below="@+id/search_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+     ></com.shunlian.app.widget.empty.NetAndEmptyInterface>
+
+        <TextView
+            android:id="@+id/tv_add_guide"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="38dp"
+            android:gravity="center"
+            android:background="@drawable/rounded_corner_solid_pink_50px"
+            android:text="去添加导购"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:layout_height="48dp" />
+    </RelativeLayout>
+</RelativeLayout>
