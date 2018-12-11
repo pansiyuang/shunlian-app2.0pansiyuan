@@ -696,6 +696,44 @@ public class GoodsDeatilEntity implements Parcelable {
         public String store_icon;     //店铺icon
         public ArrayList<Item> hot;//店铺热销
         public ArrayList<Item> push;//店主推荐
+        public ArrayList<ActItem> push_goods;//灵活版的hot 和 push
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class ActItem implements Parcelable {
+            public String title;
+            public ArrayList<Item> data;
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.title);
+                dest.writeTypedList(this.data);
+            }
+
+            public ActItem() {
+            }
+
+            protected ActItem(Parcel in) {
+                this.title = in.readString();
+                this.data = in.createTypedArrayList(Item.CREATOR);
+            }
+
+            public static final Creator<ActItem> CREATOR = new Creator<ActItem>() {
+                @Override
+                public ActItem createFromParcel(Parcel source) {
+                    return new ActItem(source);
+                }
+
+                @Override
+                public ActItem[] newArray(int size) {
+                    return new ActItem[size];
+                }
+            };
+        }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Item implements Parcelable {
@@ -704,6 +742,13 @@ public class GoodsDeatilEntity implements Parcelable {
             public String thumb;
             public String price;
             public String whole_thumb;
+            public String tag;
+            public String self_buy_earn;
+            public String share_buy_earn;
+            public String cost_price;
+
+            public Item() {
+            }
 
             @Override
             public int describeContents() {
@@ -717,9 +762,10 @@ public class GoodsDeatilEntity implements Parcelable {
                 dest.writeString(this.thumb);
                 dest.writeString(this.price);
                 dest.writeString(this.whole_thumb);
-            }
-
-            public Item() {
+                dest.writeString(this.tag);
+                dest.writeString(this.self_buy_earn);
+                dest.writeString(this.share_buy_earn);
+                dest.writeString(this.cost_price);
             }
 
             protected Item(Parcel in) {
@@ -728,9 +774,13 @@ public class GoodsDeatilEntity implements Parcelable {
                 this.thumb = in.readString();
                 this.price = in.readString();
                 this.whole_thumb = in.readString();
+                this.tag = in.readString();
+                this.self_buy_earn = in.readString();
+                this.share_buy_earn = in.readString();
+                this.cost_price = in.readString();
             }
 
-            public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
+            public static final Creator<Item> CREATOR = new Creator<Item>() {
                 @Override
                 public Item createFromParcel(Parcel source) {
                     return new Item(source);
@@ -741,6 +791,9 @@ public class GoodsDeatilEntity implements Parcelable {
                     return new Item[size];
                 }
             };
+        }
+
+        public StoreInfo() {
         }
 
         @Override
@@ -763,9 +816,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.store_icon);
             dest.writeTypedList(this.hot);
             dest.writeTypedList(this.push);
-        }
-
-        public StoreInfo() {
+            dest.writeList(this.push_goods);
         }
 
         protected StoreInfo(Parcel in) {
@@ -782,9 +833,11 @@ public class GoodsDeatilEntity implements Parcelable {
             this.store_icon = in.readString();
             this.hot = in.createTypedArrayList(Item.CREATOR);
             this.push = in.createTypedArrayList(Item.CREATOR);
+            this.push_goods = new ArrayList<ActItem>();
+            in.readList(this.push_goods, ActItem.class.getClassLoader());
         }
 
-        public static final Parcelable.Creator<StoreInfo> CREATOR = new Parcelable.Creator<StoreInfo>() {
+        public static final Creator<StoreInfo> CREATOR = new Creator<StoreInfo>() {
             @Override
             public StoreInfo createFromParcel(Parcel source) {
                 return new StoreInfo(source);
