@@ -2,6 +2,8 @@ package com.shunlian.app.ui.member;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,6 +83,7 @@ public class MemberPageActivity extends BaseActivity{
     ImageView img_user_shop;
 
     LinearLayoutManager  manager;
+    ImmersionBar immersionBar;
 
     @Override
     public void onStop() {
@@ -102,9 +105,10 @@ public class MemberPageActivity extends BaseActivity{
         for (int i =0;i<20;i++){
             lists.add(new NewUserGoodsEntity.Goods());
         }
-        ImmersionBar.with(this).fitsSystemWindows(false)
+        immersionBar = ImmersionBar.with(this);
+        immersionBar.fitsSystemWindows(false)
                 .statusBarColor(R.color.transparent)
-                .statusBarDarkFont(true)
+                .statusBarDarkFont(false)
                 .init();
 //        setStatusBarColor(R.color.value_3e3e3e);
 //        setStatusBarFontDark();
@@ -138,6 +142,7 @@ public class MemberPageActivity extends BaseActivity{
                         tv_head.setAlpha(2*percent-1);
                         tv_title_right.setAlpha(2*percent-1);
                         miv_close.setAlpha(2*percent-1);
+                        immersionBar.statusBarDarkFont(true).init();
                     }else{
                         tv_head.setTextColor(getColorResouce(R.color.white));
                         tv_title_right.setTextColor(getColorResouce(R.color.white));
@@ -146,6 +151,9 @@ public class MemberPageActivity extends BaseActivity{
                         tv_head.setAlpha(1-2*percent);
                         tv_title_right.setAlpha(1-2*percent);
                         miv_close.setAlpha(1-2*percent);
+                        if (percent > 0) {
+                            immersionBar.statusBarDarkFont(false).init();
+                        }
                     }
                 }
             }
