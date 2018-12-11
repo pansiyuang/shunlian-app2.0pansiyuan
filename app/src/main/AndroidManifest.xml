@@ -1203,6 +1203,16 @@
             android:exported="true"
             android:label="会员管理"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.member.SearchMemberActivity"
+            android:exported="true"
+            android:label="搜索会员"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.member.ShoppingGuideActivity"
+            android:exported="true"
+            android:label="我的导购"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

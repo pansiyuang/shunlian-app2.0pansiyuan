@@ -6,6 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -74,6 +75,11 @@ public class MemberPageActivity extends BaseActivity{
     @BindView(R.id.appbar)
      AppBarLayout appbar;
 
+    @BindView(R.id.img_user_level)
+    ImageView img_user_level;
+    @BindView(R.id.img_user_shop)
+    ImageView img_user_shop;
+
     LinearLayoutManager  manager;
 
     @Override
@@ -96,8 +102,12 @@ public class MemberPageActivity extends BaseActivity{
         for (int i =0;i<20;i++){
             lists.add(new NewUserGoodsEntity.Goods());
         }
-        setStatusBarColor(R.color.value_3e3e3e);
-        setStatusBarFontDark();
+        ImmersionBar.with(this).fitsSystemWindows(false)
+                .statusBarColor(R.color.transparent)
+                .statusBarDarkFont(true)
+                .init();
+//        setStatusBarColor(R.color.value_3e3e3e);
+//        setStatusBarFontDark();
 
         memberUserAdapter = new MemberUserAdapter(this,lists);
         manager = new LinearLayoutManager(this);
@@ -124,16 +134,24 @@ public class MemberPageActivity extends BaseActivity{
                         tv_head.setTextColor(getColorResouce(R.color.black));
                         tv_title_right.setTextColor(getColorResouce(R.color.black));
                         miv_close.setImageResource(R.mipmap.icon_common_back_black);
-                        setStatusBarColor(R.color.white);
+//                        setStatusBarColor(R.color.white);
+                        tv_head.setAlpha(2*percent-1);
+                        tv_title_right.setAlpha(2*percent-1);
+                        miv_close.setAlpha(2*percent-1);
                     }else{
                         tv_head.setTextColor(getColorResouce(R.color.white));
                         tv_title_right.setTextColor(getColorResouce(R.color.white));
                         miv_close.setImageResource(R.mipmap.icon_common_back_white);
-                        setStatusBarColor(R.color.value_3e3e3e);
+//                        setStatusBarColor(R.color.value_3e3e3e);
+                        tv_head.setAlpha(1-2*percent);
+                        tv_title_right.setAlpha(1-2*percent);
+                        miv_close.setAlpha(1-2*percent);
                     }
                 }
             }
         });
+        line_search.setOnClickListener(this);
+        tv_title_right.setOnClickListener(this);
     }
 
     @Override
@@ -141,10 +159,17 @@ public class MemberPageActivity extends BaseActivity{
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onClick(View view) {
+       if(view.getId()==R.id.line_search){
+           SearchMemberActivity.startAct(this);
+       }else if(view.getId()==R.id.tv_title_right){
+            ShoppingGuideActivity.startAct(this);
+        }
+    }
 
     @Override
     public void onDestroy() {
-        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }
