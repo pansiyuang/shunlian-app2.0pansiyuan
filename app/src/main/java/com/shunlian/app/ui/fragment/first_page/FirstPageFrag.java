@@ -27,6 +27,7 @@ import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.member.MemberPageActivity;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
@@ -401,7 +402,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public void scan() {
 //        H5X5Act.startAct(baseContext,"http://soft.imtt.qq.com/browser/tes/feedback.html",H5X5Act.MODE_SONIC);
 //        H5X5Act.startAct(baseContext,"https://plus.mengtianvip.com/plus",H5X5Act.MODE_SONIC);
-        ZXingDemoAct.startAct(baseActivity, false, 0);
+//        ZXingDemoAct.startAct(baseActivity, false, 0);
+        MemberPageActivity.startAct(baseActivity);
     }
 
     @OnClick(R.id.mllayout_search)
@@ -455,7 +457,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         }
         fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {
-            fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id));
+            fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id,getMenuEntiy.datas.get(i).channel_name));
             if (i >= getMenuEntiy.datas.size() - 1 && isAdded()) {
                 firstId = getMenuEntiy.datas.get(0).id;
                 pager.setAdapter(new MyFrPagerAdapter(getChildFragmentManager(), getMenuEntiy.datas, fragments));

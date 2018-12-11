@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.app.Activity;
 import android.content.Context;
 
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -163,6 +164,7 @@ public class TestWXLoginPresenter extends BasePresenter {
         SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
         SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
+        SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(wxLoginEntity.member_id);
         if (wxLoginEntity.tag != null)
             SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(wxLoginEntity.tag));

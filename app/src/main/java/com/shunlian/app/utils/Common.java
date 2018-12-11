@@ -43,8 +43,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.os.StatFs;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
@@ -721,11 +719,6 @@ public class Common {
             mtv_toast.setText(content);
             mtv_desc.setText(desc);
             toastAnim = new Toast(getApplicationContext());
-//            LinearLayout.LayoutParams vlp = new LinearLayout.LayoutParams(App.widthPixels,
-//                    App.hightPixels);
-//            vlp.setMargins(0, 0, 0, 0);
-//            show_toast.setLayoutParams(vlp);
-//            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
             toastAnim.setDuration(Toast.LENGTH_LONG);
             toastAnim.setView(v);
             toastAnim.setGravity(Gravity.FILL, 0, 0);
@@ -737,6 +730,34 @@ public class Common {
         }
         toastAnim.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         toastAnim.show();
+    }
+
+
+    public static void staticAnimNewToast(String content,String desc,String jsonAnim) {
+        if (TextUtils.isEmpty(content))
+            return;
+        if (exToast == null) {
+            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast_anim_new_json, null);
+            ex_desc=  v.findViewById(R.id.mtv_desc);
+            ex_animation_view=  v.findViewById(R.id.animation_view);
+            ex_desc.setText(content);
+            exToast =  new Toast(getApplicationContext());
+            exToast.setView(v);
+            exToast.setGravity(Gravity.FILL, 0, 0);
+        } else {
+            ex_desc.setText(desc);
+        }
+        exToast.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(ex_animation_view, "alpha", 0f, 1f);
+        objectAnimator.setDuration(300);
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                showAnimExJsonFile(jsonAnim,"images/img_11.png");
+            }});
+        exToast.show();
+        objectAnimator.start();
     }
 
     private static void showAnimJsonFile(String jsonAnim,String defaultImage){
@@ -755,41 +776,6 @@ public class Common {
         }
     }
 
-    public static void staticAnimNewToast(String content,String desc,String jsonAnim)  {
-        if (TextUtils.isEmpty(content))
-            return;
-        if (exToast == null) {
-            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast_anim_new_json, null);
-            ex_desc=  v.findViewById(R.id.mtv_desc);
-            ex_animation_view=  v.findViewById(R.id.animation_view);
-            ex_desc.setText(content);
-            exToast =  new Toast(getApplicationContext());
-            exToast.setDuration(Toast.LENGTH_LONG);
-            exToast.setView(v);
-//            exToast.setAnimations(R.style.ClickToast);
-            exToast.setGravity(Gravity.FILL, 0, 0);
-        } else {
-            ex_desc.setText(desc);
-        }
-        exToast.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(ex_desc, "alpha", 0f, 1f);
-        objectAnimator.setDuration(300);
-        objectAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                showAnimExJsonFile(jsonAnim,"images/img_11.png");
-            }});
-         exToast.show();
-        objectAnimator.start();
-    }
-
-    private  Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    };
-
     private static void showAnimExJsonFile(String jsonAnim,String defaultImage){
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -805,7 +791,6 @@ public class Common {
             e.printStackTrace();
         }
     }
-
 
     public static void staticToast(String content) {
         if (TextUtils.isEmpty(content))

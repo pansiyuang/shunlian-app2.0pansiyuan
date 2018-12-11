@@ -30,6 +30,7 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
@@ -337,6 +338,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                     if (!isEmpty(data.nickname))
                     SharedPrefUtil.saveSharedUserString("nickname", data.nickname);
                     getNetData(emptyCode,failureCode,isLoading,clone,callback);
+                    SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
                 }
             }
 

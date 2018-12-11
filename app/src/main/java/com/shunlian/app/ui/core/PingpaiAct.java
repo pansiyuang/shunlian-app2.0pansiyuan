@@ -25,6 +25,7 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IAishang;
 import com.shunlian.app.widget.MyTextView;
@@ -208,6 +209,8 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
                     kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                         @Override
                         public void onItemClick(int position) {
+                            JosnSensorsDataAPI.bannerClick(getTitle().toString(),corePingEntity.banner.get(position).type,
+                                    corePingEntity.banner.get(position).id,corePingEntity.banner.get(position).item_id,position);
                             Common.goGoGo(baseAct, corePingEntity.banner.get(position).type, corePingEntity.banner.get(position).item_id);
                         }
                     });
@@ -231,6 +234,8 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
         pinpaiAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                JosnSensorsDataAPI.pinpaiStoreClick(corePingEntity.brand_list.get(position).id,
+                        corePingEntity.brand_list.get(position).content,position);
                 PingpaiListAct.startAct(baseAct, corePingEntity.brand_list.get(position).id);
             }
         });

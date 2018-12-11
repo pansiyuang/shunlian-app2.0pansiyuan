@@ -79,6 +79,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:excludeFromRecents="true"
+            android:label="支付宝支付"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name="com.unionpay.UPPayWapActivity"
@@ -156,6 +157,7 @@
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="false"
+            android:label="推送消息"
             android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="cn.jpush.android.ui.PushActivity" />
@@ -319,6 +321,11 @@
             android:exported="false"
             android:label="@string/order_xiangqing"
             android:screenOrientation="portrait" />
+        <!--<activity-->
+        <!--android:name=".ui.start.GuideAct"-->
+        <!--android:exported="false"-->
+        <!--android:screenOrientation="portrait"-->
+        <!--android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />-->
         <activity
             android:name=".ui.start.GuideAct"
             android:exported="false"
@@ -327,6 +334,7 @@
         <activity
             android:name=".ui.register.TestAct"
             android:exported="false"
+            android:label="测试"
             android:screenOrientation="portrait" />
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -335,11 +343,11 @@
             android:label="微信回调"
             android:screenOrientation="portrait"
             android:theme="@style/wx" >
-           <!-- <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="wxbffd8c8c412e4c73" />
-            </intent-filter>-->
+            <!-- <intent-filter>
+                 <action android:name="android.intent.action.VIEW" />
+                 <category android:name="android.intent.category.DEFAULT" />
+                 <data android:scheme="wxbffd8c8c412e4c73" />
+             </intent-filter>-->
         </activity>
         <activity
             android:name=".ui.store.StoreAct"
@@ -416,6 +424,7 @@
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
+            android:label="AuthActivity"
             android:screenOrientation="behind"></activity>
         <activity
             android:name=".ui.my_comment.MyCommentAct"
@@ -496,7 +505,7 @@
             android:name=".ui.order.ExchangeDetailAct"
             android:exported="false"
             android:launchMode="singleTask"
-            android:label="@string/order_xiangqing"
+            android:label="换货详情/退款"
             android:screenOrientation="portrait" />
         <!--<activity-->
             <!--android:name=".ui.h5.H5Act"-->
@@ -584,13 +593,13 @@
         <activity
             android:name=".ui.order.PlatformInterventionRequestActivity"
             android:exported="false"
-            android:label="排行榜"
+            android:label="@string/platform_intervention_request"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.goods_detail.SearchGoodsActivity"
             android:exported="false"
-            android:label="@string/platform_intervention_request"
+            android:label="商品搜索"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.DayDayAct"
@@ -605,7 +614,7 @@
         <activity
             android:name=".ui.collection.SearchResultAct"
             android:exported="false"
-            android:label="搜索商品"
+            android:label="搜索商品结果"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.sign.SignInAct"
@@ -615,12 +624,12 @@
         <activity
             android:name=".ui.store.StoreSearchAct"
             android:exported="false"
-            android:label="搜索商品"
+            android:label="搜索店铺"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.qr_code.QrCodeAct"
             android:exported="false"
-            android:label="订单详情"
+            android:label="@string/personal_yaoqingpengyou"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.help.HelpOneAct"
@@ -650,7 +659,7 @@
         <activity
             android:name=".ui.myself_store.GoodsSearchAct"
             android:exported="false"
-            android:label="商品搜索"
+            android:label="我的商品搜索"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.myself_store.QrcodeStoreAct"
@@ -980,7 +989,7 @@
         <activity
             android:name=".ui.core.PingpaiListAct"
             android:exported="false"
-            android:label="品牌列表"
+            android:label="品牌特卖商品列表"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.sale_rank.SaleRankAct"
@@ -1188,6 +1197,21 @@
             android:name=".ui.new_user.ConfirmNewUserOrderAct"
             android:exported="true"
             android:label="新人确认订单"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.member.MemberPageActivity"
+            android:exported="true"
+            android:label="会员管理"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.member.SearchMemberActivity"
+            android:exported="true"
+            android:label="搜索会员"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.member.ShoppingGuideActivity"
+            android:exported="true"
+            android:label="我的导购"
             android:screenOrientation="portrait" />
     </application>
 

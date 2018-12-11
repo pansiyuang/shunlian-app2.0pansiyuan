@@ -17,6 +17,7 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.DayDayPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.DayDayView;
 import com.shunlian.app.widget.MyTextView;
@@ -191,6 +192,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
                 @Override
                 public void onItemClick(View view, int position) {
 //                    activityListEntity.from;//踩点
+                    JosnSensorsDataAPI.daydayGoodClick(activityListEntity.menu.get(dayDayMenuAdapter.selectPosition).time,list.get(position).goods_id,list.get(position).title,position);
                     GoodsDetailAct.startAct(DayDayAct.this, list.get(position).goods_id);
                 }
             });

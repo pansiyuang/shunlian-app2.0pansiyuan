@@ -54,7 +54,8 @@ public class GoodsDeatilEntity implements Parcelable {
     public ArrayList<ActivityDetail> full_cut;//满减
     public ArrayList<ActivityDetail> full_discount;//满折
     public ArrayList<ActivityDetail> buy_gift;//买赠
-
+    public String cate_1_name;//一级分类
+    public String cate_2_name;//二级分类
 
     public ArrayList<Voucher> voucher;
 
@@ -71,6 +72,7 @@ public class GoodsDeatilEntity implements Parcelable {
     //分享信息
     public UserInfo user_info;
     public String self_buy_earn;//自购赚多少，该字段有返回时才前台显示（该字段有可能不返回）
+
     public String share_buy_earn;
     public String share_buy_earn_btn;
     public String self_buy_earn_btn;
@@ -125,7 +127,6 @@ public class GoodsDeatilEntity implements Parcelable {
             }
         };
     }
-
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -1008,6 +1009,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String sales_desc;
         public String desc;
         public int isSuperiorProduct;
+        public String share_buy_earn;
         public String self_buy_earn;
         public String free_ship;             //是否 包邮，1是，0否
         public String send_area;             //发货地
