@@ -93,7 +93,7 @@ public class NewCouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity
     }
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        return new TwoHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.block_first_page_nav, parent, false));
+        return new TwoHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_coupon_one, parent, false));
     }
 
     @Override

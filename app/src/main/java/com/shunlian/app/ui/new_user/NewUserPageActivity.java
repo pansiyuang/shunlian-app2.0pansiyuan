@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -258,7 +259,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                     runnableB = new Runnable() {
                         @Override
                         public void run() {
-                            if (mposition < datas.size()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct.isDestroyed()) {
+                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
+                            }else if (mposition < datas.size()) {
                                 LogUtil.augusLogW("mposition:" + mposition);
                                 lLayout_toast.setVisibility(View.VISIBLE);
                                 GlideUtils.getInstance().loadCircleAvar(baseAct,miv_icon,datas.get(mposition).avatar);

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -316,7 +317,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     runnableB = new Runnable() {
                         @Override
                         public void run() {
-                            if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseAct.isFinishing()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct.isDestroyed()) {
+                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
+                            }else if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseAct.isFinishing()) {
                                 LogUtil.augusLogW("mposition:" + mposition);
                                 lLayout_toast.setVisibility(View.VISIBLE);
                                 GlideUtils.getInstance().loadCircleAvar(baseAct,miv_icon,datas.get(mposition).avatar);
