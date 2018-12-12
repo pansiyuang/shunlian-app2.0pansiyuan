@@ -1400,17 +1400,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 gone(mtv_params, view_params);
             }
 
-            if (!isEmpty(mGoodsEntity.return_7)){
-                tab_layout.addTab(tab_layout.newTab()
-                        .setCustomView(getView(mGoodsEntity.return_7)));
-            }
-            if (!isEmpty(mGoodsEntity.send_time)){
-                tab_layout.addTab(tab_layout.newTab()
-                        .setCustomView(getView(mGoodsEntity.send_time)));
-            }
-            if (!isEmpty(mGoodsEntity.quality_guarantee)){
-                tab_layout.addTab(tab_layout.newTab()
-                        .setCustomView(getView(mGoodsEntity.quality_guarantee)));
+            ArrayList<GoodsDeatilEntity.SimpTitle> services = mGoodsEntity.services;
+            if (!isEmpty(services)){
+                visible(tab_layout);
+                for (GoodsDeatilEntity.SimpTitle simptitle: services) {
+                    tab_layout.addTab(tab_layout.newTab()
+                            .setCustomView(getView(simptitle.title)));
+                }
+            }else {
+                gone(tab_layout);
             }
 
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
