@@ -600,7 +600,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
 
             mHolder.mtv_price.setText(mGoodsEntity.price);
-            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb)+"原价："+mGoodsEntity.market_price);
+            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb)+mGoodsEntity.market_price);
             String shipping_fee = mGoodsEntity.shipping_fee;
             if (!isEmpty(shipping_fee) && !"0".equals(shipping_fee)) {
                 mHolder.mtv_free_shipping.setText(String.format(getString(R.string.not_mail), shipping_fee));
@@ -1207,7 +1207,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 gone(mtv_prefPrice);
             } else {
                 visible(mtv_prefPrice);
-                mtv_prefPrice.setText(getString(R.string.rmb) + mGoodsEntity.self_buy_earn);
+                mtv_prefPrice.setText(mGoodsEntity.self_buy_earn);
             }
 
             if (mGoodsEntity.plus_door != null){
@@ -1362,29 +1362,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.tv_select_param)
         MyTextView tv_select_param;
 
-        /*@BindView(R.id.mtv_reason)
-        MyTextView mtv_reason;
-
-        @BindView(R.id.mtv_send_time)
-        MyTextView mtv_send_time;
-
-        @BindView(R.id.miv_reason)
-        MyImageView miv_reason;
-
-        @BindView(R.id.miv_send_time)
-        MyImageView miv_send_time;*/
-
-        /*@BindView(R.id.mtv_certified_products)
-        MyTextView mtv_certified_products;
-
-        @BindView(R.id.miv_certified_products)
-        MyImageView miv_certified_products;*/
-
         @BindView(R.id.view_params)
         View view_params;
 
         @BindView(R.id.tab_layout)
-        TabLayout tab_layout;
+        LinearLayout tab_layout;
 
         @BindView(R.id.rlayout_service)
         RelativeLayout rlayout_service;
@@ -1403,9 +1385,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             ArrayList<GoodsDeatilEntity.SimpTitle> services = mGoodsEntity.services;
             if (!isEmpty(services)){
                 visible(tab_layout);
-                for (GoodsDeatilEntity.SimpTitle simptitle: services) {
-                    tab_layout.addTab(tab_layout.newTab()
-                            .setCustomView(getView(simptitle.title)));
+                for (int i=0;i<services.size();i++) {
+                    if (i == 2)break;
+                    tab_layout.addView(getView(services.get(i).title));
                 }
             }else {
                 gone(tab_layout);
@@ -1414,34 +1396,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
             rlayout_service.setOnClickListener(this);
-            /*if (!isEmpty(mGoodsEntity.return_7)) {
-                mtv_reason.setText(mGoodsEntity.return_7);
-                visible(miv_reason, mtv_reason);
-            } else {
-                gone(miv_reason, mtv_reason);
-            }
-
-            if (!isEmpty(mGoodsEntity.send_time)) {
-                mtv_send_time.setText(mGoodsEntity.send_time);
-                visible(miv_send_time, mtv_send_time);
-            } else {
-                gone(miv_send_time, mtv_send_time);
-            }
-
-            if (!isEmpty(mGoodsEntity.quality_guarantee)) {
-                mtv_certified_products.setText(mGoodsEntity.quality_guarantee);
-                visible(miv_certified_products, mtv_certified_products);
-            } else {
-                gone(miv_certified_products, mtv_certified_products);
-            }*/
-
         }
 
         private View getView(String s){
 
             LinearLayout layout = new LinearLayout(context);
-            layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.leftMargin = TransformUtil.dip2px(context,10);
+            layout.setLayoutParams(layoutParams);
             layout.setGravity(Gravity.CENTER);
             MyImageView iv = new MyImageView(context);
             iv.setImageResource(R.mipmap.img_xiangqing_baozhang);
@@ -1459,6 +1422,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             layout.addView(tv);
 
             return layout;
+        }
+
+        private void showServices(){
+            if (serviceDialog == null) {
+                serviceDialog = new GoodsServiceDialog(context);
+                serviceDialog.setServiceContent(mGoodsEntity.services);
+            }
+            serviceDialog.show();
         }
 
         /**
@@ -1488,11 +1459,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     }
                     break;
                 case R.id.rlayout_service:
-                    if (serviceDialog == null) {
-                        serviceDialog = new GoodsServiceDialog(context);
-                        serviceDialog.setServiceContent(mGoodsEntity.services);
-                    }
-                    serviceDialog.show();
+                    showServices();
                     break;
             }
         }
