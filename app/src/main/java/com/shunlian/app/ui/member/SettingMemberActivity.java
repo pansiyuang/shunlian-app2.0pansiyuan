@@ -7,16 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.MemberUserAdapter;
 import com.shunlian.app.bean.NewUserGoodsEntity;
-import com.shunlian.app.listener.ICallBackResult;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.widget.EditTextImage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -31,7 +28,15 @@ import butterknife.BindView;
  *新人专享页面
  */
 
-public class ShoppingGuideActivity extends BaseActivity implements View.OnClickListener {
+public class SettingMemberActivity extends BaseActivity{
+    private List<NewUserGoodsEntity.Goods> lists;
+    private MemberUserAdapter memberUserAdapter;
+
+    @BindView(R.id.recy_view)
+    RecyclerView recy_view;
+
+    @BindView(R.id.edt_member_search)
+    EditTextImage edt_member_search;
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -39,13 +44,8 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
-    @BindView(R.id.relt_empty_guide)
-    RelativeLayout relt_empty_guide;
+    LinearLayoutManager  manager;
 
-    @BindView(R.id.tv_add_guide)
-    TextView tv_add_guide;
-
-    private CommonDialogUtil commonDialogUtil;
     @Override
     public void onStop() {
         super.onStop();
@@ -58,21 +58,31 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected int getLayoutId() {
-        return R.layout.act_shop_guide;
+        return R.layout.act_setting_member;
     }
     @Override
     protected void initData() {
+        lists = new ArrayList<>();
+        for (int i =0;i<20;i++){
+            lists.add(new NewUserGoodsEntity.Goods());
+        }
         ImmersionBar.with(this).fitsSystemWindows(true)
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
-        commonDialogUtil = new CommonDialogUtil(this);
-        nei_empty.setImageResource(R.mipmap.icon_login_logo).setText("您还没有导购专员，快去绑定吧！").setButtonText(null);
-        relt_empty_guide.setVisibility(View.VISIBLE);
+        memberUserAdapter = new MemberUserAdapter(this,lists);
+        manager = new LinearLayoutManager(this);
+        recy_view.setLayoutManager(manager);
+        nei_empty.setImageResource(R.mipmap.img_bangzhu_sousuo).setText("暂无搜索结果").setButtonText(null);
+        recy_view.setAdapter(memberUserAdapter);
+        memberUserAdapter.notifyDataSetChanged();
+
+        nei_empty.setVisibility(View.VISIBLE);
+        recy_view.setVisibility(View.GONE);
     }
 
     public static void startAct(Context context) {
-        Intent intent = new Intent(context, ShoppingGuideActivity.class);
+        Intent intent = new Intent(context, SettingMemberActivity.class);
         context.startActivity(intent);
     }
 
@@ -84,7 +94,18 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
                 finish();
             }
         });
-        tv_add_guide.setOnClickListener(this);
+        edt_member_search.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+           @Override
+            public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
+                if(arg1 == EditorInfo.IME_ACTION_SEARCH)
+                {
+                    Common.staticToast(edt_member_search.getText().toString());
+                    Common.hideKeyboard(edt_member_search);
+
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -92,29 +113,6 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    @Override
-    public void onClick(View view) {
-        if(view.getId()==R.id.tv_add_guide){
-            commonDialogUtil.inputGuideCommonDialog(new ICallBackResult<String>() {
-                @Override
-                public void onTagClick(String data) {
-                    showGuideUserInfo();
-                }
-            });
-        }
-    }
-
-    /**
-     * 设置引导用户的信息
-     */
-    private void showGuideUserInfo(){
-        commonDialogUtil.guideInfoCommonDialog(new ICallBackResult<String>() {
-            @Override
-            public void onTagClick(String data) {
-            }
-        });
-    }
 
     @Override
     public void onDestroy() {

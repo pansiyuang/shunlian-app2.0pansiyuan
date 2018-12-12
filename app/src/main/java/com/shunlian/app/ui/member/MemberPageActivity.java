@@ -2,6 +2,8 @@ package com.shunlian.app.ui.member;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.MemberUserAdapter;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -81,6 +85,7 @@ public class MemberPageActivity extends BaseActivity{
     ImageView img_user_shop;
 
     LinearLayoutManager  manager;
+    ImmersionBar immersionBar;
 
     @Override
     public void onStop() {
@@ -102,13 +107,11 @@ public class MemberPageActivity extends BaseActivity{
         for (int i =0;i<20;i++){
             lists.add(new NewUserGoodsEntity.Goods());
         }
-        ImmersionBar.with(this).fitsSystemWindows(false)
+        immersionBar = ImmersionBar.with(this);
+        immersionBar.fitsSystemWindows(false)
                 .statusBarColor(R.color.transparent)
-                .statusBarDarkFont(true)
+                .statusBarDarkFont(false)
                 .init();
-//        setStatusBarColor(R.color.value_3e3e3e);
-//        setStatusBarFontDark();
-
         memberUserAdapter = new MemberUserAdapter(this,lists);
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
@@ -138,6 +141,7 @@ public class MemberPageActivity extends BaseActivity{
                         tv_head.setAlpha(2*percent-1);
                         tv_title_right.setAlpha(2*percent-1);
                         miv_close.setAlpha(2*percent-1);
+                        immersionBar.statusBarDarkFont(true).init();
                     }else{
                         tv_head.setTextColor(getColorResouce(R.color.white));
                         tv_title_right.setTextColor(getColorResouce(R.color.white));
@@ -146,12 +150,18 @@ public class MemberPageActivity extends BaseActivity{
                         tv_head.setAlpha(1-2*percent);
                         tv_title_right.setAlpha(1-2*percent);
                         miv_close.setAlpha(1-2*percent);
+                        if (percent > 0) {
+                            immersionBar.statusBarDarkFont(false).init();
+                        }
                     }
                 }
             }
         });
         line_search.setOnClickListener(this);
         tv_title_right.setOnClickListener(this);
+        tv_sett_state.setOnClickListener(this);
+        tv_copy_num.setOnClickListener(this);
+        GlideUtils.getInstance().loadCircleAvar(this,img_user_head,"https://static.veer.com/veer/static/resources/FourPack/2018-12-03/d9738f6321324d51a78e567fdfeabc63.jpg");
     }
 
     @Override
@@ -165,7 +175,12 @@ public class MemberPageActivity extends BaseActivity{
            SearchMemberActivity.startAct(this);
        }else if(view.getId()==R.id.tv_title_right){
             ShoppingGuideActivity.startAct(this);
-        }
+        }else if(view.getId()==R.id.tv_sett_state){
+           SettingMemberActivity.startAct(this);
+       }else if(view.getId()==R.id.tv_copy_num){
+           Common.copyText(this,"拷贝成功");
+           Common.staticToast("复制邀请码成功");
+       }
     }
 
     @Override

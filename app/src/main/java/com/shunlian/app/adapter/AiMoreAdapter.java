@@ -70,7 +70,7 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
                 viewHolder.mtv_title.setText(goods.title);
                 SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
                 viewHolder.mtv_price.setText(spannableStringBuilder);
-
+                viewHolder.mtv_earn.setEarnMoney(goods.self_buy_earn, 14);
                 viewHolder.mllayout_tag.removeAllViews();
 
                 if ("1".equals(goods.is_new)) {
@@ -101,7 +101,7 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
                     viewHolder.mllayout_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
                 }
 
-                if (!isEmpty(goods.stock)&&Float.parseFloat(goods.stock)==0) {
+                if (!isEmpty(goods.stock) && Float.parseFloat(goods.stock) == 0) {
                     viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
                     viewHolder.mtv_price.setTextColor(getColor(R.color.value_A0A0A0));
                 } else {
@@ -113,8 +113,6 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
             e.printStackTrace();
         }
     }
-
-
 
 
     public TextView creatTextTag(String content, int colorRes, Drawable drawable, SingleViewHolder viewHolder) {
@@ -138,7 +136,6 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
     }
 
 
-
     public class SingleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
@@ -152,6 +149,9 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
 
+        @BindView(R.id.mtv_earn)
+        MyTextView mtv_earn;
+
         @BindView(R.id.mllayout_tag)
         MyLinearLayout mllayout_tag;
 
@@ -160,7 +160,7 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
 
         public SingleViewHolder(View itemView) {
             super(itemView);
-            int picWidth = (Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context,20)) / 2;
+            int picWidth = (Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20)) / 2;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
             mrlayout_photo.setLayoutParams(params);
             itemView.setOnClickListener(this);

@@ -35,7 +35,7 @@ public class CommonDialogUtil {
     private TextView tvCancle;
     private TextView tvMessage;
 
-
+    public CommonDialog guideInfo;
     public CommonDialog inputGuide;
     public CommonDialogUtil(Context context){
         this.context = context;
@@ -96,6 +96,41 @@ public class CommonDialogUtil {
             }
         });
     }
+
+
+    //导购信息
+    public void guideInfoCommonDialog(ICallBackResult<String> callBackResult) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,250))
+                .setView(R.layout.dialog_member_info);
+        guideInfo = nomalBuild.create();
+        guideInfo.setCancelable(false);
+        guideInfo.show();
+        TextView tvSure = guideInfo.findViewById(R.id.tv_sure);
+        TextView  tvCancle = guideInfo.findViewById(R.id.tv_cancel);
+
+        ImageView img_member_head = guideInfo.findViewById(R.id.img_member_head);
+        TextView  tv_member_name = guideInfo.findViewById(R.id.tv_member_name);
+        TextView  tv_member_number = guideInfo.findViewById(R.id.tv_member_number);
+
+        GlideUtils.getInstance().loadCircleAvar(context,img_member_head,"https://static.veer.com/veer/static/resources/FourPack/2018-12-03/d9738f6321324d51a78e567fdfeabc63.jpg");
+        tvCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideInfo.dismiss();
+            }
+        });
+        tvSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideInfo.dismiss();
+                callBackResult.onTagClick("");
+            }
+        });
+    }
+
 
     public void dismiss() {
         if(nomalBuildl!=null&&nomalBuildl.isShowing()){

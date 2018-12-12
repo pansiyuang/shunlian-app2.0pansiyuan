@@ -530,8 +530,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                     fiveHolder.view_line.setVisibility(View.GONE);
                     fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
                     if (!isEmpty(data.content)) {
-                        fiveHolder.mtv_desc.setVisibility(View.GONE);
+                        fiveHolder.mtv_desc.setVisibility(View.VISIBLE);
                         fiveHolder.mtv_desc.setText(data.content);
+                    }else {
+                        fiveHolder.mtv_desc.setVisibility(View.GONE);
                     }
 
                     fiveHolder.mtv_title.setText(data.title);

@@ -59,8 +59,8 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 OneHolder oneHolder = (OneHolder) holder;
                 ActivityListEntity.MData.Good.MList data = lists.get(position);
                 oneHolder.mtv_title.setText(data.title);
-                oneHolder.mtv_priceM.setText(context.getResources().getString(R.string.common_yuan) + data.market_price);
-                oneHolder.mtv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
+                oneHolder.mtv_priceM.setEarnMoney(data.self_buy_earn,14);
+//                oneHolder.mtv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
                 SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.act_price, getString(R.string.common_yuan), 12);
                 oneHolder.mtv_priceA.setText(spannableStringBuilder);
                 oneHolder.goods_id = data.goods_id;
@@ -110,7 +110,7 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                     oneHolder.miv_clock.setVisibility(View.GONE);
                     oneHolder.mtv_quxiao.setText(R.string.day_lijiqianggou);
                     copyBackground.setColor(getColor(R.color.pink_color));//设置填充色
-                    oneHolder.mtv_priceA.setTextColor(getColor(R.color.pink_color));
+                    oneHolder.mtv_priceA.setTextColor(getColor(R.color.new_text));
 //                if (data.percent>0){
 //                    oneHolder.seekbar_grow.setProgress(data.percent);
 //                    oneHolder.mtv_desc.setText(data.str_surplus_stock);
