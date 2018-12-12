@@ -2,13 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F7F7F7"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:id="@+id/title_bar"
-        android:background="@drawable/bg_border_line_bottom"
+        android:background="@color/white"
         >
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"
@@ -26,52 +27,101 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:gravity="center"
-            android:text="设置二维码"
+            android:text="设置微信号"
             android:textColor="@color/value_484848"
             android:textSize="18sp" />
     </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="15dp"
+    <LinearLayout
         android:layout_below="@+id/title_bar"
-        android:id="@+id/search_title"
-        android:background="@drawable/bg_border_line_bottom"
-       >
+        android:layout_width="match_parent"
+        android:id="@+id/line_have_weixin"
+        android:layout_margin="15dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/img_weixinhao_dise">
 
-        <com.shunlian.app.widget.EditTextImage
-            android:id="@+id/edt_member_search"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_toLeftOf="@+id/tv_search_cancel"
-            android:background="@drawable/rounded_corner_solid_gray_40px"
-            android:paddingRight="15dp"
-            android:drawablePadding="6.5dp"
-            android:gravity="center_vertical"
-            android:hint="搜索我的会员"
-            android:imeOptions="actionSearch"
-            android:paddingLeft="15dp"
-            android:singleLine="true"
-            android:inputType="text"
-            android:textColor="@color/new_text"
-            android:textColorHint="@color/share_text"
-            android:textSize="14sp" />
-
-    </RelativeLayout>
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recy_view"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_weixin_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="我的微信号"
+            android:textColor="@color/value_484848"/>
+        <TextView
+            android:id="@+id/tv_me_weixin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="7dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/pink_color"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:text="设置微信号后，您的会员可以添加您为微信好友，您可以更方便引导他在顺联动力商城进行购物，也可以教他开店创业。"
+                    android:textColor="@color/text_gray2"/>
+            </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_below="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/search_title"
-        android:overScrollMode="never"
-        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-    <com.shunlian.app.widget.empty.NetAndEmptyInterface
-        android:id="@+id/nei_empty"
-        android:layout_below="@+id/search_title"
+        android:layout_margin="15dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="40dp"
+        android:id="@+id/line_no_weixin"
+        android:paddingBottom="40dp"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner_solid_white_24px">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:lineSpacingExtra="5dp"
+            android:text="设置微信号后，您的会员可以添加您为微信好友，您可以更方便引导他在顺联动力商城进行购物，也可以教他开店创业。"
+            android:textColor="@color/text_gray2"/>
+
+        </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_add_weixin"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"></com.shunlian.app.widget.empty.NetAndEmptyInterface>
+        android:layout_marginBottom="38dp"
+        android:gravity="center"
+        android:background="@drawable/rounded_corner_solid_pink_50px"
+        android:text="去添加微信号"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:layout_height="48dp" />
 </RelativeLayout>

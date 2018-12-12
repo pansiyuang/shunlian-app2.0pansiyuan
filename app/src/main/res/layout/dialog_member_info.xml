@@ -28,29 +28,31 @@
           android:layout_height="60dp"
           android:layout_marginTop="10dp"
           android:orientation="horizontal"
-          android:elevation="1dp"
-          android:background="@drawable/share_circle">
+          android:gravity="center"
+          android:background="@mipmap/img_huiyuan_touxiang">
 
           <ImageView
               android:id="@+id/img_member_head"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_margin="4dp"/>
+              android:layout_width="56dp"
+              android:layout_height="56dp"
+              android:scaleType="centerCrop"
+            />
          </LinearLayout>
         <TextView
             android:id="@+id/tv_member_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:singleLine="true"
             android:gravity="center_horizontal"
-            android:text="王奶奶"
+            android:text=""
             android:textColor="@color/value_484848"
             android:layout_marginTop="5dp"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="25dp"
             android:gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -72,11 +74,11 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
-                android:text="88888"
+                android:text=""
                 android:textColor="@color/value_484848"
                 android:layout_marginTop="5dp"
                 android:textStyle="bold"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
 
         </LinearLayout>
         <View

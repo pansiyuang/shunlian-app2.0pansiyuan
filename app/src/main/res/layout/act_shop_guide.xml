@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:id="@+id/title_bar"
+        android:layout_marginTop="22dp"
         android:background="@drawable/bg_border_line_bottom"
         >
         <com.shunlian.app.widget.MyImageView
@@ -44,6 +45,7 @@
         android:layout_below="@+id/search_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="50dp"
      ></com.shunlian.app.widget.empty.NetAndEmptyInterface>
 
         <TextView

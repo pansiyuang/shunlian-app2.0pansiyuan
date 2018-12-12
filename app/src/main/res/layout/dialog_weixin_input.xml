@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="center"
-            android:text="请输入邀请码"
+            android:text="请输入微信号"
             android:layout_marginTop="15dp"
             android:textColor="@color/new_text"
             android:textSize="20sp" />
@@ -36,64 +36,6 @@
           android:textSize="15sp"
           android:background="@drawable/rounded_corner_solid_white_40px"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center_vertical|left"
-            android:text="温馨提示"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/value_484848"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:textSize="14sp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="left"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="2dp"
-                android:layout_height="2dp"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/rounded_corner_solid_pink_8px"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center_vertical|left"
-                android:text="邀请码只能绑定一次，绑定之后无法修改"
-                android:textColor="@color/text_gray2"
-                android:layout_marginLeft="5dp"
-                android:textSize="11sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="left"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="2dp"
-                android:layout_height="2dp"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/rounded_corner_solid_pink_8px"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center_vertical|left"
-                android:text="您只能绑定比您先注册的用户作为导购"
-                android:textColor="@color/text_gray2"
-                android:layout_marginLeft="5dp"
-                android:textSize="11sp" />
-        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -101,7 +43,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="42.5dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="30dp"
             android:orientation="horizontal">
 
             <TextView
