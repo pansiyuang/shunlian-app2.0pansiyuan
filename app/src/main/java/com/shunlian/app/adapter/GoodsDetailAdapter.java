@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.UrlType;
 import com.shunlian.app.bean.VideoBannerData;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -1223,6 +1224,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                             = Common.changeColor(plus_door.content, plus_door.content_highlight, getColor(R.color.pink_color));
                     mtv_plus_des.setText(content_sp);
                 }
+                rlayout_plus_tip.setOnClickListener(v -> {
+                    UrlType url = plus_door.url;
+                    if (url != null){
+                        Common.goGoGo(context,url.type,url.item_id);
+                    }
+                });
             }else {
                 gone(rlayout_plus_tip);
             }

@@ -700,7 +700,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void addCart(String msg) {
-        addCartAnim();
+        //addCartAnim();
     }
 
     /**
