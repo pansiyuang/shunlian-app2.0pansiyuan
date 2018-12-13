@@ -36,22 +36,30 @@
                 android:id="@+id/mtv_special_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/white"
-                android:textSize="29sp" />
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_special_earn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/mtv_special_price"
+                android:layout_alignBaseline="@+id/mtv_special_price"/>
 
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_special_original_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/mtv_special_price"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                app:tv_control_adapter="true"
-                app:tv_margin_left="15"
-                app:tv_margin_top="45" />
+                android:layout_below="@+id/mtv_special_price"
+                android:textColor="#FFB1A9"
+                android:layout_alignLeft="@+id/mtv_special_price"
+                android:textSize="11sp"/>
 
         </com.shunlian.app.widget.MyRelativeLayout>
 
@@ -108,33 +116,42 @@
                 android:id="@+id/mtv_rmb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/mtv_pPrice"
-                android:layout_marginBottom="7.5dp"
+                android:layout_marginTop="11dp"
                 android:layout_marginLeft="12dp"
                 android:text="@string/rmb"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_pPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/mtv_rmb"
-                android:text="125.2"
+                android:layout_alignBaseline="@+id/mtv_rmb"
                 android:textColor="@color/white"
-                android:textSize="36sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_plus_earn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/mtv_pPrice"
+                android:layout_alignBaseline="@+id/mtv_pPrice"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_pmarketPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/mtv_pPrice"
-                android:textColor="@color/value_BF012A"
+                android:layout_below="@+id/mtv_rmb"
+                android:layout_alignLeft="@+id/mtv_rmb"
+                android:textColor="#FFC4D1"
                 android:textSize="11sp" />
 
             <!--<ProgressBar

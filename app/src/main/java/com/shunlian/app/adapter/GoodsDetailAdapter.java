@@ -770,7 +770,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
                 mHolder.mtv_special_price.setText(
                         getString(R.string.rmb)+common_activity.actprice);
-
+                //赚
+                mHolder.mtv_special_earn.setText(mGoodsEntity.share_buy_earn);
                 mHolder.mtv_special_original_price.setStrikethrough().setText(
                         "原价:" + getString(R.string.rmb)+common_activity.old_price);
                 mHolder.ddp_special_downTime.setLabelBackgroundColor(getColor(R.color.white));
@@ -866,6 +867,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
 
             mHolder.mtv_pPrice.setText(tt_act.act_price);
+            mHolder.mtv_plus_earn.setText(mGoodsEntity.share_buy_earn);
             mHolder.mtv_pmarketPrice.setStrikethrough()
                     .setText(getString(R.string.rmb)+tt_act.market_price);
             mHolder.mtv_act_title.setText(tt_act.content);
@@ -1130,6 +1132,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_price_rmb)
         MyTextView mtv_price_rmb;
 
+        @BindView(R.id.mtv_plus_earn)
+        MyTextView mtv_plus_earn;
+
         /*专题活动*/
         @BindView(R.id.mllayout_specail_act)
         MyLinearLayout mllayout_specail_act;
@@ -1142,6 +1147,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mtv_special_price)
         MyTextView mtv_special_price;
+
+        @BindView(R.id.mtv_special_earn)
+        MyTextView mtv_special_earn;
 
         @BindView(R.id.mtv_special_original_price)
         MyTextView mtv_special_original_price;
@@ -1203,11 +1211,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
             TransformUtil.expandViewTouchDelegate(ll_fav,40,40,40,40);
 
-            if (isEmpty(mGoodsEntity.self_buy_earn)) {
+            if (isEmpty(mGoodsEntity.share_buy_earn)) {
                 gone(mtv_prefPrice);
             } else {
                 visible(mtv_prefPrice);
-                mtv_prefPrice.setText(mGoodsEntity.self_buy_earn);
+                mtv_prefPrice.setText(mGoodsEntity.share_buy_earn);
             }
 
             if (mGoodsEntity.plus_door != null){
