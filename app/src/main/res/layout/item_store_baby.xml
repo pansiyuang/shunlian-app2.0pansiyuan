@@ -48,6 +48,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/mtv_yuanl"
             android:textColor="@color/pink_color"
+            android:text="23232"
             android:textSize="15sp" />
 
         <com.shunlian.app.widget.MyTextView
@@ -55,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="9dp"
+            android:text="2323"
             android:layout_toRightOf="@id/mtv_pricel"
             android:textColor="@color/share_text"
             android:textSize="11sp" />

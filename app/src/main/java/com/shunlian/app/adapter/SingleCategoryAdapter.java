@@ -218,11 +218,11 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                     }
                 }
 
-                if (isEmpty(goods.tag_pic)){
+                if (isEmpty(goods.tag_pic)) {
                     viewHolder.miv_act.setVisibility(View.GONE);
-                }else {
+                } else {
                     viewHolder.miv_act.setVisibility(View.VISIBLE);
-                    GlideUtils.getInstance().loadImageZheng(context,viewHolder.miv_act,goods.tag_pic);
+                    GlideUtils.getInstance().loadImageZheng(context, viewHolder.miv_act, goods.tag_pic);
                 }
                 if (1 == goods.is_sell_out) {
                     viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
@@ -235,15 +235,14 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                 viewHolder.tv_address.setText(goods.send_area);
                 if (goods.type == 1) { //是优品
                     viewHolder.miv_product.setVisibility(View.VISIBLE);
-                    if (!isEmpty(goods.self_buy_earn)) { //有字段才显示布局
-                        viewHolder.ll_earn.setVisibility(View.VISIBLE);
-                        viewHolder.tv_earn_money.setText(getString(R.string.common_yuan) + goods.self_buy_earn);
-                    } else {
-                        viewHolder.ll_earn.setVisibility(View.GONE);
-                    }
                 } else {
-                    viewHolder.ll_earn.setVisibility(View.GONE);
                     viewHolder.miv_product.setVisibility(View.GONE);
+                }
+                if (!isEmpty(goods.self_buy_earn)) { //有字段才显示布局
+                    viewHolder.tv_earn_money.setVisibility(View.VISIBLE);
+                    viewHolder.tv_earn_money.setText(goods.self_buy_earn);
+                } else {
+                    viewHolder.tv_earn_money.setVisibility(View.GONE);
                 }
             }
         } catch (Exception e) {
@@ -349,9 +348,6 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         @BindView(R.id.tv_address)
         TextView tv_address;
-
-        @BindView(R.id.ll_earn)
-        LinearLayout ll_earn;
 
         @BindView(R.id.tv_earn_money)
         TextView tv_earn_money;

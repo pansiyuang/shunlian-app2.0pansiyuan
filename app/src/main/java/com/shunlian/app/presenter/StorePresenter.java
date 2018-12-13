@@ -280,6 +280,8 @@ public class StorePresenter extends BasePresenter<StoreView> {
                 ldata.market_price = dataList.get(b).data.get(c).market_price;
                 ldata.update_time = dataList.get(b).data.get(c).update_time;
                 ldata.whole_thumb = dataList.get(b).data.get(c).whole_thumb;
+                ldata.self_buy_earn = dataList.get(b).data.get(c).self_buy_earn;
+                ldata.share_buy_earn = dataList.get(b).data.get(c).share_buy_earn;
                 if ((c + 1) < dataList.get(b).data.size()) {
                     rdata.id = dataList.get(b).data.get(c + 1).id;
                     rdata.title = dataList.get(b).data.get(c + 1).title;
@@ -291,6 +293,8 @@ public class StorePresenter extends BasePresenter<StoreView> {
                     rdata.market_price = dataList.get(b).data.get(c + 1).market_price;
                     rdata.update_time = dataList.get(b).data.get(c + 1).update_time;
                     rdata.whole_thumb = dataList.get(b).data.get(c + 1).whole_thumb;
+                    rdata.self_buy_earn = dataList.get(b).data.get(c + 1).self_buy_earn;
+                    rdata.share_buy_earn = dataList.get(b).data.get(c + 1).share_buy_earn;
                 }
                 bbody.mDatal = ldata;
                 bbody.mDatar = rdata;
@@ -325,6 +329,8 @@ public class StorePresenter extends BasePresenter<StoreView> {
             ldata.market_price = good.data.get(c).market_price;
             ldata.whole_thumb = good.data.get(c).whole_thumb;
             ldata.giftGoodsName = good.data.get(c).giftGoodsName;
+            ldata.self_buy_earn = good.data.get(c).self_buy_earn;
+            ldata.share_buy_earn = good.data.get(c).share_buy_earn;
             if ((c + 1) < good.data.size()) {
                 rdata.id = good.data.get(c + 1).id;
                 rdata.title = good.data.get(c + 1).title;
@@ -336,6 +342,8 @@ public class StorePresenter extends BasePresenter<StoreView> {
                 rdata.market_price = good.data.get(c + 1).market_price;
                 rdata.whole_thumb = good.data.get(c + 1).whole_thumb;
                 rdata.giftGoodsName = good.data.get(c + 1).giftGoodsName;
+                rdata.share_buy_earn = good.data.get(c + 1).share_buy_earn;
+                rdata.self_buy_earn = good.data.get(c + 1).self_buy_earn;
             }
             cData.ldata = ldata;
             cData.rdata = rdata;
@@ -455,6 +463,8 @@ public class StorePresenter extends BasePresenter<StoreView> {
                             ldata.store_id = abodys.get(b).data.get(c).store_id;
                             ldata.item_id = abodys.get(b).data.get(c).item_id;
                             ldata.url = abodys.get(b).data.get(c).url;
+                            ldata.self_buy_earn = abodys.get(b).data.get(c).self_buy_earn;
+                            ldata.share_buy_earn = abodys.get(b).data.get(c).share_buy_earn;
                             ldata.whole_thumb = abodys.get(b).data.get(c).whole_thumb;
                             if ((c + 1) < abodys.get(b).data.size()) {
                                 rdata.id = abodys.get(b).data.get(c + 1).id;
@@ -468,6 +478,8 @@ public class StorePresenter extends BasePresenter<StoreView> {
                                 rdata.item_id = abodys.get(b).data.get(c + 1).item_id;
                                 rdata.url = abodys.get(b).data.get(c + 1).url;
                                 rdata.whole_thumb = abodys.get(b).data.get(c + 1).whole_thumb;
+                                rdata.share_buy_earn = abodys.get(b).data.get(c + 1).share_buy_earn;
+                                rdata.self_buy_earn = abodys.get(b).data.get(c + 1).self_buy_earn;
                             }
                             bbody.ldata = ldata;
                             bbody.rdata = rdata;

@@ -133,6 +133,9 @@ public class BigImgEntity implements Parcelable {
         };
     }
 
+    public BigImgEntity() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -149,9 +152,6 @@ public class BigImgEntity implements Parcelable {
         dest.writeParcelable(this.blog, flags);
     }
 
-    public BigImgEntity() {
-    }
-
     protected BigImgEntity(Parcel in) {
         this.itemList = in.createStringArrayList();
         this.index = in.readInt();
@@ -162,7 +162,7 @@ public class BigImgEntity implements Parcelable {
         this.blog = in.readParcelable(Blog.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<BigImgEntity> CREATOR = new Parcelable.Creator<BigImgEntity>() {
+    public static final Creator<BigImgEntity> CREATOR = new Creator<BigImgEntity>() {
         @Override
         public BigImgEntity createFromParcel(Parcel source) {
             return new BigImgEntity(source);

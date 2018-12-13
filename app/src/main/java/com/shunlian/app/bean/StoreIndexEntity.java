@@ -150,6 +150,8 @@ public class StoreIndexEntity {
             public String url;
             public String whole_thumb;
             public String description;
+            public String self_buy_earn;
+            public String share_buy_earn;
 
             @Override
             public String toString() {

@@ -1067,8 +1067,8 @@ public class GoodsDeatilEntity implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.id);
-            dest.writeString(this.cart_id);
             dest.writeString(this.tag_pic);
+            dest.writeString(this.cart_id);
             dest.writeString(this.store_id);
             dest.writeString(this.store_name);
             dest.writeString(this.goods_id);
@@ -1083,10 +1083,9 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeParcelable(this.goods_info, flags);
             dest.writeString(this.sku);
             dest.writeString(this.price);
+            dest.writeString(this.market_price);
             dest.writeString(this.old_price);
             dest.writeString(this.left);
-            dest.writeString(this.market_price);
-            dest.writeString(this.share_url);
             dest.writeTypedList(this.all_prom);
             dest.writeString(this.cate_id);
             dest.writeString(this.cate_name);
@@ -1102,6 +1101,9 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeInt(this.type);
             dest.writeInt(this.is_sell_out);
             dest.writeString(this.sales_desc);
+            dest.writeString(this.desc);
+            dest.writeInt(this.isSuperiorProduct);
+            dest.writeString(this.share_buy_earn);
             dest.writeString(this.self_buy_earn);
             dest.writeString(this.free_ship);
             dest.writeString(this.send_area);
@@ -1116,14 +1118,13 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.limit_min_buy);
             dest.writeString(this.big_label);
             dest.writeInt(this.share_num);
-            dest.writeInt(this.isSuperiorProduct);
-            dest.writeString(this.desc);
+            dest.writeString(this.share_url);
         }
 
         protected Goods(Parcel in) {
             this.id = in.readString();
-            this.cart_id = in.readString();
             this.tag_pic = in.readString();
+            this.cart_id = in.readString();
             this.store_id = in.readString();
             this.store_name = in.readString();
             this.goods_id = in.readString();
@@ -1138,10 +1139,9 @@ public class GoodsDeatilEntity implements Parcelable {
             this.goods_info = in.readParcelable(GoodsInfo.class.getClassLoader());
             this.sku = in.readString();
             this.price = in.readString();
+            this.market_price = in.readString();
             this.old_price = in.readString();
             this.left = in.readString();
-            this.market_price = in.readString();
-            this.share_url = in.readString();
             this.all_prom = in.createTypedArrayList(AllProm.CREATOR);
             this.cate_id = in.readString();
             this.cate_name = in.readString();
@@ -1157,6 +1157,9 @@ public class GoodsDeatilEntity implements Parcelable {
             this.type = in.readInt();
             this.is_sell_out = in.readInt();
             this.sales_desc = in.readString();
+            this.desc = in.readString();
+            this.isSuperiorProduct = in.readInt();
+            this.share_buy_earn = in.readString();
             this.self_buy_earn = in.readString();
             this.free_ship = in.readString();
             this.send_area = in.readString();
@@ -1171,8 +1174,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.limit_min_buy = in.readString();
             this.big_label = in.readString();
             this.share_num = in.readInt();
-            this.isSuperiorProduct = in.readInt();
-            this.desc = in.readString();
+            this.share_url = in.readString();
         }
 
         public static final Creator<Goods> CREATOR = new Creator<Goods>() {
