@@ -76,25 +76,29 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
             mHolder.tv_member_profit.setText(getString(R.string.common_yuan)+lists.get(position).income);
             GlideUtils.getInstance().loadCircleAvar(context,mHolder.miv_member_pic,
                     lists.get(position).avatar);
-            int plus_role_code = Integer.parseInt(lists.get(position).role);
-            if (plus_role_code == 1) {//店主 1=plus店主，2=销售主管，>=3 销售经理
-                mHolder.image_level.setVisibility(View.VISIBLE);
-                mHolder.image_level.setImageResource(R.mipmap.img_plus_phb_dianzhu);
-            } else if (plus_role_code >= 3) {//经理
-                mHolder.image_level.setVisibility(View.VISIBLE);
-                mHolder.image_level.setImageResource(R.mipmap.img_plus_phb_jingli);
-            } else if (plus_role_code == 2) {//主管
-                mHolder.image_level.setVisibility(View.VISIBLE);
-                mHolder.image_level.setImageResource(R.mipmap.img_plus_phb_zhuguan);
-            } else {//没有级别
-                mHolder.image_level.setVisibility(View.GONE);
+            if(!TextUtils.isEmpty(lists.get(position).role)) {
+                int plus_role_code = Integer.parseInt(lists.get(position).role);
+                if (plus_role_code == 1) {//店主 1=plus店主，2=销售主管，>=3 销售经理
+                    mHolder.image_level.setVisibility(View.VISIBLE);
+                    mHolder.image_level.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+                } else if (plus_role_code >= 3) {//经理
+                    mHolder.image_level.setVisibility(View.VISIBLE);
+                    mHolder.image_level.setImageResource(R.mipmap.img_plus_phb_jingli);
+                } else if (plus_role_code == 2) {//主管
+                    mHolder.image_level.setVisibility(View.VISIBLE);
+                    mHolder.image_level.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+                } else {//没有级别
+                    mHolder.image_level.setVisibility(View.GONE);
+                }
             }
-            Bitmap levelBitmap =TransformUtil.convertNewVIP(context,lists.get(position).level);
-            if(levelBitmap!=null){
-                mHolder.image_shop.setVisibility(View.VISIBLE);
-                mHolder.image_shop.setImageBitmap(levelBitmap);
-            }else{
-                mHolder.image_shop.setVisibility(View.GONE);
+            if(!TextUtils.isEmpty(lists.get(position).level)) {
+                Bitmap levelBitmap = TransformUtil.convertNewVIP(context, lists.get(position).level);
+                if (levelBitmap != null) {
+                    mHolder.image_shop.setVisibility(View.VISIBLE);
+                    mHolder.image_shop.setImageBitmap(levelBitmap);
+                } else {
+                    mHolder.image_shop.setVisibility(View.GONE);
+                }
             }
         }
     }

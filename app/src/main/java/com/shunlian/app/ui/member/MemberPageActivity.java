@@ -28,11 +28,15 @@ import com.shunlian.app.eventbus_bean.MemberInfoEvent;
 import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.presenter.MemberPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMemberPageView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -98,10 +102,16 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
     @BindView(R.id.img_user_shop)
     ImageView img_user_shop;
 
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
+
     LinearLayoutManager  manager;
     ImmersionBar immersionBar;
 
     MemberPagePresenter memberPagePresenter;
+
+    NestedSlHeader header;
+    int totalDistance;
     @Override
     public void onStop() {
         super.onStop();
@@ -116,9 +126,31 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
     protected int getLayoutId() {
         return R.layout.act_member_page;
     }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (lay_refresh==null)return;
+            switch (msg.what) {
+                case 1:
+                    float distance = (float) msg.obj;
+                    if (distance <= 0) {
+                        lay_refresh.setRefreshEnabled(true);
+                    } else {
+                        lay_refresh.setRefreshEnabled(false);
+                    }
+                    break;
+                case 2:
+                    lay_refresh.setRefreshEnabled((boolean) msg.obj);
+                    break;
+            }
+        }
+    };
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
+        totalDistance = TransformUtil.dip2px(this, 40);
         memberPagePresenter = new MemberPagePresenter(this, this);
         lists = new ArrayList<>();
         immersionBar = ImmersionBar.with(this);
@@ -126,6 +158,9 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
                 .statusBarColor(R.color.transparent)
                 .statusBarDarkFont(false)
                 .init();
+        header = new NestedSlHeader(this);
+        header.setBackgroundColor(getColorResouce(R.color.white));
+        lay_refresh.setRefreshHeaderView(header);
         memberUserAdapter = new MemberUserAdapter(this,lists);
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
@@ -140,8 +175,14 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
         context.startActivity(intent);
     }
 
+
     @Override
     protected void initListener() {
+        lay_refresh.setOnRefreshListener(() -> {
+            if (memberPagePresenter != null) {
+                memberPagePresenter.refreshData();
+            }
+        });
         recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -160,6 +201,19 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 float percent = Float.valueOf(Math.abs(verticalOffset)) / Float.valueOf(appBarLayout.getTotalScrollRange());
+                Message message = mHandler.obtainMessage(1);
+                message.obj = percent;
+                mHandler.sendMessage(message);
+                if(verticalOffset==0){
+                    if(header.getHeight()-Math.abs(header.getTop())>totalDistance){
+                        tv_head.setVisibility(View.GONE);
+                    }else{
+                        tv_head.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    tv_head.setVisibility(View.VISIBLE);
+                }
+
                 if (title_bar != null && miv_close != null && tv_head != null && tv_title_right != null) {
                     toolbar.setAlpha(percent);
                     if(percent>0.5){
@@ -222,6 +276,10 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
 
     @Override
     public void memberListInfo(List<MemberInfoEntity.MemberList> memberLists,int currentPage) {
+          lay_refresh.setRefreshing(false);
+          if(currentPage==1){
+            this.lists.clear();
+          }
            if(memberLists.size()>0){
                this.lists.addAll(memberLists);
                memberUserAdapter.notifyDataSetChanged();
@@ -245,25 +303,29 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
         }
         tv_me_member_number.setText(memberInfoEntity.total_person_count);
 
-        int plus_role_code = Integer.parseInt(memberInfoEntity.role);
-        if (plus_role_code == 1) {//店主 1=plus店主，2=销售主管，>=3 销售经理
-            img_user_shop.setVisibility(View.VISIBLE);
-            img_user_shop.setImageResource(R.mipmap.img_plus_phb_dianzhu);
-        } else if (plus_role_code >= 3) {//经理
-            img_user_shop.setVisibility(View.VISIBLE);
-            img_user_shop.setImageResource(R.mipmap.img_plus_phb_jingli);
-        } else if (plus_role_code == 2) {//主管
-            img_user_shop.setVisibility(View.VISIBLE);
-            img_user_shop.setImageResource(R.mipmap.img_plus_phb_zhuguan);
-        } else {//没有级别
-            img_user_shop.setVisibility(View.GONE);
-        }
-        Bitmap levelBitmap =TransformUtil.convertNewVIP(this,memberInfoEntity.level);
-        if(levelBitmap!=null){
-            img_user_level.setVisibility(View.VISIBLE);
-            img_user_level.setImageBitmap(levelBitmap);
-        }else{
-            img_user_level.setVisibility(View.GONE);
+         if(!TextUtils.isEmpty(memberInfoEntity.role)) {
+             int plus_role_code = Integer.parseInt(memberInfoEntity.role);
+             if (plus_role_code == 1) {//店主 1=plus店主，2=销售主管，>=3 销售经理
+                 img_user_shop.setVisibility(View.VISIBLE);
+                 img_user_shop.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+             } else if (plus_role_code >= 3) {//经理
+                 img_user_shop.setVisibility(View.VISIBLE);
+                 img_user_shop.setImageResource(R.mipmap.img_plus_phb_jingli);
+             } else if (plus_role_code == 2) {//主管
+                 img_user_shop.setVisibility(View.VISIBLE);
+                 img_user_shop.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+             } else {//没有级别
+                 img_user_shop.setVisibility(View.GONE);
+             }
+         }
+        if(!TextUtils.isEmpty(memberInfoEntity.level)) {
+            Bitmap levelBitmap = TransformUtil.convertNewVIP(this, memberInfoEntity.level);
+            if (levelBitmap != null) {
+                img_user_level.setVisibility(View.VISIBLE);
+                img_user_level.setImageBitmap(levelBitmap);
+            } else {
+                img_user_level.setVisibility(View.GONE);
+            }
         }
         weixinCodeInfo();
     }
@@ -298,11 +360,12 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
 
     @Override
     public void showFailureView(int request_code) {
-
+        lay_refresh.setRefreshing(false);
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
+        lay_refresh.setRefreshing(false);
     }
 
 }

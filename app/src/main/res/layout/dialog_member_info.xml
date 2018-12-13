@@ -29,11 +29,11 @@
           android:layout_marginTop="10dp"
           android:orientation="horizontal"
           android:gravity="center"
-          android:background="@mipmap/img_huiyuan_touxiang">
-
+          >
           <ImageView
               android:id="@+id/img_member_head"
               android:layout_width="56dp"
+              android:layout_gravity="center"
               android:layout_height="56dp"
               android:scaleType="centerCrop"
             />

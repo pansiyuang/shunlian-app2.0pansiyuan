@@ -27,6 +27,7 @@ import retrofit2.Call;
 public class MemberPagePresenter extends BasePresenter<IMemberPageView> {
     protected int currentPage = 1;//当前页
     protected String  member_code;
+    protected boolean isLoading = false;//是否正在加载
     public MemberPagePresenter(Context context, IMemberPageView iView) {
         super(context, iView);
     }
@@ -48,6 +49,12 @@ public class MemberPagePresenter extends BasePresenter<IMemberPageView> {
         allPage = 1;
     }
 
+    public void refreshData() {
+        currentPage = 1;
+        allPage = 1;
+        memberListInfo(false);
+    }
+
     public void initApiMemberKey(String member_code) {
         currentPage = 1;
         allPage = 1;
@@ -59,8 +66,11 @@ public class MemberPagePresenter extends BasePresenter<IMemberPageView> {
     @Override
     public void onRefresh() {
         super.onRefresh();
-        if (currentPage <= allPage) {
-            memberListInfo(false);
+        if (!isLoading) {
+            isLoading = true;
+            if (currentPage <= allPage) {
+                memberListInfo(false);
+            }
         }
     }
 
@@ -77,6 +87,7 @@ public class MemberPagePresenter extends BasePresenter<IMemberPageView> {
             @Override
             public void onSuccess(BaseEntity<MemberInfoEntity> entity) {
                 super.onSuccess(entity);
+                isLoading = false;
                 if(entity.data!=null&&entity.data.pager!=null) {
                     currentPage = Integer.valueOf(entity.data.pager.page);
                     allPage = Integer.parseInt(entity.data.pager.total_page);
