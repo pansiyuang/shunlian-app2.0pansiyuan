@@ -76,8 +76,7 @@ public class StoreDiscountOneAdapter extends BaseRecyclerAdapter<StorePromotionG
                     final StorePromotionGoodsListOneEntity.MData mData = mDatas.get(position);
                     threeHolder.mtv_descl.setText(mData.ldata.title);
                     threeHolder.mtv_pricel.setText(mData.ldata.price);
-                    threeHolder.mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
-                    threeHolder.mtv_pricer.setText(context.getResources().getString(R.string.common_yuan) + mData.ldata.market_price);
+                    threeHolder.mtv_pricer.setEarnMoney(mData.ldata.self_buy_earn,15);
                     GlideUtils.getInstance().loadImage(context, threeHolder.miv_onel, mData.ldata.whole_thumb);
                     if (TextUtils.isEmpty(mData.rdata.title) && TextUtils.isEmpty(mData.rdata.whole_thumb)) {
                         threeHolder.mllayout_oner.setVisibility(View.INVISIBLE);
@@ -85,8 +84,7 @@ public class StoreDiscountOneAdapter extends BaseRecyclerAdapter<StorePromotionG
                         threeHolder.mllayout_oner.setVisibility(View.VISIBLE);
                         threeHolder.mtv_descr.setText(mData.rdata.title);
                         threeHolder.mtv_pricels.setText(mData.rdata.price);
-                        threeHolder.mtv_pricers.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
-                        threeHolder.mtv_pricers.setText(context.getResources().getString(R.string.common_yuan) + mData.ldata.market_price);
+                        threeHolder.mtv_pricers.setEarnMoney(mData.rdata.self_buy_earn, 15);
                         GlideUtils.getInstance().loadImage(context, threeHolder.miv_oner, mData.rdata.whole_thumb);
                     }
                     if (TextUtils.isEmpty(mData.ldata.giftGoodsName)) {

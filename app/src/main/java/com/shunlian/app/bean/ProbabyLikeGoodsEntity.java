@@ -28,6 +28,8 @@ public class ProbabyLikeGoodsEntity {
         public String thumb;
         public String price;
         public String market_price;
+        public String self_buy_earn;
+        public String share_buy_earn;
         public int index;
         public boolean isParent;
     }

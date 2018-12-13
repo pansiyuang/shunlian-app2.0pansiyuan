@@ -83,7 +83,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="6dp"
                 android:text="@string/common_yuan"
-                android:textColor="@color/pink_color"
+                android:textColor="@color/value_484848"
                 android:textSize="10sp" />
 
             <com.shunlian.app.widget.MyTextView
@@ -94,8 +94,20 @@
                 android:layout_marginBottom="4.5dp"
                 android:layout_toRightOf="@id/mtv_yuan"
                 android:text="9999"
-                android:textColor="@color/pink_color"
+                android:textColor="@color/value_484848"
                 android:textSize="15sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_earn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="6dp"
+                android:layout_marginBottom="4.5dp"
+                android:layout_toRightOf="@id/mtv_price"
+                android:text="9999"
+                android:textColor="@color/pink_color"
+                android:textSize="12sp" />
 
             <com.shunlian.app.widget.MyImageView
                 android:layout_width="18.5dp"
