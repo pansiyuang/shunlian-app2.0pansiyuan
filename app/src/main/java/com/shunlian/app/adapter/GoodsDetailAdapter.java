@@ -1223,7 +1223,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
             if (mGoodsEntity.plus_door != null){
                 GoodsDeatilEntity.PlusDoor plus_door = mGoodsEntity.plus_door;
-                if (isEmpty(plus_door.title)){
+                if (isEmpty(plus_door.title) || "1".equals(plus_door.is_plus)){
                     gone(rlayout_plus_tip);
                 }else {
                     visible(rlayout_plus_tip);
