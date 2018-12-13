@@ -705,7 +705,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 if ("1".equals(common_activity.if_act_price)) {//显示预览价格
                     visible(mHolder.mtv_special_before_price);
                     mHolder.mtv_special_before_price.setText(
-                            "活动价:" + getString(R.string.rmb)+common_activity.actprice);
+                            getString(R.string.rmb)+"活动价:"+common_activity.actprice);
                 } else {
                     gone(mHolder.mtv_special_before_price);
                 }
