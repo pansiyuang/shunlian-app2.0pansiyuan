@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/line_bg"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:id="@+id/title_bar"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/bg_border_line_bottom"
         >
         <com.shunlian.app.widget.MyImageView
@@ -37,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/relt_empty_guide"
-        android:layout_below="@+id/title_bar"
         android:visibility="gone"
         >
     <com.shunlian.app.widget.empty.NetAndEmptyInterface
@@ -45,7 +45,7 @@
         android:layout_below="@+id/search_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="50dp"
+        android:paddingBottom="30dp"
      ></com.shunlian.app.widget.empty.NetAndEmptyInterface>
 
         <TextView
@@ -62,7 +62,193 @@
             android:textSize="15sp"
             android:textColor="@color/white"
             android:layout_height="48dp" />
+
     </RelativeLayout>
-
-
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/line_no_weixin"
+        android:background="@mipmap/img_daogou_baise_xiao">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/img__member_head"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:scaleType="centerCrop"
+            />
+        <TextView
+            android:id="@+id/tv_member_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="center_horizontal"
+            android:text=""
+            android:textStyle="bold"
+            android:textColor="@color/value_484848"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/tv_member_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="center_horizontal"
+            android:textStyle="normal"
+            android:textColor="@color/value_484848"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp" />
+      </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:gravity="center"
+                android:text="您的导购暂未上传微信二维码"
+                android:textStyle="normal"
+                android:textColor="@color/color_value_6c"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/line_have_weixin"
+        android:layout_width="match_parent"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:orientation="vertical"
+        android:background="@mipmap/img_daogou_baise_da">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="15dp"
+            >
+            <ImageView
+                android:id="@+id/img__weixin_member_head"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:scaleType="centerCrop"
+                />
+            <TextView
+                android:id="@+id/tv_weixin_member_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:gravity="center_horizontal"
+                android:text=""
+                android:textStyle="bold"
+                android:textColor="@color/value_484848"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_weixin_member_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:gravity="center_horizontal"
+                android:textStyle="normal"
+                android:textColor="@color/value_484848"
+                android:layout_marginTop="10dp"
+                android:textSize="14sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:gravity="center"
+          >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:gravity="center_horizontal"
+                android:text="导购专员微信号"
+                android:textStyle="normal"
+                android:textColor="@color/text_gray2"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tv_weixin_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:gravity="center_horizontal"
+                android:textStyle="normal"
+                android:textColor="#E0B054"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/tv_weixin_copy"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:text="复制微信号"
+                android:textStyle="normal"
+                android:background="@drawable/rounded_corner_solid_e0b054_60px"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="4dp"
+                android:src="@mipmap/img_dian_zuo"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:textColor="#B1B1B1"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:lineSpacingExtra="5dp"
+                android:text="您可以添加您的导购为微信好友，向他了解如何快速无门槛创业。"
+                android:layout_centerHorizontal="true"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/img_dian_you"/>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import java.io.File;
 
@@ -275,6 +276,19 @@ public class GlideUtils {
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
                 .bitmapTransform(new GlideCircleTransform(context))
+                .into(imageView);
+    }
+
+    public void loadCircleAvarRound(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null||context==null) return;
+        Glide.with(context)
+                .load(imgUrl)
+//                .error(R.mipmap.error)
+                .placeholder(R.mipmap.img_set_defaulthead)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .bitmapTransform(new GlideCircleTransform(context,3,context.getResources().getColor(R.color.line_gay)))
                 .into(imageView);
     }
 
