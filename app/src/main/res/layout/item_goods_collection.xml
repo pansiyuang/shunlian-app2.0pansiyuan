@@ -129,8 +129,8 @@
                 android:id="@+id/mtv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/value_484848"
-                android:textSize="12sp" />
+                android:textColor="@color/pink_color"
+                android:textSize="15sp" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_earn_much"
