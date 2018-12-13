@@ -594,7 +594,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                    mHolder.miv_fav.setImageResource(R.mipmap.icon_heart_sel);
                 }
             if (pref_length != 0) {
-                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length) + title);
+                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length-1) + title);
             } else {
                 mHolder.mtv_title.setText(title);
             }
@@ -765,6 +765,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         mHolder.mtv_marketPrice,
                         mHolder.mtv_price_rmb,
                         mHolder.mtv_price,
+                        mHolder.mtv_prefPrice,
                         mHolder.mllayout_specail_before_act,
                         mHolder.mllayout_specail_before_downtime);
 
@@ -773,7 +774,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 //赚
                 mHolder.mtv_special_earn.setText(mGoodsEntity.share_buy_earn);
                 mHolder.mtv_special_original_price.setStrikethrough().setText(
-                        "原价:" + getString(R.string.rmb)+common_activity.old_price);
+                        getString(R.string.rmb)+common_activity.old_price);
                 mHolder.ddp_special_downTime.setLabelBackgroundColor(getColor(R.color.white));
                 mHolder.ddp_special_downTime.setTimeUnitTextColor(getColor(R.color.pink_color));
                 mHolder.ddp_special_downTime.setTimeTextColor(getColor(R.color.pink_color));
@@ -840,7 +841,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         GoodsDeatilEntity.TTAct tt_act = mGoodsEntity.tt_act;
         if (tt_act != null) {
             visible(mHolder.mllayout_preferential);
-            gone(mHolder.mtv_price_rmb,mHolder.mtv_price,mHolder.mtv_marketPrice, mHolder.mtv_sales);
+            gone(mHolder.mtv_price_rmb,mHolder.mtv_price,mHolder.mtv_prefPrice,
+                    mHolder.mtv_marketPrice, mHolder.mtv_sales);
 
             if ("1".equals(tt_act.sale)) {//1：活动进行中   0：活动未开始
                 mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.pink_color));
@@ -894,7 +896,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 });
             }
         } else {
-            visible(mHolder.mtv_sales, mHolder.mtv_price_rmb,mHolder.mtv_price,mHolder.mtv_marketPrice);
+            visible(mHolder.mtv_sales, mHolder.mtv_price_rmb,
+                    mHolder.mtv_price,mHolder.mtv_prefPrice,mHolder.mtv_marketPrice);
             gone(mHolder.mllayout_preferential);
         }
     }
@@ -1392,13 +1395,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
             ArrayList<GoodsDeatilEntity.SimpTitle> services = mGoodsEntity.services;
             if (!isEmpty(services)){
-                visible(tab_layout);
+                visible(rlayout_service);
                 for (int i=0;i<services.size();i++) {
                     if (i == 2)break;
                     tab_layout.addView(getView(services.get(i).title));
                 }
             }else {
-                gone(tab_layout);
+                gone(rlayout_service);
             }
 
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;

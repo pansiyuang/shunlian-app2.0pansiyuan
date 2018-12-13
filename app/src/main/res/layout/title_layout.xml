@@ -228,8 +228,7 @@
         android:orientation="horizontal"
         app:ll_control_adapter="true"
         app:ll_margin_left="23"
-        app:ll_margin_right="23"
-        app:ll_margin_top="23">
+        app:ll_margin_right="23">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_price_rmb"
@@ -237,6 +236,7 @@
             android:layout_height="wrap_content"
             android:text="@string/rmb"
             android:textStyle="bold"
+            android:layout_marginTop="12dp"
             android:textColor="@color/value_484848"
             android:textSize="15sp" />
 
@@ -245,6 +245,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:layout_marginTop="12dp"
             android:textColor="@color/value_484848"
             android:textSize="20sp" />
 
@@ -257,6 +258,7 @@
             android:layout_marginRight="10dp"
             android:gravity="center"
             android:textStyle="bold"
+            android:layout_marginTop="12dp"
             android:textColor="@color/pink_color"
             android:textSize="16sp" />
 
@@ -272,6 +274,7 @@
             android:textColor="@color/white"
             android:textSize="9sp"
             app:tv_control_adapter="true"
+            app:tv_margin_top="24"
             app:tv_margin_left="12" />
 
         <!--爆款-->
@@ -286,6 +289,7 @@
             android:textColor="@color/white"
             android:textSize="9sp"
             app:tv_control_adapter="true"
+            app:tv_margin_top="24"
             app:tv_margin_left="12" />
 
         <!--热卖-->
@@ -300,6 +304,7 @@
             android:textColor="@color/white"
             android:textSize="9sp"
             app:tv_control_adapter="true"
+            app:tv_margin_top="24"
             app:tv_margin_left="12" />
 
         <!--推荐-->
@@ -314,6 +319,7 @@
             android:textColor="@color/white"
             android:textSize="9sp"
             app:tv_control_adapter="true"
+            app:tv_margin_top="24"
             app:tv_margin_left="12" />
 
         <!--还想要-->
@@ -324,6 +330,7 @@
             android:gravity="right"
             android:textColor="@color/pink_color"
             android:textSize="12sp"
+            android:layout_marginTop="12dp"
             android:visibility="gone" />
 
     </com.shunlian.app.widget.MyLinearLayout>
@@ -337,6 +344,34 @@
         app:tv_control_adapter="true"
         app:tv_margin_left="23"
         app:tv_margin_right="23"/>
+
+    <!--专题活动显示市场价和活动价-->
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_specail_before_act"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:ll_control_adapter="true"
+        app:ll_margin_left="23">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_special_before_original_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_gray2"
+            android:textSize="12sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_special_before_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/text_gray2"
+            android:textSize="12sp" />
+
+    </com.shunlian.app.widget.MyLinearLayout>
 
     <!--标题-->
     <com.shunlian.app.widget.MyRelativeLayout
@@ -442,45 +477,6 @@
                 app:tv_margin_left="20"
                 app:tv_margin_right="23"
                 app:tv_margin_top="27" />
-
-
-            <!--专题活动显示市场价和活动价-->
-            <com.shunlian.app.widget.MyLinearLayout
-                android:id="@+id/mllayout_specail_before_act"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                app:ll_control_adapter="true"
-                app:ll_margin_left="23"
-                app:ll_margin_top="24">
-
-                <com.shunlian.app.widget.MyTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="市场价"
-                    android:textColor="@color/share_text"
-                    android:textSize="11sp" />
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_special_before_original_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="￥1118.0"
-                    android:textColor="@color/share_text"
-                    android:textSize="11sp" />
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_special_before_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="活动价:￥690"
-                    android:textColor="@color/pink_color"
-                    android:textSize="11sp" />
-
-            </com.shunlian.app.widget.MyLinearLayout>
 
             <!--商品地点和包邮-->
             <com.shunlian.app.widget.MyRelativeLayout

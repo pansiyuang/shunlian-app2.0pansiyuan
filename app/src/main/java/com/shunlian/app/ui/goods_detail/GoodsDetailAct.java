@@ -1421,9 +1421,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void selfBuyAndShareBuyBottomBtn(String self_buy, String share_buy) {
-        String selfFromat = "省钱购\n"+self_buy;
-        String shareFromat = "分享赚\n"+share_buy;
+        String selfFromat = "省钱购"+(isEmpty(self_buy) ? "" : "\n"+self_buy);
         mtv_add_car.setText(Common.changeTextSize(selfFromat,self_buy,10));
-        mtv_buy_immediately.setText(Common.changeTextSize(shareFromat,share_buy,10));
+        if (!mtv_buy_immediately.getText().toString().contains("提醒")) {
+            String shareFromat = "分享赚" + (isEmpty(share_buy) ? "" : "\n" + share_buy);
+            mtv_buy_immediately.setText(Common.changeTextSize(shareFromat, share_buy, 10));
+        }
     }
 }
