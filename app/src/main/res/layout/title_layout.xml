@@ -219,7 +219,6 @@
 
     </com.shunlian.app.widget.MyLinearLayout>
 
-
     <!--价格标识-->
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_common_price"
@@ -334,6 +333,7 @@
             android:visibility="gone" />
 
     </com.shunlian.app.widget.MyLinearLayout>
+
     <!--市场价价钱-->
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_marketPrice"
@@ -384,16 +384,14 @@
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textIsSelectable="true"
+            android:layout_toLeftOf="@+id/line"
             android:textColor="@color/value_484848"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            app:tv_control_adapter="true"
-            app:tv_control_width="593" />
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_discount_info"
@@ -417,14 +415,17 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/img_active_tiantiantehui_tips"
             app:iv_control_adapter="true"
-            app:iv_margin_top="4" />
+            app:iv_margin_top="6" />
 
         <View
+            android:id="@+id/line"
             android:layout_width="0.5dp"
-            android:layout_height="31dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/mtv_title"
+            android:layout_alignBottom="@+id/ll_fav"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_toRightOf="@+id/mtv_title"
+            android:layout_toLeftOf="@+id/ll_fav"
             android:background="@color/my_gray_one" />
 
         <LinearLayout
@@ -648,4 +649,5 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp" />
     </com.shunlian.app.widget.MyRelativeLayout>
+
 </com.shunlian.app.widget.MyLinearLayout>
