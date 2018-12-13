@@ -696,11 +696,12 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     /**
      * 添加购物车
      *
-     * @param msg
+     * @param count
      */
     @Override
-    public void addCart(String msg) {
-        addCartAnim();
+    public void addCart(String count) {
+        numAnimation();
+        //addCartAnim();
     }
 
     /**

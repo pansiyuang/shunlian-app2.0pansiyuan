@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.UrlType;
 import com.shunlian.app.bean.VideoBannerData;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -599,7 +600,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
 
             mHolder.mtv_price.setText(mGoodsEntity.price);
-            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb)+"原价："+mGoodsEntity.market_price);
+            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb)+mGoodsEntity.market_price);
             String shipping_fee = mGoodsEntity.shipping_fee;
             if (!isEmpty(shipping_fee) && !"0".equals(shipping_fee)) {
                 mHolder.mtv_free_shipping.setText(String.format(getString(R.string.not_mail), shipping_fee));
@@ -704,7 +705,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 if ("1".equals(common_activity.if_act_price)) {//显示预览价格
                     visible(mHolder.mtv_special_before_price);
                     mHolder.mtv_special_before_price.setText(
-                            "活动价:" + getString(R.string.rmb)+common_activity.actprice);
+                            getString(R.string.rmb)+"活动价:"+common_activity.actprice);
                 } else {
                     gone(mHolder.mtv_special_before_price);
                 }
@@ -769,7 +770,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
                 mHolder.mtv_special_price.setText(
                         getString(R.string.rmb)+common_activity.actprice);
-
+                //赚
+                mHolder.mtv_special_earn.setText(mGoodsEntity.share_buy_earn);
                 mHolder.mtv_special_original_price.setStrikethrough().setText(
                         "原价:" + getString(R.string.rmb)+common_activity.old_price);
                 mHolder.ddp_special_downTime.setLabelBackgroundColor(getColor(R.color.white));
@@ -865,6 +867,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
 
             mHolder.mtv_pPrice.setText(tt_act.act_price);
+            mHolder.mtv_plus_earn.setText(mGoodsEntity.share_buy_earn);
             mHolder.mtv_pmarketPrice.setStrikethrough()
                     .setText(getString(R.string.rmb)+tt_act.market_price);
             mHolder.mtv_act_title.setText(tt_act.content);
@@ -1129,6 +1132,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_price_rmb)
         MyTextView mtv_price_rmb;
 
+        @BindView(R.id.mtv_plus_earn)
+        MyTextView mtv_plus_earn;
+
         /*专题活动*/
         @BindView(R.id.mllayout_specail_act)
         MyLinearLayout mllayout_specail_act;
@@ -1141,6 +1147,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mtv_special_price)
         MyTextView mtv_special_price;
+
+        @BindView(R.id.mtv_special_earn)
+        MyTextView mtv_special_earn;
 
         @BindView(R.id.mtv_special_original_price)
         MyTextView mtv_special_original_price;
@@ -1202,11 +1211,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
             TransformUtil.expandViewTouchDelegate(ll_fav,40,40,40,40);
 
-            if (isEmpty(mGoodsEntity.self_buy_earn)) {
+            if (isEmpty(mGoodsEntity.share_buy_earn)) {
                 gone(mtv_prefPrice);
             } else {
                 visible(mtv_prefPrice);
-                mtv_prefPrice.setText(getString(R.string.rmb) + mGoodsEntity.self_buy_earn);
+                mtv_prefPrice.setText(mGoodsEntity.share_buy_earn);
             }
 
             if (mGoodsEntity.plus_door != null){
@@ -1223,6 +1232,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                             = Common.changeColor(plus_door.content, plus_door.content_highlight, getColor(R.color.pink_color));
                     mtv_plus_des.setText(content_sp);
                 }
+                rlayout_plus_tip.setOnClickListener(v -> {
+                    UrlType url = plus_door.url;
+                    if (url != null){
+                        Common.goGoGo(context,url.type,url.item_id);
+                    }
+                });
             }else {
                 gone(rlayout_plus_tip);
             }
@@ -1355,29 +1370,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.tv_select_param)
         MyTextView tv_select_param;
 
-        /*@BindView(R.id.mtv_reason)
-        MyTextView mtv_reason;
-
-        @BindView(R.id.mtv_send_time)
-        MyTextView mtv_send_time;
-
-        @BindView(R.id.miv_reason)
-        MyImageView miv_reason;
-
-        @BindView(R.id.miv_send_time)
-        MyImageView miv_send_time;*/
-
-        /*@BindView(R.id.mtv_certified_products)
-        MyTextView mtv_certified_products;
-
-        @BindView(R.id.miv_certified_products)
-        MyImageView miv_certified_products;*/
-
         @BindView(R.id.view_params)
         View view_params;
 
         @BindView(R.id.tab_layout)
-        TabLayout tab_layout;
+        LinearLayout tab_layout;
 
         @BindView(R.id.rlayout_service)
         RelativeLayout rlayout_service;
@@ -1393,50 +1390,29 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 gone(mtv_params, view_params);
             }
 
-            if (!isEmpty(mGoodsEntity.return_7)){
-                tab_layout.addTab(tab_layout.newTab()
-                        .setCustomView(getView(mGoodsEntity.return_7)));
-            }
-            if (!isEmpty(mGoodsEntity.send_time)){
-                tab_layout.addTab(tab_layout.newTab()
-                        .setCustomView(getView(mGoodsEntity.send_time)));
-            }
-            if (!isEmpty(mGoodsEntity.quality_guarantee)){
-                tab_layout.addTab(tab_layout.newTab()
-                        .setCustomView(getView(mGoodsEntity.quality_guarantee)));
+            ArrayList<GoodsDeatilEntity.SimpTitle> services = mGoodsEntity.services;
+            if (!isEmpty(services)){
+                visible(tab_layout);
+                for (int i=0;i<services.size();i++) {
+                    if (i == 2)break;
+                    tab_layout.addView(getView(services.get(i).title));
+                }
+            }else {
+                gone(tab_layout);
             }
 
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
             rlayout_service.setOnClickListener(this);
-            /*if (!isEmpty(mGoodsEntity.return_7)) {
-                mtv_reason.setText(mGoodsEntity.return_7);
-                visible(miv_reason, mtv_reason);
-            } else {
-                gone(miv_reason, mtv_reason);
-            }
-
-            if (!isEmpty(mGoodsEntity.send_time)) {
-                mtv_send_time.setText(mGoodsEntity.send_time);
-                visible(miv_send_time, mtv_send_time);
-            } else {
-                gone(miv_send_time, mtv_send_time);
-            }
-
-            if (!isEmpty(mGoodsEntity.quality_guarantee)) {
-                mtv_certified_products.setText(mGoodsEntity.quality_guarantee);
-                visible(miv_certified_products, mtv_certified_products);
-            } else {
-                gone(miv_certified_products, mtv_certified_products);
-            }*/
-
         }
 
         private View getView(String s){
 
             LinearLayout layout = new LinearLayout(context);
-            layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.leftMargin = TransformUtil.dip2px(context,10);
+            layout.setLayoutParams(layoutParams);
             layout.setGravity(Gravity.CENTER);
             MyImageView iv = new MyImageView(context);
             iv.setImageResource(R.mipmap.img_xiangqing_baozhang);
@@ -1454,6 +1430,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             layout.addView(tv);
 
             return layout;
+        }
+
+        private void showServices(){
+            if (serviceDialog == null) {
+                serviceDialog = new GoodsServiceDialog(context);
+                serviceDialog.setServiceContent(mGoodsEntity.services);
+            }
+            serviceDialog.show();
         }
 
         /**
@@ -1483,11 +1467,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     }
                     break;
                 case R.id.rlayout_service:
-                    if (serviceDialog == null) {
-                        serviceDialog = new GoodsServiceDialog(context);
-                        serviceDialog.setServiceContent(mGoodsEntity.services);
-                    }
-                    serviceDialog.show();
+                    showServices();
                     break;
             }
         }
