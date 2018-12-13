@@ -579,12 +579,12 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
 //                        } else {
 //                            fiveHolder.mtv_market_price.setVisibility(View.GONE);
 //                        }
-                        if (!TextUtils.isEmpty(data.content)) {
-                            fiveHolder.mtv_buy_num.setText(data.content);
-                            fiveHolder.mtv_buy_num.setVisibility(View.VISIBLE);
-                        } else {
-                            fiveHolder.mtv_buy_num.setVisibility(View.GONE);
-                        }
+//                        if (!TextUtils.isEmpty(data.content)) {
+//                            fiveHolder.mtv_buy_num.setText(data.content);
+//                            fiveHolder.mtv_buy_num.setVisibility(View.VISIBLE);
+//                        } else {
+//                            fiveHolder.mtv_buy_num.setVisibility(View.GONE);
+//                        }
                     }
                     fiveHolder.mtv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
