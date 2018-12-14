@@ -22,6 +22,7 @@ import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.member.MemberPageActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
@@ -226,6 +227,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         mllayout_daifahuo.setOnClickListener(this);
         mllayout_daipingjia.setOnClickListener(this);
         mllayout_shouhuo.setOnClickListener(this);
+        miv_huiyuan.setOnClickListener(this);
         csv_out.setOnScrollListener(new CompileScrollView.OnScrollListener() {
             @Override
 //            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -423,6 +425,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 break;
             case R.id.mllayout_shouhuo:
                 RefundAfterSaleAct.startAct(baseContext);
+                break;
+            case R.id.miv_huiyuan:
+                MemberPageActivity.startAct(baseContext);
                 break;
         }
     }
