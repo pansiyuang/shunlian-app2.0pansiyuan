@@ -59,8 +59,8 @@ public class App extends Application {
     /**
      * Sensors Analytics 采集数据的地址
      */
-    private final static String SA_SERVER_URL = "http://shence.sldlcdn.com/debug?project=default";
-    private final static String SA_OFFLINE_SERVER_URL = "http://shence.sldlcdn.com/debug?project=default";
+    private final static String SA_SERVER_URL = "http://shence.sldlcdn.com/sa?project=default";
+    private final static String SA_OFFLINE_SERVER_URL = "http://shence.sldlcdn.com/sa?project=default";
     private final SensorsDataAPI.DebugMode SA_DEBUG_MODE = SensorsDataAPI.DebugMode.DEBUG_AND_TRACK;
     private final SensorsDataAPI.DebugMode SA_OFFLINE_MODE = SensorsDataAPI.DebugMode.DEBUG_OFF;
     public static App mApp;
