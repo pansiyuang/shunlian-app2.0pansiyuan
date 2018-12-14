@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -38,6 +39,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.mylibrary.ImmersionBar;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -151,6 +153,14 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
     protected void initData() {
         EventBus.getDefault().register(this);
         totalDistance = TransformUtil.dip2px(this, 40);
+
+        FrameLayout.LayoutParams layoutParams =  (FrameLayout.LayoutParams)toolbar.getLayoutParams();
+        layoutParams.height = DensityUtil.dip2px(this,44)+Common.getStatusBarHeight(this);
+
+        RelativeLayout.LayoutParams layoutParams1 =  (RelativeLayout.LayoutParams)title_bar.getLayoutParams();
+        layoutParams1.height= DensityUtil.dip2px(this,44);
+        layoutParams1.topMargin=Common.getStatusBarHeight(this);
+
         memberPagePresenter = new MemberPagePresenter(this, this);
         lists = new ArrayList<>();
         immersionBar = ImmersionBar.with(this);

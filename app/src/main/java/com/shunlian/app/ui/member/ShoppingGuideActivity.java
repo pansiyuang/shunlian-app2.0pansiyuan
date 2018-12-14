@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -31,6 +32,7 @@ import com.shunlian.app.widget.EditTextImage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.mylibrary.ImmersionBar;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -113,6 +115,11 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
         if(followfrom==null){
             followfrom = new MemberInfoEntity.Followfrom();
         }
+
+        LinearLayout.LayoutParams layoutParams1 =  (LinearLayout.LayoutParams)title_bar.getLayoutParams();
+        layoutParams1.height= DensityUtil.dip2px(this,44);
+        layoutParams1.topMargin=Common.getStatusBarHeight(this);
+
         memberAddPresenter = new MemberAddPresenter(this,this);
         commonDialogUtil = new CommonDialogUtil(this);
         nei_empty.setImageResource(R.mipmap.img_huiyuan_ji).setText("您还没有导购专员，快去绑定吧！").setButtonText(null);

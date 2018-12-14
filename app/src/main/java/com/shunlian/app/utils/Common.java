@@ -108,6 +108,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -1470,7 +1471,18 @@ public class Common {
             return true;
         return false;
     }
-
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height",
+                "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        if(result==0&&context!=null){
+            result= DensityUtil.dip2px(context,20);
+        }
+        return result;
+    }
 
     /**
      * 判断某个Activity 界面是否在前台
