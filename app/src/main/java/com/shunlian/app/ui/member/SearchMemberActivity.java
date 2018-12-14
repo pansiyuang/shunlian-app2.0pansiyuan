@@ -16,10 +16,13 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.MemberUserAdapter;
+import com.shunlian.app.bean.MemberInfoEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
+import com.shunlian.app.presenter.MemberPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.view.IMemberPageView;
 import com.shunlian.app.widget.EditTextImage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -36,8 +39,8 @@ import butterknife.BindView;
  *新人专享页面
  */
 
-public class SearchMemberActivity extends BaseActivity{
-    private List<NewUserGoodsEntity.Goods> lists;
+public class SearchMemberActivity extends BaseActivity  implements IMemberPageView {
+    private List<MemberInfoEntity.MemberList> lists;
     private MemberUserAdapter memberUserAdapter;
 
     @BindView(R.id.recy_view)
@@ -53,7 +56,7 @@ public class SearchMemberActivity extends BaseActivity{
     NetAndEmptyInterface nei_empty;
 
     LinearLayoutManager  manager;
-
+    MemberPagePresenter memberPagePresenter;
     @Override
     public void onStop() {
         super.onStop();
@@ -71,13 +74,11 @@ public class SearchMemberActivity extends BaseActivity{
     @Override
     protected void initData() {
         lists = new ArrayList<>();
-        for (int i =0;i<20;i++){
-            lists.add(new NewUserGoodsEntity.Goods());
-        }
         ImmersionBar.with(this).fitsSystemWindows(true)
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
+        memberPagePresenter = new MemberPagePresenter(this,this);
         memberUserAdapter = new MemberUserAdapter(this,lists);
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
@@ -96,6 +97,20 @@ public class SearchMemberActivity extends BaseActivity{
 
     @Override
     protected void initListener() {
+        recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null) {
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()) {
+                        if (memberPagePresenter != null) {
+                            memberPagePresenter.onRefresh();
+                        }
+                    }
+                }
+            }
+        });
         miv_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,9 +122,10 @@ public class SearchMemberActivity extends BaseActivity{
             public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
                 if(arg1 == EditorInfo.IME_ACTION_SEARCH)
                 {
-                    Common.staticToast(edt_member_search.getText().toString());
                     Common.hideKeyboard(edt_member_search);
-
+                    if(memberPagePresenter!=null){
+                        memberPagePresenter.initApiMemberKey(edt_member_search.getText().toString());
+                    }
                 }
                 return false;
             }
@@ -125,5 +141,43 @@ public class SearchMemberActivity extends BaseActivity{
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void memberListInfo(List<MemberInfoEntity.MemberList> memberLists, int currentPage) {
+        if(memberLists.size()==0&&currentPage==1){
+            lists.clear();
+            memberUserAdapter.notifyDataSetChanged();
+            nei_empty.setVisibility(View.VISIBLE);
+            recy_view.setVisibility(View.GONE);
+        }else{
+            nei_empty.setVisibility(View.GONE);
+            recy_view.setVisibility(View.VISIBLE);
+            if(currentPage==1){
+                lists.clear();
+            }
+            lists.addAll(memberLists);
+            memberUserAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void memberDetail(MemberInfoEntity memberInfoEntity, String total_num) {
+
+    }
+
+    @Override
+    public void setWeixin(String weixin) {
+
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }

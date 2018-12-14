@@ -47,6 +47,8 @@ public class StoreNewGoodsListEntity {
             public String type;
             public String item_id;
             public String store_id;
+            public String self_buy_earn;
+            public String share_buy_earn;
 
             @Override
             public String toString() {

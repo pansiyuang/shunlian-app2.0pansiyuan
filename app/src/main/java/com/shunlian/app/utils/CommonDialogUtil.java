@@ -19,6 +19,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
+import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.ICallBackResult;
 import com.shunlian.app.widget.MyImageView;
@@ -37,10 +38,48 @@ public class CommonDialogUtil {
 
     public CommonDialog guideInfo;
     public CommonDialog inputGuide;
+    public CommonDialog inputWeixin;
     public CommonDialogUtil(Context context){
         this.context = context;
     }
 
+    //添加微信
+    public void defaultEditDialog(ICallBackResult<String> callBackResult,String defaultValue) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,250))
+                .setView(R.layout.dialog_weixin_input);
+        inputWeixin = nomalBuild.create();
+        inputWeixin.setCancelable(false);
+        inputWeixin.show();
+        TextView tvSure = inputWeixin.findViewById(R.id.tv_sure);
+        TextView  tvCancle = inputWeixin.findViewById(R.id.tv_cancel);
+        EditText edit_input = inputWeixin.findViewById(R.id.edit_input);
+
+        if(!TextUtils.isEmpty(defaultValue)){
+            edit_input.setText(defaultValue);
+        }
+        tvCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Common.hideKeyboard(edit_input);
+                inputWeixin.dismiss();
+            }
+        });
+        tvSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(TextUtils.isEmpty(edit_input.getText())){
+                    Common.staticToast("请输入微信号");
+                    return;
+                }
+                Common.hideKeyboard(edit_input);
+                inputWeixin.dismiss();
+                callBackResult.onTagClick(edit_input.getText().toString());
+            }
+        });
+    }
     //默认的
     public void defaultCommonDialog(String message,String tv_sure, View.OnClickListener sureListener,
                                 String tv_cancle, View.OnClickListener cancleListener) {
@@ -80,6 +119,7 @@ public class CommonDialogUtil {
         tvCancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Common.hideKeyboard(edit_input);
                 inputGuide.dismiss();
             }
         });
@@ -99,7 +139,7 @@ public class CommonDialogUtil {
 
 
     //导购信息
-    public void guideInfoCommonDialog(ICallBackResult<String> callBackResult) {
+    public void guideInfoCommonDialog(ICallBackResult<MemberCodeListEntity.ListBean> callBackResult, MemberCodeListEntity.ListBean listBean) {
         if(((Activity)context).isFinishing()){
             return;
         }
@@ -114,8 +154,12 @@ public class CommonDialogUtil {
         ImageView img_member_head = guideInfo.findViewById(R.id.img_member_head);
         TextView  tv_member_name = guideInfo.findViewById(R.id.tv_member_name);
         TextView  tv_member_number = guideInfo.findViewById(R.id.tv_member_number);
+        if(listBean!=null){
+            GlideUtils.getInstance().loadCircleAvar(context,img_member_head,listBean.avatar);
+            tv_member_name.setText(listBean.nickname);
+            tv_member_number.setText(listBean.code);
+        }
 
-        GlideUtils.getInstance().loadCircleAvar(context,img_member_head,"https://static.veer.com/veer/static/resources/FourPack/2018-12-03/d9738f6321324d51a78e567fdfeabc63.jpg");
         tvCancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +170,7 @@ public class CommonDialogUtil {
             @Override
             public void onClick(View v) {
                 guideInfo.dismiss();
-                callBackResult.onTagClick("");
+                callBackResult.onTagClick(listBean);
             }
         });
     }

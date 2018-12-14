@@ -122,8 +122,8 @@ public class MyCollectionAct extends BaseActivity {
                 collectionFootprint();
                 break;
             case CONTENT_FLAG:
-                collectionContent();
-                break;
+                //collectionContent();
+                //break;
             default:
                 collectionGoods();
                 break;

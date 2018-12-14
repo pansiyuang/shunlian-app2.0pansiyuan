@@ -53,7 +53,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     @BindView(R.id.dia_tv_price)
     TextView dia_tv_price;
     @BindView(R.id.dia_tv_earn)
-    TextView dia_tv_earn;
+    MyTextView dia_tv_earn;
     @BindView(R.id.tv_count)
     TextView tv_count;
     @BindView(R.id.recycler_param)
@@ -251,12 +251,18 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             totalStock = Integer.valueOf(goodsDeatilEntity.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
+            if ("0".equals(hasOption)) {
+                dia_tv_earn.setEarnMoney(goodsDeatilEntity.self_buy_earn,17);
+            }
         }
         if (mGoods != null) {
             dia_tv_price.setText("¥" + mGoods.price);
             totalStock = Integer.valueOf(mGoods.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, mGoods.thumb);
+            if ("0".equals(hasOption)) {
+                dia_tv_earn.setEarnMoney(mGoods.self_buy_earn,17);
+            }
         }
 
         if (productDetailEntity != null) {
@@ -264,6 +270,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             totalStock = Integer.valueOf(productDetailEntity.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, productDetailEntity.thumb);
+            if ("0".equals(hasOption)) {
+                dia_tv_earn.setEarnMoney(productDetailEntity.self_buy_earn,17);
+            }
         }
 
         if (specs == null || specs.size() == 0) {
@@ -562,7 +571,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                             if (checkLinkmap(false) != null) {
                                 GoodsDeatilEntity.Sku s = checkLinkmap(false);
                                 if (!TextUtils.isEmpty(s.self_buy_earn)) {
-                                    dia_tv_earn.setText(s.self_buy_earn);
+                                    dia_tv_earn.setEarnMoney(s.self_buy_earn,17);
                                 }
                                 GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, s.thumb);
                                 dia_tv_price.setText("¥" + s.price);

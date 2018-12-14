@@ -249,6 +249,7 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
           mShareInfoParam.title =goods.title;
           mShareInfoParam.desc =goods.desc;
           mShareInfoParam.goods_id =goods.goods_id;
+          mShareInfoParam.share_buy_earn = goods.share_buy_earn;
           mShareInfoParam.price =goods.price;
           mShareInfoParam.market_price =goods.market_price;
           mShareInfoParam.img =goods.thumb;
