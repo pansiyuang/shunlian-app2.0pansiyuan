@@ -39,6 +39,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
+import com.shunlian.app.widget.banner.CenterKanner;
 import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -114,7 +115,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @BindView(R.id.rv_shang)
     RecyclerView rv_shang;
     @BindView(R.id.kanner)
-    MyKanner kanner;
+    CenterKanner kanner;
     @BindView(R.id.miv_isShow_data)
     MyImageView miv_isShow_data;
     @BindView(R.id.miv_yaoqing)
@@ -131,6 +132,18 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     MyLinearLayout mllayout_daipingjia;
     @BindView(R.id.mllayout_shouhuo)
     MyLinearLayout mllayout_shouhuo;
+    @BindView(R.id.mtv_payNum)
+    MyTextView mtv_payNum;
+    @BindView(R.id.mtv_refundNum)
+    MyTextView mtv_refundNum;
+    @BindView(R.id.mtv_remarkNum)
+    MyTextView mtv_remarkNum;
+    @BindView(R.id.mtv_sendNum)
+    MyTextView mtv_sendNum;
+    @BindView(R.id.ntv_names)
+    NewTextView ntv_names;
+    @BindView(R.id.mtv_receiveNum)
+    MyTextView mtv_receiveNum;
     public PersonalcenterPresenter personalcenterPresenter;
     private PersonalcenterEntity personalcenterEntity;
     private String invite_code;
@@ -194,6 +207,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         EventBus.getDefault().register(this);
         ImmersionBar.with(this).titleBar(rLayout_title, false).init();
         view_bg.setAlpha(0);
+        ntv_names.setAlpha(0);
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
         int picWidth = Common.getScreenWidth((Activity) baseActivity) - TransformUtil.dip2px(baseActivity, 26);
         int height = ((picWidth/2) * 80)/ 165;
@@ -216,6 +230,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     protected void initListener() {
         super.initListener();
         ntv_yaoqing.setOnClickListener(this);
+        view_bg.setOnClickListener(this);
         ntv_copy.setOnClickListener(this);
         miv_yaoqing.setOnClickListener(this);
         miv_shezhi.setOnClickListener(this);
@@ -232,11 +247,14 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             public void scrollCallBack(int y, int oldy) {
                 if (y > 188) {
                     view_bg.setAlpha(1);
+                    ntv_names.setAlpha(1);
                 } else if (y > 0) {
                     float alpha = ((float) y) / 188;
                     view_bg.setAlpha(alpha);
+                    ntv_names.setAlpha(alpha);
                 } else {
                     view_bg.setAlpha(0);
+                    ntv_names.setAlpha(0);
                     csv_out.setFocusable(false);
                 }
             }
@@ -290,6 +308,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             }
         }
         ntv_name.setText(personalcenterEntity.nickname);
+        ntv_names.setText(personalcenterEntity.nickname);
         invite_code = personalcenterEntity.invite_code;
         ntv_yaoqing.setText("邀请码：" + invite_code);
         ntv_desc.setText(personalcenterEntity.plus_meg);
@@ -319,6 +338,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             rv_zichan.setVisibility(View.GONE);
         }else {
             rv_zichan.setVisibility(View.VISIBLE);
+            rv_zichan.setNestedScrollingEnabled(false);
             ZiChanAdapter ziChanAdapter=new ZiChanAdapter(baseActivity,false,myAssets.items);
             rv_zichan.setLayoutManager(new GridLayoutManager(baseActivity,3));
             rv_zichan.setAdapter(ziChanAdapter);
@@ -334,6 +354,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             rv_fuwu.setVisibility(View.GONE);
         }else {
             rv_fuwu.setVisibility(View.VISIBLE);
+            rv_fuwu.setNestedScrollingEnabled(false);
             FuWuAdapter ziChanAdapter=new FuWuAdapter(baseActivity,false,myService.items);
             rv_fuwu.setLayoutManager(new GridLayoutManager(baseActivity,4));
             rv_fuwu.setAdapter(ziChanAdapter);
@@ -349,8 +370,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             rv_shang.setVisibility(View.GONE);
         }else {
             rv_shang.setVisibility(View.VISIBLE);
+            rv_shang.setNestedScrollingEnabled(false);
             ShangAdapter ziChanAdapter=new ShangAdapter(baseActivity,false,oursSchool.items);
-            rv_shang.setLayoutManager(new GridLayoutManager(baseActivity,3));
+            rv_shang.setLayoutManager(new GridLayoutManager(baseActivity,4));
             rv_shang.setAdapter(ziChanAdapter);
             ziChanAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
@@ -377,6 +399,46 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             }
         } else {
             kanner.setVisibility(View.GONE);
+        }
+        mtv_refundNum.setVisibility(View.VISIBLE);
+        if (Integer.parseInt(personalcenterEntity.new_refund_num) <= 0) {
+            mtv_refundNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.new_refund_num) > 9) {
+            mtv_refundNum.setText("9+");
+        } else {
+            mtv_refundNum.setText(personalcenterEntity.new_refund_num);
+        }
+        mtv_remarkNum.setVisibility(View.VISIBLE);
+        if (Integer.parseInt(personalcenterEntity.un_comment_num) <= 0) {
+            mtv_remarkNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.un_comment_num) > 9) {
+            mtv_remarkNum.setText("9+");
+        } else {
+            mtv_remarkNum.setText(personalcenterEntity.un_comment_num);
+        }
+        mtv_sendNum.setVisibility(View.VISIBLE);
+        if (Integer.parseInt(personalcenterEntity.order_un_send_num) <= 0) {
+            mtv_sendNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.order_un_send_num) > 9) {
+            mtv_sendNum.setText("9+");
+        } else {
+            mtv_sendNum.setText(personalcenterEntity.order_un_send_num);
+        }
+        mtv_receiveNum.setVisibility(View.VISIBLE);
+        if (Integer.parseInt(personalcenterEntity.order_un_receive_num) <= 0) {
+            mtv_receiveNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.order_un_receive_num) > 9) {
+            mtv_receiveNum.setText("9+");
+        } else {
+            mtv_receiveNum.setText(personalcenterEntity.order_un_receive_num);
+        }
+        mtv_payNum.setVisibility(View.VISIBLE);
+        if (Integer.parseInt(personalcenterEntity.order_un_pay_num) <= 0) {
+            mtv_payNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.order_un_pay_num) > 9) {
+            mtv_payNum.setText("9+");
+        } else {
+            mtv_payNum.setText(personalcenterEntity.order_un_pay_num);
         }
     }
 
