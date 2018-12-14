@@ -772,7 +772,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.mtv_special_price.setText(
                         getString(R.string.rmb)+common_activity.actprice);
                 //赚
-                mHolder.mtv_special_earn.setText(mGoodsEntity.share_buy_earn);
+                mHolder.mtv_special_earn.setText(common_activity.share_buy_earn);
                 mHolder.mtv_special_original_price.setStrikethrough().setText(
                         getString(R.string.rmb)+common_activity.old_price);
                 mHolder.ddp_special_downTime.setLabelBackgroundColor(getColor(R.color.white));
@@ -851,6 +851,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
                 mHolder.mtv_act_title.setTextColor(getColor(R.color.pink_color));
                 mHolder.mtv_pmarketPrice.setTextColor(Color.parseColor("#FFFFE2E8"));
+                mHolder.mtv_plus_earn.setText(tt_act.share_buy_earn);
                 //gone(mHolder.mtv_follow_count);
                 //visible(mHolder.seekbar_grow,mHolder.mtv_desc);
                 //mHolder.seekbar_grow.setProgress(Integer.parseInt(tt_act.percent));
@@ -862,6 +863,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
                 mHolder.mtv_act_title.setTextColor(getColor(R.color.new_text));
                 mHolder.mtv_pmarketPrice.setTextColor(Color.parseColor("#FFD8EEFF"));
+                mHolder.mtv_plus_earn.setText(mGoodsEntity.share_buy_earn);
                 //String remind_count = isEmpty(tt_act.remind_count) ? "0" : tt_act.remind_count;
                 //mHolder.mtv_follow_count.setText(remind_count.concat("人关注"));
                 //visible(mHolder.mtv_follow_count);
@@ -869,7 +871,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
 
             mHolder.mtv_pPrice.setText(tt_act.act_price);
-            mHolder.mtv_plus_earn.setText(mGoodsEntity.share_buy_earn);
             mHolder.mtv_pmarketPrice.setStrikethrough()
                     .setText(getString(R.string.rmb)+tt_act.market_price);
             mHolder.mtv_act_title.setText(tt_act.content);

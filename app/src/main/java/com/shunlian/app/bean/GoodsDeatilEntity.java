@@ -213,6 +213,13 @@ public class GoodsDeatilEntity implements Parcelable {
         public String end_remain_seconds;
         public String start_time;
         public String old_price;
+        public String share_buy_earn;
+        public String self_buy_earn;
+        public String share_buy_earn_btn;
+        public String self_buy_earn_btn;
+
+        public SpecailAct() {
+        }
 
         @Override
         public int describeContents() {
@@ -225,16 +232,17 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.detail_pic);
             dest.writeString(this.if_act_price);
             dest.writeString(this.if_time);
-            dest.writeString(this.actprice);
             dest.writeString(this.tag_pic);
+            dest.writeString(this.actprice);
             dest.writeString(this.activity_status);
             dest.writeString(this.start_remain_seconds);
             dest.writeString(this.end_remain_seconds);
             dest.writeString(this.start_time);
             dest.writeString(this.old_price);
-        }
-
-        public SpecailAct() {
+            dest.writeString(this.share_buy_earn);
+            dest.writeString(this.self_buy_earn);
+            dest.writeString(this.share_buy_earn_btn);
+            dest.writeString(this.self_buy_earn_btn);
         }
 
         protected SpecailAct(Parcel in) {
@@ -242,16 +250,20 @@ public class GoodsDeatilEntity implements Parcelable {
             this.detail_pic = in.readString();
             this.if_act_price = in.readString();
             this.if_time = in.readString();
-            this.actprice = in.readString();
             this.tag_pic = in.readString();
+            this.actprice = in.readString();
             this.activity_status = in.readString();
             this.start_remain_seconds = in.readString();
             this.end_remain_seconds = in.readString();
             this.start_time = in.readString();
             this.old_price = in.readString();
+            this.share_buy_earn = in.readString();
+            this.self_buy_earn = in.readString();
+            this.share_buy_earn_btn = in.readString();
+            this.self_buy_earn_btn = in.readString();
         }
 
-        public static final Parcelable.Creator<SpecailAct> CREATOR = new Parcelable.Creator<SpecailAct>() {
+        public static final Creator<SpecailAct> CREATOR = new Creator<SpecailAct>() {
             @Override
             public SpecailAct createFromParcel(Parcel source) {
                 return new SpecailAct(source);
@@ -361,6 +373,14 @@ public class GoodsDeatilEntity implements Parcelable {
         public String str_surplus_stock;
         public String start_time;
         public String end_time;
+        public String share_buy_earn;
+        public String self_buy_earn;
+        public String share_buy_earn_btn;
+        public String self_buy_earn_btn;
+
+        public TTAct() {
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -385,9 +405,11 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.percent);
             dest.writeString(this.str_surplus_stock);
             dest.writeString(this.start_time);
-        }
-
-        public TTAct() {
+            dest.writeString(this.end_time);
+            dest.writeString(this.share_buy_earn);
+            dest.writeString(this.self_buy_earn);
+            dest.writeString(this.share_buy_earn_btn);
+            dest.writeString(this.self_buy_earn_btn);
         }
 
         protected TTAct(Parcel in) {
@@ -408,9 +430,14 @@ public class GoodsDeatilEntity implements Parcelable {
             this.percent = in.readString();
             this.str_surplus_stock = in.readString();
             this.start_time = in.readString();
+            this.end_time = in.readString();
+            this.share_buy_earn = in.readString();
+            this.self_buy_earn = in.readString();
+            this.share_buy_earn_btn = in.readString();
+            this.self_buy_earn_btn = in.readString();
         }
 
-        public static final Parcelable.Creator<TTAct> CREATOR = new Parcelable.Creator<TTAct>() {
+        public static final Creator<TTAct> CREATOR = new Creator<TTAct>() {
             @Override
             public TTAct createFromParcel(Parcel source) {
                 return new TTAct(source);
