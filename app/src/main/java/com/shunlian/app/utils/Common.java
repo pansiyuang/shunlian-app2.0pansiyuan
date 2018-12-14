@@ -526,6 +526,15 @@ public class Common {
             case "attentionList"://发现关注列表
 
                 break;
+            case "myfootprint"://足迹
+                MyCollectionAct.startAct(context,MyCollectionAct.FOOTPRINT_FLAG);
+                break;
+            case "goodsCollection"://商品收藏
+                MyCollectionAct.startAct(context,MyCollectionAct.GOODS_FLAG);
+                break;
+            case "storeCollection"://关注店铺
+                MyCollectionAct.startAct(context,MyCollectionAct.STORE_FLAG);
+                break;
             default://首页
                 MainActivity.startAct(context, "");
                 break;
