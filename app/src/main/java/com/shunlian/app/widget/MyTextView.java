@@ -113,7 +113,7 @@ public class MyTextView extends TextView {
             this.setVisibility(VISIBLE);
         }
         int start=0;
-        int end=text.length()-1;
+        int end=text.length();
         if (text.contains("赚"))
             start=text.indexOf("赚")+1;
         if (text.contains("起"))
