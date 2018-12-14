@@ -89,6 +89,7 @@ import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
+import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
@@ -364,8 +365,7 @@ public class Common {
                 DayDayAct.startAct(context);
                 break;
             case "myshop":
-                if (!TextUtils.isEmpty(params[0]))
-                    QrcodeStoreAct.startAct(context,params[0]);
+                MyLittleStoreActivity.startAct(context);
                 break;
             case "checkin":
                 SignInAct.startAct(context);
@@ -525,6 +525,18 @@ public class Common {
                 break;
             case "attentionList"://发现关注列表
 
+                break;
+            case "myfootprint"://足迹
+                MyCollectionAct.startAct(context,MyCollectionAct.FOOTPRINT_FLAG);
+                break;
+            case "goodsCollection"://商品收藏
+                MyCollectionAct.startAct(context,MyCollectionAct.GOODS_FLAG);
+                break;
+            case "storeCollection"://关注店铺
+                MyCollectionAct.startAct(context,MyCollectionAct.STORE_FLAG);
+                break;
+            case "shunlianKefu":
+                HelpOneAct.startAct(context);
                 break;
             default://首页
                 MainActivity.startAct(context, "");

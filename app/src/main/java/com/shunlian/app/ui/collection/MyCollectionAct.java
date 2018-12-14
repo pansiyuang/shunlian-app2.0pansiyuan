@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.collection;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -91,6 +92,8 @@ public class MyCollectionAct extends BaseActivity {
     public static void startAct(Context context,String flag){
         Intent intent = new Intent(context, MyCollectionAct.class);
         intent.putExtra("flag",flag);
+        if (!(context instanceof Activity))
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

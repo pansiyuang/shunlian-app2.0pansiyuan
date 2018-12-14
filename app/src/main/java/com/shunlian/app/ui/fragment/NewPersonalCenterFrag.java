@@ -18,17 +18,24 @@ import com.shunlian.app.adapter.ZiChanAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.MessageActivity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.h5.H5X5Act;
+import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
+import com.shunlian.app.ui.member.MemberPageActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MyOnClickListener;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonalView;
@@ -153,7 +160,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     public final static String ASTERISK = "****";
     public final static String KEY = "person_isShow";
     private String managerUrl;
-
+    private PromptDialog promptDialog;
     //    private Timer outTimer;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -234,6 +241,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         ntv_copy.setOnClickListener(this);
         miv_yaoqing.setOnClickListener(this);
         miv_shezhi.setOnClickListener(this);
+        miv_kefu.setOnClickListener(this);
         rl_more.setOnClickListener(this);
         ntv_quanbu.setOnClickListener(this);
         mllayout_daifukuan.setOnClickListener(this);
@@ -241,6 +249,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         mllayout_daifahuo.setOnClickListener(this);
         mllayout_daipingjia.setOnClickListener(this);
         mllayout_shouhuo.setOnClickListener(this);
+        miv_huiyuan.setOnClickListener(this);
         csv_out.setOnScrollListener(new CompileScrollView.OnScrollListener() {
             @Override
 //            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -361,7 +370,15 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             ziChanAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Common.goGoGo(baseActivity,myService.items.get(position).url.type,myService.items.get(position).url.item_id);
+                    if ("myshop".equals(myService.items.get(position).url.type)) {
+                        if (Common.isPlus()) {
+                            Common.goGoGo(baseActivity, myService.items.get(position).url.type, myService.items.get(position).url.item_id);
+                        } else {
+                            initHintDialog();
+                        }
+                    }else{
+                        Common.goGoGo(baseActivity, myService.items.get(position).url.type, myService.items.get(position).url.item_id);
+                    }
                 }
             });
         }
@@ -442,6 +459,14 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         }
     }
 
+    @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.nickname = "官方客服";
+        chatMember.m_user_id = userId;
+        chatMember.type = "1";
+        ChatManager.getInstance(baseActivity).init().MemberChat2Platform(chatMember);
+    }
 
 
     @Override
@@ -463,7 +488,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 MessageActivity.startAct(baseActivity);
                 break;
             case R.id.miv_kefu:
-                MessageActivity.startAct(baseActivity);
+                personalcenterPresenter.getUserId();
                 break;
             case R.id.ntv_yue:
                 Common.goGoGo(baseActivity,myAssets.balance.url.type,myAssets.balance.url.item_id);
@@ -485,6 +510,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 break;
             case R.id.mllayout_shouhuo:
                 RefundAfterSaleAct.startAct(baseContext);
+                break;
+            case R.id.miv_huiyuan:
+                MemberPageActivity.startAct(baseContext);
                 break;
         }
     }
@@ -510,6 +538,24 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         changeState();
         SharedPrefUtil.saveCacheSharedPrfBoolean(KEY, isShowData);
 //        TaskCenterAct.startAct(baseActivity);
+    }
+
+    public void initHintDialog() {
+        if (promptDialog == null) {
+            promptDialog = new PromptDialog(baseActivity);
+        }
+        promptDialog.setSureAndCancleListener(getStringResouce(R.string.personal_ninhaibushi), getStringResouce(R.string.personal_goumai), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                promptDialog.dismiss();
+                H5X5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+            }
+        }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                promptDialog.dismiss();
+            }
+        }).show();
     }
 
     @Override
