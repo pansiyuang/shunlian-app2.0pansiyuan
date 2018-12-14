@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
@@ -87,6 +88,7 @@ public class MemberAddPresenter extends BasePresenter<IMemberCodePageView> {
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.bindSuccess(code);
+                Common.staticToasts(context, "绑定成功", R.mipmap.icon_common_duihao);
             }
 
             @Override
