@@ -252,7 +252,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                     viewHolder.tv_price.setTextColor(getColor(R.color.value_A0A0A0));
                 } else {
                     viewHolder.miv_seller_out.setVisibility(View.GONE);
-                    viewHolder.tv_price.setTextColor(getColor(R.color.pink_color));
+                    viewHolder.tv_price.setTextColor(getColor(R.color.value_484848));
                 }
 
                 viewHolder.tv_address.setText(goods.send_area);

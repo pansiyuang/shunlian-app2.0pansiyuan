@@ -41,6 +41,12 @@ public class RecommendAdapter extends BaseRecyclerAdapter {
         GlideUtils.getInstance().loadImage(context, recommendHolderView.miv_photo, goods.thumb);
         recommendHolderView.mtv_price.setText(getString(R.string.common_yuan) + goods.price);
         recommendHolderView.mtv_title.setText(goods.title);
+        if (!isEmpty(goods.self_buy_earn)) {
+            recommendHolderView.mtv_earn.setVisibility(View.VISIBLE);
+            recommendHolderView.mtv_earn.setEarnMoney(goods.self_buy_earn, 15);
+        } else {
+            recommendHolderView.mtv_earn.setVisibility(View.GONE);
+        }
     }
 
     public class RecommendHolderView extends BaseRecyclerViewHolder {
@@ -55,6 +61,9 @@ public class RecommendAdapter extends BaseRecyclerAdapter {
 
         @BindView(R.id.mtv_price)
         MyTextView mtv_price;
+
+        @BindView(R.id.mtv_earn)
+        MyTextView mtv_earn;
 
         public RecommendHolderView(View itemView) {
             super(itemView);
