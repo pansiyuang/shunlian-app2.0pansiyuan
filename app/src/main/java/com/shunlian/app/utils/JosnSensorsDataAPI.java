@@ -5,6 +5,8 @@ import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Pattern;
+
 public class JosnSensorsDataAPI {
     public static int currentPageMain = 1;
     public static boolean isRecommend = false;
@@ -197,7 +199,22 @@ public class JosnSensorsDataAPI {
             properties.put("goods_title", goods_title);
             properties.put("cate1", cate1!=null?cate1:"");
             properties.put("cate2", cate2!=null?cate2:"");
-            properties.put("price", price);
+            if(price.contains("~")){
+                String[] priceBtweet = price.split("~");
+                if(priceBtweet.length==2){
+                    if(isDoubleOrFloat(priceBtweet[0])){
+                        properties.put("min_price", Float.valueOf(priceBtweet[0]));
+                    }
+                    if(isDoubleOrFloat(priceBtweet[1])){
+                        properties.put("max_price",Float.valueOf( priceBtweet[1]));
+                    }
+                }
+            }else{
+                if(isDoubleOrFloat(price)) {
+                    properties.put("min_price", Float.valueOf(price));
+                    properties.put("max_price", Float.valueOf(price));
+                }
+            }
             properties.put("store_id", store_id!=null?store_id:"");
             properties.put("store_name", store_name!=null?store_name:"");
             properties.put("shareMethod", goodName);
@@ -294,7 +311,22 @@ public class JosnSensorsDataAPI {
             properties.put("goods_title", commodityName);
             properties.put("cate1", firstCommodity);
             properties.put("cate2", secondCommodity);
-            properties.put("price", pricePerCommodity);
+            if(pricePerCommodity.contains("~")){
+               String[] priceBtweet = pricePerCommodity.split("~");
+               if(priceBtweet.length==2){
+                   if(isDoubleOrFloat(priceBtweet[0])){
+                       properties.put("min_price", Float.valueOf(priceBtweet[0]));
+                   }
+                   if(isDoubleOrFloat(priceBtweet[1])){
+                       properties.put("max_price",Float.valueOf( priceBtweet[1]));
+                   }
+               }
+            }else{
+                if(isDoubleOrFloat(pricePerCommodity)) {
+                    properties.put("min_price", Float.valueOf(pricePerCommodity));
+                    properties.put("max_price", Float.valueOf(pricePerCommodity));
+                }
+            }
             properties.put("store_id", storeID);
             properties.put("store_name", storeName);
             SensorsDataAPI.sharedInstance().track("commodityDetail", properties);
@@ -324,6 +356,14 @@ public class JosnSensorsDataAPI {
 //        }
     }
 
-
+    /*
+     * 是否为浮点数？double或float类型。
+     * @param str 传入的字符串。
+     * @return 是浮点数返回true,否则返回false。
+     */
+    public static boolean isDoubleOrFloat(String str) {
+        Pattern pattern = Pattern.compile("^[-\\+]?[.\\d]*$");
+        return pattern.matcher(str).matches();
+    }
 
 }

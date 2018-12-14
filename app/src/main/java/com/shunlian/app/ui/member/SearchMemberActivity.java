@@ -122,7 +122,6 @@ public class SearchMemberActivity extends BaseActivity  implements IMemberPageVi
             public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
                 if(arg1 == EditorInfo.IME_ACTION_SEARCH)
                 {
-                    Common.staticToast(edt_member_search.getText().toString());
                     Common.hideKeyboard(edt_member_search);
                     if(memberPagePresenter!=null){
                         memberPagePresenter.initApiMemberKey(edt_member_search.getText().toString());

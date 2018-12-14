@@ -75,7 +75,7 @@ public class ShareGoodDialogUtil {
 
         if (!TextUtils.isEmpty(mShareInfoParam.share_buy_earn)&&isGood){
             line_share_title.setVisibility(View.VISIBLE);
-            tv_price_state.setText("赚"+mShareInfoParam.share_buy_earn);
+            tv_price_state.setText(mShareInfoParam.share_buy_earn);
         }else {
             line_share_title.setVisibility(View.GONE);
         }
