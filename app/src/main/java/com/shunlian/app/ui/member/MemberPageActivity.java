@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -272,11 +273,13 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
            }
        }else if(view.getId()==R.id.tv_copy_num){
            if(memberInfoEntity!=null&&memberInfoEntity.invite_code!=null) {
+               Common.staticToastAct(this,"复制成功");
                Common.copyText(this, memberInfoEntity.invite_code);
-               Common.staticToast("复制成功");
            }
        }
     }
+
+
 
     @Override
     public void onDestroy() {

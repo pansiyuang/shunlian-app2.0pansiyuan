@@ -170,8 +170,8 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
             });
         }else if(view.getId()==R.id.tv_weixin_copy){
             if(!TextUtils.isEmpty(followfrom.weixin)){
+                Common.staticToastAct(this,"复制成功");
                 Common.copyText(this,followfrom.weixin);
-                Common.staticToast("复制成功");
             }
         }
     }
