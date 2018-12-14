@@ -764,7 +764,10 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     }
 
+    @Override
+    public void getUserId(String userId) {
 
+    }
 
 
     private boolean equals(String avatar, String avatar1) {
