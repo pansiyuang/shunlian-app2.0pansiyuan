@@ -24,12 +24,16 @@ import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.balance.BalanceDetailAct;
+import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.h5.H5X5Act;
+import com.shunlian.app.ui.my_profit.DetailOrderRecordAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.member.MemberPageActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
+import com.shunlian.app.ui.setting.PersonalDataAct;
 import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -99,6 +103,12 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     NewTextView ntv_yaoqing;
     @BindView(R.id.ntv_desc)
     NewTextView ntv_desc;
+    @BindView(R.id.ntv_asset)
+    NewTextView ntv_asset;
+    @BindView(R.id.ntv_service)
+    NewTextView ntv_service;
+    @BindView(R.id.ntv_shang)
+    NewTextView ntv_shang;
     @BindView(R.id.miv_avar)
     MyImageView miv_avar;
     @BindView(R.id.miv_level)
@@ -129,6 +139,12 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     MyImageView miv_yaoqing;
     @BindView(R.id.ntv_quanbu)
     NewTextView ntv_quanbu;
+    @BindView(R.id.ntv_shouyixiangqing)
+    NewTextView ntv_shouyixiangqing;
+    @BindView(R.id.ntv_lijitixian)
+    NewTextView ntv_lijitixian;
+    @BindView(R.id.ntv_tixianmingxi)
+    NewTextView ntv_tixianmingxi;
     @BindView(R.id.mllayout_daifukuan)
     MyLinearLayout mllayout_daifukuan;
     @BindView(R.id.mllayout_daishouhuo)
@@ -151,6 +167,10 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     NewTextView ntv_names;
     @BindView(R.id.mtv_receiveNum)
     MyTextView mtv_receiveNum;
+    @BindView(R.id.mrlayout_plus)
+    MyRelativeLayout mrlayout_plus;
+    @BindView(R.id.ntv_check)
+    NewTextView ntv_check;
     public PersonalcenterPresenter personalcenterPresenter;
     private PersonalcenterEntity personalcenterEntity;
     private String invite_code;
@@ -224,6 +244,11 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         RelativeLayout.LayoutParams paramss = (RelativeLayout.LayoutParams) miv_huiyuan.getLayoutParams();
         paramss.height=height;
         paramss.width=picWidth/2;
+        if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
+            mrlayout_plus.setVisibility(View.VISIBLE);
+        } else {
+            mrlayout_plus.setVisibility(View.GONE);
+        }
     }
 
 
@@ -242,10 +267,16 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         miv_yaoqing.setOnClickListener(this);
         miv_shezhi.setOnClickListener(this);
         miv_kefu.setOnClickListener(this);
+        ntv_yue.setOnClickListener(this);
         rl_more.setOnClickListener(this);
+        ntv_shouyixiangqing.setOnClickListener(this);
+        ntv_lijitixian.setOnClickListener(this);
+        ntv_tixianmingxi.setOnClickListener(this);
         ntv_quanbu.setOnClickListener(this);
         mllayout_daifukuan.setOnClickListener(this);
         mllayout_daishouhuo.setOnClickListener(this);
+        miv_avar.setOnClickListener(this);
+        ntv_check.setOnClickListener(this);
         mllayout_daifahuo.setOnClickListener(this);
         mllayout_daipingjia.setOnClickListener(this);
         mllayout_shouhuo.setOnClickListener(this);
@@ -330,7 +361,12 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         ntv_zhifu.setText(personalcenterEntity.zhifu);
         ntv_keti.setText(personalcenterEntity.all_sl_income);
         ntv_dai.setText(personalcenterEntity.estimateProfit);
-        ntv_notice.setText(personalcenterEntity.notice);
+        if (!isEmpty(personalcenterEntity.notice)){
+            ntv_notice.setText(personalcenterEntity.notice);
+            ntv_notice.setVisibility(View.VISIBLE);
+        }else {
+            ntv_notice.setVisibility(View.GONE);
+        }
          myAssets=personalcenterEntity.myAssets;
          if (myAssets==null)
              return;
@@ -457,6 +493,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         } else {
             mtv_payNum.setText(personalcenterEntity.order_un_pay_num);
         }
+        ntv_shang.setText(oursSchool.title);
+        ntv_service.setText(myService.title);
+        ntv_asset.setText(myAssets.title);
     }
 
     @Override
@@ -491,7 +530,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 personalcenterPresenter.getUserId();
                 break;
             case R.id.ntv_yue:
-                Common.goGoGo(baseActivity,myAssets.balance.url.type,myAssets.balance.url.item_id);
+                Constant.ISBALANCE = true;
+                BalanceMainAct.startAct(baseContext, false);
+//                Common.goGoGo(baseActivity,myAssets.balance.url.type,myAssets.balance.url.item_id);
                 break;
             case R.id.miv_yaoqing:
                 QrCodeAct.startAct(baseContext, managerUrl);
@@ -513,6 +554,34 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 break;
             case R.id.miv_huiyuan:
                 MemberPageActivity.startAct(baseContext);
+                break;
+            case R.id.ntv_check:
+//                EggDetailAct.startAct(getContext());
+//                mainActivity.myPlusClick();//old
+                if (Common.isPlus()) {
+//                    LogUtil.augusLogW("uiui-"+SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD));
+                    H5X5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+//                    H5X5Act.startAct(baseContext, "https://www.baidu.com", H5Act.MODE_SONIC);
+                } else {
+//                    LogUtil.augusLogW("uiui-"+SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD));
+                    H5X5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+//                    H5X5Act.startAct(baseContext, "https://www.baidu.com", H5Act.MODE_SONIC);
+                }
+                //点击查看特权
+                break;
+            case R.id.miv_avar:
+                PersonalDataAct.startAct(baseActivity);
+                break;
+            case R.id.ntv_shouyixiangqing:
+                //订单详情
+                DetailOrderRecordAct.startAct(baseActivity);
+                break;
+            case R.id.ntv_lijitixian:
+                Constant.ISBALANCE = false;
+                BalanceMainAct.startAct(baseContext, false);
+                break;
+            case R.id.ntv_tixianmingxi:
+                BalanceDetailAct.startAct(baseActivity);
                 break;
         }
     }

@@ -22,6 +22,7 @@ import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
@@ -910,7 +911,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 CouponListAct.startAct(baseActivity);
                 break;
             case R.id.mllayout_dongli:
-                MyProfitAct.startAct(baseActivity, false);
+                MainActivity.startAct(baseActivity, "personCenter");
+//                MyProfitAct.startAct(baseActivity, false);
                 break;
             case R.id.mllayout_xiaoshou:
                 SaleDataAct.startAct(baseActivity);

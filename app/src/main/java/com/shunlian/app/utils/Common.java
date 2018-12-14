@@ -386,7 +386,8 @@ public class Common {
                     Common.goGoGo(context,"login");
                     theRelayJump(type,params);
                 } else {
-                    MyProfitAct.startAct(context, false);
+                    MainActivity.startAct(context, "personCenter");
+//                    MyProfitAct.startAct(context, false);
                 }
                 break;
 //            case "myvoucherlist":
