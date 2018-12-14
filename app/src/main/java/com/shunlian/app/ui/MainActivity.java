@@ -41,6 +41,7 @@ import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.fragment.NewDiscoverFrag;
+import com.shunlian.app.ui.fragment.NewPersonalCenterFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
@@ -137,7 +138,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private DiscoverFrag discoverFrag;
     private NewDiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
-    private PersonalCenterFrag personalCenterFrag;
+    private NewPersonalCenterFrag personalCenterFrag;
     private long mExitTime;
     private FragmentManager fragmentManager;
     private int pageIndex;
@@ -619,9 +620,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (personalCenterFrag == null) {
-            personalCenterFrag = (PersonalCenterFrag) fragmentMap.get(flags[4]);
+            personalCenterFrag = (NewPersonalCenterFrag) fragmentMap.get(flags[4]);
             if (personalCenterFrag == null) {
-                personalCenterFrag = new PersonalCenterFrag();
+                personalCenterFrag = new NewPersonalCenterFrag();
                 fragmentMap.put(flags[4], personalCenterFrag);
             }
         } else {
