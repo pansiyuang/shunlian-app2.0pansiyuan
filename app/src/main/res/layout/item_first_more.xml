@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/pink_color"
             android:visibility="gone"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 </com.shunlian.app.widget.MyLinearLayout>
 
