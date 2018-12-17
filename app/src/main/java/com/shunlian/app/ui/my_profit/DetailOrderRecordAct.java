@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -13,6 +15,7 @@ import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IDetailOrderRecordView;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -25,11 +28,11 @@ import butterknife.BindView;
 
 public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRecordView{
 
-    @BindView(R.id.mtv_toolbar_title)
-    MyTextView mtv_toolbar_title;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
 
-    @BindView(R.id.mrlayout_toolbar_more)
-    MyRelativeLayout mrlayout_toolbar_more;
+    @BindView(R.id.miv_title_right)
+    MyImageView miv_title_right;
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
@@ -39,6 +42,7 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
 
     private DetailOrderRecordPresenter presenter;
     private LinearLayoutManager manager;
+    private boolean isShow = true;
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,DetailOrderRecordAct.class));
@@ -79,17 +83,32 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
 
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        mtv_toolbar_title.setText("详细订单记录");
-        gone(mrlayout_toolbar_more);
+        tv_title.setText("详细订单记录");
+        miv_title_right.setImageResource(R.mipmap.icon_eyes_open);
+        visible(miv_title_right);
 
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
         int i = TransformUtil.dip2px(this, 10);
+        TransformUtil.expandViewTouchDelegate(miv_title_right, i, i, i, i);
         recy_view.addItemDecoration(new VerticalItemDecoration(i,0,0));
 //        recy_view.addItemDecoration(new MVerticalItemDecoration(this,10,0,0));
 
         presenter = new DetailOrderRecordPresenter(this,this);
 
+        miv_title_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isShow) {
+                    isShow = false;
+                    miv_title_right.setImageResource(R.mipmap.icon_eyes_closes);
+                } else {
+                    isShow = true;
+                    miv_title_right.setImageResource(R.mipmap.icon_eyes_opens);
+                }
+                presenter.setIsShow(isShow);
+            }
+        });
     }
 
     /**

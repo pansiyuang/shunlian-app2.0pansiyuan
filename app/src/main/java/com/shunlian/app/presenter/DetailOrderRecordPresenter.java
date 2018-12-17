@@ -24,6 +24,7 @@ public class DetailOrderRecordPresenter extends BasePresenter<IDetailOrderRecord
     public final String page_size = "20";
     private List<DetailOrderRecordEntity.Item> items = new ArrayList<>();
     private DetailOrderRecordAdapter adapter;
+    private boolean isShow = true;
 
     public DetailOrderRecordPresenter(Context context, IDetailOrderRecordView iView) {
         super(context, iView);
@@ -50,6 +51,13 @@ public class DetailOrderRecordPresenter extends BasePresenter<IDetailOrderRecord
         if (items != null){
             items.clear();
             items = null;
+        }
+    }
+
+    public void setIsShow(boolean b) {
+        isShow = b;
+        if (adapter != null) {
+            adapter.setShow(isShow);
         }
     }
 
