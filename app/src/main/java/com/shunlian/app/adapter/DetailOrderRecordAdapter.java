@@ -27,6 +27,7 @@ import butterknife.BindView;
 
 public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRecordEntity.Item> {
 
+    private boolean isShow = true;
     private List<BaseRecyclerAdapter> adapterList = new ArrayList<>();
     public DetailOrderRecordAdapter(Context context, List<DetailOrderRecordEntity.Item> lists) {
         super(context, true, lists);
@@ -42,6 +43,11 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         View view = mInflater.inflate(R.layout.item_order_record, parent, false);
         return new DetailOrderRecordHolder(view);
+    }
+
+    public void setShow(boolean show){
+        isShow = show;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -94,7 +100,7 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
             GoodsItemAdapter goodsItemAdapter = new GoodsItemAdapter(context, item.order_goods);
             if (adapterList != null)adapterList.add(goodsItemAdapter);
             mHolder.recy_view.setAdapter(goodsItemAdapter);
-
+            goodsItemAdapter.isShow(isShow);
 
             GradientDrawable buyDrawable = (GradientDrawable) mHolder.mtv_buy.getBackground();
             buyDrawable.setStroke(0, getColor(R.color.white));
@@ -105,6 +111,13 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
                 mHolder.mtv_buy.setText("卖");
                 buyDrawable.setColor(getColor(R.color.pink_color));
             }
+        }
+        if (isShow) {
+            mHolder.mtv_buy.setVisibility(View.VISIBLE);
+            mHolder.mtv_forecast_earnings.setVisibility(View.VISIBLE);
+        } else {
+            mHolder.mtv_buy.setVisibility(View.GONE);
+            mHolder.mtv_forecast_earnings.setVisibility(View.GONE);
         }
         mHolder.mtv_order_time.setText("下单日期：" + item.order_time);
     }
@@ -162,7 +175,7 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
 
 
     public class GoodsItemAdapter extends BaseRecyclerAdapter<DetailOrderRecordEntity.OrderGoods>{
-
+        private boolean isShow = true;
 
         public GoodsItemAdapter(Context context,List<DetailOrderRecordEntity.OrderGoods> lists) {
             super(context, false, lists);
@@ -178,6 +191,11 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
         protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
             View view = mInflater.inflate(R.layout.item_order_goods, parent, false);
             return new GoodsItemHolder(view);
+        }
+
+        public void isShow(boolean b){
+            isShow = b;
+            this.notifyDataSetChanged();
         }
 
         /**
@@ -207,6 +225,13 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
                 mHolder.mtv_goods_title.setText(Common.getPlaceholder(offered.length())
                         .concat(item.title));
             }
+            if(isShow){
+                mHolder.mtv_assertion.setVisibility(View.VISIBLE);
+                mHolder.mtv_assertionProfit.setVisibility(View.VISIBLE);
+            }else{
+                mHolder.mtv_assertion.setVisibility(View.GONE);
+                mHolder.mtv_assertionProfit.setVisibility(View.GONE);
+            }
         }
 
 
@@ -230,6 +255,9 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
 
             @BindView(R.id.mtv_goods_count)
             MyTextView mtv_goods_count;
+
+            @BindView(R.id.mtv_assertion)
+            MyTextView mtv_assertion;
 
             @BindView(R.id.mtv_assertionProfit)
             MyTextView mtv_assertionProfit;

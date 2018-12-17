@@ -32,9 +32,8 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.balance.BalanceDetailAct;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.h5.H5X5Act;
-import com.shunlian.app.ui.my_profit.DetailOrderRecordAct;
-import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.member.MemberPageActivity;
+import com.shunlian.app.ui.my_profit.DetailOrderRecordAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
@@ -56,7 +55,6 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.CenterKanner;
-import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.mylibrary.ImmersionBar;
 import com.zh.chartlibrary.common.DensityUtil;
 
