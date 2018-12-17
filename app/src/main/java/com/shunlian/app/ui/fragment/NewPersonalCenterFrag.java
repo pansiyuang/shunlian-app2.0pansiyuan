@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringConfig;
+import com.facebook.rebound.SpringListener;
+import com.facebook.rebound.SpringSystem;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.FuWuAdapter;
@@ -272,9 +277,15 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     private float lastY;
     private double lastY_damping = 0.2;
     private boolean isDownUp= false;
+    private SpringSystem springSystem;
+    private Spring spring;
+    private boolean isStartAnim = false;
     @Override
     protected void initListener() {
         super.initListener();
+        springSystem = SpringSystem.create();
+        spring = springSystem.createSpring();
+        spring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(100, 4));
         ntv_yaoqing.setOnClickListener(this);
         view_bg.setOnClickListener(this);
         ntv_copy.setOnClickListener(this);
@@ -322,25 +333,30 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                     int action = event.getAction();
                     switch (action) {
                         case MotionEvent.ACTION_DOWN:
+                            Log.d("ACTION_DOWN","ACTION_DOWN");
                             lastY = event.getY();
                             isDownUp = true;
                             break;
                         case MotionEvent.ACTION_UP:
+                            Log.d("ACTION_DOWN","ACTION_UP");
+                            spring.removeAllListeners();
                             isDownUp = false;
                             lastY = 0;
-                            line_anim.setTranslationY(lastY);
+                            handler.sendEmptyMessage(0);
                             break;
                         case MotionEvent.ACTION_MOVE:
                             if (isDownUp) {
                                 float nowY = event.getY();
+                                Log.d("ACTION_DOWN","ACTION_MOVE:"+nowY+"  nowY - lastY:"+(nowY - lastY));
                                 if (nowY - lastY > 0) {
                                     int deltaY = (int) ((nowY - lastY) * lastY_damping);
                                     line_anim.setTranslationY(deltaY);
                                 } else {
-                                    line_anim.setTranslationY(0);
+                                     line_anim.setTranslationY(0);
                                 }
                             } else {
                                 lastY = event.getY();
+                                Log.d("ACTION_DOWN","ACTION_MOVE:"+lastY);
                                 isDownUp = true;
                             }
                             break;
@@ -373,7 +389,34 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     private  Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            line_anim.setTranslationY(0);
+            spring.setCurrentValue(line_anim.getTranslationY());
+            spring.setEndValue(0);
+            spring.addListener(new SpringListener() {
+                @Override
+                public void onSpringUpdate(Spring spring) {
+                    double value = spring.getCurrentValue();
+                    if(!isDownUp) {
+                        line_anim.setTranslationY((int) value);
+                    }
+                    isStartAnim = true;
+                }
+
+                @Override
+                public void onSpringAtRest(Spring spring) {
+                }
+
+                @Override
+                public void onSpringActivate(Spring spring) {
+                }
+
+                @Override
+                public void onSpringEndStateChange(Spring spring) {
+//                    if(!isDownUp) {
+//                        line_anim.setTranslationY(0);
+//                    }
+                    isStartAnim =false;
+                }
+            });
         }
     };
 
