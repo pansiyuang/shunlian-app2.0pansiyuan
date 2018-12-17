@@ -276,6 +276,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         ntv_quanbu.setOnClickListener(this);
         mllayout_daifukuan.setOnClickListener(this);
         mllayout_daishouhuo.setOnClickListener(this);
+        ntv_name.setOnClickListener(this);
         miv_avar.setOnClickListener(this);
         ntv_check.setOnClickListener(this);
         mllayout_daifahuo.setOnClickListener(this);
@@ -589,6 +590,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 if(!TextUtils.isEmpty(personalcenterEntity.salesInfo_url)) {
                     H5X5Act.startAct(baseContext, personalcenterEntity.salesInfo_url, H5X5Act.MODE_SONIC);
                 }
+                break;
+            case R.id.ntv_name:
+                ntv_name.requestFocus();
                 break;
         }
     }
