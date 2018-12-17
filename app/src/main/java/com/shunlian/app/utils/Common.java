@@ -87,6 +87,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.h5.H5X5Act;
+import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
@@ -540,6 +541,9 @@ public class Common {
                 break;
             case "shunlianKefu":
                 HelpOneAct.startAct(context);
+                break;
+            case "businessSchool":
+                HelpClassAct.startAct(context, params[0]);
                 break;
             default://首页
                 MainActivity.startAct(context, "");
