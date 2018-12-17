@@ -49,7 +49,8 @@ public class FirstHorizonAdapter extends BaseRecyclerAdapter<GetDataEntity.MData
             if (isNew) {
                 mHolder.mtv_title.setText(data.title);
                 mHolder.mtv_title.setVisibility(View.VISIBLE);
-                mHolder.mtv_earn_price.setVisibility(View.GONE);
+                mHolder.mtv_earn_price.setVisibility(View.VISIBLE);
+                mHolder.mtv_earn_price.setEarnMoney(data.self_buy_earn,11);
             } else {
                 mHolder.mtv_title.setVisibility(View.GONE);
                 mHolder.mtv_earn_price.setEarnMoney(data.self_buy_earn,11);

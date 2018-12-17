@@ -30,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:paddingBottom="10dp"
         android:layout_marginTop="7dp">
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_price"
@@ -48,8 +49,8 @@
             android:layout_marginRight="5dp"
             android:ellipsize="end"
             android:lines="1"
-            android:textColor="@color/color_value_6c"
-            android:textSize="12sp" />
+            android:textColor="@color/pink_color"
+            android:textSize="15sp" />
     </com.shunlian.app.widget.MyLinearLayout>
 </com.shunlian.app.widget.MyLinearLayout>
 

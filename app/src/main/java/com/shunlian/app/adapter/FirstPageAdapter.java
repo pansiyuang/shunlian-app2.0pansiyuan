@@ -748,6 +748,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
                         tenHolder.mtv_price.setText(spannableStringBuilder);
                     }
+                    if(!TextUtils.isEmpty(goods.self_buy_earn))
+                    {
+                        tenHolder.mtv_earn.setVisibility(View.VISIBLE);
+                        tenHolder.mtv_earn.setText(goods.self_buy_earn);
+                    }else{
+                        tenHolder.mtv_earn.setVisibility(View.GONE);
+                    }
                     if (tenHolder.mllayout_tag != null)
                         tenHolder.mllayout_tag.removeAllViews();
                     tenHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
@@ -870,11 +877,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
         //        @BindView(R.id.mtv_price)
         MyTextView mtv_price;
 
+        MyTextView mtv_earn;
         TenHolder(View itemView) {
             super(itemView);
             mllayout_root = (MyLinearLayout) itemView.findViewById(R.id.mllayout_root);
             miv_photo = (MyImageView) itemView.findViewById(R.id.miv_photo);
             mtv_title = (MyTextView) itemView.findViewById(R.id.mtv_title);
+            mtv_earn = (MyTextView) itemView.findViewById(R.id.mtv_earn);
             mllayout_tag = (MyLinearLayout) itemView.findViewById(R.id.mllayout_tag);
             mtv_price = (MyTextView) itemView.findViewById(R.id.mtv_price);
             int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
