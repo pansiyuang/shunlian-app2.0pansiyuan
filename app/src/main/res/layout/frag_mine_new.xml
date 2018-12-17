@@ -385,6 +385,8 @@
                     android:background="@drawable/bg_personal_notice"
                     android:drawableLeft="@mipmap/icon_horn"
                     android:drawablePadding="2dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:text="ddddddddd"
                     android:textColor="@color/share_text" />
 
