@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -281,6 +282,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         mllayout_daipingjia.setOnClickListener(this);
         mllayout_shouhuo.setOnClickListener(this);
         miv_huiyuan.setOnClickListener(this);
+        ntv_left.setOnClickListener(this);
         csv_out.setOnScrollListener(new CompileScrollView.OnScrollListener() {
             @Override
 //            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -582,6 +584,11 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 break;
             case R.id.ntv_tixianmingxi:
                 BalanceDetailAct.startAct(baseActivity);
+                break;
+            case R.id.ntv_left:
+                if(!TextUtils.isEmpty(personalcenterEntity.salesInfo_url)) {
+                    H5X5Act.startAct(baseContext, personalcenterEntity.salesInfo_url, H5X5Act.MODE_SONIC);
+                }
                 break;
         }
     }
