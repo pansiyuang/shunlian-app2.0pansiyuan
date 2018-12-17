@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -281,6 +282,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         mllayout_daipingjia.setOnClickListener(this);
         mllayout_shouhuo.setOnClickListener(this);
         miv_huiyuan.setOnClickListener(this);
+        ntv_left.setOnClickListener(this);
         csv_out.setOnScrollListener(new CompileScrollView.OnScrollListener() {
             @Override
 //            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -325,7 +327,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             GlideUtils.getInstance().loadCircleAvar(baseContext, miv_avar, personalcenterEntity.avatar);
         }
         if (!isEmpty(personalcenterEntity.plus_expire_time))
-            GlideUtils.getInstance().loadCircleAvar(baseContext, miv_pluss, personalcenterEntity.plus_expire_time);
+            GlideUtils.getInstance().loadImageChang(baseContext, miv_pluss, personalcenterEntity.plus_expire_time);
         if (!isEmpty(personalcenterEntity.level)) {
             Bitmap bitmap = TransformUtil.convertNewVIP(getActivity(), personalcenterEntity.level);
             miv_level.setImageBitmap(bitmap);
@@ -583,6 +585,11 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             case R.id.ntv_tixianmingxi:
                 BalanceDetailAct.startAct(baseActivity);
                 break;
+            case R.id.ntv_left:
+                if(!TextUtils.isEmpty(personalcenterEntity.salesInfo_url)) {
+                    H5X5Act.startAct(baseContext, personalcenterEntity.salesInfo_url, H5X5Act.MODE_SONIC);
+                }
+                break;
         }
     }
     public SpannableStringBuilder formatNumber(String number) {
@@ -592,7 +599,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     }
 
     private void changeState() {
-        miv_isShow_data.setImageResource(!isShowData ? R.mipmap.icon_eyes_opens : R.mipmap.icon_eyes_closes);
+        miv_isShow_data.setImageResource(!isShowData ? R.mipmap.icon_eyes_closes : R.mipmap.icon_eyes_opens);
         if (personalcenterEntity != null) {
             ntv_title.setText(!isShowData ? ASTERISK : personalcenterEntity.team_sales);
             ntv_zhifu.setText(!isShowData ? ASTERISK : personalcenterEntity.zhifu);
