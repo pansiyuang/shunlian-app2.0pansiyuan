@@ -231,7 +231,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
-        ImmersionBar.with(this)/*.statusBarView(R.id.view_status_bar)*/.titleBar(rLayout_title, false).init();
+        ImmersionBar.with(this).titleBar(rLayout_title, false).init();
         view_bg.setAlpha(0);
         ntv_names.setAlpha(0);
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
