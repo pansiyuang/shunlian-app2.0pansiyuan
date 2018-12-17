@@ -191,7 +191,7 @@ public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollL
     protected void initData() {
         member_id = SharedPrefUtil.getSharedUserString("member_id", "");
         ImmersionBar.with(this).fitsSystemWindows(true)
-                .statusBarColor(R.color.white)
+                .statusBarColor(R.color.white).statusBarView(R.id.view_status_bar)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         mtv_close.setVisibility(View.GONE);

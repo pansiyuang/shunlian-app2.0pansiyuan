@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,11 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -187,7 +183,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     protected void initData() {
-        immersionBar.statusBarColor(R.color.white)
+        immersionBar.statusBarColor(R.color.white).statusBarView(R.id.view_status_bar)
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true)
                 .init();

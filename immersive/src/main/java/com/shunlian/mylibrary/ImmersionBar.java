@@ -13,6 +13,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
+import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -1624,6 +1625,34 @@ public class ImmersionBar {
     }
 
     /**
+     * 检查布局根节点是否使用了android:fitsSystemWindows="true"属性
+     * Check fits system windows boolean.
+     *
+     * @param view the view
+     * @return the boolean
+     */
+    public static boolean checkFitsSystemWindows(View view) {
+        if (view.getFitsSystemWindows()) {
+            return true;
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0, count = viewGroup.getChildCount(); i < count; i++) {
+                View childView = viewGroup.getChildAt(i);
+                if (childView instanceof DrawerLayout) {
+                    if (checkFitsSystemWindows(childView)) {
+                        return true;
+                    }
+                }
+                if (childView.getFitsSystemWindows()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * 重新绘制标题栏高度，解决状态栏与顶部重叠问题
      * Sets title bar.
      */
@@ -1668,9 +1697,9 @@ public class ImmersionBar {
     private void keyboardEnable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (mBarParams.keyboardEnable) {  //解决软键盘与底部输入框冲突问题
-                KeyboardPatch.patch(mActivity).enable(mBarParams.keyboardMode);
+                KeyboardPatch.patch(mActivity,this).enable(mBarParams.keyboardMode);
             } else {
-                KeyboardPatch.patch(mActivity).disable(mBarParams.keyboardMode);
+                KeyboardPatch.patch(mActivity,this).disable(mBarParams.keyboardMode);
             }
         }
     }

@@ -148,11 +148,19 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                             iView.activityState(tt_act.sale,tt_act.remind_status);
                             shareInfoParam.start_time = tt_act.start_time;
                             shareInfoParam.act_label = "天天特惠";
+                            //底部导航，分享赚，自购
+                            if ("1".equals(tt_act.sale)) {
+                                iView.selfBuyAndShareBuyBottomBtn(
+                                        tt_act.self_buy_earn_btn, tt_act.share_buy_earn_btn);
+                            }
                         }
                     }
                     GoodsDeatilEntity.SpecailAct common_activity = data.common_activity;
                     if (common_activity != null){
                         iView.specailAct();
+                        //底部导航，分享赚，自购
+                        iView.selfBuyAndShareBuyBottomBtn(
+                                common_activity.self_buy_earn_btn,common_activity.share_buy_earn_btn);
                     }
 
                     /**************分享****************/
@@ -185,8 +193,11 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         mgoldSecond = data.get_gold_second;
                         iView.stayObtainEggs(Integer.parseInt(mgoldSecond));
                     }
-                    //底部导航，分享赚，自购
-                    iView.selfBuyAndShareBuyBottomBtn(data.self_buy_earn_btn,data.share_buy_earn_btn);
+                    if (!((data.common_activity != null && !"1".equals(data.common_activity.activity_status))
+                            || (data.tt_act != null && "1".equals(data.tt_act.sale)))){
+                        //底部导航，分享赚，自购
+                        iView.selfBuyAndShareBuyBottomBtn(data.self_buy_earn_btn,data.share_buy_earn_btn);
+                    }
                 }
             }
 

@@ -240,7 +240,7 @@
         app:tabIndicatorHeight="1dp"
         app:tabSelectedTextColor="@color/pink_color"
         app:tabTextColor="@color/value_88"
-        app:tabBackground="@color/transparent"
+        app:tabBackground="@color/white"
         android:textSize="19sp"/>
 
     <View

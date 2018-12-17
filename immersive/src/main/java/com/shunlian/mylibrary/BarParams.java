@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.view.View;
+import android.view.WindowManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,9 @@ public class BarParams implements Cloneable {
     public int titleBarHeight;                    //标题栏的高度
     public int titleBarPaddingTopHeight;                    //标题栏的paddingTop高度
     public boolean keyboardEnable = false;   //解决软键盘与输入框冲突问题
-    public int keyboardMode;                 //软键盘属性
+//    public int keyboardMode;                 //软键盘属性
+    public int keyboardMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
+            | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
     public boolean navigationBarEnable = true;      //是否能修改导航栏颜色
     public boolean fixMarginAtBottom = false;  //解决出现底部多余导航栏高度，默认为false
 

@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -40,9 +41,6 @@ import com.shunlian.app.utils.sideslip.widget.SlideBackLayout;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -338,6 +336,17 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             immersionBar = ImmersionBar.with(this);
         }
         immersionBar.fitsSystemWindows(true).statusBarColor(statusBarColor).init();
+    }
+
+    /**
+     *设置状态栏高度，解决重叠
+     * @param statusBarID
+     */
+    public void setStatusBarView(@IdRes int statusBarID) {
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
+        immersionBar.statusBarView(statusBarID).init();
     }
 
     /**
