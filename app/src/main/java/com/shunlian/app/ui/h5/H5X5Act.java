@@ -80,8 +80,6 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
     @BindView(R.id.mtv_close)
     public MyTextView mtv_close;
-    @BindView(R.id.view_line)
-    public View view_line;
     @BindView(R.id.mar_title)
     public MarqueeTextView mar_title;
     @BindView(R.id.mtv_title)
@@ -227,11 +225,10 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         mIntent = getIntent();
         flag = mIntent.getStringExtra("flag");
         if (!isEmpty(flag) && "noTitle".equals(flag)) {
-//            view_line.setVisibility(View.GONE);
             rl_title.setVisibility(View.GONE);
         }
         immersionBar.statusBarColor(R.color.white)
-                .statusBarDarkFont(true, 0.2f)
+                .statusBarDarkFont(true, 0.2f).statusBarView(R.id.view_status_bar)
                 .keyboardEnable(true)
                 .init();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
