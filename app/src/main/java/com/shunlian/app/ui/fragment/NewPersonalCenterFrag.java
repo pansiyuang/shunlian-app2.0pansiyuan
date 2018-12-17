@@ -325,7 +325,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             GlideUtils.getInstance().loadCircleAvar(baseContext, miv_avar, personalcenterEntity.avatar);
         }
         if (!isEmpty(personalcenterEntity.plus_expire_time))
-            GlideUtils.getInstance().loadCircleAvar(baseContext, miv_pluss, personalcenterEntity.plus_expire_time);
+            GlideUtils.getInstance().loadImageChang(baseContext, miv_pluss, personalcenterEntity.plus_expire_time);
         if (!isEmpty(personalcenterEntity.level)) {
             Bitmap bitmap = TransformUtil.convertNewVIP(getActivity(), personalcenterEntity.level);
             miv_level.setImageBitmap(bitmap);
@@ -592,7 +592,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     }
 
     private void changeState() {
-        miv_isShow_data.setImageResource(!isShowData ? R.mipmap.icon_eyes_opens : R.mipmap.icon_eyes_closes);
+        miv_isShow_data.setImageResource(!isShowData ? R.mipmap.icon_eyes_closes : R.mipmap.icon_eyes_opens);
         if (personalcenterEntity != null) {
             ntv_title.setText(!isShowData ? ASTERISK : personalcenterEntity.team_sales);
             ntv_zhifu.setText(!isShowData ? ASTERISK : personalcenterEntity.zhifu);

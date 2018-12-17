@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <com.shunlian.app.widget.CompileScrollView
         android:id="@+id/csv_out"
@@ -30,8 +30,8 @@
                 <com.shunlian.app.widget.MyRelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginBottom="20dp">
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="10dp">
 
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_avar"
@@ -55,14 +55,27 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_center_grow"
+                        android:ellipsize="end"
                         android:gravity="center"
+                        android:lines="2"
                         android:paddingLeft="10dp"
                         android:paddingRight="6dp"
                         android:text="成长值\nffff"
                         android:textColor="@color/white"
-                        android:textSize="10sp"
-                        android:lines="2"
-                        android:ellipsize="end"/>
+                        android:textSize="10sp" />
+
+                    <com.shunlian.app.widget.NewTextView
+                        android:id="@+id/ntv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/miv_levels"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="140dp"
+                        android:layout_toRightOf="@id/miv_avar"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_levels"
@@ -70,22 +83,9 @@
                         android:layout_height="15dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="6dp"
-                        android:layout_toLeftOf="@id/ntv_grow"
-                        android:scaleType="fitXY" />
-
-                    <com.shunlian.app.widget.NewTextView
-                        android:id="@+id/ntv_name"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@id/miv_levels"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="6dp"
-                        android:layout_toLeftOf="@id/miv_levels"
-                        android:layout_toRightOf="@id/miv_avar"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:layout_toRightOf="@id/ntv_name"
+                        android:scaleType="fitXY"
+                        android:layout_marginLeft="-135dp"/>
 
                     <com.shunlian.app.widget.NewTextView
                         android:id="@+id/ntv_yaoqing"
@@ -128,29 +128,34 @@
                         android:id="@+id/miv_plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
                         android:src="@mipmap/icon_plus_mycenter" />
 
                     <com.shunlian.app.widget.NewTextView
+                        android:id="@+id/ntv_check"
                         android:layout_width="74dp"
                         android:layout_height="22dp"
                         android:layout_alignParentRight="true"
+                        android:layout_marginTop="5dp"
                         android:background="@drawable/bg_center_check"
                         android:drawableRight="@mipmap/icon_right_01"
                         android:gravity="center"
                         android:paddingRight="6dp"
                         android:text="查看特权"
-                        android:id="@+id/ntv_check"
                         android:textColor="@color/new_text"
                         android:textSize="12sp" />
+
                     <com.shunlian.app.widget.MyImageView
-                        android:layout_toRightOf="@id/miv_plus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxHeight="22dp"
                         android:id="@+id/miv_pluss"
-                        android:layout_toLeftOf="@id/ntv_check"
+                        android:layout_width="140dp"
+                        android:layout_height="22dp"
+                        android:layout_marginLeft="5dp"
                         android:layout_marginRight="30dp"
-                        android:layout_marginLeft="5dp"/>
+                        android:layout_toLeftOf="@id/ntv_check"
+                        android:layout_toRightOf="@id/miv_plus"
+                        android:scaleType="fitXY"
+                        android:layout_marginTop="4dp" />
+
                     <com.shunlian.app.widget.NewTextView
                         android:id="@+id/ntv_desc"
                         android:layout_width="wrap_content"
@@ -178,8 +183,8 @@
                             android:id="@+id/ntv_title"
                             android:layout_width="wrap_content"
                             android:layout_height="26dp"
-                            android:gravity="center"
                             android:layout_centerVertical="true"
+                            android:gravity="center"
                             android:text="5656565"
                             android:textColor="@color/pink_color"
                             android:textSize="24sp" />
@@ -210,18 +215,18 @@
                             android:textSize="12sp" />
 
                         <com.shunlian.app.widget.NewTextView
+                            android:id="@+id/ntv_left"
                             android:layout_width="wrap_content"
                             android:layout_height="28dp"
-                            android:id="@+id/ntv_left"
                             android:layout_alignParentRight="true"
                             android:background="@drawable/bg_center_sale"
+                            android:ellipsize="end"
                             android:gravity="center"
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:singleLine="true"
-                            android:ellipsize="end"
-                            android:textColor="@color/share_text"
                             android:text="dsfsdfsdfjlj"
+                            android:textColor="@color/share_text"
                             android:textSize="12sp" />
                     </com.shunlian.app.widget.MyRelativeLayout>
 
@@ -245,11 +250,11 @@
                                 android:textSize="12sp" />
 
                             <com.shunlian.app.widget.NewTextView
+                                android:id="@+id/ntv_zhifu"
                                 android:layout_width="wrap_content"
                                 android:layout_height="20dp"
-                                android:gravity="center"
                                 android:layout_marginTop="10dp"
-                                android:id="@+id/ntv_zhifu"
+                                android:gravity="center"
                                 android:text="已提现收益(元)"
                                 android:textColor="@color/share_text"
                                 android:textSize="15sp" />
@@ -281,23 +286,23 @@
                                 android:textSize="12sp" />
 
                             <com.shunlian.app.widget.NewTextView
+                                android:id="@+id/ntv_keti"
                                 android:layout_width="wrap_content"
                                 android:layout_height="20dp"
-                                android:gravity="center"
                                 android:layout_marginTop="10dp"
-                                android:id="@+id/ntv_keti"
+                                android:gravity="center"
                                 android:text="已提现收益(元)"
                                 android:textColor="@color/share_text"
                                 android:textSize="15sp" />
 
                             <com.shunlian.app.widget.NewTextView
+                                android:id="@+id/ntv_lijitixian"
                                 android:layout_width="66dp"
                                 android:layout_height="20dp"
                                 android:layout_marginTop="12dp"
                                 android:background="@drawable/bg_center_operate"
                                 android:gravity="center"
                                 android:text="立即提现"
-                                android:id="@+id/ntv_lijitixian"
                                 android:textColor="@color/pink_color"
                                 android:textSize="12sp" />
                         </com.shunlian.app.widget.MyLinearLayout>
@@ -317,23 +322,23 @@
                                 android:textSize="12sp" />
 
                             <com.shunlian.app.widget.NewTextView
+                                android:id="@+id/ntv_dai"
                                 android:layout_width="wrap_content"
                                 android:layout_height="20dp"
-                                android:gravity="center"
                                 android:layout_marginTop="10dp"
-                                android:id="@+id/ntv_dai"
+                                android:gravity="center"
                                 android:text="已提现收益(元)"
                                 android:textColor="@color/share_text"
                                 android:textSize="15sp" />
 
                             <com.shunlian.app.widget.NewTextView
+                                android:id="@+id/ntv_shouyixiangqing"
                                 android:layout_width="66dp"
                                 android:layout_height="20dp"
                                 android:layout_marginTop="12dp"
                                 android:background="@drawable/bg_center_operate"
                                 android:gravity="center"
                                 android:text="收益详情"
-                                android:id="@+id/ntv_shouyixiangqing"
                                 android:textColor="@color/pink_color"
                                 android:textSize="12sp" />
                         </com.shunlian.app.widget.MyLinearLayout>
@@ -348,10 +353,10 @@
                     android:background="@color/bg_gray" />
 
                 <com.shunlian.app.widget.NewTextView
+                    android:id="@+id/ntv_notice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="18dp"
-                    android:id="@+id/ntv_notice"
                     android:layout_marginRight="18dp"
                     android:layout_marginTop="22dp"
                     android:drawableLeft="@mipmap/icon_horn"
@@ -371,16 +376,16 @@
                         android:id="@+id/miv_yaoqing"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/image_invitefriend"
-                        android:scaleType="fitXY" />
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/image_invitefriend" />
 
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_huiyuan"
                         android:layout_width="wrap_content"
-                        android:src="@mipmap/image_vip"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
-                        android:scaleType="fitXY" />
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/image_vip" />
                 </com.shunlian.app.widget.MyRelativeLayout>
 
                 <View
@@ -394,23 +399,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="16dp" >
+                    android:layout_marginTop="16dp">
+
                     <com.shunlian.app.widget.NewTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:text="我的订单"
-                        android:textSize="18sp"
-                        android:layout_centerVertical="true"
-                        android:textColor="@color/new_text"/>
+                        android:textColor="@color/new_text"
+                        android:textSize="18sp" />
+
                     <com.shunlian.app.widget.NewTextView
+                        android:id="@+id/ntv_quanbu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="查看全部>"
-                        android:id="@+id/ntv_quanbu"
-                        android:textSize="13sp"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:textColor="@color/share_text"/>
+                        android:layout_centerVertical="true"
+                        android:text="查看全部>"
+                        android:textColor="@color/share_text"
+                        android:textSize="13sp" />
                 </com.shunlian.app.widget.MyRelativeLayout>
 
                 <com.shunlian.app.widget.MyLinearLayout
@@ -497,6 +504,7 @@
                             android:textColor="@color/share_text"
                             android:textSize="12sp" />
                     </com.shunlian.app.widget.MyLinearLayout>
+
                     <com.shunlian.app.widget.MyLinearLayout
                         android:id="@+id/mllayout_daishouhuo"
                         android:layout_width="0dp"
@@ -622,83 +630,93 @@
                     android:layout_width="match_parent"
                     android:layout_height="16dp"
                     android:background="@color/bg_gray" />
+
                 <com.shunlian.app.widget.MyRelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="16dp" >
+                    android:layout_marginTop="16dp">
+
                     <com.shunlian.app.widget.NewTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="我的资产"
-                        android:textSize="18sp"
                         android:id="@+id/ntv_asset"
-                        android:layout_centerVertical="true"
-                        android:textColor="@color/new_text"/>
-                    <com.shunlian.app.widget.NewTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="余额>"
-                        android:id="@+id/ntv_yue"
-                        android:textSize="13sp"
                         android:layout_centerVertical="true"
+                        android:text="我的资产"
+                        android:textColor="@color/new_text"
+                        android:textSize="18sp" />
+
+                    <com.shunlian.app.widget.NewTextView
+                        android:id="@+id/ntv_yue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:textColor="@color/share_text"/>
+                        android:layout_centerVertical="true"
+                        android:text="余额>"
+                        android:textColor="@color/share_text"
+                        android:textSize="13sp" />
                 </com.shunlian.app.widget.MyRelativeLayout>
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_zichan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="16dp" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="16dp"
                     android:layout_marginBottom="16dp"
                     android:background="@color/bg_gray" />
+
                 <com.shunlian.app.widget.NewTextView
+                    android:id="@+id/ntv_service"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我的服务"
-                    android:id="@+id/ntv_service"
-                    android:textSize="18sp"
-                    android:layout_marginLeft="10dp"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/new_text"/>
+                    android:layout_marginLeft="10dp"
+                    android:text="我的服务"
+                    android:textColor="@color/new_text"
+                    android:textSize="18sp" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_fuwu"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
                 <!--轮播-->
                 <com.shunlian.app.widget.banner.CenterKanner
                     android:id="@+id/kanner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:bb_delay="5"
-                    app:bb_period="3"
-                    app:bb_scale="0.3"
+                    android:layout_marginBottom="16dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginBottom="16dp"/>
+                    app:bb_delay="5"
+                    app:bb_period="3"
+                    app:bb_scale="0.3" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="16dp"
                     android:layout_marginBottom="16dp"
                     android:background="@color/bg_gray" />
+
                 <com.shunlian.app.widget.NewTextView
+                    android:id="@+id/ntv_shang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="商学院"
-                    android:textSize="18sp"
-                    android:id="@+id/ntv_shang"
-                    android:layout_marginLeft="10dp"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/new_text"/>
+                    android:layout_marginLeft="10dp"
+                    android:text="商学院"
+                    android:textColor="@color/new_text"
+                    android:textSize="18sp" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_shang"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="16dp" />
             </com.shunlian.app.widget.MyLinearLayout>
         </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.CompileScrollView>
@@ -766,16 +784,17 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="5dp"
                 android:src="@mipmap/icon_linear_service" />
+
             <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_names"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ntv_names"
+                android:layout_centerInParent="true"
+                android:ellipsize="end"
                 android:maxEms="10"
                 android:singleLine="true"
-                android:ellipsize="end"
-                android:textSize="14sp"
-                android:layout_centerInParent="true"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textSize="14sp" />
         </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyRelativeLayout>
 </com.shunlian.app.widget.MyRelativeLayout>
