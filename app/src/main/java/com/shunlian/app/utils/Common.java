@@ -55,6 +55,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -89,6 +90,7 @@ import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
+import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
@@ -108,6 +110,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -364,8 +367,7 @@ public class Common {
                 DayDayAct.startAct(context);
                 break;
             case "myshop":
-                if (!TextUtils.isEmpty(params[0]))
-                    QrcodeStoreAct.startAct(context,params[0]);
+                MyLittleStoreActivity.startAct(context);
                 break;
             case "checkin":
                 SignInAct.startAct(context);
@@ -386,7 +388,8 @@ public class Common {
                     Common.goGoGo(context,"login");
                     theRelayJump(type,params);
                 } else {
-                    MyProfitAct.startAct(context, false);
+                    MainActivity.startAct(context, "personCenter");
+//                    MyProfitAct.startAct(context, false);
                 }
                 break;
 //            case "myvoucherlist":
@@ -534,6 +537,9 @@ public class Common {
                 break;
             case "storeCollection"://关注店铺
                 MyCollectionAct.startAct(context,MyCollectionAct.STORE_FLAG);
+                break;
+            case "shunlianKefu":
+                HelpOneAct.startAct(context);
                 break;
             default://首页
                 MainActivity.startAct(context, "");
@@ -808,7 +814,7 @@ public class Common {
             View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
             mtv_toast = (MyTextView) v.findViewById(R.id.mtv_toast);
             mtv_toast.setText(content);
-            toast = new Toast(getApplicationContext());
+            toast = new Toast(App.getContext());
 //            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(v);
@@ -817,6 +823,20 @@ public class Common {
             mtv_toast.setText(content);
         }
         toast.show();
+    }
+
+    public static void staticToastAct(Activity activity,String content) {
+        if (TextUtils.isEmpty(content))
+            return;
+            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
+           TextView mtv_toast = (MyTextView) v.findViewById(R.id.mtv_toast);
+            mtv_toast.setText(content);
+            Toast  toast = new Toast(activity);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(v);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            mtv_toast.setText(content);
+            toast.show();
     }
 
     public static void staticToasts(Context context, String content, String desc, int imgSource) {
@@ -1479,7 +1499,18 @@ public class Common {
             return true;
         return false;
     }
-
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height",
+                "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        if(result==0&&context!=null){
+            result= DensityUtil.dip2px(context,20);
+        }
+        return result;
+    }
 
     /**
      * 判断某个Activity 界面是否在前台

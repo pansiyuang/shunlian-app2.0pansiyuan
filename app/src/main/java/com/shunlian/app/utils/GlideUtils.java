@@ -189,6 +189,9 @@ public class GlideUtils {
     public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize) {
         loadOverrideImage(context,R.mipmap.img_default_common,imageView,imgUrl,withSize,heightSize);
     }
+    public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize,int radius) {
+        loadOverrideImage(context,R.mipmap.img_default_common,imageView,imgUrl,withSize,heightSize,radius);
+    }
 
     public void loadOverrideImage(Context context, int resourceId, ImageView imageView,
                                   String imgUrl, int withSize, int heightSize){
@@ -200,6 +203,21 @@ public class GlideUtils {
                 .dontAnimate()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .override(withSize, heightSize)
+                .into(imageView);
+    }
+    public void loadOverrideImage(Context context, int resourceId, ImageView imageView,
+                                  String imgUrl, int withSize, int heightSize,int radius){
+        if (imageView == null||withSize<=0||heightSize<=0||context==null) return;
+        Glide.with(context)
+                .load(imgUrl)
+                .placeholder(resourceId)
+                .crossFade()
+                .dontAnimate()
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .bitmapTransform(new CenterCrop(context),
+                        new GlideRoundTransform(context, radius))
                 .override(withSize, heightSize)
                 .into(imageView);
     }

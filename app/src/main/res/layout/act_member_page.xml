@@ -30,7 +30,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="205dp"
+                    android:layout_height="225dp"
                     android:background="@mipmap/img_huiyuan_beijing"
                     android:orientation="vertical"
                     app:layout_collapseMode="parallax">
@@ -38,8 +38,9 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_centerVertical="true"
+                        android:layout_alignParentBottom="true"
                         android:paddingLeft="15dp"
+                        android:layout_marginBottom="80dp"
                         android:paddingRight="15dp">
 
                         <ImageView
