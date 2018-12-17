@@ -31,6 +31,7 @@ public class PersonalcenterEntity {
     public String footermark_fav_num;
     public String team_member_num;
     public String team_order_num;
+    public String salesInfo_url;
     public String next_level_score;
     public String next_level_percent;
     public String next_level_info;
