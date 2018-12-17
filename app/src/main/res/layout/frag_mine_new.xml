@@ -381,6 +381,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="16dp"
                     android:paddingLeft="13dp"
+                    android:paddingRight="13dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/bg_personal_notice"
                     android:drawableLeft="@mipmap/icon_horn"
