@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CommonEntity;
@@ -73,6 +74,8 @@ public class ZiChanAdapter extends BaseRecyclerAdapter<PersonalcenterEntity.MyAs
         @BindView(R.id.view_tag)
         View view_tag;
 
+        @BindView(R.id.im_tag)
+        ImageView im_tag;
 
         public ActivityMoreHolder(View itemView) {
             super(itemView);

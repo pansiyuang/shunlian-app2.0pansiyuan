@@ -2,13 +2,17 @@ package com.shunlian.app.ui.fragment;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
@@ -54,6 +58,7 @@ import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.CenterKanner;
 import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.mylibrary.ImmersionBar;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -172,6 +177,10 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     MyRelativeLayout mrlayout_plus;
     @BindView(R.id.ntv_check)
     NewTextView ntv_check;
+
+    @BindView(R.id.line_anim)
+    LinearLayout line_anim;
+
     public PersonalcenterPresenter personalcenterPresenter;
     private PersonalcenterEntity personalcenterEntity;
     private String invite_code;
@@ -247,9 +256,12 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         paramss.width=picWidth/2;
         if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
             mrlayout_plus.setVisibility(View.VISIBLE);
+            line_anim.setTranslationY(DensityUtil.dip2px(baseContext, 65));
         } else {
             mrlayout_plus.setVisibility(View.GONE);
+            line_anim.setTranslationY(0);
         }
+
     }
 
 
@@ -259,6 +271,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         super.onDestroy();
     }
 
+    private float lastY;
+    private double lastY_damping = 0.2;
+    private boolean isDownUp= false;
     @Override
     protected void initListener() {
         super.initListener();
@@ -302,6 +317,44 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 }
             }
         });
+        csv_out.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
+                    int action = event.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            lastY = event.getY();
+                            isDownUp = true;
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            isDownUp = false;
+                            lastY = 0;
+                            line_anim.setTranslationY(lastY);
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if (isDownUp) {
+                                float nowY = event.getY();
+                                if (nowY - lastY > 0) {
+                                    int deltaY = (int) ((nowY - lastY) * lastY_damping);
+                                    line_anim.setTranslationY(deltaY);
+                                } else {
+                                    line_anim.setTranslationY(0);
+                                }
+                            } else {
+                                lastY = event.getY();
+                                isDownUp = true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    return false;
+                }else{
+                    return false;
+                }
+            }
+        });
     }
 
 
@@ -318,8 +371,27 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         return false;
     }
 
+
+    private  Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            line_anim.setTranslationY(0);
+        }
+    };
+
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
+        if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
+            if(line_anim.getTranslationY()>0) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        handler.sendEmptyMessage(0);
+                    }
+                }, 2000);
+            }
+        }
+
         SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity = personalcenterEntity;
         String avatar = SharedPrefUtil.getSharedUserString("personal_avatar", "null");

@@ -52,6 +52,15 @@
         android:visibility="gone"
         android:layout_marginLeft="2dp"
         android:background="@drawable/point_plus_seekbar"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/im_tag"
+        android:layout_marginLeft="2dp"
+        android:visibility="gone"
+        android:layout_alignBottom="@id/miv_icon"
+        android:layout_toRightOf="@id/miv_icon"
+        android:layout_marginBottom="16dp"/>
 </com.shunlian.app.widget.MyRelativeLayout>
 
 
