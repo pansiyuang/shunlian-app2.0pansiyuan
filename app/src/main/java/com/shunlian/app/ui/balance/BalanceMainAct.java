@@ -124,7 +124,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
         isBack = getIntent().getBooleanExtra("isBack", false);
         isBalance = Constant.ISBALANCE;
         if (isBalance) {
-            mtv_title.setText(getStringResouce(R.string.balance_yue));
+            mtv_title.setText(getStringResouce(R.string.balance_yuetixian));
             mtv_yueminxi.setVisibility(View.VISIBLE);
             mtv_keyong.setText(getStringResouce(R.string.balance_keyong));
         } else {

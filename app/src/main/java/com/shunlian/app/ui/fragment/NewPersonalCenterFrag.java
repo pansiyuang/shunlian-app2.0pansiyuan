@@ -194,6 +194,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     public final static String KEY = "person_isShow";
     private String managerUrl;
     private PromptDialog promptDialog;
+    private String currentChatUserId;
     //    private Timer outTimer;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -609,13 +610,21 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
     @Override
     public void getUserId(String userId) {
-        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
-        chatMember.nickname = "官方客服";
-        chatMember.m_user_id = userId;
-        chatMember.type = "1";
-        ChatManager.getInstance(baseActivity).init().MemberChat2Platform(chatMember);
+        currentChatUserId = userId;
+        jump2Chat(userId);
     }
 
+    public void jump2Chat(String chatUserId){
+        if (!isEmpty(chatUserId)) {
+            ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+            chatMember.nickname = "官方客服";
+            chatMember.m_user_id = chatUserId;
+            chatMember.type = "1";
+            ChatManager.getInstance(baseActivity).init().MemberChat2Platform(chatMember);
+        } else {
+            personalcenterPresenter.getUserId();
+        }
+    }
 
     @Override
     public void mOnClick(View view) {
@@ -636,7 +645,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 MessageActivity.startAct(baseActivity);
                 break;
             case R.id.miv_kefu:
-                personalcenterPresenter.getUserId();
+                jump2Chat(currentChatUserId);
                 break;
             case R.id.ntv_yue:
                 Constant.ISBALANCE = true;
