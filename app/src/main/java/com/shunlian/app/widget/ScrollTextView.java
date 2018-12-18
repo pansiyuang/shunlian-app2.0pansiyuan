@@ -62,9 +62,8 @@ public class ScrollTextView extends AppCompatTextView {
         mPaused = true;
         mXPaused = 0;
         isBackScroll = false;
-        int textWidth = calculateScrollingLen()-getWidth();
         int textViewWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-        if (textViewWidth < textWidth)
+        if (textViewWidth < textLength())
             resumeScroll();
     }
 
@@ -84,7 +83,7 @@ public class ScrollTextView extends AppCompatTextView {
         setScroller(mSlr);
 
         int scrollingLen = calculateScrollingLen();
-        int distance = getWidth();
+        int distance = scrollingLen - getWidth();
         int duration = (new Double(mRndDuration * distance * 1.00000
                 / scrollingLen)).intValue();
 
@@ -108,13 +107,17 @@ public class ScrollTextView extends AppCompatTextView {
      * @return the scrolling length in pixels
      */
     private int calculateScrollingLen() {
+        return textLength() + getWidth() / 3;
+    }
+
+    private int textLength(){
         TextPaint tp = getPaint();
         Rect rect = new Rect();
         String strTxt = getText().toString();
         tp.getTextBounds(strTxt, 0, strTxt.length(), rect);
-        int scrollingLen = rect.width() + getWidth();
+        int textLen = rect.width();
         rect = null;
-        return scrollingLen;
+        return textLen;
     }
 
     @Override
