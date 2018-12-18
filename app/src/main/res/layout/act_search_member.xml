@@ -55,7 +55,7 @@
             android:singleLine="true"
             android:inputType="text"
             android:textColor="@color/new_text"
-            android:textColorHint="@color/share_text"
+            android:textColorHint="#CCCCCC"
             android:textSize="14sp" />
 
     </RelativeLayout>
