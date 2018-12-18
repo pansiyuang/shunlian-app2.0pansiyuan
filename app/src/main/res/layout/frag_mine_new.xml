@@ -735,6 +735,8 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/rounded_corner_solid_white_24px"
                         app:bb_delay="5"
                         app:bb_period="3"
                         app:bb_scale="0.3" />
