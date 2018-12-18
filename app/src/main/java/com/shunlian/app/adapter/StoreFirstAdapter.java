@@ -216,7 +216,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         twoHolder.mtv_desc.setText(data.ldata.title);
                         twoHolder.mtv_number.setText("已售" + data.ldata.sales);
                         twoHolder.mtv_price.setText(data.ldata.price);
-                        twoHolder.mtv_earn.setEarnMoney(data.ldata.self_buy_earn, 14);
+                        twoHolder.mtv_earn.setEarnMoney(data.ldata.self_buy_earn, 15);
                         LinearLayoutManager firstManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
                         twoHolder.rv_type.setLayoutManager(firstManager);
                         twoHolder.rv_type.setNestedScrollingEnabled(false);

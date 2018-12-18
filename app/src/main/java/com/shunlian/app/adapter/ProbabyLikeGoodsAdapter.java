@@ -113,7 +113,7 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
             ChildrenViewHolder childrenViewHolder = (ChildrenViewHolder) holder;
             GlideUtils.getInstance().loadImage(context, childrenViewHolder.miv_onel, goods.thumb);
             childrenViewHolder.mtv_descl.setText(goods.title);
-            childrenViewHolder.mtv_pricel.setText(getString(R.string.common_yuan) + goods.market_price);
+            childrenViewHolder.mtv_pricel.setText(goods.market_price);
             childrenViewHolder.mtv_pricer.setEarnMoney(goods.self_buy_earn, 15);
             GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) childrenViewHolder.ll_rootView.getLayoutParams();
 

@@ -409,6 +409,8 @@ public class StorePresenter extends BasePresenter<StoreView> {
                             adata.url = ebodys.get(f).data.get(g).url;
                             adata.whole_thumb = ebodys.get(f).data.get(g).whole_thumb;
                             adata.label = ebodys.get(f).data.get(g).label;
+                            adata.self_buy_earn = ebodys.get(f).data.get(g).self_buy_earn;
+                            adata.share_buy_earn = ebodys.get(f).data.get(g).share_buy_earn;
                             fbody.ldata = adata;
                             gbodys.add(fbody);
                             if (g >= ebodys.get(f).data.size() - 1) {

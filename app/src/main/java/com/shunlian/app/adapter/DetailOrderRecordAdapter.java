@@ -213,7 +213,7 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
             mHolder.mtv_goods_attr.setText(item.sku);
             mHolder.mtv_goods_count.setText("x"+item.qty);
             mHolder.mtv_goods_price.setText(getString(R.string.rmb)+item.price);
-            mHolder.mtv_assertionProfit.setText(item.estimate_profit);
+            mHolder.mtv_assertionProfit.setText("+" + item.estimate_profit);
             String offered = item.big_label;
 //            String offered = "测试";
             if (isEmpty(offered)){

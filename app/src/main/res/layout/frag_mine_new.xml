@@ -391,12 +391,13 @@
                         android:background="@drawable/bg_personal_notice"
                         android:drawableLeft="@mipmap/icon_horn"
                         android:drawablePadding="2dp"
-                        android:ellipsize="end"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
                         android:gravity="center_vertical"
                         android:paddingLeft="13dp"
                         android:paddingRight="13dp"
+                        android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="ddddddddd"
                         android:textColor="@color/share_text" />
 
                     <com.shunlian.app.widget.MyRelativeLayout
@@ -727,7 +728,8 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_fuwu"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"/>
                     <!--轮播-->
                     <com.shunlian.app.widget.banner.CenterKanner
                         android:id="@+id/kanner"
@@ -736,7 +738,6 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="16dp"
-                        android:layout_marginTop="16dp"
                         android:background="@drawable/rounded_corner_solid_white_24px"
                         app:bb_delay="5"
                         app:bb_period="3"
@@ -796,7 +797,7 @@
 
             <com.shunlian.app.widget.MyRelativeLayout
                 android:id="@+id/rl_more"
-                android:layout_width="wrap_content"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -807,6 +808,7 @@
                     android:layout_height="20dp"
                     android:layout_centerInParent="true"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginRight="9.5dp"
                     android:src="@mipmap/icon_personalcenter_xiaoxi" />
 
