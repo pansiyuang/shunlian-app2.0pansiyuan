@@ -726,7 +726,8 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_fuwu"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"/>
                     <!--轮播-->
                     <com.shunlian.app.widget.banner.CenterKanner
                         android:id="@+id/kanner"
@@ -735,7 +736,6 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="16dp"
-                        android:layout_marginTop="16dp"
                         android:background="@drawable/rounded_corner_solid_white_24px"
                         app:bb_delay="5"
                         app:bb_period="3"
