@@ -550,7 +550,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 strings.add(myService.banner_list.get(i).img);
                 if (i >= myService.banner_list.size() - 1) {
                     kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
-                    kanner.setBanner(strings);
+                    kanner.setRoundBanner(strings);
                     kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                         @Override
                         public void onItemClick(int position) {
