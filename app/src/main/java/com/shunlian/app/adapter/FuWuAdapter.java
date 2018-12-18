@@ -46,7 +46,7 @@ public class FuWuAdapter extends BaseRecyclerAdapter<PersonalcenterEntity.MyServ
         if (!isEmpty(ad.update_title)){
 //            mHolder.ntv_tag.setVisibility(View.VISIBLE);
               mHolder.im_tag.setVisibility(View.VISIBLE);
-              GlideUtils.getInstance().loadGifThumbnailImage(context,mHolder.im_tag,ad.update_title);
+              GlideUtils.getInstance().loadGifImage(context,mHolder.im_tag,ad.update_title);
 //            mHolder.ntv_tag.setText(ad.update_title);
               mHolder.ntv_tag.setVisibility(View.GONE);
         }else {
