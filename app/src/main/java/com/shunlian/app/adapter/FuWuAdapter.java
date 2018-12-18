@@ -44,10 +44,14 @@ public class FuWuAdapter extends BaseRecyclerAdapter<PersonalcenterEntity.MyServ
         GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_icon,ad.img);
         mHolder.ntv_title.setText(ad.title);
         if (!isEmpty(ad.update_title)){
-            mHolder.ntv_tag.setVisibility(View.VISIBLE);
-            mHolder.ntv_tag.setText(ad.update_title);
+//            mHolder.ntv_tag.setVisibility(View.VISIBLE);
+              mHolder.im_tag.setVisibility(View.VISIBLE);
+              GlideUtils.getInstance().loadGifThumbnailImage(context,mHolder.im_tag,ad.update_title);
+//            mHolder.ntv_tag.setText(ad.update_title);
+              mHolder.ntv_tag.setVisibility(View.GONE);
         }else {
             mHolder.ntv_tag.setVisibility(View.GONE);
+            mHolder.im_tag.setVisibility(View.GONE);
             if ("0".equals(ad.update_point)){
                 mHolder.view_tag.setVisibility(View.GONE);
             }else {
