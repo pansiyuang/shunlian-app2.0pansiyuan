@@ -3,9 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textColor="@color/new_text"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp"
     android:textSize="14sp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        >
     <com.shunlian.app.widget.NewTextView
         android:id="@+id/ntv_account"
         android:layout_width="wrap_content"
@@ -45,14 +50,12 @@
         android:visibility="visible"
         android:background="@drawable/bg_center_tag"/>
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="16dp"
         android:id="@+id/im_tag"
-        android:layout_marginBottom="6dp"
-        android:layout_marginLeft="2dp"
-        android:visibility="gone"
-        android:layout_alignBottom="@id/ntv_account"
-        android:layout_toRightOf="@id/ntv_account"/>
+        android:layout_alignParentTop="true"
+        android:visibility="visible"
+        android:layout_alignParentRight="true"/>
     <View
         android:layout_width="5dp"
         android:layout_height="5dp"
@@ -63,6 +66,7 @@
         android:layout_marginLeft="2dp"
         android:visibility="gone"
         android:background="@drawable/point_plus_seekbar"/>
+    </RelativeLayout>
 </com.shunlian.app.widget.MyRelativeLayout>
 
 

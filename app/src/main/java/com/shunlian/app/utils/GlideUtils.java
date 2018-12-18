@@ -440,8 +440,8 @@ public class GlideUtils {
                 .load(imgUrl)
                 .asGif()
                 .crossFade()
-                .priority(Priority.NORMAL) //下载的优先级
-                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .priority(Priority.HIGH) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.NONE) //缓存策略
 //                .error(R.mipmap.error)
 //                .placeholder(R.mipmap.error)
                 .into(imageView);
