@@ -333,12 +333,10 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                     int action = event.getAction();
                     switch (action) {
                         case MotionEvent.ACTION_DOWN:
-                            Log.d("ACTION_DOWN","ACTION_DOWN");
                             lastY = event.getY();
                             isDownUp = true;
                             break;
                         case MotionEvent.ACTION_UP:
-                            Log.d("ACTION_DOWN","ACTION_UP");
                             spring.removeAllListeners();
                             isDownUp = false;
                             lastY = 0;
@@ -347,7 +345,6 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                         case MotionEvent.ACTION_MOVE:
                             if (isDownUp) {
                                 float nowY = event.getY();
-                                Log.d("ACTION_DOWN","ACTION_MOVE:"+nowY+"  nowY - lastY:"+(nowY - lastY));
                                 if (nowY - lastY > 0) {
                                     int deltaY = (int) ((nowY - lastY) * lastY_damping);
                                     line_anim.setTranslationY(deltaY);
@@ -356,7 +353,6 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                                 }
                             } else {
                                 lastY = event.getY();
-                                Log.d("ACTION_DOWN","ACTION_MOVE:"+lastY);
                                 isDownUp = true;
                             }
                             break;
@@ -411,9 +407,6 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
                 @Override
                 public void onSpringEndStateChange(Spring spring) {
-//                    if(!isDownUp) {
-//                        line_anim.setTranslationY(0);
-//                    }
                     isStartAnim =false;
                 }
             });
