@@ -12,7 +12,6 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IBalanceMain;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -84,6 +83,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
                     BalanceXQAct.startAct(baseAct, data, false);
                 break;
             case R.id.mtv_yueminxi:
+                Constant.ISBALANCE = true;
                 BalanceDetailAct.startAct(baseAct);
                 break;
             case R.id.mrlayout_zhifushezhi:

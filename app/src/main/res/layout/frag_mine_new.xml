@@ -65,7 +65,7 @@
                         android:textColor="@color/white"
                         android:textSize="10sp" />
 
-                    <com.shunlian.app.widget.NewTextView
+                    <com.shunlian.app.widget.ScrollTextView
                         android:id="@+id/ntv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -73,11 +73,6 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="140dp"
                         android:layout_toRightOf="@id/miv_avar"
-                        android:ellipsize="marquee"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:marqueeRepeatLimit="1"
-                        android:scrollHorizontally="true"
                         android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
@@ -247,6 +242,8 @@
                                         android:id="@+id/ntv_left"
                                         android:layout_width="wrap_content"
                                         android:layout_height="28dp"
+                                        android:drawablePadding="3dp"
+                                        android:drawableRight="@mipmap/icon_personalcenter_fanhui"
                                         android:layout_alignParentRight="true"
                                         android:background="@drawable/bg_center_sale"
                                         android:ellipsize="end"
@@ -454,7 +451,9 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:text="查看全部>"
+                            android:text="查看全部"
+                            android:drawablePadding="3dp"
+                            android:drawableRight="@mipmap/icon_personalcenter_fanhui"
                             android:textColor="@color/share_text"
                             android:textSize="13sp" />
                     </com.shunlian.app.widget.MyRelativeLayout>
@@ -697,7 +696,9 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:text="余额>"
+                            android:text="余额"
+                            android:drawablePadding="3dp"
+                            android:drawableRight="@mipmap/icon_personalcenter_fanhui"
                             android:textColor="@color/share_text"
                             android:textSize="13sp" />
                     </com.shunlian.app.widget.MyRelativeLayout>
@@ -727,7 +728,8 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_fuwu"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"/>
                     <!--轮播-->
                     <com.shunlian.app.widget.banner.CenterKanner
                         android:id="@+id/kanner"
@@ -736,7 +738,6 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="16dp"
-                        android:layout_marginTop="16dp"
                         android:background="@drawable/rounded_corner_solid_white_24px"
                         app:bb_delay="5"
                         app:bb_period="3"
@@ -805,7 +806,7 @@
                 <com.shunlian.app.widget.MyImageView
                     android:layout_width="23dp"
                     android:layout_height="20dp"
-                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="9.5dp"

@@ -63,7 +63,7 @@ public class GoodsDetailShopAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
                 gone(mHoler.mtv_earn_much);
             }else {
                 visible(mHoler.mtv_earn_much);
-                mHoler.mtv_earn_much.setText(item.self_buy_earn);
+                mHoler.mtv_earn_much.setEarnMoney(item.self_buy_earn,12);
             }
         }
     }

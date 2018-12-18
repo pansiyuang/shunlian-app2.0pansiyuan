@@ -50,8 +50,8 @@
         android:visibility="visible"
         android:background="@drawable/bg_center_tag"/>
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="16dp"
+        android:layout_width="45dp"
+        android:layout_height="18dp"
         android:id="@+id/im_tag"
         android:layout_alignParentTop="true"
         android:visibility="visible"
