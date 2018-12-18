@@ -48,6 +48,7 @@ public class PersonalcenterEntity {
     public String grow_num;
     public String plus_meg;
     public String diff;
+    public String diff_meg;
     public String zhifu;
     public String plus_expire_time;
     public String notice;

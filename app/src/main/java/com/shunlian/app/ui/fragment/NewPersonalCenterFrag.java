@@ -203,7 +203,6 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         messageCountManager.setTextCount(tv_msg_count);
-
     }
 
     @Override
@@ -465,7 +464,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         if (!isEmpty(personalcenterEntity.diff)&&Float.parseFloat(personalcenterEntity.diff)>0){
             ntv_left.setText("销售额还差"+personalcenterEntity.diff+"元即可获得奖励>");
         }else {
-            ntv_left.setText("查看本月销售业绩>");
+            ntv_left.setText(personalcenterEntity.diff_meg + ">");
         }
         ntv_zhifu.setText(personalcenterEntity.zhifu);
         ntv_keti.setText(personalcenterEntity.all_sl_income);
@@ -565,40 +564,40 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         mtv_refundNum.setVisibility(View.VISIBLE);
         if (Integer.parseInt(personalcenterEntity.new_refund_num) <= 0) {
             mtv_refundNum.setVisibility(View.GONE);
-        } else if (Integer.parseInt(personalcenterEntity.new_refund_num) > 9) {
-            mtv_refundNum.setText("9+");
+        } else if (Integer.parseInt(personalcenterEntity.new_refund_num) > 99) {
+            mtv_refundNum.setText("99+");
         } else {
             mtv_refundNum.setText(personalcenterEntity.new_refund_num);
         }
         mtv_remarkNum.setVisibility(View.VISIBLE);
         if (Integer.parseInt(personalcenterEntity.un_comment_num) <= 0) {
             mtv_remarkNum.setVisibility(View.GONE);
-        } else if (Integer.parseInt(personalcenterEntity.un_comment_num) > 9) {
-            mtv_remarkNum.setText("9+");
+        } else if (Integer.parseInt(personalcenterEntity.un_comment_num) > 99) {
+            mtv_remarkNum.setText("99+");
         } else {
             mtv_remarkNum.setText(personalcenterEntity.un_comment_num);
         }
         mtv_sendNum.setVisibility(View.VISIBLE);
         if (Integer.parseInt(personalcenterEntity.order_un_send_num) <= 0) {
             mtv_sendNum.setVisibility(View.GONE);
-        } else if (Integer.parseInt(personalcenterEntity.order_un_send_num) > 9) {
-            mtv_sendNum.setText("9+");
+        } else if (Integer.parseInt(personalcenterEntity.order_un_send_num) > 99) {
+            mtv_sendNum.setText("99+");
         } else {
             mtv_sendNum.setText(personalcenterEntity.order_un_send_num);
         }
         mtv_receiveNum.setVisibility(View.VISIBLE);
         if (Integer.parseInt(personalcenterEntity.order_un_receive_num) <= 0) {
             mtv_receiveNum.setVisibility(View.GONE);
-        } else if (Integer.parseInt(personalcenterEntity.order_un_receive_num) > 9) {
-            mtv_receiveNum.setText("9+");
+        } else if (Integer.parseInt(personalcenterEntity.order_un_receive_num) > 99) {
+            mtv_receiveNum.setText("99+");
         } else {
             mtv_receiveNum.setText(personalcenterEntity.order_un_receive_num);
         }
         mtv_payNum.setVisibility(View.VISIBLE);
         if (Integer.parseInt(personalcenterEntity.order_un_pay_num) <= 0) {
             mtv_payNum.setVisibility(View.GONE);
-        } else if (Integer.parseInt(personalcenterEntity.order_un_pay_num) > 9) {
-            mtv_payNum.setText("9+");
+        } else if (Integer.parseInt(personalcenterEntity.order_un_pay_num) > 99) {
+            mtv_payNum.setText("99+");
         } else {
             mtv_payNum.setText(personalcenterEntity.order_un_pay_num);
         }
