@@ -690,6 +690,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 BalanceMainAct.startAct(baseContext, false);
                 break;
             case R.id.ntv_tixianmingxi:
+                Constant.ISBALANCE = false;
                 BalanceDetailAct.startAct(baseActivity);
                 break;
             case R.id.ntv_left:
