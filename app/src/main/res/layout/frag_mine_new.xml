@@ -805,7 +805,7 @@
                 <com.shunlian.app.widget.MyImageView
                     android:layout_width="23dp"
                     android:layout_height="20dp"
-                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="9.5dp"
                     android:src="@mipmap/icon_personalcenter_xiaoxi" />

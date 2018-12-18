@@ -62,7 +62,10 @@ public class ScrollTextView extends AppCompatTextView {
         mPaused = true;
         mXPaused = 0;
         isBackScroll = false;
-        resumeScroll();
+        int textWidth = calculateScrollingLen()-getWidth();
+        int textViewWidth = getWidth() - getPaddingLeft() - getPaddingRight();
+        if (textViewWidth < textWidth)
+            resumeScroll();
     }
 
     /**
