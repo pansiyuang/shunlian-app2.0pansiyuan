@@ -13,6 +13,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 
@@ -48,10 +49,14 @@ public class ZiChanAdapter extends BaseRecyclerAdapter<PersonalcenterEntity.MyAs
         }
         mHolder.ntv_title.setText(ad.title);
         if (!isEmpty(ad.update_title)){
-            mHolder.ntv_tag.setVisibility(View.VISIBLE);
-            mHolder.ntv_tag.setText(ad.update_title);
+//            mHolder.ntv_tag.setVisibility(View.VISIBLE);
+            mHolder.im_tag.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadGifThumbnailImage(context,mHolder.im_tag,ad.update_title);
+//            mHolder.ntv_tag.setText(ad.update_title);
+            mHolder.ntv_tag.setVisibility(View.GONE);
         }else {
             mHolder.ntv_tag.setVisibility(View.GONE);
+            mHolder.im_tag.setVisibility(View.GONE);
             if ("0".equals(ad.update_point)){
                 mHolder.view_tag.setVisibility(View.GONE);
             }else {
