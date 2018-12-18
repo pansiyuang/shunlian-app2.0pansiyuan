@@ -471,6 +471,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         ntv_dai.setText(personalcenterEntity.estimateProfit);
         if (!isEmpty(personalcenterEntity.notice)){
             ntv_notice.setText(personalcenterEntity.notice);
+            ntv_notice.setSelected(true);
             ntv_notice.setVisibility(View.VISIBLE);
         }else {
             ntv_notice.setVisibility(View.GONE);
