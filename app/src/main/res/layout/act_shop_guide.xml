@@ -136,7 +136,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
@@ -204,7 +204,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:gravity="center_horizontal"
-                android:textStyle="normal"
+                android:textStyle="bold"
                 android:textColor="#E0B054"
                 android:layout_marginTop="10dp"
                 android:textSize="18sp" />

@@ -86,7 +86,7 @@ public class SearchMemberActivity extends BaseActivity  implements IMemberPageVi
         recy_view.setAdapter(memberUserAdapter);
         memberUserAdapter.notifyDataSetChanged();
 
-        nei_empty.setVisibility(View.VISIBLE);
+        nei_empty.setVisibility(View.GONE);
         recy_view.setVisibility(View.GONE);
     }
 

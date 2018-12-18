@@ -221,7 +221,9 @@
                 <category android:name="com.shunlian.app" />
             </intent-filter>
         </receiver>
-
+        <meta-data
+            android:name="com.shunlian.app.glidemodule.OkHttpGlideModule"
+            android:value="GlideModule"/>
         <!-- Required. For publish channel feature -->
         <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。-->
         <!-- 例如: -->
