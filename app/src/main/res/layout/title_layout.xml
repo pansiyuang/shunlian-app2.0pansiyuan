@@ -547,7 +547,7 @@
                     android:layout_alignParentRight="true"
                     android:text="开通后自购订单收益平均提高4倍"
                     android:layout_marginTop="16dp"
-                    android:drawableRight="@mipmap/img_bangzhu_jiantou"
+                    android:drawableRight="@mipmap/icon_right_plus"
                     android:drawablePadding="5dp"
                     android:layout_marginRight="8dp"
                     android:textColor="#343434"

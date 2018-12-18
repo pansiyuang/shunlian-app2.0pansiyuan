@@ -8,7 +8,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,6 +57,7 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
+import com.shunlian.app.widget.ScrollTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.CenterKanner;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -91,7 +91,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @BindView(R.id.ntv_grow)
     NewTextView ntv_grow;
     @BindView(R.id.ntv_name)
-    NewTextView ntv_name;
+    ScrollTextView ntv_name;
     @BindView(R.id.ntv_yue)
     NewTextView ntv_yue;
     @BindView(R.id.ntv_title)
@@ -462,9 +462,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         ntv_desc.setText(personalcenterEntity.plus_meg);
         ntv_title.setText(personalcenterEntity.team_sales);
         if (!isEmpty(personalcenterEntity.diff)&&Float.parseFloat(personalcenterEntity.diff)>0){
-            ntv_left.setText("销售额还差"+personalcenterEntity.diff+"元即可获得奖励>");
+            ntv_left.setText("销售额还差"+personalcenterEntity.diff+"元即可获得奖励");
         }else {
-            ntv_left.setText(personalcenterEntity.diff_meg + ">");
+            ntv_left.setText(personalcenterEntity.diff_meg);
         }
         ntv_zhifu.setText(personalcenterEntity.zhifu);
         ntv_keti.setText(personalcenterEntity.all_sl_income);
@@ -479,7 +479,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
          if (myAssets==null)
              return;
         if (myAssets.balance!=null&&!isEmpty(myAssets.balance.title)){
-            ntv_yue.setText(myAssets.balance.title+">");
+            ntv_yue.setText(myAssets.balance.title);
             ntv_yue.setVisibility(View.VISIBLE);
         }else {
             ntv_yue.setVisibility(View.GONE);
@@ -697,7 +697,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 }
                 break;
             case R.id.ntv_name:
-                ntv_name.requestFocus();
+                ntv_name.startScroll();
                 break;
         }
     }
