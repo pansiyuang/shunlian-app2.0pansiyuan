@@ -21,7 +21,6 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
-import com.shunlian.app.presenter.BasePresenter;
 import com.shunlian.app.presenter.EmptyPresenter;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.core.AishangAct;
@@ -30,7 +29,6 @@ import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.LogUtil;
@@ -46,11 +44,6 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
-import com.shunlian.app.widget.popmenu.PopMenu;
-import com.shunlian.app.widget.popmenu.PopMenuItem;
-import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
-import com.shunlian.app.wxapi.WXEntryActivity;
-import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -593,11 +586,14 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                                 Common.goGoGo(context, "login");
                                 return;
                             }
-
-                            mShareInfoParam.goods_id = data.url.item_id;
-                            mShareInfoParam.share_buy_earn = data.share_buy_earn;
-                            basePresenter.getShareInfo(basePresenter.goods,data.url.item_id);
-//                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            String content = fiveHolder.mtv_share.getText().toString();
+                            if (content.equals("分享赚")) {
+                                mShareInfoParam.goods_id = data.url.item_id;
+                                mShareInfoParam.share_buy_earn = data.share_buy_earn;
+                                basePresenter.getShareInfo(basePresenter.goods, data.url.item_id);
+                            }else {
+                                Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            }
                         }
                     });
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
