@@ -159,7 +159,7 @@ public class JosnSensorsDataAPI {
         try {
             JSONObject properties = new JSONObject();
             properties.put("asxpChannelName", channelName);
-            properties.put("asxpDoodId", goodId);
+            properties.put("asxpGoodId", goodId);
             properties.put("asxpGoodName", goodName);
             properties.put("asxpGoodRank", rank);
             SensorsDataAPI.sharedInstance().track("asxpGoodsClick", properties);
