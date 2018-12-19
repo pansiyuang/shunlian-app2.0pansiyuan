@@ -8,7 +8,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,6 +57,7 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
+import com.shunlian.app.widget.ScrollTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.CenterKanner;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -91,7 +91,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @BindView(R.id.ntv_grow)
     NewTextView ntv_grow;
     @BindView(R.id.ntv_name)
-    NewTextView ntv_name;
+    ScrollTextView ntv_name;
     @BindView(R.id.ntv_yue)
     NewTextView ntv_yue;
     @BindView(R.id.ntv_title)
@@ -178,6 +178,8 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     MyTextView mtv_receiveNum;
     @BindView(R.id.mrlayout_plus)
     MyRelativeLayout mrlayout_plus;
+    @BindView(R.id.rl_layout_top)
+    MyRelativeLayout rl_layout_top;
     @BindView(R.id.ntv_check)
     NewTextView ntv_check;
 
@@ -194,6 +196,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     public final static String KEY = "person_isShow";
     private String managerUrl;
     private PromptDialog promptDialog;
+    private String currentChatUserId;
     //    private Timer outTimer;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -293,6 +296,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         miv_kefu.setOnClickListener(this);
         ntv_yue.setOnClickListener(this);
         rl_more.setOnClickListener(this);
+        rl_layout_top.setOnClickListener(this);
         ntv_shouyixiangqing.setOnClickListener(this);
         ntv_lijitixian.setOnClickListener(this);
         ntv_tixianmingxi.setOnClickListener(this);
@@ -421,7 +425,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                     public void run() {
                         handler.sendEmptyMessage(0);
                     }
-                }, 2000);
+                }, 1000);
             }
         }
 
@@ -462,9 +466,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         ntv_desc.setText(personalcenterEntity.plus_meg);
         ntv_title.setText(personalcenterEntity.team_sales);
         if (!isEmpty(personalcenterEntity.diff)&&Float.parseFloat(personalcenterEntity.diff)>0){
-            ntv_left.setText("销售额还差"+personalcenterEntity.diff+"元即可获得奖励>");
+            ntv_left.setText("销售额还差"+personalcenterEntity.diff+"元即可获得奖励");
         }else {
-            ntv_left.setText(personalcenterEntity.diff_meg + ">");
+            ntv_left.setText(personalcenterEntity.diff_meg);
         }
         ntv_zhifu.setText(personalcenterEntity.zhifu);
         ntv_keti.setText(personalcenterEntity.all_sl_income);
@@ -480,7 +484,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
          if (myAssets==null)
              return;
         if (myAssets.balance!=null&&!isEmpty(myAssets.balance.title)){
-            ntv_yue.setText(myAssets.balance.title+">");
+            ntv_yue.setText(myAssets.balance.title);
             ntv_yue.setVisibility(View.VISIBLE);
         }else {
             ntv_yue.setVisibility(View.GONE);
@@ -609,13 +613,21 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
     @Override
     public void getUserId(String userId) {
-        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
-        chatMember.nickname = "官方客服";
-        chatMember.m_user_id = userId;
-        chatMember.type = "1";
-        ChatManager.getInstance(baseActivity).init().MemberChat2Platform(chatMember);
+        currentChatUserId = userId;
+        jump2Chat(userId);
     }
 
+    public void jump2Chat(String chatUserId){
+        if (!isEmpty(chatUserId)) {
+            ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+            chatMember.nickname = "官方客服";
+            chatMember.m_user_id = chatUserId;
+            chatMember.type = "1";
+            ChatManager.getInstance(baseActivity).init().MemberChat2Platform(chatMember);
+        } else {
+            personalcenterPresenter.getUserId();
+        }
+    }
 
     @Override
     public void mOnClick(View view) {
@@ -636,7 +648,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 MessageActivity.startAct(baseActivity);
                 break;
             case R.id.miv_kefu:
-                personalcenterPresenter.getUserId();
+                jump2Chat(currentChatUserId);
                 break;
             case R.id.ntv_yue:
                 Constant.ISBALANCE = true;
@@ -664,6 +676,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             case R.id.miv_huiyuan:
                 MemberPageActivity.startAct(baseContext);
                 break;
+            case R.id.rl_layout_top:
             case R.id.ntv_check:
 //                EggDetailAct.startAct(getContext());
 //                mainActivity.myPlusClick();//old
@@ -680,6 +693,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 break;
             case R.id.miv_avar:
                 PersonalDataAct.startAct(baseActivity);
+
                 break;
             case R.id.ntv_shouyixiangqing:
                 //订单详情
@@ -690,6 +704,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 BalanceMainAct.startAct(baseContext, false);
                 break;
             case R.id.ntv_tixianmingxi:
+                Constant.ISBALANCE = false;
                 BalanceDetailAct.startAct(baseActivity);
                 break;
             case R.id.ntv_left:
@@ -698,7 +713,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 }
                 break;
             case R.id.ntv_name:
-                ntv_name.requestFocus();
+                ntv_name.startScroll();
                 break;
         }
     }

@@ -90,6 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     private OnSlideListenerAdapter mSlideBackListener;
     protected CommondDialog commondDialog;
     protected Activity baseAct;
+    private InputMethodManager mInputMethodManager;
 
 
     @Override
@@ -573,6 +574,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
 
         super.finish();
+        hideSoftKeyBoard();
     }
 
     @Override
@@ -590,4 +592,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         GlideUtils.getInstance().clearMemory();
     }
 
+    public void hideSoftKeyBoard() {
+        View localView = getCurrentFocus();
+        if (this.mInputMethodManager == null) {
+            this.mInputMethodManager = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
+        }
+        if ((localView != null) && (this.mInputMethodManager != null)) {
+            this.mInputMethodManager.hideSoftInputFromWindow(localView.getWindowToken(), 2);
+        }
+    }
 }

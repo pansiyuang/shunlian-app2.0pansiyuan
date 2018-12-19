@@ -168,6 +168,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginRight="12dp"
+        android:visibility="gone"
         android:background="@color/white">
 
         <com.shunlian.app.widget.MyImageView

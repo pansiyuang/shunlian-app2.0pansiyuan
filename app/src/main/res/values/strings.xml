@@ -713,7 +713,7 @@
     <string name="balance_wozaixiang">我再想想</string>
     <string name="balance_yuemingxi">余额明细</string>
     <string name="balance_keyong">可用余额(元)</string>
-    <string name="balance_keyongshouyi">可用收益(元)</string>
+    <string name="balance_keyongshouyi">可提现</string>
     <string name="balance_zhifushezhi">支付设置</string>
     <string name="balance_wodezhifu">我的支付宝</string>
     <string name="balance_zhifubao">支付宝(%s)</string>
