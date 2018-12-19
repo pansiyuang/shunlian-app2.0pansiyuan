@@ -113,11 +113,12 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
             }
         }
         if (isShow) {
-            mHolder.mtv_buy.setVisibility(View.VISIBLE);
-            mHolder.mtv_forecast_earnings.setVisibility(View.VISIBLE);
+            visible(mHolder.mtv_buy,mHolder.mtv_forecast_earnings);
+            if (mHolder.mtv_buy != null && isEmpty(mHolder.mtv_buy.getText())){
+                gone(mHolder.mtv_buy);
+            }
         } else {
-            mHolder.mtv_buy.setVisibility(View.GONE);
-            mHolder.mtv_forecast_earnings.setVisibility(View.GONE);
+            gone(mHolder.mtv_buy,mHolder.mtv_forecast_earnings);
         }
         mHolder.mtv_order_time.setText("下单日期：" + item.order_time);
     }
