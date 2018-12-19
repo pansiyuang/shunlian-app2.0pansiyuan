@@ -148,7 +148,9 @@ public class App extends Application {
         }
         initJPush();
         //默认关闭，去首页获取开关状态,此方法除非卸载app，重启也有效保留状态
-        JPushInterface.stopPush(Common.getApplicationContext());
+        if(!JPushInterface.isPushStopped(Common.getApplicationContext())){
+            JPushInterface.stopPush(Common.getApplicationContext());
+        }
         if (BuildConfig.DEBUG){
             SwitchHostUtil.setHostMethod();
 //            if (LeakCanary.isInAnalyzerProcess(this)) {

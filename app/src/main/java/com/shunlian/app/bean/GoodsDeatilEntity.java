@@ -78,6 +78,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String share_buy_earn_btn;
     public String self_buy_earn_btn;
     public PlusDoor plus_door;
+    public String specs_text;//选择规格
 
     public static class SimpTitle implements Parcelable {
         public String title;
@@ -1664,6 +1665,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.share_buy_earn_btn);
         dest.writeString(this.self_buy_earn_btn);
         dest.writeParcelable(this.plus_door, flags);
+        dest.writeString(this.specs_text);
     }
 
     protected GoodsDeatilEntity(Parcel in) {
@@ -1721,6 +1723,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.share_buy_earn_btn = in.readString();
         this.self_buy_earn_btn = in.readString();
         this.plus_door = in.readParcelable(PlusDoor.class.getClassLoader());
+        this.specs_text = in.readString();
     }
 
     public static final Creator<GoodsDeatilEntity> CREATOR = new Creator<GoodsDeatilEntity>() {

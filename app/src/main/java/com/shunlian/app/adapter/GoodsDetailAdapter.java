@@ -999,8 +999,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     //@Override
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count,boolean isAddcart) {
 //        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
-        if (tv_select_param != null && sku != null)
-            tv_select_param.setText(getString(R.string.selection)+"  "+sku.name);
+        if (tv_select_param != null && sku != null) {
+            tv_select_param.setText("已" + getString(R.string.selection) + "  " + sku.name);
+        }else {
+            tv_select_param.setText("已" + getString(R.string.selection) + "  " + count+"件");
+        }
 
         if (context instanceof GoodsDetailAct) {
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
@@ -1387,6 +1390,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         public ParamAttrsHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
+            if (tv_select_param != null && isEmpty(tv_select_param.getText())){
+                if (!isEmpty(mGoodsEntity.specs_text)) {
+                    tv_select_param.setText("请选择  " + mGoodsEntity.specs_text);
+                }else {
+                    tv_select_param.setText("请选择  规格");
+                }
+            }
             if (!isEmpty(mGoodsEntity.attrs)) {
                 mtv_params.setOnClickListener(this);
                 visible(mtv_params, view_params);

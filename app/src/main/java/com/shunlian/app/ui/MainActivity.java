@@ -991,7 +991,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
         SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);
         if ("0".equals(data.push_on)) {//接收推送，1是，0否
-            JPushInterface.stopPush(Common.getApplicationContext());
+            if (!JPushInterface.isPushStopped(Common.getApplicationContext())) {
+                JPushInterface.stopPush(Common.getApplicationContext());
+            }
         } else {
             JPushInterface.resumePush(Common.getApplicationContext());
         }
