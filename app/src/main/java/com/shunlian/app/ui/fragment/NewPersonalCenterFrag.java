@@ -178,6 +178,8 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     MyTextView mtv_receiveNum;
     @BindView(R.id.mrlayout_plus)
     MyRelativeLayout mrlayout_plus;
+    @BindView(R.id.rl_layout_top)
+    MyRelativeLayout rl_layout_top;
     @BindView(R.id.ntv_check)
     NewTextView ntv_check;
 
@@ -294,6 +296,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         miv_kefu.setOnClickListener(this);
         ntv_yue.setOnClickListener(this);
         rl_more.setOnClickListener(this);
+        rl_layout_top.setOnClickListener(this);
         ntv_shouyixiangqing.setOnClickListener(this);
         ntv_lijitixian.setOnClickListener(this);
         ntv_tixianmingxi.setOnClickListener(this);
@@ -673,6 +676,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             case R.id.miv_huiyuan:
                 MemberPageActivity.startAct(baseContext);
                 break;
+            case R.id.rl_layout_top:
             case R.id.ntv_check:
 //                EggDetailAct.startAct(getContext());
 //                mainActivity.myPlusClick();//old
@@ -689,6 +693,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 break;
             case R.id.miv_avar:
                 PersonalDataAct.startAct(baseActivity);
+
                 break;
             case R.id.ntv_shouyixiangqing:
                 //订单详情

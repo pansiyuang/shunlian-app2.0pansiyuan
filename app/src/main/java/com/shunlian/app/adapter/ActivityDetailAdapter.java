@@ -208,7 +208,6 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 GlideUtils.getInstance().loadImage(context, blogViewHolder.miv_goods_icon, goods.thumb);
                 blogViewHolder.tv_goods_name.setText(goods.title);
                 blogViewHolder.tv_goods_price.setText(getString(R.string.common_yuan) + goods.price);
-                blogViewHolder.tv_goods_earn.setEarnMoney(goods.self_buy_earn, 12);
 
                 int i = TransformUtil.dip2px(context, 10);
                 TransformUtil.expandViewTouchDelegate(blogViewHolder.tv_share_count, i, i, i, i);
@@ -562,9 +561,6 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
         @BindView(R.id.tv_download)
         TextView tv_download;
-
-        @BindView(R.id.tv_goods_earn)
-        MyTextView tv_goods_earn;
 
         @BindView(R.id.miv_more)
         MyImageView miv_more;

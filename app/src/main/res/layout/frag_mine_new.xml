@@ -124,38 +124,43 @@
                     android:paddingRight="15dp"
                     android:paddingBottom="20dp">
 
-                    <com.shunlian.app.widget.MyImageView
-                        android:id="@+id/miv_plus"
+                    <com.shunlian.app.widget.MyRelativeLayout
+                        android:id="@+id/rl_layout_top"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:src="@mipmap/icon_plus_mycenter" />
+                        android:layout_height="wrap_content">
 
-                    <com.shunlian.app.widget.NewTextView
-                        android:id="@+id/ntv_check"
-                        android:layout_width="74dp"
-                        android:layout_height="22dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_center_check"
-                        android:drawableRight="@mipmap/icon_right_01"
-                        android:gravity="center"
-                        android:paddingRight="6dp"
-                        android:text="查看特权"
-                        android:textColor="@color/new_text"
-                        android:textSize="12sp" />
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_plus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:src="@mipmap/icon_plus_mycenter" />
 
-                    <com.shunlian.app.widget.MyImageView
-                        android:id="@+id/miv_pluss"
-                        android:layout_width="140dp"
-                        android:layout_height="22dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_toLeftOf="@id/ntv_check"
-                        android:layout_toRightOf="@id/miv_plus"
-                        android:scaleType="fitXY" />
+                        <com.shunlian.app.widget.NewTextView
+                            android:id="@+id/ntv_check"
+                            android:layout_width="74dp"
+                            android:layout_height="22dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/bg_center_check"
+                            android:drawableRight="@mipmap/icon_right_01"
+                            android:gravity="center"
+                            android:paddingRight="6dp"
+                            android:text="查看特权"
+                            android:textColor="@color/new_text"
+                            android:textSize="12sp" />
 
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_pluss"
+                            android:layout_width="140dp"
+                            android:layout_height="22dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="30dp"
+                            android:layout_toLeftOf="@id/ntv_check"
+                            android:layout_toRightOf="@id/miv_plus"
+                            android:scaleType="fitXY" />
+                    </com.shunlian.app.widget.MyRelativeLayout>
                     <com.shunlian.app.widget.NewTextView
                         android:id="@+id/ntv_desc"
                         android:layout_width="wrap_content"
