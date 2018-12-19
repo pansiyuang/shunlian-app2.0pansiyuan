@@ -121,8 +121,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         Map<String, String> map = new HashMap<>();
         map.put("goods_id", goods_id);
         sortAndMD5(map);
-        RequestBody requestBody = getRequestBody(map);
-        mGoodsDataCall = getSaveCookieApiService().goodsDetail(requestBody);
+        //RequestBody requestBody = getRequestBody(map);
+        mGoodsDataCall = getSaveCookieApiService().goodsDetail(map);
         getNetData(0,100,true, mGoodsDataCall,
                 new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
             @Override

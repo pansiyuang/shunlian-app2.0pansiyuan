@@ -303,8 +303,8 @@ public interface ApiService {
      *
      * @return
      */
-    @POST("goods/detail")
-    Call<BaseEntity<GoodsDeatilEntity>> goodsDetail(@Body RequestBody body);
+    @GET("goods/detail")
+    Call<BaseEntity<GoodsDeatilEntity>> goodsDetail(@QueryMap Map<String, String> map);
 
     /**
      * 关注店铺

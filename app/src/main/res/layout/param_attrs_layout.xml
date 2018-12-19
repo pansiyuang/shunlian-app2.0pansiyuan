@@ -32,7 +32,6 @@
         android:drawableRight="@mipmap/img_common_viewarrow_1"
         android:minHeight="50dp"
         android:gravity="center_vertical"
-        android:text="@string/select_size_color"
         android:textColor="@color/new_text"
         android:textSize="12sp"
         app:tv_control_adapter="true"
