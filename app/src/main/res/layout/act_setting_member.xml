@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textSize="15sp"
-                    android:gravity="center"
+                    android:gravity="left|center"
                     android:lineSpacingExtra="5dp"
                     android:text="设置微信号后，您的会员可以添加您为微信好友，您可以更方便引导他在顺联动力商城进行购物，也可以教他开店创业。"
                     android:textColor="@color/text_gray2"/>
@@ -120,7 +120,7 @@
         android:layout_marginBottom="38dp"
         android:gravity="center"
         android:background="@drawable/rounded_corner_solid_pink_50px"
-        android:text="去添加微信号"
+        android:text="填写微信号"
         android:textSize="15sp"
         android:textColor="@color/white"
         android:layout_height="48dp" />

@@ -91,13 +91,15 @@ public class SettingMemberActivity extends BaseActivity implements View.OnClickL
      */
     private void setWeixinView(){
         if(TextUtils.isEmpty(weixinNum)){
-            tv_add_weixin.setText("添加微信号");
+            tv_add_weixin.setText("填写微信号");
+            tv_add_weixin.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
             tv_weixin_title.setVisibility(View.GONE);
             tv_me_weixin.setVisibility(View.GONE);
             line_have_weixin.setVisibility(View.GONE);
             line_no_weixin.setVisibility(View.VISIBLE);
         }else{
             tv_add_weixin.setText("编辑");
+            tv_add_weixin.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
             tv_weixin_title.setVisibility(View.VISIBLE);
             tv_me_weixin.setVisibility(View.VISIBLE);
             tv_me_weixin.setText(weixinNum);
