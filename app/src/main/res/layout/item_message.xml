@@ -74,9 +74,6 @@
                         android:maxWidth="100dp"
                         android:singleLine="true"
                         android:textColor="@color/new_text"
-                        android:maxWidth="100dp"
-                        android:singleLine="true"
-                        android:ellipsize="end"
                         android:textSize="14sp" />
 
                     <TextView
