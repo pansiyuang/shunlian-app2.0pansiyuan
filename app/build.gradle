@@ -9,15 +9,15 @@ android {
         abortOnError false
     }
     signingConfigs {
-//        ShunLianPower {
-//            List<String> lists = file('C:/Augus/file/signState.txt').readLines()
-//            String alias = lists.get(0)
-//            String pwd = lists.get(1)
-//            storeFile file('C:/Augus/file/ShunLianPower.jks')
-//            storePassword pwd
-//            keyAlias alias
-//            keyPassword pwd
-//        }
+        ShunLianPower {
+            List<String> lists = file('C:/Augus/file/signState.txt').readLines()
+            String alias = lists.get(0)
+            String pwd = lists.get(1)
+            storeFile file('C:/Augus/file/ShunLianPower.jks')
+            storePassword pwd
+            keyAlias alias
+            keyPassword pwd
+        }
     }
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
@@ -28,9 +28,9 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 32
-        versionName "2.6.1.0"
+        versionName "2.6.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        signingConfig signingConfigs.ShunLianPower
+        signingConfig signingConfigs.ShunLianPower
 
         //bugly
         ndk {
@@ -52,10 +52,10 @@ android {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.ShunLianPower
+            signingConfig signingConfigs.ShunLianPower
         }
         debug {
-//            signingConfig signingConfigs.ShunLianPower
+            signingConfig signingConfigs.ShunLianPower
             debuggable true
             minifyEnabled false
         }
@@ -141,9 +141,9 @@ dependencies {
     implementation project(':layoutfit')
     implementation project(':SmallMediaRecordLib2')
 }
-//bugly {
-//    appId = '1400008795' // 注册时分配的App ID
-//    appKey = '8fd19263-5cbe-45ff-be6c-000be537123f' // 注册时分配的App Key5+‘’
-//    appPackage='com.shunlian.app'
-//    appVersion='2.6.1.0'
-//}
+bugly {
+    appId = '1400008795' // 注册时分配的App ID
+    appKey = '8fd19263-5cbe-45ff-be6c-000be537123f' // 注册时分配的App Key5+‘’
+    appPackage='com.shunlian.app'
+    appVersion='2.6.0.0'
+}
