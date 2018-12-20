@@ -354,7 +354,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                 @Override
                 public void onItemClick(View view, int position) {
                     JosnSensorsDataAPI.pinpaiStoreGoodClick(currentId,corePingEntity.brand.content
-                            ,mDatas.get(position).id,mDatas.get(position).title,position);
+                            ,mDatas.get(position).id,mDatas.get(position).title,position,corePingEntity.brand.promotion_type);
                     GoodsDetailAct.startAct(baseAct,mDatas.get(position).id);
                 }
             });

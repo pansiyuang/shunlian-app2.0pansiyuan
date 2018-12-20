@@ -137,11 +137,12 @@ public class JosnSensorsDataAPI {
      * 品牌特卖店铺商品点击
      * @return
      */
-    public static void pinpaiStoreGoodClick(String storeId,String storeName,String goodId,String goodName,int rank){
+    public static void pinpaiStoreGoodClick(String storeId,String storeName,String goodId,String goodName,int rank,String promotion_type){
         try {
             JSONObject properties = new JSONObject();
             properties.put("pptmStoreId", storeId);
             properties.put("pptmStoreName", storeName);
+            properties.put("pptmStoreType", promotion_type);
             properties.put("pptmStoreGoodId", goodId);
             properties.put("pptmStoreGoodName", goodName);
             properties.put("pptmStoreGoodRank", rank);
@@ -152,7 +153,7 @@ public class JosnSensorsDataAPI {
     }
 
     /**
-     * 爱上新品商品点击
+     * 爱上新品商品点
      * @return
      */
     public static void loveNewGoodClick(String channelName,String goodId,String goodName,int rank){
