@@ -234,7 +234,7 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
         pinpaiAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                JosnSensorsDataAPI.pinpaiStoreClick(corePingEntity.brand_list.get(position).id,
+                JosnSensorsDataAPI.pinpaiStoreClick(corePingEntity.brand_list.get(position).promotion_type,corePingEntity.brand_list.get(position).id,
                         corePingEntity.brand_list.get(position).content,position);
                 PingpaiListAct.startAct(baseAct, corePingEntity.brand_list.get(position).id);
             }

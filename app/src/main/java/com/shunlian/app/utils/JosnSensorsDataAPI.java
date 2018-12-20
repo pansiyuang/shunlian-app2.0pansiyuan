@@ -120,11 +120,11 @@ public class JosnSensorsDataAPI {
      * 品牌特卖店铺点击
      * @return
      */
-    public static void pinpaiStoreClick(String storeId,String storeName,int rank){
+    public static void pinpaiStoreClick(String promotion_type,String storeId,String storeName,int rank){
         try {
             JSONObject properties = new JSONObject();
             properties.put("pptmStoreId", storeId);
-//            properties.put("bannerLocation", bannerLocation);
+            properties.put("pptmStoreType", promotion_type);
             properties.put("pptmStoreName", storeName);
             properties.put("pptmStoreRank", rank);
             SensorsDataAPI.sharedInstance().track("pptmStoreClick", properties);
