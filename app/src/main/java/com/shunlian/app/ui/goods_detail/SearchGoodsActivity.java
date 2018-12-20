@@ -241,7 +241,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         }
                         JosnSensorsDataAPI.isHistory = false;
                         if (currentKeyWord!=null){
-                            if(currentKeyWord.equals(text.toString())){
+                            if(currentKeyWord.equals(text.toString())||text==null||text.toString().equals("")){
                                 JosnSensorsDataAPI.isRecommend = true;
                             }else{
                                 JosnSensorsDataAPI.isRecommend = false;
@@ -252,6 +252,14 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                     }
                     return true;
                 } else if (text!=null){
+                    JosnSensorsDataAPI.isHistory = false;
+                    if (currentKeyWord!=null){
+                        if(text==null||currentKeyWord.equals(text.toString())||text.toString().equals("")){
+                            JosnSensorsDataAPI.isRecommend = true;
+                        }else{
+                            JosnSensorsDataAPI.isRecommend = false;
+                        }
+                    }
                     switchToJump(text.toString());
                     return true;
                 }
@@ -339,7 +347,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             @Override
             public View getView(FlowLayout parent, final int position, Object o) {
                 JosnSensorsDataAPI.isHistory = true;
-                JosnSensorsDataAPI.isRecommend = true;
+                JosnSensorsDataAPI.isRecommend = false;
                 final String tagStr = histotyTags.get(position);
                 View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_goods_tag_layout, taglayout_history, false);
                 TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
