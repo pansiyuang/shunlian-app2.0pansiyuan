@@ -96,7 +96,7 @@ public class ShareGoodDialogUtil {
                 }
                 if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
                     JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
-                            mShareInfoParam.price,mShareInfoParam.store_id,mShareInfoParam.store_name,"微信好友");
+                            mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"微信好友");
                 }
             }
         });
