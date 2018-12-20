@@ -188,7 +188,9 @@ public class SettingAct extends BaseActivity implements ISettingView {
             case R.id.llayout_message:
                 if (isPushOpen) {//停止推送服务
                     miv_message.setImageResource(R.mipmap.icon_chat_userlist_n);
-                    JPushInterface.stopPush(Common.getApplicationContext());
+                    if (!JPushInterface.isPushStopped(Common.getApplicationContext())) {
+                        JPushInterface.stopPush(Common.getApplicationContext());
+                    }
                     if (presenter != null) {
                         presenter.updatePushSetting("0");
                     }
