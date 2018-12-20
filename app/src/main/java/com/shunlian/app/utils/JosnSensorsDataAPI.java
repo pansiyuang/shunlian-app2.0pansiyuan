@@ -159,7 +159,7 @@ public class JosnSensorsDataAPI {
         try {
             JSONObject properties = new JSONObject();
             properties.put("asxpChannelName", channelName);
-            properties.put("asxpDoodId", goodId);
+            properties.put("asxpGoodId", goodId);
             properties.put("asxpGoodName", goodName);
             properties.put("asxpGoodRank", rank);
             SensorsDataAPI.sharedInstance().track("asxpGoodsClick", properties);
@@ -280,7 +280,7 @@ public class JosnSensorsDataAPI {
             properties.put("hasResult", hasResult);
             properties.put("isHistory", isHistory);
             properties.put("isRecommend", isRecommend);
-            SensorsDataAPI.sharedInstance().track("signUp", properties);
+            SensorsDataAPI.sharedInstance().track("search", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -329,7 +329,7 @@ public class JosnSensorsDataAPI {
             }
             properties.put("store_id", storeID);
             properties.put("store_name", storeName);
-            SensorsDataAPI.sharedInstance().track("commodityDetail", properties);
+            SensorsDataAPI.sharedInstance().track("goodsDetail", properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }

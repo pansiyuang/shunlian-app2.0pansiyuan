@@ -70,6 +70,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:ellipsize="end"
+                        android:maxWidth="100dp"
+                        android:singleLine="true"
                         android:textColor="@color/new_text"
                         android:textSize="14sp" />
 

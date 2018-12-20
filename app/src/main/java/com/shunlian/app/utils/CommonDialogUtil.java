@@ -59,6 +59,7 @@ public class CommonDialogUtil {
 
         if(!TextUtils.isEmpty(defaultValue)){
             edit_input.setText(defaultValue);
+            edit_input.setSelection(defaultValue.length());
         }
         tvCancle.setOnClickListener(new View.OnClickListener() {
             @Override

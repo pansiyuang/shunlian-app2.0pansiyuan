@@ -425,7 +425,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                     public void run() {
                         handler.sendEmptyMessage(0);
                     }
-                }, 2000);
+                }, 1000);
             }
         }
 
