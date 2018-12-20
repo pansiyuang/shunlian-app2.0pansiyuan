@@ -31,6 +31,7 @@ public class CorePingEntity {
         public String bg_img;
         public String thumb;
         public String market_price;
+        public String self_buy_earn;
         public String price;
         public String sales;
         public String title;

@@ -303,8 +303,8 @@ public interface ApiService {
      *
      * @return
      */
-    @POST("goods/detail")
-    Call<BaseEntity<GoodsDeatilEntity>> goodsDetail(@Body RequestBody body);
+    @GET("goods/detail")
+    Call<BaseEntity<GoodsDeatilEntity>> goodsDetail(@QueryMap Map<String, String> map);
 
     /**
      * 关注店铺
@@ -2930,4 +2930,18 @@ public interface ApiService {
      */
     @GET("member/login/info")
     Call<BaseEntity<New3LoginInfoTipEntity>> loginInfoTip(@QueryMap Map<String,String> map);
+
+    /**
+     * 会员集主页
+     * @return
+     */
+    @POST("member/follower/followerList")
+    Call<BaseEntity<MemberInfoEntity>> followerList(@Body RequestBody body);
+
+    /**
+     * 绑定导购员
+     * @return
+     */
+    @POST("member/Register/bindShareidAfter")
+    Call<BaseEntity<EmptyEntity>> bindShareidAfter(@Body RequestBody body);
 }

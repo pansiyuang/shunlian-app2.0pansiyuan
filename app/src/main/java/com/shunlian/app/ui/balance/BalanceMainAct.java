@@ -3,6 +3,7 @@ package com.shunlian.app.ui.balance;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BalanceInfoEntity;
@@ -25,11 +26,15 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
+
     @BindView(R.id.mtv_count)
     MyTextView mtv_count;
 
     @BindView(R.id.mtv_keyong)
     MyTextView mtv_keyong;
+
+    @BindView(R.id.tv_withdraw)
+    TextView tv_withdraw;
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -78,6 +83,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
                     BalanceXQAct.startAct(baseAct, data, false);
                 break;
             case R.id.mtv_yueminxi:
+                Constant.ISBALANCE = true;
                 BalanceDetailAct.startAct(baseAct);
                 break;
             case R.id.mrlayout_zhifushezhi:
@@ -92,6 +98,10 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
                 if (data != null)
                     H5X5Act.startAct(this, data.profit_help_url, H5X5Act.MODE_SONIC);
                 break;
+            case R.id.tv_withdraw:
+                if (data != null)
+                    BalanceXQAct.startAct(baseAct, data, false);
+                break;
         }
     }
 
@@ -103,6 +113,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
         mrlayout_tixiandao.setOnClickListener(this);
         mrlayout_zhifushezhi.setOnClickListener(this);
         mtv_count.setOnClickListener(this);
+        tv_withdraw.setOnClickListener(this);
         miv_close.setOnClickListener(this);
     }
 
@@ -113,7 +124,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
         isBack = getIntent().getBooleanExtra("isBack", false);
         isBalance = Constant.ISBALANCE;
         if (isBalance) {
-            mtv_title.setText(getStringResouce(R.string.balance_yue));
+            mtv_title.setText(getStringResouce(R.string.balance_yuetixian));
             mtv_yueminxi.setVisibility(View.VISIBLE);
             mtv_keyong.setText(getStringResouce(R.string.balance_keyong));
         } else {

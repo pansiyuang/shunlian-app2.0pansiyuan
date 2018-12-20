@@ -70,15 +70,15 @@ public class PingListAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
             viewHolder.mtv_title.setText(goods.title);
             SpannableStringBuilder spannableStringBuilder=Common.changeTextSize(getString(R.string.common_yuan)+goods.price,getString(R.string.common_yuan),12);
             viewHolder.mtv_price.setText(spannableStringBuilder);
-            viewHolder.mtv_marketPrice.setText(goods.market_price);
-            viewHolder.mtv_marketPrice.setStrikethrough();
+            viewHolder.mtv_marketPrice.setEarnMoney(goods.self_buy_earn,14);
+//            viewHolder.mtv_marketPrice.setStrikethrough();
             viewHolder.mtv_gou.setText(String.format(getString(R.string.first_yigou),goods.sales));
             if (!isEmpty(goods.stock)&&Float.parseFloat(goods.stock)==0) {
                 viewHolder.miv_seller_out.setVisibility(View.VISIBLE);
                 viewHolder.mtv_price.setTextColor(getColor(R.color.value_A0A0A0));
             } else {
                 viewHolder.miv_seller_out.setVisibility(View.GONE);
-                viewHolder.mtv_price.setTextColor(getColor(R.color.pink_color));
+                viewHolder.mtv_price.setTextColor(getColor(R.color.share_text));
             }
         }
     }

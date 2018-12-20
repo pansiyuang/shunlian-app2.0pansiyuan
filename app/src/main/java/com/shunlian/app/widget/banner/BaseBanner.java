@@ -317,6 +317,43 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         startScroll();
     }
 
+    /**
+     * set data source list
+     */
+    public void setRoundBanner(List<E> list,int... params) {
+        this.list = list;
+        if (list != null && list.size() == 1) {
+            removeAllViews();
+            MyImageView myImageView = new MyImageView(getContext());
+            myImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            GlideUtils.getInstance().loadCornerImage(getContext(), myImageView, (String) list.get(0),5);
+            addView(myImageView, 0, lp_vp);
+            myImageView.setOnClickListener(v -> {
+                if (onItemClickL != null) {
+                    onItemClickL.onItemClick(0);
+                }
+            });
+        }
+        if (params.length > 0 ) {
+            ImageView imageView = new ImageView(getContext());
+            addView(imageView, 1);
+            RelativeLayout.LayoutParams layoutParams = (LayoutParams) imageView.getLayoutParams();
+            int i = dp2px(50);
+            layoutParams.width = i;
+            layoutParams.height = i;
+            layoutParams.topMargin = dp2px(70);
+            layoutParams.leftMargin = i / 5;
+            switch (params[0]){
+                case 1:
+                    imageView.setImageResource(R.mipmap.img_plus_youping_xiao);
+                    break;
+                case 2:
+                    imageView.setImageResource(R.mipmap.img_biaoqian_tuangou);
+                    break;
+            }
+        }
+        startScroll();
+    }
     public void setBanners(List<E> list, MyTextView mtv_one, MyTextView mtv_two) {
         this.list = list;
         mDatas = (List<StoreIndexEntity.Body.Datas>) list;

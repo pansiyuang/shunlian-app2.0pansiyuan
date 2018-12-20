@@ -18,5 +18,7 @@ public class RecommendEntity {
         public String title;
         public String thumb;
         public String price;
+        public String self_buy_earn;
+        public String share_buy_earn;
     }
 }

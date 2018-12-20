@@ -3,11 +3,15 @@ package com.shunlian.app.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 
 /**
@@ -98,7 +102,30 @@ public class MyTextView extends TextView {
             }
         }
     }
-
+    /**
+     * 设置赚多少
+     */
+    public MyTextView setEarnMoney(String text,int bigSize){
+        if (TextUtils.isEmpty(text)){
+            this.setVisibility(View.GONE);
+            return this;
+        }else {
+            this.setVisibility(VISIBLE);
+        }
+        int start=0;
+        int end=text.length();
+        if (text.contains("赚"))
+            start=text.indexOf("赚")+1;
+        if (text.contains("起"))
+            end=text.indexOf("起");
+        if (text.contains("元"))
+            end=text.indexOf("元");
+        if (text.contains("￥"))
+            start=text.indexOf("￥")+1;
+        String value=text.substring(start,end);
+        this.setText(Common.changeTextSize(text,value,bigSize));
+        return this;
+    }
     /**
      * 设置中划线
      */

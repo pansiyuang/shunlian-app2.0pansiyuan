@@ -5,7 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +35,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String return_7;
     public String send_time;
     public String quality_guarantee;
+    public ArrayList<SimpTitle> services;
     public String credit;
     public String video;//视频地址
     public String type;// 普通商品0，优品1,团购商品2
@@ -55,7 +55,8 @@ public class GoodsDeatilEntity implements Parcelable {
     public ArrayList<ActivityDetail> full_cut;//满减
     public ArrayList<ActivityDetail> full_discount;//满折
     public ArrayList<ActivityDetail> buy_gift;//买赠
-
+    public String cate_1_name;//一级分类
+    public String cate_2_name;//二级分类
 
     public ArrayList<Voucher> voucher;
 
@@ -72,6 +73,92 @@ public class GoodsDeatilEntity implements Parcelable {
     //分享信息
     public UserInfo user_info;
     public String self_buy_earn;//自购赚多少，该字段有返回时才前台显示（该字段有可能不返回）
+
+    public String share_buy_earn;
+    public String share_buy_earn_btn;
+    public String self_buy_earn_btn;
+    public PlusDoor plus_door;
+    public String specs_text;//选择规格
+
+    public static class SimpTitle implements Parcelable {
+        public String title;
+        public String content;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.title);
+            dest.writeString(this.content);
+        }
+
+        public SimpTitle() {
+        }
+
+        protected SimpTitle(Parcel in) {
+            this.title = in.readString();
+            this.content = in.readString();
+        }
+
+        public static final Creator<SimpTitle> CREATOR = new Creator<SimpTitle>() {
+            @Override
+            public SimpTitle createFromParcel(Parcel source) {
+                return new SimpTitle(source);
+            }
+
+            @Override
+            public SimpTitle[] newArray(int size) {
+                return new SimpTitle[size];
+            }
+        };
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class PlusDoor extends SimpTitle implements Parcelable {
+        public String is_plus;
+        public UrlType url;
+        public ArrayList<String> title_highlight;
+        public ArrayList<String> content_highlight;
+
+        public PlusDoor() {
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.is_plus);
+            dest.writeParcelable(this.url, flags);
+            dest.writeStringList(this.title_highlight);
+            dest.writeStringList(this.content_highlight);
+        }
+
+        protected PlusDoor(Parcel in) {
+            this.is_plus = in.readString();
+            this.url = in.readParcelable(UrlType.class.getClassLoader());
+            this.title_highlight = in.createStringArrayList();
+            this.content_highlight = in.createStringArrayList();
+        }
+
+        public static final Creator<PlusDoor> CREATOR = new Creator<PlusDoor>() {
+            @Override
+            public PlusDoor createFromParcel(Parcel source) {
+                return new PlusDoor(source);
+            }
+
+            @Override
+            public PlusDoor[] newArray(int size) {
+                return new PlusDoor[size];
+            }
+        };
+    }
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class UserInfo implements Parcelable {
@@ -127,6 +214,13 @@ public class GoodsDeatilEntity implements Parcelable {
         public String end_remain_seconds;
         public String start_time;
         public String old_price;
+        public String share_buy_earn;
+        public String self_buy_earn;
+        public String share_buy_earn_btn;
+        public String self_buy_earn_btn;
+
+        public SpecailAct() {
+        }
 
         @Override
         public int describeContents() {
@@ -139,16 +233,17 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.detail_pic);
             dest.writeString(this.if_act_price);
             dest.writeString(this.if_time);
-            dest.writeString(this.actprice);
             dest.writeString(this.tag_pic);
+            dest.writeString(this.actprice);
             dest.writeString(this.activity_status);
             dest.writeString(this.start_remain_seconds);
             dest.writeString(this.end_remain_seconds);
             dest.writeString(this.start_time);
             dest.writeString(this.old_price);
-        }
-
-        public SpecailAct() {
+            dest.writeString(this.share_buy_earn);
+            dest.writeString(this.self_buy_earn);
+            dest.writeString(this.share_buy_earn_btn);
+            dest.writeString(this.self_buy_earn_btn);
         }
 
         protected SpecailAct(Parcel in) {
@@ -156,16 +251,20 @@ public class GoodsDeatilEntity implements Parcelable {
             this.detail_pic = in.readString();
             this.if_act_price = in.readString();
             this.if_time = in.readString();
-            this.actprice = in.readString();
             this.tag_pic = in.readString();
+            this.actprice = in.readString();
             this.activity_status = in.readString();
             this.start_remain_seconds = in.readString();
             this.end_remain_seconds = in.readString();
             this.start_time = in.readString();
             this.old_price = in.readString();
+            this.share_buy_earn = in.readString();
+            this.self_buy_earn = in.readString();
+            this.share_buy_earn_btn = in.readString();
+            this.self_buy_earn_btn = in.readString();
         }
 
-        public static final Parcelable.Creator<SpecailAct> CREATOR = new Parcelable.Creator<SpecailAct>() {
+        public static final Creator<SpecailAct> CREATOR = new Creator<SpecailAct>() {
             @Override
             public SpecailAct createFromParcel(Parcel source) {
                 return new SpecailAct(source);
@@ -275,6 +374,14 @@ public class GoodsDeatilEntity implements Parcelable {
         public String str_surplus_stock;
         public String start_time;
         public String end_time;
+        public String share_buy_earn;
+        public String self_buy_earn;
+        public String share_buy_earn_btn;
+        public String self_buy_earn_btn;
+
+        public TTAct() {
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -299,9 +406,11 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.percent);
             dest.writeString(this.str_surplus_stock);
             dest.writeString(this.start_time);
-        }
-
-        public TTAct() {
+            dest.writeString(this.end_time);
+            dest.writeString(this.share_buy_earn);
+            dest.writeString(this.self_buy_earn);
+            dest.writeString(this.share_buy_earn_btn);
+            dest.writeString(this.self_buy_earn_btn);
         }
 
         protected TTAct(Parcel in) {
@@ -322,9 +431,14 @@ public class GoodsDeatilEntity implements Parcelable {
             this.percent = in.readString();
             this.str_surplus_stock = in.readString();
             this.start_time = in.readString();
+            this.end_time = in.readString();
+            this.share_buy_earn = in.readString();
+            this.self_buy_earn = in.readString();
+            this.share_buy_earn_btn = in.readString();
+            this.self_buy_earn_btn = in.readString();
         }
 
-        public static final Parcelable.Creator<TTAct> CREATOR = new Parcelable.Creator<TTAct>() {
+        public static final Creator<TTAct> CREATOR = new Creator<TTAct>() {
             @Override
             public TTAct createFromParcel(Parcel source) {
                 return new TTAct(source);
@@ -641,6 +755,44 @@ public class GoodsDeatilEntity implements Parcelable {
         public String store_icon;     //店铺icon
         public ArrayList<Item> hot;//店铺热销
         public ArrayList<Item> push;//店主推荐
+        public ArrayList<ActItem> push_goods;//灵活版的hot 和 push
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class ActItem implements Parcelable {
+            public String title;
+            public ArrayList<Item> data;
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.title);
+                dest.writeTypedList(this.data);
+            }
+
+            public ActItem() {
+            }
+
+            protected ActItem(Parcel in) {
+                this.title = in.readString();
+                this.data = in.createTypedArrayList(Item.CREATOR);
+            }
+
+            public static final Creator<ActItem> CREATOR = new Creator<ActItem>() {
+                @Override
+                public ActItem createFromParcel(Parcel source) {
+                    return new ActItem(source);
+                }
+
+                @Override
+                public ActItem[] newArray(int size) {
+                    return new ActItem[size];
+                }
+            };
+        }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Item implements Parcelable {
@@ -649,6 +801,13 @@ public class GoodsDeatilEntity implements Parcelable {
             public String thumb;
             public String price;
             public String whole_thumb;
+            public String tag;
+            public String self_buy_earn;
+            public String share_buy_earn;
+            public String cost_price;
+
+            public Item() {
+            }
 
             @Override
             public int describeContents() {
@@ -662,9 +821,10 @@ public class GoodsDeatilEntity implements Parcelable {
                 dest.writeString(this.thumb);
                 dest.writeString(this.price);
                 dest.writeString(this.whole_thumb);
-            }
-
-            public Item() {
+                dest.writeString(this.tag);
+                dest.writeString(this.self_buy_earn);
+                dest.writeString(this.share_buy_earn);
+                dest.writeString(this.cost_price);
             }
 
             protected Item(Parcel in) {
@@ -673,9 +833,13 @@ public class GoodsDeatilEntity implements Parcelable {
                 this.thumb = in.readString();
                 this.price = in.readString();
                 this.whole_thumb = in.readString();
+                this.tag = in.readString();
+                this.self_buy_earn = in.readString();
+                this.share_buy_earn = in.readString();
+                this.cost_price = in.readString();
             }
 
-            public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
+            public static final Creator<Item> CREATOR = new Creator<Item>() {
                 @Override
                 public Item createFromParcel(Parcel source) {
                     return new Item(source);
@@ -686,6 +850,9 @@ public class GoodsDeatilEntity implements Parcelable {
                     return new Item[size];
                 }
             };
+        }
+
+        public StoreInfo() {
         }
 
         @Override
@@ -708,9 +875,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.store_icon);
             dest.writeTypedList(this.hot);
             dest.writeTypedList(this.push);
-        }
-
-        public StoreInfo() {
+            dest.writeList(this.push_goods);
         }
 
         protected StoreInfo(Parcel in) {
@@ -727,9 +892,11 @@ public class GoodsDeatilEntity implements Parcelable {
             this.store_icon = in.readString();
             this.hot = in.createTypedArrayList(Item.CREATOR);
             this.push = in.createTypedArrayList(Item.CREATOR);
+            this.push_goods = new ArrayList<ActItem>();
+            in.readList(this.push_goods, ActItem.class.getClassLoader());
         }
 
-        public static final Parcelable.Creator<StoreInfo> CREATOR = new Parcelable.Creator<StoreInfo>() {
+        public static final Creator<StoreInfo> CREATOR = new Creator<StoreInfo>() {
             @Override
             public StoreInfo createFromParcel(Parcel source) {
                 return new StoreInfo(source);
@@ -900,6 +1067,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String sales_desc;
         public String desc;
         public int isSuperiorProduct;
+        public String share_buy_earn;
         public String self_buy_earn;
         public String free_ship;             //是否 包邮，1是，0否
         public String send_area;             //发货地
@@ -927,8 +1095,8 @@ public class GoodsDeatilEntity implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.id);
-            dest.writeString(this.cart_id);
             dest.writeString(this.tag_pic);
+            dest.writeString(this.cart_id);
             dest.writeString(this.store_id);
             dest.writeString(this.store_name);
             dest.writeString(this.goods_id);
@@ -943,10 +1111,9 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeParcelable(this.goods_info, flags);
             dest.writeString(this.sku);
             dest.writeString(this.price);
+            dest.writeString(this.market_price);
             dest.writeString(this.old_price);
             dest.writeString(this.left);
-            dest.writeString(this.market_price);
-            dest.writeString(this.share_url);
             dest.writeTypedList(this.all_prom);
             dest.writeString(this.cate_id);
             dest.writeString(this.cate_name);
@@ -962,6 +1129,9 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeInt(this.type);
             dest.writeInt(this.is_sell_out);
             dest.writeString(this.sales_desc);
+            dest.writeString(this.desc);
+            dest.writeInt(this.isSuperiorProduct);
+            dest.writeString(this.share_buy_earn);
             dest.writeString(this.self_buy_earn);
             dest.writeString(this.free_ship);
             dest.writeString(this.send_area);
@@ -976,14 +1146,13 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.limit_min_buy);
             dest.writeString(this.big_label);
             dest.writeInt(this.share_num);
-            dest.writeInt(this.isSuperiorProduct);
-            dest.writeString(this.desc);
+            dest.writeString(this.share_url);
         }
 
         protected Goods(Parcel in) {
             this.id = in.readString();
-            this.cart_id = in.readString();
             this.tag_pic = in.readString();
+            this.cart_id = in.readString();
             this.store_id = in.readString();
             this.store_name = in.readString();
             this.goods_id = in.readString();
@@ -998,10 +1167,9 @@ public class GoodsDeatilEntity implements Parcelable {
             this.goods_info = in.readParcelable(GoodsInfo.class.getClassLoader());
             this.sku = in.readString();
             this.price = in.readString();
+            this.market_price = in.readString();
             this.old_price = in.readString();
             this.left = in.readString();
-            this.market_price = in.readString();
-            this.share_url = in.readString();
             this.all_prom = in.createTypedArrayList(AllProm.CREATOR);
             this.cate_id = in.readString();
             this.cate_name = in.readString();
@@ -1017,6 +1185,9 @@ public class GoodsDeatilEntity implements Parcelable {
             this.type = in.readInt();
             this.is_sell_out = in.readInt();
             this.sales_desc = in.readString();
+            this.desc = in.readString();
+            this.isSuperiorProduct = in.readInt();
+            this.share_buy_earn = in.readString();
             this.self_buy_earn = in.readString();
             this.free_ship = in.readString();
             this.send_area = in.readString();
@@ -1031,8 +1202,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.limit_min_buy = in.readString();
             this.big_label = in.readString();
             this.share_num = in.readInt();
-            this.isSuperiorProduct = in.readInt();
-            this.desc = in.readString();
+            this.share_url = in.readString();
         }
 
         public static final Creator<Goods> CREATOR = new Creator<Goods>() {
@@ -1250,6 +1420,11 @@ public class GoodsDeatilEntity implements Parcelable {
         public String stock;
         public String specs;
         public String thumb;
+        public String share_buy_earn; //分享赚
+        public String self_buy_earn; //自购省
+
+        public Sku() {
+        }
 
         @Override
         public int describeContents() {
@@ -1267,9 +1442,8 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.stock);
             dest.writeString(this.specs);
             dest.writeString(this.thumb);
-        }
-
-        public Sku() {
+            dest.writeString(this.share_buy_earn);
+            dest.writeString(this.self_buy_earn);
         }
 
         protected Sku(Parcel in) {
@@ -1282,9 +1456,11 @@ public class GoodsDeatilEntity implements Parcelable {
             this.stock = in.readString();
             this.specs = in.readString();
             this.thumb = in.readString();
+            this.share_buy_earn = in.readString();
+            this.self_buy_earn = in.readString();
         }
 
-        public static final Parcelable.Creator<Sku> CREATOR = new Parcelable.Creator<Sku>() {
+        public static final Creator<Sku> CREATOR = new Creator<Sku>() {
             @Override
             public Sku createFromParcel(Parcel source) {
                 return new Sku(source);
@@ -1455,6 +1631,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.return_7);
         dest.writeString(this.send_time);
         dest.writeString(this.quality_guarantee);
+        dest.writeTypedList(this.services);
         dest.writeString(this.credit);
         dest.writeString(this.video);
         dest.writeString(this.type);
@@ -1472,6 +1649,8 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeTypedList(this.full_cut);
         dest.writeTypedList(this.full_discount);
         dest.writeTypedList(this.buy_gift);
+        dest.writeString(this.cate_1_name);
+        dest.writeString(this.cate_2_name);
         dest.writeTypedList(this.voucher);
         dest.writeParcelable(this.store_info, flags);
         dest.writeTypedList(this.combo);
@@ -1482,6 +1661,11 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeParcelable(this.activity, flags);
         dest.writeParcelable(this.user_info, flags);
         dest.writeString(this.self_buy_earn);
+        dest.writeString(this.share_buy_earn);
+        dest.writeString(this.share_buy_earn_btn);
+        dest.writeString(this.self_buy_earn_btn);
+        dest.writeParcelable(this.plus_door, flags);
+        dest.writeString(this.specs_text);
     }
 
     protected GoodsDeatilEntity(Parcel in) {
@@ -1505,6 +1689,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.return_7 = in.readString();
         this.send_time = in.readString();
         this.quality_guarantee = in.readString();
+        this.services = in.createTypedArrayList(SimpTitle.CREATOR);
         this.credit = in.readString();
         this.video = in.readString();
         this.type = in.readString();
@@ -1522,6 +1707,8 @@ public class GoodsDeatilEntity implements Parcelable {
         this.full_cut = in.createTypedArrayList(ActivityDetail.CREATOR);
         this.full_discount = in.createTypedArrayList(ActivityDetail.CREATOR);
         this.buy_gift = in.createTypedArrayList(ActivityDetail.CREATOR);
+        this.cate_1_name = in.readString();
+        this.cate_2_name = in.readString();
         this.voucher = in.createTypedArrayList(Voucher.CREATOR);
         this.store_info = in.readParcelable(StoreInfo.class.getClassLoader());
         this.combo = in.createTypedArrayList(Combo.CREATOR);
@@ -1532,6 +1719,11 @@ public class GoodsDeatilEntity implements Parcelable {
         this.activity = in.readParcelable(Act.class.getClassLoader());
         this.user_info = in.readParcelable(UserInfo.class.getClassLoader());
         this.self_buy_earn = in.readString();
+        this.share_buy_earn = in.readString();
+        this.share_buy_earn_btn = in.readString();
+        this.self_buy_earn_btn = in.readString();
+        this.plus_door = in.readParcelable(PlusDoor.class.getClassLoader());
+        this.specs_text = in.readString();
     }
 
     public static final Creator<GoodsDeatilEntity> CREATOR = new Creator<GoodsDeatilEntity>() {

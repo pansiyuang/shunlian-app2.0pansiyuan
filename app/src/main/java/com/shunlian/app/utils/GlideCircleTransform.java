@@ -2,6 +2,7 @@ package com.shunlian.app.utils;
 
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -12,6 +13,8 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
 
 public class GlideCircleTransform extends BitmapTransformation {
+    private Paint mBorderPaint;
+    private float mBorderWidth;
 
     public GlideCircleTransform(Context context) {
         super(context);
@@ -21,7 +24,18 @@ public class GlideCircleTransform extends BitmapTransformation {
         return circleCrop(pool, toTransform);
     }
 
-    private static Bitmap circleCrop(BitmapPool pool, Bitmap source) {
+    public GlideCircleTransform(Context context, int borderWidth, int borderColor) {
+        super(context);
+        mBorderWidth = Resources.getSystem().getDisplayMetrics().density * borderWidth;
+        mBorderPaint = new Paint();
+        mBorderPaint.setDither(true);
+        mBorderPaint.setAntiAlias(true);
+        mBorderPaint.setColor(borderColor);
+        mBorderPaint.setStyle(Paint.Style.STROKE);
+        mBorderPaint.setStrokeWidth(mBorderWidth);
+    }
+
+        private Bitmap circleCrop(BitmapPool pool, Bitmap source) {
         if (source == null) return null;
 
         int size = Math.min(source.getWidth(), source.getHeight());
@@ -42,6 +56,10 @@ public class GlideCircleTransform extends BitmapTransformation {
         paint.setAntiAlias(true);
         float r = size / 2f;
         canvas.drawCircle(r, r, r, paint);
+        if (mBorderPaint != null) {
+            float borderRadius = r - mBorderWidth / 2;
+             canvas.drawCircle(r, r, borderRadius, mBorderPaint);
+       }
         return result;
     }
 

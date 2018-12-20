@@ -5,7 +5,9 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 /**
  * 解决底部输入框和软键盘的问题
@@ -16,15 +18,34 @@ public class KeyboardPatch {
     private View mDecorView;
     private View mContentView;
     private boolean flag = false;
+    private Window mWindow;
+    private View mChildView;
+    private ImmersionBar mImmersionBar;
+    private final int mStatusBarHeight;
+    private final int mActionBarHeight;
+    private int mPaddingLeft = 0, mPaddingTop = 0, mPaddingRight = 0, mPaddingBottom = 0;
 
-    private KeyboardPatch(Activity activity) {
-        this(activity, activity.findViewById(android.R.id.content));
+    private KeyboardPatch(Activity activity,ImmersionBar immersionBar) {
+        this(activity, activity.findViewById(android.R.id.content),immersionBar);
     }
 
-    private KeyboardPatch(Activity activity, View contentView) {
+    private KeyboardPatch(Activity activity, View contentView,ImmersionBar immersionBar) {
+        mImmersionBar = immersionBar;
         this.mActivity = activity;
-        this.mDecorView = activity.getWindow().getDecorView();
-        this.mContentView = contentView;
+        mWindow = activity.getWindow();
+        this.mDecorView = mWindow.getDecorView();
+        FrameLayout frameLayout = mDecorView.findViewById(android.R.id.content);
+        mChildView = frameLayout.getChildAt(0);
+        if (mChildView != null) {
+            mPaddingLeft = mChildView.getPaddingLeft();
+            mPaddingTop = mChildView.getPaddingTop();
+            mPaddingRight = mChildView.getPaddingRight();
+            mPaddingBottom = mChildView.getPaddingBottom();
+        }
+        this.mContentView = mChildView != null ? mChildView : frameLayout;
+        BarConfig barConfig = new BarConfig(mActivity);
+        mStatusBarHeight = barConfig.getStatusBarHeight();
+        mActionBarHeight = barConfig.getActionBarHeight();
         if (contentView.equals(activity.findViewById(android.R.id.content))) {
             this.flag = false;
         } else {
@@ -38,8 +59,8 @@ public class KeyboardPatch {
      * @param activity the activity
      * @return the keyboard patch
      */
-    public static KeyboardPatch patch(Activity activity) {
-        return new KeyboardPatch(activity);
+    public static KeyboardPatch patch(Activity activity,ImmersionBar immersionBar) {
+        return new KeyboardPatch(activity,immersionBar);
     }
 
     /**
@@ -50,7 +71,7 @@ public class KeyboardPatch {
      * @return the keyboard patch
      */
     public static KeyboardPatch patch(Activity activity, View contentView) {
-        return new KeyboardPatch(activity, contentView);
+        return new KeyboardPatch(activity, contentView,null);
     }
 
     /**
@@ -62,7 +83,7 @@ public class KeyboardPatch {
     }
 
     public void enable(int mode) {
-        mActivity.getWindow().setSoftInputMode(mode);
+        mWindow.setSoftInputMode(mode);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);//当在一个视图树中全局布局发生改变或者视图树中的某个视图的可视状态发生改变时，所要调用的回调函数的接口类
         }
@@ -83,13 +104,43 @@ public class KeyboardPatch {
             mDecorView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
         }
     }
-
+    private int mTempKeyboardHeight;
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
+            if (mDecorView == null || mContentView == null || mImmersionBar == null)return;
+            int bottom = 0, keyboardHeight, navigationBarHeight = ImmersionBar.getNavigationBarHeight(mActivity);
             Rect r = new Rect();
             mDecorView.getWindowVisibleDisplayFrame(r); //获取当前窗口可视区域大小的
-            int height = mDecorView.getContext().getResources().getDisplayMetrics().heightPixels; //获取屏幕密度，不包含导航栏
+            keyboardHeight = mContentView.getHeight() - r.bottom;
+            if(keyboardHeight != mTempKeyboardHeight){
+                mTempKeyboardHeight = keyboardHeight;
+                if (!ImmersionBar.checkFitsSystemWindows(mWindow.getDecorView().findViewById(android.R.id.content))) {
+                    if (mChildView != null) {
+                        if (mImmersionBar.getBarParams().isSupportActionBar) {
+                            keyboardHeight += mActionBarHeight + mStatusBarHeight;
+                        }
+                        if (mImmersionBar.getBarParams().fits) {
+                            keyboardHeight += mStatusBarHeight;
+                        }
+                        if (keyboardHeight > navigationBarHeight) {
+                            bottom = keyboardHeight + mPaddingBottom;
+                        }
+                        mContentView.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, bottom);
+                    } else {
+                        bottom = mContentView.getPaddingBottom();
+                        keyboardHeight -= navigationBarHeight;
+                        if (keyboardHeight > navigationBarHeight) {
+                            bottom = keyboardHeight + navigationBarHeight;
+                        }
+                        mContentView.setPadding(mContentView.getPaddingLeft(),
+                                mContentView.getPaddingTop(),
+                                mContentView.getPaddingRight(),
+                                bottom);
+                    }
+                }
+            }
+            /*int height = mDecorView.getContext().getResources().getDisplayMetrics().heightPixels; //获取屏幕密度，不包含导航栏
             int diff = height - r.bottom;
             if (diff > 0) {
                 if (mContentView.getPaddingBottom() != diff) {
@@ -109,7 +160,7 @@ public class KeyboardPatch {
                         mContentView.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(mActivity));
                     }
                 }
-            }
+            }*/
         }
     };
 }

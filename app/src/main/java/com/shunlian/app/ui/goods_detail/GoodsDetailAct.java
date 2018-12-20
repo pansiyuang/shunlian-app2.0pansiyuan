@@ -3,6 +3,7 @@ package com.shunlian.app.ui.goods_detail;
 import android.animation.Animator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,7 +19,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,20 +43,18 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
-import com.shunlian.app.newchat.util.TimeUtil;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
-import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -66,7 +64,6 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.RollNumView;
-import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -203,8 +200,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private boolean isStopAnimation;
     private int goodsCount;//商品数量
     private int offset;//导航栏先从透明到完全显示的偏移量
-    private boolean isAddcart = false;//是否加入购物车
-    private boolean isNowBuy = false;//是否立即购买
+    //private boolean isAddcart = false;//是否加入购物车
+    //private boolean isNowBuy = false;//是否立即购买
     private String favId;//收藏商品id
     private int num;//加入购物车的商品数量
     private int currentQuickAction = -1;//当前快速点击位置
@@ -363,9 +360,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }, 0, (Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR)  * 1000);
     }
 
+    public static String goTitleType = "";
     public static void startAct(Context context, String goodsId) {
         Intent intent = new Intent(context, GoodsDetailAct.class);
         intent.putExtra("goodsId", goodsId);
+        intent.putExtra("goTitleType", ((Activity)context).getTitle().toString());
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -395,7 +394,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected void initData() {
         goodsId = getIntent().getStringExtra("goodsId");
-
+        goTitleType = getIntent().getStringExtra("goTitleType");
         initConstant();
         defToolbar();
         goodsFrag();
@@ -674,6 +673,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             store_id = store_info.store_id;
         }
         mShareInfoParam = goodsDetailPresenter.getShareInfoParam();
+        JosnSensorsDataAPI.commodityDetail(GoodsDetailAct.goTitleType,goodsDeatilEntity.id,goodsDeatilEntity.title,
+                goodsDeatilEntity.cate_1_name, goodsDeatilEntity.cate_2_name,
+                goodsDeatilEntity.price,goodsDeatilEntity.store_info.store_id,goodsDeatilEntity.store_info.decoration_name);
     }
 
 
@@ -694,11 +696,12 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     /**
      * 添加购物车
      *
-     * @param msg
+     * @param count
      */
     @Override
-    public void addCart(String msg) {
-        addCartAnim();
+    public void addCart(String count) {
+        numAnimation();
+        //addCartAnim();
     }
 
     /**
@@ -858,7 +861,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     Common.goGoGo(this, "login");
                     return;
                 }
-                isAddcart = true;
+                //isAddcart = true;
                 /*if (goodsCount == 0){//此流程：如果选过商品属性，不需要勾选
                     goodsDeatilFrag.showParamDialog();
                 }else {
@@ -867,6 +870,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }*/
                 //需求更改：每次加入购物车都需要选择属性
                 goodsDeatilFrag.showParamDialog();
+//                JosnSensorsDataAPI.addToShoppingcart(GoodsDetailAct.goTitleType,mGoodsDeatilEntity.id,mGoodsDeatilEntity.title,
+//                        GoodsDeatilEntity.getAttrsInfo(true,mGoodsDeatilEntity.attrs),  GoodsDeatilEntity.getAttrsInfo(false,mGoodsDeatilEntity.attrs),
+//                        mGoodsDeatilEntity.store_info.goods_count,"商品详情加入");
                 break;
             case R.id.miv_more:
                 moreAnim();
@@ -909,15 +915,16 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     return;
                 }
                 String buyText = mtv_buy_immediately.getText().toString();
-                if (getStringResouce(R.string.now_buy).equals(buyText)||getStringResouce(R.string.goods_tuangoupifa).equals(buyText)) {//立刻购买或者团购批发
-                    isNowBuy = true;
-                    goodsDeatilFrag.showParamDialog();
+                if (buyText.contains("分享赚")) {//立刻购买或者团购批发
+                    //isNowBuy = true;
+                    //goodsDeatilFrag.showParamDialog();
                     /*if (goodsCount == 0){
                         goodsDeatilFrag.showParamDialog();
                     }else {
                         ConfirmOrderAct.startAct(this,goodsId,String
                         .valueOf(goodsCount),sku==null?"":sku.id);
                     }*/
+                    moreAnim();
                 } else {
                     //设置提醒
                     if (getStringResouce(R.string.day_setting_remind).equals(buyText)) {//设置提醒
@@ -1216,30 +1223,32 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      * @param sku
      * @param count
      */
-    public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count) {
+    public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count,boolean isAddcart) {
         //this.sku = sku;
         goodsCount = count;
         //LogUtil.zhLogW("=goodsCount=========="+goodsCount);
         if (isAddcart) {
-            isAddcart = false;
+            //isAddcart = false;
             rnview.setVisibility(View.VISIBLE);
             goodsDetailPresenter.addCart(goodsId, sku == null ? "" : sku.id, String.valueOf(goodsCount));
-        }
-
-        if (isNowBuy) {
-            isNowBuy = false;
+        }else {
             ConfirmOrderAct.startAct(this, goodsId, String.valueOf(goodsCount), sku == null ? "" : sku.id);
         }
+
+        /*if (isNowBuy) {
+            isNowBuy = false;
+            ConfirmOrderAct.startAct(this, goodsId, String.valueOf(goodsCount), sku == null ? "" : sku.id);
+        }*/
     }
 
     public void closeParamsDialog(){
-        isAddcart = false;
-        isNowBuy = false;
+        //isAddcart = false;
+        //isNowBuy = false;
     }
 
     @OnClick(R.id.mllayout_store)
     public void jumpStore() {
-        StoreAct.startAct(this, store_id);
+        //StoreAct.startAct(this, store_id);
     }
 
     public void getCouchers(String id) {
@@ -1381,6 +1390,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mShareInfoParam.desc = baseEntity.data.desc;
             mShareInfoParam.egg_type = 1;
             mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
+            mShareInfoParam.cate1 = mGoodsDeatilEntity.cate_1_name;
+            mShareInfoParam.cate2 = mGoodsDeatilEntity.cate_2_name;
+            mShareInfoParam.shop_id = mGoodsDeatilEntity.store_info.store_id;
+            mShareInfoParam.shop_name = mGoodsDeatilEntity.store_info.decoration_name;
+
             mShareInfoParam.isSuperiorProduct = mGoodsDeatilEntity.type.equals("1")?true:false;
             if(mGoodsDeatilEntity.tt_act!=null&&!"0".equals(mGoodsDeatilEntity.status)){//非下架商品){
                 if(mGoodsDeatilEntity.tt_act.content!=null){
@@ -1403,5 +1417,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             }
         }
 
+    }
+
+    @Override
+    public void selfBuyAndShareBuyBottomBtn(String self_buy, String share_buy) {
+        String selfFromat = "省钱购"+(isEmpty(self_buy) ? "" : "\n"+self_buy);
+        mtv_add_car.setText(Common.changeTextSize(selfFromat,self_buy,10));
+        if (!mtv_buy_immediately.getText().toString().contains("提醒")) {
+            String shareFromat = "分享赚" + (isEmpty(share_buy) ? "" : "\n" + share_buy);
+            mtv_buy_immediately.setText(Common.changeTextSize(shareFromat, share_buy, 10));
+        }
     }
 }

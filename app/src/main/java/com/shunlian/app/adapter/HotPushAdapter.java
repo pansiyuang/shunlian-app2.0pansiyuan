@@ -63,8 +63,8 @@ public class HotPushAdapter extends BaseRecyclerAdapter<HotRdEntity.MData> {
             viewHolder.mtv_title.setText(goods.description);
             SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
             viewHolder.mtv_price.setText(spannableStringBuilder);
-            viewHolder.mtv_marketPrice.setText(goods.market_price);
-            viewHolder.mtv_marketPrice.setStrikethrough();
+            viewHolder.mtv_marketPrice.setText(goods.self_buy_earn);
+//            viewHolder.mtv_marketPrice.setStrikethrough();
         }
     }
 

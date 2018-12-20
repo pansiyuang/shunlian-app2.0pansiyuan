@@ -108,6 +108,10 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         enableViewHolder.tv_prefer.setText(mPromotion.title_label);
         enableViewHolder.tv_discount.setText(mPromotion.prom_title);
 
+        if (!isEmpty(goods.self_buy_earn)) {
+            enableViewHolder.tv_goods_earn.setText(goods.self_buy_earn);
+        }
+
         if (everyDay != null) {
             enableViewHolder.tv_active.setText(everyDay.remind + " " + everyDay.left_time);
             enableViewHolder.tv_active.setVisibility(View.VISIBLE);
@@ -288,6 +292,9 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
         @BindView(R.id.tv_goods_price)
         TextView tv_goods_price;
+
+        @BindView(R.id.tv_goods_earn)
+        TextView tv_goods_earn;
 
         @BindView(R.id.tv_goods_num)
         TextView tv_goods_num;

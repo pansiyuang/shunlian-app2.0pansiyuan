@@ -231,68 +231,18 @@
         android:layout_height="0.5dp"
         android:background="@color/bg_gray_two" />
 
-
-    <!--店家推荐和热销-->
-    <com.shunlian.app.widget.MyLinearLayout
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:minHeight="44dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        app:tabIndicatorColor="@color/pink_color"
+        app:tabIndicatorHeight="1dp"
+        app:tabSelectedTextColor="@color/pink_color"
+        app:tabTextColor="@color/value_88"
+        app:tabBackground="@color/white"
+        android:textSize="19sp"/>
 
-        <com.shunlian.app.widget.MyLinearLayout
-            android:id="@+id/mll_self_hot"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:paddingTop="19dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
-
-
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_self_hot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/this_store_sells_well"
-                android:textSize="12sp"
-                android:textColor="@color/new_text"/>
-
-            <View
-                android:id="@+id/view_self_hot"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/pink_color"
-                android:layout_marginTop="14dp"
-                />
-        </com.shunlian.app.widget.MyLinearLayout>
-
-        <com.shunlian.app.widget.MyLinearLayout
-            android:id="@+id/mll_self_push"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:paddingTop="19dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
-
-
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_self_push"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/the_shopkeeper_recommended"
-                android:textSize="12sp"
-                android:textColor="@color/value_88"/>
-
-            <View
-                android:id="@+id/view_self_push"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/pink_color"
-                android:layout_marginTop="14dp"
-                android:visibility="invisible"
-                />
-        </com.shunlian.app.widget.MyLinearLayout>
-    </com.shunlian.app.widget.MyLinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -304,4 +254,5 @@
         android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
 </com.shunlian.app.widget.MyLinearLayout>

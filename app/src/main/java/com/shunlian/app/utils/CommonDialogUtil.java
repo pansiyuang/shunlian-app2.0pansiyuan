@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,7 +19,9 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
+import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.listener.ICallBackResult;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -33,13 +36,57 @@ public class CommonDialogUtil {
     private TextView tvCancle;
     private TextView tvMessage;
 
+    public CommonDialog guideInfo;
+    public CommonDialog inputGuide;
+    public CommonDialog inputWeixin;
     public CommonDialogUtil(Context context){
         this.context = context;
     }
 
-    //分享商品的diolog
+    //添加微信
+    public void defaultEditDialog(ICallBackResult<String> callBackResult,String defaultValue) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,250))
+                .setView(R.layout.dialog_weixin_input);
+        inputWeixin = nomalBuild.create();
+        inputWeixin.setCancelable(false);
+        inputWeixin.show();
+        TextView tvSure = inputWeixin.findViewById(R.id.tv_sure);
+        TextView  tvCancle = inputWeixin.findViewById(R.id.tv_cancel);
+        EditText edit_input = inputWeixin.findViewById(R.id.edit_input);
+
+        if(!TextUtils.isEmpty(defaultValue)){
+            edit_input.setText(defaultValue);
+            edit_input.setSelection(defaultValue.length());
+        }
+        tvCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Common.hideKeyboard(edit_input);
+                inputWeixin.dismiss();
+            }
+        });
+        tvSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(TextUtils.isEmpty(edit_input.getText())){
+                    Common.staticToast("请输入微信号");
+                    return;
+                }
+                Common.hideKeyboard(edit_input);
+                inputWeixin.dismiss();
+                callBackResult.onTagClick(edit_input.getText().toString());
+            }
+        });
+    }
+    //默认的
     public void defaultCommonDialog(String message,String tv_sure, View.OnClickListener sureListener,
                                 String tv_cancle, View.OnClickListener cancleListener) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
         CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,250))
                 .setView(R.layout.dialog_common_cart);
         nomalBuildl = nomalBuild.create();
@@ -54,6 +101,79 @@ public class CommonDialogUtil {
         tvMessage.setText(message);
         tvCancle.setOnClickListener(cancleListener);
         tvSure.setOnClickListener(sureListener);
+    }
+
+    //输入导购
+    public void inputGuideCommonDialog(ICallBackResult<String> callBackResult) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,250))
+                .setView(R.layout.dialog_member_input);
+        inputGuide = nomalBuild.create();
+        inputGuide.setCancelable(false);
+        inputGuide.show();
+        TextView tvSure = inputGuide.findViewById(R.id.tv_sure);
+        TextView  tvCancle = inputGuide.findViewById(R.id.tv_cancel);
+         EditText edit_input = inputGuide.findViewById(R.id.edit_input);
+
+        tvCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Common.hideKeyboard(edit_input);
+                inputGuide.dismiss();
+            }
+        });
+        tvSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(TextUtils.isEmpty(edit_input.getText())){
+                    Common.staticToast("请输入邀请码");
+                    return;
+                }
+                Common.hideKeyboard(edit_input);
+                inputGuide.dismiss();
+                callBackResult.onTagClick(edit_input.getText().toString());
+            }
+        });
+    }
+
+
+    //导购信息
+    public void guideInfoCommonDialog(ICallBackResult<MemberCodeListEntity.ListBean> callBackResult, MemberCodeListEntity.ListBean listBean) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,250))
+                .setView(R.layout.dialog_member_info);
+        guideInfo = nomalBuild.create();
+        guideInfo.setCancelable(false);
+        guideInfo.show();
+        TextView tvSure = guideInfo.findViewById(R.id.tv_sure);
+        TextView  tvCancle = guideInfo.findViewById(R.id.tv_cancel);
+
+        ImageView img_member_head = guideInfo.findViewById(R.id.img_member_head);
+        TextView  tv_member_name = guideInfo.findViewById(R.id.tv_member_name);
+        TextView  tv_member_number = guideInfo.findViewById(R.id.tv_member_number);
+        if(listBean!=null){
+            GlideUtils.getInstance().loadCircleAvar(context,img_member_head,listBean.avatar);
+            tv_member_name.setText(listBean.nickname);
+            tv_member_number.setText(listBean.code);
+        }
+
+        tvCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideInfo.dismiss();
+            }
+        });
+        tvSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideInfo.dismiss();
+                callBackResult.onTagClick(listBean);
+            }
+        });
     }
 
 

@@ -48,14 +48,17 @@ public class StoreBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEntity.M
             StoreGoodsListEntity.MData data=datas.get(position);
             oneHolder.mtv_descl.setText(data.title);
             oneHolder.mtv_pricel.setText(data.price);
-            oneHolder.mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
-            oneHolder.mtv_pricer.setText(context.getResources().getString(R.string.common_yuan)+data.market_price);
             GlideUtils.getInstance().loadImage(context,oneHolder.miv_onel,data.whole_thumb);
+
+            oneHolder.mtv_yuanl.setTextColor(getColor(R.color.value_484848));
+            oneHolder.mtv_pricel.setTextColor(getColor(R.color.value_484848));
+            oneHolder.mtv_pricer.setTextColor(getColor(R.color.pink_color));
+            oneHolder.mtv_pricer.setEarnMoney(data.self_buy_earn, 15);
         }
     }
 
     class OneHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private MyTextView mtv_descl,mtv_pricel,mtv_pricer;
+        private MyTextView mtv_yuanl,mtv_descl,mtv_pricel,mtv_pricer;
         private MyImageView miv_onel;
 
 
@@ -65,6 +68,7 @@ public class StoreBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEntity.M
             int picWidth = Common.getScreenWidth((Activity) context)- TransformUtil.dip2px(context,5);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth /2, picWidth /2);
             miv_onel.setLayoutParams(params);
+            mtv_yuanl = (MyTextView) itemView.findViewById(R.id.mtv_yuanl);
             mtv_descl = (MyTextView) itemView.findViewById(R.id.mtv_descl);
             mtv_pricel = (MyTextView) itemView.findViewById(R.id.mtv_pricel);
             mtv_pricer = (MyTextView) itemView.findViewById(R.id.mtv_pricer);

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_item"
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_member_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_below="@+id/tv_usew_desc"
+            app:iv_control_adapter="true"
+            app:iv_control_height="110"
+            app:iv_control_width="110" />
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/xx30"
+            android:layout_toRightOf="@+id/miv_member_pic"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_member_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:text="老牌"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    />
+                <ImageView
+                    android:id="@+id/image_level"
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/icon_xjiantou"/>
+                <ImageView
+                    android:id="@+id/image_shop"
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/icon_xjiantou"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_member_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:text="邀请码：456456"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="13sp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_member_time_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:text="2018-08-27 已购买6单"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="10sp"
+                    />
+            </LinearLayout>
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/tv_member_profit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="$454"
+            android:textColor="@color/pink_color"
+            android:textSize="13sp"
+        />
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+
+</LinearLayout>

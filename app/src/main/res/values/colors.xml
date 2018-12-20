@@ -12,7 +12,7 @@
     <color name="bg_toast">#a6000000</color>
     <color name="bg_store_banner">#33000000</color>
     <color name="value_CCCBCB">#CCCBCB</color>
-
+    <color name="value_3e3e3e">#3e3e3e</color>
 
     <!-- title颜色-->
     <color name="my_line_gray">#DDDDDD</color>

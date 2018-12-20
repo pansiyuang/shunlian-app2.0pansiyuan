@@ -339,6 +339,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     protected void initData() {
+        setStatusBarView(R.id.view_state);
         EventBus.getDefault().register(this);
         if (!TextUtils.isEmpty(getIntent().getStringExtra("storeId"))) {
             storeId = getIntent().getStringExtra("storeId");

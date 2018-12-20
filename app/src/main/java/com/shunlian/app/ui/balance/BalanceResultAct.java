@@ -9,6 +9,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.presenter.PBalanceMain;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.PromptDialog;
@@ -64,7 +65,8 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
         if (Constant.ISBALANCE && data != null) {
             BalanceXQAct.startAct(baseAct, data, true);
         } else {
-            MyProfitAct.startAct(baseAct, true);
+            MainActivity.startAct(baseAct, "personCenter");
+//            MyProfitAct.startAct(baseAct, true);
         }
         finish();
     }
@@ -116,7 +118,8 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
         if (Constant.ISBALANCE) {
             BalanceXQAct.startAct(baseAct, data, true);
         } else {
-            MyProfitAct.startAct(baseAct, true);
+            MainActivity.startAct(baseAct, "personCenter");
+//            MyProfitAct.startAct(baseAct, true);
         }
         super.onBackPressed();
     }

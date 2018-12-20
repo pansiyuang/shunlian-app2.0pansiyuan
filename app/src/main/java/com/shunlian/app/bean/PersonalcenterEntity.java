@@ -18,6 +18,7 @@ public class PersonalcenterEntity {
     public String balance;
     public String coupon_num;
     public String all_sl_income;
+    public String estimateProfit;
     public String team_sales;
     public String order_un_pay_num;
     public String order_un_receive_num;
@@ -30,6 +31,7 @@ public class PersonalcenterEntity {
     public String footermark_fav_num;
     public String team_member_num;
     public String team_order_num;
+    public String salesInfo_url;
     public String next_level_score;
     public String next_level_percent;
     public String next_level_info;
@@ -43,6 +45,16 @@ public class PersonalcenterEntity {
     public List<Game> game_door;
     public String plus_role;
     public String bcm_role;
+    public String grow_num;
+    public String plus_meg;
+    public String diff;
+    public String diff_meg;
+    public String zhifu;
+    public String plus_expire_time;
+    public String notice;
+    public MyAssets myAssets;
+    public MyService myService;
+    public OursSchool oursSchool;
     public List<User> sl_user_ranks;
     public List<HelpcenterIndexEntity.ArticleCategory> article;
 
@@ -73,6 +85,101 @@ public class PersonalcenterEntity {
                 ", my_rank_code='" + my_rank_code + '\'' +
                 ", sl_user_ranks=" + sl_user_ranks +
                 '}';
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class OursSchool {
+        public String title;
+        public String item_type;
+        public List<Item> items;
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Item {
+            public String title;
+            public String img;
+            public String id;
+            public String update_title;
+            public String update_point;
+            public Url url;
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class Url {
+                public String type;
+                public String item_id;
+            }
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class MyService {
+        public String title;
+        public String item_type;
+        public List<Item> items;
+        public List<Banner> banner_list;
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Banner {
+            public String img;
+            public Link link;
+
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class Link {
+                public String type;
+                public String item_id;
+            }
+        }
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Item {
+            public String title;
+            public String img;
+            public String update_point;
+            public String update_title;
+            public Url url;
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class Content {
+                public String text;
+                public String color;
+            }
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class Url {
+                public String type;
+                public String item_id;
+            }
+        }
+    }
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class MyAssets {
+        public String title;
+        public String item_type;
+        public Balance balance;
+        public List<Item> items;
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Balance {
+            public String title;
+            public Url url;
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class Url {
+                public String type;
+                public String item_id;
+            }
+        }
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Item {
+            public String title;
+            public String update_title;
+            public String update_point;
+            public Content content;
+            public Url url;
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class Content {
+                public String text;
+                public String color;
+            }
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class Url {
+                public String type;
+                public String item_id;
+            }
+        }
     }
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Game {

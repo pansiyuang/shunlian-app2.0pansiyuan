@@ -34,7 +34,7 @@ public class MemberCodeListEntity {
          * regtime : 2016-04-30 23:48:18
          * code : 2572672505
          */
-
+        public String weixin;
         public String member_id;
         public String nickname;
         public String avatar;

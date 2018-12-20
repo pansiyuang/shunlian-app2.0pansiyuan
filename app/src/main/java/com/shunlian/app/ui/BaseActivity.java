@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -40,9 +41,6 @@ import com.shunlian.app.utils.sideslip.widget.SlideBackLayout;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -92,6 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     private OnSlideListenerAdapter mSlideBackListener;
     protected CommondDialog commondDialog;
     protected Activity baseAct;
+    private InputMethodManager mInputMethodManager;
 
 
     @Override
@@ -341,6 +340,17 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     /**
+     *设置状态栏高度，解决重叠
+     * @param statusBarID
+     */
+    public void setStatusBarView(@IdRes int statusBarID) {
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
+        immersionBar.statusBarView(statusBarID).init();
+    }
+
+    /**
      * 当状态栏颜色为白色
      * 设置状态栏字体的颜色，仅限于魅族flymeos4以上，小米MIUI6以上，Android6.0以上
      * 如果不支持修改颜色就给状态栏设置为透明度
@@ -564,6 +574,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
 
         super.finish();
+        hideSoftKeyBoard();
     }
 
     @Override
@@ -581,4 +592,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         GlideUtils.getInstance().clearMemory();
     }
 
+    public void hideSoftKeyBoard() {
+        View localView = getCurrentFocus();
+        if (this.mInputMethodManager == null) {
+            this.mInputMethodManager = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
+        }
+        if ((localView != null) && (this.mInputMethodManager != null)) {
+            this.mInputMethodManager.hideSoftInputFromWindow(localView.getWindowToken(), 2);
+        }
+    }
 }
