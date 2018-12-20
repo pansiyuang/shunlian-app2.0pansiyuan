@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:id="@+id/title_bar"
+        android:background="@drawable/bg_border_line_bottom"
+        >
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:padding="10dp"
+            android:src="@mipmap/icon_common_back_black" />
+        <TextView
+            android:id="@+id/tv_head"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="9dp"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="center"
+            android:text="会员管理"
+            android:textColor="@color/value_484848"
+            android:textSize="18sp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        android:layout_below="@+id/title_bar"
+        android:id="@+id/search_title"
+        android:background="@drawable/bg_border_line_bottom"
+       >
+
+        <com.shunlian.app.widget.EditTextImage
+            android:id="@+id/edt_member_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@+id/tv_search_cancel"
+            android:background="@drawable/rounded_corner_solid_gray_40px"
+            android:paddingRight="15dp"
+            android:drawablePadding="6.5dp"
+            android:gravity="center_vertical"
+            android:hint="请输入会员的邀请码"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="15dp"
+            android:singleLine="true"
+            android:inputType="text"
+            android:textColor="@color/new_text"
+            android:textColorHint="#CCCCCC"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_title"
+        android:overScrollMode="never"
+        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_below="@+id/search_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"></com.shunlian.app.widget.empty.NetAndEmptyInterface>
+</RelativeLayout>

@@ -164,9 +164,11 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         oneHolder.type_left = data.ldata.type;
                         oneHolder.type_keywordL = data.ldata.keyword;
 
+                        oneHolder.mtv_earnl.setEarnMoney(data.ldata.self_buy_earn,14);
                         oneHolder.mtv_descl.setText(data.ldata.title);
-                        oneHolder.mtv_numberl.setText("已售" + data.ldata.sales);
-                        oneHolder.mtv_pricel.setText(data.ldata.price);
+                        oneHolder.mtv_numberl.setText("已售：" + data.ldata.sales);
+                        String pricel = getString(R.string.common_yuan) + data.ldata.price;
+                        oneHolder.mtv_pricel.setText(Common.changeTextSize(pricel, getString(R.string.common_yuan), 10));
                         GlideUtils.getInstance().loadImage(context, oneHolder.miv_onel, data.ldata.whole_thumb);
 
                         if (TextUtils.isEmpty(data.rdata.title) && TextUtils.isEmpty(data.rdata.whole_thumb)) {
@@ -179,8 +181,10 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
 
                             oneHolder.mllayout_oner.setVisibility(View.VISIBLE);
                             oneHolder.mtv_descr.setText(data.rdata.title);
-                            oneHolder.mtv_numberr.setText("已售" + data.rdata.sales);
-                            oneHolder.mtv_pricer.setText(data.rdata.price);
+                            oneHolder.mtv_numberr.setText("已售：" + data.rdata.sales);
+                            String pricer = getString(R.string.common_yuan) + data.rdata.price;
+                            oneHolder.mtv_pricer.setText(Common.changeTextSize(pricer, getString(R.string.common_yuan), 10));
+                            oneHolder.mtv_earnr.setEarnMoney(data.rdata.self_buy_earn,14);
                             GlideUtils.getInstance().loadImage(context, oneHolder.miv_oner, data.rdata.whole_thumb);
                         }
 
@@ -212,6 +216,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         twoHolder.mtv_desc.setText(data.ldata.title);
                         twoHolder.mtv_number.setText("已售" + data.ldata.sales);
                         twoHolder.mtv_price.setText(data.ldata.price);
+                        twoHolder.mtv_earn.setEarnMoney(data.ldata.self_buy_earn, 15);
                         LinearLayoutManager firstManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
                         twoHolder.rv_type.setLayoutManager(firstManager);
                         twoHolder.rv_type.setNestedScrollingEnabled(false);
@@ -390,7 +395,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     }
 
     class OneHolder extends RecyclerView.ViewHolder {
-        private MyTextView mtv_one, mtv_descl, mtv_pricel, mtv_numberl, mtv_descr, mtv_pricer, mtv_numberr;
+        private MyTextView mtv_one, mtv_descl, mtv_pricel, mtv_earnl,mtv_numberl, mtv_descr, mtv_pricer,mtv_earnr, mtv_numberr;
         private View view_lineOne, view_lineTwo;
         private MyImageView miv_onel, miv_oner;
         private MyLinearLayout mllayout_oner, mllayout_onel;
@@ -409,9 +414,11 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             miv_oner.setLayoutParams(params);
             mtv_descl = (MyTextView) itemView.findViewById(R.id.mtv_descl);
             mtv_pricel = (MyTextView) itemView.findViewById(R.id.mtv_pricel);
+            mtv_earnl = (MyTextView) itemView.findViewById(R.id.mtv_earnl);
             mtv_numberl = (MyTextView) itemView.findViewById(R.id.mtv_numberl);
             mtv_descr = (MyTextView) itemView.findViewById(R.id.mtv_descr);
             mtv_pricer = (MyTextView) itemView.findViewById(R.id.mtv_pricer);
+            mtv_earnr = (MyTextView) itemView.findViewById(R.id.mtv_earnr);
             mtv_numberr = (MyTextView) itemView.findViewById(R.id.mtv_numberr);
             mllayout_oner = (MyLinearLayout) itemView.findViewById(R.id.mllayout_oner);
             mllayout_onel = (MyLinearLayout) itemView.findViewById(R.id.mllayout_onel);
@@ -431,7 +438,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     }
 
     class TwoHolder extends RecyclerView.ViewHolder {
-        private MyTextView mtv_two, mtv_desc, mtv_price, mtv_number;
+        private MyTextView mtv_two, mtv_desc, mtv_price, mtv_number,mtv_earn;
         private View view_lineOne, view_lineTwo;
         private MyImageView miv_two;
         private MyLinearLayout mllayout_two;
@@ -445,6 +452,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             mtv_desc = (MyTextView) itemView.findViewById(R.id.mtv_desc);
             mtv_price = (MyTextView) itemView.findViewById(R.id.mtv_price);
             mtv_number = (MyTextView) itemView.findViewById(R.id.mtv_number);
+            mtv_earn = (MyTextView) itemView.findViewById(R.id.mtv_earn);
             view_lineOne = itemView.findViewById(R.id.view_lineOne);
             view_lineTwo = itemView.findViewById(R.id.view_lineTwo);
             miv_two = (MyImageView) itemView.findViewById(R.id.miv_two);

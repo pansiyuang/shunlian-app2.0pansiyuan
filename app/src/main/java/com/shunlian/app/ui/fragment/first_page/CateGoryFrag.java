@@ -33,7 +33,7 @@ import butterknife.BindView;
 
 public class CateGoryFrag extends BaseFragment implements IFirstPage {
     public PFirstPage pFirstPage;
-    public String cate_id, sort_type;
+    public String cate_id, sort_type,cate_name;
     public List<GetDataEntity.MData> mDatass = new ArrayList<>();
     public List<GetDataEntity.MData> mDatasss = new ArrayList<>();
     public List<GetDataEntity.MData> mDatassss = new ArrayList<>();
@@ -43,18 +43,19 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     NestedRefreshLoadMoreLayout lay_refresh;
     //    @BindView(R.id.mtv_empty)
 //    MyTextView mtv_empty;
-    private String channel_id;
+    private String channel_id,chinnel_name;
     private FirstPageAdapter firstPageAdapter;
     private GridLayoutManager gridLayoutManager;
     private boolean isFirst = false, isRefresh = false/*, isShow = true*/;
     private View rootView;
 
 
-    public static BaseFragment getInstance(String channel_id) {
+    public static BaseFragment getInstance(String channel_id,String chinnel_name) {
         CateGoryFrag fragment = new CateGoryFrag();
 
         Bundle args = new Bundle();
         args.putSerializable("channel_id", channel_id);
+        args.putString("chinnel_name", chinnel_name);
         fragment.setArguments(args);
         return fragment;
     }
@@ -131,6 +132,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         //end
         if (getArguments() != null)
             channel_id = (String) getArguments().getSerializable("channel_id");
+            chinnel_name=  getArguments().getString("chinnel_name");
         if (FirstPageFrag.firstId.equals(channel_id)) {
             isFirst = true;
         } else {
@@ -179,7 +181,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
             mDatass.addAll(getDataEntity.datas);
         }
 //        if (firstPageAdapter==null){
-        firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this, size);
+        firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this, size,chinnel_name);
         gridLayoutManager = new GridLayoutManager(baseActivity, 2);
 
         if (rv_view == null)
@@ -190,6 +192,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         if (!isEmpty(mDatass) && !isEmpty(mDatass.get(mDatass.size() - 1).cates)) {
             cate_id = mDatass.get(mDatass.size() - 1).cates.get(0).id;
             sort_type = mDatass.get(mDatass.size() - 1).cates.get(0).sort_type;
+            cate_name = mDatass.get(mDatass.size() - 1).cates.get(0).name;
             pFirstPage.resetBaby(cate_id, sort_type);
         }
 

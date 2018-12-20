@@ -22,7 +22,8 @@ public class HotRdEntity {
     public String count_down;
     public String content;
     public Share share;
-
+    public String self_buy_earn;
+    public String share_buy_earn;
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Share {
         public String share_url;
@@ -38,6 +39,8 @@ public class HotRdEntity {
         public String price;
         public String market_price;
         public String description;
+        public String self_buy_earn;
+        public String share_buy_earn;
         public Url url;
         public String is_show;
         @JsonIgnoreProperties(ignoreUnknown = true)

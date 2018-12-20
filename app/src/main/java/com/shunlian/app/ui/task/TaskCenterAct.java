@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -23,8 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.SignEggEntity;
@@ -34,7 +31,6 @@ import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
-import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -185,6 +181,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     protected void initData() {
         setSignStyle();
+        immersionBar.statusBarView(R.id.view_state).init();
         EventBus.getDefault().register(this);
         mPresenter = new TaskCenterPresenter(this, this);
         setGoldEggsAnim("eggs_not_hatch.json");

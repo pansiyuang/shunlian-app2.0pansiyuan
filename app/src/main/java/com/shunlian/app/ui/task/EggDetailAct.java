@@ -46,6 +46,7 @@ public class EggDetailAct extends BaseActivity implements IEggDetail {
 //        setStatusBarColor(R.color.white);
 //        setStatusBarFontDark();
 //        storeId = getIntent().getStringExtra("storeId");
+        immersionBar.statusBarView(R.id.view_line).init();
         pEggDetail = new PEggDetail(this, this);
         nei_empty.setImageResource(R.mipmap.img_empty_common)
                 .setText(getString(R.string.mission_zanwumingxi))

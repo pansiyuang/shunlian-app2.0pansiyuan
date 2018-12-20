@@ -76,6 +76,7 @@ public class ActivityListEntity {
                 public String market_price;
                 public String store_id;
                 public String act_price;
+                public String self_buy_earn;
                 public String goods_pic;
                 public String session_status;
                 public String stock;

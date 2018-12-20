@@ -203,6 +203,9 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
 
         @BindView(R.id.mrlayout_discount_title)
         MyLinearLayout mrlayout_discount_title;
+
+        @BindView(R.id.mtv_earn_much)
+        MyTextView mtv_earn_much;
         private final SwipeMenuLayout swipeMenuLayout;
 
         public CollectionGoodsHolder(View itemView) {

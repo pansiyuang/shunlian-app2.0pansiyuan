@@ -50,6 +50,7 @@ import com.shunlian.app.utils.download.JsDownloadListener;
 import com.shunlian.app.widget.BlogBottomDialog;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewLookBigImgAct;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.SaveImgDialog;

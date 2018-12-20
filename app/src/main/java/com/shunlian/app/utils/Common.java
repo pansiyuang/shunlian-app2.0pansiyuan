@@ -43,8 +43,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.os.StatFs;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
@@ -57,7 +55,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -76,7 +74,6 @@ import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.core.AishangAct;
-import com.shunlian.app.ui.core.GetCouponAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.core.KouBeiAct;
 import com.shunlian.app.ui.core.NewGetCouponAct;
@@ -84,16 +81,17 @@ import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.coupon.CouponGoodsAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.coupon.UserCouponListAct;
-import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.fragment.SortAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.h5.H5X5Act;
+import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
+import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
@@ -111,16 +109,15 @@ import com.shunlian.app.ui.task.TaskCenterAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.popmenu.PopMenu;
-import com.shunlian.app.widget.popmenu.PopMenuItem;
-import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -371,8 +368,7 @@ public class Common {
                 DayDayAct.startAct(context);
                 break;
             case "myshop":
-                if (!TextUtils.isEmpty(params[0]))
-                    QrcodeStoreAct.startAct(context,params[0]);
+                MyLittleStoreActivity.startAct(context);
                 break;
             case "checkin":
                 SignInAct.startAct(context);
@@ -393,7 +389,8 @@ public class Common {
                     Common.goGoGo(context,"login");
                     theRelayJump(type,params);
                 } else {
-                    MyProfitAct.startAct(context, false);
+                    MainActivity.startAct(context, "personCenter");
+//                    MyProfitAct.startAct(context, false);
                 }
                 break;
 //            case "myvoucherlist":
@@ -532,6 +529,21 @@ public class Common {
                 break;
             case "attentionList"://发现关注列表
 
+                break;
+            case "myfootprint"://足迹
+                MyCollectionAct.startAct(context,MyCollectionAct.FOOTPRINT_FLAG);
+                break;
+            case "goodsCollection"://商品收藏
+                MyCollectionAct.startAct(context,MyCollectionAct.GOODS_FLAG);
+                break;
+            case "storeCollection"://关注店铺
+                MyCollectionAct.startAct(context,MyCollectionAct.STORE_FLAG);
+                break;
+            case "shunlianKefu":
+                HelpOneAct.startAct(context);
+                break;
+            case "businessSchool":
+                HelpClassAct.startAct(context, params[0]);
                 break;
             default://首页
                 MainActivity.startAct(context, "");
@@ -726,11 +738,6 @@ public class Common {
             mtv_toast.setText(content);
             mtv_desc.setText(desc);
             toastAnim = new Toast(getApplicationContext());
-//            LinearLayout.LayoutParams vlp = new LinearLayout.LayoutParams(App.widthPixels,
-//                    App.hightPixels);
-//            vlp.setMargins(0, 0, 0, 0);
-//            show_toast.setLayoutParams(vlp);
-//            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
             toastAnim.setDuration(Toast.LENGTH_LONG);
             toastAnim.setView(v);
             toastAnim.setGravity(Gravity.FILL, 0, 0);
@@ -742,6 +749,34 @@ public class Common {
         }
         toastAnim.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         toastAnim.show();
+    }
+
+
+    public static void staticAnimNewToast(String content,String desc,String jsonAnim) {
+        if (TextUtils.isEmpty(content))
+            return;
+        if (exToast == null) {
+            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast_anim_new_json, null);
+            ex_desc=  v.findViewById(R.id.mtv_desc);
+            ex_animation_view=  v.findViewById(R.id.animation_view);
+            ex_desc.setText(content);
+            exToast =  new Toast(getApplicationContext());
+            exToast.setView(v);
+            exToast.setGravity(Gravity.FILL, 0, 0);
+        } else {
+            ex_desc.setText(desc);
+        }
+        exToast.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(ex_animation_view, "alpha", 0f, 1f);
+        objectAnimator.setDuration(300);
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                showAnimExJsonFile(jsonAnim,"images/img_11.png");
+            }});
+        exToast.show();
+        objectAnimator.start();
     }
 
     private static void showAnimJsonFile(String jsonAnim,String defaultImage){
@@ -760,41 +795,6 @@ public class Common {
         }
     }
 
-    public static void staticAnimNewToast(String content,String desc,String jsonAnim)  {
-        if (TextUtils.isEmpty(content))
-            return;
-        if (exToast == null) {
-            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast_anim_new_json, null);
-            ex_desc=  v.findViewById(R.id.mtv_desc);
-            ex_animation_view=  v.findViewById(R.id.animation_view);
-            ex_desc.setText(content);
-            exToast =  new Toast(getApplicationContext());
-            exToast.setDuration(Toast.LENGTH_LONG);
-            exToast.setView(v);
-//            exToast.setAnimations(R.style.ClickToast);
-            exToast.setGravity(Gravity.FILL, 0, 0);
-        } else {
-            ex_desc.setText(desc);
-        }
-        exToast.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(ex_desc, "alpha", 0f, 1f);
-        objectAnimator.setDuration(300);
-        objectAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                showAnimExJsonFile(jsonAnim,"images/img_11.png");
-            }});
-         exToast.show();
-        objectAnimator.start();
-    }
-
-    private  Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    };
-
     private static void showAnimExJsonFile(String jsonAnim,String defaultImage){
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -811,7 +811,6 @@ public class Common {
         }
     }
 
-
     public static void staticToast(String content) {
         if (TextUtils.isEmpty(content))
             return;
@@ -819,7 +818,7 @@ public class Common {
             View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
             mtv_toast = (MyTextView) v.findViewById(R.id.mtv_toast);
             mtv_toast.setText(content);
-            toast = new Toast(getApplicationContext());
+            toast = new Toast(App.getContext());
 //            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(v);
@@ -828,6 +827,20 @@ public class Common {
             mtv_toast.setText(content);
         }
         toast.show();
+    }
+
+    public static void staticToastAct(Activity activity,String content) {
+        if (TextUtils.isEmpty(content))
+            return;
+            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
+           TextView mtv_toast = (MyTextView) v.findViewById(R.id.mtv_toast);
+            mtv_toast.setText(content);
+            Toast  toast = new Toast(activity);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(v);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            mtv_toast.setText(content);
+            toast.show();
     }
 
     public static void staticToasts(Context context, String content, String desc, int imgSource) {
@@ -990,6 +1003,33 @@ public class Common {
             return ssb;
         } else {
             ssb.setSpan(colorSpan, i, i + changeStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
+    }
+
+    /**
+     * 更改源字符串的颜色
+     *
+     * @param source    源字符串
+     * @param changeStr 需要改变颜色的字符串
+     * @param color     变化的颜色
+     * @return
+     */
+    public static SpannableStringBuilder changeColor(String source, ArrayList<String> changeStr, @ColorInt int color) {
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        if (changeStr != null && changeStr.size() > 0){
+            for (String str: changeStr) {
+                if (TextUtils.isEmpty(str))continue;
+                int i = source.indexOf(str);
+                if (i != -1)
+                ssb.setSpan(colorSpan, i, i + str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }else {
+            return ssb;
         }
         return ssb;
     }
@@ -1463,7 +1503,18 @@ public class Common {
             return true;
         return false;
     }
-
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height",
+                "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        if(result==0&&context!=null){
+            result= DensityUtil.dip2px(context,20);
+        }
+        return result;
+    }
 
     /**
      * 判断某个Activity 界面是否在前台

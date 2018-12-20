@@ -113,9 +113,8 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
             ChildrenViewHolder childrenViewHolder = (ChildrenViewHolder) holder;
             GlideUtils.getInstance().loadImage(context, childrenViewHolder.miv_onel, goods.thumb);
             childrenViewHolder.mtv_descl.setText(goods.title);
-            childrenViewHolder.mtv_pricel.setText(goods.price);
-            childrenViewHolder.mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
-            childrenViewHolder.mtv_pricer.setText(getString(R.string.common_yuan) + goods.market_price);
+            childrenViewHolder.mtv_pricel.setText(goods.market_price);
+            childrenViewHolder.mtv_pricer.setEarnMoney(goods.self_buy_earn, 15);
             GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) childrenViewHolder.ll_rootView.getLayoutParams();
 
             int margin = TransformUtil.dip2px(context, 5);
@@ -126,6 +125,10 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
             }
             childrenViewHolder.mrlayout_plus.setVisibility(View.GONE);
             childrenViewHolder.ll_rootView.setOnClickListener(v -> GoodsDetailAct.startAct(context, goods.id));
+
+            childrenViewHolder.mtv_yuanl.setTextColor(getColor(R.color.value_484848));
+            childrenViewHolder.mtv_pricel.setTextColor(getColor(R.color.value_484848));
+            childrenViewHolder.mtv_pricer.setTextColor(getColor(R.color.pink_color));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -150,6 +153,9 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
 
         @BindView(R.id.mtv_descl)
         MyTextView mtv_descl;
+
+        @BindView(R.id.mtv_yuanl)
+        MyTextView mtv_yuanl;
 
         @BindView(R.id.mtv_pricel)
         MyTextView mtv_pricel;

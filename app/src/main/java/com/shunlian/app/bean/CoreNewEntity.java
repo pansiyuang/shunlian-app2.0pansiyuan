@@ -26,6 +26,7 @@ public class CoreNewEntity {
         public String title;
         public String thumb;
         public String price;
+        public String self_buy_earn;
         public String cate_id;
         public String cate_name;
     }

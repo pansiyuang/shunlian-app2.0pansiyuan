@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.zxing.common.StringUtils;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -62,13 +63,6 @@ public class ShareGoodDialogUtil {
                 nomalBuildl.dismiss();
             }
         });
-        if(!shareInfoParam.isShowTiltle){
-            nomalBuildl.getView(R.id.tv_title1).setVisibility(View.GONE);
-            nomalBuildl.getView(R.id.tv_title2).setVisibility(View.GONE);
-        }else{
-            nomalBuildl.getView(R.id.tv_title1).setVisibility(View.VISIBLE);
-            nomalBuildl.getView(R.id.tv_title2).setVisibility(View.VISIBLE);
-        }
         if(shareInfoParam.isSpecial){
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.GONE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
@@ -76,7 +70,15 @@ public class ShareGoodDialogUtil {
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.VISIBLE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.VISIBLE);
         }
+        TextView tv_price_state =  nomalBuildl.getView(R.id.tv_price_state);
+        LinearLayout line_share_title =  nomalBuildl.getView(R.id.line_share_title);
 
+        if (!TextUtils.isEmpty(mShareInfoParam.share_buy_earn)&&isGood){
+            line_share_title.setVisibility(View.VISIBLE);
+            tv_price_state.setText(mShareInfoParam.share_buy_earn);
+        }else {
+            line_share_title.setVisibility(View.GONE);
+        }
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +93,10 @@ public class ShareGoodDialogUtil {
                 }else{
                     WXEntryActivity.startAct(context,
                             "shareFriend", mShareInfoParam);
+                }
+                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                            mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"微信好友");
                 }
             }
         });
@@ -111,6 +117,10 @@ public class ShareGoodDialogUtil {
                 }else{
                     createShopCode(true);
                 }
+                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                            mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"朋友圈");
+                }
             }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new View.OnClickListener() {
@@ -127,8 +137,11 @@ public class ShareGoodDialogUtil {
                 }else{
                     createShopCode(false);
                 }
+                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,
+                            mShareInfoParam.shop_id,mShareInfoParam.shop_name,"图文");
+                }
             }
-
 
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new View.OnClickListener() {
@@ -136,6 +149,10 @@ public class ShareGoodDialogUtil {
             public void onClick(View v) {
                 Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, true);
                 nomalBuildl.dismiss();
+                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                            mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"复制链接");
+                }
             }
         });
     }

@@ -45,6 +45,7 @@ public class AishangHorizonAdapter extends BaseRecyclerAdapter<CoreNewEntity.MDa
         mHolder.mtv_price.setText(priceBuilder);
         mHolder.mtv_title.setText(data.title);
         mHolder.mtv_title.setVisibility(View.VISIBLE);
+        mHolder.mtv_earn_price.setEarnMoney(data.self_buy_earn,11);
 
         GlideUtils.getInstance().loadImage(context, mHolder.miv_photo, data.thumb);
     }
@@ -55,6 +56,9 @@ public class AishangHorizonAdapter extends BaseRecyclerAdapter<CoreNewEntity.MDa
 
         @BindView(R.id.mtv_price)
         MyTextView mtv_price;
+
+        @BindView(R.id.mtv_earn_price)
+        MyTextView mtv_earn_price;
 
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;

@@ -8,6 +8,7 @@ import android.support.multidex.MultiDex;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
@@ -21,7 +22,9 @@ import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -53,6 +56,13 @@ import cn.jpush.android.api.JPushInterface;
  */
 
 public class App extends Application {
+    /**
+     * Sensors Analytics 采集数据的地址
+     */
+    private final static String SA_SERVER_URL = "http://shence.sldlcdn.com/sa?project=default";
+    private final static String SA_OFFLINE_SERVER_URL = "http://shence.sldlcdn.com/sa?project=production";
+    private final SensorsDataAPI.DebugMode SA_DEBUG_MODE = SensorsDataAPI.DebugMode.DEBUG_AND_TRACK;
+    private final SensorsDataAPI.DebugMode SA_OFFLINE_MODE = SensorsDataAPI.DebugMode.DEBUG_OFF;
     public static App mApp;
     private ActivityHelper mActivityHelper;
     private static Context context;
@@ -138,7 +148,9 @@ public class App extends Application {
         }
         initJPush();
         //默认关闭，去首页获取开关状态,此方法除非卸载app，重启也有效保留状态
-        JPushInterface.stopPush(Common.getApplicationContext());
+        if(!JPushInterface.isPushStopped(Common.getApplicationContext())){
+            JPushInterface.stopPush(Common.getApplicationContext());
+        }
         if (BuildConfig.DEBUG){
             SwitchHostUtil.setHostMethod();
 //            if (LeakCanary.isInAnalyzerProcess(this)) {
@@ -166,10 +178,37 @@ public class App extends Application {
         };
         //x5内核初始化接口
         QbSdk.initX5Environment(getApplicationContext(),  cb);
-
         //优化x5内核首次启动卡顿黑屏现象
         HashMap map = new HashMap();
         map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
         QbSdk.initTbsSettings(map);
+        initSensorsDataAPI();
     }
+
+    /**
+     * 初始化 Sensors Analytics SDK
+     */
+    private void initSensorsDataAPI() {
+        SensorsDataAPI.sharedInstance(
+                this,                               // 传入 Context
+                BuildConfig.DEBUG?SA_SERVER_URL:SA_OFFLINE_SERVER_URL,                      // 数据接收的 URL
+                BuildConfig.DEBUG?SA_DEBUG_MODE:SA_OFFLINE_MODE);                     // Debug 模式选项
+        // 打开自动采集, 并指定追踪哪些 AutoTrack 事件
+        List<SensorsDataAPI.AutoTrackEventType> eventTypeList = new ArrayList<>();
+        // $AppStart
+        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_START);
+        // $AppEnd
+        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_END);
+        // $AppViewScreen
+        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_VIEW_SCREEN);
+        // $AppClick
+        eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_CLICK);
+        SensorsDataAPI.sharedInstance(this).enableAutoTrack(eventTypeList);
+        SensorsDataAPI.sharedInstance().trackFragmentAppViewScreen();
+
+        if(Common.isAlreadyLogin()) {
+            SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
+        }
+    }
+
 }

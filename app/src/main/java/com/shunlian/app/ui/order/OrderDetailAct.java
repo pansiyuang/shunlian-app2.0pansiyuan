@@ -28,6 +28,7 @@ import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
@@ -562,6 +563,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             public void onSelect(int position) {
                 if (orderDetailPresenter != null) {
                     orderDetailPresenter.cancleOrder(orderId, position + 1);
+//                    JosnSensorsDataAPI.cancelPayOrder(orderId,orderdetailEntity.);
                 }
             }
         });

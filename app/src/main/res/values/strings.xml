@@ -168,6 +168,7 @@
     <string name="store_zengpin">赠品</string>
     <string name="store_kanzhizhao">*输入验证码查看执照信息</string>
     <string name="store_taocan">套餐原价￥</string>
+    <string name="store_sales_count">已售:%s</string>
     <item name="tag_store_discount_menu_id" type="id" />
     <item name="tag_store_discount_menu_type" type="id" />
 
@@ -712,7 +713,7 @@
     <string name="balance_wozaixiang">我再想想</string>
     <string name="balance_yuemingxi">余额明细</string>
     <string name="balance_keyong">可用余额(元)</string>
-    <string name="balance_keyongshouyi">可用收益(元)</string>
+    <string name="balance_keyongshouyi">可提现</string>
     <string name="balance_zhifushezhi">支付设置</string>
     <string name="balance_wodezhifu">我的支付宝</string>
     <string name="balance_zhifubao">支付宝(%s)</string>

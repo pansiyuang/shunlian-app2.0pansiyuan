@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -298,6 +299,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
         SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
+        SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(content.member_id);
         if (content.tag != null)
             SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));

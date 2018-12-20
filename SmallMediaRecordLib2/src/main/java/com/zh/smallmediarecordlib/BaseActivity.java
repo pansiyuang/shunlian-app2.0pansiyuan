@@ -35,8 +35,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         builder.setCancelable(false);
         View view = View.inflate(this, R.layout.dialog_loading, null);
         builder.setView(view);
-        ProgressBar pb_loading = view.findViewById(R.id.pb_loading);
-        TextView tv_hint = view.findViewById(R.id.tv_hint);
+        ProgressBar pb_loading = (ProgressBar) view.findViewById(R.id.pb_loading);
+        TextView tv_hint = (TextView)view.findViewById(R.id.tv_hint);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             pb_loading.setIndeterminateTintList(ContextCompat.getColorStateList(this, R.color.blue));
         }

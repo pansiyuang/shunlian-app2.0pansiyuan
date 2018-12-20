@@ -96,7 +96,7 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/miv_goods_pic"
         android:text="预估收益："
-        android:textColor="@color/new_text"
+        android:textColor="@color/pink_color"
         android:textSize="12sp" />
 
     <com.shunlian.app.widget.MyTextView

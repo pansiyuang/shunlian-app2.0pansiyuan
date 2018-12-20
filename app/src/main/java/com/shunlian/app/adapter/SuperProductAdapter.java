@@ -19,6 +19,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -110,9 +111,11 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
                 SuperProductEntity.Url url = bannerEntity.url;
                 switch (url.type) {
                     case "shop":
+                        JosnSensorsDataAPI.bannerClick("优品",superProduct.title,url.item_id,"店铺："+url.item_id,pos);
                         StoreAct.startAct(context, url.item_id);
                         break;
                     case "goods":
+                        JosnSensorsDataAPI.bannerClick("优品",superProduct.title,url.item_id,"商品："+url.item_id,pos);
                         GoodsDetailAct.startAct(context, url.item_id);
                         break;
                 }

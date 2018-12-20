@@ -52,19 +52,38 @@
         android:layout_marginRight="5dp"
         android:orientation="horizontal" />
 
-    <com.shunlian.app.widget.MyTextView
-        android:id="@+id/mtv_price"
+    <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:layout_marginTop="7dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:ellipsize="end"
-        android:lines="1"
-        android:textColor="@color/new_text"
-        android:textSize="15sp"
-        android:layout_marginBottom="10dp"/>
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/new_text"
+            android:textSize="15sp"
+            android:layout_marginBottom="10dp"/>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_earn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/pink_color"
+            android:textSize="11sp"
+            android:layout_marginBottom="10dp"/>
+    </com.shunlian.app.widget.MyLinearLayout>
 </com.shunlian.app.widget.MyLinearLayout>
 
 

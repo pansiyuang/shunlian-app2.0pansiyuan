@@ -41,6 +41,7 @@ import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.fragment.NewDiscoverFrag;
+import com.shunlian.app.ui.fragment.NewPersonalCenterFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
@@ -52,6 +53,7 @@ import com.shunlian.app.ui.h5.H5X5Frag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -136,7 +138,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private DiscoverFrag discoverFrag;
     private NewDiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
-    private PersonalCenterFrag personalCenterFrag;
+    private NewPersonalCenterFrag personalCenterFrag;
     private long mExitTime;
     private FragmentManager fragmentManager;
     private int pageIndex;
@@ -419,6 +421,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             public void run() {
                 switch (view.getId()) {
                     case R.id.ll_tab_main_page:
+                        JosnSensorsDataAPI.currentPageMain = 1;
                         if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
                             cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
                             if (cateGoryFrag.rv_view != null) {
@@ -432,16 +435,20 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         break;
                     case R.id.ll_tab_sort:
                         //myPlusClick();
+                        JosnSensorsDataAPI.currentPageMain = 2;
                         sortClick();
                         break;
                     case R.id.ll_tab_discover:
+                        JosnSensorsDataAPI.currentPageMain = 3;
                         discoverClick();
                         break;
                     case R.id.ll_tab_shopping_car:
+                        JosnSensorsDataAPI.currentPageMain = 4;
 //                        CouponMsgAct.startAct(MainActivity.this,"");
                         shoppingCarClick();
                         break;
                     case R.id.ll_tab_person_center:
+                        JosnSensorsDataAPI.currentPageMain = 5;
                         miv_hint.setVisibility(View.GONE);
                         SharedPrefUtil.saveSharedUserBoolean("hide_first", true);
                         personCenterClick();
@@ -613,9 +620,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (personalCenterFrag == null) {
-            personalCenterFrag = (PersonalCenterFrag) fragmentMap.get(flags[4]);
+            personalCenterFrag = (NewPersonalCenterFrag) fragmentMap.get(flags[4]);
             if (personalCenterFrag == null) {
-                personalCenterFrag = new PersonalCenterFrag();
+                personalCenterFrag = new NewPersonalCenterFrag();
                 fragmentMap.put(flags[4], personalCenterFrag);
             }
         } else {
@@ -848,7 +855,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         super.onDestroy();
         if (fragmentMap != null)
             fragmentMap.clear();
-
         mainPageFrag = null;
 //        myPlusFrag = null;
         h5PlusFrag = null;
@@ -985,7 +991,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
         SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);
         if ("0".equals(data.push_on)) {//接收推送，1是，0否
-            JPushInterface.stopPush(Common.getApplicationContext());
+            if (!JPushInterface.isPushStopped(Common.getApplicationContext())) {
+                JPushInterface.stopPush(Common.getApplicationContext());
+            }
         } else {
             JPushInterface.resumePush(Common.getApplicationContext());
         }

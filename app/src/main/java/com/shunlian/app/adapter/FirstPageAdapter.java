@@ -21,6 +21,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.presenter.EmptyPresenter;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.KouBeiAct;
@@ -28,25 +29,21 @@ import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HourRedDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
+import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
-import com.shunlian.app.widget.popmenu.PopMenu;
-import com.shunlian.app.widget.popmenu.PopMenuItem;
-import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
-import com.shunlian.app.wxapi.WXEntryActivity;
-import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +54,7 @@ import butterknife.BindView;
  * Created by augus on 2017/11/13 0013.
  */
 
-public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
+public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> implements IView {
     private static final int TYPE9 = 9;//轮播
     private static final int TYPE2 = 2;//导航
     private static final int TYPE3 = 3;//会场
@@ -74,14 +71,17 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     private int second = (int) (System.currentTimeMillis() / 1000);
     private int hotPosition = -1;
 
+    private EmptyPresenter basePresenter;
     private ShareGoodDialogUtil shareGoodDialogUtil;
-
-    public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
+    private String chinnel_name;
+    public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition,String chinnel_name) {
         super(context, isShowFooter, datas);
         this.isFirst = isFirst;
         this.cateGoryFrag = cateGoryFrag;
         this.mergePosition = mergePosition;
         shareGoodDialogUtil = new ShareGoodDialogUtil(context);
+        this.chinnel_name =chinnel_name;
+        basePresenter = new EmptyPresenter(context,this);
     }
 
     @Override
@@ -183,9 +183,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 nineHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                                     @Override
                                     public void onItemClick(int position) {
-
-                                        if (data.datass.get(position).url != null)
+                                        if (data.datass.get(position).url!=null) {
+                                            JosnSensorsDataAPI.bannerClick(chinnel_name, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id, position);
                                             Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
+                                        }
                                     }
                                 });
                             }
@@ -210,8 +211,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     twoHolder.firstNavyAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            if (data.datass.get(position).url != null)
+                            if (data.datass.get(position).url != null) {
+                                JosnSensorsDataAPI.fristIconClick(data.datass.get(position).url.type, data.datass.get(position).title, position);
                                 Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
+                            }
                         }
                     });
 //                        }else {
@@ -510,7 +513,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20);
                     int height = picWidth * 158 / 340;
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
-                    params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10), 0);
+                    params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10),  TransformUtil.dip2px(context, 15));
                     if (fiveHolder.miv_photo != null) {
                         fiveHolder.miv_photo.setLayoutParams(params);
                         GlideUtils.getInstance().loadBgImageChang(context, fiveHolder.miv_photo, data.pic);
@@ -520,8 +523,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     fiveHolder.view_line.setVisibility(View.GONE);
                     fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
                     if (!isEmpty(data.content)) {
-                        fiveHolder.mtv_desc.setVisibility(View.GONE);
+                        fiveHolder.mtv_desc.setVisibility(View.VISIBLE);
                         fiveHolder.mtv_desc.setText(data.content);
+                    }else {
+                        fiveHolder.mtv_desc.setVisibility(View.GONE);
                     }
 
                     fiveHolder.mtv_title.setText(data.title);
@@ -540,13 +545,18 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if ((data.url!=null&&data.url.type!=null)&&
                             (data.url.type.equals("shop")||data.url.type.equals("special"))) {
                         fiveHolder.mtv_store_title.setVisibility(View.VISIBLE);
-                        fiveHolder.mtv_title.setVisibility(View.INVISIBLE);
+                        fiveHolder.mtv_title.setVisibility(View.GONE);
                         fiveHolder.mtv_price.setVisibility(View.GONE);
                         fiveHolder.mtv_market_price.setVisibility(View.GONE);
                         fiveHolder.mtv_store_title.setText(data.title);
+                        fiveHolder.mtv_share.setText("立即购买");
+                        fiveHolder.mtv_buy.setVisibility(View.GONE);
+                        fiveHolder.mtv_buy_num.setVisibility(View.GONE);
                     } else {
+                        fiveHolder.mtv_buy.setVisibility(View.VISIBLE);
                         fiveHolder.mtv_store_title.setVisibility(View.GONE);
                         fiveHolder.mtv_title.setVisibility(View.VISIBLE);
+                        fiveHolder.mtv_share.setText("分享赚");
                         if (!TextUtils.isEmpty(data.price)) {
                             SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
                                     getString(R.string.common_yuan), 12);
@@ -555,18 +565,35 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         } else {
                             fiveHolder.mtv_price.setVisibility(View.GONE);
                         }
-                        fiveHolder.mtv_market_price.setStrikethrough();
-                        if (!TextUtils.isEmpty(data.market_price)) {
-                            fiveHolder.mtv_market_price.setText(getString(R.string.common_yuan) + data.market_price);
-                            fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
-                        } else {
-                            fiveHolder.mtv_market_price.setVisibility(View.GONE);
-                        }
+                        fiveHolder.mtv_market_price.setEarnMoney(data.self_buy_earn,14);
+//                        if (!TextUtils.isEmpty(data.self_buy_earn)) {
+//                            fiveHolder.mtv_market_price.setText(data.self_buy_earn);
+//                            fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
+//                        } else {
+//                            fiveHolder.mtv_market_price.setVisibility(View.GONE);
+//                        }
+//                        if (!TextUtils.isEmpty(data.content)) {
+//                            fiveHolder.mtv_buy_num.setText(data.content);
+//                            fiveHolder.mtv_buy_num.setVisibility(View.VISIBLE);
+//                        } else {
+//                            fiveHolder.mtv_buy_num.setVisibility(View.GONE);
+//                        }
                     }
                     fiveHolder.mtv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            if(!Common.isAlreadyLogin()){
+                                Common.goGoGo(context, "login");
+                                return;
+                            }
+                            String content = fiveHolder.mtv_share.getText().toString();
+                            if (content.equals("分享赚")) {
+                                mShareInfoParam.goods_id = data.url.item_id;
+                                mShareInfoParam.share_buy_earn = data.share_buy_earn;
+                                basePresenter.getShareInfo(basePresenter.goods, data.url.item_id);
+                            }else {
+                                Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            }
                         }
                     });
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
@@ -574,6 +601,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         public void onClick(View view) {
                             if (data.url != null)
                                 Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                            if(isFirst){
+                                JosnSensorsDataAPI.fristQualityHotClick("大图",data.url.type,data.url.item_id,data.title,position);
+                            }else{
+                                JosnSensorsDataAPI.fristQualityHotClick("大图",data.url.type,data.url.item_id,data.title,position);
+                            }
                         }
                     });
                 }
@@ -606,8 +638,14 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (data.url != null)
+                            if (data.url != null){
                                 Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
+                                if(isFirst){
+                                    JosnSensorsDataAPI.fristQualityHotClick("大图带商品",data.url.type,data.url.item_id,data.name,position);
+                                }else{
+                                    JosnSensorsDataAPI.fristQualityHotClick("大图带商品",data.url.type,data.url.item_id,data.name,position);
+                                }
+                            }
                         }
                     });
 //                        if (sixHolder.firstHorizonAdapter == null) {
@@ -615,11 +653,15 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     sixHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                     sixHolder.rv_goods.setAdapter(sixHolder.firstHorizonAdapter);
                     sixHolder.rv_goods.setNestedScrollingEnabled(false);
-                    sixHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
                     sixHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
+                            if(isFirst){
+                                JosnSensorsDataAPI.fristQualityHotClick("大图带商品",data.datass.get(position).url.type,data.datass.get(position).url.item_id,data.datass.get(position).title,position);
+                            }else{
+                                JosnSensorsDataAPI.fristQualityHotClick("大图带商品",data.datass.get(position).url.type,data.datass.get(position).url.item_id,data.datass.get(position).title,position);
+                            }
                         }
                     });
 //                        }
@@ -632,19 +674,26 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     SevenHolder sevenHolder = (SevenHolder) holder;
                     GetDataEntity.MData data = lists.get(position);
 //                        if (sevenHolder.firstHorizonAdapter == null) {
+                    if (isEmpty(data.datass)){
+                        sevenHolder.mtv_xianshi.setVisibility(View.GONE);
+                        sevenHolder.rv_goods.setVisibility(View.GONE);
+                    }else {
+                        sevenHolder.mtv_xianshi.setVisibility(View.VISIBLE);
+                        sevenHolder.rv_goods.setVisibility(View.VISIBLE);
+                    }
                     sevenHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, true);
                     sevenHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                     sevenHolder.rv_goods.setAdapter(sevenHolder.firstHorizonAdapter);
                     sevenHolder.rv_goods.setNestedScrollingEnabled(false);
-                    sevenHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
                     sevenHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
+                            if(!isFirst){
+                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"限时特惠",data.datass.get(position).url.item_id,data.datass.get(position).title,position);
+                            }
                         }
                     });
-//                        }
-//                        sevenHolder.firstHorizonAdapter.notifyDataSetChanged();
                     sevenHolder.rv_goods.setFocusable(false);
                 }
                 break;
@@ -656,8 +705,6 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 //                        cateGoryFrag.cate_id = data.get(0).id;
 //                        cateGoryFrag.pFirstPage.resetBaby(cateGoryFrag.cate_id);
                         eightHolder.firstCategoryMenuAdapter = new FirstCategoryMenuAdapter(context, false, data, isFirst);
-                        if (isFirst)
-                            eightHolder.rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
                         eightHolder.firstCategoryMenuAdapter.setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
@@ -665,6 +712,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                     eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
                                     eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
                                     cateGoryFrag.cate_id = data.get(position).id;
+                                    cateGoryFrag.cate_name = data.get(position).name;
                                     cateGoryFrag.sort_type = data.get(position).sort_type;
                                     if (cateGoryFrag.pFirstPage != null)
                                         cateGoryFrag.pFirstPage.resetBaby(data.get(position).id, data.get(position).sort_type);
@@ -696,12 +744,24 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
                         tenHolder.mtv_price.setText(spannableStringBuilder);
                     }
+                    if(!TextUtils.isEmpty(goods.self_buy_earn))
+                    {
+                        tenHolder.mtv_earn.setVisibility(View.VISIBLE);
+                        tenHolder.mtv_earn.setText(goods.self_buy_earn);
+                    }else{
+                        tenHolder.mtv_earn.setVisibility(View.GONE);
+                    }
                     if (tenHolder.mllayout_tag != null)
                         tenHolder.mllayout_tag.removeAllViews();
                     tenHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             GoodsDetailAct.startAct(context, goods.id);
+                            if(!isFirst){
+                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"热销榜单-"+cateGoryFrag!=null&&cateGoryFrag.cate_name!=null?cateGoryFrag.cate_name:"",goods.id,goods.title,position);
+                            }else{
+                                JosnSensorsDataAPI.channelGoodClick(chinnel_name,"今日推荐",goods.id,goods.title,position);
+                            }
                         }
                     });
                     if ("1".equals(goods.is_new)) {
@@ -740,46 +800,31 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 //        }
     }
 
-    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        mShareInfoParam = baseEntity.data;
-        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, false);
-//        shareStyle2Dialog();
+    private void bannerInfoClick(String type,GetDataEntity.MData ndata){
+
     }
 
-    /**
-     * 分享微信和复制链接
-     */
-    public void shareStyle2Dialog() {
-        PopMenu mPopMenu = new PopMenu.Builder().attachToActivity((Activity) context)
-                .addMenuItem(new PopMenuItem("微信", getDrawable(R.mipmap.icon_weixin)))
-                .addMenuItem(new PopMenuItem("复制链接", getDrawable(R.mipmap.icon_lianjie)))
-                .setOnItemClickListener(new PopMenuItemCallback() {
-                    @Override
-                    public void onItemClick(PopMenu popMenu, int position) {
-                        switch (position) {
-                            case 0:
-                                WXEntryActivity.startAct(context,
-                                        "shareFriend", mShareInfoParam);
-                                break;
-                            case 1:
-                                Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.desc, true);
-                                break;
-                        }
-                    }
+    @Override
+    public void showFailureView(int request_code) {
 
-                    @Override
-                    public void onHideCallback(Activity mActivity) {
-                        ImmersionBar.with(mActivity).fitsSystemWindows(true)
-                                .statusBarColor(R.color.pink_color)
-                                .statusBarDarkFont(false, 0)
-                                .init();
-                        Constant.IS_FIRST_SHARE = false;
-                    }
-                }).build();
-        if (!mPopMenu.isShowing()) {
-            Constant.IS_FIRST_SHARE = true;
-            mPopMenu.show();
-        }
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        mShareInfoParam.shareLink = baseEntity.data.shareLink;
+        mShareInfoParam.img = baseEntity.data.img;
+        mShareInfoParam.desc = baseEntity.data.desc;
+        mShareInfoParam.price = baseEntity.data.price;
+        mShareInfoParam.market_price = baseEntity.data.market_price;
+        if(!TextUtils.isEmpty(baseEntity.data.share_buy_earn))
+        mShareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+        mShareInfoParam.title = baseEntity.data.title;
+        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, false);
     }
 
     public TextView creatTextTag(String content, int colorRes, Drawable drawable, TenHolder tenHolder) {
@@ -828,11 +873,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         //        @BindView(R.id.mtv_price)
         MyTextView mtv_price;
 
+        MyTextView mtv_earn;
         TenHolder(View itemView) {
             super(itemView);
             mllayout_root = (MyLinearLayout) itemView.findViewById(R.id.mllayout_root);
             miv_photo = (MyImageView) itemView.findViewById(R.id.miv_photo);
             mtv_title = (MyTextView) itemView.findViewById(R.id.mtv_title);
+            mtv_earn = (MyTextView) itemView.findViewById(R.id.mtv_earn);
             mllayout_tag = (MyLinearLayout) itemView.findViewById(R.id.mllayout_tag);
             mtv_price = (MyTextView) itemView.findViewById(R.id.mtv_price);
             int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
@@ -998,6 +1045,12 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         @BindView(R.id.mtv_share)
         MyTextView mtv_share;
 
+        @BindView(R.id.mtv_buy_num)
+        MyTextView mtv_buy_num;
+
+        @BindView(R.id.mtv_buy)
+        MyTextView mtv_buy;
+
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
 
@@ -1045,16 +1098,21 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         SixHolder(View itemView) {
             super(itemView);
+            rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
         }
     }
 
     class SevenHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.rv_goods)
         RecyclerView rv_goods;
+
+        @BindView(R.id.mtv_xianshi)
+        MyTextView mtv_xianshi;
         private FirstHorizonAdapter firstHorizonAdapter;
 
         SevenHolder(View itemView) {
             super(itemView);
+            rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
         }
     }
 
@@ -1067,6 +1125,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         EightHolder(View itemView) {
             super(itemView);
+            if (isFirst)
+                rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
         }
     }
 

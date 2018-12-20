@@ -52,6 +52,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     MyImageView iv_dialogPhoto;
     @BindView(R.id.dia_tv_price)
     TextView dia_tv_price;
+    @BindView(R.id.dia_tv_earn)
+    MyTextView dia_tv_earn;
     @BindView(R.id.tv_count)
     TextView tv_count;
     @BindView(R.id.recycler_param)
@@ -70,6 +72,12 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     MyImageView iv_cancel;
     @BindView(R.id.rLayout_count)
     RelativeLayout rLayout_count;
+    @BindView(R.id.ll_complete)
+    LinearLayout ll_complete;
+    @BindView(R.id.btn_add_car)
+    Button btn_add_car;
+    @BindView(R.id.btn_buy)
+    Button btn_buy;
     private List<GoodsDeatilEntity.Specs> specs;
     private List<GoodsDeatilEntity.Sku> mSku;
     private GoodsDeatilEntity goodsDeatilEntity;
@@ -80,6 +88,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private ParamItemAdapter paramItemAdapter;
     private List<GoodsDeatilEntity.Values> mCurrentValues;
     private OnSelectCallBack selectCallBack;
+    private OnGoodsBuyCallBack goodsBuyCallBack;
     private int recycleHeight;
     private int totalStock;
     private String hasOption = "0";//是否有参数
@@ -88,9 +97,10 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private int currentGoodsType = 0; //0普通商品、1优品、2团购
     private LinkedHashMap<String, GoodsDeatilEntity.Values> linkedHashMap;
 
-    public void setSelectCount(boolean isSelectCount){
-        this.isSelectCount  =isSelectCount;
+    public void setSelectCount(boolean isSelectCount) {
+        this.isSelectCount = isSelectCount;
     }
+
     public ParamDialog(Context context, GoodsDeatilEntity goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
@@ -241,12 +251,18 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             totalStock = Integer.valueOf(goodsDeatilEntity.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
+            if ("0".equals(hasOption)) {
+                dia_tv_earn.setEarnMoney(goodsDeatilEntity.self_buy_earn,17);
+            }
         }
         if (mGoods != null) {
             dia_tv_price.setText("¥" + mGoods.price);
             totalStock = Integer.valueOf(mGoods.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, mGoods.thumb);
+            if ("0".equals(hasOption)) {
+                dia_tv_earn.setEarnMoney(mGoods.self_buy_earn,17);
+            }
         }
 
         if (productDetailEntity != null) {
@@ -254,6 +270,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             totalStock = Integer.valueOf(productDetailEntity.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, productDetailEntity.thumb);
+            if ("0".equals(hasOption)) {
+                dia_tv_earn.setEarnMoney(productDetailEntity.self_buy_earn,17);
+            }
         }
 
         if (specs == null || specs.size() == 0) {
@@ -279,6 +298,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         btn_minus.setOnClickListener(this);
         btn_complete.setOnClickListener(this);
         iv_cancel.setOnClickListener(this);
+        btn_add_car.setOnClickListener(this);
+        btn_buy.setOnClickListener(this);
     }
 
     public void initMap() {
@@ -336,12 +357,10 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                     Common.staticToast("库存不足");
                     return;
                 }
-
                 if (currentCount > totalStock) {
                     Common.staticToast("数量不能超过库存数量");
                     return;
                 }
-
                 if (TextUtils.isEmpty(edt_number.getText()) && currentCount == 1) {
                     edt_number.setText("1");
                     edt_number.setSelection("1".length());
@@ -363,6 +382,56 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 if (selectCallBack != null)
                     selectCallBack.closeDialog();
                 dismiss();
+                break;
+            case R.id.btn_add_car:
+                if (currentCount == 0) {
+                    Common.staticToast("库存不足");
+                    return;
+                }
+                if (currentCount > totalStock) {
+                    Common.staticToast("数量不能超过库存数量");
+                    return;
+                }
+                if (TextUtils.isEmpty(edt_number.getText()) && currentCount == 1) {
+                    edt_number.setText("1");
+                    edt_number.setSelection("1".length());
+                }
+                if ("1".equals(hasOption)) {
+                    GoodsDeatilEntity.Sku s = checkLinkmap(true);
+                    if (goodsBuyCallBack != null && s != null) {
+                        goodsBuyCallBack.onAddCar(s, currentCount);
+                        dismiss();
+                    }
+                } else {
+                    if (goodsBuyCallBack != null)
+                        goodsBuyCallBack.onAddCar(null, currentCount);
+                    dismiss();
+                }
+                break;
+            case R.id.btn_buy:
+                if (currentCount == 0) {
+                    Common.staticToast("库存不足");
+                    return;
+                }
+                if (currentCount > totalStock) {
+                    Common.staticToast("数量不能超过库存数量");
+                    return;
+                }
+                if (TextUtils.isEmpty(edt_number.getText()) && currentCount == 1) {
+                    edt_number.setText("1");
+                    edt_number.setSelection("1".length());
+                }
+                if ("1".equals(hasOption)) {
+                    GoodsDeatilEntity.Sku s = checkLinkmap(true);
+                    if (goodsBuyCallBack != null && s != null) {
+                        goodsBuyCallBack.onBuyNow(s, currentCount);
+                        dismiss();
+                    }
+                } else {
+                    if (goodsBuyCallBack != null)
+                        goodsBuyCallBack.onBuyNow(null, currentCount);
+                    dismiss();
+                }
                 break;
         }
     }
@@ -431,6 +500,19 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         }
     }
 
+    public void setOnGoodsBuyCallBack(OnGoodsBuyCallBack buyCallBack) {
+        this.goodsBuyCallBack = buyCallBack;
+
+        ll_complete.setVisibility(View.VISIBLE);
+        btn_complete.setVisibility(View.GONE);
+    }
+
+    public interface OnGoodsBuyCallBack {
+        void onAddCar(GoodsDeatilEntity.Sku sku, int count);
+
+        void onBuyNow(GoodsDeatilEntity.Sku sku, int count);
+    }
+
     public interface OnSelectCallBack {
         void onSelectComplete(GoodsDeatilEntity.Sku sku, int count);
 
@@ -488,7 +570,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                             }
                             if (checkLinkmap(false) != null) {
                                 GoodsDeatilEntity.Sku s = checkLinkmap(false);
-
+                                if (!TextUtils.isEmpty(s.self_buy_earn)) {
+                                    dia_tv_earn.setEarnMoney(s.self_buy_earn,17);
+                                }
                                 GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, s.thumb);
                                 dia_tv_price.setText("¥" + s.price);
                                 totalStock = Integer.valueOf(s.stock);

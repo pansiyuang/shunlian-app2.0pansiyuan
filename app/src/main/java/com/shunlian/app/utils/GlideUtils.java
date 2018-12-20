@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import java.io.File;
 
@@ -188,6 +189,9 @@ public class GlideUtils {
     public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize) {
         loadOverrideImage(context,R.mipmap.img_default_common,imageView,imgUrl,withSize,heightSize);
     }
+    public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize,int radius) {
+        loadOverrideImage(context,R.mipmap.img_default_common,imageView,imgUrl,withSize,heightSize,radius);
+    }
 
     public void loadOverrideImage(Context context, int resourceId, ImageView imageView,
                                   String imgUrl, int withSize, int heightSize){
@@ -199,6 +203,21 @@ public class GlideUtils {
                 .dontAnimate()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .override(withSize, heightSize)
+                .into(imageView);
+    }
+    public void loadOverrideImage(Context context, int resourceId, ImageView imageView,
+                                  String imgUrl, int withSize, int heightSize,int radius){
+        if (imageView == null||withSize<=0||heightSize<=0||context==null) return;
+        Glide.with(context)
+                .load(imgUrl)
+                .placeholder(resourceId)
+                .crossFade()
+                .dontAnimate()
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .bitmapTransform(new CenterCrop(context),
+                        new GlideRoundTransform(context, radius))
                 .override(withSize, heightSize)
                 .into(imageView);
     }
@@ -275,6 +294,19 @@ public class GlideUtils {
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
                 .bitmapTransform(new GlideCircleTransform(context))
+                .into(imageView);
+    }
+
+    public void loadCircleAvarRound(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null||context==null) return;
+        Glide.with(context)
+                .load(imgUrl)
+//                .error(R.mipmap.error)
+                .placeholder(R.mipmap.img_set_defaulthead)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .bitmapTransform(new GlideCircleTransform(context,3,context.getResources().getColor(R.color.line_gay)))
                 .into(imageView);
     }
 
@@ -408,8 +440,8 @@ public class GlideUtils {
                 .load(imgUrl)
                 .asGif()
                 .crossFade()
-                .priority(Priority.NORMAL) //下载的优先级
-                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .priority(Priority.HIGH) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.NONE) //缓存策略
 //                .error(R.mipmap.error)
 //                .placeholder(R.mipmap.error)
                 .into(imageView);

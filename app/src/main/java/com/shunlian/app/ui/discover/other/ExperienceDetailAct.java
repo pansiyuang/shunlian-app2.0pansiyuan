@@ -97,7 +97,7 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
      */
     @Override
     protected void initData() {
-        immersionBar.statusBarColor(R.color.white)
+        immersionBar.statusBarColor(R.color.white).statusBarView(R.id.view_status_bar)
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true)
                 .init();
