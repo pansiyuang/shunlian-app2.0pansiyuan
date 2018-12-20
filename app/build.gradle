@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
-//apply plugin: 'bugly'
+apply plugin: 'bugly'
 android {
     lintOptions {
         checkReleaseBuilds false
