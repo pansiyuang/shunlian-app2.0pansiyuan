@@ -166,7 +166,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
-                        android:text="开通PLUS店主，预计每年购物可节省9448元享平台7打专属权益"
                         android:textColor="#FFE8A2"
                         android:textSize="16sp" />
                 </com.shunlian.app.widget.MyRelativeLayout>
@@ -284,7 +283,6 @@
                                             android:layout_height="20dp"
                                             android:layout_marginTop="10dp"
                                             android:gravity="center"
-                                            android:text="已提现收益(元)"
                                             android:textColor="@color/share_text"
                                             android:textSize="15sp" />
 
@@ -320,7 +318,6 @@
                                             android:layout_height="20dp"
                                             android:layout_marginTop="10dp"
                                             android:gravity="center"
-                                            android:text="已提现收益(元)"
                                             android:textColor="@color/share_text"
                                             android:textSize="15sp" />
 
@@ -356,7 +353,6 @@
                                             android:layout_height="20dp"
                                             android:layout_marginTop="10dp"
                                             android:gravity="center"
-                                            android:text="已提现收益(元)"
                                             android:textColor="@color/share_text"
                                             android:textSize="15sp" />
 
@@ -400,6 +396,7 @@
                         android:paddingRight="13dp"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
+                        android:visibility="gone"
                         android:textColor="@color/share_text" />
 
                     <com.shunlian.app.widget.MyRelativeLayout
@@ -699,6 +696,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:text="余额"
+                            android:visibility="gone"
                             android:drawablePadding="3dp"
                             android:drawableRight="@mipmap/icon_personalcenter_fanhui"
                             android:textColor="@color/share_text"
