@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:paddingTop="22dp"
       >
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_icon"

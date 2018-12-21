@@ -274,7 +274,7 @@ public class JosnSensorsDataAPI {
      * 搜索
      * @return
      */
-    public static void search(String keyWord,boolean hasResult,boolean isRecommend ,boolean isHistory){
+    public static void search(String keyWord,boolean hasResult ,boolean isHistory,boolean isRecommend){
         try {
             JSONObject properties = new JSONObject();
             properties.put("keyWord", keyWord);
