@@ -13,6 +13,7 @@
         app:mode="follow">
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
@@ -244,7 +245,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:layout_marginTop="6dp"
-                            android:text="累计总收益（元）"
+                            android:text="累计总收益  (元)"
                             android:textColor="@color/value_484848"
                             android:textSize="10sp" />
                     </LinearLayout>

@@ -46,6 +46,7 @@ import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -333,36 +334,49 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
-                    int action = event.getAction();
-                    switch (action) {
-                        case MotionEvent.ACTION_DOWN:
-                            lastY = event.getY();
-                            isDownUp = true;
-                            break;
-                        case MotionEvent.ACTION_UP:
+                    LogUtil.longW(csv_out.getScrollY()+"");
+                    if(csv_out.getScrollY()==0) {
+                        int action = event.getAction();
+                        switch (action) {
+                            case MotionEvent.ACTION_DOWN:
+                                lastY = event.getY();
+                                isDownUp = true;
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                spring.removeAllListeners();
+                                isDownUp = false;
+                                lastY = 0;
+                                handler.sendEmptyMessage(0);
+                                break;
+                            case MotionEvent.ACTION_MOVE:
+                                if (isDownUp) {
+                                    float nowY = event.getY();
+                                    if (nowY - lastY > 0) {
+                                        int deltaY = (int) ((nowY - lastY) * lastY_damping);
+                                        if (line_anim.getTranslationY() < DensityUtil.dip2px(baseContext, 65)) {
+                                              line_anim.setTranslationY(deltaY);
+                                        }
+                                    } else {
+                                        line_anim.setTranslationY(0);
+                                    }
+                                } else {
+                                    lastY = event.getY();
+                                    isDownUp = true;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        return false;
+                    }else{
+                        if(line_anim.getTranslationY()!=0&&isDownUp){
                             spring.removeAllListeners();
                             isDownUp = false;
                             lastY = 0;
                             handler.sendEmptyMessage(0);
-                            break;
-                        case MotionEvent.ACTION_MOVE:
-                            if (isDownUp) {
-                                float nowY = event.getY();
-                                if (nowY - lastY > 0) {
-                                    int deltaY = (int) ((nowY - lastY) * lastY_damping);
-                                    line_anim.setTranslationY(deltaY);
-                                } else {
-                                     line_anim.setTranslationY(0);
-                                }
-                            } else {
-                                lastY = event.getY();
-                                isDownUp = true;
-                            }
-                            break;
-                        default:
-                            break;
+                        }
+                        return false;
                     }
-                    return false;
                 }else{
                     return false;
                 }
