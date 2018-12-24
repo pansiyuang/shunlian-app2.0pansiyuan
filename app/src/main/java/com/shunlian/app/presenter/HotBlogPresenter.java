@@ -1,5 +1,6 @@
 package com.shunlian.app.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
@@ -140,7 +141,7 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.praiseBlog(blogId);
-                Common.staticToast(entity.message);
+                Common.staticToastAct((Activity)context,entity.message);
             }
 
             @Override
@@ -151,7 +152,7 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                Common.staticToast(message);
+                Common.staticToastAct((Activity)context,message);
             }
         });
     }
@@ -177,7 +178,7 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                Common.staticToast(message);
+                Common.staticToastAct((Activity)context,message);
             }
         });
     }
