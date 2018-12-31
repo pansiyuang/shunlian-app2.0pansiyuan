@@ -2,16 +2,12 @@ package com.shunlian.app.newchat.util;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Typeface;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.websocket.MemberStatus;
-import com.shunlian.app.widget.MyTextView;
 
 /**
  * Created by Administrator on 2018/4/18.
@@ -79,23 +75,23 @@ public class SwitchStatusDialog implements View.OnClickListener {
     }
 
     public void show() {
-        if (!mContext.isFinishing()&&dialog != null && !dialog.isShowing()) {
-        dialog.show();
-    }
-}
-        try{
-            if (dialog != null && !dialog.isShowing()) {
+        try {
+            if (!mContext.isFinishing() && dialog != null && !dialog.isShowing()) {
                 dialog.show();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
 
     public void dismiss() {
-        if (!mContext.isFinishing()&&dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
+        try {
+            if (!mContext.isFinishing() && dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        } catch (Exception e) {
+
         }
     }
 
