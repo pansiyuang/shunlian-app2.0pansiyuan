@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.websocket.MemberStatus;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.widget.MyTextView;
 
 /**
  * Created by Administrator on 2018/4/18.
