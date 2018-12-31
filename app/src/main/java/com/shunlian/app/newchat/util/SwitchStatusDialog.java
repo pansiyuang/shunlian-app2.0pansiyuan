@@ -78,15 +78,23 @@ public class SwitchStatusDialog implements View.OnClickListener {
     }
 
     public void show() {
-        if (dialog != null && !dialog.isShowing()) {
-            dialog.show();
+        try{
+            if (dialog != null && !dialog.isShowing()) {
+                dialog.show();
+            }
+        }catch (Exception e){
+
         }
     }
 
 
     public void dismiss() {
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
+        try {
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }catch (Exception e){
+
         }
     }
 
