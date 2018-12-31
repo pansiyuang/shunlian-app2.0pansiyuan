@@ -19,7 +19,7 @@ import com.shunlian.app.widget.HttpDialog;
 
 public class ChatManager {
 
-    private Context mContext;
+    private static Context mContext;
     public static ChatManager chatManager;
     private SwitchStatusDialog statusDialog;
     private EasyWebsocketClient mClient;
@@ -28,18 +28,18 @@ public class ChatManager {
     private boolean isPush = false;
     private HttpDialog httpDialog;
 
-    private ChatManager(Context context) {
-        mContext = context;
+    private ChatManager() {
     }
 
     public static ChatManager getInstance(Context context) {
         if (chatManager == null) {
             synchronized (ChatManager.class) {
                 if (chatManager == null) {
-                    chatManager = new ChatManager(context);
+                    chatManager = new ChatManager();
                 }
             }
         }
+        mContext = context;
         return chatManager;
     }
 

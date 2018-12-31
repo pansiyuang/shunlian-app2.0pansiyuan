@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.websocket.MemberStatus;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
 
 /**
@@ -80,8 +81,8 @@ public class SwitchStatusDialog implements View.OnClickListener {
 
     public void show() {
         if (!mContext.isFinishing()&&dialog != null && !dialog.isShowing()) {
-        dialog.show();
-    }
+            dialog.show();
+        }
 }
 
 

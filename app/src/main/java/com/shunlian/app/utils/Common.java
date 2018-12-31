@@ -517,7 +517,11 @@ public class Common {
                     chatMember.m_user_id = params[12];
 
                     //0，普通用户，1平台客服管理员，2平台普通客服，3商家客服管理员，4商家普通客服
-                    ChatManager.getInstance(context).init().switch2jumpChat(params[10], params[11], chatMember);
+                    if(context instanceof Activity){
+                        ChatManager.getInstance(context).init().switch2jumpChat(params[10], params[11], chatMember);
+                    }else {
+                        Common.staticToast("聊天初始化失败");
+                    }
                 }
                 break;
             case "submitlogisticsinfo"://提交物流信息
