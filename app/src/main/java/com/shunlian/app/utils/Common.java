@@ -71,6 +71,7 @@ import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
+import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.core.AishangAct;
@@ -251,6 +252,16 @@ public class Common {
                 return "CouponMsgAct";
             case "taskSystems":
                 return "TaskCenterAct";
+            case "businessSchool":
+                return "HelpClassAct";
+            case "myBalance":
+                return "BalanceMainAct";
+            case "shunlianKefu":
+                return "HelpOneAct";
+            case "myfootprint":
+            case "goodsCollection":
+            case "storeCollection":
+                return "MyCollectionAct";
             default:
                 return "";
         }
@@ -548,6 +559,10 @@ public class Common {
                 break;
             case "businessSchool":
                 HelpClassAct.startAct(context, params[0]);
+                break;
+            case "myBalance":
+                Constant.ISBALANCE = true;
+                BalanceMainAct.startAct(context, false);
                 break;
             default://首页
                 MainActivity.startAct(context, "");
