@@ -252,57 +252,61 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             outTimer.cancel();
         }
         outTimer = new Timer();
-        outTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (mposition < datas.size()) {
-                    runnableB = new Runnable() {
-                        @Override
-                        public void run() {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct.isDestroyed()) {
-                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
-                            }else if (mposition < datas.size()) {
-                                LogUtil.augusLogW("mposition:" + mposition);
-                                lLayout_toast.setVisibility(View.VISIBLE);
-                                GlideUtils.getInstance().loadCircleAvar(baseAct,miv_icon,datas.get(mposition).avatar);
-                                tv_info.setText(datas.get(mposition).text);
-                                lLayout_toast.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (datas.get(mposition).url!=null)
-                                            Common.goGoGo(baseAct,datas.get(mposition).url.type,datas.get(mposition).url.item_id);
-                                    }
-                                });
-                            }
-                        }
-                    };
-                    if (handler == null) {
-                        if (!isCrash) {
-                            isCrash = true;
-                            Handler mHandler = new Handler(Looper.getMainLooper());
-                            mHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    isCrash = false;
-                                }
-                            }, (7 * size + 2) * 1000);
-                        }
-                    } else {
-                        handler.post(runnableB);
-                        runnableC = new Runnable() {
+        try{
+            outTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (mposition < datas.size()) {
+                        runnableB = new Runnable() {
                             @Override
                             public void run() {
-                                if (!isStop) {
-                                    lLayout_toast.setVisibility(View.GONE);
-                                    mposition++;
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct.isDestroyed()) {
+//                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
+                                }else if (mposition < datas.size()) {
+                                    LogUtil.augusLogW("mposition:" + mposition);
+                                    lLayout_toast.setVisibility(View.VISIBLE);
+                                    GlideUtils.getInstance().loadCircleAvar(baseAct,miv_icon,datas.get(mposition).avatar);
+                                    tv_info.setText(datas.get(mposition).text);
+                                    lLayout_toast.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            if (datas.get(mposition).url!=null)
+                                                Common.goGoGo(baseAct,datas.get(mposition).url.type,datas.get(mposition).url.item_id);
+                                        }
+                                    });
                                 }
                             }
                         };
-                        handler.postDelayed(runnableC, 5 * 1000);
+                        if (handler == null) {
+                            if (!isCrash) {
+                                isCrash = true;
+                                Handler mHandler = new Handler(Looper.getMainLooper());
+                                mHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        isCrash = false;
+                                    }
+                                }, (7 * size + 2) * 1000);
+                            }
+                        } else {
+                            handler.post(runnableB);
+                            runnableC = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!isStop) {
+                                        lLayout_toast.setVisibility(View.GONE);
+                                        mposition++;
+                                    }
+                                }
+                            };
+                            handler.postDelayed(runnableC, 5 * 1000);
+                        }
                     }
                 }
-            }
-        }, 0, 7 * 1000);
+            }, 0, 7 * 1000);
+        }catch (Exception e){
+
+        }
     }
 
 //    public static void startAct(Context context, String memberId) {
@@ -465,6 +469,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @Override
     public void bannerList(List<AdUserEntity.AD> adList,boolean isNew) {
+        if (kanner==null)
+            return;
         this.adList = adList;
         initFrags(isNew);
         List<String> strings = new ArrayList<>();

@@ -816,27 +816,31 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     private void switch2jump(String flag) {
-        switch (flag) {
-            case "mainPage":
-                mainPageClick();
-                break;
-            case "myplus":
-                //myPlusClick();
-                sortClick();
-                break;
-            case "focus":
-            case "discover":
-                discoverClick();
-                break;
-            case "shoppingcar":
-                shoppingCarClick();
-                break;
-            case "personCenter":
-                personCenterClick();
-                break;
-            default:
-                mainPageClick();
-                break;
+        try {
+            switch (flag) {
+                case "mainPage":
+                    mainPageClick();
+                    break;
+                case "myplus":
+                    //myPlusClick();
+                    sortClick();
+                    break;
+                case "focus":
+                case "discover":
+                    discoverClick();
+                    break;
+                case "shoppingcar":
+                    shoppingCarClick();
+                    break;
+                case "personCenter":
+                    personCenterClick();
+                    break;
+                default:
+                    mainPageClick();
+                    break;
+            }
+        }catch (Exception e){
+
         }
     }
 

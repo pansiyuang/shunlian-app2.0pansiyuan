@@ -274,7 +274,8 @@ public class CouponGoodsListAdapter extends BaseRecyclerAdapter<StageGoodsListEn
                 mHolder.ll_earn.setVisibility(View.GONE);
                 mHolder.miv_product.setVisibility(View.GONE);
             }*/
-            gone(mHolder.ll_earn,mHolder.miv_product,mHolder.tv_earn_money);
+//            gone(mHolder.ll_earn,mHolder.miv_product,mHolder.tv_earn_money);
+            gone(mHolder.miv_product,mHolder.tv_earn_money);
         }
     }
 
@@ -373,8 +374,8 @@ public class CouponGoodsListAdapter extends BaseRecyclerAdapter<StageGoodsListEn
         @BindView(R.id.tv_address)
         TextView tv_address;
 
-        @BindView(R.id.ll_earn)
-        LinearLayout ll_earn;
+//        @BindView(R.id.ll_earn)
+//        LinearLayout ll_earn;
 
         @BindView(R.id.tv_earn_money)
         TextView tv_earn_money;

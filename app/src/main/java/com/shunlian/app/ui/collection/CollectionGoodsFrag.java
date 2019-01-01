@@ -151,6 +151,8 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
      */
     @Override
     public void operationMange() {
+        if (adapter==null)
+            return;
         for (CollectionGoodsEntity.Goods goods : goodsLists) {
             goods.isSelect = false;
         }
