@@ -369,7 +369,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public static void startAct(Context context, String goodsId) {
         Intent intent = new Intent(context, GoodsDetailAct.class);
         intent.putExtra("goodsId", goodsId);
-        intent.putExtra("goTitleType", ((Activity)context).getTitle().toString());
+        if (context instanceof Activity) {
+            intent.putExtra("goTitleType", ((Activity) context).getTitle().toString());
+        }else {
+            intent.putExtra("goTitleType", "");
+        }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }

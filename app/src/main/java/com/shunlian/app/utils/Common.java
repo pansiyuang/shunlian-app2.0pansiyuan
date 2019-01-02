@@ -490,12 +490,7 @@ public class Common {
                 SuperProductsAct.startAct(context);
                 break;
             case "slmall"://任务中心
-                if (!Common.isAlreadyLogin()){
-                    Common.goGoGo(context,"login");
-                    theRelayJump(type,params);
-                }else {
-                    TaskCenterAct.startAct(context);
-                }
+                TaskCenterAct.startAct(context);
                 break;
             case "plus":
                 MainActivity.startAct(context, "myplus");
