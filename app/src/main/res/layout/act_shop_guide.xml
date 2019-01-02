@@ -123,7 +123,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:gravity="center"
-                android:text="您的导购暂未上传微信二维码"
+                android:text="您的导购暂未上传微信号"
                 android:textStyle="normal"
                 android:textColor="@color/color_value_6c"
                 android:textSize="16sp" />
