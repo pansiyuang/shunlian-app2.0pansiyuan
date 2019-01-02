@@ -227,7 +227,7 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
 
-        ///Common.handleTheRelayJump(baseActivity);
+        Common.handleTheRelayJump(baseActivity);
 
         if (!"1".equals(content.is_tag)){
             SexSelectAct.startAct(baseActivity);
