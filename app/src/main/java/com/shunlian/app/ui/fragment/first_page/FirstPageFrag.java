@@ -182,57 +182,61 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             outTimer.cancel();
         }
         outTimer = new Timer();
-        outTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (mposition < datas.size()) {
-                    runnableB = new Runnable() {
-                        @Override
-                        public void run() {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity.isDestroyed()) {
-                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
-                            }else if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseActivity.isFinishing()) {
-                                LogUtil.augusLogW("mposition:" + mposition);
-                                lLayout_toast.setVisibility(View.VISIBLE);
-                                GlideUtils.getInstance().loadCircleAvar(baseActivity,miv_icon,datas.get(mposition).avatar);
-                                tv_info.setText(datas.get(mposition).text);
-                                lLayout_toast.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (datas.get(mposition).url!=null)
-                                            Common.goGoGo(baseContext,datas.get(mposition).url.type,datas.get(mposition).url.item_id);
-                                    }
-                                });
-                            }
-                        }
-                    };
-                    if (handler == null) {
-                        if (!isCrash) {
-                            isCrash = true;
-                            Handler mHandler = new Handler(Looper.getMainLooper());
-                            mHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    isCrash = false;
-                                }
-                            }, ((Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR) * size + 2) * 1000);
-                        }
-                    } else {
-                        handler.post(runnableB);
-                        runnableC = new Runnable() {
+        try {
+            outTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (mposition < datas.size()) {
+                        runnableB = new Runnable() {
                             @Override
                             public void run() {
-                                if (!isStop&&lLayout_toast!=null) {
-                                    lLayout_toast.setVisibility(View.GONE);
-                                    mposition++;
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity.isDestroyed()) {
+//                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
+                                }else if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseActivity.isFinishing()) {
+                                    LogUtil.augusLogW("mposition:" + mposition);
+                                    lLayout_toast.setVisibility(View.VISIBLE);
+                                    GlideUtils.getInstance().loadCircleAvar(baseActivity,miv_icon,datas.get(mposition).avatar);
+                                    tv_info.setText(datas.get(mposition).text);
+                                    lLayout_toast.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            if (datas.get(mposition).url!=null)
+                                                Common.goGoGo(baseContext,datas.get(mposition).url.type,datas.get(mposition).url.item_id);
+                                        }
+                                    });
                                 }
                             }
                         };
-                        handler.postDelayed(runnableC, Constant.BUBBLE_SHOW * 1000);
+                        if (handler == null) {
+                            if (!isCrash) {
+                                isCrash = true;
+                                Handler mHandler = new Handler(Looper.getMainLooper());
+                                mHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        isCrash = false;
+                                    }
+                                }, ((Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR) * size + 2) * 1000);
+                            }
+                        } else {
+                            handler.post(runnableB);
+                            runnableC = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!isStop&&lLayout_toast!=null) {
+                                        lLayout_toast.setVisibility(View.GONE);
+                                        mposition++;
+                                    }
+                                }
+                            };
+                            handler.postDelayed(runnableC, Constant.BUBBLE_SHOW * 1000);
+                        }
                     }
                 }
-            }
-        }, 0, (Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR) * 1000);
+            }, 0, (Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR) * 1000);
+        }catch (Exception e){
+
+        }
     }
 //   气泡
 

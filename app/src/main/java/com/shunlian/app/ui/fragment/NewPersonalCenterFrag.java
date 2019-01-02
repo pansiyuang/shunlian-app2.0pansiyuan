@@ -408,7 +408,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 @Override
                 public void onSpringUpdate(Spring spring) {
                     double value = spring.getCurrentValue();
-                    if(!isDownUp) {
+                    if(!isDownUp&&line_anim!=null) {
                         line_anim.setTranslationY((int) value);
                     }
                     isStartAnim = true;
@@ -432,6 +432,8 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
+        if (ntv_grow==null)
+            return;
         if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
             if(line_anim.getTranslationY()>0) {
                 handler.postDelayed(new Runnable() {
@@ -722,7 +724,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 BalanceDetailAct.startAct(baseActivity);
                 break;
             case R.id.ntv_left:
-                if(!TextUtils.isEmpty(personalcenterEntity.salesInfo_url)) {
+                if(personalcenterEntity!=null&&!TextUtils.isEmpty(personalcenterEntity.salesInfo_url)) {
                     H5X5Act.startAct(baseContext, personalcenterEntity.salesInfo_url, H5X5Act.MODE_SONIC);
                 }
                 break;

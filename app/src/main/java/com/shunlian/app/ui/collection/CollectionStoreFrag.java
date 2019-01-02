@@ -155,6 +155,8 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
      */
     @Override
     public void operationMange() {
+        if (adapter==null)
+            return;
         for (CollectionStoresEntity.Store goods : stores) {
             goods.isSelect = false;
         }

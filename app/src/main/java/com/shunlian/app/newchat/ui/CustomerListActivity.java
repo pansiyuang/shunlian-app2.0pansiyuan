@@ -115,10 +115,13 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.miv_distribution:
+                String user_id="";
+                if (mUser!=null)
+                    user_id=mUser.user_id;
                 if (currentReception == 0) {
-                    mPresenter.setReception(mUser.user_id, 1);
+                    mPresenter.setReception(user_id, 1);
                 } else {
-                    mPresenter.setReception(mUser.user_id, 0);
+                    mPresenter.setReception(user_id, 0);
                 }
                 break;
             case R.id.tv_change:
