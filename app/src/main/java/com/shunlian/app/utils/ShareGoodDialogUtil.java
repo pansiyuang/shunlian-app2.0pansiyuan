@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import com.google.zxing.common.StringUtils;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -52,11 +54,19 @@ public class ShareGoodDialogUtil {
             nomalBuildl.dismiss();
         }
         this.mShareInfoParam = shareInfoParam;
-        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottom()
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context).fromBottom().fullWidth()
                 .setView(R.layout.dialog_share);
         nomalBuildl = nomalBuild.create();
-        nomalBuildl.setCancelable(false);
+        nomalBuildl.setCancelable(true);
+        nomalBuildl.setCanceledOnTouchOutside(true);
         nomalBuildl.show();
+        nomalBuildl.getWindow().getDecorView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                nomalBuildl.dismiss();
+                return false;
+            }
+        });
         nomalBuildl.setOnClickListener(R.id.ntv_cancel, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +93,7 @@ public class ShareGoodDialogUtil {
             @Override
             public void onClick(View v) {
                 setEddType();
+                Common.copyText(context,mShareInfoParam.title);
                 nomalBuildl.dismiss();
                 if(isGood) {
                     WXEntryActivity.startAct(context,
@@ -104,6 +115,7 @@ public class ShareGoodDialogUtil {
             @Override
             public void onClick(View v) {
                 setEddType();
+                Common.copyText(context,mShareInfoParam.title);
                 nomalBuildl.dismiss();
                 if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
                     createSpecialCode( false);
@@ -128,6 +140,7 @@ public class ShareGoodDialogUtil {
             public void onClick(View v) {
                 setEddType();
                 nomalBuildl.dismiss();
+                Common.copyText(context,mShareInfoParam.title);
                 if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
                     createSpecialCode(true);
                     return;
