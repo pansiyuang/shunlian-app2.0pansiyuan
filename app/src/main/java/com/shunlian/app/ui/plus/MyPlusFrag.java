@@ -507,41 +507,45 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
             outTimer.cancel();
         }
         outTimer = new Timer();
-        outTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (position < datas.size()) {
-                    runnableB = () -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity.isDestroyed()) {
-                            throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
-                        }else if (position < datas.size()) {
-                            lLayout_toast.setVisibility(View.VISIBLE);
-                            GlideUtils.getInstance().loadCircleImage(getActivity(), miv_toast_icon, datas.get(position).avatar);
-                            tv_info.setText(datas.get(position).sentence);
-                            lLayout_toast.setOnClickListener(v -> {
-                                //
-                            });
-                        }
-                    };
-                    if (handler == null) {
-                        if (!isCrash) {
-                            isCrash = true;
-                            Handler mHandler = new Handler(Looper.getMainLooper());
-                            mHandler.postDelayed(() -> isCrash = false, (7 * size + 2) * 1000);
-                        }
-                    } else {
-                        handler.post(runnableB);
-                        runnableC = () -> {
-                            if (!isStop) {
-                                lLayout_toast.setVisibility(View.GONE);
-                                position++;
+        try {
+            outTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (position < datas.size()) {
+                        runnableB = () -> {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity.isDestroyed()) {
+//                            throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
+                            }else if (position < datas.size()) {
+                                lLayout_toast.setVisibility(View.VISIBLE);
+                                GlideUtils.getInstance().loadCircleImage(getActivity(), miv_toast_icon, datas.get(position).avatar);
+                                tv_info.setText(datas.get(position).sentence);
+                                lLayout_toast.setOnClickListener(v -> {
+                                    //
+                                });
                             }
                         };
-                        handler.postDelayed(runnableC, 5 * 1000);
+                        if (handler == null) {
+                            if (!isCrash) {
+                                isCrash = true;
+                                Handler mHandler = new Handler(Looper.getMainLooper());
+                                mHandler.postDelayed(() -> isCrash = false, (7 * size + 2) * 1000);
+                            }
+                        } else {
+                            handler.post(runnableB);
+                            runnableC = () -> {
+                                if (!isStop) {
+                                    lLayout_toast.setVisibility(View.GONE);
+                                    position++;
+                                }
+                            };
+                            handler.postDelayed(runnableC, 5 * 1000);
+                        }
                     }
                 }
-            }
-        }, 0, 7 * 1000);
+            }, 0, 7 * 1000);
+        }catch (Exception e){
+
+        }
     }
 
     public void beginToast() {

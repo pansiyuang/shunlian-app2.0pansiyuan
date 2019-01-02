@@ -169,6 +169,8 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 ////            rv_view.setVisibility(View.VISIBLE);
 //            mtv_empty.setVisibility(View.VISIBLE);
 //            rv_view.setVisibility(View.GONE);
+        if (rv_view==null)
+            return;
         if (getDataEntity != null && !isEmpty(getDataEntity.default_keyword))
             FirstPageFrag.mtv_search.setText(getDataEntity.default_keyword);
         if (lay_refresh != null)

@@ -125,18 +125,19 @@ public class PopMenu {
      * 隐藏菜单
      */
     public void hide() {
-        //先执行消失的动画
-        if (isShowing && mGridLayout != null) {
-            hideSubMenus(mGridLayout, new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    ViewGroup decorView = (ViewGroup) mActivity.getWindow().getDecorView();
-                    ViewGroup contentView = (ViewGroup) decorView.findViewById(android.R.id.content);
-                    contentView.removeView(mAnimateLayout);
-                }
-            });
-            isShowing = false;
-            popMenuItemCallback.onHideCallback(mActivity);
+        try {
+            //先执行消失的动画
+            if (isShowing && mGridLayout != null) {
+                hideSubMenus(mGridLayout, new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        ViewGroup decorView = (ViewGroup) mActivity.getWindow().getDecorView();
+                        ViewGroup contentView = (ViewGroup) decorView.findViewById(android.R.id.content);
+                        contentView.removeView(mAnimateLayout);
+                    }
+                });
+                isShowing = false;
+                popMenuItemCallback.onHideCallback(mActivity);
 //            if (mHander==null)
 //                mHander=new Handler();
 //            mHander.postDelayed(new Runnable() {
@@ -145,6 +146,9 @@ public class PopMenu {
 //                    popMenuItemCallback.onHideCallback(mActivity);
 //                }
 //            },60);
+            }
+        }catch (Exception e ){
+
         }
 
     }

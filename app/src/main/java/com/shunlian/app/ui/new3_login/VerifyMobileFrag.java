@@ -112,7 +112,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
     }
 
     private void dispatchApi() {
-        if (mConfig != null) {
+        if (mConfig != null&&mtv_mobile!=null) {
             if (!isEmpty(mConfig.mobile) && mConfig.mobile.length() == 11){
                 String temp = "";//130 0756 2706
                 for (int i = 0; i < mConfig.mobile.length(); i++) {

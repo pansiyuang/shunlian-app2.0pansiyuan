@@ -1,5 +1,6 @@
 package com.shunlian.app.newchat.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -18,7 +19,7 @@ import com.shunlian.app.widget.HttpDialog;
 
 public class ChatManager {
 
-    private Context mContext;
+    private static Context mContext;
     public static ChatManager chatManager;
     private SwitchStatusDialog statusDialog;
     private EasyWebsocketClient mClient;
@@ -27,25 +28,25 @@ public class ChatManager {
     private boolean isPush = false;
     private HttpDialog httpDialog;
 
-    private ChatManager(Context context) {
-        mContext = context;
+    private ChatManager() {
     }
 
     public static ChatManager getInstance(Context context) {
         if (chatManager == null) {
             synchronized (ChatManager.class) {
                 if (chatManager == null) {
-                    chatManager = new ChatManager(context);
+                    chatManager = new ChatManager();
                 }
             }
         }
+        mContext = context;
         return chatManager;
     }
 
     public ChatManager init() {
         mClient = EasyWebsocketClient.getInstance(mContext);
         httpDialog = new HttpDialog(mContext);
-        statusDialog = new SwitchStatusDialog(mContext).setOnButtonClickListener(new SwitchStatusDialog.OnButtonClickListener() {
+        statusDialog = new SwitchStatusDialog((Activity) mContext).setOnButtonClickListener(new SwitchStatusDialog.OnButtonClickListener() {
             @Override
             public void OnClickSure() {
                 mClient.switchStatus(mStatus);

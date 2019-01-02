@@ -1,15 +1,14 @@
 package com.shunlian.app.newchat.util;
 
+import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Typeface;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.websocket.MemberStatus;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
 
 /**
@@ -21,10 +20,10 @@ public class SwitchStatusDialog implements View.OnClickListener {
     private TextView tvCancle;
     private TextView tvMessage;
     private Dialog dialog;
-    private Context mContext;
+    private Activity mContext;
     private OnButtonClickListener mListener;
 
-    public SwitchStatusDialog(Context context) {
+    public SwitchStatusDialog(Activity context) {
         mContext = context;
         dialog = new Dialog(mContext, R.style.Mydialog);
         dialog.setContentView(R.layout.dialog_common);
@@ -78,15 +77,23 @@ public class SwitchStatusDialog implements View.OnClickListener {
     }
 
     public void show() {
-        if (dialog != null && !dialog.isShowing()) {
-            dialog.show();
+        try {
+            if (!mContext.isFinishing() && dialog != null && !dialog.isShowing()) {
+                dialog.show();
+            }
+        } catch (Exception e) {
+
         }
     }
 
 
     public void dismiss() {
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
+        try {
+            if (!mContext.isFinishing() && dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        } catch (Exception e) {
+
         }
     }
 

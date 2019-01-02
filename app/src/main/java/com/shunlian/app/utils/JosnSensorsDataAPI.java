@@ -22,12 +22,15 @@ public class JosnSensorsDataAPI {
             properties.put("bannerBelongs", pageType);
 //            properties.put("bannerName", bannerName);
             properties.put("bannerID", bannerID);
-            if(bannerName!=null&&bannerName.equals("goods")&&!url.contains("商品")){
-                properties.put("bannerURL", "商品："+url);
-            }else if(bannerName!=null&&bannerName.equals("shop")&&!url.contains("店铺")){
-                properties.put("bannerURL", "店铺："+url);
+            String mUrl="";
+            if (url!=null)
+                mUrl=url;
+            if(bannerName!=null&&bannerName.equals("goods")&&!mUrl.contains("商品")){
+                properties.put("bannerURL", "商品："+mUrl);
+            }else if(bannerName!=null&&bannerName.equals("shop")&&!mUrl.contains("店铺")){
+                properties.put("bannerURL", "店铺："+mUrl);
             }else {
-                properties.put("bannerURL", url);
+                properties.put("bannerURL", mUrl);
             }
             properties.put("bannerRank", rank);
             SensorsDataAPI.sharedInstance().track("bannerClick", properties);
