@@ -117,12 +117,15 @@ public class KeyboardPatch {
                 mTempKeyboardHeight = keyboardHeight;
                 if (!ImmersionBar.checkFitsSystemWindows(mWindow.getDecorView().findViewById(android.R.id.content))) {
                     if (mChildView != null) {
-                        if (mImmersionBar!=null&&mImmersionBar.getBarParams()!=null){
-                            if (mImmersionBar.getBarParams().isSupportActionBar) {
-                                keyboardHeight += mActionBarHeight + mStatusBarHeight;
-                            }
-                            if (mImmersionBar.getBarParams().fits) {
-                                keyboardHeight += mStatusBarHeight;
+                        if (mImmersionBar!=null) {
+                            BarParams barParams = mImmersionBar.getBarParams();
+                            if (barParams != null) {
+                                if (barParams.isSupportActionBar) {
+                                    keyboardHeight += mActionBarHeight + mStatusBarHeight;
+                                }
+                                if (barParams.fits) {
+                                    keyboardHeight += mStatusBarHeight;
+                                }
                             }
                         }
                         if (keyboardHeight > navigationBarHeight) {

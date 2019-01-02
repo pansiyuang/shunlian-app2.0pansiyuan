@@ -23,18 +23,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
-import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
-import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
-import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -42,7 +39,6 @@ import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.fragment.NewDiscoverFrag;
 import com.shunlian.app.ui.fragment.NewPersonalCenterFrag;
-import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
@@ -54,6 +50,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -82,7 +79,6 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
-import retrofit2.Call;
 
 public class MainActivity extends BaseActivity implements MessageCountManager.OnGetMessageListener, IMain {
     private static final String[] flags = {"mainPage", "myPlus", "discover", "shoppingcar", "personCenter"};
@@ -291,7 +287,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
 //        }
         if (Common.isAlreadyLogin()) {
-            handleJump();
+            Common.handleTheRelayJump(this);
         }
         super.onResume();
     }
@@ -315,23 +311,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (discoverFrag != null) {
             discoverFrag.setCurrentPage(currentDiscoverFlag);
         }
-        handleJump();
-    }
-
-    private void handleJump() {
-        String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
-        if (isEmpty(jumpType)) return;
-        ObjectMapper om = new ObjectMapper();
-        try {
-            DispachJump dispachJump = om.readValue(jumpType, DispachJump.class);
-            if (dispachJump != null) {
-                Common.goGoGo(this, dispachJump.jumpType, dispachJump.items);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
-        }
+        Common.handleTheRelayJump(this);
     }
 
     public void switchContent(Fragment show) {

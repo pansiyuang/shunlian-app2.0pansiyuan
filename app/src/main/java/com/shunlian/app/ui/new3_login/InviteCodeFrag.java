@@ -26,7 +26,6 @@ import com.shunlian.app.widget.MyTextView;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashSet;
 
@@ -99,7 +98,6 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     protected void initData() {
-        EventBus.getDefault().register(this);
         GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
         btnDrawable.setColor(Color.parseColor("#ECECEC"));
         presenter = new New3LoginPresenter(baseActivity,this);
@@ -213,11 +211,6 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
 
     }
 
-    @Subscribe(sticky = true)
-    public void eventBus(DispachJump jump) {
-        mJump = jump;
-    }
-
     @Override
     public void loginMobileSuccess(LoginFinishEntity content) {
         //登陆成功啦
@@ -239,9 +232,7 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
 
-        if (mJump != null){
-            Common.goGoGo(baseActivity,mJump.jumpType,mJump.items);
-        }
+        Common.handleTheRelayJump(baseActivity);
 
         if (!"1".equals(content.is_tag)){
             SexSelectAct.startAct(baseActivity);
@@ -252,6 +243,5 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().unregister(this);
     }
 }

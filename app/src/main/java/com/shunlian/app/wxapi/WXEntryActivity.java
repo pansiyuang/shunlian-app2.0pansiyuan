@@ -12,8 +12,6 @@ import android.os.Message;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
@@ -21,7 +19,6 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
@@ -47,7 +44,6 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashSet;
 
@@ -78,7 +74,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     @Override
     protected void initData() {
         setHideStatusAndNavigation();
-        EventBus.getDefault().register(this);
         wxEntryPresenter = new WXEntryPresenter(this, this);
         //初始注册方法必须有，即使就算第二次回调启动的时候先调用onResp，也必须有注册方法，否则会出错
         api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
@@ -330,23 +325,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         }
     }
 
-    @Subscribe(sticky = true)
-    public void eventBus(DispachJump jump) {
-        if (jump != null && !isEmpty(jump.jumpType)) {
-            ObjectMapper om = new ObjectMapper();
-            try {
-                if (jump.items == null){
-                    jump.items = new String[0];
-                }
-                String s = om.writeValueAsString(jump);
-                //LogUtil.zhLogW("=eventBus===wx========="+s);
-                SharedPrefUtil.saveCacheSharedPrf("wx_jump", s);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     @Override
     public void onWXCallback(BaseEntity<WXLoginEntity> entity) {
         if (entity != null && entity.data != null) {
@@ -493,7 +471,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     private void mYFinish(){

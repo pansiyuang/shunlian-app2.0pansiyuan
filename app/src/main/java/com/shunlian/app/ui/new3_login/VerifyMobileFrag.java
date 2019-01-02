@@ -25,7 +25,6 @@ import com.shunlian.app.widget.VerificationCodeInput;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashSet;
 
@@ -96,7 +95,6 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
      */
     @Override
     protected void initData() {
-        EventBus.getDefault().register(this);
         presenter = new New3LoginPresenter(baseActivity, this);
         presenter.loginInfoTip();
         mConfig = getArguments().getParcelable("config");
@@ -158,7 +156,6 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().unregister(this);
         if (countDownTimer != null) {
             countDownTimer.cancel();
             countDownTimer = null;
@@ -285,11 +282,6 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         }
     }
 
-    @Subscribe(sticky = true)
-    public void eventBus(DispachJump jump) {
-        mJump = jump;
-    }
-
     @Override
     public void loginMobileSuccess(LoginFinishEntity content) {
         //登陆成功啦
@@ -312,9 +304,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
 
-        if (mJump != null) {
-            Common.goGoGo(baseActivity, mJump.jumpType, mJump.items);
-        }
+        Common.handleTheRelayJump(baseActivity);
 
         if (!"1".equals(content.is_tag)) {
             SexSelectAct.startAct(baseActivity);
