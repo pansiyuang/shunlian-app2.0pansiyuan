@@ -30,7 +30,6 @@ import com.shunlian.app.widget.SelectAccountDialog;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashSet;
 
@@ -109,7 +108,6 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     protected void initData() {
-        EventBus.getDefault().register(this);
         GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
         btnDrawable.setColor(Color.parseColor("#ECECEC"));
         presenter = new New3LoginPresenter(baseActivity,this);
@@ -197,11 +195,6 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
         }
     }
 
-    @Subscribe(sticky = true)
-    public void eventBus(DispachJump jump) {
-        mJump = jump;
-    }
-
     /**
      * 账号密码登录
      *
@@ -234,9 +227,7 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
 
-        if (mJump != null){
-            Common.goGoGo(baseActivity,mJump.jumpType,mJump.items);
-        }
+        ///Common.handleTheRelayJump(baseActivity);
 
         if (!"1".equals(content.is_tag)){
             SexSelectAct.startAct(baseActivity);
@@ -267,6 +258,5 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().unregister(this);
     }
 }

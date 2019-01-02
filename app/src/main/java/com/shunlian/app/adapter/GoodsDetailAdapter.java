@@ -999,14 +999,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     //@Override
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count,boolean isAddcart) {
 //        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
-        if (tv_select_param==null)
-            return;
-        if (sku != null) {
-            tv_select_param.setText("已" + getString(R.string.selection) + "  " + sku.name);
-        }else {
-            tv_select_param.setText("已" + getString(R.string.selection) + "  " + count+"件");
+        if (tv_select_param != null){
+            if (sku != null) {
+                tv_select_param.setText("已" + getString(R.string.selection) + "  " + sku.name);
+            }else {
+                tv_select_param.setText("已" + getString(R.string.selection) + "  " + count+"件");
+            }
         }
-
         if (context instanceof GoodsDetailAct) {
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
             goodsDetailAct.selectGoodsInfo(sku, count,isAddcart);

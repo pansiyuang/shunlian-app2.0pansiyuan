@@ -59,6 +59,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -91,9 +93,7 @@ import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
-import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
-import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
@@ -114,9 +114,8 @@ import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
 import com.zh.chartlibrary.common.DensityUtil;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -491,7 +490,12 @@ public class Common {
                 SuperProductsAct.startAct(context);
                 break;
             case "slmall"://任务中心
-                TaskCenterAct.startAct(context);
+                if (!Common.isAlreadyLogin()){
+                    Common.goGoGo(context,"login");
+                    theRelayJump(type,params);
+                }else {
+                    TaskCenterAct.startAct(context);
+                }
                 break;
             case "plus":
                 MainActivity.startAct(context, "myplus");
@@ -576,10 +580,46 @@ public class Common {
      * @param items
      */
     public static void theRelayJump(String type,String[] items){
+        if (TextUtils.isEmpty(type))return;
         DispachJump dispachJump = new DispachJump();
         dispachJump.jumpType = type;
         dispachJump.items = items;
-        EventBus.getDefault().postSticky(dispachJump);
+        ObjectMapper om = new ObjectMapper();
+        try {
+            if (dispachJump.items == null){
+                dispachJump.items = new String[0];
+            }
+            String s = om.writeValueAsString(dispachJump);
+            SharedPrefUtil.saveCacheSharedPrf("wx_jump", s);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }finally {
+            dispachJump = null;
+            om = null;
+        }
+    }
+
+    /**
+     * 处理接力跳转
+     * @param context
+     */
+    public static void handleTheRelayJump(Context context) {
+        String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
+        if (TextUtils.isEmpty(jumpType)) return;
+        ObjectMapper om = new ObjectMapper();
+        DispachJump dispachJump;
+        try {
+            dispachJump = om.readValue(jumpType, DispachJump.class);
+            if (dispachJump != null) {
+                Common.goGoGo(context, dispachJump.jumpType, dispachJump.items);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            om = null;
+            dispachJump = null;
+            SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
+        }
     }
 
     public static String getURLParameterValue(String url, String parameter) {
