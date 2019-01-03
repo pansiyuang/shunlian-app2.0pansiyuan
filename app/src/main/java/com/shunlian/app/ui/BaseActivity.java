@@ -34,6 +34,7 @@ import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.shunlian.app.utils.sideslip.SlideBackHelper;
 import com.shunlian.app.utils.sideslip.SlideConfig;
 import com.shunlian.app.utils.sideslip.callbak.OnSlideListenerAdapter;
@@ -91,7 +92,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected CommondDialog commondDialog;
     protected Activity baseAct;
     private InputMethodManager mInputMethodManager;
-
+    public static boolean isNetwork = false;
 
     @Override
     protected void onRestart() {
@@ -132,6 +133,19 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         initData();
 //        SharedPrefUtil.saveCacheSharedPrf("localVersion", getVersionName());
 
+        if (this instanceof MainActivity){
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            networkBroadcast = new NetworkBroadcast();
+            registerReceiver(networkBroadcast, filter);
+            networkBroadcast.setOnUpdateUIListenner(new NetworkBroadcast.UpdateUIListenner() {
+                @Override
+                public void updateUI(boolean isShow) {
+                    isNetwork = isShow;
+                    showPopup(isShow);
+                }
+            });
+        }
     }
 
     /**
@@ -229,32 +243,53 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        try{
-            if (!(this instanceof PayListActivity) || !(this instanceof ConfirmOrderAct)){
-                IntentFilter filter = new IntentFilter();
-                filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-                if (networkBroadcast != null) {
-                    unregisterReceiver(networkBroadcast);
-                    networkBroadcast = null;
-                }
-                networkBroadcast = new NetworkBroadcast();
-                registerReceiver(networkBroadcast, filter);
-                networkBroadcast.setOnUpdateUIListenner(isShow ->showPopup(isShow));
-            }
-        }catch (Exception e){
-
-        }
+//        try{
+//            if (!(this instanceof PayListActivity) || !(this instanceof ConfirmOrderAct)){
+//                IntentFilter filter = new IntentFilter();
+//                filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+//                if (networkBroadcast != null) {
+//                    unregisterReceiver(networkBroadcast);
+//                    networkBroadcast = null;
+//                }
+//                networkBroadcast = new NetworkBroadcast();
+//                registerReceiver(networkBroadcast, filter);
+//                networkBroadcast.setOnUpdateUIListenner(isShow ->showPopup(isShow));
+//            }
+//        }catch (Exception e){
+//
+//        }
+        showPopup(isNetwork);
     }
 
     public void showPopup(boolean isShow){
+//        if (!isShow && dialogLists.size() == 0)return;
+//        boolean b = dialogLists.containsKey(this.hashCode());
+//        if (!b){
+//            NetDialog netDialog = new NetDialog(this);
+//            dialogLists.put(this.hashCode(),netDialog);
+//        }
+//        if (isShow) {
+//            dialogLists.get(this.hashCode()).show();
+//        }else {
+//            dismissDialog(true);
+//        }
+        if(ActivityHelper.getActivity()==null)
+        {
+            return;
+        }
+        if(ActivityHelper.getActivity() instanceof ConfirmOrderAct ||
+                ActivityHelper.getActivity() instanceof  PayListActivity ||
+                ActivityHelper.getActivity() instanceof  SearchGoodsActivity){
+            return;
+        }
         if (!isShow && dialogLists.size() == 0)return;
-        boolean b = dialogLists.containsKey(this.hashCode());
+        boolean b = dialogLists.containsKey(ActivityHelper.getActivity().hashCode());
         if (!b){
-            NetDialog netDialog = new NetDialog(this);
-            dialogLists.put(this.hashCode(),netDialog);
+            NetDialog netDialog = new NetDialog(ActivityHelper.getActivity());
+            dialogLists.put(ActivityHelper.getActivity().hashCode(),netDialog);
         }
         if (isShow) {
-            dialogLists.get(this.hashCode()).show();
+            dialogLists.get(ActivityHelper.getActivity().hashCode()).show();
         }else {
             dismissDialog(true);
         }
@@ -513,18 +548,30 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onStop() {
         super.onStop();
-        if (networkBroadcast != null && (!(this instanceof PayListActivity)
-                || !(this instanceof ConfirmOrderAct))){
-            unregisterReceiver(networkBroadcast);
-            networkBroadcast = null;
-        }
-        dismissDialog(false);
+//        if (networkBroadcast != null && (!(this instanceof PayListActivity)
+//                || !(this instanceof ConfirmOrderAct))){
+//            unregisterReceiver(networkBroadcast);
+//            networkBroadcast = null;
+//        }
+//        dismissDialog(false);
     }
 
     @Override
     protected void onDestroy() {
         if (unbinder != null) {
             unbinder.unbind();
+        }
+        if(ActivityHelper.getActivity()==null){
+            if (isNetwork && dialogLists.size() > 0) {
+                boolean b = dialogLists.containsKey(ActivityHelper.getActivity().hashCode());
+                if(b){
+                    NetDialog netDialog = dialogLists.get(ActivityHelper.getActivity().hashCode());
+                    if(netDialog!=null&&netDialog.isShowing()) {
+                        netDialog.dismiss();
+                        dialogLists.remove(ActivityHelper.getActivity().hashCode());
+                    }
+                }
+            }
         }
         super.onDestroy();
         if (immersionBar != null){
@@ -534,8 +581,28 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     private void dismissDialog(boolean isClearAll) {
+//        if (!isClearAll){
+//            NetDialog netDialog = dialogLists.get(hashCode());
+//            if (netDialog != null && netDialog.isShowing()){
+//                netDialog.dismiss();
+//                netDialog = null;
+//            }
+//            return;
+//        }
+//        if (dialogLists != null && dialogLists.size() > 0){
+//            Iterator<Integer> iterator = dialogLists.keySet().iterator();
+//            while (iterator.hasNext()){
+//                Integer next = iterator.next();
+//                NetDialog netDialog = dialogLists.get(next);
+//                if (netDialog != null && netDialog.isShowing()){
+//                    netDialog.dismiss();
+//                }
+//                netDialog = null;
+//            }
+//            dialogLists.clear();
+//        }
         if (!isClearAll){
-            NetDialog netDialog = dialogLists.get(hashCode());
+            NetDialog netDialog = dialogLists.get(ActivityHelper.getActivity().hashCode());
             if (netDialog != null && netDialog.isShowing()){
                 netDialog.dismiss();
                 netDialog = null;

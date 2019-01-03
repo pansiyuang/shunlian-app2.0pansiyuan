@@ -18,7 +18,7 @@ import pay.PayListActivity;
 public class ActivityHelper implements Application.ActivityLifecycleCallbacks {
 
     private static Stack<Activity> mActivityStack;
-
+    private static Activity sActivity;
     public ActivityHelper() {
     }
 
@@ -38,7 +38,7 @@ public class ActivityHelper implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityStarted(Activity activity) {
-
+        sActivity=activity;
     }
 
     @Override
@@ -59,6 +59,10 @@ public class ActivityHelper implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
 
+    }
+
+    public static Activity getActivity(){
+        return sActivity;
     }
 
     @Override
