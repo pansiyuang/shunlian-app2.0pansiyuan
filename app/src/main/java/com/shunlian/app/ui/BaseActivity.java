@@ -34,6 +34,7 @@ import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.shunlian.app.utils.sideslip.SlideBackHelper;
 import com.shunlian.app.utils.sideslip.SlideConfig;
 import com.shunlian.app.utils.sideslip.callbak.OnSlideListenerAdapter;
@@ -92,6 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected Activity baseAct;
     private InputMethodManager mInputMethodManager;
 
+    public static boolean isNetwork = true;
 
     @Override
     protected void onRestart() {
@@ -130,6 +132,19 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         finishAct();
         initListener();
         initData();
+        if (this instanceof MainActivity){
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            networkBroadcast = new NetworkBroadcast();
+            registerReceiver(networkBroadcast, filter);
+            networkBroadcast.setOnUpdateUIListenner(new NetworkBroadcast.UpdateUIListenner() {
+                                                        @Override
+                                                        public void updateUI(boolean isShow) {
+                                                            isNetwork = isShow;
+                                                            showPopup(isShow);
+                                                        }
+                                                    });
+        }
 //        SharedPrefUtil.saveCacheSharedPrf("localVersion", getVersionName());
 
     }
@@ -226,23 +241,22 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (!(this instanceof PayListActivity) || !(this instanceof ConfirmOrderAct)){
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            networkBroadcast = new NetworkBroadcast();
-            registerReceiver(networkBroadcast, filter);
-            networkBroadcast.setOnUpdateUIListenner(isShow ->showPopup(isShow));
-        }
+        showPopup(isNetwork);
     }
 
     public void showPopup(boolean isShow){
+
         if (!isShow && dialogLists.size() == 0)return;
         boolean b = dialogLists.containsKey(this.hashCode());
         if (!b){
-            NetDialog netDialog = new NetDialog(this);
+            if(ActivityHelper.getActivity()==null){
+                return;
+            }
+            NetDialog netDialog = new NetDialog(ActivityHelper.getActivity());
             dialogLists.put(this.hashCode(),netDialog);
         }
         if (isShow) {
@@ -505,11 +519,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onStop() {
         super.onStop();
-        if (networkBroadcast != null && (!(this instanceof PayListActivity)
-                || !(this instanceof ConfirmOrderAct))){
-            unregisterReceiver(networkBroadcast);
-            networkBroadcast = null;
-        }
+
         dismissDialog(false);
     }
 
@@ -521,6 +531,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onDestroy();
         if (immersionBar != null){
             immersionBar.destroy();
+        }
+        if (networkBroadcast != null&&this instanceof MainActivity){
+            unregisterReceiver(networkBroadcast);
+            networkBroadcast = null;
         }
         GlideUtils.getInstance().clearMemory();
     }
