@@ -278,8 +278,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             return;
         }
         if(ActivityHelper.getActivity() instanceof ConfirmOrderAct ||
-                ActivityHelper.getActivity() instanceof  PayListActivity ||
-                ActivityHelper.getActivity() instanceof  SearchGoodsActivity){
+                ActivityHelper.getActivity() instanceof  PayListActivity ){
             return;
         }
         if (!isShow && dialogLists.size() == 0)return;
