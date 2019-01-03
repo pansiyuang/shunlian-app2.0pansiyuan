@@ -229,16 +229,20 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        if (!(this instanceof PayListActivity) || !(this instanceof ConfirmOrderAct)){
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            if (networkBroadcast != null) {
-                unregisterReceiver(networkBroadcast);
-                networkBroadcast = null;
+        try{
+            if (!(this instanceof PayListActivity) || !(this instanceof ConfirmOrderAct)){
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+                if (networkBroadcast != null) {
+                    unregisterReceiver(networkBroadcast);
+                    networkBroadcast = null;
+                }
+                networkBroadcast = new NetworkBroadcast();
+                registerReceiver(networkBroadcast, filter);
+                networkBroadcast.setOnUpdateUIListenner(isShow ->showPopup(isShow));
             }
-            networkBroadcast = new NetworkBroadcast();
-            registerReceiver(networkBroadcast, filter);
-            networkBroadcast.setOnUpdateUIListenner(isShow ->showPopup(isShow));
+        }catch (Exception e){
+
         }
     }
 

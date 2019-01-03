@@ -529,12 +529,13 @@ public class WheelSurfPanView extends View {
 
             if (mListBitmap.size() != mDeses.length || mListBitmap.size() != mColors.length
                     || mDeses.length != mColors.length) {
-                throw new RuntimeException("Icons数量和Deses和Colors三者数量必须与mTypeNum一致");
+//                throw new RuntimeException("Icons数量和Deses和Colors三者数量必须与mTypeNum一致");
             }
         } else {
             //直接大图
-            if (mMainImgRes == null || mMainImgRes == 0)
-                throw new RuntimeException("类型为2必须要传大图mMainImgRes");
+            if (mMainImgRes == null || mMainImgRes == 0){
+//                throw new RuntimeException("类型为2必须要传大图mMainImgRes");
+            }
             mMain = BitmapFactory.decodeResource(mContext.getResources(), mMainImgRes);
         }
 
