@@ -249,7 +249,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     public void showPopup(boolean isShow){
-        if(ActivityHelper.getActivity()==null){
+        if(ActivityHelper.getActivity()==null)
+        {
+            return;
+        }
+        if(ActivityHelper.getActivity() instanceof ConfirmOrderAct ||
+                ActivityHelper.getActivity() instanceof  PayListActivity ||
+               ActivityHelper.getActivity() instanceof  SearchGoodsActivity){
             return;
         }
         if (!isShow && dialogLists.size() == 0)return;
