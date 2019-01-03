@@ -93,7 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected Activity baseAct;
     private InputMethodManager mInputMethodManager;
 
-    public static boolean isNetwork = true;
+    public static boolean isNetwork = false;
 
     @Override
     protected void onRestart() {
@@ -249,18 +249,17 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     public void showPopup(boolean isShow){
-
+        if(ActivityHelper.getActivity()==null){
+            return;
+        }
         if (!isShow && dialogLists.size() == 0)return;
-        boolean b = dialogLists.containsKey(this.hashCode());
+        boolean b = dialogLists.containsKey(ActivityHelper.getActivity().hashCode());
         if (!b){
-            if(ActivityHelper.getActivity()==null){
-                return;
-            }
             NetDialog netDialog = new NetDialog(ActivityHelper.getActivity());
-            dialogLists.put(this.hashCode(),netDialog);
+            dialogLists.put(ActivityHelper.getActivity().hashCode(),netDialog);
         }
         if (isShow) {
-            dialogLists.get(this.hashCode()).show();
+            dialogLists.get(ActivityHelper.getActivity().hashCode()).show();
         }else {
             dismissDialog(true);
         }
@@ -519,14 +518,25 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onStop() {
         super.onStop();
-
-        dismissDialog(false);
+//        dismissDialog(false);
     }
 
     @Override
     protected void onDestroy() {
         if (unbinder != null) {
             unbinder.unbind();
+        }
+        if(ActivityHelper.getActivity()==null){
+            if (isNetwork && dialogLists.size() > 0) {
+                boolean b = dialogLists.containsKey(ActivityHelper.getActivity().hashCode());
+                if(b){
+                    NetDialog netDialog = dialogLists.get(ActivityHelper.getActivity().hashCode());
+                    if(netDialog!=null&&netDialog.isShowing()) {
+                        netDialog.dismiss();
+                        dialogLists.remove(ActivityHelper.getActivity().hashCode());
+                    }
+                }
+            }
         }
         super.onDestroy();
         if (immersionBar != null){
@@ -541,7 +551,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     private void dismissDialog(boolean isClearAll) {
         if (!isClearAll){
-            NetDialog netDialog = dialogLists.get(hashCode());
+            NetDialog netDialog = dialogLists.get(ActivityHelper.getActivity().hashCode());
             if (netDialog != null && netDialog.isShowing()){
                 netDialog.dismiss();
                 netDialog = null;
