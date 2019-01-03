@@ -10,7 +10,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.h5.H5X5Act;
-import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyTextView;

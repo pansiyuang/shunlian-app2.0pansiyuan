@@ -94,7 +94,7 @@ import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
-import com.shunlian.app.ui.new_login_register.LoginEntryAct;
+import com.shunlian.app.ui.new3_login.LoginEntryAct;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
