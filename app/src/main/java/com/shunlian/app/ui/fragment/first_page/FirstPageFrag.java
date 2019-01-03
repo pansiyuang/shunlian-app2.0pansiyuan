@@ -190,7 +190,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                         runnableB = new Runnable() {
                             @Override
                             public void run() {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity.isDestroyed()) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity!=null&&baseActivity.isDestroyed()) {
 //                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
                                 }else if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseActivity.isFinishing()) {
                                     LogUtil.augusLogW("mposition:" + mposition);

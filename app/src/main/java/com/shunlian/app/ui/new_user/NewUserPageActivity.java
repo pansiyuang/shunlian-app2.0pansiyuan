@@ -260,7 +260,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                         runnableB = new Runnable() {
                             @Override
                             public void run() {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct.isDestroyed()) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct!=null&& baseAct.isDestroyed()) {
 //                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
                                 }else if (mposition < datas.size()) {
                                     LogUtil.augusLogW("mposition:" + mposition);

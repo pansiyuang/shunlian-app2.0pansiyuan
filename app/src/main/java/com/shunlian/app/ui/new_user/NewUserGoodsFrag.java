@@ -9,36 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.adapter.CollectionGoodsAdapter;
-import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.adapter.NewUserGoodsAdapter;
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.BigImgEntity;
-import com.shunlian.app.bean.CollectionGoodsEntity;
-import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
-import com.shunlian.app.presenter.CollectionGoodsPresenter;
-import com.shunlian.app.presenter.CommonBlogPresenter;
 import com.shunlian.app.presenter.NewUserGoodsPresenter;
-import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
-import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
-import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.CommonDialogUtil;
-import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
-import com.shunlian.app.view.ICollectionGoodsView;
-import com.shunlian.app.view.ICollectionStoresView;
-import com.shunlian.app.view.ICommonBlogView;
 import com.shunlian.app.view.INewUserGoodsView;
 import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -58,21 +42,17 @@ import butterknife.BindView;
  * Created by Administrator on 2018/10/22.
  */
 
-public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsView,NewUserGoodsAdapter.IAddShoppingCarListener {
-    private ShareInfoParam shareInfoParam;
-    private ShareGoodDialogUtil shareGoodDialogUtil;
+public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsView, NewUserGoodsAdapter.IAddShoppingCarListener {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
-
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
-
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
-
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
-
+    private ShareInfoParam shareInfoParam;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
     private NewUserGoodsPresenter mPresenter;
     private String currentFrom;
     private NewUserGoodsAdapter hotBlogAdapter;
@@ -80,6 +60,16 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
     private LinearLayoutManager manager;
 
     private String type;
+
+    public static NewUserGoodsFrag getInstance(String comFrom, String type, boolean isNew) {
+        NewUserGoodsFrag commonBlogFrag = new NewUserGoodsFrag();
+        Bundle bundle = new Bundle();
+        bundle.putString("from", comFrom);
+        bundle.putString("type", type);
+        bundle.putBoolean("isNew", isNew);
+        commonBlogFrag.setArguments(bundle);
+        return commonBlogFrag;
+    }
 
     @Override
     public void onDestroyView() {
@@ -91,16 +81,6 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.frag_new_user, null, false);
 
         return view;
-    }
-
-    public static NewUserGoodsFrag getInstance(String comFrom,String type,boolean isNew) {
-        NewUserGoodsFrag commonBlogFrag = new NewUserGoodsFrag();
-        Bundle bundle = new Bundle();
-        bundle.putString("from", comFrom);
-        bundle.putString("type", type);
-        bundle.putBoolean("isNew", isNew);
-        commonBlogFrag.setArguments(bundle);
-        return commonBlogFrag;
     }
 
     @Override
@@ -121,15 +101,15 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
-        mPresenter = new NewUserGoodsPresenter(baseActivity,  this,type);
+        mPresenter = new NewUserGoodsPresenter(baseActivity, this, type);
 
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new NewUserGoodsAdapter(baseActivity, goodList,type,NewUserPageActivity.isNew);
+            hotBlogAdapter = new NewUserGoodsAdapter(baseActivity, goodList, type, NewUserPageActivity.isNew);
             hotBlogAdapter.setAddShoppingCarListener(this);
             hotBlogAdapter.setOnItemClickListener((view, position) -> {
-                if(goodList.get(position).status.equals("0")){
+                if (goodList.get(position).status.equals("0")) {
                     Common.staticToast("不好意思啦！亲！该商品已失效了！");
-                }else{
+                } else {
                     GoodsDetailAct.startAct(baseActivity, goodList.get(position).id);
                 }
             });
@@ -137,9 +117,10 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         }
 
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshPayData(UserPaySuccessEvent event) {
-        if (event!=null && event.isSuccess&&event.isFragmet) {
+        if (event != null && event.isSuccess && event.isFragmet) {
             if (mPresenter != null) {
                 if (mPresenter != null) {
                     mPresenter.refreshData();
@@ -148,9 +129,10 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         }
     }
 
-    public void updateTypeUser(String type,boolean isNew){
+    public void updateTypeUser(String type, boolean isNew) {
         this.type = type;
     }
+
     @Override
     protected void initListener() {
         lay_refresh.setOnRefreshListener(() -> {
@@ -213,13 +195,15 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
     @Override
     public void userGoodsList(int currentPage, int totalPage, List<NewUserGoodsEntity.Goods> collectionGoodsLists) {
+        if (recycler_list == null)
+            return;
         if (currentPage == 1) {
             goodList.clear();
-            if(hotBlogAdapter!=null){
-                if(!NewUserPageActivity.isNew){
-                    type="1";
+            if (hotBlogAdapter != null) {
+                if (!NewUserPageActivity.isNew) {
+                    type = "1";
                 }
-                hotBlogAdapter.updateTypeUser(!NewUserPageActivity.isNew?"1":type,NewUserPageActivity.isNew);
+                hotBlogAdapter.updateTypeUser(!NewUserPageActivity.isNew ? "1" : type, NewUserPageActivity.isNew);
             }
             if (isEmpty(collectionGoodsLists)) {
                 recycler_list.setVisibility(View.GONE);
@@ -243,30 +227,30 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
      * @param goods
      */
     @Override
-    public void showGoodsSku(GoodsDeatilEntity.Goods goods,int postion) {
-        ParamDialog paramDialog = new ParamDialog(baseActivity,goods);
+    public void showGoodsSku(GoodsDeatilEntity.Goods goods, int postion) {
+        ParamDialog paramDialog = new ParamDialog(baseActivity, goods);
         paramDialog.show();
         paramDialog.setSelectCount(false);
         paramDialog.setOnSelectCallBack((sku, count) -> {
-            if (mPresenter != null&&type.equals("1")){
-                mPresenter.addCart(goods.goods_id,sku==null?"":sku.id,String.valueOf(count),postion);
+            if (mPresenter != null && type.equals("1")) {
+                mPresenter.addCart(goods.goods_id, sku == null ? "" : sku.id, String.valueOf(count), postion);
             }
         });
     }
 
     @Override
     public void onGoodsId(View view, int position) {
-        if(goodList.get(position).status.equals("0")){
+        if (goodList.get(position).status.equals("0")) {
             Common.staticToast("不好意思啦！亲！该商品已失效了！");
             return;
         }
-        if(type.equals("1")){
-            if(NewUserPageActivity.isNew) {
+        if (type.equals("1")) {
+            if (NewUserPageActivity.isNew) {
                 NewUserGoodsEntity.Goods goods = goodList.get(position);
-                mPresenter.getGoodsSku(goods.id,position);
-            }else{
+                mPresenter.getGoodsSku(goods.id, position);
+            } else {
                 updateShareParm(position);
-                mPresenter.getShareInfo(mPresenter.new_exclusive,goodList.get(position).id);
+                mPresenter.getShareInfo(mPresenter.new_exclusive, goodList.get(position).id);
             }
             return;
         }
@@ -275,9 +259,10 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
     /**
      * 更新分享的参数
+     *
      * @param postion
      */
-    private void updateShareParm(int postion){
+    private void updateShareParm(int postion) {
         shareInfoParam.title = goodList.get(postion).title;
         shareInfoParam.price = goodList.get(postion).price;
         shareInfoParam.market_price = goodList.get(postion).market_price;
@@ -289,13 +274,13 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
     }
 
     @Override
-    public void addCartSuccess(int cartNum,int postion) {
-        if(goodList!=null&&goodList.size()>postion){
+    public void addCartSuccess(int cartNum, int postion) {
+        if (goodList != null && goodList.size() > postion) {
             goodList.get(postion).is_add_cart = 1;
-            ((NewUserPageActivity)baseActivity).addCartOne();
-            if(NewUserPageActivity.CURRENT_NUM==NewUserPageActivity.MAX_COUNT) {
+            ((NewUserPageActivity) baseActivity).addCartOne();
+            if (NewUserPageActivity.CURRENT_NUM == NewUserPageActivity.MAX_COUNT) {
                 hotBlogAdapter.notifyDataSetChanged();
-            }else{
+            } else {
                 hotBlogAdapter.notifyItemChanged(postion);
             }
 
@@ -312,14 +297,14 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
     }
 
     public void updateCartGoods(NewUserGoodsEntity.Goods goodsList) {
-           if(hotBlogAdapter!=null){
-               for (NewUserGoodsEntity.Goods good:this.goodList){
-                   if(goodsList.goods_id.equals(good.id)){
-                       good.is_add_cart = 0;
-                       hotBlogAdapter.notifyDataSetChanged();
-                   }
-               }
-           }
+        if (hotBlogAdapter != null) {
+            for (NewUserGoodsEntity.Goods good : this.goodList) {
+                if (goodsList.goods_id.equals(good.id)) {
+                    good.is_add_cart = 0;
+                    hotBlogAdapter.notifyDataSetChanged();
+                }
+            }
+        }
     }
 
     @Override
@@ -332,6 +317,6 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         shareInfoParam.desc = baseEntity.data.desc;
         shareInfoParam.start_time = "0元3件";
         shareInfoParam.act_label = "新人专享";
-        shareGoodDialogUtil.shareGoodDialog(shareInfoParam,true,false);
+        shareGoodDialogUtil.shareGoodDialog(shareInfoParam, true, false);
     }
 }
