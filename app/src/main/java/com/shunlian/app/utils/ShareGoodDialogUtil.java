@@ -93,7 +93,7 @@ public class ShareGoodDialogUtil {
             @Override
             public void onClick(View v) {
                 setEddType();
-                Common.copyText(context,mShareInfoParam.title);
+                Common.copyText(context,mShareInfoParam.title+mShareInfoParam.shareLink);
                 nomalBuildl.dismiss();
                 if(isGood) {
                     WXEntryActivity.startAct(context,
@@ -115,7 +115,7 @@ public class ShareGoodDialogUtil {
             @Override
             public void onClick(View v) {
                 setEddType();
-                Common.copyText(context,mShareInfoParam.title);
+                Common.copyText(context,mShareInfoParam.title+mShareInfoParam.shareLink);
                 nomalBuildl.dismiss();
                 if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
                     createSpecialCode( false);
@@ -140,7 +140,7 @@ public class ShareGoodDialogUtil {
             public void onClick(View v) {
                 setEddType();
                 nomalBuildl.dismiss();
-                Common.copyText(context,mShareInfoParam.title);
+                Common.copyText(context,mShareInfoParam.title+mShareInfoParam.shareLink);
                 if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
                     createSpecialCode(true);
                     return;

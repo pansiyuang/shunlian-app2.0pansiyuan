@@ -1,66 +1,37 @@
 package com.shunlian.app.ui.new_user;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
-import com.shunlian.app.bean.AdEntity;
+import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.bean.AdUserEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BubbleEntity;
-import com.shunlian.app.bean.CollectionGoodsEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
-import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
-import com.shunlian.app.presenter.BasePresenter;
-import com.shunlian.app.presenter.MyPagePresenter;
-import com.shunlian.app.presenter.NewUserGoodsPresenter;
 import com.shunlian.app.presenter.NewUserPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
-import com.shunlian.app.ui.discover_new.AttentionMemberActivity;
-import com.shunlian.app.ui.discover_new.CommonBlogFrag;
-import com.shunlian.app.ui.discover_new.DiscoverMsgActivity;
-import com.shunlian.app.ui.discover_new.FansListActivity;
-import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
-import com.shunlian.app.ui.setting.AutographAct;
-import com.shunlian.app.ui.setting.PersonalDataAct;
-import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
-import com.shunlian.app.utils.SharedPrefUtil;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.UserBuyGoodsDialog;
-import com.shunlian.app.view.IMyPageView;
-import com.shunlian.app.view.INewUserGoodsView;
 import com.shunlian.app.view.INewUserPageView;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.banner.BaseBanner;
-import com.shunlian.app.widget.banner.Kanner;
 import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -85,6 +56,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private boolean isEvent =false;
     private  CommonLazyPagerAdapter commonLazyPagerAdapter;
+
     /**
      * 最大0元够数量
      */
@@ -93,24 +65,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @BindView(R.id.viewpager)
     ViewPager viewpager;
-
-    @BindView(R.id.tv_left)
-    TextView tv_left;
-
-    @BindView(R.id.tv_right)
-    TextView tv_right;
-
-    @BindView(R.id.line_left)
-    View line_left;
-
-    @BindView(R.id.line_right)
-    View line_right;
-
-    @BindView(R.id.ll_left)
-    RelativeLayout ll_left;
-
-    @BindView(R.id.ll_right)
-    RelativeLayout ll_right;
 
     @BindView(R.id.tv_buy_num)
     TextView tv_buy_num;
@@ -130,17 +84,12 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @BindView(R.id.kanner)
     MyKanner kanner;
 
-    @BindView(R.id.show_title_info)
-    LinearLayout show_title_info;
-
     @BindView(R.id.line_user_buy)
     LinearLayout line_user_buy;
     public static boolean isNew = false;
 
-    private String[] titles = {"新人专享", "精选商品"};
     private String[] titlesOld = {"精选商品"};
     private List<BaseFragment> goodsFrags;
-    private boolean isDefault = true;
     private  NewUserPagePresenter mPresenter;
     private  UserBuyGoodsDialog userBuyGoodsDialog;
     private NewUserGoodsFrag userGoodFragFrist;
@@ -337,8 +286,14 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         goodsFrags = new ArrayList<>();
          commonLazyPagerAdapter = new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld);
         viewpager.setAdapter(commonLazyPagerAdapter);
-        setTabMode(isDefault);
         mPresenter.adlist();
+
+        tv_head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NewInvitationActivity.startAct(NewUserPageActivity.this);
+            }
+        });
     }
 
     public static void startAct(Context context) {
@@ -353,14 +308,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             Common.goGoGo(this, "login");
             return;
         }
-        ll_left.setOnClickListener(v -> {
-            isDefault = true;
-            setTabMode(isDefault);
-        });
-        ll_right.setOnClickListener(v -> {
-            isDefault = false;
-            setTabMode(isDefault);
-        });
+
         tv_buy_num.setOnClickListener(v -> mPresenter.cartlist(false));
         tv_go_pay.setOnClickListener(v -> {
             goBuyUserGood();
@@ -375,13 +323,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             }
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    isDefault = true;
-                    setTabMode(isDefault);
-                } else {
-                    isDefault = false;
-                    setTabMode(isDefault);
-                }
             }
 
             @Override
@@ -398,24 +339,11 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         goodsFrags.clear();
         if(this.isNew) {
             tv_head.setText("新人专享");
-            tv_right.setText("精选商品");
-            tv_right.setTextColor(getColorResouce(R.color.text_gray2));
-            show_title_info.setVisibility(View.VISIBLE);
-            for (int i = 0; i < titles.length; i++) {
-                if (i == 0) {
-                    userGoodFragFrist = NewUserGoodsFrag.getInstance(titles[i], "1",isNew);
-                    goodsFrags.add(userGoodFragFrist);
-                } else {
-                    userGoodFragEnd = NewUserGoodsFrag.getInstance(titles[i], "2",isNew);
-                    goodsFrags.add(userGoodFragEnd);
-                }
-            }
+            userGoodFragFrist = NewUserGoodsFrag.getInstance(titlesOld[0], "1",isNew);
+            userGoodFragEnd.updateTypeUser("1",isNew);
+            goodsFrags.add(userGoodFragFrist);
         }else{
-            setTabMode(true);
             tv_head.setText("邀粉专区");
-            tv_right.setText("商品列表");
-            show_title_info.setVisibility(View.VISIBLE);
-            ll_left.setVisibility(View.GONE);
             userGoodFragEnd = NewUserGoodsFrag.getInstance(titlesOld[0], "1",isNew);
             userGoodFragEnd.updateTypeUser("1",isNew);
             goodsFrags.add(userGoodFragEnd);
@@ -426,26 +354,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         }
     }
 
-
-    public void setTabMode(boolean isDefault) {
-        if (tv_show_num==null)
-            return;
-        if (isDefault) {
-            tv_show_num.setTextColor(getColorResouce(R.color.pink_color));
-            tv_left.setTextColor(getColorResouce(R.color.pink_color));
-            tv_right.setTextColor(getColorResouce(R.color.value_484848));
-            line_left.setVisibility(View.VISIBLE);
-            line_right.setVisibility(View.GONE);
-            viewpager.setCurrentItem(0);
-        } else {
-            tv_right.setTextColor(getColorResouce(R.color.pink_color));
-            tv_left.setTextColor(getColorResouce(R.color.value_484848));
-            tv_show_num.setTextColor(getColorResouce(R.color.value_484848));
-            line_right.setVisibility(View.VISIBLE);
-            line_left.setVisibility(View.GONE);
-            viewpager.setCurrentItem(1);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
