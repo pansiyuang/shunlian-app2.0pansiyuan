@@ -285,6 +285,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         boolean b = dialogLists.containsKey(ActivityHelper.getActivity().hashCode());
         if (!b){
             NetDialog netDialog = new NetDialog(ActivityHelper.getActivity());
+            netDialog.setOwnerActivity(ActivityHelper.getActivity());
             dialogLists.put(ActivityHelper.getActivity().hashCode(),netDialog);
         }
         if (isShow) {
@@ -565,7 +566,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 boolean b = dialogLists.containsKey(ActivityHelper.getActivity().hashCode());
                 if(b){
                     NetDialog netDialog = dialogLists.get(ActivityHelper.getActivity().hashCode());
-                    if(netDialog!=null&&netDialog.isShowing()) {
+                    if(netDialog!=null&&netDialog.isShowing()&&netDialog.getOwnerActivity()!=null
+                            &&!netDialog.getOwnerActivity().isFinishing()) {
                         netDialog.dismiss();
                         dialogLists.remove(ActivityHelper.getActivity().hashCode());
                     }
@@ -604,7 +606,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             NetDialog netDialog = dialogLists.get(ActivityHelper.getActivity().hashCode());
             if (netDialog != null && netDialog.isShowing()){
                 netDialog.dismiss();
-                netDialog = null;
             }
             return;
         }
@@ -613,10 +614,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             while (iterator.hasNext()){
                 Integer next = iterator.next();
                 NetDialog netDialog = dialogLists.get(next);
-                if (netDialog != null && netDialog.isShowing()){
+                if (ActivityHelper.getActivity()!=null&&netDialog != null &&
+                        netDialog.isShowing()&&netDialog.getOwnerActivity()!=null
+                        &&!netDialog.getOwnerActivity().isFinishing()){
                     netDialog.dismiss();
                 }
-                netDialog = null;
             }
             dialogLists.clear();
         }
