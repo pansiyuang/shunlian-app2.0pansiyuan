@@ -7,10 +7,13 @@ import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
@@ -18,6 +21,7 @@ import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MyTextView;
@@ -51,6 +55,18 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
 
     @BindView(R.id.mtv_smsLoginTip)
     MyTextView mtv_smsLoginTip;
+
+    @BindView(R.id.miv_avatar)
+    ImageView miv_avatar;
+
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
+
+    @BindView(R.id.mtv_invite_code)
+    MyTextView mtv_invite_code;
+
+    @BindView(R.id.rlayout_root)
+    RelativeLayout rlayout_root;
 
 
     private VerifyPicDialog mVerifyPicDialog;
@@ -110,6 +126,10 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
     }
 
     private void dispatchApi() {
+        String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
+        if (!isEmpty(inviteCode) && presenter != null){
+            presenter.codeDetail(inviteCode);
+        }
         if (mConfig != null&&mtv_mobile!=null) {
             if (!isEmpty(mConfig.mobile) && mConfig.mobile.length() == 11){
                 String temp = "";//130 0756 2706
@@ -246,6 +266,23 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
             countDown();
         }
     }
+
+    /**
+     * 邀请码详情
+     *
+     * @param bean
+     */
+    @Override
+    public void codeInfo(MemberCodeListEntity bean, String error) {
+        if (bean != null && bean.info != null){
+            visible(rlayout_root);
+            MemberCodeListEntity.ListBean info = bean.info;
+            mtv_invite_code.setText("邀请码："+info.code);
+            mtv_title.setText(info.nickname+"邀请了您加入顺联动力");
+            GlideUtils.getInstance().loadCircleHeadImage(baseActivity,miv_avatar,info.avatar);
+        }
+    }
+
     /**
      * 检查短信验证码
      * @param showPictureCode 1显示图像验证码
