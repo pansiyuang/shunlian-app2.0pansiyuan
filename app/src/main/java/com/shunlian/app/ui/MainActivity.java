@@ -47,9 +47,11 @@ import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.h5.H5X5Frag;
+import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.HighLightKeyWordUtil;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
@@ -237,7 +239,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
         pMain = new PMain(MainActivity.this, MainActivity.this);
         pMain.entryInfo();
-        pMain.isShowNewPersonPrize();
+        pMain.isShowUserNewPersonPrize();
         initMessage();
         fragmentManager = getSupportFragmentManager();
         mainPageClick();
@@ -900,17 +902,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void initDialogs(String prize) {
 //        if (dialog_new == null) {
             dialog_new = new Dialog(this, R.style.popAd);
-            dialog_new.setContentView(R.layout.dialog_new);
+            dialog_new.setContentView(R.layout.dialog_user_new);
             MyImageView miv_close = (MyImageView) dialog_new.findViewById(R.id.miv_close);
-            NewTextView ntv_bThree = (NewTextView) dialog_new.findViewById(R.id.ntv_bThree);
-            ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_aOne);
-            ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
-            ntv_check = (NewTextView) dialog_new.findViewById(R.id.ntv_check);
-            ntv_use = (NewTextView) dialog_new.findViewById(R.id.ntv_use);
-            mllayout_before = (MyLinearLayout) dialog_new.findViewById(R.id.mllayout_before);
-            mllayout_after = (MyLinearLayout) dialog_new.findViewById(R.id.mllayout_after);
-            SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(String.format(getStringResouce(R.string.new_zuigaokede), prize), prize, 34);
-            ntv_bThree.setText(spannableStringBuilder);
+             ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_user_bOne);
+             ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
+             ntv_aOne.setText(HighLightKeyWordUtil.getHighLightKeyWord(getResources().getColor(R.color.pink_color),
+                     prize,"现金红包"));
+//            SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(String.format(getStringResouce(R.string.new_zuigaokede), prize), prize, 34);
+//            ntv_bThree.setText(spannableStringBuilder);
             miv_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -920,18 +919,18 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             ntv_get.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Common.isAlreadyLogin()) {
-                        pMain.getPrizeByRegister();
-                    } else {
-//                      isGetAward=true;
-                        Common.goGoGo(baseAct,"login");
-                        dialog_new.dismiss();
-                    }
+                    dialog_new.dismiss();
+                    NewUserPageActivity.startAct(MainActivity.this,true);
+//                    if (Common.isAlreadyLogin()) {
+////                        pMain.getPrizeByRegister();
+//                    } else {
+////                      isGetAward=true;
+//                        Common.goGoGo(baseAct,"login");
+//                        dialog_new.dismiss();
+//                    }
                 }
             });
-
             dialog_new.setCancelable(false);
-//        }
         dialog_new.show();
     }
 
@@ -992,7 +991,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void isShowNew(CommonEntity data) {
-        if ("1".equals(data.show) && !isEmpty(data.prize) && Float.parseFloat(data.prize) > 0)
+        if ("1".equals(data.show) && !isEmpty(data.prize))
             initDialogs(data.prize);
     }
 

@@ -148,9 +148,6 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         }
     }
 
-    public void updateTypeUser(String type,boolean isNew){
-        this.type = type;
-    }
     @Override
     protected void initListener() {
         lay_refresh.setOnRefreshListener(() -> {

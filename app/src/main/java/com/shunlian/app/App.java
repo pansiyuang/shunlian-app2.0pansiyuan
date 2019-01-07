@@ -21,6 +21,9 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -205,6 +208,13 @@ public class App extends Application {
         eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_CLICK);
         SensorsDataAPI.sharedInstance(this).enableAutoTrack(eventTypeList);
         SensorsDataAPI.sharedInstance().trackFragmentAppViewScreen();
+        try {
+            JSONObject properties = new JSONObject();
+            properties.put("platformType", "Android");
+            SensorsDataAPI.sharedInstance().registerSuperProperties(properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         if(Common.isAlreadyLogin()) {
             SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));

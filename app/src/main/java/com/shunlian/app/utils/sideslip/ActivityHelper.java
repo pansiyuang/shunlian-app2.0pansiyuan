@@ -36,9 +36,15 @@ public class ActivityHelper implements Application.ActivityLifecycleCallbacks {
         }
     }
 
+    private static Activity sActivity;
     @Override
     public void onActivityStarted(Activity activity) {
 
+        sActivity=activity;
+    }
+
+    public static Activity getActivity(){
+        return sActivity;
     }
 
     @Override

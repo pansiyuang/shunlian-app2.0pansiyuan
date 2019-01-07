@@ -39,8 +39,65 @@ public class CommonDialogUtil {
     public CommonDialog guideInfo;
     public CommonDialog inputGuide;
     public CommonDialog inputWeixin;
+    public CommonDialog dialog_user_info;
+    public CommonDialog dialog_user_old;
     public CommonDialogUtil(Context context){
         this.context = context;
+    }
+
+    //新人领取优惠劵
+    public void userNewShowDialog(ICallBackResult<String> callBackResult,String defaultValue) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd)
+                .setView(R.layout.dialog_page_user_new);
+        dialog_user_info = nomalBuild.create();
+        dialog_user_info.setCancelable(false);
+        dialog_user_info.show();
+        TextView tv_new_submit = dialog_user_info.findViewById(R.id.tv_new_submit);
+        TextView  ntv_user_page_price= dialog_user_info.findViewById(R.id.ntv_user_page_price);
+        if(!TextUtils.isEmpty(defaultValue)){
+            tv_new_submit.setText(defaultValue);
+        }
+        tv_new_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callBackResult.onTagClick(tv_new_submit.getText().toString());
+            }
+        });
+    }
+
+    //老用户领取优惠劵
+    public void userOldShowDialog(ICallBackResult<String> callBackResult,String content) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,260))
+                .setView(R.layout.dialog_page_user_old);
+        dialog_user_old = nomalBuild.create();
+        dialog_user_old.setCancelable(false);
+        dialog_user_old.show();
+        TextView tv_messages = dialog_user_old.findViewById(R.id.tv_messages);
+        TextView  tv_sure= dialog_user_old.findViewById(R.id.tv_sure);
+        TextView  tv_cancel= dialog_user_old.findViewById(R.id.tv_cancel);
+        if(!TextUtils.isEmpty(content)){
+            tv_messages.setText(content);
+        }
+        tv_sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_user_old.dismiss();
+                callBackResult.onTagClick("page");
+            }
+        });
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_user_old.dismiss();
+                callBackResult.onTagClick("home");
+            }
+        });
     }
 
     //添加微信

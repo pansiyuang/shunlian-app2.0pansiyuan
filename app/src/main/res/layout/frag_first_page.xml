@@ -230,6 +230,47 @@
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:layout_alignParentRight="true"
+        android:paddingRight="10dp"
+        android:visibility="gone"
+        android:id="@+id/show_new_user_view"
+        android:layout_height="105dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/img_xinren_xiaochuangkou"/>
+
+        <TextView
+            android:id="@+id/tv_new_user_title"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:text="新人特供￥9.9"
+            android:textColor="@color/white"
+            android:textSize="9sp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="45dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:id="@+id/tv_new_user_time"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:text="2天09:26:08"
+            android:textColor="@color/pink_color"
+            android:textSize="8sp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rounded_corner_solid_white_24px"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
 </com.shunlian.app.widget.MyRelativeLayout>
 
 

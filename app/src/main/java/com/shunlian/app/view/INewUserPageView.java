@@ -6,6 +6,7 @@ import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
+import com.shunlian.app.bean.UserNewDataEntity;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface INewUserPageView extends IView {
   void bannerList(List<AdUserEntity.AD> adList,boolean isNew);
   void goodCartList(List<NewUserGoodsEntity.Goods> goodsList,boolean isFrist);
   void delCart(String cid);
+  void getvoucher(UserNewDataEntity userNewDataEntity);
+  void getOldMessage(String message);
 }

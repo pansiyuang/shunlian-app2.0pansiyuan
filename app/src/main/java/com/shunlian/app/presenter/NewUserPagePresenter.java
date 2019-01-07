@@ -10,6 +10,7 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.bean.UserNewDataEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMyPageView;
@@ -122,6 +123,25 @@ public class NewUserPagePresenter extends BasePresenter<INewUserPageView> {
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.delCart(cid);
+            }
+        });
+    }
+
+
+    public void getvoucher() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<UserNewDataEntity>> setinfo = getAddCookieApiService().getvoucher(map);
+        getNetData(false, setinfo, new SimpleNetDataCallback<BaseEntity<UserNewDataEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<UserNewDataEntity> entity) {
+                super.onSuccess(entity);
+                iView.getvoucher(entity.data);
+            }
+            @Override
+            public void onErrorCode(int code, String message) {
+//                super.onErrorCode(code, message);
+                iView.getOldMessage(message);
             }
         });
     }
