@@ -38,6 +38,10 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +93,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     private List<GoodsDeatilEntity.Goods> mGoodsLists;
     private SelectGoodsAdapter mGoodsAdapter;
     private FindSendPicPresenter presenter;
+    private static boolean isFirst = true;
     /********打开选择图片activity的请求码**********/
     public static final int SELECT_PIC_REQUESTCODE = 800;
     /*********添加地址************/
@@ -109,6 +114,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     private final int MAX_ASSOCIATED_GOODS = 5;
     private SendConfig mConfig;
     private PromptDialog promptDialog;
+    private ArrayList<String> mFirstSelectResultList;
 
     /**
      *
@@ -151,7 +157,17 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (isFirst){
+            handleUpLoadPic(mFirstSelectResultList);
+            isFirst = false;
+        }
+    }
+
+    @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
@@ -285,25 +301,44 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
             }
         } else if (requestCode == SELECT_PIC_REQUESTCODE && resultCode == Activity.RESULT_OK) {
             ArrayList<String> picturePaths = data.getStringArrayListExtra(SelectPicVideoAct.EXTRA_RESULT);
-            if (!isEmpty(picturePaths)) {
-                String path = picturePaths.get(0);
-                if (!isEmpty(path) && isMP4Path(path)) {
-                    if (presenter != null) {
-                        try {
-                            MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
-                            mRetriever.setDataSource(path);
-                            Bitmap bitmap = mRetriever.getFrameAtTime();
-                            presenter.uploadVideoThumb(BitmapUtil.Bitmap2Bytes(bitmap));
-                            presenter.uploadVideo(path);
-                        }catch (Exception e){}
-                    }
-                } else {
-                    if (presenter != null){
-                        presenter.reducePics(picturePaths);
-                    }
+            handleUpLoadPic(picturePaths);
+        }
+    }
+
+    /**
+     * 处理上传图片
+     * @param picturePaths
+     */
+    private void handleUpLoadPic(ArrayList<String> picturePaths){
+        if (!isEmpty(picturePaths)) {
+            //防止eventbus事件发错
+            if (!(picturePaths.get(0) instanceof  String))return;
+            String path = picturePaths.get(0);
+            if (!isEmpty(path) && isMP4Path(path)) {
+                if (presenter != null) {
+                    try {
+                        MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+                        mRetriever.setDataSource(path);
+                        Bitmap bitmap = mRetriever.getFrameAtTime();
+                        presenter.uploadVideoThumb(BitmapUtil.Bitmap2Bytes(bitmap));
+                        presenter.uploadVideo(path);
+                    }catch (Exception e){}
+                }
+            } else {
+                if (presenter != null){
+                    presenter.reducePics(picturePaths);
                 }
             }
         }
+    }
+
+    /**
+     * 第一次进入发布页先选择图片
+     * @param selectResultList
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void eventBusSelectPicVideo(ArrayList<String> selectResultList){
+        mFirstSelectResultList = selectResultList;
     }
 
     @Override
@@ -326,6 +361,13 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
         if (promptDialog != null){
             promptDialog.dismiss();
         }
+        isFirst = true;
+        if (mFirstSelectResultList != null){
+            mFirstSelectResultList.clear();
+            mFirstSelectResultList = null;
+        }
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

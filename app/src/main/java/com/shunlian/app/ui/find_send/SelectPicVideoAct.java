@@ -39,6 +39,8 @@ import com.shunlian.mylibrary.ImmersionBar;
 import com.zh.smallmediarecordlib.RecordedActivity;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,6 +112,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
     private LoaderLocalImgVideoAdapter mImageVideoAdapter;
     private ImageCaptureManager captureManager;
     private AsyncTask<List<ImageVideo>, Void, List<ImageVideo>> asyncTask;
+    private FindSendPictureTextAct.SendConfig mSendConfig;
 
     public static void startAct(Activity context, int code, int maxCount) {
         Intent intent = new Intent(context, SelectPicVideoAct.class);
@@ -124,6 +127,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         maxCount = getIntent().getIntExtra("maxCount", 0);
@@ -164,12 +168,26 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 发布页需要的配置信息
+     * @param sendConfig
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void fushSendConfig(FindSendPictureTextAct.SendConfig sendConfig){
+        mSendConfig = sendConfig;
+    }
+
     @OnClick(R.id.tv_complete)
     public void complete() {
         if (!isEmpty(mSelectResultList)) {
-            Intent intent = new Intent();
-            intent.putExtra(EXTRA_RESULT, mSelectResultList);
-            setResult(Activity.RESULT_OK, intent);
+            if (maxCount == 9){
+                EventBus.getDefault().postSticky(mSelectResultList);
+                FindSendPictureTextAct.startAct(this,mSendConfig);
+            }else {
+                Intent intent = new Intent();
+                intent.putExtra(EXTRA_RESULT, mSelectResultList);
+                setResult(Activity.RESULT_OK, intent);
+            }
             finish();
         } else {
             Common.staticToast("请选择图片或者视频");
@@ -297,6 +315,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
             mFolderPopupWindow.clearListSelection();
             mFolderPopupWindow = null;
         }
+        EventBus.getDefault().unregister(this);
     }
 
 
