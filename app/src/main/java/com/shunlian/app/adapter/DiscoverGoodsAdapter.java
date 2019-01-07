@@ -55,6 +55,7 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
     private boolean isCode;
     private String from,froms,mBlogId;
     private Dialog dialog;
+    private Activity activity;
     private ShareInfoParam  mShareInfoParam;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private HotVideoBlogPresenter hotVideoBlogPresenter;
@@ -67,6 +68,18 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
         this.froms=froms;
         this.mBlogId = blogId;
         this.dialog=dialog;
+        shareGoodDialogUtil = new ShareGoodDialogUtil(context);
+        hotVideoBlogPresenter = new HotVideoBlogPresenter(context,this);
+    }
+
+    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,String from,String froms,Activity activity) {
+        super(context, false, lists);
+        mInflater = LayoutInflater.from(context);
+        this.isCode=isCode;
+        this.from=from;
+        this.froms=froms;
+        this.mBlogId = blogId;
+        this.activity = activity;
         shareGoodDialogUtil = new ShareGoodDialogUtil(context);
         hotVideoBlogPresenter = new HotVideoBlogPresenter(context,this);
     }
@@ -111,7 +124,12 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
 //                            }
 //                            quickActions.createCode(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
 //                                    1==goods.isSuperiorProduct,from,froms);
-                            dialog.dismiss();
+                            if (dialog != null) {
+                                dialog.dismiss();
+                            }
+                            if (activity != null) {
+                                activity.finish();
+                            }
 //                            quickActions.createCode(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
 //                                    1==goods.isSuperiorProduct,from,froms);
                             mShareInfoParam = new ShareInfoParam();
@@ -135,7 +153,12 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                     viewHolder.miv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            dialog.dismiss();
+                            if (dialog != null) {
+                                dialog.dismiss();
+                            }
+                            if (activity != null) {
+                                activity.finish();
+                            }
                             shareGoodDialogUtil.setOnShareBlogCallBack(new ShareGoodDialogUtil.OnShareBlogCallBack() {
                                 @Override
                                 public void shareSuccess(String blogId, String goodsId) {
