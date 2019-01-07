@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.SingleImgAdapterV2;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -31,12 +32,12 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
-import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
+import com.shunlian.app.ui.find_send.SelectPicVideoAct;
 import com.shunlian.app.ui.fragment.NewDiscoverFrag;
 import com.shunlian.app.ui.fragment.NewPersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
@@ -50,7 +51,6 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -70,7 +70,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -385,7 +384,10 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     sendConfig.memberId = baseInfo.member_id;
 
                     if (Common.isPlus()) {
-                        FindSendPictureTextAct.startAct(this, sendConfig);
+                        //FindSendPictureTextAct.startAct(this, sendConfig);
+                        EventBus.getDefault().postSticky(sendConfig);
+                        SelectPicVideoAct.startAct(this,
+                                FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
                     } else {
                         initHintDialog();
                     }

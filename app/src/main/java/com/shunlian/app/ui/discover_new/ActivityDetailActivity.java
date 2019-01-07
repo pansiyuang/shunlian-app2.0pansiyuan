@@ -20,6 +20,7 @@ import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
+import com.shunlian.app.ui.find_send.SelectPicVideoAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
@@ -163,7 +164,10 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                     sendConfig.activityTitle = "#" + currentDetail.title + "#";
                 }
                 sendConfig.memberId = baseInfo.member_id;
-                FindSendPictureTextAct.startAct(ActivityDetailActivity.this, sendConfig);
+                //FindSendPictureTextAct.startAct(ActivityDetailActivity.this, sendConfig);
+                EventBus.getDefault().postSticky(sendConfig);
+                SelectPicVideoAct.startAct(this,
+                        FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
             } catch (Exception e) {
                 e.printStackTrace();
             }
