@@ -282,7 +282,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 if (isEmpty(wx_flag)) {
                     SendAuth.Resp sendAuthResp = (SendAuth.Resp) baseResp;// 用于分享时不要有这个，不能强转
                     String code = sendAuthResp.code;
-                    wxEntryPresenter.wxLogin(code);
+                    wxEntryPresenter.newWXLogin(code);
                 } else {
                     if (!isEmpty(Constant.SHARE_TYPE)) {
                         if ("goods".equals(Constant.SHARE_TYPE)
@@ -330,12 +330,27 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (entity != null && entity.data != null) {
             WXLoginEntity wxLoginEntity = entity.data;
             String unique_sign = wxLoginEntity.unique_sign;
-            String mobile = wxLoginEntity.mobile;
+            //String mobile = wxLoginEntity.mobile;
             String member_id = wxLoginEntity.member_id;
             String status = wxLoginEntity.status;
-            if ("2".equals(status)) {//绑定手机号不需要推荐人
-                /*RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);*/
+
+
+            if ("1".equals(status)){//登录成功
+                loginSuccess(entity, wxLoginEntity);
+            }else if ("0".equals(status)){
+                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
+                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
+                config.unique_sign = unique_sign;
+                config.member_id = member_id;
+                New3LoginAct.startAct(this,config);
+                mYFinish();
+            }
+
+
+
+            /*if ("2".equals(status)) {//绑定手机号不需要推荐人
+                *//*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);*//*
                 New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
                 config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
                 config.status = status;
@@ -346,8 +361,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             } else if ("1".equals(status)) {//登录成功
                 loginSuccess(entity, wxLoginEntity);
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
-                /*RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);*/
+                *//*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);*//*
                 New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
                 config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
                 config.status = status;
@@ -356,8 +371,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 New3LoginAct.startAct(this,config);
                 mYFinish();
             }else if ("4".equals(status)){//绑定推荐人
-                /*RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);*/
+                *//*RegisterAndBindingAct.startAct(this,
+                        RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);*//*
                 New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
                 config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
                 config.unique_sign = unique_sign;
@@ -366,7 +381,9 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 config.isMobileRegister = true;
                 New3LoginAct.startAct(this,config);
                 mYFinish();
-            }
+            }*/
+
+
         } else {
             mYFinish();
         }

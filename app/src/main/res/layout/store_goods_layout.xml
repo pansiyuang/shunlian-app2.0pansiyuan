@@ -153,7 +153,7 @@
                 android:orientation="vertical">
 
                 <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_attention_count"
+                    android:id="@+id/mtv_description_consistency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/value_32"
@@ -162,7 +162,7 @@
                 <com.shunlian.app.widget.MyTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/follow_count"
+                    android:text="@string/description"
                     android:textColor="@color/value_9B"
                     android:textSize="11sp"
                     app:tv_control_adapter="true"
@@ -174,7 +174,32 @@
                 android:layout_height="match_parent"
                 android:background="@color/bg_gray_two" />
 
-            <RelativeLayout
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_quality_satisfy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/value_32"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quality_satisfy"
+                    android:textColor="@color/value_9B"
+                    android:textSize="11sp"
+                    app:tv_control_adapter="true"
+                    app:tv_margin_top="14" />
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <!--<RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -221,7 +246,7 @@
                     android:textColor="@color/pink_color"
                     android:textSize="12sp"
                     android:layout_marginLeft="4dp"/>
-            </RelativeLayout>
+            </RelativeLayout>-->
 
         </com.shunlian.app.widget.MyLinearLayout>
 

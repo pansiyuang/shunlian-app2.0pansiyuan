@@ -107,6 +107,7 @@ public class HotBlogsEntity {
         public String follow_num;
         public String blog_num;
         public int expert;
+        public int is_inner;
         public int add_v;
         public String expert_icon;
         public String v_icon;

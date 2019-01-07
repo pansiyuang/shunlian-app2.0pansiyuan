@@ -20,7 +20,6 @@ import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
-import com.shunlian.app.ui.new_login_register.LoginEntryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;

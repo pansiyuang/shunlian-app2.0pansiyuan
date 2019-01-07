@@ -34,6 +34,7 @@ public class WXLoginEntity {
     public String refresh_token;
     public String plus_role;
     public String is_tag;
+    public String share_status;//是否有邀请码 1有  2无
     public List<String> tag;
 
     @Override

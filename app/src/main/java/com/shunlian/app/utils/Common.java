@@ -94,7 +94,7 @@ import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
-import com.shunlian.app.ui.new_login_register.LoginEntryAct;
+import com.shunlian.app.ui.new3_login.LoginEntryAct;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
@@ -106,7 +106,7 @@ import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.ui.store.StoreAct;
-import com.shunlian.app.ui.task.TaskCenterAct;
+import com.shunlian.app.ui.task.NewTaskCenterAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -282,7 +282,7 @@ public class Common {
                 H5X5Act.startAct(context, params[0], H5X5Act.MODE_SONIC,"noTitle");
                 break;
             case "taskSystems":
-                TaskCenterAct.startAct(context);
+                NewTaskCenterAct.startAct(context);
                 break;
             case "taskTurnTable":
                 LuckWheelPanActivity.startAct(context);
@@ -490,7 +490,7 @@ public class Common {
                 SuperProductsAct.startAct(context);
                 break;
             case "slmall"://任务中心
-                TaskCenterAct.startAct(context);
+                NewTaskCenterAct.startAct(context);
                 break;
             case "plus":
                 MainActivity.startAct(context, "myplus");

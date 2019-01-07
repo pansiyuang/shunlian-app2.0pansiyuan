@@ -2957,4 +2957,18 @@ public interface ApiService {
      */
     @GET("newexclusive/getvoucher")
     Call<BaseEntity<UserNewDataEntity>> getvoucher(@QueryMap Map<String, String> map);
+
+    /**
+     * 新版注册
+     * @return
+     */
+    @POST("member/register/v2")
+    Call<BaseEntity<LoginFinishEntity>> newRegister(@Body RequestBody body);
+
+    /**
+     * 新版微信登录
+     * @return
+     */
+    @POST("member/oauth/wechatV2")
+    Call<BaseEntity<WXLoginEntity>> newWXLogin(@Body RequestBody body);
 }

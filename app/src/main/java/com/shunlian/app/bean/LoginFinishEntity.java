@@ -9,6 +9,9 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoginFinishEntity {
+    public String id;
+    public String unique_sign;
+    public String status;
     public String member_id;
     public String mobile;
     public String shareid;
@@ -24,6 +27,7 @@ public class LoginFinishEntity {
     public String token;
     public String expires_in;
     public String plus_role;
+    public String share_status;//是否有邀请码 1有  2无
     public String is_tag;//是否有标签1是0否
     public List<String> tag;
 }

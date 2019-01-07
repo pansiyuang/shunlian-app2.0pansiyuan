@@ -48,10 +48,12 @@ public class SearchExpertAdapter extends BaseRecyclerAdapter<ExpertEntity.Expert
                 expertViewHolder.tv_attention.setBackgroundDrawable(null);
                 expertViewHolder.tv_attention.setText("已关注");
                 expertViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+                expertViewHolder.tv_attention.setVisibility(View.GONE);
             } else {
                 expertViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 expertViewHolder.tv_attention.setText("关注");
                 expertViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+                expertViewHolder.tv_attention.setVisibility(View.VISIBLE);
             }
 
             if (expert.add_v == 1) {

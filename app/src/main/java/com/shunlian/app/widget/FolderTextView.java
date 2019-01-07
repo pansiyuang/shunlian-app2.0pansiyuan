@@ -3,7 +3,6 @@ package com.shunlian.app.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -17,6 +16,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 
 public class FolderTextView extends TextView {
 
@@ -64,6 +65,7 @@ public class FolderTextView extends TextView {
     private int mCountBackUp = 0;
     // 统计onDraw调用的次数
     private int mCountOnDraw = 0;
+    private String mBlogText;
 
     // 点击处理
     private ClickableSpan clickSpan = new ClickableSpan() {
@@ -127,6 +129,7 @@ public class FolderTextView extends TextView {
 
         a.recycle();
     }
+
 
     @Override
     public void setText(CharSequence text, BufferType type) {
@@ -459,4 +462,32 @@ public class FolderTextView extends TextView {
         }
     }
 
+    public void setBlogText(String content) {
+        mBlogText = content;
+    }
+
+    boolean isSelectAll = false;
+
+    @Override
+    public boolean onTextContextMenuItem(int id) {
+        if (TextUtils.isEmpty(mBlogText)) {
+            return super.onTextContextMenuItem(id);
+        } else {
+            //全部复制
+            if (id == 34537472) {
+                Common.copyText(getContext(), mBlogText);
+                isSelectAll = false;
+                return true;
+            } else if (id == android.R.id.selectAll) {
+                isSelectAll = true;
+            } else if (id == android.R.id.copy) {
+                if (isSelectAll) {
+                    Common.copyText(getContext(), mBlogText);
+                    isSelectAll = false;
+                    return true;
+                }
+            }
+        }
+        return super.onTextContextMenuItem(id);
+    }
 }

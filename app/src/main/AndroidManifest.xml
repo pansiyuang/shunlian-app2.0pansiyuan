@@ -282,18 +282,6 @@
             <!--</intent-filter>-->
 
         </activity>
-        <activity
-            android:name=".ui.login.LoginAct"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:label="登录"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".ui.register.SelectRecommendAct"
-            android:exported="false"
-            android:label="选择导购专员"
-            android:screenOrientation="portrait" />
 
         <activity
             android:name=".widget.NewLookBigImgAct"
@@ -1051,12 +1039,6 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.register.RegisterAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:label="注册"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
             android:name=".ui.setting.change_user.ModifyAct"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -1077,18 +1059,12 @@
             android:label="@string/prepaid_phone_records"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.new_login_register.LoginEntryAct"
+            android:name=".ui.new3_login.LoginEntryAct"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:label="登录"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".ui.new_login_register.RegisterAndBindingAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:label="注册"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".ui.coupon.UserCouponListAct"
             android:exported="false"
             android:label="使用优惠券"
@@ -1225,6 +1201,10 @@
             android:exported="true"
             android:label="邀请记录"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.task.NewTaskCenterAct"
+            android:exported="true"
+            android:label="任务中心"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

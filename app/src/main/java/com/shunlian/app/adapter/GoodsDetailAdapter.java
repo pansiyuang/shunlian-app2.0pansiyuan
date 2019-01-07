@@ -120,6 +120,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private Pattern p = Pattern.compile(re);
     private Rect mRect;
     private final VideoBannerData videoBannerData;
+    private static String selectAttr = "";
 
     public GoodsDetailAdapter(Context context, GoodsDeatilEntity entity, List<String> lists) {
         super(context, false, lists);
@@ -142,6 +143,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 netWorkStatus != NetworkUtils.NETWORK_CLASS_UNKNOWN){
             videoBannerData.isShowNetTip = true;
         }
+        selectAttr = "";
     }
 
     @Override
@@ -320,7 +322,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     mHolder.miv_shop_head, store_info.store_icon, 100, 100);
             mHolder.mtv_store_name.setText(store_info.decoration_name);
             mHolder.mtv_goods_count.setText(store_info.goods_count);
-            mHolder.mtv_attention_count.setText(store_info.attention_count);
+            //mHolder.mtv_attention_count.setText(store_info.attention_count);
             mHolder.mtv_description_consistency.setText(store_info.description_consistency);
             mHolder.mtv_quality_satisfy.setText(store_info.quality_satisfy);
             GlideUtils.getInstance().loadImage(context, mHolder.miv_starBar, store_info.star);
@@ -1001,10 +1003,18 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 //        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
         if (tv_select_param != null){
             if (sku != null) {
-                tv_select_param.setText("已" + getString(R.string.selection) + "  " + sku.name);
+                if (!isEmpty(sku.name)){
+                    String[] split = sku.name.split(",");
+                    String temp = "";
+                    for (String sp : split){
+                        temp += "“"+sp+"” ";
+                    }
+                    tv_select_param.setText("已" + getString(R.string.selection) + "  " + temp);
+                }
             }else {
-                tv_select_param.setText("已" + getString(R.string.selection) + "  " + count+"件");
+                tv_select_param.setText("已" + getString(R.string.selection) + "  “" + count+"件”");
             }
+            selectAttr = tv_select_param.getText().toString();
         }
         if (context instanceof GoodsDetailAct) {
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
@@ -1391,11 +1401,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         public ParamAttrsHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
-            if (tv_select_param != null && isEmpty(tv_select_param.getText())){
-                if (!isEmpty(mGoodsEntity.specs_text)) {
-                    tv_select_param.setText("请选择  " + mGoodsEntity.specs_text);
+            if (tv_select_param != null){
+                if (isEmpty(selectAttr)) {
+                    if (!isEmpty(mGoodsEntity.specs_text)) {
+                        tv_select_param.setText("请选择  " + mGoodsEntity.specs_text);
+                    } else {
+                        tv_select_param.setText("请选择  “规格”");
+                    }
                 }else {
-                    tv_select_param.setText("请选择  规格");
+                    tv_select_param.setText(selectAttr);
                 }
             }
             if (!isEmpty(mGoodsEntity.attrs)) {
@@ -1544,8 +1558,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_goods_count)
         MyTextView mtv_goods_count;
 
-        @BindView(R.id.mtv_attention_count)
-        MyTextView mtv_attention_count;
+        /*@BindView(R.id.mtv_attention_count)
+        MyTextView mtv_attention_count;*/
 
         @BindView(R.id.mtv_description_consistency)
         MyTextView mtv_description_consistency;
