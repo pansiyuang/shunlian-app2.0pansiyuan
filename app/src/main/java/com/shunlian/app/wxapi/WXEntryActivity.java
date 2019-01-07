@@ -16,8 +16,8 @@ import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.ShareInfoParam;
-import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -326,76 +326,39 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     @Override
-    public void onWXCallback(BaseEntity<WXLoginEntity> entity) {
+    public void onWXCallback(BaseEntity<LoginFinishEntity> entity) {
         if (entity != null && entity.data != null) {
-            WXLoginEntity wxLoginEntity = entity.data;
+            LoginFinishEntity wxLoginEntity = entity.data;
             String unique_sign = wxLoginEntity.unique_sign;
             //String mobile = wxLoginEntity.mobile;
             String member_id = wxLoginEntity.member_id;
             String status = wxLoginEntity.status;
 
-
             if ("1".equals(status)){//登录成功
                 loginSuccess(entity, wxLoginEntity);
-            }else if ("0".equals(status)){
+            }else{
                 New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
                 config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
                 config.unique_sign = unique_sign;
                 config.member_id = member_id;
+                config.status = status;
                 New3LoginAct.startAct(this,config);
                 mYFinish();
             }
-
-
-
-            /*if ("2".equals(status)) {//绑定手机号不需要推荐人
-                *//*RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE, null,unique_sign,member_id);*//*
-                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
-                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
-                config.status = status;
-                config.unique_sign = unique_sign;
-                config.member_id = member_id;
-                New3LoginAct.startAct(this,config);
-                mYFinish();
-            } else if ("1".equals(status)) {//登录成功
-                loginSuccess(entity, wxLoginEntity);
-            } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
-                *//*RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_MOBILE_ID,null,unique_sign,member_id);*//*
-                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
-                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
-                config.status = status;
-                config.unique_sign = unique_sign;
-                config.member_id = member_id;
-                New3LoginAct.startAct(this,config);
-                mYFinish();
-            }else if ("4".equals(status)){//绑定推荐人
-                *//*RegisterAndBindingAct.startAct(this,
-                        RegisterAndBindingAct.FLAG_BIND_ID,mobile,unique_sign,member_id);*//*
-                New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
-                config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
-                config.unique_sign = unique_sign;
-                config.member_id = member_id;
-                config.mobile = mobile;
-                config.isMobileRegister = true;
-                New3LoginAct.startAct(this,config);
-                mYFinish();
-            }*/
-
 
         } else {
             mYFinish();
         }
     }
 
-    private void loginSuccess(BaseEntity<WXLoginEntity> entity, WXLoginEntity wxLoginEntity) {
+    private void loginSuccess(BaseEntity<LoginFinishEntity> entity, LoginFinishEntity wxLoginEntity) {
         //Common.staticToast(entity.message);
         SharedPrefUtil.saveSharedUserString("token", wxLoginEntity.token);
         SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
         SharedPrefUtil.saveSharedUserString("avatar", wxLoginEntity.avatar);
         SharedPrefUtil.saveSharedUserString("nickname", wxLoginEntity.nickname);
+        SharedPrefUtil.saveSharedUserString("share_status", wxLoginEntity.share_status);
         SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
         SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(wxLoginEntity.member_id);
@@ -408,11 +371,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         EventBus.getDefault().post(event);
 
         EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
-//        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
-//            Common.goGoGo(this, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)
-//                    ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
-//                    ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
-//        }
         if (!"1".equals(wxLoginEntity.is_tag)){
             SexSelectAct.startAct(this);
         }

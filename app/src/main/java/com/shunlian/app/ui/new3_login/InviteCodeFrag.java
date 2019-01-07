@@ -1,38 +1,23 @@
 package com.shunlian.app.ui.new3_login;
 
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
-import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.eventbus_bean.DispachJump;
-import com.shunlian.app.newchat.util.MessageCountManager;
-import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyTextView;
-import com.tencent.bugly.crashreport.CrashReport;
-
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.shunlian.app.ui.new3_login.New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
 
 /**
  * Created by zhanghe on 2018/11/19.
@@ -61,7 +46,6 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
 
     private VerifyPicDialog mVerifyPicDialog;
     private New3LoginPresenter presenter;
-    private DispachJump mJump;
     private New3LoginAct.LoginConfig mConfig;
 
     /**
@@ -80,7 +64,7 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     @Override
     protected void initListener() {
         super.initListener();
-        invite_code.setOnTextChangeListener(sequence -> {
+        /*invite_code.setOnTextChangeListener(sequence -> {
             GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
             if (!isEmpty(sequence)){
                 btnDrawable.setColor(getColorResouce(R.color.pink_color));
@@ -90,7 +74,7 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
             if (isEmpty(sequence)){
                 mtv_tip.setVisibility(View.INVISIBLE);
             }
-        });
+        });*/
     }
 
     /**
@@ -98,8 +82,9 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     protected void initData() {
-        GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
-        btnDrawable.setColor(Color.parseColor("#ECECEC"));
+        //按钮状态
+        //GradientDrawable btnDrawable = (GradientDrawable) mbtnLogin.getBackground();
+        //btnDrawable.setColor(Color.parseColor("#ECECEC"));
         presenter = new New3LoginPresenter(baseActivity,this);
         presenter.loginInfoTip();
         //如果有推荐人，直接填写推荐人
@@ -128,6 +113,8 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     @OnClick(R.id.mbtn_login)
     public void bindInviteCode(){
         if (invite_code == null || isEmpty(invite_code.getText())){
+            Common.goGoGo(baseActivity,"home");
+            ((New3LoginAct) baseActivity).finish();
             return;
         }
 
@@ -153,19 +140,25 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
             mVerifyPicDialog.setMemberDetail(bean.info);
             mVerifyPicDialog.setSureAndCancleListener("确认绑定", v -> {
                 String code = invite_code.getText().toString();
-                if (presenter != null && mConfig != null) {
-                    if (mConfig.login_mode == BIND_INVITE_CODE) {//绑定导购员
-                        mConfig.invite_code = code;
-                        ((New3LoginAct) baseActivity).loginSms(2, mConfig);
-                    } else {
-                        presenter.register(mConfig.mobile, mConfig.smsCode, code, mConfig.unique_sign);
-                    }
+                if (presenter != null) {
+                    presenter.bindShareid(code);
                 }
                 mVerifyPicDialog.dismiss();
             }, "取消", v -> mVerifyPicDialog.dismiss()).show();
         }else {
             mtv_tip.setText(error);
             mtv_tip.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void bindShareID(String tip) {
+        if (!isEmpty(tip)){
+            mtv_tip.setText(tip);
+            mtv_tip.setVisibility(View.VISIBLE);
+        }else {
+            Common.goGoGo(baseActivity,"home");
+            ((New3LoginAct)baseActivity).finish();
         }
     }
 
@@ -209,35 +202,6 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     @Override
     public void showDataEmptyView(int request_code) {
 
-    }
-
-    @Override
-    public void loginMobileSuccess(LoginFinishEntity content) {
-        //登陆成功啦
-        SharedPrefUtil.saveSharedUserString("token", content.token);
-        SharedPrefUtil.saveSharedUserString("avatar", content.avatar);
-        SharedPrefUtil.saveSharedUserString("plus_role", content.plus_role);
-        SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
-        SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
-        SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
-        CrashReport.setUserId(content.member_id);
-        if (content.tag!=null)
-            SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));
-        JpushUtil.setJPushAlias();
-        //通知登录成功
-        DefMessageEvent event = new DefMessageEvent();
-        event.loginSuccess = true;
-        EventBus.getDefault().post(event);
-
-        EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
-        MessageCountManager.getInstance(getActivity()).initData();
-
-        Common.handleTheRelayJump(baseActivity);
-
-        if (!"1".equals(content.is_tag)){
-            SexSelectAct.startAct(baseActivity);
-        }
-        baseActivity.finish();
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
@@ -360,12 +361,62 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
         sortAndMD5(map);
 
         Call<BaseEntity<LoginFinishEntity>> baseEntityCall
-                = getAddCookieApiService().newRegister(getRequestBody(map));
+                = getSaveCookieApiService().newRegister(getRequestBody(map));
         getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
             @Override
             public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
                 super.onSuccess(entity);
                 iView.loginMobileSuccess(entity.data);
+            }
+        });
+    }
+
+
+
+    public void checkFromWXMobile(String status,String mobile){
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", mobile);
+        map.put("status", status);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>>
+                baseEntityCall = getAddCookieApiService().checkFromWXMobile(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.checkFromWXMobile(entity.data.status,"");
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.checkFromWXMobile("",message);
+            }
+        });
+    }
+
+
+    public void bindShareid(String code){
+        Map<String, String> map = new HashMap<>();
+        map.put("code", code);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>>
+                baseEntityCall = getAddCookieApiService().bindShareidV2(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.bindShareID("");
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.bindShareID(message);
             }
         });
     }
