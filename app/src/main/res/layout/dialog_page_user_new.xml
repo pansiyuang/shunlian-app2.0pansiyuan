@@ -5,58 +5,95 @@
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrlayout_top"
-        android:layout_width="350dp"
-        android:layout_height="355dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"
+        android:background="@mipmap/img_xinren_beijing"
         >
         <ImageView
             android:layout_width="350dp"
             android:layout_height="320dp"
             android:layout_centerHorizontal="true"
-            android:background="@mipmap/img_xinren_tanchuang"
+            android:background="@mipmap/img_hongbao"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="150dp"
             />
+        <TextView
+            android:id="@+id/tv_new_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="立即领取"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:textColor="#F05A63"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="325dp"/>
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mllayout_before"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingTop="110dp"
+            android:layout_marginTop="220dp"
             android:layout_centerHorizontal="true">
             <com.shunlian.app.widget.NewTextView
-                android:id="@+id/ntv_user_bOne"
-                android:textSize="15sp"
-                android:textColor="@color/new_text"
+                android:id="@+id/ntv_user_page_price"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/pink_color"
                 android:layout_width="152dp"
+                android:gravity="center"
                 android:lineSpacingExtra="5dp"
-                android:text="恭喜您获得现金红包,新人专享特供"
+                android:text="￥？"
                 android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="152dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:layout_height="20dp">
+                <com.shunlian.app.widget.NewTextView
+                    android:textSize="11sp"
+                    android:textColor="#808080"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:text="新人专享特供"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:id="@+id/line"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="-10dp"
+                    android:layout_marginRight="-10dp"
+                    android:layerType="software"
+                    android:layout_width="30dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/shape_dash_line"/>
+                <com.shunlian.app.widget.NewTextView
+                    android:textSize="11sp"
+                    android:textColor="#808080"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:text="优惠券"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
         </com.shunlian.app.widget.MyLinearLayout>
-        <com.shunlian.app.widget.NewTextView
-            android:id="@+id/ntv_get"
-            android:layout_width="184dp"
-            android:layout_height="42dp"
-            android:visibility="visible"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="3dp"
-            android:background="@mipmap/img_xinren_tanchuang_anniu"/>
 
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_close"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_marginRight="25dp"
-            android:paddingBottom="6dp"
-            android:layout_marginTop="35dp"
-            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
-            android:src="@mipmap/img_renwu_guanbi"/>
+            android:text="温馨提示：优惠券有效期为领取之日起3天"
+            android:textColor="#FFACDF"
+            android:layout_marginBottom="25dp"
+            android:layout_alignParentBottom="true"
+            android:textSize="11sp"
+            android:layout_centerHorizontal="true"
+          />
     </com.shunlian.app.widget.MyRelativeLayout>
 
 

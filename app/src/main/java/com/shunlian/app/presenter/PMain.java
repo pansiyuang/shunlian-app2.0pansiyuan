@@ -163,6 +163,23 @@ public class PMain extends BasePresenter<IMain> {
         });
     }
 
+    public void isShowUserNewPersonPrize() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().isUserShowNewPersonPrize(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null) {
+                    iView.isShowNew(data);
+                }
+            }
+        });
+    }
     public void getPrizeByRegister() {
         Map<String, String> map = new HashMap<>();
 //        map.put("storeId", storeId);

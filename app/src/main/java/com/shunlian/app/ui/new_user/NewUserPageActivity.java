@@ -19,10 +19,13 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.bean.UserNewDataEntity;
 import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
+import com.shunlian.app.listener.ICallBackResult;
 import com.shunlian.app.presenter.NewUserPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.CommonDialogUtil;
@@ -57,6 +60,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     private boolean isEvent =false;
     private  CommonLazyPagerAdapter commonLazyPagerAdapter;
 
+    private CommonDialogUtil commonDialogUtil;
     /**
      * 最大0元够数量
      */
@@ -88,12 +92,13 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     LinearLayout line_user_buy;
     public static boolean isNew = false;
 
+    public boolean isDialogNew = false;
+
     private String[] titlesOld = {"精选商品"};
     private List<BaseFragment> goodsFrags;
     private  NewUserPagePresenter mPresenter;
     private  UserBuyGoodsDialog userBuyGoodsDialog;
     private NewUserGoodsFrag userGoodFragFrist;
-    private NewUserGoodsFrag userGoodFragEnd;
     private ShareInfoParam shareInfoParam;
 
     @BindView(R.id.lLayout_toast)
@@ -153,7 +158,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             isEvent = true;
             mPresenter.adlist();
         }else if(event!=null && !event.isSuccess&&!event.isFragmet){
-            line_user_buy.setVisibility(View.GONE);
+            line_user_buy.setVisibility(View.VISIBLE);
+            tv_buy_num.setText("邀请记录");
+            tv_go_pay.setText("去邀请赚钱");
         }
     }
 
@@ -166,7 +173,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @Override
     protected void onResume() {
         super.onResume();
-        beginToast();
+        if(Common.isAlreadyLogin()) {
+            beginToast();
+        }
     }
 
     @Override
@@ -273,7 +282,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         EventBus.getDefault().register(this);
+        isDialogNew = this.getIntent().getBooleanExtra("isDialogNew",false);
         shareInfoParam = new ShareInfoParam();
+        commonDialogUtil = new CommonDialogUtil(this);
         shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         ImmersionBar.with(NewUserPageActivity.this).fitsSystemWindows(true)
                 .statusBarColor(R.color.pink_color)
@@ -286,32 +297,57 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         goodsFrags = new ArrayList<>();
          commonLazyPagerAdapter = new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld);
         viewpager.setAdapter(commonLazyPagerAdapter);
-        mPresenter.adlist();
-
+        if(Common.isAlreadyLogin()) {
+            mPresenter.adlist();
+        }
         tv_head.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewInvitationActivity.startAct(NewUserPageActivity.this);
             }
         });
+
+        if(isDialogNew) {
+            commonDialogUtil.userNewShowDialog(new ICallBackResult<String>() {
+                @Override
+                public void onTagClick(String data) {
+                    if(!Common.isAlreadyLogin()){
+                        Common.goGoGo(NewUserPageActivity.this, "login");
+                    }else if(Common.isAlreadyLogin()&&data.equals("立即领取")){
+                        mPresenter.getvoucher();
+                    }else if(Common.isAlreadyLogin()&&data.equals("前往使用")){
+                        mPresenter.adlist();
+                        beginToast();
+                    }
+                }
+            }, "立即领取");
+        }
     }
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, NewUserPageActivity.class);
         context.startActivity(intent);
     }
-
+    public static void startAct(Context context,boolean isDialogNew) {
+        Intent intent = new Intent(context, NewUserPageActivity.class);
+        intent.putExtra("isDialogNew",isDialogNew);
+        context.startActivity(intent);
+    }
     @Override
     protected void initListener() {
-        if(!Common.isAlreadyLogin()){
-            finish();
-            Common.goGoGo(this, "login");
-            return;
-        }
-
-        tv_buy_num.setOnClickListener(v -> mPresenter.cartlist(false));
+        tv_buy_num.setOnClickListener(v -> {
+            if(isNew) {
+                mPresenter.cartlist(false);
+            }else{
+                NewInvitationActivity.startAct(NewUserPageActivity.this);
+            }
+          }
+        );
         tv_go_pay.setOnClickListener(v -> {
-            goBuyUserGood();
+            if(isNew) {
+                goBuyUserGood();
+            }else{
+                mPresenter.getNewUserShareInfo();
+            }
         });
         img_share.setOnClickListener(v -> {
             mPresenter.getNewUserShareInfo();
@@ -337,16 +373,18 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     public void initFrags(boolean isNew) {
         this.isNew  =  isNew;
         goodsFrags.clear();
+        line_user_buy.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
         if(this.isNew) {
             tv_head.setText("新人专享");
             userGoodFragFrist = NewUserGoodsFrag.getInstance(titlesOld[0], "1",isNew);
-            userGoodFragEnd.updateTypeUser("1",isNew);
             goodsFrags.add(userGoodFragFrist);
         }else{
             tv_head.setText("邀粉专区");
-            userGoodFragEnd = NewUserGoodsFrag.getInstance(titlesOld[0], "1",isNew);
-            userGoodFragEnd.updateTypeUser("1",isNew);
-            goodsFrags.add(userGoodFragEnd);
+            userGoodFragFrist = NewUserGoodsFrag.getInstance(titlesOld[0], "1",isNew);
+            goodsFrags.add(userGoodFragFrist);
+            tv_buy_num.setText("邀请记录");
+            tv_go_pay.setText("去邀请赚钱");
+            line_user_buy.setVisibility(View.VISIBLE);
         }
         commonLazyPagerAdapter.notifyDataSetChanged();
         if(isEvent){
@@ -440,6 +478,39 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         userBuyGoodsDialog.updateItemData(this.goodsList);
         updateCartNum();
     }
+
+    @Override
+    public void getvoucher(UserNewDataEntity userNewDataEntity) {
+        if(commonDialogUtil!=null&&commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
+            TextView tv_new_submit = commonDialogUtil.dialog_user_info.findViewById(R.id.tv_new_submit);
+            TextView  ntv_user_page_price= commonDialogUtil.dialog_user_info.findViewById(R.id.ntv_user_page_price);
+            tv_new_submit.setText("前往使用");
+            ntv_user_page_price.setText(getStringResouce(R.string.common_yuan)+userNewDataEntity.prize);
+        }
+    }
+
+    @Override
+    public void getOldMessage(String message) {
+        commonDialogUtil.userOldShowDialog(new ICallBackResult<String>() {
+            @Override
+            public void onTagClick(String data) {
+                if(commonDialogUtil.dialog_user_old!=null&&commonDialogUtil.dialog_user_old.isShowing()){
+                    commonDialogUtil.dialog_user_old.dismiss();
+                }
+                if(commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
+                    commonDialogUtil.dialog_user_info.dismiss();
+                }
+                if(data.equals("home")){
+                    MainActivity.startAct(NewUserPageActivity.this, "mainPage");
+                    finish();
+                }else{
+                    mPresenter.adlist();
+                    beginToast();
+                }
+            }
+        }, message);
+    }
+
     /**
      * 更新购物车数量
      */
@@ -459,11 +530,17 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
      */
     public void updateCartNum(){
         tv_buy_num.setText("已购商品("+CURRENT_NUM+")");
+
        if(CURRENT_NUM==0){
            line_user_buy.setVisibility(View.GONE);
        }else{
            line_user_buy.setVisibility(isNew?View.VISIBLE:View.GONE);
        }
+        if(!isNew) {
+            tv_buy_num.setText("邀请记录");
+            tv_go_pay.setText("去邀请赚钱");
+            line_user_buy.setVisibility(View.VISIBLE);
+        }
     }
     @Override
     public void delGood(NewUserGoodsEntity.Goods goods) {

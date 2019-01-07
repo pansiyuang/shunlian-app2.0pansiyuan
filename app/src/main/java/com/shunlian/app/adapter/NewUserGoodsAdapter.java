@@ -117,43 +117,39 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
             if(type.equals("1")){
                 if(isNew) {
                     if(goods.is_add_cart==1) {
-                        mHolder.tv_shopping_car.setEnabled(false);
-                        mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_da_50px);
-                        mHolder.tv_shopping_car.setText("加入购物车");
+                        mHolder.tv_user_shopping_car.setEnabled(false);
+                        mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_ga_50px);
+                        mHolder.tv_user_shopping_car.setText("加入购物车");
                     }else{
                         if(NewUserPageActivity.CURRENT_NUM==NewUserPageActivity.MAX_COUNT){
-                            mHolder.tv_shopping_car.setEnabled(false);
-                            mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_da_50px);
-                            mHolder.tv_shopping_car.setText("加入购物车");
+                            mHolder.tv_user_shopping_car.setEnabled(false);
+                            mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_ga_50px);
+                            mHolder.tv_user_shopping_car.setText("加入购物车");
                         }else {
-                            mHolder.tv_shopping_car.setEnabled(true);
-                            mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
-                            mHolder.tv_shopping_car.setText("加入购物车");
+                            mHolder.tv_user_shopping_car.setEnabled(true);
+                            mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
+                            mHolder.tv_user_shopping_car.setText("加入购物车");
                         }
                     }
+                    mHolder.tv_show_num.setVisibility(View.GONE);
                 }else{
-                    mHolder.tv_shopping_car.setEnabled(true);
-                    mHolder.tv_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
-                    mHolder.tv_shopping_car.setText("立即分享");
+                    mHolder.tv_user_shopping_car.setEnabled(true);
+                    mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
+                    mHolder.tv_show_num.setVisibility(View.VISIBLE);
+                    mHolder.tv_user_shopping_car.setText("立即分享");
                 }
             }else if(type.equals("2")){
-                    mHolder.tv_shopping_car.setText("立即购买");
+                    mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
+                    mHolder.tv_user_shopping_car.setText("立即购买");
             }
-            if(position==0&&type.equals("1")){
-                if(isNew) {
-                    mHolder.tv_usew_desc.setVisibility(View.VISIBLE);
-                    mHolder.tv_usew_desc.setText("0元选3件仅当前页面加入购物车有效");
-                }else{
-                    mHolder.tv_usew_desc.setVisibility(View.GONE);
-                }
-            }else{
-                mHolder.tv_usew_desc.setVisibility(View.GONE);
-            }
+            mHolder.tv_usew_desc.setVisibility(View.GONE);
         }
     }
 
 
     public class CollectionGoodsHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
+        @BindView(R.id.tv_show_num)
+        TextView tv_show_num;
 
         @BindView(R.id.miv_goods_pic)
         MyImageView miv_goods_pic;
@@ -167,8 +163,8 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
         @BindView(R.id.mtv_discount_price)
         MyTextView mtv_discount_price;
 
-        @BindView(R.id.tv_shopping_car)
-        MyTextView tv_shopping_car;
+        @BindView(R.id.tv_user_shopping_car)
+        MyTextView tv_user_shopping_car;
 
         @BindView(R.id.mrlayout_item)
         MyRelativeLayout mrlayout_item;
@@ -179,7 +175,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
         public CollectionGoodsHolder(View itemView) {
             super(itemView);
             mrlayout_item.setOnClickListener(this);
-            tv_shopping_car.setOnClickListener(this);
+            tv_user_shopping_car.setOnClickListener(this);
         }
 
         /**

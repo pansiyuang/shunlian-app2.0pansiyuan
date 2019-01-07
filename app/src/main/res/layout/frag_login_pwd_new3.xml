@@ -52,7 +52,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_corner_solid_pink_50px"
+        android:background="@drawable/rounded_corner_solid_da_50px"
         android:gravity="center"
         android:text="登录"
         android:textColor="@color/white"

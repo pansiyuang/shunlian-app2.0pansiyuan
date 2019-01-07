@@ -1,100 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="wrap_content">
 
-    <com.shunlian.app.widget.MyRelativeLayout
-        android:id="@+id/mrlayout_top"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true"
-        android:background="@mipmap/img_xinren_beijing"
-        >
-        <ImageView
-            android:layout_width="350dp"
-            android:layout_height="320dp"
-            android:layout_centerHorizontal="true"
-            android:background="@mipmap/img_hongbao"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="150dp"
-            />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="@drawable/bg_dialog_top"
+        android:orientation="vertical">
+
+
         <TextView
-            android:id="@+id/tv_new_submit"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="立即领取"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:textColor="#F05A63"
-            android:textSize="16sp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="325dp"/>
-        <com.shunlian.app.widget.MyLinearLayout
-            android:id="@+id/mllayout_before"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:ellipsize="end"
             android:gravity="center"
-            android:layout_marginTop="220dp"
-            android:layout_centerHorizontal="true">
-            <com.shunlian.app.widget.NewTextView
-                android:id="@+id/ntv_user_page_price"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/pink_color"
-                android:layout_width="152dp"
-                android:gravity="center"
-                android:lineSpacingExtra="5dp"
-                android:text="￥？"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:layout_width="152dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:layout_height="20dp">
-                <com.shunlian.app.widget.NewTextView
-                    android:textSize="11sp"
-                    android:textColor="#808080"
-                    android:layout_width="wrap_content"
-                    android:gravity="center"
-                    android:text="新人专享特供"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:id="@+id/line"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="-10dp"
-                    android:layout_marginRight="-10dp"
-                    android:layerType="software"
-                    android:layout_width="30dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@drawable/shape_dash_line"/>
-                <com.shunlian.app.widget.NewTextView
-                    android:textSize="11sp"
-                    android:textColor="#808080"
-                    android:layout_width="wrap_content"
-                    android:gravity="center"
-                    android:text="优惠券"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </com.shunlian.app.widget.MyLinearLayout>
+            android:text="实在很抱歉"
+            android:layout_gravity="center"
+            android:textColor="@color/value_484848"
+            android:lineSpacingExtra="5dp"
+            android:textSize="18sp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_messages"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="温馨提示：优惠券有效期为领取之日起3天"
-            android:textColor="#FFACDF"
-            android:layout_marginBottom="25dp"
-            android:layout_alignParentBottom="true"
-            android:textSize="11sp"
-            android:layout_centerHorizontal="true"
-          />
-    </com.shunlian.app.widget.MyRelativeLayout>
+            android:ellipsize="end"
+            android:layout_marginTop="5dp"
+            android:text="您不是新用户哦，无法领取该优惠券"
+            android:gravity="center"
+            android:textColor="@color/text_gray2"
+            android:textSize="14sp"
+            android:visibility="visible"/>
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:layout_marginBottom="20dp"
+          android:src="@mipmap/img_huiyuan_ji"/>
+
+    </LinearLayout>
 
 
-</com.shunlian.app.widget.MyRelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/my_line_gray" />
+
+    <LinearLayout
+        android:background="@null"
+        android:layout_width="match_parent"
+        android:layout_height="42.5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_sure"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/value_484848"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_dialog_bottoml"/>
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/my_line_gray" />
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="回到首页"
+            android:textColor="#FB0036"
+            android:textSize="15sp"
+            android:background="@drawable/bg_dialog_bottomr"
+            />
+    </LinearLayout>
+</LinearLayout>

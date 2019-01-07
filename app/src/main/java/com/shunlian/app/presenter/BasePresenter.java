@@ -275,7 +275,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,
                                  INetDataCallback<BaseEntity<T>> callback, int emptyCode,
                                  int failureCode, boolean isLoading) {
-        if (code != Code.CODE_REFRESH_TOKEN_VALIDE && code != Code.API_ERROR_NO_MESSAGE) {
+        if (code != Code.CODE_REFRESH_TOKEN_VALIDE && code != Code.API_ERROR_NO_MESSAGE&& code != 6200) {
             Common.staticToast(message);
         }
         switch (code) {

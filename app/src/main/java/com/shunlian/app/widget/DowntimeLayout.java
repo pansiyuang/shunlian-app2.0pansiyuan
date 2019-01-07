@@ -185,7 +185,7 @@ public class DowntimeLayout extends View {
         }
     }
 
-    private void updateProgress() {
+    private void  updateProgress() {
         currentProgressW += (maxProgressW * 1.0f / mMaxProgress);
         /*LogUtil.zhLogW(String.format("最大进度：%d    ; 当前进度：%f   ; 当前时间：%s",
                 maxProgressW,currentProgressW,text));*/
