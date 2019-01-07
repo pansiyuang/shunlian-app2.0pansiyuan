@@ -56,10 +56,12 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
                 hotExpertViewHolder.tv_attention.setBackgroundDrawable(null);
                 hotExpertViewHolder.tv_attention.setText("已关注");
                 hotExpertViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+                hotExpertViewHolder.tv_attention.setVisibility(View.GONE);
             } else {
                 hotExpertViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 hotExpertViewHolder.tv_attention.setText("关注");
                 hotExpertViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+                hotExpertViewHolder.tv_attention.setVisibility(View.VISIBLE);
             }
 
             if (blog.add_v == 1) {
@@ -78,7 +80,7 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
 
             hotExpertViewHolder.tv_attention.setOnClickListener(v -> {
                 if (mCallBack != null) {
-                    mCallBack.toFocusUser(blog.is_focus, blog.member_id,blog.nickname);
+                    mCallBack.toFocusUser(blog.is_focus, blog.member_id, blog.nickname);
                 }
             });
 //            hotExpertViewHolder.tv_zan.setOnClickListener(v -> {
@@ -93,7 +95,7 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
 
             if (blog.type == 1) {
                 int recyclerWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 79);
-                SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth,false);
+                SinglePicAdapter singlePicAdapter = new SinglePicAdapter(context, blog.pics, 4, recyclerWidth, false);
                 BitmapUtil.discoverImg(hotExpertViewHolder.miv_big_icon, hotExpertViewHolder.recycler_list, singlePicAdapter, blog.pics, (Activity) context
                         , 0, 0, 63, 12, 16, 0, 4, 0);
                 singlePicAdapter.setOnItemClickListener((view, position1) -> MyPageActivity.startAct(context, blog.member_id));
@@ -176,7 +178,7 @@ public class HotExpertAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
     }
 
     public interface OnAdapterCallBack {
-        void toFocusUser(int isFocus, String memberId,String nickName);
+        void toFocusUser(int isFocus, String memberId, String nickName);
 
         void toPraiseBlog(String blogId);
     }

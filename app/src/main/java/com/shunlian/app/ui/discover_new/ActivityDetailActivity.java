@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ActivityDetailAdapter;
@@ -75,6 +77,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private HotBlogsEntity.Detail currentDetail;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private PromptDialog promptDialog, plusDialog;
+    private LottieAnimationView mAnimationView;
 
     @Override
     protected int getLayoutId() {
@@ -245,13 +248,36 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     @Override
     public void praiseBlog(String blogId) {
-        for (BigImgEntity.Blog blog : blogList) {
-            if (blogId.equals(blog.id)) {
-                blog.is_praise = 1;
-                blog.praise_num++;
-            }
+        if (mAnimationView != null) {
+            mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    for (BigImgEntity.Blog blog : blogList) {
+                        if (blogId.equals(blog.id)) {
+                            blog.is_praise = 1;
+                            blog.praise_num++;
+                        }
+                    }
+                    mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            mAnimationView.playAnimation();
         }
-        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -286,8 +312,9 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
-    public void toPraiseBlog(String blogId) {
+    public void toPraiseBlog(String blogId, LottieAnimationView lottieAnimationView) {
         mPresent.praiseBlos(blogId);
+        mAnimationView = lottieAnimationView;
     }
 
     @Override

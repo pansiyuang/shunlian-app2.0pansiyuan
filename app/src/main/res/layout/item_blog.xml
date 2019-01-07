@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:FolderTextView="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -25,8 +26,8 @@
             android:id="@+id/miv_v"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            android:layout_alignBottom="@+id/miv_icon"
             android:layout_alignRight="@+id/miv_icon"
+            android:layout_alignBottom="@+id/miv_icon"
             android:scaleType="fitXY"
             android:visibility="gone" />
 
@@ -50,8 +51,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/value_343434"
-                    android:textStyle="bold"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_expert"
@@ -104,13 +105,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="63sp"
-        android:layout_marginRight="27dp"
         android:layout_marginTop="12dp"
+        android:layout_marginRight="27dp"
         android:lineSpacingExtra="10dp"
         android:textColor="@color/value_484848"
         android:textSize="15sp"
-        FolderTextView:tailTextColor="@color/value_3673FB"
-        FolderTextView:foldLine="4" />
+        android:textIsSelectable="true"
+        FolderTextView:foldLine="4"
+        FolderTextView:tailTextColor="@color/value_3673FB" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_list"
@@ -126,8 +128,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="63dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="12dp"
+        android:layout_marginRight="16dp"
         android:scaleType="centerCrop"
         android:visibility="gone" />
 
@@ -136,8 +138,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="63dp"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="12dp"
+        android:layout_marginRight="5dp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -170,8 +172,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="63dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="13dp"
+        android:layout_marginRight="16dp"
         android:background="@color/value_f5"
         android:padding="8dp"
         android:visibility="gone">
@@ -220,9 +222,9 @@
             android:layout_centerVertical="true"
             android:drawableTop="@mipmap/icon_more_fenxiang"
             android:gravity="center"
-            android:paddingBottom="6dp"
             android:paddingLeft="8dp"
             android:paddingTop="5dp"
+            android:paddingBottom="6dp"
             android:text="8"
             android:textSize="10sp" />
     </RelativeLayout>
@@ -240,24 +242,35 @@
             android:drawableLeft="@mipmap/icon_faxian_xaizai"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:text="0"
             android:paddingRight="17.5dp"
+            android:text="0"
             android:textColor="@color/value_343434"
             android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/tv_zan"
+        <LinearLayout
+            android:id="@+id/ll_zan"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true"
+            android:layout_marginLeft="17.5dp"
             android:layout_toRightOf="@+id/tv_download"
-            android:drawableLeft="@mipmap/icon_faxian_zan"
-            android:drawablePadding="5dp"
-            android:gravity="center"
-            android:paddingLeft="17.5dp"
-            android:text="0"
-            android:textColor="@color/value_343434"
-            android:textSize="10sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation_zan"
+                android:layout_width="45dp"
+                android:layout_height="45dp" />
+
+            <TextView
+                android:id="@+id/tv_zan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-13dp"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/value_343434"
+                android:textSize="10sp" />
+        </LinearLayout>
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_more"

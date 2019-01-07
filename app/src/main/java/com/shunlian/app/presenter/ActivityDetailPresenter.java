@@ -129,7 +129,6 @@ public class ActivityDetailPresenter extends BasePresenter<IActivityDetailView> 
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.praiseBlog(blogId);
-                Common.staticToast(entity.message);
             }
 
             @Override

@@ -73,6 +73,8 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
         manager = new LinearLayoutManager(getContext());
         recycler_list.setLayoutManager(manager);
         stringList = new ArrayList<>();
+
+        setCanceledOnTouchOutside(true);
     }
 
     public void setBlog(BigImgEntity.Blog blog) {

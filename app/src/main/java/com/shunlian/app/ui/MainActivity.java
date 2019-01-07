@@ -404,10 +404,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     }
                     sendConfig.memberId = baseInfo.member_id;
 
+                    //判断跳转逻辑:非plus和非内部账号不跳转发布界面
                     if (Common.isPlus()) {
                         FindSendPictureTextAct.startAct(this, sendConfig);
                     } else {
-                        initHintDialog();
+                        if (baseInfo.is_inner == 1) {
+                            FindSendPictureTextAct.startAct(this, sendConfig);
+                        } else {
+                            initHintDialog();
+                        }
                     }
                 }
             } catch (Exception e) {

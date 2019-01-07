@@ -133,7 +133,6 @@ public class CommonBlogPresenter extends BasePresenter<ICommonBlogView> {
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.praiseBlog(blogId);
-                Common.staticToast(entity.message);
             }
 
             @Override
