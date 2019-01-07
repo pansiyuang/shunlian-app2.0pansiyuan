@@ -2944,4 +2944,18 @@ public interface ApiService {
      */
     @POST("member/Register/bindShareidAfter")
     Call<BaseEntity<EmptyEntity>> bindShareidAfter(@Body RequestBody body);
+
+    /**
+     * 新版注册
+     * @return
+     */
+    @POST("member/register/v2")
+    Call<BaseEntity<LoginFinishEntity>> newRegister(@Body RequestBody body);
+
+    /**
+     * 新版微信登录
+     * @return
+     */
+    @POST("member/oauth/wechatV2")
+    Call<BaseEntity<WXLoginEntity>> newWXLogin(@Body RequestBody body);
 }

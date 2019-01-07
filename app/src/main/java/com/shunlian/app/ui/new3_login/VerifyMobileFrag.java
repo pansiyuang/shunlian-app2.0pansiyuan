@@ -35,7 +35,6 @@ import java.util.HashSet;
 import butterknife.BindView;
 
 import static com.shunlian.app.ui.new3_login.New3LoginAct.LoginConfig.LOGIN_MODE.BIND_INVITE_CODE;
-import static com.shunlian.app.ui.new3_login.New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
 
 /**
  * Created by zhanghe on 2018/11/17.
@@ -127,7 +126,8 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
 
     private void dispatchApi() {
         String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
-        if (!isEmpty(inviteCode) && presenter != null){
+        if (!isEmpty(inviteCode) && presenter != null
+                && mConfig != null && !mConfig.isMobileRegister){
             presenter.codeDetail(inviteCode);
         }
         if (mConfig != null&&mtv_mobile!=null) {
@@ -295,7 +295,14 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         }else if (showPictureCode == 2){
             input_code.clearAll();//短信验证码输入错误清空输入内容
         } else if (showPictureCode == 0 && mConfig != null) {
-            if (isEmpty(mConfig.status) && mConfig.isMobileRegister && mConfig.login_mode == SMS_TO_LOGIN) {
+
+
+            if (presenter != null){
+                String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
+                presenter.newRegister(mConfig.mobile,mSmsCode,inviteCode,mConfig.unique_sign);
+            }
+
+            /*if (isEmpty(mConfig.status) && mConfig.isMobileRegister && mConfig.login_mode == SMS_TO_LOGIN) {
                 presenter.loginMobile(mConfig.mobile, mSmsCode);//登录
             }else if ("2".equals(mConfig.status)) {
                 if (presenter != null) {//绑定手机号
@@ -315,7 +322,10 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
                         presenter.register(mConfig.mobile, mSmsCode, "", mConfig.unique_sign);
                     }
                 }
-            }
+            }*/
+
+
+
         }
     }
 

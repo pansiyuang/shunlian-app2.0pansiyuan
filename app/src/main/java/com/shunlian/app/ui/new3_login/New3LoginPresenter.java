@@ -349,4 +349,24 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
             }
         });
     }
+
+
+    public void newRegister(String mobile,String mobile_code,String code,String unique_sign){
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", mobile);
+        map.put("mobile_code", mobile_code);
+        map.put("unique_sign", unique_sign);
+        map.put("code", code);
+        sortAndMD5(map);
+
+        Call<BaseEntity<LoginFinishEntity>> baseEntityCall
+                = getAddCookieApiService().newRegister(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
+                super.onSuccess(entity);
+                iView.loginMobileSuccess(entity.data);
+            }
+        });
+    }
 }

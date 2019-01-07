@@ -117,6 +117,39 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
         });
     }
 
+    public void newWXLogin(String code){
+        Map<String,String> map = new HashMap<>();
+        map.put("code",code);
+        sortAndMD5(map);
+
+        Call<BaseEntity<WXLoginEntity>> baseEntityCall = getSaveCookieApiService()
+                .newWXLogin(getRequestBody(map));
+
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<WXLoginEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<WXLoginEntity> entity) {
+                super.onSuccess(entity);
+                if (iView!=null)
+                    iView.onWXCallback(entity);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                if (iView!=null) {
+                    iView.onWXCallback(null);
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                if (iView!=null)
+                    iView.cloasePage();
+            }
+        });
+    }
+
     @Override
     public void attachView() {
 
