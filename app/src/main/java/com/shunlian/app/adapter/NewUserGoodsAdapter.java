@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +118,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                 mHolder.mtv_discount_price.setVisibility(View.GONE);
             }
 
-            if(fristPostionNewGood==-1){
+            if(fristPostionNewGood==-1&&!goods.is_recommend){
                 fristPostionNewGood = position;
             }
 
@@ -143,11 +145,33 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                     mHolder.tv_show_num.setVisibility(View.VISIBLE);
                     mHolder.tv_user_shopping_car.setText("立即分享");
               }
-              if(position==fristPostionNewGood) {
-                  mHolder.line_new_title.setVisibility(View.VISIBLE);
-              }else{
-                  mHolder.line_new_title.setVisibility(View.GONE);
+
+              if(!goods.is_recommend) {
+                  mHolder.line_time_view.setVisibility(View.GONE);
+                  mHolder.view_head_view.setVisibility(View.GONE);
+                  if (position == fristPostionNewGood) {
+                      mHolder.line_new_title.setVisibility(View.VISIBLE);
+                      mHolder.line_new_title.setBackgroundColor(context.getResources().getColor(R.color.white));
+                      mHolder.tv_usew_desc.setText("新人专区");
+                      Drawable drawable = context.getResources().getDrawable(R.mipmap.icon_xinren_zhuanqu);
+                      drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                      mHolder.tv_usew_desc.setCompoundDrawables(drawable, null, null, null);
+                      mHolder.tv_usew_desc.setCompoundDrawablePadding(DensityUtil.dip2px(context,5));
+                  } else {
+                      mHolder.line_new_title.setVisibility(View.GONE);
+                  }
+              }else if(position==0&&goods.is_recommend){//推荐
+                   mHolder.line_new_title.setVisibility(View.VISIBLE);
+                   mHolder.line_time_view.setVisibility(View.VISIBLE);
+                  mHolder.view_head_view.setVisibility(View.VISIBLE);
+                  mHolder.tv_usew_desc.setText("新人专区爆品");
+                  Drawable drawable = context.getResources().getDrawable(R.mipmap.icon_xinren_bangping);
+                  drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                  mHolder.tv_usew_desc.setCompoundDrawables(drawable, null, null, null);
+                  mHolder.tv_usew_desc.setCompoundDrawablePadding(DensityUtil.dip2px(context,5));
+                  mHolder.line_new_title.setBackgroundResource(R.drawable.bg_border_line_bottom);
               }
+
         }
     }
 

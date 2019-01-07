@@ -209,7 +209,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
 
     @Override
-    public void userGoodsList(int currentPage, int totalPage, List<NewUserGoodsEntity.Goods> collectionGoodsLists) {
+    public void userGoodsList(int currentPage, int totalPage, List<NewUserGoodsEntity.Goods> collectionGoodsLists,NewUserGoodsEntity.Goods recommend) {
         if (currentPage == 1) {
             goodList.clear();
             if (isEmpty(collectionGoodsLists)) {
@@ -218,6 +218,10 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
             } else {
                 recycler_list.setVisibility(View.VISIBLE);
                 nestedScrollView.setVisibility(View.GONE);
+            }
+            if(recommend!=null){//添加推荐商品
+                recommend.is_recommend = true;
+                goodList.add(recommend);
             }
         }
         if (!isEmpty(collectionGoodsLists)) {
