@@ -20,5 +20,6 @@ public class NoticeMsgEntity {
     public static class Notice {
         public int opt;
         public String content;
+        public String rejected;
     }
 }

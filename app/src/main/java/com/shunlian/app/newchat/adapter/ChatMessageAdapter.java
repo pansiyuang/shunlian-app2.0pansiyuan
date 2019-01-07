@@ -1190,10 +1190,18 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         TextMessage textMessage = new TextMessage();
         TextMessage.TextMessageBody textMessageBody = new TextMessage.TextMessageBody();
         textMessage.setSendType(BaseMessage.VALUE_SYSTEM);
-        textMessageBody.text = String.valueOf(sendTime);
+        if (isPre) {
+            textMessageBody.text = String.valueOf(lastmsgTime);
+        } else {
+            textMessageBody.text = String.valueOf(sendTime);
+        }
         textMessage.msg_body = textMessageBody;
         textMessage.msg_type = "system";
-        info.send_time = sendTime;
+        if (isPre) {
+            info.send_time = lastmsgTime;
+        } else {
+            info.send_time = sendTime;
+        }
         try {
             info.message = objectMapper.writeValueAsString(textMessage);
         } catch (Exception e) {

@@ -77,7 +77,7 @@ public class CommonDialog extends Dialog {
 		}
 
 		public Builder(Context context) {
-			this(context, R.style.dialog);
+			this(context, R.style.popAd);
 		}
 
 		public CommonDialog create() {

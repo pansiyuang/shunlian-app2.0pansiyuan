@@ -2946,6 +2946,19 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> bindShareidAfter(@Body RequestBody body);
 
     /**
+     * 首页验证新人
+     * @return
+     */
+    @GET("newexclusive/isShowNewPersonPrize")
+    Call<BaseEntity<CommonEntity>> isUserShowNewPersonPrize(@QueryMap Map<String, String> map);
+
+    /**
+     *领取新人优惠券
+     */
+    @GET("newexclusive/getvoucher")
+    Call<BaseEntity<UserNewDataEntity>> getvoucher(@QueryMap Map<String, String> map);
+
+    /**
      * 新版注册
      * @return
      */

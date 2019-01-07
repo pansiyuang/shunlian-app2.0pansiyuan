@@ -2,10 +2,14 @@
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:background="@color/transparent">
-
+  >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:id="@+id/shalog_share"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -170,4 +174,5 @@
             android:textColor="@color/share_text"
             android:textSize="14sp" />
     </com.shunlian.app.widget.MyLinearLayout>
+    </RelativeLayout>
 </com.shunlian.app.widget.MyRelativeLayout>

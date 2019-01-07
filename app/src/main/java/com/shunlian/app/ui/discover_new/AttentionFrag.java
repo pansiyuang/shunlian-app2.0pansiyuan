@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new;
 
+import android.animation.Animator;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AttentionAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -66,6 +68,8 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     private int focusType; //0 关注blog列表用户,1关注推荐关注用户,2,关注空页面推荐关注用户
     private PromptDialog promptDialog;
     private ShareGoodDialogUtil shareGoodDialogUtil;
+    private LottieAnimationView mAnimationView;
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -165,7 +169,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
             attentionAdapter.setHasFocus(hotBlogsEntity.is_have_focus);
         } else {
             if (hotBlogAdapter == null) {
-                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList,shareGoodDialogUtil);
+                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList, shareGoodDialogUtil);
                 hotBlogAdapter.setAdapterCallBack(this);
                 hotBlogAdapter.setShowAttention(false);
             }
@@ -190,7 +194,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         }
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case 1:
             case 2:
@@ -215,13 +219,36 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
 
     @Override
     public void praiseBlog(String blogId) {
-        for (BigImgEntity.Blog blog : blogList) {
-            if (blogId.equals(blog.id)) {
-                blog.is_praise = 1;
-                blog.praise_num++;
-            }
+        if (mAnimationView != null) {
+            mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    for (BigImgEntity.Blog blog : blogList) {
+                        if (blogId.equals(blog.id)) {
+                            blog.is_praise = 1;
+                            blog.praise_num++;
+                        }
+                    }
+                    hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            mAnimationView.playAnimation();
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
     }
 
     @Override
@@ -231,7 +258,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 blog.down_num++;
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
 
@@ -257,7 +284,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     }
 
     @Override
-    public void toFocusUser(int isFocus, String memberId,String nickName) {
+    public void toFocusUser(int isFocus, String memberId, String nickName) {
         focusType = 0;
         if (isFocus == 1) {
             if (promptDialog == null) {
@@ -279,7 +306,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     }
 
     @Override
-    public void toFocusMember(int isFocus, String memberId,String nickName) {
+    public void toFocusMember(int isFocus, String memberId, String nickName) {
         focusType = 1;
         if (isFocus == 1) {
             if (promptDialog == null) {
@@ -301,8 +328,9 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     }
 
     @Override
-    public void toPraiseBlog(String blogId) {
+    public void toPraiseBlog(String blogId, LottieAnimationView animationView) {
         mPresenter.praiseBlos(blogId);
+        mAnimationView = animationView;
     }
 
     @Override
@@ -323,7 +351,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                 blog.total_share_num++;
             }
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -340,7 +368,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         blog.is_focus = event.mData.is_focus;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case RefreshBlogEvent.PRAISE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -349,7 +377,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         blog.praise_num++;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case RefreshBlogEvent.SHARE_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -357,7 +385,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         blog.total_share_num++;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
             case RefreshBlogEvent.DOWNLOAD_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
@@ -365,7 +393,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
                         blog.down_num++;
                     }
                 }
-                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(),blogList);
+                hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
                 break;
         }
     }

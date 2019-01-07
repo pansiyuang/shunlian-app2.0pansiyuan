@@ -115,7 +115,13 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     private int mposition, size;
     private static Handler handler;
 
-
+    //新用户的倒计时
+    @BindView(R.id.show_new_user_view)
+    RelativeLayout show_new_user_view;
+    @BindView(R.id.tv_new_user_title)
+    TextView tv_new_user_title;
+    @BindView(R.id.tv_new_user_time)
+    TextView tv_new_user_time;
     public void beginToast() {
         if (isPause) {
             mposition = 0;

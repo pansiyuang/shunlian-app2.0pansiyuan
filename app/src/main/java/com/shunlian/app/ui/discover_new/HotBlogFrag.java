@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new;
 
+import android.animation.Animator;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
@@ -57,6 +59,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private ObjectMapper objectMapper;
     private PromptDialog promptDialog;
     private ShareGoodDialogUtil shareGoodDialogUtil;
+    private LottieAnimationView mAnimationView;
 
     @Override
     public void onDestroyView() {
@@ -165,13 +168,36 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Override
     public void praiseBlog(String blogId) {
-        for (BigImgEntity.Blog blog : blogList) {
-            if (blogId.equals(blog.id)) {
-                blog.is_praise = 1;
-                blog.praise_num++;
-            }
+        if (mAnimationView != null) {
+            mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    for (BigImgEntity.Blog blog : blogList) {
+                        if (blogId.equals(blog.id)) {
+                            blog.is_praise = 1;
+                            blog.praise_num++;
+                        }
+                    }
+                    hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            mAnimationView.playAnimation();
         }
-        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     @Override
@@ -230,8 +256,9 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     }
 
     @Override
-    public void toPraiseBlog(String blogId) {
+    public void toPraiseBlog(String blogId, LottieAnimationView animationView) {
         hotBlogPresenter.praiseBlos(blogId);
+        mAnimationView = animationView;
     }
 
     @Override

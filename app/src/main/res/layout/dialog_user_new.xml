@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_top"
+        android:layout_width="350dp"
+        android:layout_height="355dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        >
+        <ImageView
+            android:layout_width="350dp"
+            android:layout_height="320dp"
+            android:layout_centerHorizontal="true"
+            android:background="@mipmap/img_xinren_tanchuang"
+            android:layout_alignParentTop="true"
+            />
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mllayout_before"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="110dp"
+            android:layout_centerHorizontal="true">
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_user_bOne"
+                android:textSize="15sp"
+                android:textColor="@color/new_text"
+                android:layout_width="152dp"
+                android:lineSpacingExtra="5dp"
+                android:text="恭喜您获得现金红包,新人专享特供"
+                android:layout_height="wrap_content" />
+        </com.shunlian.app.widget.MyLinearLayout>
+        <com.shunlian.app.widget.NewTextView
+            android:id="@+id/ntv_get"
+            android:layout_width="184dp"
+            android:layout_height="42dp"
+            android:visibility="visible"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="3dp"
+            android:background="@mipmap/img_xinren_tanchuang_anniu"/>
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="25dp"
+            android:paddingBottom="6dp"
+            android:layout_marginTop="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_renwu_guanbi"/>
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+
+</com.shunlian.app.widget.MyRelativeLayout>

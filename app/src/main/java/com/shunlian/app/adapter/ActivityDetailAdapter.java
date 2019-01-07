@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.DiscoverActivityEntity;
@@ -36,6 +37,7 @@ import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.DownLoadImageThread;
+import com.shunlian.app.utils.DownLoadQRCodeImageUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorizonItemDecoration;
 import com.shunlian.app.utils.LogUtil;
@@ -49,6 +51,7 @@ import com.shunlian.app.utils.download.DownloadUtils;
 import com.shunlian.app.utils.download.JsDownloadListener;
 import com.shunlian.app.widget.BlogBottomDialog;
 import com.shunlian.app.widget.FolderTextView;
+import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewLookBigImgAct;
@@ -76,18 +79,45 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
     private String currentBlogId;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private ShareInfoParam mShareInfoParam;
+    private HttpDialog httpDialog;
+    private DownLoadQRCodeImageUtil downLoadQRCodeImageUtil;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (saveImgDialog == null) {
-                Activity activity = (Activity) context;
-                saveImgDialog = new SaveImgDialog(activity);
+            switch (msg.what) {
+                case 1:
+                    if (httpDialog != null) {
+                        httpDialog.dismiss();
+                    }
+                    if (saveImgDialog == null) {
+                        Activity activity = (Activity) context;
+                        saveImgDialog = new SaveImgDialog(activity);
+                    }
+                    saveImgDialog.show();
+                    if (mCallBack != null) {
+                        mCallBack.toDown(currentBlogId);
+                    }
+                    break;
+                case 2:
+                    BigImgEntity.Blog blog = (BigImgEntity.Blog) msg.obj;
+                    if (downLoadQRCodeImageUtil == null) {
+                        downLoadQRCodeImageUtil = new DownLoadQRCodeImageUtil(context);
+                    }
+                    downLoadQRCodeImageUtil.setMyCallBack(new DownLoadQRCodeImageUtil.MyCallBack() {
+                        @Override
+                        public void successBack() {
+                            mHandler.sendEmptyMessage(1);
+                        }
+
+                        @Override
+                        public void errorBack() {
+
+                        }
+                    });
+                    downLoadQRCodeImageUtil.saveGoodsQRImage(blog.related_goods);
+                    break;
             }
-            if (mCallBack != null) {
-                mCallBack.toDown(currentBlogId);
-            }
-            saveImgDialog.show();
         }
     };
 
@@ -128,19 +158,19 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.tv_attention.setBackgroundDrawable(null);
                 blogViewHolder.tv_attention.setText("已关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+                blogViewHolder.tv_attention.setVisibility(View.GONE);
             } else {
                 blogViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 blogViewHolder.tv_attention.setText("关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
             }
 
             if (blog.is_praise == 1) {
-                blogViewHolder.tv_zan.setClickable(false);
-                setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
+                blogViewHolder.animation_zan.setProgress(1f);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.pink_color));
             } else {
-                blogViewHolder.tv_zan.setClickable(true);
-                setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
+                blogViewHolder.animation_zan.setProgress(0f);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
             }
 
@@ -253,7 +283,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.rl_video.setVisibility(View.GONE);
             } else {
                 RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) blogViewHolder.miv_video.getLayoutParams();
-                setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_xaizai);
+                setTextDrawable(blogViewHolder.tv_download, R.mipmap.icon_faxian_xaizai);
                 if (!isEmpty(blog.video_thumb)) {
                     int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(blog.video_thumb, "w"), Common.getURLParameterValue(blog.video_thumb, "h"), 190, 190);
 
@@ -287,25 +317,27 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.tv_attention.setBackgroundDrawable(null);
                 blogViewHolder.tv_attention.setText("已关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.text_gray2));
+                blogViewHolder.tv_attention.setVisibility(View.GONE);
             } else {
                 blogViewHolder.tv_attention.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_stroke_pink_20px));
                 blogViewHolder.tv_attention.setText("关注");
                 blogViewHolder.tv_attention.setTextColor(getColor(R.color.pink_color));
+                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
             }
 
+            blogViewHolder.animation_zan.setAnimation("praise.json");
+            blogViewHolder.animation_zan.loop(false);
+            blogViewHolder.animation_zan.setImageAssetsFolder("images/");
             if (blog.is_praise == 1) {
-                blogViewHolder.tv_zan.setClickable(false);
-                setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_dainzan_hong);
+                blogViewHolder.animation_zan.setProgress(1f);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.pink_color));
             } else {
-                blogViewHolder.tv_zan.setClickable(true);
-                setTextDrawable(blogViewHolder.tv_zan, R.mipmap.icon_faxian_zan);
+                blogViewHolder.animation_zan.setProgress(0f);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
             }
 
             if (blog.is_self == 0) {
                 blogViewHolder.miv_more.setVisibility(View.VISIBLE);
-                blogViewHolder.tv_attention.setVisibility(View.VISIBLE);
             } else {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
                 blogViewHolder.miv_more.setVisibility(View.GONE);
@@ -323,10 +355,10 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
             blogViewHolder.miv_icon.setOnClickListener(v -> MyPageActivity.startAct(context, blog.member_id));
 
-            blogViewHolder.tv_zan.setOnClickListener(v -> {
+            blogViewHolder.ll_zan.setOnClickListener(v -> {
                 if (Common.isAlreadyLogin()) {
                     if (mCallBack != null) {
-                        mCallBack.toPraiseBlog(blog.id);
+                        mCallBack.toPraiseBlog(blog.id, blogViewHolder.animation_zan);
                     }
                 } else {
                     Common.goGoGo(context, "login");
@@ -559,6 +591,12 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         @BindView(R.id.tv_zan)
         TextView tv_zan;
 
+        @BindView(R.id.ll_zan)
+        LinearLayout ll_zan;
+
+        @BindView(R.id.animation_zan)
+        LottieAnimationView animation_zan;
+
         @BindView(R.id.tv_download)
         TextView tv_download;
 
@@ -607,7 +645,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
     public interface OnAdapterCallBack {
         void toFocusUser(int isFocus, String memberId, String nickName);
 
-        void toPraiseBlog(String blogId);
+        void toPraiseBlog(String blogId, LottieAnimationView lottieAnimationView);
 
         void toDown(String blogId);
 
@@ -619,12 +657,23 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         switch (blog.type) {
             case 1://图文
                 if (!isEmpty(blog.pics)) {
+                    if (httpDialog == null) {
+                        httpDialog = new HttpDialog(context);
+                    }
+                    httpDialog.show();
                     ArrayList arrayList = new ArrayList();
                     arrayList.addAll(blog.pics);
                     DownLoadImageThread threads = new DownLoadImageThread(context, arrayList, new DownLoadImageThread.MyCallBack() {
                         @Override
                         public void successBack() {
-                            mHandler.sendEmptyMessage(1);
+                            //开始保存二维码图片
+                            if (isEmpty(blog.related_goods)) {
+                                mHandler.sendEmptyMessage(1);
+                            } else {
+                                Message message = mHandler.obtainMessage(2);
+                                message.obj = blog;
+                                mHandler.sendMessage(message);
+                            }
                         }
 
                         @Override
