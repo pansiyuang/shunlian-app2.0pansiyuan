@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -33,9 +34,9 @@ import butterknife.BindView;
 
 public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.Goods> {
 
-
+    private int fristPostionNewGood = -1;
+    private int fristPostionVeryGood = -1;
     private IAddShoppingCarListener mCarListener;
-    public boolean isShowSelect;
     public String type;
     private boolean isNew;
     public NewUserGoodsAdapter(Context context, List<NewUserGoodsEntity.Goods> lists,String type,boolean isNew) {
@@ -99,7 +100,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
      */
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof CollectionGoodsHolder) {
+         if (holder instanceof CollectionGoodsHolder) {
             CollectionGoodsHolder mHolder = (CollectionGoodsHolder) holder;
             NewUserGoodsEntity.Goods goods = lists.get(position);
             GlideUtils.getInstance().loadOverrideImage(context,
@@ -114,8 +115,12 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
             }else{
                 mHolder.mtv_discount_price.setVisibility(View.GONE);
             }
-            if(type.equals("1")){
-                if(isNew) {
+
+            if(fristPostionNewGood==-1){
+                fristPostionNewGood = position;
+            }
+
+            if(isNew) {
                     if(goods.is_add_cart==1) {
                         mHolder.tv_user_shopping_car.setEnabled(false);
                         mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_ga_50px);
@@ -137,12 +142,12 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                     mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
                     mHolder.tv_show_num.setVisibility(View.VISIBLE);
                     mHolder.tv_user_shopping_car.setText("立即分享");
-                }
-            }else if(type.equals("2")){
-                    mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
-                    mHolder.tv_user_shopping_car.setText("立即购买");
-            }
-            mHolder.tv_usew_desc.setVisibility(View.GONE);
+              }
+              if(position==fristPostionNewGood) {
+                  mHolder.line_new_title.setVisibility(View.VISIBLE);
+              }else{
+                  mHolder.line_new_title.setVisibility(View.GONE);
+              }
         }
     }
 
@@ -172,6 +177,23 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
         @BindView(R.id.tv_usew_desc)
         TextView tv_usew_desc;
 
+        @BindView(R.id.line_new_title)
+        LinearLayout line_new_title;
+
+        @BindView(R.id.view_head_view)
+        View view_head_view;
+
+        @BindView(R.id.line_time_view)
+        LinearLayout line_time_view;
+        @BindView(R.id.tv_time_title)
+        TextView tv_time_title;
+        @BindView(R.id.tv_time_day)
+        TextView tv_time_day;
+        @BindView(R.id.tv_time_hh)
+        TextView tv_time_hh;
+        @BindView(R.id.tv_time_mm)
+        TextView tv_time_mm;
+
         public CollectionGoodsHolder(View itemView) {
             super(itemView);
             mrlayout_item.setOnClickListener(this);
@@ -186,7 +208,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.tv_shopping_car:
+                case R.id.tv_user_shopping_car:
                     if (mCarListener != null){
                         mCarListener.onGoodsId(v,getAdapterPosition());
                     }

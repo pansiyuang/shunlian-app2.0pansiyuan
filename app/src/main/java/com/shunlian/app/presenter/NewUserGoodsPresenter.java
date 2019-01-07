@@ -108,7 +108,7 @@ public class NewUserGoodsPresenter extends BasePresenter<INewUserGoodsView> {
                         iView.showNoPayDialog(data.unpaid);
                     }
                     if(type.equals("1")) {
-                        ((NewUserPageActivity) context).initCartNum(data.cartTotal);
+                        ((NewUserPageActivity) context).initCartNum(data.cartTotal,data.show);
                     }
                 }
                 currentPage++;

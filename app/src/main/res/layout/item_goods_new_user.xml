@@ -5,14 +5,139 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/yy80"
-        android:visibility="visible"
-        android:textSize="10sp"
+        android:orientation="horizontal"
         android:gravity="center"
-        android:textColor="@color/text_gray2"
+        android:id="@+id/line_new_title"
+        android:visibility="gone"
+        android:background="@drawable/bg_border_line_bottom"
+        android:layout_height="35dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:textSize="15sp"
+        android:text="新人专区"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@mipmap/icon_xinren_zhuanqu"
+        android:gravity="center"
+        android:textColor="#CD9A4C"
         android:id="@+id/tv_usew_desc"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/line_time_view"
+        android:layout_height="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:text="距开始:"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:textColor="#8F8F8F"
+            android:id="@+id/tv_time_title"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:text="06"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/rounded_corner_black_4px"
+            android:gravity="center"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:textColor="#8F8F8F"
+            android:id="@+id/tv_time_day"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:text="天"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:textColor="#8F8F8F"
+           />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:text="06"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/rounded_corner_black_4px"
+            android:gravity="center"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:textColor="#8F8F8F"
+            android:id="@+id/tv_time_hh"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:text="时"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:textColor="#8F8F8F"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:text="06"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/rounded_corner_black_4px"
+            android:gravity="center"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:textColor="#8F8F8F"
+            android:id="@+id/tv_time_mm"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:text="分"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:textColor="#8F8F8F"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:text="06"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/rounded_corner_black_4px"
+            android:gravity="center"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:textColor="#8F8F8F"
+            android:id="@+id/tv_time_ss"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:text="秒"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:textColor="#8F8F8F"
+            />
+    </LinearLayout>
+
+
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrlayout_item"
         android:paddingBottom="@dimen/xx45"
@@ -120,7 +245,7 @@
             android:lineSpacingExtra="2dp"
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:textSize="10sp"
             android:gravity="center"
             android:background="@mipmap/img_xinren_fenxiang"
@@ -129,5 +254,10 @@
 
     </com.shunlian.app.widget.MyRelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:id="@+id/view_head_view"
+        android:background="@color/value_F7F7F7"></View>
 
 </LinearLayout>

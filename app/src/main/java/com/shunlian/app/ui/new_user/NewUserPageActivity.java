@@ -282,7 +282,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         EventBus.getDefault().register(this);
-        isDialogNew = this.getIntent().getBooleanExtra("isDialogNew",false);
+//        isDialogNew = this.getIntent().getBooleanExtra("isDialogNew",false);
         shareInfoParam = new ShareInfoParam();
         commonDialogUtil = new CommonDialogUtil(this);
         shareGoodDialogUtil = new ShareGoodDialogUtil(this);
@@ -299,6 +299,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         viewpager.setAdapter(commonLazyPagerAdapter);
         if(Common.isAlreadyLogin()) {
             mPresenter.adlist();
+        }else{
+            showDialogView();
         }
         tv_head.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -306,21 +308,28 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             }
         });
 
-        if(isDialogNew) {
-            commonDialogUtil.userNewShowDialog(new ICallBackResult<String>() {
-                @Override
-                public void onTagClick(String data) {
-                    if(!Common.isAlreadyLogin()){
-                        Common.goGoGo(NewUserPageActivity.this, "login");
-                    }else if(Common.isAlreadyLogin()&&data.equals("立即领取")){
-                        mPresenter.getvoucher();
-                    }else if(Common.isAlreadyLogin()&&data.equals("前往使用")){
-                        mPresenter.adlist();
-                        beginToast();
+    }
+
+    /**
+     * 显示新人的dialog
+     */
+    private void showDialogView(){
+        commonDialogUtil.userNewShowDialog(new ICallBackResult<String>() {
+            @Override
+            public void onTagClick(String data) {
+                if(!Common.isAlreadyLogin()){
+                    Common.goGoGo(NewUserPageActivity.this, "login");
+                }else if(Common.isAlreadyLogin()&&data.equals("立即领取")){
+                    mPresenter.getvoucher();
+                }else if(Common.isAlreadyLogin()&&data.equals("前往使用")){
+                    if(commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
+                        commonDialogUtil.dialog_user_info.dismiss();
                     }
+                    mPresenter.adlist();
+                    beginToast();
                 }
-            }, "立即领取");
-        }
+            }
+        }, "立即领取");
     }
 
     public static void startAct(Context context) {
@@ -521,9 +530,12 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     /**
      * 更新购物车数量
      */
-    public void initCartNum(int currentNum){
+    public void initCartNum(int currentNum,int show){
         this.CURRENT_NUM = currentNum;
         updateCartNum();
+        if(show!=1){
+            showDialogView();
+        }
     }
     /**
      * 更新购物车数量
