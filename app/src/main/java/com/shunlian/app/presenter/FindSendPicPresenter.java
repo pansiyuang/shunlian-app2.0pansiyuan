@@ -196,7 +196,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
         sortAndMD5(map);
 
         uploadMultiPicsCall = getAddCookieApiService().uploadPic(parts, map);
-        getNetData(true, uploadMultiPicsCall, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
+        getNetData(false, uploadMultiPicsCall, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
                 super.onSuccess(entity);
@@ -268,7 +268,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
 
         uploadVideoCall = getAddCookieApiService().uploadVideo(part);
 
-        getNetData(true, uploadVideoCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        getNetData(false, uploadVideoCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);

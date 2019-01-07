@@ -6,6 +6,52 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/rlayout_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/img_denglu_beijing"
+        android:visibility="gone"
+        android:minHeight="60dp">
+
+        <ImageView
+            android:id="@+id/miv_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="27dp"
+            android:src="@mipmap/img_set_defaulthead" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="9dp"
+            android:layout_toRightOf="@+id/miv_avatar"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_invite_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_smsLoginTip"
         android:layout_width="match_parent"

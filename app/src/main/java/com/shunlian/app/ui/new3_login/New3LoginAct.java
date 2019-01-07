@@ -227,14 +227,19 @@ public class New3LoginAct extends BaseActivity{
     public static class LoginConfig implements Parcelable {
 
         //登录状态
+        /**老版微信登录状态 已废弃*/
+        @Deprecated
         public String status;//微信登录状态 0和3绑定手机号需要推荐人  2绑定手机号不需要推荐人  4绑定推荐人
         public String unique_sign;//微信登录openid
         public String member_id;
         public String mobile;//手机号
         public String smsCode;//短信验证码
-        public boolean isMobileRegister;//手机号是否注册
+        /*** @deprecated 使用 {@link #isUseMobile} .*/
+        @Deprecated
+        public boolean isMobileRegister;//手机号是否注册 true 注册
         public String invite_code;//邀请码
         public LOGIN_MODE login_mode;//登录模式
+        public boolean isUseMobile;//手机号是否可用 true可用
 
         public enum LOGIN_MODE{
 
