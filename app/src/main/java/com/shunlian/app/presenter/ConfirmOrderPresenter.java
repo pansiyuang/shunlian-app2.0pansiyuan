@@ -2,15 +2,18 @@ package com.shunlian.app.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextUtils;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.new3_login.EditInviteCodeDialog;
 import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
+import com.shunlian.app.ui.new3_login.VerifyPicDialog;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IConfirmOrderView;
@@ -33,6 +36,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
     public static boolean isSelectStoreVoucher = true;
 
     private EditInviteCodeDialog mInviteCodeDialog;
+    private VerifyPicDialog mVerifyPicDialog;
 
     public ConfirmOrderPresenter(Context context, IConfirmOrderView iView) {
         super(context, iView);
@@ -46,7 +50,10 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
 
     @Override
     public void detachView() {
-
+        if (mInviteCodeDialog != null)
+            mInviteCodeDialog.release();
+        if (mVerifyPicDialog != null)
+            mVerifyPicDialog.release();
     }
 
     @Override
@@ -71,7 +78,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 if (isEmpty(inviteCode)) {
                     Common.staticToast("请填写邀请码");
                 } else {
-                    bindShareid(inviteCode);
+                    codeDetail(inviteCode);
                 }
             });
             mInviteCodeDialog.show();
@@ -261,7 +268,11 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 iView.bindShareID("");
+                Common.staticToasts(context,"已确认",R.mipmap.icon_common_duihao);
                 SharedPrefUtil.saveSharedUserString("share_status", "1");
+                if (mVerifyPicDialog != null){
+                    mVerifyPicDialog.release();
+                }
                 if (mInviteCodeDialog != null){
                     mInviteCodeDialog.release();
                 }
@@ -271,6 +282,53 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
                 iView.bindShareID(message);
+            }
+        });
+    }
+
+    /**
+     * 邀请码详情
+     * @param id
+     */
+    public void codeDetail(String id){
+        Map<String,String> map = new HashMap<>();
+        map.put("code",id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<MemberCodeListEntity>>
+                baseEntityCall = getApiService().codeInfo(map);
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback
+                <BaseEntity<MemberCodeListEntity>>(){
+
+            @Override
+            public void onSuccess(BaseEntity<MemberCodeListEntity> entity) {
+                super.onSuccess(entity);
+
+                if (mInviteCodeDialog != null)mInviteCodeDialog.dismiss();
+
+
+                MemberCodeListEntity bean = entity.data;
+                if (bean != null) {
+                    mVerifyPicDialog = new VerifyPicDialog((Activity) context);
+                    mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
+                    mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
+                    mVerifyPicDialog.setMessage("请确认您的导购专员");
+                    mVerifyPicDialog.showState(2);
+                    mVerifyPicDialog.setMemberDetail(bean.info);
+                    mVerifyPicDialog.setSureAndCancleListener("确认绑定", v -> {
+                        bindShareid(bean.info.code);
+                        mVerifyPicDialog.dismiss();
+                    }, "取消", v -> {
+                        mVerifyPicDialog.dismiss();
+                        if (mInviteCodeDialog != null)mInviteCodeDialog.show();
+                    }).show();
+                }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
             }
         });
     }
