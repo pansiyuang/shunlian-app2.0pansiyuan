@@ -122,6 +122,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (confirmOrderPresenter != null){
+            confirmOrderPresenter.detachView();
+        }
     }
 
     /**
@@ -171,6 +174,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         intent.putExtra("goods_id",goods_id);
         intent.putExtra("qty",qty);
         intent.putExtra("sku_id",sku_id);
+        if (params != null && params.length > 0)
         intent.putExtra("type",params[0]);
         context.startActivity(intent);
     }

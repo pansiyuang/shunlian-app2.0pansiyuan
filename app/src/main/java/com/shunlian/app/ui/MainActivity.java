@@ -53,6 +53,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HighLightKeyWordUtil;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -287,9 +288,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        } else {
 //            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
 //        }
-        if (Common.isAlreadyLogin()) {
-            Common.handleTheRelayJump(this);
-        }
+        Common.handleTheRelayJump(this);
         super.onResume();
     }
 
@@ -602,6 +601,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     public void personCenterClick() {
         isFirst = false;
+        LogUtil.zhLogW("点击个人中心personCenterClick");
         if (!Common.isAlreadyLogin()) {
             Common.goGoGo(this, "login");
             Common.theRelayJump("personCenter", null);
@@ -921,7 +921,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     NewUserPageActivity.startAct(MainActivity.this, true);
                 }
             });
-            dialog_new.setCancelable(false);
+            //dialog_new.setCancelable(false);
         }
         dialog_new.show();
     }

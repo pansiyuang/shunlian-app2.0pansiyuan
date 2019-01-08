@@ -599,7 +599,9 @@ public class Common {
      * @param context
      */
     public static void handleTheRelayJump(Context context) {
+        if (!Common.isAlreadyLogin())return;
         String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
+        LogUtil.zhLogW("处理接力跳转："+jumpType);
         if (TextUtils.isEmpty(jumpType)) return;
         ObjectMapper om = new ObjectMapper();
         DispachJump dispachJump;

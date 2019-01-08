@@ -12,6 +12,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.HashMap;
@@ -66,6 +67,7 @@ public class New3LoginAct extends BaseActivity{
         super.initListener();
         miv_close.setOnClickListener(v -> {
            if (mCurrentPage == 1 || mCurrentPage == 3){
+               SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
                Common.goGoGo(this,"home");
                finish();
            }else {
@@ -208,6 +210,7 @@ public class New3LoginAct extends BaseActivity{
     @Override
     public void onBackPressed() {
         if (mCurrentPage == 1 || mCurrentPage == 3){
+            SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
             Common.goGoGo(this,"home");
             super.onBackPressed();
         }else {
