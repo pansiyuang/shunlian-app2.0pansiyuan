@@ -90,10 +90,12 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                     if (httpDialog != null) {
                         httpDialog.dismiss();
                     }
+                    boolean b = (boolean) msg.obj;
                     if (saveImgDialog == null) {
                         Activity activity = (Activity) context;
                         saveImgDialog = new SaveImgDialog(activity);
                     }
+                    saveImgDialog.showQRCodeView(b);
                     saveImgDialog.show();
                     if (mCallBack != null) {
                         mCallBack.toDown(currentBlogId);
@@ -107,7 +109,9 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                     downLoadQRCodeImageUtil.setMyCallBack(new DownLoadQRCodeImageUtil.MyCallBack() {
                         @Override
                         public void successBack() {
-                            mHandler.sendEmptyMessage(1);
+                            Message message = mHandler.obtainMessage(1);
+                            message.obj = true;
+                            mHandler.sendMessage(message);
                         }
 
                         @Override

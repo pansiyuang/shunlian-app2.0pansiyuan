@@ -58,6 +58,7 @@ import com.shunlian.app.utils.download.DownLoadDialogProgress;
 import com.shunlian.app.utils.download.DownloadUtils;
 import com.shunlian.app.utils.download.JsDownloadListener;
 import com.shunlian.app.widget.BlogBottomDialog;
+import com.shunlian.app.widget.BlogGoodsShareDialog;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
@@ -108,10 +109,15 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     if (httpDialog != null) {
                         httpDialog.dismiss();
                     }
+                    boolean b = false;
+                    if (msg.obj != null) {
+                        b = (boolean) msg.obj;
+                    }
                     if (saveImgDialog == null) {
                         Activity activity = (Activity) context;
                         saveImgDialog = new SaveImgDialog(activity);
                     }
+                    saveImgDialog.showQRCodeView(b);
                     saveImgDialog.show();
                     if (mCallBack != null) {
                         mCallBack.toDown(currentBlogId);
@@ -125,7 +131,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     downLoadQRCodeImageUtil.setMyCallBack(new DownLoadQRCodeImageUtil.MyCallBack() {
                         @Override
                         public void successBack() {
-                            mHandler.sendEmptyMessage(1);
+                            Message message = mHandler.obtainMessage(1);
+                            message.obj = true;
+                            mHandler.sendMessage(message);
                         }
 
                         @Override
@@ -515,40 +523,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     }
 
     public void initDialog(BigImgEntity.Blog blog) {
-        Dialog dialog_new = new Dialog(context, R.style.popAd);
-        dialog_new.setContentView(R.layout.dialog_found_goods);
-        Window window = dialog_new.getWindow();
-//        //设置边框距离
-//        window.getDecorView().setPadding(0, 0, 0, 0);
-        //设置dialog位置
-        window.setGravity(Gravity.BOTTOM);
-        WindowManager.LayoutParams lp = window.getAttributes();
-        //设置宽高
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        window.setAttributes(lp);
-
-        MyImageView miv_close = dialog_new.findViewById(R.id.miv_close);
-        MyImageView miv_icon = dialog_new.findViewById(R.id.miv_icon);
-        NewTextView ntv_desc = dialog_new.findViewById(R.id.ntv_desc);
-        RecyclerView rv_goods = dialog_new.findViewById(R.id.rv_goods);
-        miv_close.setOnClickListener(view -> dialog_new.dismiss());
-        miv_icon.setOnClickListener(view -> MyPageActivity.startAct(context, blog.member_id));
-        ntv_desc.setOnClickListener(view -> MyPageActivity.startAct(context, blog.member_id));
-        GlideUtils.getInstance().loadCircleImage(context, miv_icon, blog.avatar);
-        SpannableStringBuilder ssb = Common.changeColor(blog.nickname
-                + getString(R.string.discover_fenxiangdetuijian), blog.nickname, getColor(R.color.value_007AFF));
-        ntv_desc.setText(ssb);
-        rv_goods.setLayoutManager(new LinearLayoutManager(context));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(context, blog.id, blog.related_goods, false,
-                SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""), dialog_new);
-        rv_goods.setAdapter(discoverGoodsAdapter);
-        discoverGoodsAdapter.setOnItemClickListener((view, position) -> {
-            GoodsDetailAct.startAct(context, blog.related_goods.get(position).goods_id);
-        });
-        rv_goods.addItemDecoration(new MVerticalItemDecoration(context, 36, 38, 38));
-        dialog_new.setCanceledOnTouchOutside(true);
-        dialog_new.show();
+        BlogGoodsShareDialog.startAct(context, blog);
     }
 
     public void showAttentionList(List<HotBlogsEntity.RecomandFocus> list, RecyclerView.ViewHolder holder) {

@@ -35,6 +35,7 @@ import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IHotVideoBlogView;
+import com.shunlian.app.widget.BlogGoodsShareDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -53,22 +54,37 @@ import butterknife.BindView;
 public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> implements IHotVideoBlogView {
     private LayoutInflater mInflater;
     private boolean isCode;
-    private String from,froms,mBlogId;
+    private String from, froms, mBlogId;
     private Dialog dialog;
-    private ShareInfoParam  mShareInfoParam;
+    private BlogGoodsShareDialog blogGoodsShareDialog;
+    private ShareInfoParam mShareInfoParam;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private HotVideoBlogPresenter hotVideoBlogPresenter;
 
-    public DiscoverGoodsAdapter(Context context,String blogId, List<GoodsDeatilEntity.Goods> lists,boolean isCode,String from,String froms,Dialog dialog) {
+    public DiscoverGoodsAdapter(Context context, String blogId, List<GoodsDeatilEntity.Goods> lists, boolean isCode, String from, String froms, Dialog dialog) {
         super(context, false, lists);
         mInflater = LayoutInflater.from(context);
-        this.isCode=isCode;
-        this.from=from;
-        this.froms=froms;
+        this.isCode = isCode;
+        this.from = from;
+        this.froms = froms;
         this.mBlogId = blogId;
-        this.dialog=dialog;
+        this.dialog = dialog;
         shareGoodDialogUtil = new ShareGoodDialogUtil(context);
-        hotVideoBlogPresenter = new HotVideoBlogPresenter(context,this);
+        hotVideoBlogPresenter = new HotVideoBlogPresenter(context, this);
+    }
+
+    public DiscoverGoodsAdapter(Context context, String blogId, List<GoodsDeatilEntity.Goods> lists, boolean isCode, String from, String froms, BlogGoodsShareDialog activity) {
+        super(context, false, lists);
+        mInflater = LayoutInflater.from(context);
+        this.isCode = isCode;
+        this.from = from;
+        this.froms = froms;
+        this.mBlogId = blogId;
+        this.blogGoodsShareDialog = activity;
+        if (context != null) {
+            shareGoodDialogUtil = new ShareGoodDialogUtil(context);
+            hotVideoBlogPresenter = new HotVideoBlogPresenter(context, this);
+        }
     }
 
 
@@ -80,29 +96,29 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof SingleViewHolder) {
-                SingleViewHolder viewHolder = (SingleViewHolder) holder;
-                GoodsDeatilEntity.Goods goods = lists.get(position);
-                if (goods==null)
-                    return;
-                GlideUtils.getInstance().loadCornerImage(context, viewHolder.miv_photo, goods.thumb,4);
-                viewHolder.ntv_title.setText(goods.title);
-                viewHolder.ntv_price.setText(getString(R.string.common_yuan)+goods.price);
-                viewHolder.ntv_price1.setText(getString(R.string.common_yuan)+goods.price);
-                viewHolder.ntv_priceM1.setText(getString(R.string.common_yuan)+goods.market_price);
-                viewHolder.ntv_priceM1.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
-                viewHolder.ntv_priceM.setText(getString(R.string.common_yuan)+goods.market_price);
-                viewHolder.ntv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
-                if (isCode){
-                    viewHolder.ntv_code.setVisibility(View.VISIBLE);
-                    viewHolder.ntv_price1.setVisibility(View.VISIBLE);
-                    viewHolder.ntv_priceM1.setVisibility(View.VISIBLE);
-                    viewHolder.ntv_priceM.setVisibility(View.GONE);
-                    viewHolder.ntv_price.setVisibility(View.GONE);
-                    viewHolder.miv_share.setVisibility(View.GONE);
-                    viewHolder.ntv_code.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+        if (holder instanceof SingleViewHolder) {
+            SingleViewHolder viewHolder = (SingleViewHolder) holder;
+            GoodsDeatilEntity.Goods goods = lists.get(position);
+            if (goods == null)
+                return;
+            GlideUtils.getInstance().loadCornerImage(context, viewHolder.miv_photo, goods.thumb, 4);
+            viewHolder.ntv_title.setText(goods.title);
+            viewHolder.ntv_price.setText(getString(R.string.common_yuan) + goods.price);
+            viewHolder.ntv_price1.setText(getString(R.string.common_yuan) + goods.price);
+            viewHolder.ntv_priceM1.setText(getString(R.string.common_yuan) + goods.market_price);
+            viewHolder.ntv_priceM1.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
+            viewHolder.ntv_priceM.setText(getString(R.string.common_yuan) + goods.market_price);
+            viewHolder.ntv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
+            if (isCode) {
+                viewHolder.ntv_code.setVisibility(View.VISIBLE);
+                viewHolder.ntv_price1.setVisibility(View.VISIBLE);
+                viewHolder.ntv_priceM1.setVisibility(View.VISIBLE);
+                viewHolder.ntv_priceM.setVisibility(View.GONE);
+                viewHolder.ntv_price.setVisibility(View.GONE);
+                viewHolder.miv_share.setVisibility(View.GONE);
+                viewHolder.ntv_code.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 //                            boolean is=false;
 //                            if (!isEmpty(goods.isSuperiorProduct)&&"1".equals(goods.isSuperiorProduct)){
 //                                is=true;
@@ -111,57 +127,75 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
 //                            }
 //                            quickActions.createCode(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
 //                                    1==goods.isSuperiorProduct,from,froms);
-                            dialog.dismiss();
 //                            quickActions.createCode(goods.share_url,goods.title,goods.desc,goods.price,goods.goods_id,goods.thumb,
 //                                    1==goods.isSuperiorProduct,from,froms);
-                            mShareInfoParam = new ShareInfoParam();
-                            mShareInfoParam.blogId =mBlogId;
-                            mShareInfoParam.shareLink=goods.share_url;
-                            mShareInfoParam.title =goods.title;
-                            mShareInfoParam.desc =goods.desc;
-                            mShareInfoParam.goods_id =goods.goods_id;
-                            mShareInfoParam.price =goods.price;
-                            mShareInfoParam.market_price =goods.market_price;
-                            mShareInfoParam.img =goods.thumb;
-                            mShareInfoParam.share_buy_earn = goods.share_buy_earn;
-                            mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
-                            mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
-                            mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
+                        mShareInfoParam = new ShareInfoParam();
+                        mShareInfoParam.blogId = mBlogId;
+                        mShareInfoParam.shareLink = goods.share_url;
+                        mShareInfoParam.title = goods.title;
+                        mShareInfoParam.desc = goods.desc;
+                        mShareInfoParam.goods_id = goods.goods_id;
+                        mShareInfoParam.price = goods.price;
+                        mShareInfoParam.market_price = goods.market_price;
+                        mShareInfoParam.img = goods.thumb;
+                        mShareInfoParam.share_buy_earn = goods.share_buy_earn;
+                        mShareInfoParam.isSuperiorProduct = (goods.isSuperiorProduct == 1 ? true : false);
+                        mShareInfoParam.userName = SharedPrefUtil.getSharedUserString("nickname", "");
+                        mShareInfoParam.userAvatar = SharedPrefUtil.getSharedUserString("avatar", "");
+                        if (shareGoodDialogUtil != null) {
                             shareGoodDialogUtil.setShareInfoParam(mShareInfoParam);
-                            shareGoodDialogUtil.createGoodCode(true,false);
+                            shareGoodDialogUtil.createGoodCode(true, false);
                         }
-                    });
-                }else {
-                    viewHolder.miv_share.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+
+                        if (dialog != null) {
                             dialog.dismiss();
+                        }
+                        if (blogGoodsShareDialog != null) {
+                            blogGoodsShareDialog.finish();
+                        }
+                    }
+                });
+            } else {
+                viewHolder.miv_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (shareGoodDialogUtil != null) {
                             shareGoodDialogUtil.setOnShareBlogCallBack(new ShareGoodDialogUtil.OnShareBlogCallBack() {
                                 @Override
                                 public void shareSuccess(String blogId, String goodsId) {
                                     hotVideoBlogPresenter.goodsShare("blog_goods", blogId, goodsId);
                                 }
                             });
-                            mShareInfoParam = new ShareInfoParam();
-                            mShareInfoParam.blogId =mBlogId;
-                            mShareInfoParam.shareLink=goods.share_url;
-                            mShareInfoParam.title =goods.title;
-                            mShareInfoParam.desc =goods.desc;
-                            mShareInfoParam.goods_id =goods.goods_id;
-                            mShareInfoParam.price =goods.price;
-                            mShareInfoParam.market_price =goods.market_price;
-                            mShareInfoParam.img =goods.thumb;
-                            mShareInfoParam.share_buy_earn = goods.share_buy_earn;
-                            mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
-                            mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
-                            mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
-                            shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,true);
+                        }
+                        mShareInfoParam = new ShareInfoParam();
+                        mShareInfoParam.blogId = mBlogId;
+                        mShareInfoParam.shareLink = goods.share_url;
+                        mShareInfoParam.title = goods.title;
+                        mShareInfoParam.desc = goods.desc;
+                        mShareInfoParam.goods_id = goods.goods_id;
+                        mShareInfoParam.price = goods.price;
+                        mShareInfoParam.market_price = goods.market_price;
+                        mShareInfoParam.img = goods.thumb;
+                        mShareInfoParam.share_buy_earn = goods.share_buy_earn;
+                        mShareInfoParam.isSuperiorProduct = (goods.isSuperiorProduct == 1 ? true : false);
+                        mShareInfoParam.userName = SharedPrefUtil.getSharedUserString("nickname", "");
+                        mShareInfoParam.userAvatar = SharedPrefUtil.getSharedUserString("avatar", "");
+                        if (shareGoodDialogUtil != null) {
+                            shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
                             shareGoodDialogUtil.setShareGoods();
                         }
-                    });
-                }
 
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                        if (blogGoodsShareDialog != null) {
+                            blogGoodsShareDialog.finish();
+                        }
+                    }
+                });
             }
+
+        }
     }
 
     @Override
