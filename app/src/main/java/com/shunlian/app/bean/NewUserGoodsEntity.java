@@ -39,5 +39,7 @@ public class NewUserGoodsEntity {
         public String   qty;//数量
         public int   is_add_cart;//是不是加入购物车 1:加入 0 未加入
         public boolean is_recommend= false;
+        public int  process;//进度
+        public long    finish;
     }
 }
