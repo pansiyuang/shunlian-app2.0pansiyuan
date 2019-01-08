@@ -27,7 +27,7 @@ android {
         multiDexEnabled true
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 40
+        versionCode 42
         versionName "2.6.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.ShunLianPower
