@@ -1,13 +1,18 @@
 package com.shunlian.app.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.new3_login.EditInviteCodeDialog;
+import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IConfirmOrderView;
 
 import java.util.HashMap;
@@ -27,8 +32,11 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
     /******是否选择店铺优惠券********/
     public static boolean isSelectStoreVoucher = true;
 
+    private EditInviteCodeDialog mInviteCodeDialog;
+
     public ConfirmOrderPresenter(Context context, IConfirmOrderView iView) {
         super(context, iView);
+        isCanBindShareID();
     }
 
     @Override
@@ -45,6 +53,31 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
     protected void initApi() {
 
     }
+
+    /**
+     * 是否需要绑定上级
+     */
+    private void isCanBindShareID() {
+        //share_status == 2 表示该用户没有上级，需要绑定上级才能购买
+        String share_status = SharedPrefUtil.getSharedUserString("share_status", "");
+        if ("2".equals(share_status)){
+            loginInfoTip();
+            mInviteCodeDialog = new EditInviteCodeDialog((Activity) context);
+            mInviteCodeDialog.setOnClickListener(v -> {
+                mInviteCodeDialog.release();
+                ((Activity) context).finish();
+            }, v -> {
+                String inviteCode = mInviteCodeDialog.getInviteCode();
+                if (isEmpty(inviteCode)) {
+                    Common.staticToast("请填写邀请码");
+                } else {
+                    bindShareid(inviteCode);
+                }
+            });
+            mInviteCodeDialog.show();
+        }
+    }
+
 
     /**
      * 新人专享
@@ -231,5 +264,55 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 setDate(entity);
             }
         });
+    }
+
+    /**
+     * 绑定上级
+     * @param code
+     */
+    public void bindShareid(String code){
+        Map<String, String> map = new HashMap<>();
+        map.put("code", code);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>>
+                baseEntityCall = getAddCookieApiService().bindShareidV2(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.bindShareID("");
+                SharedPrefUtil.saveSharedUserString("share_status", "1");
+                if (mInviteCodeDialog != null){
+                    mInviteCodeDialog.release();
+                }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.bindShareID(message);
+            }
+        });
+    }
+
+    /**
+     * 登录界面提示信息
+     */
+    public void loginInfoTip(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<New3LoginInfoTipEntity>> baseEntityCall = getApiService().loginInfoTip(map);
+        getNetData(false,baseEntityCall,new
+                SimpleNetDataCallback<BaseEntity<New3LoginInfoTipEntity>>(){
+                    @Override
+                    public void onSuccess(BaseEntity<New3LoginInfoTipEntity> entity) {
+                        super.onSuccess(entity);
+                        if (entity.data != null && mInviteCodeDialog != null){
+                            mInviteCodeDialog.setStrategyUrl(entity.data.incite_code_url);
+                        }
+                    }
+                });
     }
 }

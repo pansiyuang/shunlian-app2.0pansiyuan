@@ -48,4 +48,10 @@ public interface IConfirmOrderView extends IView{
      * @param receiving_prompt
      */
     default void receivingPrompt(String receiving_prompt){}
+
+    /**
+     * 绑定上级提示
+     * @param tip
+     */
+    default void bindShareID(String tip){}
 }
