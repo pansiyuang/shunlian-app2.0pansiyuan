@@ -3,17 +3,12 @@ package com.shunlian.app.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -50,12 +45,14 @@ public class BlogGoodsShareDialog extends AppCompatActivity {
     private ImmersionBar immersionBar;
     private Unbinder unbinder;
     private Window window;
+    private static Context mContext;
 
     public static void startAct(Context context, BigImgEntity.Blog blog) {
+        mContext = context;
         Intent intent = new Intent(context, BlogGoodsShareDialog.class);
         intent.putExtra("blog", blog);
         context.startActivity(intent);
-        ((Activity)context).overridePendingTransition(R.anim.push_bottom_in,R.anim.push_bottom_out);
+        ((Activity) context).overridePendingTransition(R.anim.push_bottom_in, R.anim.push_bottom_out);
     }
 
     @Override
@@ -101,7 +98,7 @@ public class BlogGoodsShareDialog extends AppCompatActivity {
                 + this.getResources().getString(R.string.discover_fenxiangdetuijian), mBlog.nickname, this.getResources().getColor(R.color.value_007AFF));
         ntv_desc.setText(ssb);
         rv_goods.setLayoutManager(new LinearLayoutManager(this));
-        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(this, mBlog.id, mBlog.related_goods, false,
+        DiscoverGoodsAdapter discoverGoodsAdapter = new DiscoverGoodsAdapter(mContext, mBlog.id, mBlog.related_goods, false,
                 SharedPrefUtil.getSharedUserString("nickname", ""), SharedPrefUtil.getSharedUserString("avatar", ""), this);
         rv_goods.setAdapter(discoverGoodsAdapter);
         discoverGoodsAdapter.setOnItemClickListener((v, position) -> {
@@ -127,6 +124,9 @@ public class BlogGoodsShareDialog extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         unbinder.unbind();
+        if (mContext != null) {
+            mContext = null;
+        }
         super.onDestroy();
     }
 }

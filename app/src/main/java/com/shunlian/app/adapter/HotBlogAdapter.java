@@ -109,10 +109,15 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     if (httpDialog != null) {
                         httpDialog.dismiss();
                     }
+                    boolean b = false;
+                    if (msg.obj != null) {
+                        b = (boolean) msg.obj;
+                    }
                     if (saveImgDialog == null) {
                         Activity activity = (Activity) context;
                         saveImgDialog = new SaveImgDialog(activity);
                     }
+                    saveImgDialog.showQRCodeView(b);
                     saveImgDialog.show();
                     if (mCallBack != null) {
                         mCallBack.toDown(currentBlogId);
@@ -126,7 +131,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     downLoadQRCodeImageUtil.setMyCallBack(new DownLoadQRCodeImageUtil.MyCallBack() {
                         @Override
                         public void successBack() {
-                            mHandler.sendEmptyMessage(1);
+                            Message message = mHandler.obtainMessage(1);
+                            message.obj = true;
+                            mHandler.sendMessage(message);
                         }
 
                         @Override
@@ -516,7 +523,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     }
 
     public void initDialog(BigImgEntity.Blog blog) {
-        BlogGoodsShareDialog.startAct(context,blog);
+        BlogGoodsShareDialog.startAct(context, blog);
     }
 
     public void showAttentionList(List<HotBlogsEntity.RecomandFocus> list, RecyclerView.ViewHolder holder) {

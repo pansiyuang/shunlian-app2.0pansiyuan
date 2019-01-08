@@ -31,11 +31,13 @@
             android:src="@mipmap/image_saveinphoto" />
 
         <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_qrcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/image_pin" />
+            android:src="@mipmap/image_pin"
+            android:visibility="gone"/>
 
         <com.shunlian.app.widget.MyImageView
             android:layout_width="wrap_content"
