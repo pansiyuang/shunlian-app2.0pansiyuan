@@ -177,7 +177,8 @@ public class WheelSurfPanView extends View {
                         mVarTime = 75;
 
                     if (mTypeNum == 0)
-                        throw new RuntimeException("找不到分类数量mTypeNum");
+                        return;
+//                        throw new RuntimeException("找不到分类数量mTypeNum");
 
                     //每一个扇形的角度
                     mAngle = (float) (360.0 / mTypeNum);
@@ -197,11 +198,15 @@ public class WheelSurfPanView extends View {
 
                         //描述
                         int nameArray = typedArray.getResourceId(R.styleable.wheelSurfView_deses, -1);
-                        if (nameArray == -1) throw new RuntimeException("找不到描述");
+                        if (nameArray == -1)
+                            return;
+//                            throw new RuntimeException("找不到描述");
                         mDeses = context.getResources().getStringArray(nameArray);
                         //图片
                         int iconArray = typedArray.getResourceId(R.styleable.wheelSurfView_icons, -1);
-                        if (iconArray == -1) throw new RuntimeException("找不到分类的图片资源");
+                        if (iconArray == -1)
+                            return;
+//                            throw new RuntimeException("找不到分类的图片资源");
                         String[] iconStrs = context.getResources().getStringArray(iconArray);
                         List<Integer> iconLists = new ArrayList<>();
                         for (int i = 0; i < iconStrs.length; i++) {
@@ -210,19 +215,24 @@ public class WheelSurfPanView extends View {
                         mIcons = iconLists.toArray(new Integer[iconLists.size()]);
                         //颜色
                         int colorArray = typedArray.getResourceId(R.styleable.wheelSurfView_colors, -1);
-                        if (colorArray == -1) throw new RuntimeException("找不到背景颜色");
+                        if (colorArray == -1)
+                            return;
+//                        throw new RuntimeException("找不到背景颜色");
                         String[] colorStrs = context.getResources().getStringArray(colorArray);
                         if (mDeses == null || mIcons == null || colorStrs == null)
-                            throw new RuntimeException("找不到描述或图片或背景颜色资源");
+                            return;
+//                            throw new RuntimeException("找不到描述或图片或背景颜色资源");
                         if (mDeses.length != mTypeNum || mIcons.length != mTypeNum || colorStrs.length != mTypeNum)
-                            throw new RuntimeException("资源或描述或背景颜色的长度和mTypeNum不一致");
+                            return;
+//                            throw new RuntimeException("资源或描述或背景颜色的长度和mTypeNum不一致");
                         mColors = new Integer[mTypeNum];
                         //分析背景颜色
                         for (int i = 0; i < colorStrs.length; i++) {
                             try {
                                 mColors[i] = Color.parseColor(colorStrs[i]);
                             } catch (Exception e) {
-                                throw new RuntimeException("颜色值有误");
+                                e.printStackTrace();
+//                                throw new RuntimeException("颜色值有误");
                             }
                         }
                         //加载分类图片 存放图片的集合
@@ -529,13 +539,14 @@ public class WheelSurfPanView extends View {
 
             if (mListBitmap.size() != mDeses.length || mListBitmap.size() != mColors.length
                     || mDeses.length != mColors.length) {
+                return;
 //                throw new RuntimeException("Icons数量和Deses和Colors三者数量必须与mTypeNum一致");
             }
         } else {
             //直接大图
-            if (mMainImgRes == null || mMainImgRes == 0){
+            if (mMainImgRes == null || mMainImgRes == 0)
+                return;
 //                throw new RuntimeException("类型为2必须要传大图mMainImgRes");
-            }
             mMain = BitmapFactory.decodeResource(mContext.getResources(), mMainImgRes);
         }
 
