@@ -124,17 +124,6 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                /*ConfirmOrderEntity data = entity.data;
-                iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
-                float total_amount = 0;
-                if (data.enabled != null && data.enabled.size() > 0){
-                    List<ConfirmOrderEntity.Enabled> enabled = data.enabled;
-                    for (int i = 0; i < enabled.size(); i++) {
-                        String sub_total = enabled.get(i).sub_total;
-                        total_amount += Float.parseFloat(sub_total);
-                    }
-                }
-                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));*/
                 setDate(entity);
             }
         });
@@ -250,17 +239,6 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                /*ConfirmOrderEntity data = entity.data;
-                iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
-                float total_amount = 0;
-                if (data.enabled != null && data.enabled.size() > 0){
-                    List<ConfirmOrderEntity.Enabled> enabled = data.enabled;
-                    for (int i = 0; i < enabled.size(); i++) {
-                        String sub_total = enabled.get(i).sub_total;
-                        total_amount += Float.parseFloat(sub_total);
-                    }
-                }
-                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));*/
                 setDate(entity);
             }
         });
@@ -314,5 +292,34 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                         }
                     }
                 });
+    }
+
+    /**
+     * plus免费专区
+     * @param goods_id
+     * @param qty
+     * @param sku_id
+     * @param address_id
+     */
+    public void plusfree(String goods_id, String qty, String sku_id, String address_id) {
+        Map<String,String> map = new HashMap<>();
+        map.put("gid",goods_id);
+        map.put("qty",qty);
+        map.put("sku_id",sku_id);
+        if (!TextUtils.isEmpty(address_id)) {
+            map.put("address_id", address_id);
+        }
+        sortAndMD5(map);
+
+        Call<BaseEntity<ConfirmOrderEntity>>
+                baseEntityCall = getAddCookieApiService().plusfree(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
+                super.onSuccess(entity);
+                setDate(entity);
+            }
+        });
     }
 }

@@ -2986,4 +2986,19 @@ public interface ApiService {
      */
     @POST("member/userinfo/bindShareidV2")
     Call<BaseEntity<CommonEntity>> bindShareidV2(@Body RequestBody body);
+
+    /**
+     * plus免费专区 确认订单
+     * @param body
+     * @return
+     */
+    @POST("plusfree/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> plusfree(@Body RequestBody body);
+
+    /**
+     * plus免费专区 订单结算
+     * @param body
+     * @return
+     */
+    Call<BaseEntity<PayOrderEntity>> plusfreePay(@Body RequestBody body);
 }
