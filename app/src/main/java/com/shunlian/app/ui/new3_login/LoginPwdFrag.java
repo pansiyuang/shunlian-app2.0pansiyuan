@@ -231,7 +231,7 @@ public class LoginPwdFrag extends BaseFragment implements INew3LoginView{
         if (!"1".equals(content.is_tag)){
             SexSelectAct.startAct(baseActivity);
         }
-        baseActivity.finish();
+        ((New3LoginAct) baseActivity).finish();
     }
 
     /**

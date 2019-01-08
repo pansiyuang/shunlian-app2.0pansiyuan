@@ -15,7 +15,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseFragment;
@@ -71,7 +70,6 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
     private VerifyPicDialog mVerifyPicDialog;
     private CountDownTimer countDownTimer;
     private New3LoginPresenter presenter;
-    private DispachJump mJump;
     private String mSmsCode;
     private New3LoginAct.LoginConfig mConfig;
 
@@ -126,8 +124,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
 
     private void dispatchApi() {
         String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
-        if (!isEmpty(inviteCode) && presenter != null
-                && mConfig != null && !mConfig.isMobileRegister){
+        if (!isEmpty(inviteCode) && presenter != null){
             presenter.codeDetail(inviteCode);
         }
         if (mConfig != null&&mtv_mobile!=null) {
@@ -294,38 +291,11 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
             presenter.getPictureCode();//获取图形验证码
         }else if (showPictureCode == 2){
             input_code.clearAll();//短信验证码输入错误清空输入内容
-        } else if (showPictureCode == 0 && mConfig != null) {
-
-
-            if (presenter != null){
+        } else if (showPictureCode == 0) {
+            if (presenter != null && mConfig != null){
                 String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
                 presenter.newRegister(mConfig.mobile,mSmsCode,inviteCode,mConfig.unique_sign);
             }
-
-            /*if (isEmpty(mConfig.status) && mConfig.isMobileRegister && mConfig.login_mode == SMS_TO_LOGIN) {
-                presenter.loginMobile(mConfig.mobile, mSmsCode);//登录
-            }else if ("2".equals(mConfig.status)) {
-                if (presenter != null) {//绑定手机号
-                    presenter.register(mConfig.mobile, mSmsCode, "", mConfig.unique_sign);
-                }
-            }else if (mConfig.login_mode == BIND_INVITE_CODE) {
-                if (presenter != null) {//绑定导购员
-                    presenter.bindShareid(mConfig.member_id, mConfig.invite_code, mConfig.mobile, mSmsCode);
-                }
-            }else if ("0".equals(mConfig.status) || "3".equals(mConfig.status)
-                    || (!mConfig.isMobileRegister && isEmpty(mConfig.status))) {//绑定手机号和导购员
-                mConfig.smsCode = mSmsCode;
-                if ("0".equals(mConfig.invite_code)){
-                    ((New3LoginAct) baseActivity).loginInviteCode(mConfig);
-                }else {//微信绑定有上级的手机号，不需要手动绑定上级
-                    if (presenter != null) {
-                        presenter.register(mConfig.mobile, mSmsCode, "", mConfig.unique_sign);
-                    }
-                }
-            }*/
-
-
-
         }
     }
 
@@ -338,6 +308,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
         SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
+        SharedPrefUtil.saveSharedUserString("share_status", content.share_status);
         SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(content.member_id);
         if (content.tag != null)
@@ -351,11 +322,15 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
 
-        Common.handleTheRelayJump(baseActivity);
-
         if (!"1".equals(content.is_tag)) {
             SexSelectAct.startAct(baseActivity);
         }
-        baseActivity.finish();
+
+        if ("2".equals(content.type)){//绑定上级
+            ((New3LoginAct) baseActivity).loginInviteCode(mConfig);
+        }else {
+            ((New3LoginAct) baseActivity).finish();
+            Common.handleTheRelayJump(baseActivity);
+        }
     }
 }

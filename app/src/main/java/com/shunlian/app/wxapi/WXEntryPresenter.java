@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
-import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.presenter.BasePresenter;
 import com.shunlian.app.utils.Constant;
@@ -90,11 +90,11 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             e.printStackTrace();
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),json);
-        final Call<BaseEntity<WXLoginEntity>> baseEntityCall = getSaveCookieApiService().wxLogin(requestBody);
+        final Call<BaseEntity<LoginFinishEntity>> baseEntityCall = getSaveCookieApiService().wxLogin(requestBody);
 
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<WXLoginEntity>>(){
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<WXLoginEntity> entity) {
+            public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
                 super.onSuccess(entity);
                 if (iView!=null)
                 iView.onWXCallback(entity);
@@ -122,12 +122,12 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
         map.put("code",code);
         sortAndMD5(map);
 
-        Call<BaseEntity<WXLoginEntity>> baseEntityCall = getSaveCookieApiService()
+        Call<BaseEntity<LoginFinishEntity>> baseEntityCall = getSaveCookieApiService()
                 .newWXLogin(getRequestBody(map));
 
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<WXLoginEntity>>(){
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<WXLoginEntity> entity) {
+            public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
                 super.onSuccess(entity);
                 if (iView!=null)
                     iView.onWXCallback(entity);

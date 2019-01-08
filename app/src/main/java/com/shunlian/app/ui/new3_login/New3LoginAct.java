@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.HashMap;
@@ -64,10 +65,9 @@ public class New3LoginAct extends BaseActivity{
     protected void initListener() {
         super.initListener();
         miv_close.setOnClickListener(v -> {
-           if (mCurrentPage == 1){
-                finish();
-           }else if (mConfig != null && mConfig.login_mode == LoginConfig.LOGIN_MODE.BIND_INVITE_CODE){
-               loginInviteCode(mConfig);
+           if (mCurrentPage == 1 || mCurrentPage == 3){
+               Common.goGoGo(this,"home");
+               finish();
            }else {
                loginSms(1, mConfig);
            }
@@ -157,11 +157,7 @@ public class New3LoginAct extends BaseActivity{
      * 邀请码
      */
     public void loginInviteCode(LoginConfig config){
-        if (config.login_mode == LoginConfig.LOGIN_MODE.BIND_INVITE_CODE){
-            mCurrentPage = 1;
-        }else {
-            mCurrentPage = 3;
-        }
+        mCurrentPage = 3;
         mInviteCodeFrag = (InviteCodeFrag) fragments.get(INVITE_CODE);
         if (mInviteCodeFrag == null){
             mInviteCodeFrag = new InviteCodeFrag();
@@ -211,11 +207,9 @@ public class New3LoginAct extends BaseActivity{
 
     @Override
     public void onBackPressed() {
-        if (mCurrentPage == 1){
+        if (mCurrentPage == 1 || mCurrentPage == 3){
+            Common.goGoGo(this,"home");
             super.onBackPressed();
-        }else if (mConfig != null && mConfig.login_mode
-                == LoginConfig.LOGIN_MODE.BIND_INVITE_CODE){
-            loginInviteCode(mConfig);
         }else {
             loginSms(1, mConfig);
         }
@@ -227,9 +221,7 @@ public class New3LoginAct extends BaseActivity{
     public static class LoginConfig implements Parcelable {
 
         //登录状态
-        /**老版微信登录状态 已废弃*/
-        @Deprecated
-        public String status;//微信登录状态 0和3绑定手机号需要推荐人  2绑定手机号不需要推荐人  4绑定推荐人
+        public String status;//1 微信登录状态 别的状态绑定手机号
         public String unique_sign;//微信登录openid
         public String member_id;
         public String mobile;//手机号
@@ -239,7 +231,7 @@ public class New3LoginAct extends BaseActivity{
         public boolean isMobileRegister;//手机号是否注册 true 注册
         public String invite_code;//邀请码
         public LOGIN_MODE login_mode;//登录模式
-        public boolean isUseMobile;//手机号是否可用 true可用
+        public boolean isUseMobile = true;//手机号是否可用 true可用  默认可用
 
         public enum LOGIN_MODE{
 
@@ -276,6 +268,7 @@ public class New3LoginAct extends BaseActivity{
             dest.writeByte(this.isMobileRegister ? (byte) 1 : (byte) 0);
             dest.writeString(this.invite_code);
             dest.writeInt(this.login_mode == null ? -1 : this.login_mode.ordinal());
+            dest.writeByte(this.isUseMobile ? (byte) 1 : (byte) 0);
         }
 
         protected LoginConfig(Parcel in) {
@@ -288,6 +281,7 @@ public class New3LoginAct extends BaseActivity{
             this.invite_code = in.readString();
             int tmpLogin_mode = in.readInt();
             this.login_mode = tmpLogin_mode == -1 ? null : LOGIN_MODE.values()[tmpLogin_mode];
+            this.isUseMobile = in.readByte() != 0;
         }
 
         public static final Creator<LoginConfig> CREATOR = new Creator<LoginConfig>() {

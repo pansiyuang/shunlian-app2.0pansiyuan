@@ -264,7 +264,7 @@ public interface ApiService {
      * @return
      */
     @POST("member/oauth/wechat")
-    Call<BaseEntity<WXLoginEntity>> wxLogin(@Body RequestBody requestBody);
+    Call<BaseEntity<LoginFinishEntity>> wxLogin(@Body RequestBody requestBody);
 
     /**
      * 推荐人验证
@@ -2970,5 +2970,20 @@ public interface ApiService {
      * @return
      */
     @POST("member/oauth/wechatV2")
-    Call<BaseEntity<WXLoginEntity>> newWXLogin(@Body RequestBody body);
+    Call<BaseEntity<LoginFinishEntity>> newWXLogin(@Body RequestBody body);
+
+    /**
+     * 从微信界面过来绑定手机号验证
+     * @param body
+     * @return
+     */
+    @POST("member/oauth/checkMobileV2")
+    Call<BaseEntity<CommonEntity>> checkFromWXMobile(@Body RequestBody body);
+
+    /**
+     * 绑定导购员
+     * @return
+     */
+    @POST("member/userinfo/bindShareidV2")
+    Call<BaseEntity<CommonEntity>> bindShareidV2(@Body RequestBody body);
 }

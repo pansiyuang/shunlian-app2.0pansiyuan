@@ -68,8 +68,10 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
             String mobile_text = mobile.getText().toString();
             if (mobile_text.length() == 11){
                 btnDrawable.setColor(getColorResouce(R.color.pink_color));
-                if (presenter != null){
-                    presenter.checkMobile(mobile_text);
+                if (presenter != null && mConfig != null
+                        && !isEmpty(mConfig.status) && !"1".equals(mConfig.status)){
+                    //微信过来的验证手机号是否可用
+                    presenter.checkFromWXMobile(mConfig.status,mobile_text);
                 }
             }else {
                 btnDrawable.setColor(Color.parseColor("#ECECEC"));
@@ -101,12 +103,7 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
         }
         String mobile = this.mobile.getText().toString();
         if (isEmpty(mobile) || mobile.length() != 11) return;
-        if (mConfig != null && !isEmpty(mConfig.status) &&
-                ("2".equals(mConfig.status) || "3".equals(mConfig.status))
-                && mConfig.isMobileRegister){
-            return;
-        }
-        if (presenter != null){
+        if (presenter != null && mConfig != null && mConfig.isUseMobile){
             presenter.sendSmsCode(mobile,"");
         }
     }
@@ -118,23 +115,19 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
     }
 
     /**
-     * 手机号是否正确
-     * @param b
+     * 从微信界面过来绑定手机号验证
+     * @param status
+     * @param msg
      */
     @Override
-    public void iSMobileRight(boolean b,String msg,String shareid) {
-        if (b){
-            if (mConfig != null) {
-                mConfig.isMobileRegister = "1".equals(msg);
-                mConfig.invite_code = shareid;
-                if (!isEmpty(mConfig.status) &&
-                        ("2".equals(mConfig.status) || "3".equals(mConfig.status))
-                        && mConfig.isMobileRegister){
-                    showMobileTip("该手机号已注册");
-                }
-            }
-        }else {
+    public void checkFromWXMobile(String status, String msg) {
+        if (!isEmpty(msg)){
             showMobileTip(msg);
+        }
+        if ("2".equals(status) && mConfig != null){
+            mConfig.isUseMobile = false;
+        }else if ("1".equals(status) && mConfig != null){
+            mConfig.isUseMobile = true;
         }
     }
 
@@ -158,12 +151,14 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     public void smsCode(int showPictureCode,String error) {
-        if (showPictureCode == 0){
+        if (showPictureCode == 0 || showPictureCode == 1){
             String mobile = this.mobile.getText().toString();
             if (mConfig != null) {
                 mConfig.mobile = mobile;
             }
             ((New3LoginAct)baseActivity).loginSms(2,mConfig);
+        }else {
+            showMobileTip(error);
         }
     }
 
