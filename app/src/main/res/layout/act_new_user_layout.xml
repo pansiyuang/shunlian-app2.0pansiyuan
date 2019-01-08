@@ -197,7 +197,7 @@
         android:layout_marginBottom="60dp"
         android:layout_alignParentRight="true"
         android:paddingRight="10dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/show_new_user_view"
         android:layout_height="105dp">
         <ImageView

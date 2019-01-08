@@ -21,6 +21,6 @@ public interface INewUserPageView extends IView {
   void goodCartList(List<NewUserGoodsEntity.Goods> goodsList,boolean isFrist);
   void delCart(String cid);
   void getvoucher(UserNewDataEntity userNewDataEntity);
-  void getOldMessage(String message);
+  void getOldMessage(String message,int code);
   void showVoucherSuspension(ShowVoucherSuspension voucherSuspension);
 }

@@ -518,13 +518,13 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                 tv_new_submit.setText("前往使用");
                 ntv_user_page_price.setText(getStringResouce(R.string.common_yuan) + userNewDataEntity.prize);
             }else{
-                getOldMessage("您不是新用户哦，无法领取该优惠券");
+                getOldMessage("您不是新用户哦，无法领取该优惠券",0);
             }
         }
     }
 
     @Override
-    public void getOldMessage(String message) {
+    public void getOldMessage(String message,int code) {
         commonDialogUtil.userOldShowDialog(new ICallBackResult<String>() {
             @Override
             public void onTagClick(String data) {
@@ -539,10 +539,11 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                     finish();
                 }else{
                     mPresenter.adlist();
+                    mPresenter.showVoucherSuspension();
                     beginToast();
                 }
             }
-        }, message);
+        }, message, code);
     }
 
     @Override

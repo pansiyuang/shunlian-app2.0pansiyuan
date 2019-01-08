@@ -69,7 +69,7 @@ public class CommonDialogUtil {
     }
 
     //老用户领取优惠劵
-    public void userOldShowDialog(ICallBackResult<String> callBackResult,String content) {
+    public void userOldShowDialog(ICallBackResult<String> callBackResult,String content,int code) {
         if(((Activity)context).isFinishing()){
             return;
         }
@@ -81,21 +81,35 @@ public class CommonDialogUtil {
         TextView tv_messages = dialog_user_old.findViewById(R.id.tv_messages);
         TextView  tv_sure= dialog_user_old.findViewById(R.id.tv_sure);
         TextView  tv_cancel= dialog_user_old.findViewById(R.id.tv_cancel);
-        if(!TextUtils.isEmpty(content)){
-            tv_messages.setText(content);
+       ImageView image_pic= dialog_user_old.findViewById(R.id.image_pic);
+        TextView  tv_title= dialog_user_old.findViewById(R.id.tv_title);
+
+        if(code==6201){
+            tv_cancel.setText("去新人专享");
+            image_pic.setVisibility(View.GONE);
+            tv_title.setVisibility(View.INVISIBLE);
+            tv_messages.setText("您已经领取过新人专享优惠券了哦，赶紧去使用吧");
+        }else{
+            tv_cancel.setText("确定");
+            tv_title.setVisibility(View.VISIBLE);
+            image_pic.setVisibility(View.VISIBLE);
+            if(!TextUtils.isEmpty(content)){
+                tv_messages.setText(content);
+            }
         }
         tv_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog_user_old.dismiss();
-                callBackResult.onTagClick("page");
+                callBackResult.onTagClick("home");
             }
         });
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog_user_old.dismiss();
-                callBackResult.onTagClick("home");
+
+                callBackResult.onTagClick("page");
             }
         });
     }
