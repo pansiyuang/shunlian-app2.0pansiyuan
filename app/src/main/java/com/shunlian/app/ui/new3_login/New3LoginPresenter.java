@@ -386,7 +386,7 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.checkFromWXMobile(entity.data.status,"");
+                iView.checkFromWXMobile(entity.data.status,entity.message);
             }
 
             @Override

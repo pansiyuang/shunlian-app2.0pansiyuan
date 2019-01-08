@@ -2569,6 +2569,14 @@ public interface ApiService {
     Call<BaseEntity<WXLoginEntity>> checkTest(@QueryMap Map<String, String> map);
 
     /**
+     *模拟微信登录
+     * @param map
+     * @return
+     */
+    @GET("member/oauth/checkTestV2")
+    Call<BaseEntity<LoginFinishEntity>> checkTestV2(@QueryMap Map<String, String> map);
+
+    /**
      * 导购员详情
      * @param map
      * @return
