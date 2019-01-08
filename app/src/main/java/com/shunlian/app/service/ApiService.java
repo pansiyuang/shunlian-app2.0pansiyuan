@@ -2986,4 +2986,16 @@ public interface ApiService {
      */
     @POST("member/userinfo/bindShareidV2")
     Call<BaseEntity<CommonEntity>> bindShareidV2(@Body RequestBody body);
+
+    /**
+     * 新人专享banner
+     */
+    @GET("newexclusive/showVoucherSuspension")
+    Call<BaseEntity<ShowVoucherSuspension>> showVoucherSuspension(@QueryMap Map<String, String> map);
+
+    /**
+     * 邀请好友列表
+     */
+    @GET("newexclusive/inviteLog")
+    Call<BaseEntity<InviteLogUserEntity>> inviteLog(@QueryMap Map<String, String> map);
 }

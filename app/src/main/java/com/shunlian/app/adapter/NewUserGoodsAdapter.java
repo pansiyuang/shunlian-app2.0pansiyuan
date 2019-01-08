@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
@@ -111,7 +112,9 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
             NewUserGoodsEntity.Goods goods = lists.get(position);
             GlideUtils.getInstance().loadOverrideImage(context,
                     mHolder.miv_goods_pic, goods.thumb,220,220);
-            mHolder.mtv_title.setText(goods.title);
+//            mHolder.mtv_title.setText(goods.title);
+//             mHolder.mtv_title.setText();
+             getSubString(mHolder.mtv_title,goods.title,1);
             String source = getString(R.string.rmb).concat(goods.price);
             mHolder.mtv_price.setText(Common.changeTextSize(source, getString(R.string.rmb), 12));
             mHolder.mtv_discount_price.setStrikethrough();
@@ -186,9 +189,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                   }catch (Exception e){
 
                   }
-
               }
-
         }
     }
 
@@ -278,6 +279,18 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
         }
 
 
+    }
+
+    public  String getSubString(TextView mTextView, String content, int maxLine){
+        float tvWidth = App.widthPixels-DensityUtil.dip2px(context,180);
+        float width = mTextView.getPaint().measureText(content);
+        if(width / tvWidth > (maxLine + 0.5)) {
+            String str = content.substring(0, (int) (content.length() / (width / tvWidth) * (maxLine + 0.5))) + "...";
+            mTextView.setText(str);
+        }else{
+            mTextView.setText(content);
+        }
+        return content;
     }
 
     /**

@@ -64,8 +64,8 @@ public class ProgressViewLayout extends View {
     }
 
     private void init(Context context) {
-        maxProgressW = TransformUtil.dip2px(context, 120f);
-        maxProgressH = TransformUtil.dip2px(context, 15f);;
+        maxProgressW = TransformUtil.dip2px(context, 90f);
+        maxProgressH = TransformUtil.dip2px(context, 12f);;
 
         rad = TransformUtil.dip2px(context, 10f);
         grayColor = getResources().getColor(R.color.pink_color);
@@ -115,7 +115,7 @@ public class ProgressViewLayout extends View {
         float mTextWidth = mTextPaint.measureText(text);
         Canvas srcCanvas = new Canvas(srcBitmap);
         srcCanvas.drawText(text, 0, text.length(),
-                maxProgressW  - mTextWidth -progressrad, maxProgressH / 2 + mTextHeight / 2, mTextPaint);
+                maxProgressW  - mTextWidth -progressrad/2, maxProgressH / 2+mTextHeight/3, mTextPaint);
         mTextPaint.setXfermode(xformode);
         mTextPaint.setColor(Color.WHITE);
         srcCanvas.drawRoundRect(progressRect, progressrad, progressrad, mTextPaint);

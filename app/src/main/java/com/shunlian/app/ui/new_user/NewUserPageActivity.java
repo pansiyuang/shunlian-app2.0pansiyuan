@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -19,6 +20,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UserNewDataEntity;
 import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.listener.ICallBackResult;
@@ -33,6 +35,8 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.UserBuyGoodsDialog;
+import com.shunlian.app.utils.timer.HoneRedDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.INewUserPageView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.banner.MyKanner;
@@ -54,6 +58,8 @@ import butterknife.BindView;
  */
 
 public class NewUserPageActivity extends BaseActivity implements INewUserPageView ,UserBuyGoodsDialog.CartDelGoodListen ,ShareGoodDialogUtil.OnShareBlogCallBack {
+    private int second = (int) (System.currentTimeMillis() / 1000);
+
     private  List<AdUserEntity.AD> adList;
     private List<NewUserGoodsEntity.Goods> goodsList;
     private ShareGoodDialogUtil shareGoodDialogUtil;
@@ -85,6 +91,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @BindView(R.id.img_share)
     ImageView img_share;
 
+    @BindView(R.id.img_guize)
+    ImageView img_guize;
+
     @BindView(R.id.kanner)
     MyKanner kanner;
 
@@ -93,6 +102,13 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     public static boolean isNew = false;
 
     public boolean isDialogNew = false;
+
+    @BindView(R.id.tv_new_user_title)
+    TextView tv_new_user_title;
+    @BindView(R.id.tv_new_user_time)
+    HoneRedDownTimerView tv_new_user_time;
+    @BindView(R.id.show_new_user_view)
+    RelativeLayout show_new_user_view;
 
     private String[] titlesOld = {"精选商品"};
     private List<BaseFragment> goodsFrags;
@@ -162,6 +178,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             tv_buy_num.setText("邀请记录");
             tv_go_pay.setText("去邀请赚钱");
         }
+        mPresenter.showVoucherSuspension();
     }
 
     @Override
@@ -267,12 +284,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         }
     }
 
-//    public static void startAct(Context context, String memberId) {
-//        Intent intent = new Intent(context, NewUserPageActivity.class);
-//        intent.putExtra("member_id", memberId);
-//        context.startActivity(intent);
-//    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.act_new_user_layout;
@@ -299,12 +310,14 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         viewpager.setAdapter(commonLazyPagerAdapter);
         if(Common.isAlreadyLogin()) {
             mPresenter.adlist();
+            mPresenter.showVoucherSuspension();
         }else{
             showDialogView();
         }
-        tv_head.setOnClickListener(new View.OnClickListener() {
+        img_guize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //到H5规则
             }
         });
 
@@ -325,8 +338,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                     if(commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
                         commonDialogUtil.dialog_user_info.dismiss();
                     }
-                    mPresenter.adlist();
                     beginToast();
+                    mPresenter.showVoucherSuspension();
                 }
             }
         }, "立即领取");
@@ -520,6 +533,27 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         }, message);
     }
 
+    @Override
+    public void showVoucherSuspension(ShowVoucherSuspension voucherSuspension) {
+        if(voucherSuspension.suspensionShow.equals("1")&&isNew){
+            tv_new_user_title.setText(voucherSuspension.suspension.prize);
+            show_new_user_view.setVisibility(View.VISIBLE);
+            tv_new_user_time.cancelDownTimer();
+            int seconds = (int) (System.currentTimeMillis() / 1000) - second;
+            tv_new_user_time.setDownTime(1000000 - seconds);
+            tv_new_user_time.startDownTimer();
+            tv_new_user_time.setDownTimerListener(new OnCountDownTimerListener() {
+                @Override
+                public void onFinish() {
+                    tv_new_user_time.cancelDownTimer();
+                    mPresenter.adlist();
+                }
+            });
+        }else{
+             show_new_user_view.setVisibility(View.GONE);
+        }
+    }
+
     /**
      * 更新购物车数量
      */
@@ -533,7 +567,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     public void initCartNum(int currentNum,int show){
         this.CURRENT_NUM = currentNum;
         updateCartNum();
-        if(show!=1){
+        if(show!=1&&isNew){
             showDialogView();
         }
     }
@@ -587,6 +621,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        if(tv_new_user_time!=null){
+            tv_new_user_time.cancelDownTimer();
+        }
         super.onDestroy();
     }
 }

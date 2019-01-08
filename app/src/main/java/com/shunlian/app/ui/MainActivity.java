@@ -900,16 +900,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     public void initDialogs(String prize) {
-//        if (dialog_new == null) {
+        if (dialog_new == null) {
             dialog_new = new Dialog(this, R.style.popAd);
             dialog_new.setContentView(R.layout.dialog_user_new);
             MyImageView miv_close = (MyImageView) dialog_new.findViewById(R.id.miv_close);
-             ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_user_bOne);
-             ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
-             ntv_aOne.setText(HighLightKeyWordUtil.getHighLightKeyWord(getResources().getColor(R.color.pink_color),
-                     prize,"现金红包"));
-//            SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(String.format(getStringResouce(R.string.new_zuigaokede), prize), prize, 34);
-//            ntv_bThree.setText(spannableStringBuilder);
+            ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_user_bOne);
+            ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
+            ntv_aOne.setText(HighLightKeyWordUtil.getHighLightKeyWord(getResources().getColor(R.color.pink_color),
+                    prize, "现金红包"));
             miv_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -920,17 +918,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 @Override
                 public void onClick(View view) {
                     dialog_new.dismiss();
-                    NewUserPageActivity.startAct(MainActivity.this,true);
-//                    if (Common.isAlreadyLogin()) {
-////                        pMain.getPrizeByRegister();
-//                    } else {
-////                      isGetAward=true;
-//                        Common.goGoGo(baseAct,"login");
-//                        dialog_new.dismiss();
-//                    }
+                    NewUserPageActivity.startAct(MainActivity.this, true);
                 }
             });
             dialog_new.setCancelable(false);
+        }
         dialog_new.show();
     }
 

@@ -21,9 +21,11 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.AdUserEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BubbleEntity;
+import com.shunlian.app.bean.InviteLogUserEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
+import com.shunlian.app.presenter.NewInvitationPresenter;
 import com.shunlian.app.presenter.NewUserPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
@@ -35,6 +37,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.UserBuyGoodsDialog;
 import com.shunlian.app.view.INewUserPageView;
+import com.shunlian.app.view.InvitationView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.MyKanner;
@@ -55,13 +58,37 @@ import butterknife.BindView;
  *新人专享页面
  */
 
-public class NewInvitationActivity extends BaseActivity {
+public class NewInvitationActivity extends BaseActivity implements InvitationView,ShareGoodDialogUtil.OnShareBlogCallBack {
     private SimpleRecyclerAdapter adapter;
 
     @BindView(R.id.recy_view_invitaion)
     RecyclerView recy_view_invitaion;
 
-    private List<String> invitationData;
+
+    @BindView(R.id.tv_show_price)
+    TextView tv_show_price;
+
+    @BindView(R.id.tv_show_desc)
+    TextView tv_show_desc;
+
+    @BindView(R.id.tv_please)
+    TextView tv_please;
+
+    @BindView(R.id.tv_my_invitaion)
+    TextView tv_my_invitaion;
+
+    @BindView(R.id.tv_invitation_copy)
+    TextView tv_invitation_copy;
+
+    @BindView(R.id.tv_total_price)
+    TextView tv_total_price;
+
+    private List<InviteLogUserEntity.UserList> invitationData;
+    private String code;
+
+    private NewInvitationPresenter newInvitationPresenter;
+    private ShareGoodDialogUtil shareGoodDialogUtil;
+    private ShareInfoParam shareInfoParam;
     @Override
     protected int getLayoutId() {
         return R.layout.act_user_invitation_layout;
@@ -70,20 +97,21 @@ public class NewInvitationActivity extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
+        newInvitationPresenter = new NewInvitationPresenter(this,this);
         invitationData = new ArrayList<>();
-        for (int i=0;i<40;i++){
-            invitationData.add(i+"");
-        }
+        shareInfoParam = new ShareInfoParam();
+        shareGoodDialogUtil = new ShareGoodDialogUtil(this);
         recy_view_invitaion.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SimpleRecyclerAdapter<String>(this, R.layout.item_tag_layout, this.invitationData) {
+        adapter = new SimpleRecyclerAdapter<InviteLogUserEntity.UserList>(this, R.layout.item_tag_layout, this.invitationData) {
             @Override
-            public void convert(SimpleViewHolder holder, String  goods, int position) {
-              TextView textView =  holder.getView(R.id.tv_history_tag);
+            public void convert(SimpleViewHolder holder, InviteLogUserEntity.UserList  goods, int position) {
+               TextView textView =  holder.getView(R.id.tv_history_tag);
                 textView.setText(goods+"信息");
             }
         };
         recy_view_invitaion.setAdapter(adapter);
+        tv_invitation_copy.setOnClickListener(this);
+        tv_please.setOnClickListener(this);
     }
 
     public static void startAct(Context context) {
@@ -92,9 +120,59 @@ public class NewInvitationActivity extends BaseActivity {
     }
 
     @Override
-    protected void initListener() {
-        super.initListener();
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.tv_invitation_copy:
+                break;
+            case R.id.tv_please:
+                newInvitationPresenter.getNewUserShareInfo();
+                break;
+        }
     }
 
+    @Override
+    protected void initListener() {
+        super.initListener();
 
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        shareInfoParam.shareLink =baseEntity.data.link;
+        shareInfoParam.title =baseEntity.data.title;
+        shareInfoParam.desc =baseEntity.data.content;
+        shareInfoParam.img =baseEntity.data.imgdefalt;
+        shareInfoParam.special_img_url =baseEntity.data.imgdefalt;
+        shareGoodDialogUtil.shareGoodDialog(shareInfoParam,false,false);
+    }
+
+    @Override
+    public void shareSuccess(String blogId, String goodsId) {
+
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    @Override
+    public void refreshFinish(List<InviteLogUserEntity.UserList> userLists, InviteLogUserEntity inviteLogUserEntity) {
+        if(!TextUtils.isEmpty(inviteLogUserEntity.code)){
+            tv_my_invitaion.setText("我的邀请码："+inviteLogUserEntity.code);
+        }
+        if(!TextUtils.isEmpty(inviteLogUserEntity.money)){
+            tv_show_price.setText("立赚"+inviteLogUserEntity.code+"元");
+        }
+        if(!TextUtils.isEmpty(inviteLogUserEntity.prize)){
+            tv_total_price.setText(getStringResouce(R.string.common_yuan)+inviteLogUserEntity.prize);
+        }
+        invitationData.addAll(userLists);
+        adapter.notifyDataSetChanged();
+    }
 }
