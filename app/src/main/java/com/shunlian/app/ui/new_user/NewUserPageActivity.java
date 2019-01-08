@@ -349,6 +349,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                         commonDialogUtil.dialog_user_info.dismiss();
                     }
                     beginToast();
+                    mPresenter.adlist();
                     mPresenter.showVoucherSuspension();
                 }
             }
@@ -511,10 +512,14 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @Override
     public void getvoucher(UserNewDataEntity userNewDataEntity) {
         if(commonDialogUtil!=null&&commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
-            TextView tv_new_submit = commonDialogUtil.dialog_user_info.findViewById(R.id.tv_new_submit);
-            TextView  ntv_user_page_price= commonDialogUtil.dialog_user_info.findViewById(R.id.ntv_user_page_price);
-            tv_new_submit.setText("前往使用");
-            ntv_user_page_price.setText(getStringResouce(R.string.common_yuan)+userNewDataEntity.prize);
+            if(userNewDataEntity.isNew) {
+                TextView tv_new_submit = commonDialogUtil.dialog_user_info.findViewById(R.id.tv_new_submit);
+                TextView ntv_user_page_price = commonDialogUtil.dialog_user_info.findViewById(R.id.ntv_user_page_price);
+                tv_new_submit.setText("前往使用");
+                ntv_user_page_price.setText(getStringResouce(R.string.common_yuan) + userNewDataEntity.prize);
+            }else{
+                getOldMessage("您不是新用户哦，无法领取该优惠券");
+            }
         }
     }
 
