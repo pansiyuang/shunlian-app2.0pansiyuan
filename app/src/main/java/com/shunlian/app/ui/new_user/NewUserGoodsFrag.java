@@ -105,12 +105,6 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
     @Override
     protected void initData() {
-    }
-
-    @Override
-    protected void onFragmentFirstVisible() {
-        super.onFragmentFirstVisible();
-        EventBus.getDefault().register(this);
         NestedSlHeader header = new NestedSlHeader(getActivity());
         lay_refresh.setRefreshHeaderView(header);
         shareInfoParam = new ShareInfoParam();
@@ -122,30 +116,21 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
         mPresenter = new NewUserGoodsPresenter(baseActivity,  this,type);
-
-        if (hotBlogAdapter == null) {
-            hotBlogAdapter = new NewUserGoodsAdapter(baseActivity, goodList,type,NewUserPageActivity.isNew);
-            hotBlogAdapter.setAddShoppingCarListener(this);
-            hotBlogAdapter.setOnItemClickListener((view, position) -> {
+        hotBlogAdapter = new NewUserGoodsAdapter(baseActivity, goodList,type,NewUserPageActivity.isNew);
+        hotBlogAdapter.setAddShoppingCarListener(this);
+        hotBlogAdapter.setOnItemClickListener((view, position) -> {
                 if(goodList.get(position).status.equals("0")){
                     Common.staticToast("不好意思啦！亲！该商品已失效了！");
                 }else{
                     GoodsDetailAct.startAct(baseActivity, goodList.get(position).id);
                 }
             });
-            recycler_list.setAdapter(hotBlogAdapter);
-        }
-
+         recycler_list.setAdapter(hotBlogAdapter);
     }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshPayData(UserPaySuccessEvent event) {
-        if (event!=null && event.isSuccess&&event.isFragmet) {
-            if (mPresenter != null) {
-                if (mPresenter != null) {
-                    mPresenter.refreshData();
-                }
-            }
-        }
+
+    @Override
+    protected void onFragmentFirstVisible() {
+        super.onFragmentFirstVisible();
     }
 
     @Override
@@ -195,18 +180,10 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         }
     }
 
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshData(RefreshBlogEvent event) {
-
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
-
 
     @Override
     public void userGoodsList(int currentPage, int totalPage, List<NewUserGoodsEntity.Goods> collectionGoodsLists,NewUserGoodsEntity.Goods recommend) {
@@ -223,6 +200,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
                 recommend.is_recommend = true;
                 goodList.add(recommend);
             }
+            hotBlogAdapter.updateUserTime();
         }
         if (!isEmpty(collectionGoodsLists)) {
             goodList.addAll(collectionGoodsLists);
@@ -296,6 +274,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
         }
     }
+
 
     @Override
     public void showNoPayDialog(String msg) {

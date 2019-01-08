@@ -53,9 +53,8 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
     }
 
 
-    public void updateTypeUser(String type,boolean isNew){
-        this.type = type;
-        this.isNew = isNew;
+    public void updateUserTime(){
+        second=(int)(System.currentTimeMillis()/1000);
     }
     /**
      * 子类需要实现的holder
@@ -251,8 +250,10 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
             downTime_firsts.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
-                    if (downTime_firsts!=null)
+                    if (downTime_firsts!=null){
                         downTime_firsts.cancelDownTimer();
+                        ((NewUserPageActivity) context).resreshQuest();
+                    }
                 }
             });
         }

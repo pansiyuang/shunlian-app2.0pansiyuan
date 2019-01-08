@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
+import com.shunlian.app.adapter.CommonPagerAdapter;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.bean.AdUserEntity;
 import com.shunlian.app.bean.BaseEntity;
@@ -64,7 +65,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     private List<NewUserGoodsEntity.Goods> goodsList;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private boolean isEvent =false;
-    private  CommonLazyPagerAdapter commonLazyPagerAdapter;
+    private CommonPagerAdapter commonLazyPagerAdapter;
 
     private CommonDialogUtil commonDialogUtil;
     /**
@@ -306,7 +307,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         userBuyGoodsDialog.setCartDelGoodListen(this);
         mPresenter = new NewUserPagePresenter(this, this);
         goodsFrags = new ArrayList<>();
-         commonLazyPagerAdapter = new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld);
+         commonLazyPagerAdapter = new CommonPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld);
         viewpager.setAdapter(commonLazyPagerAdapter);
         if(Common.isAlreadyLogin()) {
             mPresenter.adlist();
@@ -317,10 +318,19 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         img_guize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                resreshQuest();
                 //到H5规则
             }
         });
 
+    }
+
+    /**
+     * 刷选页面
+     */
+    public void resreshQuest(){
+        mPresenter.adlist();
+        mPresenter.showVoucherSuspension();
     }
 
     /**
@@ -409,9 +419,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             line_user_buy.setVisibility(View.VISIBLE);
         }
         commonLazyPagerAdapter.notifyDataSetChanged();
-        if(isEvent){
-            EventBus.getDefault().post(new UserPaySuccessEvent(true,true));
-        }
     }
 
 
@@ -546,6 +553,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                 @Override
                 public void onFinish() {
                     tv_new_user_time.cancelDownTimer();
+                    show_new_user_view.setVisibility(View.GONE);
                     mPresenter.adlist();
                 }
             });
