@@ -19,7 +19,6 @@ import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SubmitGoodsEntity;
-import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -31,8 +30,6 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyNestedScrollView;
 import com.shunlian.app.widget.MyTextView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +107,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private ConfirmOrderPresenter confirmOrderPresenter;
     public static final String TYPE_CART = "cart";//购物车
     public static final String TYPE_COMBO = "combo";//套餐
+    public static final String TYPE_PLUSFREE = "plusfree";//plus免费专区
     private String type;
     private List<ConfirmOrderEntity.Enabled> enabled;
     private DiscountListDialog mStageVoucherDialog;
@@ -161,8 +159,10 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
      * @param goods_id
      * @param qty
      * @param sku_id
+     * @param params 参数类型 第一个参数指的是界面来源
      */
-    public static void startAct(Context context,String goods_id,String qty,String sku_id){
+    public static void startAct(Context context,String goods_id,
+                                String qty,String sku_id,String... params){
         if (!Common.isAlreadyLogin()){
             Common.goGoGo(context,"login");
             return;
@@ -171,6 +171,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         intent.putExtra("goods_id",goods_id);
         intent.putExtra("qty",qty);
         intent.putExtra("sku_id",sku_id);
+        intent.putExtra("type",params[0]);
         context.startActivity(intent);
     }
     @Override
@@ -211,21 +212,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         sku_id = intent.getStringExtra("sku_id");
         type = intent.getStringExtra("type");
         confirmOrderPresenter = new ConfirmOrderPresenter(this,this);
-        if (!TextUtils.isEmpty(cart_ids)){
-            isOrderBuy = false;
-            if (TYPE_CART.equals(type)) {
-                confirmOrderPresenter.orderConfirm(cart_ids, null);
-            }else {
-                confirmOrderPresenter.buyCombo(cart_ids,null);
-            }
-        }else if (!isEmpty(goods_id)){
-            isOrderBuy = true;
-            confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,null);
-        }else {
-            isOrderBuy = false;
-            confirmOrderPresenter.newexclusive(null);
-        }
-
+        getConfirmOrderData(null);
         recy_view.setLayoutManager(new LinearLayoutManager(this));
         recy_view.setNestedScrollingEnabled(false);
         int space = TransformUtil.dip2px(this, 10);
@@ -389,20 +376,32 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && Activity.RESULT_OK == resultCode){
             addressId = data.getStringExtra("addressId");
-            if (!TextUtils.isEmpty(cart_ids)){
-                isOrderBuy = false;
-                if (TYPE_CART.equals(type)) {
-                    confirmOrderPresenter.orderConfirm(cart_ids,addressId);
-                }else {
-                    confirmOrderPresenter.buyCombo(cart_ids,addressId);
-                }
-            }else if (!isEmpty(goods_id)){
-                isOrderBuy = true;
-                confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,addressId);
-            }else {
-                isOrderBuy = false;
-                confirmOrderPresenter.newexclusive(addressId);
+            getConfirmOrderData(addressId);
+        }
+    }
+
+    /**
+     * 获取确认订单数据
+     * @param addressId
+     */
+    private void getConfirmOrderData(String addressId) {
+        if (confirmOrderPresenter == null) return;
+        if (!TextUtils.isEmpty(cart_ids)){
+            isOrderBuy = false;
+            if (TYPE_CART.equals(type)) {//购物车
+                confirmOrderPresenter.orderConfirm(cart_ids,addressId);
+            }else {//套餐
+                confirmOrderPresenter.buyCombo(cart_ids,addressId);
             }
+        }else if (TYPE_PLUSFREE.equals(type)){//plus免费专区
+            isOrderBuy = false;
+            confirmOrderPresenter.plusfree(goods_id, qty, sku_id,addressId);
+        }else if (!isEmpty(goods_id)){//商品详情页直接购买
+            isOrderBuy = true;
+            confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,addressId);
+        }else {//新人专享
+            isOrderBuy = false;
+            confirmOrderPresenter.newexclusive(addressId);
         }
     }
 
@@ -448,6 +447,12 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                     params.isNewExclusive = true;
                 }else {
                     params.isNewExclusive = false;
+                }
+                if (TYPE_PLUSFREE.equals(type)){
+                    params.gid = goods_id;
+                    params.isPlusfree = true;
+                }else {
+                    params.isPlusfree = false;
                 }
 
                 String paramsStr = "";

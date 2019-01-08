@@ -29,6 +29,9 @@ public class SaveImgDialog extends Dialog {
     @BindView(R.id.miv_share_wechat)
     MyImageView miv_wechat;
 
+    @BindView(R.id.miv_qrcode)
+    MyImageView miv_qrcode;
+
     @BindView(R.id.tv_cancel)
     TextView tv_cancel;
 
@@ -55,6 +58,10 @@ public class SaveImgDialog extends Dialog {
         lp.gravity = Gravity.BOTTOM;
         win.setAttributes(lp);
         win.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        win.getDecorView().setOnTouchListener((v, event) -> {
+            dismiss();
+            return false;
+        });
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_save_imgs, null, false);
         setContentView(view);
@@ -66,6 +73,10 @@ public class SaveImgDialog extends Dialog {
             dismiss();
         });
         tv_cancel.setOnClickListener(v -> dismiss());
+    }
+
+    public void showQRCodeView(boolean isShow) {
+        miv_qrcode.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     public void destory() {

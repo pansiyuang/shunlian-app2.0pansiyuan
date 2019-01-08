@@ -121,13 +121,17 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
      */
     @Override
     public void checkFromWXMobile(String status, String msg) {
-        if (!isEmpty(msg)){
-            showMobileTip(msg);
-        }
         if ("2".equals(status) && mConfig != null){
             mConfig.isUseMobile = false;
+            if (!isEmpty(msg)){
+                showMobileTip(msg);
+            }
         }else if ("1".equals(status) && mConfig != null){
             mConfig.isUseMobile = true;
+        }else {
+            if (!isEmpty(msg)){
+                showMobileTip(msg);
+            }
         }
     }
 
@@ -165,8 +169,9 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
     @Override
     public void setLoginInfoTip(New3LoginInfoTipEntity data) {
         if (data != null && mtv_mobileLoginTip != null){
-            if (!isEmpty(data.login_title)) {
-                mtv_mobileLoginTip.setText(data.login_title);
+            New3LoginInfoTipEntity.V2 v2 = data.v2;
+            if (v2 != null && !isEmpty(v2.register_title)) {
+                mtv_mobileLoginTip.setText(v2.register_title);
                 visible(mtv_mobileLoginTip);
             }else {
                 gone(mtv_mobileLoginTip);

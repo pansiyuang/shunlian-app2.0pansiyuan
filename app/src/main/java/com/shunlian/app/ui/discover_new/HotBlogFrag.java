@@ -84,16 +84,16 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
         EventBus.getDefault().register(this);
-        NestedSlHeader header = new NestedSlHeader(getContext());
+        NestedSlHeader header = new NestedSlHeader(baseActivity);
         lay_refresh.setRefreshHeaderView(header);
         recycler_list.setNestedScrollingEnabled(false);
 
         objectMapper = new ObjectMapper();
         blogList = new ArrayList<>();
-        hotBlogPresenter = new HotBlogPresenter(getActivity(), this);
+        hotBlogPresenter = new HotBlogPresenter(baseActivity, this);
         hotBlogPresenter.getHotBlogList(true);
 
-        manager = new LinearLayoutManager(getActivity());
+        manager = new LinearLayoutManager(baseActivity);
         recycler_list.setLayoutManager(manager);
 
         ((SimpleItemAnimator) recycler_list.getItemAnimator()).setSupportsChangeAnimations(false);
@@ -144,7 +144,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, hotBlogsEntity.ad_list, shareGoodDialogUtil);
+            hotBlogAdapter = new HotBlogAdapter(baseActivity, blogList, hotBlogsEntity.ad_list, shareGoodDialogUtil);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }
@@ -234,7 +234,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     public void toFocusUser(int isFocus, String memberId, String nickName) {
         if (isFocus == 1) {
             if (promptDialog == null) {
-                promptDialog = new PromptDialog(getActivity());
+                promptDialog = new PromptDialog(baseActivity);
                 promptDialog.setTvSureBGColor(Color.WHITE);
                 promptDialog.setTvSureColor(R.color.pink_color);
                 promptDialog.setTvCancleIsBold(false);

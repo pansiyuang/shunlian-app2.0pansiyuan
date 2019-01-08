@@ -19,4 +19,6 @@ public class BuyGoodsParams {
     public String sku_id;//属性id
     public String use_egg;//是否使用金蛋 1是 0否
     public boolean isNewExclusive;//是否是新人专享
+    public String gid;//plus免费专区商品主键 注意不是商品的id
+    public boolean isPlusfree;//是否是plus免费专区
 }

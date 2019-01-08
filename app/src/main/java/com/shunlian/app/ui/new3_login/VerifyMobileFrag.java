@@ -204,8 +204,9 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
     @Override
     public void setLoginInfoTip(New3LoginInfoTipEntity data) {
         if (data != null && mtv_smsLoginTip != null){
-            if (!isEmpty(data.login_title)) {
-                mtv_smsLoginTip.setText(data.login_title);
+            New3LoginInfoTipEntity.V2 v2 = data.v2;
+            if (v2 != null && !isEmpty(v2.register_title)) {
+                mtv_smsLoginTip.setText(v2.register_title);
                 visible(mtv_smsLoginTip);
             }else {
                 gone(mtv_smsLoginTip);

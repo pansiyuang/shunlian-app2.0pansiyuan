@@ -110,6 +110,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String anonymous;
     /*********使用金蛋*****************/
     private String use_egg;
+    private String gid;
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -180,6 +181,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     public static final int PLUGIN_NOT_INSTALLED = -1;
     public static final int PLUGIN_NEED_UPGRADE = 2;
     private boolean isNewExclusive;
+    private boolean isPlusfree;
 
     /**
      * 传参使用json格式，减少字段
@@ -314,6 +316,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 mTopUpPrice = params.face_price;
                 use_egg = params.use_egg;
                 isNewExclusive = params.isNewExclusive;
+                isPlusfree = params.isPlusfree;
+                gid = params.gid;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -702,6 +706,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         if (!isEmpty(shop_goods)) {
             if (isNewExclusive){
                 payListPresenter.newexclusivePay(shop_goods, addressId, anonymous,code);
+            }else if (isPlusfree){
+                payListPresenter.plusfreePay(shop_goods, addressId, anonymous,code,gid);
             }else {
                 payListPresenter.orderCheckout(shop_goods, addressId, stageVoucherId, anonymous, use_egg, code);
             }
@@ -742,7 +748,11 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                                 getString(R.string.SelectRecommendAct_sure), (v) -> {
                                     if (!isEmpty(shop_goods)) {
                                         if (isNewExclusive){
-                                            payListPresenter.newexclusivePay(shop_goods, addressId, anonymous,pay_types.code);
+                                            payListPresenter.newexclusivePay(shop_goods, addressId,
+                                                    anonymous,pay_types.code);
+                                        }else if (isPlusfree){
+                                            payListPresenter.plusfreePay(shop_goods, addressId,
+                                                    anonymous,pay_types.code,gid);
                                         }else {
                                             payListPresenter.orderCheckout(shop_goods,
                                                     addressId, stageVoucherId, anonymous, use_egg, pay_types.code);

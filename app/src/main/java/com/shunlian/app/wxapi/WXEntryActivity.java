@@ -20,6 +20,7 @@ import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.ShareInfoEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
@@ -371,6 +372,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         EventBus.getDefault().post(event);
 
         EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
+        MessageCountManager.getInstance(this).initData();
+
         if (!"1".equals(wxLoginEntity.is_tag)){
             SexSelectAct.startAct(this);
         }

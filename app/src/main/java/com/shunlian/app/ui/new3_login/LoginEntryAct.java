@@ -98,7 +98,7 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
         if (presenterTest == null) {
             presenterTest = new TestWXLoginPresenter(this, this);
         }else {
-            presenterTest.initApi();
+            presenterTest.wxLoginV2();
         }
     }
 
