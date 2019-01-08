@@ -73,7 +73,7 @@ public class CommonDialogUtil {
         if(((Activity)context).isFinishing()){
             return;
         }
-        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,260))
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,280))
                 .setView(R.layout.dialog_page_user_old);
         dialog_user_old = nomalBuild.create();
         dialog_user_old.setCancelable(false);
