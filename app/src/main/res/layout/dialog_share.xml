@@ -88,7 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
-                    android:text="微信好友"
+                    android:text="分享好友"
                     android:textColor="@color/share_text"
                     android:textSize="12sp" />
             </com.shunlian.app.widget.MyLinearLayout>
@@ -110,7 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
-                    android:text="微信朋友圈"
+                    android:text="分享朋友圈"
                     android:textColor="@color/share_text"
                     android:textSize="12sp" />
             </com.shunlian.app.widget.MyLinearLayout>

@@ -198,7 +198,7 @@ public class ShareGoodDialogUtil {
     private void createSpecialCode(boolean isShow) {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_special_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle()
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().setWidth(DensityUtil.dip2px(context,280))
                     .setView(inflate);
             showSpecialBuild = nomalBuild.create();
             showSpecialBuild.setCancelable(false);

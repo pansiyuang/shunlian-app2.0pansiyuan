@@ -141,7 +141,8 @@ public class NewUserPagePresenter extends BasePresenter<INewUserPageView> {
             @Override
             public void onErrorCode(int code, String message) {
 //                super.onErrorCode(code, message);
-                iView.getOldMessage(message);
+
+                iView.getOldMessage(message,code);
             }
         });
     }

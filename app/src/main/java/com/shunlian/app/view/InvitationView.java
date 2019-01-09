@@ -14,5 +14,5 @@ public interface InvitationView extends IView {
     /**
      * 刷新完成
      */
-    void refreshFinish(List<InviteLogUserEntity.UserList> userLists, InviteLogUserEntity inviteLogUserEntity);
+    void refreshFinish(List<InviteLogUserEntity.UserList> userLists, InviteLogUserEntity inviteLogUserEntity,int currentPage);
 }

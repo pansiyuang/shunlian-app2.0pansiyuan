@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
+import com.shunlian.app.adapter.CommonPagerAdapter;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.bean.AdUserEntity;
 import com.shunlian.app.bean.BaseEntity;
@@ -58,13 +59,11 @@ import butterknife.BindView;
  */
 
 public class NewUserPageActivity extends BaseActivity implements INewUserPageView ,UserBuyGoodsDialog.CartDelGoodListen ,ShareGoodDialogUtil.OnShareBlogCallBack {
-    private int second = (int) (System.currentTimeMillis() / 1000);
-
     private  List<AdUserEntity.AD> adList;
     private List<NewUserGoodsEntity.Goods> goodsList;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private boolean isEvent =false;
-    private  CommonLazyPagerAdapter commonLazyPagerAdapter;
+    private CommonPagerAdapter commonLazyPagerAdapter;
 
     private CommonDialogUtil commonDialogUtil;
     /**
@@ -306,7 +305,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         userBuyGoodsDialog.setCartDelGoodListen(this);
         mPresenter = new NewUserPagePresenter(this, this);
         goodsFrags = new ArrayList<>();
-         commonLazyPagerAdapter = new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld);
+         commonLazyPagerAdapter = new CommonPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld);
         viewpager.setAdapter(commonLazyPagerAdapter);
         if(Common.isAlreadyLogin()) {
             mPresenter.adlist();
@@ -317,10 +316,19 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         img_guize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                resreshQuest();
                 //到H5规则
             }
         });
 
+    }
+
+    /**
+     * 刷选页面
+     */
+    public void resreshQuest(){
+        mPresenter.adlist();
+        mPresenter.showVoucherSuspension();
     }
 
     /**
@@ -339,6 +347,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                         commonDialogUtil.dialog_user_info.dismiss();
                     }
                     beginToast();
+                    mPresenter.adlist();
                     mPresenter.showVoucherSuspension();
                 }
             }
@@ -409,9 +418,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             line_user_buy.setVisibility(View.VISIBLE);
         }
         commonLazyPagerAdapter.notifyDataSetChanged();
-        if(isEvent){
-            EventBus.getDefault().post(new UserPaySuccessEvent(true,true));
-        }
     }
 
 
@@ -504,15 +510,19 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @Override
     public void getvoucher(UserNewDataEntity userNewDataEntity) {
         if(commonDialogUtil!=null&&commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
-            TextView tv_new_submit = commonDialogUtil.dialog_user_info.findViewById(R.id.tv_new_submit);
-            TextView  ntv_user_page_price= commonDialogUtil.dialog_user_info.findViewById(R.id.ntv_user_page_price);
-            tv_new_submit.setText("前往使用");
-            ntv_user_page_price.setText(getStringResouce(R.string.common_yuan)+userNewDataEntity.prize);
+            if(userNewDataEntity.isNew) {
+                TextView tv_new_submit = commonDialogUtil.dialog_user_info.findViewById(R.id.tv_new_submit);
+                TextView ntv_user_page_price = commonDialogUtil.dialog_user_info.findViewById(R.id.ntv_user_page_price);
+                tv_new_submit.setText("前往使用");
+                ntv_user_page_price.setText(getStringResouce(R.string.common_yuan) + userNewDataEntity.prize);
+            }else{
+                getOldMessage("您不是新用户哦，无法领取该优惠券",0);
+            }
         }
     }
 
     @Override
-    public void getOldMessage(String message) {
+    public void getOldMessage(String message,int code) {
         commonDialogUtil.userOldShowDialog(new ICallBackResult<String>() {
             @Override
             public void onTagClick(String data) {
@@ -527,10 +537,11 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                     finish();
                 }else{
                     mPresenter.adlist();
+                    mPresenter.showVoucherSuspension();
                     beginToast();
                 }
             }
-        }, message);
+        }, message, code);
     }
 
     @Override
@@ -538,17 +549,22 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         if(voucherSuspension.suspensionShow.equals("1")&&isNew){
             tv_new_user_title.setText(voucherSuspension.suspension.prize);
             show_new_user_view.setVisibility(View.VISIBLE);
-            tv_new_user_time.cancelDownTimer();
-            int seconds = (int) (System.currentTimeMillis() / 1000) - second;
-            tv_new_user_time.setDownTime(1000000 - seconds);
-            tv_new_user_time.startDownTimer();
-            tv_new_user_time.setDownTimerListener(new OnCountDownTimerListener() {
-                @Override
-                public void onFinish() {
-                    tv_new_user_time.cancelDownTimer();
-                    mPresenter.adlist();
-                }
-            });
+            if(voucherSuspension.suspension.finish>0) {
+                tv_new_user_time.setVisibility(View.VISIBLE);
+                tv_new_user_time.cancelDownTimer();
+                tv_new_user_time.setDownTime(voucherSuspension.suspension.finish);
+                tv_new_user_time.startDownTimer();
+                tv_new_user_time.setDownTimerListener(new OnCountDownTimerListener() {
+                    @Override
+                    public void onFinish() {
+                        tv_new_user_time.cancelDownTimer();
+                        show_new_user_view.setVisibility(View.GONE);
+                        mPresenter.adlist();
+                    }
+                });
+            }else{
+                tv_new_user_time.setVisibility(View.GONE);
+            }
         }else{
              show_new_user_view.setVisibility(View.GONE);
         }

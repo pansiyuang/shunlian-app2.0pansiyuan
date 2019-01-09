@@ -212,7 +212,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                         @Override
                         public void onItemClick(View view, int position) {
                             if (data.datass.get(position).url != null) {
-                                JosnSensorsDataAPI.fristIconClick(data.datass.get(position).url.type, data.datass.get(position).title, position);
+                                JosnSensorsDataAPI.fristIconClick(data.datass.get(position).title,data.datass.get(position).url.type, position);
                                 Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
                             }
                         }
