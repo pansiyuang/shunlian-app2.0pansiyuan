@@ -21,6 +21,7 @@ import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
@@ -36,6 +37,8 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.timer.HoneRedDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -121,7 +124,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     @BindView(R.id.tv_new_user_title)
     TextView tv_new_user_title;
     @BindView(R.id.tv_new_user_time)
-    TextView tv_new_user_time;
+    HoneRedDownTimerView tv_new_user_time;
     public void beginToast() {
         if (isPause) {
             mposition = 0;
@@ -259,6 +262,33 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         miv_entry.setLayoutParams(layoutParams);
         mtv_search = (MyTextView) rootView.findViewById(R.id.mtv_search);
         return rootView;
+    }
+
+    public void updateUserNewToast(ShowVoucherSuspension voucherSuspension){
+        if(voucherSuspension.suspensionShow.equals("1")){
+            tv_new_user_title.setText(voucherSuspension.suspension.prize);
+            show_new_user_view.setVisibility(View.VISIBLE);
+            if(miv_entry.getVisibility() == View.VISIBLE){
+                miv_entry.setVisibility(View.GONE);
+            }
+            if(voucherSuspension.suspension.finish>0) {
+                tv_new_user_time.setVisibility(View.VISIBLE);
+                tv_new_user_time.cancelDownTimer();
+                tv_new_user_time.setDownTime(voucherSuspension.suspension.finish);
+                tv_new_user_time.startDownTimer();
+                tv_new_user_time.setDownTimerListener(new OnCountDownTimerListener() {
+                    @Override
+                    public void onFinish() {
+                        tv_new_user_time.cancelDownTimer();
+                        show_new_user_view.setVisibility(View.GONE);
+                    }
+                });
+            }else{
+                tv_new_user_time.setVisibility(View.GONE);
+            }
+        }else{
+            show_new_user_view.setVisibility(View.GONE);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

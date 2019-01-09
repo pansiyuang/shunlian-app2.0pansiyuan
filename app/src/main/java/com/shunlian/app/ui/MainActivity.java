@@ -29,6 +29,7 @@ import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
@@ -1029,6 +1030,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         if (discoverFrag != null) {
 //            discoverFrag.initMessage(data);
+        }
+    }
+
+    @Override
+    public void showVoucherSuspension(ShowVoucherSuspension voucherSuspension) {
+        if(mainPageFrag!=null){
+            mainPageFrag.updateUserNewToast(voucherSuspension);
         }
     }
 

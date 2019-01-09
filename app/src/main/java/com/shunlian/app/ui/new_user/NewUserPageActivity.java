@@ -59,8 +59,6 @@ import butterknife.BindView;
  */
 
 public class NewUserPageActivity extends BaseActivity implements INewUserPageView ,UserBuyGoodsDialog.CartDelGoodListen ,ShareGoodDialogUtil.OnShareBlogCallBack {
-    private int second = (int) (System.currentTimeMillis() / 1000);
-
     private  List<AdUserEntity.AD> adList;
     private List<NewUserGoodsEntity.Goods> goodsList;
     private ShareGoodDialogUtil shareGoodDialogUtil;
@@ -551,18 +549,22 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         if(voucherSuspension.suspensionShow.equals("1")&&isNew){
             tv_new_user_title.setText(voucherSuspension.suspension.prize);
             show_new_user_view.setVisibility(View.VISIBLE);
-            tv_new_user_time.cancelDownTimer();
-            int seconds = (int) (System.currentTimeMillis() / 1000) - second;
-            tv_new_user_time.setDownTime(1000000 - seconds);
-            tv_new_user_time.startDownTimer();
-            tv_new_user_time.setDownTimerListener(new OnCountDownTimerListener() {
-                @Override
-                public void onFinish() {
-                    tv_new_user_time.cancelDownTimer();
-                    show_new_user_view.setVisibility(View.GONE);
-                    mPresenter.adlist();
-                }
-            });
+            if(voucherSuspension.suspension.finish>0) {
+                tv_new_user_time.setVisibility(View.VISIBLE);
+                tv_new_user_time.cancelDownTimer();
+                tv_new_user_time.setDownTime(voucherSuspension.suspension.finish);
+                tv_new_user_time.startDownTimer();
+                tv_new_user_time.setDownTimerListener(new OnCountDownTimerListener() {
+                    @Override
+                    public void onFinish() {
+                        tv_new_user_time.cancelDownTimer();
+                        show_new_user_view.setVisibility(View.GONE);
+                        mPresenter.adlist();
+                    }
+                });
+            }else{
+                tv_new_user_time.setVisibility(View.GONE);
+            }
         }else{
              show_new_user_view.setVisibility(View.GONE);
         }

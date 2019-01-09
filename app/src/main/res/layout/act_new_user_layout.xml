@@ -224,7 +224,7 @@
             android:layout_alignParentBottom="true"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:background="@drawable/rounded_corner_solid_white_24px"
             android:layout_centerHorizontal="true">
 
