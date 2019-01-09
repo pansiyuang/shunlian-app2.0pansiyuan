@@ -356,6 +356,7 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
         Map<String, String> map = new HashMap<>();
         map.put("mobile", mobile);
         map.put("mobile_code", mobile_code);
+        if (!isEmpty(unique_sign))
         map.put("unique_sign", unique_sign);
         map.put("code", code);
         sortAndMD5(map);

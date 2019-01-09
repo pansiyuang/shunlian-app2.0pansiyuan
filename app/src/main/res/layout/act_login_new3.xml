@@ -17,6 +17,15 @@
             android:padding="15dp"
             android:src="@mipmap/icon_common_back_black" />
 
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/value_484848"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
     </RelativeLayout>
 
 

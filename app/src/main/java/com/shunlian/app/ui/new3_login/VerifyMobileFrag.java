@@ -307,7 +307,6 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
         SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
-        SharedPrefUtil.saveSharedUserString("share_status", content.share_status);
         SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(content.member_id);
         if (content.tag != null)
@@ -321,7 +320,7 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
             SexSelectAct.startAct(baseActivity);
         }
 
-        if ("2".equals(content.type)){//绑定上级
+        if ("2".equals(content.share_status)){//绑定上级
             ((New3LoginAct) baseActivity).loginInviteCode(mConfig);
         }else {
             //通知登录成功

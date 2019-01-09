@@ -107,8 +107,6 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
         New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
         config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
         New3LoginAct.startAct(this,config);
-        /*RegisterAndBindingAct.startAct(this,
-                RegisterAndBindingAct.FLAG_LOGIN,null,null,null);*/
         finish();
     }
 
@@ -117,8 +115,6 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
         New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
         config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.PASSWORD_TO_LOGIN;
         New3LoginAct.startAct(this,config);
-        /*RegisterAndBindingAct.startAct(this,
-                RegisterAndBindingAct.FLAG_PWD_LOGIN,null,null,null);*/
         finish();
     }
 
@@ -218,7 +214,7 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void notifClose(DefMessageEvent n){
+    public void notifyClose(DefMessageEvent n){
         if (n != null && n.loginSuccess){
             finish();
         }

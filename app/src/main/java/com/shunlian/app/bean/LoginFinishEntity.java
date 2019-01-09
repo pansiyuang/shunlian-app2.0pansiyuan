@@ -27,8 +27,7 @@ public class LoginFinishEntity {
     public String token;
     public String expires_in;
     public String plus_role;
-    public String share_status;//是否有邀请码 1有  2无
-    public String type;//直接登录成功还是跳到绑定上级页面 1登录  2去绑定上级
+    public String share_status;//直接登录成功还是跳到绑定上级页面 1登录  2去绑定上级
     public String is_tag;//是否有标签1是0否
     public List<String> tag;
 }

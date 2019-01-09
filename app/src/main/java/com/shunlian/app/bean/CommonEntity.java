@@ -12,6 +12,7 @@ public class CommonEntity {
     public String fid;//商品收藏id
     public String message;
     public String status;
+    public String share_status;
     public String share_show_status;
     public String praise_total;//总赞数
     public List<String> suggest_list; // 搜索关键字提示接口

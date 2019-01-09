@@ -15,6 +15,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -32,6 +33,9 @@ public class New3LoginAct extends BaseActivity{
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
+
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
 
     private FragmentManager mFragmentManager;
     private Map<String, BaseFragment> fragments;
@@ -88,8 +92,8 @@ public class New3LoginAct extends BaseActivity{
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         mConfig = getIntent().getParcelableExtra("config");
+        fragments = new HashMap<>();
         if (mConfig != null){
-            fragments = new HashMap<>();
             mFragmentManager = getSupportFragmentManager();
             switch (mConfig.login_mode){
                 case PASSWORD_TO_LOGIN:
@@ -115,6 +119,9 @@ public class New3LoginAct extends BaseActivity{
      * 密码登录
      */
     public void loginPwd(){
+        if (mtv_title != null){
+            mtv_title.setText("");
+        }
         mLoginPwdFrag = (LoginPwdFrag) fragments.get(ACCOUNT_PWD_LOGIN);
         if (mLoginPwdFrag == null){
             mLoginPwdFrag = new LoginPwdFrag();
@@ -127,6 +134,9 @@ public class New3LoginAct extends BaseActivity{
      * 短信登录
      */
     public void loginSms(int page, LoginConfig config){
+        if (mtv_title != null){
+            mtv_title.setText("");
+        }
         if (page == 1){
             mCurrentPage = 1;
             mLoginMobileFrag = (LoginMobileFrag) fragments.get(MOBILE_1_LOGIN);
@@ -160,6 +170,9 @@ public class New3LoginAct extends BaseActivity{
      * 邀请码
      */
     public void loginInviteCode(LoginConfig config){
+        if (mtv_title != null){
+            mtv_title.setText("填写邀请码");
+        }
         mCurrentPage = 3;
         mInviteCodeFrag = (InviteCodeFrag) fragments.get(INVITE_CODE);
         if (mInviteCodeFrag == null){
