@@ -57,7 +57,7 @@ public class CommonDialogUtil {
         dialog_user_info.show();
         TextView tv_new_submit = dialog_user_info.findViewById(R.id.tv_new_submit);
         TextView  ntv_user_page_price= dialog_user_info.findViewById(R.id.ntv_user_page_price);
-        TextView tv_desc_text= dialog_user_info.findViewById(R.id.tv_new_submit);
+        TextView tv_desc_text= dialog_user_info.findViewById(R.id.tv_desc_text);
         if(!TextUtils.isEmpty(defaultValue)){
             tv_new_submit.setText(defaultValue);
         }
