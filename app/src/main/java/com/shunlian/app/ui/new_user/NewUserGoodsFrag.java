@@ -257,6 +257,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         shareInfoParam.shareLink = goodList.get(postion).thumb;
         shareInfoParam.img = goodList.get(postion).thumb;
         shareInfoParam.goods_id = goodList.get(postion).id;
+        shareInfoParam.isNewUserGood = true;
         shareInfoParam.start_time = "0元3件";
         shareInfoParam.act_label = "新人专享";
     }

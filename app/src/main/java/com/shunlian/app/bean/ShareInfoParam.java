@@ -62,7 +62,8 @@ public class ShareInfoParam implements Serializable {
     public String pic;
     public String logo;
     public boolean isSpecial = false;
-
+    public boolean isNewUserGood = false;
+    public boolean isActivityStart = false;
     public String cate1;
     public String cate2;
     public String store_id;

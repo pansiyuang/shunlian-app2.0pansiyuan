@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +31,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -71,6 +73,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
      */
     public static final int MAX_COUNT = 3;
     public static int CURRENT_NUM = 0;
+    private NewUserGoodsEntity newUserGoodsEntity;
 
     @BindView(R.id.viewpager)
     ViewPager viewpager;
@@ -99,8 +102,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @BindView(R.id.line_user_buy)
     LinearLayout line_user_buy;
     public static boolean isNew = false;
-
-    public boolean isDialogNew = false;
 
     @BindView(R.id.tv_new_user_title)
     TextView tv_new_user_title;
@@ -311,13 +312,11 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             mPresenter.adlist();
             mPresenter.showVoucherSuspension();
         }else{
-            showDialogView();
+            showDialogView("");
         }
-        img_guize.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resreshQuest();
-                //到H5规则
+        img_guize.setOnClickListener(v -> {
+            if(newUserGoodsEntity!=null&&!TextUtils.isEmpty(newUserGoodsEntity.h5_rule)){
+                H5X5Act.startAct(NewUserPageActivity.this, newUserGoodsEntity.h5_rule, H5X5Act.MODE_SONIC);
             }
         });
 
@@ -334,7 +333,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     /**
      * 显示新人的dialog
      */
-    private void showDialogView(){
+    private void showDialogView(String warn_txt){
         commonDialogUtil.userNewShowDialog(new ICallBackResult<String>() {
             @Override
             public void onTagClick(String data) {
@@ -351,7 +350,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                     mPresenter.showVoucherSuspension();
                 }
             }
-        }, "立即领取");
+        }, "立即领取",warn_txt);
     }
 
     public static void startAct(Context context) {
@@ -580,11 +579,12 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     /**
      * 更新购物车数量
      */
-    public void initCartNum(int currentNum,int show){
+    public void initCartNum(int currentNum,int show,NewUserGoodsEntity newUserGoodsEntity){
         this.CURRENT_NUM = currentNum;
+        this.newUserGoodsEntity = newUserGoodsEntity;
         updateCartNum();
         if(show!=1&&isNew){
-            showDialogView();
+            showDialogView(newUserGoodsEntity.warn_txt);
         }
     }
     /**
