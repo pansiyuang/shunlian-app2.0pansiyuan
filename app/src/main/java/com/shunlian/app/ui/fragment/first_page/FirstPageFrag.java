@@ -350,6 +350,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         mll_message.setOnClickListener(this);
         miv_photo.setOnClickListener(this);
         miv_entry.setOnClickListener(this);
+        show_new_user_view.setOnClickListener(this);
         mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -464,6 +465,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 break;
             case R.id.miv_photo:
                 Common.goGoGo(getContext(), logoType, logoId);
+                break;
+            case R.id.show_new_user_view:
+                Common.goGoGo(getContext(), "newuser");
                 break;
             case R.id.miv_entry:
                 if (isHide) {
