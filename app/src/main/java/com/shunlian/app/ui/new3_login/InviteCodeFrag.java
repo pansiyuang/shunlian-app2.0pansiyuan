@@ -99,20 +99,23 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     public void initStatus(New3LoginAct.LoginConfig config) {
         mConfig = config;
         //如果有推荐人，直接填写推荐人
-        String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
+        /*String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
         if (!isEmpty(inviteCode)){
             invite_code.setInviteCodeText(inviteCode);
         }else if (mConfig != null && !isEmpty(mConfig.invite_code)){
 
         }else {
             invite_code.setInviteCodeText("");
-        }
+        }*/
+        if (invite_code != null)
+        invite_code.setInviteCodeText("");
     }
 
 
     @OnClick(R.id.mbtn_login)
     public void bindInviteCode(){
         if (invite_code == null || isEmpty(invite_code.getText())){
+            ((New3LoginAct) baseActivity).loginNotify();
             SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
             Common.goGoGo(baseActivity,"home");
             ((New3LoginAct) baseActivity).finish();

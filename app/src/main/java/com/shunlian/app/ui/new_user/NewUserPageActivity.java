@@ -14,9 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.adapter.CommonPagerAdapter;
-import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.bean.AdUserEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BubbleEntity;
@@ -480,10 +478,10 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             CommonDialogUtil promptDialog = new CommonDialogUtil(this);
             promptDialog.defaultCommonDialog("你已经领取了" + CURRENT_NUM + "件商品\n还可以再免费领" + (MAX_COUNT - CURRENT_NUM) + "件商品哦", "去支付", view -> {
                 promptDialog.dismiss();
-                ConfirmOrderAct.startAct(this);
+                ConfirmOrderAct.startAct(this,ConfirmOrderAct.TYPE_NEW_USER_PAGE);
             }, "再逛逛", view -> promptDialog.dismiss());
         }else{
-            ConfirmOrderAct.startAct(this);
+            ConfirmOrderAct.startAct(this,ConfirmOrderAct.TYPE_NEW_USER_PAGE);
         }
 
     }

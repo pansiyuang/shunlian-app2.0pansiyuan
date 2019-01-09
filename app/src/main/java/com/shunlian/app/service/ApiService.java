@@ -3021,4 +3021,7 @@ public interface ApiService {
      * @return
      */
     Call<BaseEntity<PayOrderEntity>> plusfreePay(@Body RequestBody body);
+
+    @GET("member/userinfo/checkBindShareidV2")
+    Call<BaseEntity<CommonEntity>> checkBindShareidV2(@QueryMap Map<String, String> map);
 }

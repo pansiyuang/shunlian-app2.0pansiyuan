@@ -15,7 +15,6 @@ import com.shunlian.app.ui.new3_login.EditInviteCodeDialog;
 import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 import com.shunlian.app.ui.new3_login.VerifyPicDialog;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IConfirmOrderView;
 
 import java.util.HashMap;
@@ -40,7 +39,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
 
     public ConfirmOrderPresenter(Context context, IConfirmOrderView iView) {
         super(context, iView);
-        isCanBindShareID();
+        checkBindShareidV2();
     }
 
     @Override
@@ -66,23 +65,21 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
      */
     private void isCanBindShareID() {
         //share_status == 2 表示该用户没有上级，需要绑定上级才能购买
-        String share_status = SharedPrefUtil.getSharedUserString("share_status", "");
-        if ("2".equals(share_status)){
-            loginInfoTip();
-            mInviteCodeDialog = new EditInviteCodeDialog((Activity) context);
-            mInviteCodeDialog.setOnClickListener(v -> {
-                mInviteCodeDialog.release();
-                ((Activity) context).finish();
-            }, v -> {
-                String inviteCode = mInviteCodeDialog.getInviteCode();
-                if (isEmpty(inviteCode)) {
-                    Common.staticToast("请填写邀请码");
-                } else {
-                    codeDetail(inviteCode);
-                }
-            });
-            mInviteCodeDialog.show();
-        }
+        loginInfoTip();
+        mInviteCodeDialog = new EditInviteCodeDialog((Activity) context);
+        mInviteCodeDialog.setOnClickListener(v -> {
+            mInviteCodeDialog.release();
+            ((Activity) context).finish();
+        }, v -> {
+            String inviteCode = mInviteCodeDialog.getInviteCode();
+            if (isEmpty(inviteCode)) {
+                Common.staticToast("请填写邀请码");
+            } else {
+                codeDetail(inviteCode);
+            }
+        });
+        mInviteCodeDialog.show();
+
     }
 
 
@@ -269,7 +266,6 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 super.onSuccess(entity);
                 iView.bindShareID("");
                 Common.staticToasts(context,"已确认",R.mipmap.icon_common_duihao);
-                SharedPrefUtil.saveSharedUserString("share_status", "1");
                 if (mVerifyPicDialog != null){
                     mVerifyPicDialog.release();
                 }
@@ -377,6 +373,27 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
                 setDate(entity);
+            }
+        });
+    }
+
+
+    public void checkBindShareidV2(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>>
+                baseEntityCall = getApiService().checkBindShareidV2(map);
+
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null && "2".equals(data.share_status)){//需要绑定上级
+                    isCanBindShareID();
+                }
             }
         });
     }

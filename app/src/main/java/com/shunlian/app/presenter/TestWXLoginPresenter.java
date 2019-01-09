@@ -77,7 +77,6 @@ public class TestWXLoginPresenter extends BasePresenter {
         SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
         SharedPrefUtil.saveSharedUserString("avatar", wxLoginEntity.avatar);
         SharedPrefUtil.saveSharedUserString("nickname", wxLoginEntity.nickname);
-        SharedPrefUtil.saveSharedUserString("share_status", wxLoginEntity.share_status);
         SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
         SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(wxLoginEntity.member_id);
@@ -195,7 +194,6 @@ public class TestWXLoginPresenter extends BasePresenter {
         SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
         SharedPrefUtil.saveSharedUserString("refresh_token", wxLoginEntity.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", wxLoginEntity.member_id);
-        SharedPrefUtil.saveSharedUserString("share_status", wxLoginEntity.share_status);
         SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(wxLoginEntity.member_id);
         if (wxLoginEntity.tag != null)

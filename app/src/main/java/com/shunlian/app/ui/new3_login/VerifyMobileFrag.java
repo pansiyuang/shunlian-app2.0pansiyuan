@@ -14,7 +14,6 @@ import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
-import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseFragment;
@@ -26,8 +25,6 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.VerificationCodeInput;
 import com.tencent.bugly.crashreport.CrashReport;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashSet;
 
@@ -124,7 +121,8 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
 
     private void dispatchApi() {
         String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
-        if (!isEmpty(inviteCode) && presenter != null){
+        if (!isEmpty(inviteCode) && presenter != null
+                && mConfig != null && mConfig.isShowInviteSource){
             presenter.codeDetail(inviteCode);
         }
         if (mConfig != null&&mtv_mobile!=null) {
@@ -309,16 +307,11 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
         SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
-        SharedPrefUtil.saveSharedUserString("share_status", content.share_status);
         SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(content.member_id);
         if (content.tag != null)
             SharedPrefUtil.saveSharedUserStringss("tags", new HashSet<>(content.tag));
         JpushUtil.setJPushAlias();
-        //通知登录成功
-        DefMessageEvent event = new DefMessageEvent();
-        event.loginSuccess = true;
-        EventBus.getDefault().post(event);
 
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         MessageCountManager.getInstance(getActivity()).initData();
@@ -327,9 +320,11 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
             SexSelectAct.startAct(baseActivity);
         }
 
-        if ("2".equals(content.type)){//绑定上级
+        if ("2".equals(content.share_status)){//绑定上级
             ((New3LoginAct) baseActivity).loginInviteCode(mConfig);
         }else {
+            //通知登录成功
+            ((New3LoginAct) baseActivity).loginNotify();
             ((New3LoginAct) baseActivity).finish();
             Common.handleTheRelayJump(baseActivity);
         }
