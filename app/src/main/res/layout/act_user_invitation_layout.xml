@@ -50,6 +50,7 @@
            android:background="@mipmap/img_xinren_jilu_beijing"
            android:orientation="vertical">
            <TextView
+               android:id="@+id/tv_show_price"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:layout_centerHorizontal="true"
@@ -74,14 +75,16 @@
                    android:src="@mipmap/img_hongbao"/>
 
                <TextView
+                   android:id="@+id/tv_show_desc"
                    android:layout_width="150dp"
                    android:layout_height="wrap_content"
                    android:layout_centerHorizontal="true"
                    android:textColor="#F05A63"
                    android:layout_marginTop="75dp"
                    android:textSize="16sp"
-                   android:text="好友成为顺联动力用户，并完成首单，你就可以获得"/>
+                   android:text="好友成为顺联动力用户，并完成首单，你就可以获得红包"/>
                <TextView
+                   android:id="@+id/tv_please"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_centerHorizontal="true"
@@ -111,6 +114,7 @@
                        android:gravity="center"
                       />
                    <TextView
+                       android:id="@+id/tv_invitation_copy"
                        android:layout_width="wrap_content"
                        android:layout_height="match_parent"
                        android:text="复制邀请码"
@@ -143,6 +147,7 @@
                        android:textSize="12sp"
                        android:layout_height="match_parent" />
                    <TextView
+                       android:id="@+id/tv_total_price"
                        android:layout_width="wrap_content"
                        android:gravity="center_vertical"
                        android:text="$52"
@@ -160,7 +165,6 @@
                    android:layout_marginLeft="20dp"
                    android:layout_marginRight="20dp"
                    android:layout_marginBottom="20dp"
-
                    android:layout_marginTop="10dp"
                    android:layout_height="match_parent">
                </android.support.v7.widget.RecyclerView>

@@ -17,6 +17,8 @@ public class NewUserGoodsEntity {
     public int page_size;
     public boolean isNew;//是否是新人 true：是 false:否  （type=2不返回该字段）
     public int   cartTotal;//购物车数量（type=2不返回该字段）
+    public int   show;//是否已领取 1：已领取过
+    public  Goods recommend;//推荐的商品
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Cates {
         public String id;
@@ -36,5 +38,8 @@ public class NewUserGoodsEntity {
         public String   sku;//"黑色+3XL",
         public String   qty;//数量
         public int   is_add_cart;//是不是加入购物车 1:加入 0 未加入
+        public boolean is_recommend= false;
+        public int  process;//进度
+        public long    finish;
     }
 }

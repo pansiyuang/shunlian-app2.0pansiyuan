@@ -1,14 +1,17 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
@@ -17,10 +20,15 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SwipeMenuLayout;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.timer.DayNewUserDownTimerView;
+import com.shunlian.app.utils.timer.DayNoBlackDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.ProgressViewLayout;
+import com.zh.chartlibrary.common.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +40,10 @@ import butterknife.BindView;
  */
 
 public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.Goods> {
-
-
+    private int second=(int)(System.currentTimeMillis()/1000);
+    private int fristPostionNewGood = -1;
+    private int fristPostionVeryGood = -1;
     private IAddShoppingCarListener mCarListener;
-    public boolean isShowSelect;
     public String type;
     private boolean isNew;
     public NewUserGoodsAdapter(Context context, List<NewUserGoodsEntity.Goods> lists,String type,boolean isNew) {
@@ -45,9 +53,8 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
     }
 
 
-    public void updateTypeUser(String type,boolean isNew){
-        this.type = type;
-        this.isNew = isNew;
+    public void updateUserTime(){
+        second=(int)(System.currentTimeMillis()/1000);
     }
     /**
      * 子类需要实现的holder
@@ -99,12 +106,14 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
      */
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof CollectionGoodsHolder) {
+         if (holder instanceof CollectionGoodsHolder) {
             CollectionGoodsHolder mHolder = (CollectionGoodsHolder) holder;
             NewUserGoodsEntity.Goods goods = lists.get(position);
             GlideUtils.getInstance().loadOverrideImage(context,
                     mHolder.miv_goods_pic, goods.thumb,220,220);
-            mHolder.mtv_title.setText(goods.title);
+//            mHolder.mtv_title.setText(goods.title);
+//             mHolder.mtv_title.setText();
+             getSubString(mHolder.mtv_title,goods.title,1);
             String source = getString(R.string.rmb).concat(goods.price);
             mHolder.mtv_price.setText(Common.changeTextSize(source, getString(R.string.rmb), 12));
             mHolder.mtv_discount_price.setStrikethrough();
@@ -114,8 +123,12 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
             }else{
                 mHolder.mtv_discount_price.setVisibility(View.GONE);
             }
-            if(type.equals("1")){
-                if(isNew) {
+
+            if(fristPostionNewGood==-1&&!goods.is_recommend){
+                fristPostionNewGood = position;
+            }
+
+            if(isNew) {
                     if(goods.is_add_cart==1) {
                         mHolder.tv_user_shopping_car.setEnabled(false);
                         mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_ga_50px);
@@ -137,12 +150,45 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                     mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
                     mHolder.tv_show_num.setVisibility(View.VISIBLE);
                     mHolder.tv_user_shopping_car.setText("立即分享");
-                }
-            }else if(type.equals("2")){
-                    mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
-                    mHolder.tv_user_shopping_car.setText("立即购买");
-            }
-            mHolder.tv_usew_desc.setVisibility(View.GONE);
+              }
+             mHolder.progress_view.setVisibility(View.VISIBLE);
+             mHolder.progress_view.setSecond(goods.process,100);
+              if(!goods.is_recommend) {
+                  mHolder.line_time_view.setVisibility(View.GONE);
+                  mHolder.view_head_view.setVisibility(View.GONE);
+                  if (position == fristPostionNewGood) {
+                      mHolder.line_new_title.setVisibility(View.VISIBLE);
+                      mHolder.line_new_title.setBackgroundColor(context.getResources().getColor(R.color.white));
+                      mHolder.tv_usew_desc.setText("新人专区");
+                      Drawable drawable = context.getResources().getDrawable(R.mipmap.icon_xinren_zhuanqu);
+                      drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                      mHolder.tv_usew_desc.setCompoundDrawables(drawable, null, null, null);
+                      mHolder.tv_usew_desc.setCompoundDrawablePadding(DensityUtil.dip2px(context,5));
+                  } else {
+                      mHolder.line_new_title.setVisibility(View.GONE);
+                  }
+              }else if(position==0&&goods.is_recommend){//推荐
+                   mHolder.line_new_title.setVisibility(View.VISIBLE);
+                   mHolder.line_time_view.setVisibility(View.VISIBLE);
+                   mHolder.view_head_view.setVisibility(View.VISIBLE);
+                   mHolder.tv_usew_desc.setText("新人专区爆品");
+                   Drawable drawable = context.getResources().getDrawable(R.mipmap.icon_xinren_bangping);
+                   drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                   mHolder.tv_usew_desc.setCompoundDrawables(drawable, null, null, null);
+                   mHolder.tv_usew_desc.setCompoundDrawablePadding(DensityUtil.dip2px(context,5));
+                   mHolder.line_new_title.setBackgroundResource(R.drawable.bg_border_line_bottom);
+                  int seconds=(int)(System.currentTimeMillis()/1000)-second;
+                  mHolder.downTime_firsts.cancelDownTimer();
+                  try {
+                      if(goods.finish!=0) {
+                          mHolder.downTime_firsts.setLabelBackgroundColor(context.getResources().getColor(R.color.black));
+                          mHolder.downTime_firsts.setDownTime(goods.finish - seconds);
+                          mHolder.downTime_firsts.startDownTimer();
+                      }
+                  }catch (Exception e){
+
+                  }
+              }
         }
     }
 
@@ -172,10 +218,44 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
         @BindView(R.id.tv_usew_desc)
         TextView tv_usew_desc;
 
+        @BindView(R.id.line_new_title)
+        LinearLayout line_new_title;
+
+        @BindView(R.id.view_head_view)
+        View view_head_view;
+
+        @BindView(R.id.progress_view)
+        ProgressViewLayout progress_view;
+
+        @BindView(R.id.line_time_view)
+        LinearLayout line_time_view;
+
+        @BindView(R.id.tv_time_title)
+        TextView tv_time_title;
+
+        @BindView(R.id.downTime_firsts)
+        DayNewUserDownTimerView downTime_firsts;
+
+//        @BindView(R.id.tv_time_day)
+//        TextView tv_time_day;
+//        @BindView(R.id.tv_time_hh)
+//        TextView tv_time_hh;
+//        @BindView(R.id.tv_time_mm)
+//        TextView tv_time_mm;
+
         public CollectionGoodsHolder(View itemView) {
             super(itemView);
             mrlayout_item.setOnClickListener(this);
             tv_user_shopping_car.setOnClickListener(this);
+            downTime_firsts.setDownTimerListener(new OnCountDownTimerListener() {
+                @Override
+                public void onFinish() {
+                    if (downTime_firsts!=null){
+                        downTime_firsts.cancelDownTimer();
+                        ((NewUserPageActivity) context).resreshQuest();
+                    }
+                }
+            });
         }
 
         /**
@@ -186,7 +266,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.tv_shopping_car:
+                case R.id.tv_user_shopping_car:
                     if (mCarListener != null){
                         mCarListener.onGoodsId(v,getAdapterPosition());
                     }
@@ -200,6 +280,18 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
         }
 
 
+    }
+
+    public  String getSubString(TextView mTextView, String content, int maxLine){
+        float tvWidth = App.widthPixels-DensityUtil.dip2px(context,180);
+        float width = mTextView.getPaint().measureText(content);
+        if(width / tvWidth > (maxLine + 0.5)) {
+            String str = content.substring(0, (int) (content.length() / (width / tvWidth) * (maxLine + 0.5))) + "...";
+            mTextView.setText(str);
+        }else{
+            mTextView.setText(content);
+        }
+        return content;
     }
 
     /**

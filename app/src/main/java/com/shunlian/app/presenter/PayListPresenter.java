@@ -260,4 +260,41 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
                 });
 
     }
+
+    /**
+     * plus免费专区
+     * @param shop_goods
+     * @param address_id
+     * @param anonymous
+     * @param paytype
+     */
+    public void plusfreePay(String shop_goods, String address_id,
+                                String anonymous, String paytype,String gid){
+        Map<String, String> map = new HashMap<>();
+        map.put("shop_goods", shop_goods);
+        map.put("address_id", address_id);
+        map.put("anonymous", anonymous);
+        map.put("gid", gid);
+        map.put("paytype", paytype);
+        sortAndMD5(map);
+
+        Call<BaseEntity<PayOrderEntity>>
+                baseEntityCall = getAddCookieApiService().plusfreePay(getRequestBody(map));
+
+        getNetData(true, baseEntityCall,
+                new SimpleNetDataCallback<BaseEntity<PayOrderEntity>>() {
+                    @Override
+                    public void onSuccess(BaseEntity<PayOrderEntity> entity) {
+                        super.onSuccess(entity);
+                        iView.payOrder(entity.data);
+                    }
+
+                    @Override
+                    public void onErrorData(BaseEntity<PayOrderEntity> payOrderEntityBaseEntity) {
+                        super.onErrorData(payOrderEntityBaseEntity);
+                        iView.payOrderFail(payOrderEntityBaseEntity.data);
+                    }
+                });
+
+    }
 }

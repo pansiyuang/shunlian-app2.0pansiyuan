@@ -10,6 +10,7 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UserNewDataEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -97,7 +98,6 @@ public class NewUserPagePresenter extends BasePresenter<INewUserPageView> {
                 iView.bannerList(entity.data.list,entity.data.isNew);
             }
         });
-
     }
 
     public void cartlist(boolean isGoBuy) {
@@ -141,7 +141,21 @@ public class NewUserPagePresenter extends BasePresenter<INewUserPageView> {
             @Override
             public void onErrorCode(int code, String message) {
 //                super.onErrorCode(code, message);
-                iView.getOldMessage(message);
+
+                iView.getOldMessage(message,code);
+            }
+        });
+    }
+
+    public void showVoucherSuspension() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<ShowVoucherSuspension>> setinfo = getAddCookieApiService().showVoucherSuspension(map);
+        getNetData(true, setinfo, new SimpleNetDataCallback<BaseEntity<ShowVoucherSuspension>>() {
+            @Override
+            public void onSuccess(BaseEntity<ShowVoucherSuspension> entity) {
+                super.onSuccess(entity);
+                iView.showVoucherSuspension(entity.data);
             }
         });
     }
