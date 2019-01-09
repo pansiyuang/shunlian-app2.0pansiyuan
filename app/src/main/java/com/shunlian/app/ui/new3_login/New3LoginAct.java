@@ -9,11 +9,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.shunlian.app.R;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MyImageView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -67,6 +70,7 @@ public class New3LoginAct extends BaseActivity{
         super.initListener();
         miv_close.setOnClickListener(v -> {
            if (mCurrentPage == 1 || mCurrentPage == 3){
+               if (mCurrentPage == 3)loginNotify();
                SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
                Common.goGoGo(this,"home");
                finish();
@@ -87,26 +91,23 @@ public class New3LoginAct extends BaseActivity{
         if (mConfig != null){
             fragments = new HashMap<>();
             mFragmentManager = getSupportFragmentManager();
-            if (!isEmpty(mConfig.status))
-            {
-                loginSms(1, mConfig);
+            switch (mConfig.login_mode){
+                case PASSWORD_TO_LOGIN:
+                    //密码登录
+                    loginPwd();
+                    break;
+                case SMS_TO_LOGIN:
+                    //短信登录
+                    loginSms(1, mConfig);
+                    break;
+                case BIND_INVITE_CODE:
+                    //绑定推荐人
+                    loginInviteCode(mConfig);
+                    break;
+                default:
+                    loginSms(1, mConfig);
+                    break;
             }
-            else
-
-                switch (mConfig.login_mode){
-                    case PASSWORD_TO_LOGIN:
-                        //密码登录
-                        loginPwd();
-                        break;
-                    case SMS_TO_LOGIN:
-                        //短信登录
-                        loginSms(1, mConfig);
-                        break;
-                    case BIND_INVITE_CODE:
-                        //绑定推荐人
-                        loginInviteCode(mConfig);
-                        break;
-                }
         }
     }
 
@@ -210,12 +211,23 @@ public class New3LoginAct extends BaseActivity{
     @Override
     public void onBackPressed() {
         if (mCurrentPage == 1 || mCurrentPage == 3){
+            if (mCurrentPage == 3)loginNotify();
             SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
             Common.goGoGo(this,"home");
             super.onBackPressed();
         }else {
             loginSms(1, mConfig);
         }
+    }
+
+    /**
+     * 登录成功通知
+     */
+    public void loginNotify(){
+        //通知登录成功
+        DefMessageEvent event = new DefMessageEvent();
+        event.loginSuccess = true;
+        EventBus.getDefault().post(event);
     }
 
     /**
@@ -235,6 +247,7 @@ public class New3LoginAct extends BaseActivity{
         public String invite_code;//邀请码
         public LOGIN_MODE login_mode;//登录模式
         public boolean isUseMobile = true;//手机号是否可用 true可用  默认可用
+        public boolean isShowInviteSource;//是否显示邀请码来源 true显示 默认不显示
 
         public enum LOGIN_MODE{
 
@@ -272,6 +285,7 @@ public class New3LoginAct extends BaseActivity{
             dest.writeString(this.invite_code);
             dest.writeInt(this.login_mode == null ? -1 : this.login_mode.ordinal());
             dest.writeByte(this.isUseMobile ? (byte) 1 : (byte) 0);
+            dest.writeByte(this.isShowInviteSource ? (byte) 1 : (byte) 0);
         }
 
         protected LoginConfig(Parcel in) {
@@ -285,6 +299,7 @@ public class New3LoginAct extends BaseActivity{
             int tmpLogin_mode = in.readInt();
             this.login_mode = tmpLogin_mode == -1 ? null : LOGIN_MODE.values()[tmpLogin_mode];
             this.isUseMobile = in.readByte() != 0;
+            this.isShowInviteSource = in.readByte() != 0;
         }
 
         public static final Creator<LoginConfig> CREATOR = new Creator<LoginConfig>() {

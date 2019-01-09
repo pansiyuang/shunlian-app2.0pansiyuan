@@ -70,9 +70,10 @@ public interface INew3LoginView extends IView {
     /**
      * 从微信界面过来绑定手机号验证
      * @param status
+     * @param share_show_status
      * @param msg
      */
-    default void checkFromWXMobile(String status,String msg){}
+    default void checkFromWXMobile(String status,String share_show_status,String msg){}
 
     /**
      * 绑定上级提示

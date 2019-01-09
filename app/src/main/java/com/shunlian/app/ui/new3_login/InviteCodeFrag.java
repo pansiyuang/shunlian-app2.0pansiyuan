@@ -113,6 +113,7 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     @OnClick(R.id.mbtn_login)
     public void bindInviteCode(){
         if (invite_code == null || isEmpty(invite_code.getText())){
+            ((New3LoginAct) baseActivity).loginNotify();
             SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
             Common.goGoGo(baseActivity,"home");
             ((New3LoginAct) baseActivity).finish();

@@ -376,6 +376,7 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
     public void checkFromWXMobile(String status,String mobile){
         Map<String, String> map = new HashMap<>();
         map.put("mobile", mobile);
+        if (!isEmpty(status))
         map.put("status", status);
         sortAndMD5(map);
 
@@ -386,13 +387,14 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.checkFromWXMobile(entity.data.status,entity.message);
+                iView.checkFromWXMobile(entity.data.status,
+                        entity.data.share_show_status,entity.message);
             }
 
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                iView.checkFromWXMobile("",message);
+                iView.checkFromWXMobile("","",message);
             }
         });
     }
