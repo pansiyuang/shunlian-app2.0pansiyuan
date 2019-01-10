@@ -293,11 +293,11 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_title =  showGoodBuild.findViewById(R.id.mtv_title);
             MyTextView  mtv_coupon_title =  showGoodBuild.findViewById(R.id.mtv_coupon_title);
 
-            if(!TextUtils.isEmpty(mShareInfoParam.coupon_name)){
+            if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
                 mtv_coupon_title.setVisibility(View.VISIBLE);
-                mtv_coupon_title.setText(mShareInfoParam.coupon_name);
-                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.coupon_name+mShareInfoParam.title);
-                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.coupon_name.length(),
+                mtv_coupon_title.setText(mShareInfoParam.voucher);
+                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher+mShareInfoParam.title);
+                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
                         Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 mtv_title.setText(span);
             }else{
@@ -348,11 +348,11 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_time  = showGoodBuild.findViewById(R.id.mtv_time);
             MyTextView mtv_act_label  = showGoodBuild.findViewById(R.id.mtv_act_label);
 
-            if (TextUtils.isEmpty(mShareInfoParam.start_time)||mShareInfoParam.isNewUserGood) {
+            if (TextUtils.isEmpty(mShareInfoParam.time_text)||mShareInfoParam.isNewUserGood) {
                 llayout_day.setVisibility(View.GONE);
             } else {
                 llayout_day.setVisibility(View.VISIBLE);
-                if(mShareInfoParam.isActivityStart){
+                if(mShareInfoParam.is_start==0){
                     llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
                     mtv_act_label.setTextColor(context.getResources().getColor(R.color.value_007AFF));
                     mtv_time.setTextColor(context.getResources().getColor(R.color.white));
@@ -363,8 +363,8 @@ public class ShareGoodDialogUtil {
                     mtv_time.setTextColor(context.getResources().getColor(R.color.white));
                     mtv_time.setBackgroundColor(context.getResources().getColor(R.color.pink_color));
                 }
-                mtv_time.setText(mShareInfoParam.start_time);
-                mtv_act_label.setText(mShareInfoParam.act_label);
+                mtv_time.setText(mShareInfoParam.time_text);
+                mtv_act_label.setText(mShareInfoParam.little_word);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
             int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 80);

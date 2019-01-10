@@ -12,21 +12,18 @@ import android.view.ViewGroup;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.HotBlogPresenter;
-import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.PromptDialog;
-import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.IHotBlogView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
-import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
-import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +51,10 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     private HotBlogAdapter hotBlogAdapter;
     private String currentKeyword;
     private PromptDialog promptDialog;
-    private ShareGoodDialogUtil shareGoodDialogUtil;
     private LottieAnimationView mAnimationView;
 
+    private ShareGoodDialogUtil shareGoodDialogUtil;
+    private ShareInfoParam mShareInfoParam;
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -70,9 +68,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
 
     @Override
     protected void initData() {
-        //分享
-        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
-        shareGoodDialogUtil.setOnShareBlogCallBack(this);
+
     }
 
     public static SearchBlogFrag getInstance(String str) {
@@ -119,7 +115,9 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-
+        //分享
+        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
         NestedSlHeader header = new NestedSlHeader(baseContext);
         lay_refresh.setRefreshHeaderView(header);
 
@@ -240,6 +238,33 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     }
 
     @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        if(mShareInfoParam==null){
+            mShareInfoParam = new ShareInfoParam();
+        }
+        if (mShareInfoParam != null) {
+            mShareInfoParam.isShowTiltle = false;
+            mShareInfoParam.userName = baseEntity.data.userName;
+            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            mShareInfoParam.shareLink = baseEntity.data.shareLink;
+            mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.price = baseEntity.data.price;
+            mShareInfoParam.title = baseEntity.data.title;
+            mShareInfoParam.img = baseEntity.data.img;
+            mShareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+            mShareInfoParam.little_word = baseEntity.data.little_word;
+            mShareInfoParam.time_text = baseEntity.data.time_text;
+            mShareInfoParam.is_start = baseEntity.data.is_start;
+            mShareInfoParam.market_price = baseEntity.data.market_price;
+            mShareInfoParam.voucher = baseEntity.data.voucher;
+            if (shareGoodDialogUtil != null) {
+                shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
+                shareGoodDialogUtil.setShareGoods();
+            }
+        }
+    }
+
+    @Override
     public void toFocusUser(int isFocus, String memberId, String nickName) {
         if (isFocus == 1) {
             if (promptDialog == null) {
@@ -274,6 +299,16 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     @Override
     public void toDown(String blogId) {
         mPresenter.downCount(blogId);
+    }
+
+    @Override
+    public void getShareInfo(String blogId, String goodid) {
+        mShareInfoParam = new ShareInfoParam();
+        mShareInfoParam.goods_id = goodid;
+        mShareInfoParam.blogId = blogId;
+        if(mPresenter!=null) {
+            mPresenter.getShareInfo(mPresenter.goods, goodid);
+        }
     }
 
     @Override

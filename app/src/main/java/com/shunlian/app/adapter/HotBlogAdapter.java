@@ -97,8 +97,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private DownloadUtils downloadUtils;
     private HttpDialog httpDialog;
     private String currentBlogId;
-    private ShareGoodDialogUtil shareGoodDialogUtil;
-    private ShareInfoParam mShareInfoParam;
+
     private DownLoadQRCodeImageUtil downLoadQRCodeImageUtil;
     private Handler mHandler = new Handler() {
         @Override
@@ -150,20 +149,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, ShareGoodDialogUtil mShareGoodDialogUtil) {
         super(context, true, lists);
         this.mActivity = activity;
-        shareGoodDialogUtil = mShareGoodDialogUtil;
     }
 
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads, ShareGoodDialogUtil mShareGoodDialogUtil) {
         super(context, true, lists);
         this.adList = ads;
-        shareGoodDialogUtil = mShareGoodDialogUtil;
     }
 
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list, ShareGoodDialogUtil mShareGoodDialogUtil) {
         super(context, true, lists);
         this.mActivity = activity;
         this.recomandFocusList = list;
-        shareGoodDialogUtil = mShareGoodDialogUtil;
     }
 
     public void setShowAttention(boolean isShow) {
@@ -348,21 +344,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 int i = TransformUtil.dip2px(context, 10);
                 TransformUtil.expandViewTouchDelegate(blogViewHolder.tv_share_count, i, i, i, i);
                 blogViewHolder.tv_share_count.setOnClickListener(view -> {
-                    mShareInfoParam = new ShareInfoParam();
-                    mShareInfoParam.blogId = blog.id;
-                    mShareInfoParam.shareLink = goods.share_url;
-                    mShareInfoParam.title = goods.title;
-                    mShareInfoParam.desc = goods.desc;
-                    mShareInfoParam.goods_id = goods.goods_id;
-                    mShareInfoParam.price = goods.price;
-                    mShareInfoParam.market_price = goods.market_price;
-                    mShareInfoParam.img = goods.thumb;
-                    mShareInfoParam.share_buy_earn = goods.share_buy_earn;
-                    mShareInfoParam.isSuperiorProduct = (goods.isSuperiorProduct == 1 ? true : false);
-                    mShareInfoParam.userName = SharedPrefUtil.getSharedUserString("nickname", "");
-                    mShareInfoParam.userAvatar = SharedPrefUtil.getSharedUserString("avatar", "");
-                    shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
-                    shareGoodDialogUtil.setShareGoods();
+                    if(mCallBack!=null) {
+                        mCallBack.getShareInfo(blog.id, goods.goods_id);
+                    }
                 });
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
             } else {
@@ -700,6 +684,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         void toPraiseBlog(String blogId, LottieAnimationView lottieAnimationView);
 
         void toDown(String blogId);
+
+        void getShareInfo(String blogId,String goodid);
     }
 
     public interface OnDelBlogListener {
