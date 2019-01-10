@@ -93,9 +93,6 @@ public class ShareGoodDialogUtil {
             if(isGood) {
                 WXEntryActivity.startAct(context,
                         "shareFriend", mShareInfoParam);
-                if(isFound&&mCallBack!=null){
-//                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
-                }
             }else{
                 WXEntryActivity.startAct(context,
                         "shareFriend", mShareInfoParam);
@@ -116,7 +113,6 @@ public class ShareGoodDialogUtil {
             if(isGood) {
                 createGoodCode(isFound,true);
                 if(isFound&&mCallBack!=null){
-//                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                 }
             }else{
                 createShopCode(true);
@@ -144,15 +140,12 @@ public class ShareGoodDialogUtil {
                         mShareInfoParam.shop_id,mShareInfoParam.shop_name,"图文");
             }
         });
-        nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, true);
-                nomalBuildl.dismiss();
-                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
-                            mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"复制链接");
-                }
+        nomalBuildl.setOnClickListener(R.id.mllayout_shangping, v -> {
+            Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, true);
+            nomalBuildl.dismiss();
+            if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                        mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"复制链接");
             }
         });
     }
@@ -361,14 +354,14 @@ public class ShareGoodDialogUtil {
                 llayout_day.setVisibility(View.VISIBLE);
                 if(mShareInfoParam.isActivityStart){
                     llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
-                    mtv_time.setTextColor(context.getResources().getColor(R.color.value_007AFF));
-                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.white));
-                    mtv_act_label.setBackgroundColor(context.getResources().getColor(R.color.value_007AFF));
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.value_007AFF));
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundColor(context.getResources().getColor(R.color.value_007AFF));
                 }else{
                     llayout_day.setBackgroundResource(R.drawable.edge_pink_1px);
-                    mtv_time.setTextColor(context.getResources().getColor(R.color.pink_color));
-                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.white));
-                    mtv_act_label.setBackgroundColor(context.getResources().getColor(R.color.pink_color));
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.pink_color));
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundColor(context.getResources().getColor(R.color.pink_color));
                 }
                 mtv_time.setText(mShareInfoParam.start_time);
                 mtv_act_label.setText(mShareInfoParam.act_label);

@@ -263,11 +263,11 @@
                     android:layout_height="20dp"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:background="@drawable/edge_007aff_1px"
+                    android:background="@drawable/edge_pink_1px"
                     android:orientation="horizontal"
                     android:visibility="gone">
                     <com.shunlian.app.widget.MyTextView
-                        android:id="@+id/mtv_time"
+                        android:id="@+id/mtv_act_label"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:paddingLeft="4dp"
@@ -276,9 +276,8 @@
                         android:text=""
                         android:textColor="@color/pink_color"
                         android:textSize="10sp" />
-
                     <com.shunlian.app.widget.MyTextView
-                        android:id="@+id/mtv_act_label"
+                        android:id="@+id/mtv_time"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@color/pink_color"
@@ -288,10 +287,9 @@
                         android:text=""
                         android:textColor="@color/white"
                         android:textSize="10sp"
-                        android:textStyle="bold" />
-
+                        android:textStyle="bold"
+                      />
                 </LinearLayout>
-
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_goodsID"
