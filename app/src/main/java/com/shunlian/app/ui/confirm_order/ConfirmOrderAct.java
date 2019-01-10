@@ -96,7 +96,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     MyTextView mtv_tip;
 
     private String mTotalPrice;
-    private boolean isOrderBuy = false;//是否直接购买
+    private boolean isOrderBuy = false;//是否直接购买 用于促销可选还是仅看
     private String detail_address;
     private String addressId;
     private String cart_ids;
@@ -119,6 +119,8 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private ObjectMapper mOM;
     private float mEggReduce;
     public static final String EGGS_TIP = "订单支付金额必须大于1元";//金蛋减免提示
+    public String device_order;//新人专享专用字段  ，是否享受过此福利1是0否
+
 
     @Override
     protected void onDestroy() {
@@ -412,6 +414,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 break;
 
             case TYPE_NEW_USER_PAGE://新人专享
+                isOrderBuy = true;
                 confirmOrderPresenter.newexclusive(addressId);
                 break;
 
@@ -456,6 +459,20 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 if (isUserGoldenEggs && Float.parseFloat(price_num) < 1){
                     //提示用户至少支付的钱数
                     Common.staticToast(EGGS_TIP);
+                    return;
+                }
+
+                if (TYPE_NEW_USER_PAGE.equals(from) && "1".equals(device_order)){
+                    //代表新人享受过该福利，不能再次享受
+                    Common.staticToast("您已享受过此福利");
+                    return;
+                }
+
+                /********防止没有绑定成功上级 去下单的情况*********/
+                if (!ConfirmOrderPresenter.isHasSuperior){
+                    if (confirmOrderPresenter != null){//没有绑定成功再去验证
+                        confirmOrderPresenter.checkBindShareidV2();
+                    }
                     return;
                 }
 

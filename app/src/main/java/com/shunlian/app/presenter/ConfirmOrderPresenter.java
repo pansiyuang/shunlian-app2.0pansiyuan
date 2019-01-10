@@ -11,6 +11,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.new3_login.EditInviteCodeDialog;
 import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 import com.shunlian.app.ui.new3_login.VerifyPicDialog;
@@ -36,6 +37,8 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
 
     private EditInviteCodeDialog mInviteCodeDialog;
     private VerifyPicDialog mVerifyPicDialog;
+    /********是否有上级***********/
+    public static boolean isHasSuperior;
 
     public ConfirmOrderPresenter(Context context, IConfirmOrderView iView) {
         super(context, iView);
@@ -53,6 +56,8 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             mInviteCodeDialog.release();
         if (mVerifyPicDialog != null)
             mVerifyPicDialog.release();
+
+        isHasSuperior = false;
     }
 
     @Override
@@ -226,6 +231,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
         iView.stageVoucher(data.user_stage_voucher,data.stage_voucher);
         iView.goldenEggs(data.egg_tip,data.gold_egg,data.egg_reduce);
         iView.receivingPrompt(data.receiving_prompt);
+        ((ConfirmOrderAct) context).device_order = data.device_order;
     }
 
     /**
@@ -307,15 +313,15 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 MemberCodeListEntity bean = entity.data;
                 if (bean != null) {
                     mVerifyPicDialog = new VerifyPicDialog((Activity) context);
-                    mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
+                    mVerifyPicDialog.setTvSureColor(R.color.pink_color);
                     mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
                     mVerifyPicDialog.setMessage("请确认您的导购专员");
                     mVerifyPicDialog.showState(2);
                     mVerifyPicDialog.setMemberDetail(bean.info);
-                    mVerifyPicDialog.setSureAndCancleListener("确认绑定", v -> {
+                    mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
                         bindShareid(bean.info.code);
                         mVerifyPicDialog.dismiss();
-                    }, "取消", v -> {
+                    }, "返回", v -> {
                         mVerifyPicDialog.dismiss();
                         if (mInviteCodeDialog != null)mInviteCodeDialog.show();
                     }).show();
@@ -390,6 +396,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
+                isHasSuperior = true;
                 CommonEntity data = entity.data;
                 if (data != null && "2".equals(data.share_status)){//需要绑定上级
                     isCanBindShareID();

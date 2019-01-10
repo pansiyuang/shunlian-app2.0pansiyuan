@@ -374,11 +374,13 @@ public class New3LoginPresenter extends BasePresenter<INew3LoginView> {
 
 
 
-    public void checkFromWXMobile(String status,String mobile){
+    public void checkFromWXMobile(String status,String mobile,String unique_sign){
         Map<String, String> map = new HashMap<>();
         map.put("mobile", mobile);
         if (!isEmpty(status))
-        map.put("status", status);
+            map.put("status", status);
+        if (!isEmpty(unique_sign))
+            map.put("unique_sign",unique_sign);
         sortAndMD5(map);
 
         Call<BaseEntity<CommonEntity>>

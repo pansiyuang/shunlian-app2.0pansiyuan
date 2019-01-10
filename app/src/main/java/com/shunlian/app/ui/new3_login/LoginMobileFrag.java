@@ -70,7 +70,7 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
                 btnDrawable.setColor(getColorResouce(R.color.pink_color));
                 if (presenter != null && mConfig != null){
                     //微信过来的验证手机号是否可用 和是否显示上级
-                    presenter.checkFromWXMobile(mConfig.status, mobile_text);
+                    presenter.checkFromWXMobile(mConfig.status, mobile_text,mConfig.unique_sign);
                 }
             }else {
                 btnDrawable.setColor(Color.parseColor("#ECECEC"));
