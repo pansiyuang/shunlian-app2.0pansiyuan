@@ -18,6 +18,9 @@ public class NewUserGoodsEntity {
     public boolean isNew;//是否是新人 true：是 false:否  （type=2不返回该字段）
     public int   cartTotal;//购物车数量（type=2不返回该字段）
     public int   show;//是否已领取 1：已领取过
+    public String   h5_rule;//规则说明
+    public String   warn_txt;//邀请提示
+    public int   device_order;//是否享用过1：是
     public  Goods recommend;//推荐的商品
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Cates {

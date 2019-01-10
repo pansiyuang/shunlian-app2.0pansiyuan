@@ -85,6 +85,7 @@
         </com.shunlian.app.widget.MyLinearLayout>
 
         <TextView
+            android:id="@+id/tv_desc_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="温馨提示：优惠券有效期为领取之日起3天"

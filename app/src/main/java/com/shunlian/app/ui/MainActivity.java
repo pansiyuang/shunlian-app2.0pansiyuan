@@ -1088,7 +1088,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginRefresh(DefMessageEvent event) {
         if (event.loginSuccess && pMain != null) {
-            pMain.isShowNewPersonPrize();
+            pMain.isShowUserNewPersonPrize();
+            pMain.showVoucherSuspension();
         }
     }
 

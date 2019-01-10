@@ -1037,7 +1037,28 @@ public class Common {
         }
         return ssb;
     }
-
+    /**
+     * 将点后面的字变小
+     *
+     * @param source
+     * @param textSize 需要变小的文字大小
+     * @return
+     */
+    public static SpannableStringBuilder dotPointAfterSmall(String source, int textSize) {
+        if (TextUtils.isEmpty(source)) {
+            return null;
+        }
+        AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(textSize, true);
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        int start = source.indexOf(".");
+        if (start > 0) {
+            ssb.setSpan(sizeSpan, start, source.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
+    }
     /**
      * 更改源字符串的颜色
      *
@@ -1331,7 +1352,10 @@ public class Common {
         cmb.setText(content); //将内容放入粘贴管理器,在别的地方长按选择"粘贴"即可
         Common.staticToast("复制成功");
     }
-
+    public static void copyTextNoToast(Context context, String content){
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setText(content); //将内容放入粘贴管理器,在别的地方长按选择"粘贴"即可
+    }
     public static void copyText(Context context, String shareLink, String shareDesc,boolean isToast) {
         StringBuffer sb = new StringBuffer();
         sb.setLength(0);

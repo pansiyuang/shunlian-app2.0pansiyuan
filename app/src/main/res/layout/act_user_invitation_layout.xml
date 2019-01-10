@@ -60,7 +60,7 @@
                android:textStyle="bold"
                android:textSize="30sp"
                android:layout_alignParentBottom="true"
-               android:text="立赚5元"/>
+               android:text=""/>
            <RelativeLayout
                android:layout_width="320dp"
                android:layout_gravity="center_horizontal"
@@ -82,7 +82,7 @@
                    android:textColor="#F05A63"
                    android:layout_marginTop="75dp"
                    android:textSize="16sp"
-                   android:text="好友成为顺联动力用户，并完成首单，你就可以获得红包"/>
+                   android:text=""/>
                <TextView
                    android:id="@+id/tv_please"
                    android:layout_width="wrap_content"
@@ -106,7 +106,7 @@
                        android:id="@+id/tv_my_invitaion"
                        android:layout_width="wrap_content"
                        android:layout_height="match_parent"
-                       android:text="我的邀请码：454564654502"
+                       android:text="我的邀请码："
                        android:textSize="11sp"
                        android:paddingLeft="10dp"
                        android:paddingRight="10dp"
@@ -150,7 +150,7 @@
                        android:id="@+id/tv_total_price"
                        android:layout_width="wrap_content"
                        android:gravity="center_vertical"
-                       android:text="$52"
+                       android:text=""
                        android:textColor="@color/pink_color"
                        android:layout_alignParentRight="true"
                        android:paddingLeft="20dp"
@@ -172,6 +172,10 @@
                    android:id="@+id/empty_view"
                    android:layout_width="match_parent"
                    android:visibility="gone"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginBottom="20dp"
+                   android:layout_marginTop="10dp"
                    android:layout_height="match_parent">
                </com.shunlian.app.widget.empty.NetAndEmptyInterface>
            </LinearLayout>

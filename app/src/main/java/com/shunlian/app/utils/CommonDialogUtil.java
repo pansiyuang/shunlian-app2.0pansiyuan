@@ -46,7 +46,7 @@ public class CommonDialogUtil {
     }
 
     //新人领取优惠劵
-    public void userNewShowDialog(ICallBackResult<String> callBackResult,String defaultValue) {
+    public void userNewShowDialog(ICallBackResult<String> callBackResult,String defaultValue,String warn_txt) {
         if(((Activity)context).isFinishing()){
             return;
         }
@@ -57,8 +57,12 @@ public class CommonDialogUtil {
         dialog_user_info.show();
         TextView tv_new_submit = dialog_user_info.findViewById(R.id.tv_new_submit);
         TextView  ntv_user_page_price= dialog_user_info.findViewById(R.id.ntv_user_page_price);
+        TextView tv_desc_text= dialog_user_info.findViewById(R.id.tv_desc_text);
         if(!TextUtils.isEmpty(defaultValue)){
             tv_new_submit.setText(defaultValue);
+        }
+        if(!TextUtils.isEmpty(warn_txt)){
+            tv_desc_text.setText(warn_txt);
         }
         tv_new_submit.setOnClickListener(new View.OnClickListener() {
             @Override

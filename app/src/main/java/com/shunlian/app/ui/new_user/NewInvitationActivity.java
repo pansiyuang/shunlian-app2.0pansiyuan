@@ -140,6 +140,7 @@ public class NewInvitationActivity extends BaseActivity implements InvitationVie
         tv_invitation_copy.setOnClickListener(this);
         tv_please.setOnClickListener(this);
         empty_view.setImageResource(R.mipmap.img_wuguanzhu);
+        empty_view.setTextPaddingTop(10);
         empty_view.setText("您还没有邀请哦");
         newInvitationPresenter.getUserList(true);
     }
@@ -210,8 +211,9 @@ public class NewInvitationActivity extends BaseActivity implements InvitationVie
                 tv_total_price.setText(getStringResouce(R.string.common_yuan) + inviteLogUserEntity.prize);
             }
           if(userLists==null||userLists.size()==0&&currentPage==1){
-             recy_view_invitaion.setVisibility(View.GONE);
-             empty_view.setVisibility(View.VISIBLE);
+              recy_view_invitaion.setVisibility(View.GONE);
+              empty_view.setVisibility(View.VISIBLE);
+              empty_view.setButtonText("");
           }else {
              recy_view_invitaion.setVisibility(View.VISIBLE);
              empty_view.setVisibility(View.GONE);

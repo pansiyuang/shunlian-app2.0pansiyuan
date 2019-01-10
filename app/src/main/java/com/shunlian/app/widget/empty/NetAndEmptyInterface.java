@@ -67,6 +67,13 @@ public class NetAndEmptyInterface extends LinearLayout {
         textView.setLayoutParams(textParams1);
     }
 
+    private int paddingTop = 0;
+    public void setTextPaddingTop(int top){
+        this.paddingTop = TransformUtil.dip2px(getContext(), top);
+        LayoutParams textParams1 = (LayoutParams) textView.getLayoutParams();
+        textParams1.topMargin = paddingTop;
+    }
+
     private void addButton() {
         button = new MyButton(getContext());
         button.setBackgroundResource(R.drawable.rounded_rectangle_lin_gray_4px);
