@@ -218,33 +218,50 @@
                     android:layout_marginRight="80dp"
                     android:layout_alignParentLeft="true"
                     android:orientation="vertical">
-
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
                     <com.shunlian.app.widget.MyTextView
                         android:id="@+id/mtv_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="2"
+                        android:text=""
                         android:lineSpacingExtra="3dp"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
+                        <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_coupon_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pink_color"
+                            android:background="@drawable/rounded_corner_solid_fde8e8_20px"
+                            android:text=""
+                            android:layout_marginTop="2dp"
+                            android:paddingLeft="5dp"
+                            android:visibility="gone"
+                            android:paddingRight="5dp"
+                            android:textSize="10sp" />
                         <com.shunlian.app.widget.MyTextView
                             android:id="@+id/mtv_SuperiorProduct"
                             android:layout_width="40dp"
                             android:layout_height="20dp"
                             android:layout_marginTop="6dp"
                             android:text="自营"
+                            android:layout_below="@+id/mtv_title"
                             android:gravity="center"
                             android:background="@color/pink_color"
                             android:textSize="13sp"
                             android:textColor="@color/white"
                             android:visibility="gone"
                           />
+                    </RelativeLayout>
                 <LinearLayout
                     android:id="@+id/llayout_day"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:background="@drawable/edge_007aff_1px"
                     android:orientation="horizontal"
