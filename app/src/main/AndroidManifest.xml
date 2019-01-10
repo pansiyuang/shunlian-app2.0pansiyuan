@@ -1211,6 +1211,11 @@
             android:exported="false"
             android:theme="@style/chatDialog"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.GoldEggLuckyWheelPanActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

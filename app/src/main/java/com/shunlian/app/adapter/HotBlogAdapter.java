@@ -261,9 +261,11 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             if (blog.is_praise == 1) {
                 blogViewHolder.animation_zan.setProgress(1f);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.pink_color));
+                blogViewHolder.ll_zan.setClickable(false);
             } else {
                 blogViewHolder.animation_zan.setProgress(0f);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
+                blogViewHolder.ll_zan.setClickable(true);
             }
 
             blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));

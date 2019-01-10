@@ -2986,4 +2986,28 @@ public interface ApiService {
      */
     @POST("member/userinfo/bindShareidV2")
     Call<BaseEntity<CommonEntity>> bindShareidV2(@Body RequestBody body);
+
+    /**
+     * 转转转获取奖品列表
+     *
+     * @return
+     */
+    @GET("task/getPrizeList")
+    Call<BaseEntity<GoldEggPrizeEntity>> getPrizeList(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转抽奖
+     *
+     * @return
+     */
+    @GET("task/draw")
+    Call<BaseEntity<TaskDrawEntity>> getTaskDraw(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转获取轮播中奖记录
+     *
+     * @return
+     */
+    @GET("task/getDrawRecordList")
+    Call<BaseEntity<DrawRecordEntity>> getDrawRecordList(@QueryMap Map<String, String> map);
 }
