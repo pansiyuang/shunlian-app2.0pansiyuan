@@ -146,8 +146,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         if (tt_act != null){
                             act_id = tt_act.id;
                             iView.activityState(tt_act.sale,tt_act.remind_status);
-                            shareInfoParam.start_time = tt_act.start_time;
-                            shareInfoParam.act_label = "天天特惠";
+                            shareInfoParam.time_text = tt_act.start_time;
+                            shareInfoParam.little_word = "天天特惠";
                             //底部导航，分享赚，自购
                             if ("1".equals(tt_act.sale)) {
                                 iView.selfBuyAndShareBuyBottomBtn(
@@ -179,8 +179,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     /**************分享****************/
 
                     if (data.common_activity != null){
-                        shareInfoParam.start_time = data.common_activity.start_time;
-                        shareInfoParam.act_label = data.is_preferential;
+                        shareInfoParam.time_text = data.common_activity.start_time;
+                        shareInfoParam.little_word = data.is_preferential;
                     }
 
                     if ("1".equals(data.type)){

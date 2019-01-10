@@ -93,9 +93,6 @@ public class ShareGoodDialogUtil {
             if(isGood) {
                 WXEntryActivity.startAct(context,
                         "shareFriend", mShareInfoParam);
-                if(isFound&&mCallBack!=null){
-//                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
-                }
             }else{
                 WXEntryActivity.startAct(context,
                         "shareFriend", mShareInfoParam);
@@ -116,7 +113,6 @@ public class ShareGoodDialogUtil {
             if(isGood) {
                 createGoodCode(isFound,true);
                 if(isFound&&mCallBack!=null){
-//                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                 }
             }else{
                 createShopCode(true);
@@ -144,15 +140,12 @@ public class ShareGoodDialogUtil {
                         mShareInfoParam.shop_id,mShareInfoParam.shop_name,"图文");
             }
         });
-        nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, true);
-                nomalBuildl.dismiss();
-                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
-                            mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"复制链接");
-                }
+        nomalBuildl.setOnClickListener(R.id.mllayout_shangping, v -> {
+            Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, true);
+            nomalBuildl.dismiss();
+            if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                        mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"复制链接");
             }
         });
     }
@@ -300,11 +293,11 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_title =  showGoodBuild.findViewById(R.id.mtv_title);
             MyTextView  mtv_coupon_title =  showGoodBuild.findViewById(R.id.mtv_coupon_title);
 
-            if(!TextUtils.isEmpty(mShareInfoParam.coupon_name)){
+            if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
                 mtv_coupon_title.setVisibility(View.VISIBLE);
-                mtv_coupon_title.setText(mShareInfoParam.coupon_name);
-                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.coupon_name+mShareInfoParam.title);
-                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.coupon_name.length(),
+                mtv_coupon_title.setText(mShareInfoParam.voucher);
+                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher+mShareInfoParam.title);
+                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
                         Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 mtv_title.setText(span);
             }else{
@@ -355,23 +348,23 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_time  = showGoodBuild.findViewById(R.id.mtv_time);
             MyTextView mtv_act_label  = showGoodBuild.findViewById(R.id.mtv_act_label);
 
-            if (TextUtils.isEmpty(mShareInfoParam.start_time)||mShareInfoParam.isNewUserGood) {
+            if (TextUtils.isEmpty(mShareInfoParam.time_text)||mShareInfoParam.isNewUserGood) {
                 llayout_day.setVisibility(View.GONE);
             } else {
                 llayout_day.setVisibility(View.VISIBLE);
-                if(mShareInfoParam.isActivityStart){
+                if(mShareInfoParam.is_start==0){
                     llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
-                    mtv_time.setTextColor(context.getResources().getColor(R.color.value_007AFF));
-                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.white));
-                    mtv_act_label.setBackgroundColor(context.getResources().getColor(R.color.value_007AFF));
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.value_007AFF));
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundColor(context.getResources().getColor(R.color.value_007AFF));
                 }else{
                     llayout_day.setBackgroundResource(R.drawable.edge_pink_1px);
-                    mtv_time.setTextColor(context.getResources().getColor(R.color.pink_color));
-                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.white));
-                    mtv_act_label.setBackgroundColor(context.getResources().getColor(R.color.pink_color));
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.pink_color));
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundColor(context.getResources().getColor(R.color.pink_color));
                 }
-                mtv_time.setText(mShareInfoParam.start_time);
-                mtv_act_label.setText(mShareInfoParam.act_label);
+                mtv_time.setText(mShareInfoParam.time_text);
+                mtv_act_label.setText(mShareInfoParam.little_word);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
             int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 80);

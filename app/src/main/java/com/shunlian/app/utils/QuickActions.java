@@ -1284,12 +1284,12 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
         LinearLayout llayout_day = (LinearLayout) inflate.findViewById(R.id.llayout_day);
 
-        if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
-            llayout_day.setVisibility(GONE);
-        } else {
-            mtv_time.setText(mShareInfoParam.start_time);
-            mtv_act_label.setText(mShareInfoParam.act_label);
-        }
+//        if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
+//            llayout_day.setVisibility(GONE);
+//        } else {
+//            mtv_time.setText(mShareInfoParam.start_time);
+//            mtv_act_label.setText(mShareInfoParam.act_label);
+//        }
 
         //显示优品图标
         MyImageView miv_SuperiorProduct = (MyImageView) inflate.findViewById(R.id.miv_SuperiorProduct);

@@ -1393,42 +1393,37 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        if(mShareInfoParam==null){
+            mShareInfoParam = new ShareInfoParam();
+        }
         if (mShareInfoParam != null) {
-            mShareInfoParam =baseEntity.data;
             mShareInfoParam.isShowTiltle = false;
             mShareInfoParam.userName = baseEntity.data.userName;
             mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
             mShareInfoParam.shareLink = baseEntity.data.shareLink;
             mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.img = baseEntity.data.img;
+            mShareInfoParam.title = baseEntity.data.title;
             mShareInfoParam.egg_type = 1;
             mShareInfoParam.goods_id = mGoodsDeatilEntity.id;
             mShareInfoParam.cate1 = mGoodsDeatilEntity.cate_1_name;
             mShareInfoParam.cate2 = mGoodsDeatilEntity.cate_2_name;
             mShareInfoParam.shop_id = mGoodsDeatilEntity.store_info.store_id;
             mShareInfoParam.shop_name = mGoodsDeatilEntity.store_info.decoration_name;
+            if(!TextUtils.isEmpty(baseEntity.data.share_buy_earn))
+                mShareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+            mShareInfoParam.price = baseEntity.data.price;
+            mShareInfoParam.little_word = baseEntity.data.little_word;
+            mShareInfoParam.time_text = baseEntity.data.time_text;
+            mShareInfoParam.is_start = baseEntity.data.is_start;
+            mShareInfoParam.market_price = baseEntity.data.market_price;
+            mShareInfoParam.voucher = baseEntity.data.voucher;
 
-            mShareInfoParam.isSuperiorProduct = mGoodsDeatilEntity.type.equals("1")?true:false;
-            if(mGoodsDeatilEntity.tt_act!=null&&!"0".equals(mGoodsDeatilEntity.status)){//非下架商品){
-                if(mGoodsDeatilEntity.tt_act.content!=null){
-                  if(mGoodsDeatilEntity.tt_act.sale.equals("0")){
-                      mShareInfoParam.start_time =mGoodsDeatilEntity.tt_act.start_time;
-                  }else{
-                      mShareInfoParam.start_time =mGoodsDeatilEntity.tt_act.end_time;
-                  }
-                }
-                mShareInfoParam.act_label = "天天特惠";
-                mShareInfoParam.price = mGoodsDeatilEntity.tt_act.act_price;
-                mShareInfoParam.market_price = mGoodsDeatilEntity.tt_act.market_price;
-            }
-            if(mShareInfoParam.price==null&&mGoodsDeatilEntity.price!=null){
-                mShareInfoParam.price= mGoodsDeatilEntity.price;
-            }
             if (goodsDetailPresenter != null) {
                 goodsDetailPresenter.setShareInfoParam(mShareInfoParam);
                 shareGoodDialogUtil.shareGoodDialog(goodsDetailPresenter.getShareInfoParam(),true,false);
             }
         }
-
     }
 
     @Override
