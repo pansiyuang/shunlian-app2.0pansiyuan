@@ -137,18 +137,18 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     public void codeInfo(MemberCodeListEntity bean,String error) {
         if (bean != null) {
             mVerifyPicDialog = new VerifyPicDialog(baseActivity);
-            mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
+            mVerifyPicDialog.setTvSureColor(R.color.pink_color);
             mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
             mVerifyPicDialog.setMessage("请确认您的导购专员");
             mVerifyPicDialog.showState(2);
             mVerifyPicDialog.setMemberDetail(bean.info);
-            mVerifyPicDialog.setSureAndCancleListener("确认绑定", v -> {
+            mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
                 String code = invite_code.getText().toString();
                 if (presenter != null) {
                     presenter.bindShareid(code);
                 }
                 mVerifyPicDialog.dismiss();
-            }, "取消", v -> mVerifyPicDialog.dismiss()).show();
+            }, "返回", v -> mVerifyPicDialog.dismiss()).show();
         }else {
             mtv_tip.setText(error);
             mtv_tip.setVisibility(View.VISIBLE);

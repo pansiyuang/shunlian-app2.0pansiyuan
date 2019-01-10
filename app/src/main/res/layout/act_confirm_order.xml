@@ -300,7 +300,7 @@
                     android:minHeight="50dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:textColor="@color/new_text"
+                    android:textColor="@color/value_007AFF"
                     android:textSize="14sp" />
             </LinearLayout>
 

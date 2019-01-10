@@ -27,6 +27,7 @@ public class ConfirmOrderEntity {
     public String egg_reduce;//减多少钱
     public String egg_tip;//满多少金蛋减多少钱
     public String receiving_prompt;//收货提示
+    public String device_order;//是否享受过此福利1是0否
 
     @Override
     public String toString() {
