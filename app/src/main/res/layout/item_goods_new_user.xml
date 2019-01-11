@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:gravity="center"
         android:id="@+id/line_time_view"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_height="40dp">
         <TextView
             android:layout_width="wrap_content"
@@ -161,8 +161,8 @@
 
             android:layout_below="@+id/tv_usew_desc"
             app:iv_control_adapter="true"
-            app:iv_control_height="220"
-            app:iv_control_width="220" />
+            app:iv_control_height="205"
+            app:iv_control_width="205" />
 
     <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_title"
@@ -171,6 +171,8 @@
             android:layout_alignTop="@+id/miv_goods_pic"
             android:layout_toRightOf="@+id/miv_goods_pic"
             android:text=""
+            android:maxLines="2"
+            android:ellipsize="end"
             android:lineSpacingExtra="5dp"
             android:textColor="@color/new_text"
             android:textSize="14sp"

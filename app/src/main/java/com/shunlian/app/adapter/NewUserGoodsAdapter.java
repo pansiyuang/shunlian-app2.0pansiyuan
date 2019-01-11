@@ -158,7 +158,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                   mHolder.view_head_view.setVisibility(View.GONE);
                   if (position == fristPostionNewGood) {
                       mHolder.line_new_title.setVisibility(View.VISIBLE);
-                      mHolder.line_new_title.setBackgroundColor(context.getResources().getColor(R.color.white));
+                      mHolder.line_new_title.setBackgroundResource(R.drawable.bg_border_line_bottom);
                       mHolder.tv_usew_desc.setText("新人专区");
                       Drawable drawable = context.getResources().getDrawable(R.mipmap.icon_xinren_zhuanqu);
                       drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -176,7 +176,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                    mHolder.tv_usew_desc.setCompoundDrawables(drawable, null, null, null);
                    mHolder.tv_usew_desc.setCompoundDrawablePadding(DensityUtil.dip2px(context,5));
-                   mHolder.line_new_title.setBackgroundResource(R.drawable.bg_border_line_bottom);
+                  mHolder.line_new_title.setBackgroundColor(context.getResources().getColor(R.color.white));
                   int seconds=(int)(System.currentTimeMillis()/1000)-second;
                   mHolder.downTime_firsts.cancelDownTimer();
                   try {
