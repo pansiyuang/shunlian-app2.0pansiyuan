@@ -3,35 +3,48 @@ package com.shunlian.app.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.presenter.EmptyPresenter;
+import com.shunlian.app.presenter.GoodsDetailPresenter;
+import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
 
-public class DownLoadQRCodeImageUtil {
+public class DownLoadQRCodeImageUtil implements IView {
     private Context mContext;
     private MyCallBack myCallBack;
 
+    private EmptyPresenter emptyPresenter;
     public DownLoadQRCodeImageUtil(Context context) {
         mContext = context;
     }
 
     public void saveGoodsQRImage(List<GoodsDeatilEntity.Goods> goodsList) {
+        emptyPresenter = new EmptyPresenter(mContext,this);
         try {
             for (int i = 0; i < goodsList.size(); i++) {
-                createGoodCode(goodsList.get(i));
+                emptyPresenter.getShareInfo(emptyPresenter.goods,goodsList.get(i).goods_id);
+//                createGoodCode(goodsList.get(i));
             }
             if (myCallBack != null) {
                 myCallBack.successBack();
@@ -48,76 +61,74 @@ public class DownLoadQRCodeImageUtil {
         this.myCallBack = callBack;
     }
 
-    public void createGoodCode(GoodsDeatilEntity.Goods goods) {
+    public void createGoodCode(ShareInfoParam mShareInfoParam) {
         if (!Common.isAlreadyLogin()) {
             Common.goGoGo(mContext, "login");
         } else {
             final View inflate = LayoutInflater.from(mContext).inflate(R.layout.share_goods_new, null, false);
             MyImageView miv_close = inflate.findViewById(R.id.miv_close);
-            MyImageView miv_user_head = inflate.findViewById(R.id.miv_user_head);
-            MyTextView mtv_nickname = inflate.findViewById(R.id.mtv_nickname);
-            TextView mtv_market_price = inflate.findViewById(R.id.mtv_market_price);
-            mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
-            GlideUtils.getInstance().loadCircleAvar(mContext, miv_user_head, SharedPrefUtil.getSharedUserString("avatar", ""));
             MyImageView miv_code = inflate.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(mContext, 92.5f);
-            Bitmap qrImage = BitmapUtil.createQRImage(goods.share_url, null, i);
+            Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
             miv_code.setImageBitmap(qrImage);
-            MyTextView mtv_title = inflate.findViewById(R.id.mtv_title);
-            mtv_title.setText(goods.title);
-            if (!TextUtils.isEmpty(goods.market_price)) {
-                mtv_market_price.setVisibility(View.VISIBLE);
-                mtv_market_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                mtv_market_price.setText("￥" + goods.market_price);
-            } else {
-                mtv_market_price.setVisibility(View.VISIBLE);
-            }
-            MyTextView mtv_desc = inflate.findViewById(R.id.mtv_desc);
-            if (!TextUtils.isEmpty(goods.desc)) {
-                mtv_desc.setVisibility(View.GONE);
-                mtv_desc.setText(goods.desc);
-            } else {
-                mtv_desc.setVisibility(View.GONE);
-            }
-            MyTextView mtv_price = inflate.findViewById(R.id.mtv_price);
-            mtv_price.setText("￥" + goods.price);
-            MyTextView mtv_goodsID = inflate.findViewById(R.id.mtv_goodsID);
-            mtv_goodsID.setText("商品编号:" + goods.goods_id + "(搜索可直达)");
 
-            //显示优品图标
-            MyTextView mtv_SuperiorProduct = inflate.findViewById(R.id.mtv_SuperiorProduct);
-            if (goods.isSuperiorProduct == 1) {
-                mtv_SuperiorProduct.setVisibility(View.VISIBLE);
-            } else {
-                mtv_SuperiorProduct.setVisibility(View.GONE);
-            }
+            MyTextView mtv_title =  inflate.findViewById(R.id.mtv_title);
+            MyTextView  mtv_coupon_title =  inflate.findViewById(R.id.mtv_coupon_title);
 
-//            LinearLayout llayout_day = inflate.findViewById(R.id.llayout_day);
-//            MyTextView mtv_time = inflate.findViewById(R.id.mtv_time);
-//            MyTextView mtv_act_label = inflate.findViewById(R.id.mtv_act_label);
-//            if (TextUtils.isEmpty(goods.start_time)) {
-//                llayout_day.setVisibility(View.GONE);
-//            } else {
-//                llayout_day.setVisibility(View.VISIBLE);
-//                mtv_time.setText(mShareInfoParam.start_time);
-//                mtv_act_label.setText(mShareInfoParam.act_label);
-//            }
-            MyImageView miv_goods_pic = inflate.findViewById(R.id.miv_goods_pic);
+            if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
+                mtv_coupon_title.setVisibility(View.VISIBLE);
+                mtv_coupon_title.setText(mShareInfoParam.voucher);
+                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher+mShareInfoParam.title);
+                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
+                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                mtv_title.setText(span);
+            }else{
+                mtv_title.setText(mShareInfoParam.title);
+                mtv_coupon_title.setVisibility(View.GONE);
+            }
+            //不是新用户商品显示价格
+            LinearLayout line_old_user= inflate.findViewById(R.id.line_old_user);
+            MyTextView mtv_price =  inflate.findViewById(R.id.mtv_price);
+            //新用户商品显示价格
+            RelativeLayout re_newuser_layout = inflate.findViewById(R.id.re_newuser_layout);
+
+            re_newuser_layout.setVisibility(View.GONE);
+            line_old_user.setVisibility(View.VISIBLE);
+             mtv_price.setText(Common.dotPointAfterSmall(mShareInfoParam.price,11));
+            LinearLayout  llayout_day =inflate.findViewById(R.id.llayout_day);
+            MyTextView mtv_time  = inflate.findViewById(R.id.mtv_time);
+            MyTextView mtv_act_label  = inflate.findViewById(R.id.mtv_act_label);
+
+         if(!TextUtils.isEmpty(mShareInfoParam.time_text)){
+                llayout_day.setVisibility(View.VISIBLE);
+                if(mShareInfoParam.is_start==0){
+                    llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
+                    mtv_act_label.setTextColor(mContext.getResources().getColor(R.color.value_007AFF));
+                    mtv_time.setTextColor(mContext.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundColor(mContext.getResources().getColor(R.color.value_007AFF));
+                }else{
+                    llayout_day.setBackgroundResource(R.drawable.edge_pink_1px);
+                    mtv_act_label.setTextColor(mContext.getResources().getColor(R.color.pink_color));
+                    mtv_time.setTextColor(mContext.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundColor(mContext.getResources().getColor(R.color.pink_color));
+                }
+                mtv_time.setText(mShareInfoParam.time_text);
+                mtv_act_label.setText(mShareInfoParam.little_word);
+            }
+            MyImageView miv_goods_pic =  inflate.findViewById(R.id.miv_goods_pic);
             int width = Common.getScreenWidth((Activity) mContext) - TransformUtil.dip2px(mContext, 80);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
             layoutParams.width = width;
             layoutParams.height = width;
 
-            miv_close.setVisibility(View.GONE);
-            inflate.findViewById(R.id.line_share_line).setVisibility(View.GONE);
             inflate.findViewById(R.id.line_share_boottom).setVisibility(View.GONE);
-            GlideUtils.getInstance().loadBitmapSync(mContext, goods.thumb,
+            GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.img,
                     new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource,
                                                     GlideAnimation<? super Bitmap> glideAnimation) {
                             int width = Common.getScreenWidth((Activity) mContext) - TransformUtil.dip2px(mContext, 10);
-                            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+                            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
                             layoutParams.width = width;
                             layoutParams.height = width;
 
@@ -134,6 +145,40 @@ public class DownLoadQRCodeImageUtil {
                             super.onLoadFailed(e, errorDrawable);
                         }
                     });
+        }
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        ShareInfoParam  mShareInfoParam = new ShareInfoParam();
+        if (mShareInfoParam != null) {
+            mShareInfoParam.isShowTiltle = false;
+            mShareInfoParam.userName = baseEntity.data.userName;
+            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            mShareInfoParam.shareLink = baseEntity.data.shareLink;
+            mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.img = baseEntity.data.img;
+            mShareInfoParam.title = baseEntity.data.title;
+            mShareInfoParam.goods_id = baseEntity.data.goods_id;
+            if(!TextUtils.isEmpty(baseEntity.data.share_buy_earn))
+                mShareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+            mShareInfoParam.price = baseEntity.data.price;
+            mShareInfoParam.little_word = baseEntity.data.little_word;
+            mShareInfoParam.time_text = baseEntity.data.time_text;
+            mShareInfoParam.is_start = baseEntity.data.is_start;
+            mShareInfoParam.market_price = baseEntity.data.market_price;
+            mShareInfoParam.voucher = baseEntity.data.voucher;
+            createGoodCode(mShareInfoParam);
         }
     }
 

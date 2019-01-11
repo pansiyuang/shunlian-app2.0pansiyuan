@@ -350,7 +350,7 @@ public class ShareGoodDialogUtil {
 
             if (TextUtils.isEmpty(mShareInfoParam.time_text)||mShareInfoParam.isNewUserGood) {
                 llayout_day.setVisibility(View.GONE);
-            } else {
+            } else if(!TextUtils.isEmpty(mShareInfoParam.time_text)){
                 llayout_day.setVisibility(View.VISIBLE);
                 if(mShareInfoParam.is_start==0){
                     llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
