@@ -3,12 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <RelativeLayout
+    android:background="@color/white"
+    android:layout_width="match_parent"
+        android:id="@+id/title_bar"
+    android:layout_height="44dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:padding="10dp"
+        android:src="@mipmap/icon_common_back_black" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/text_gray2"
+        android:textSize="18sp"
+        android:text="新人专享优惠券"
+     />
+
+</RelativeLayout>
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrlayout_top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_below="@+id/title_bar"
         android:layout_centerHorizontal="true"
         android:background="@mipmap/img_xinren_beijing"
         >
