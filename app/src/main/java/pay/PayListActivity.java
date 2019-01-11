@@ -554,6 +554,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     private void tunedUpWechatPay(PayOrderEntity entity) {
         PayOrderEntity.WXChatPayEntity wechat = entity.wechat;
+        if (wechat == null)return;
         IWXAPI wxgApi = WXAPIFactory.createWXAPI(this, null);
         wxgApi.registerApp(wechat.appid);
 
