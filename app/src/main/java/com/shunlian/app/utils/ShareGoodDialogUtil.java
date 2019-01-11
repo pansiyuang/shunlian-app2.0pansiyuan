@@ -88,7 +88,7 @@ public class ShareGoodDialogUtil {
         }
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, v -> {
             setEddType();
-            Common.copyTextNoToast(context,mShareInfoParam.title+mShareInfoParam.shareLink);
+            Common.copyTextNoToast(context,mShareInfoParam.title);
             nomalBuildl.dismiss();
             if(isGood) {
                 WXEntryActivity.startAct(context,
@@ -104,7 +104,7 @@ public class ShareGoodDialogUtil {
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, v -> {
             setEddType();
-            Common.copyTextNoToast(context,mShareInfoParam.title+mShareInfoParam.shareLink);
+            Common.copyTextNoToast(context,mShareInfoParam.title);
             nomalBuildl.dismiss();
             if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
                 createSpecialCode( false);
@@ -125,7 +125,7 @@ public class ShareGoodDialogUtil {
         nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, v -> {
             setEddType();
             nomalBuildl.dismiss();
-            Common.copyTextNoToast(context,mShareInfoParam.title+mShareInfoParam.shareLink);
+            Common.copyTextNoToast(context,mShareInfoParam.title);
             if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
                 createSpecialCode(true);
                 return;
