@@ -71,7 +71,7 @@ public class DownLoadQRCodeImageUtil implements IView {
             int i = TransformUtil.dip2px(mContext, 92.5f);
             Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
             miv_code.setImageBitmap(qrImage);
-
+            miv_close.setVisibility(View.GONE);
             MyTextView mtv_title =  inflate.findViewById(R.id.mtv_title);
             MyTextView  mtv_coupon_title =  inflate.findViewById(R.id.mtv_coupon_title);
 
