@@ -292,7 +292,7 @@ public class ShareGoodDialogUtil {
             miv_code.setImageBitmap(qrImage);
             MyTextView mtv_title =  showGoodBuild.findViewById(R.id.mtv_title);
             MyTextView  mtv_coupon_title =  showGoodBuild.findViewById(R.id.mtv_coupon_title);
-
+            RelativeLayout relt_share_image = showGoodBuild.findViewById(R.id.relt_share_image);
             if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
                 mtv_coupon_title.setVisibility(View.VISIBLE);
                 mtv_coupon_title.setText(mShareInfoParam.voucher);
@@ -329,6 +329,7 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_newuser_mark_price = showGoodBuild.findViewById(R.id.mtv_newuser_mark_price);
 
             if(mShareInfoParam.isNewUserGood) {
+                relt_share_image.setPadding(DensityUtil.dip2px(context,10),0,DensityUtil.dip2px(context,10),0);
                 line_old_user.setVisibility(View.GONE);
                 re_newuser_layout.setVisibility(View.VISIBLE);
                 mtv_newuser_price.setText(context.getResources().getString(R.string.common_yuan)+mShareInfoParam.price);
@@ -449,12 +450,14 @@ public class ShareGoodDialogUtil {
            View ll_root= showShopBuild.findViewById(R.id.ll_root);
             MyImageView miv_close = showShopBuild.findViewById(R.id.miv_close);
             MyLinearLayout mllayout_save = showShopBuild.findViewById(R.id.mllayout_save);
-            MyImageView miv_user_head = showShopBuild.findViewById(R.id.miv_user_head);
-            MyImageView  miv_store = showShopBuild.findViewById(R.id.miv_store);
-            MyTextView mtv_nickname = showShopBuild.findViewById(R.id.mtv_nickname);
 
-            mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
-            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
+            MyImageView  miv_store = showShopBuild.findViewById(R.id.miv_store);
+
+//            MyImageView miv_user_head = showShopBuild.findViewById(R.id.miv_user_head);
+//            MyTextView mtv_nickname = showShopBuild.findViewById(R.id.mtv_nickname);
+//            mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
+//            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
+
             GlideUtils.getInstance().loadImageZheng(context, miv_store, mShareInfoParam.shop_logo);
             MyImageView miv_code =  showShopBuild.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(context, 92.5f);
