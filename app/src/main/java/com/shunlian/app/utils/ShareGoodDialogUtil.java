@@ -483,7 +483,7 @@ public class ShareGoodDialogUtil {
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
 
             }else{
-                showShopBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
+                showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
             }
             miv_close.setOnClickListener(view -> showShopBuild.dismiss());
