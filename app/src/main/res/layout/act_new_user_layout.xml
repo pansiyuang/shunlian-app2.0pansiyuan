@@ -80,7 +80,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/yy30"
-                          android:background="@color/white_ash"></View>
+                          android:background="@color/white"></View>
                 </LinearLayout>
                 <com.shunlian.app.widget.banner.MyKanner
                     android:id="@+id/kanner"
