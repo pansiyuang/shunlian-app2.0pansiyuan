@@ -46,24 +46,39 @@ public class CommonDialogUtil {
     }
 
     //新人领取优惠劵
-    public void userNewShowDialog(ICallBackResult<String> callBackResult,String defaultValue) {
+    public void userNewShowDialog(ICallBackResult<String> callBackResult,String defaultValue,String warn_txt) {
         if(((Activity)context).isFinishing()){
             return;
         }
-        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd)
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fullWidth()
                 .setView(R.layout.dialog_page_user_new);
         dialog_user_info = nomalBuild.create();
         dialog_user_info.setCancelable(false);
         dialog_user_info.show();
+        MyImageView miv_close= dialog_user_info.findViewById(R.id.miv_close);
         TextView tv_new_submit = dialog_user_info.findViewById(R.id.tv_new_submit);
         TextView  ntv_user_page_price= dialog_user_info.findViewById(R.id.ntv_user_page_price);
+        TextView tv_desc_text= dialog_user_info.findViewById(R.id.tv_desc_text);
         if(!TextUtils.isEmpty(defaultValue)){
             tv_new_submit.setText(defaultValue);
+        }
+        if(!TextUtils.isEmpty(warn_txt)){
+            tv_desc_text.setText(warn_txt);
         }
         tv_new_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 callBackResult.onTagClick(tv_new_submit.getText().toString());
+            }
+        });
+        miv_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!((Activity)context).isFinishing()){
+                    dialog_user_info.dismiss();
+                    ((Activity)context).finish();
+                    return;
+                }
             }
         });
     }
@@ -73,7 +88,7 @@ public class CommonDialogUtil {
         if(((Activity)context).isFinishing()){
             return;
         }
-        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,260))
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,280))
                 .setView(R.layout.dialog_page_user_old);
         dialog_user_old = nomalBuild.create();
         dialog_user_old.setCancelable(false);

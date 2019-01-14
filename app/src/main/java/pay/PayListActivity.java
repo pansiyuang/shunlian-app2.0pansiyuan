@@ -554,6 +554,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     private void tunedUpWechatPay(PayOrderEntity entity) {
         PayOrderEntity.WXChatPayEntity wechat = entity.wechat;
+        if (wechat == null)return;
         IWXAPI wxgApi = WXAPIFactory.createWXAPI(this, null);
         wxgApi.registerApp(wechat.appid);
 
@@ -705,7 +706,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     public void payCommon(String code){
         if (!isEmpty(shop_goods)) {
             if (isNewExclusive){
-                payListPresenter.newexclusivePay(shop_goods, addressId, anonymous,code);
+                payListPresenter.newexclusivePay(shop_goods, addressId, anonymous,code,stageVoucherId);
             }else if (isPlusfree){
                 payListPresenter.plusfreePay(shop_goods, addressId, anonymous,code,gid);
             }else {
@@ -749,7 +750,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                                     if (!isEmpty(shop_goods)) {
                                         if (isNewExclusive){
                                             payListPresenter.newexclusivePay(shop_goods, addressId,
-                                                    anonymous,pay_types.code);
+                                                    anonymous,pay_types.code,stageVoucherId);
                                         }else if (isPlusfree){
                                             payListPresenter.plusfreePay(shop_goods, addressId,
                                                     anonymous,pay_types.code,gid);

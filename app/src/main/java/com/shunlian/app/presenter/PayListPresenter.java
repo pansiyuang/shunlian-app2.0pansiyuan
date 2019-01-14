@@ -233,12 +233,14 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
      * @param paytype
      */
     public void newexclusivePay(String shop_goods, String address_id,
-                                String anonymous, String paytype){
+                                String anonymous, String paytype,String stage_voucher_id){
         Map<String, String> map = new HashMap<>();
         map.put("shop_goods", shop_goods);
         map.put("address_id", address_id);
         map.put("anonymous", anonymous);
         map.put("paytype", paytype);
+        if (isEmpty(stage_voucher_id)) stage_voucher_id = "0";
+        map.put("stage_voucher_id", stage_voucher_id);
         sortAndMD5(map);
 
         Call<BaseEntity<PayOrderEntity>>

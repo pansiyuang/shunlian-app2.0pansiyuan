@@ -68,10 +68,9 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
             String mobile_text = mobile.getText().toString();
             if (mobile_text.length() == 11){
                 btnDrawable.setColor(getColorResouce(R.color.pink_color));
-                if (presenter != null && mConfig != null
-                        && !isEmpty(mConfig.status) && !"1".equals(mConfig.status)){
-                    //微信过来的验证手机号是否可用
-                    presenter.checkFromWXMobile(mConfig.status,mobile_text);
+                if (presenter != null && mConfig != null){
+                    //微信过来的验证手机号是否可用 和是否显示上级
+                    presenter.checkFromWXMobile(mConfig.status, mobile_text,mConfig.unique_sign);
                 }
             }else {
                 btnDrawable.setColor(Color.parseColor("#ECECEC"));
@@ -120,7 +119,17 @@ public class LoginMobileFrag extends BaseFragment implements INew3LoginView{
      * @param msg
      */
     @Override
-    public void checkFromWXMobile(String status, String msg) {
+    public void checkFromWXMobile(String status,String share_show_status,String msg) {
+        if ("1".equals(share_show_status)){//1不显示，2显示
+            if (mConfig != null){
+                mConfig.isShowInviteSource = false;
+            }
+        }else if ("2".equals(share_show_status)){
+            if (mConfig != null){
+                mConfig.isShowInviteSource = true;
+            }
+        }
+
         if ("2".equals(status) && mConfig != null){
             mConfig.isUseMobile = false;
             if (!isEmpty(msg)){

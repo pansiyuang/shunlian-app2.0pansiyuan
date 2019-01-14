@@ -823,6 +823,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
         mShareInfoParam.market_price = baseEntity.data.market_price;
         if(!TextUtils.isEmpty(baseEntity.data.share_buy_earn))
         mShareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+        mShareInfoParam.voucher = baseEntity.data.voucher;
+        mShareInfoParam.little_word = baseEntity.data.little_word;
+        mShareInfoParam.time_text = baseEntity.data.time_text;
+        mShareInfoParam.is_start = baseEntity.data.is_start;
         mShareInfoParam.title = baseEntity.data.title;
         shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, false);
     }

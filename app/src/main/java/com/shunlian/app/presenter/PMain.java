@@ -11,6 +11,7 @@ import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.PunishEntity;
+import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -267,6 +268,26 @@ public class PMain extends BasePresenter<IMain> {
                 if (data != null) {
                     iView.setAD(data);
                 }
+                showVoucherSuspension();
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+//                super.onErrorCode(code, message);
+                showVoucherSuspension();
+            }
+        });
+    }
+
+    public void showVoucherSuspension() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<ShowVoucherSuspension>> setinfo = getAddCookieApiService().showVoucherSuspension(map);
+        getNetData(true, setinfo, new SimpleNetDataCallback<BaseEntity<ShowVoucherSuspension>>() {
+            @Override
+            public void onSuccess(BaseEntity<ShowVoucherSuspension> entity) {
+                super.onSuccess(entity);
+                iView.showVoucherSuspension(entity.data);
             }
         });
     }

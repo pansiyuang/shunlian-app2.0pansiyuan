@@ -56,13 +56,13 @@ public class StoreViewUtil {
         mtv_pricel2 =  showShopBuild.findViewById(R.id.mtv_pricel2);
         mtv_pricer2 =  showShopBuild.findViewById(R.id.mtv_pricer2);
 
-        int width = Common.getScreenWidth((Activity) context)/2 - TransformUtil.dip2px(context, 70);
+        int width = Common.getScreenWidth((Activity) context)/2 - TransformUtil.dip2px(context, 20);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_onel.getLayoutParams();
-        layoutParams.width = width+TransformUtil.dip2px(context, 25);
+//        layoutParams.width = width+TransformUtil.dip2px(context, 55);
         layoutParams.height = width;
 
         RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) miv_onel2.getLayoutParams();
-        layoutParams2.width = width+TransformUtil.dip2px(context, 25);
+//        layoutParams2.width = width+TransformUtil.dip2px(context, 55);
         layoutParams2.height = width;
     }
 

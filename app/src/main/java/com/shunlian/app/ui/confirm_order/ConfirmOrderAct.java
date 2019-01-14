@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -97,7 +96,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     MyTextView mtv_tip;
 
     private String mTotalPrice;
-    private boolean isOrderBuy = false;//是否直接购买
+    private boolean isOrderBuy = false;//是否直接购买 用于促销可选还是仅看
     private String detail_address;
     private String addressId;
     private String cart_ids;
@@ -107,8 +106,10 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private ConfirmOrderPresenter confirmOrderPresenter;
     public static final String TYPE_CART = "cart";//购物车
     public static final String TYPE_COMBO = "combo";//套餐
+    public static final String TYPE_GOODS_DETAIL = "goods_detail";//商品详情
+    public static final String TYPE_NEW_USER_PAGE = "new_user_page";//新人专享
     public static final String TYPE_PLUSFREE = "plusfree";//plus免费专区
-    private String type;
+    private String from;
     private List<ConfirmOrderEntity.Enabled> enabled;
     private DiscountListDialog mStageVoucherDialog;
     private ConfirmOrderEntity.Enabled mStageVoucherEntity;
@@ -118,6 +119,8 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private ObjectMapper mOM;
     private float mEggReduce;
     public static final String EGGS_TIP = "订单支付金额必须大于1元";//金蛋减免提示
+    public String device_order;//新人专享专用字段  ，是否享受过此福利1是0否
+
 
     @Override
     protected void onDestroy() {
@@ -130,12 +133,13 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     /**
      * 新人专享到确认订单
      */
-    public static void startAct(Context context){
+    public static void startAct(Context context,String from){
         if (!Common.isAlreadyLogin()){
             Common.goGoGo(context,"login");
             return;
         }
         Intent intent = new Intent(context, ConfirmOrderAct.class);
+        intent.putExtra("from",from);
         context.startActivity(intent);
     }
 
@@ -143,16 +147,16 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
      * 购物车到确认订单
      * @param context
      * @param cart_ids
-     * @param type
+     * @param from
      */
-    public static void startAct(Context context,String cart_ids,String type){
+    public static void startAct(Context context,String cart_ids,String from){
         if (!Common.isAlreadyLogin()){
             Common.goGoGo(context,"login");
             return;
         }
         Intent intent = new Intent(context, ConfirmOrderAct.class);
         intent.putExtra("cart_ids",cart_ids);
-        intent.putExtra("type",type);
+        intent.putExtra("from",from);
         context.startActivity(intent);
     }
 
@@ -162,10 +166,10 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
      * @param goods_id
      * @param qty
      * @param sku_id
-     * @param params 参数类型 第一个参数指的是界面来源
+     * @param from 上个页面来源
      */
     public static void startAct(Context context,String goods_id,
-                                String qty,String sku_id,String... params){
+                                String qty,String sku_id,String from){
         if (!Common.isAlreadyLogin()){
             Common.goGoGo(context,"login");
             return;
@@ -174,8 +178,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         intent.putExtra("goods_id",goods_id);
         intent.putExtra("qty",qty);
         intent.putExtra("sku_id",sku_id);
-        if (params != null && params.length > 0)
-        intent.putExtra("type",params[0]);
+        intent.putExtra("from",from);
         context.startActivity(intent);
     }
     @Override
@@ -214,7 +217,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         goods_id = intent.getStringExtra("goods_id");
         qty = intent.getStringExtra("qty");
         sku_id = intent.getStringExtra("sku_id");
-        type = intent.getStringExtra("type");
+        from = intent.getStringExtra("from");
         confirmOrderPresenter = new ConfirmOrderPresenter(this,this);
         getConfirmOrderData(null);
         recy_view.setLayoutManager(new LinearLayoutManager(this));
@@ -264,7 +267,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
 
         this.enabled = enabled;
         ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
-                enabled, disabled,address,isOrderBuy,noDeliveryList);
+                enabled, disabled,address,isOrderBuy,noDeliveryList,from);
         recy_view.setAdapter(df);
 
         df.setSelectVoucherListener(position ->calculateAmount(enabled));
@@ -390,14 +393,41 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
      */
     private void getConfirmOrderData(String addressId) {
         if (confirmOrderPresenter == null) return;
-        if (!TextUtils.isEmpty(cart_ids)){
+
+        isOrderBuy = false;
+        switch (from){
+            case TYPE_CART://购物车
+                confirmOrderPresenter.orderConfirm(cart_ids,addressId);
+                break;
+
+            case TYPE_COMBO://套餐
+                confirmOrderPresenter.buyCombo(cart_ids,addressId);
+                break;
+
+            case TYPE_PLUSFREE://plus免费专区
+                confirmOrderPresenter.plusfree(goods_id, qty, sku_id,addressId);
+                break;
+
+            case TYPE_GOODS_DETAIL://商品详情页直接购买
+                isOrderBuy = true;
+                confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,addressId);
+                break;
+
+            case TYPE_NEW_USER_PAGE://新人专享
+                isOrderBuy = true;
+                confirmOrderPresenter.newexclusive(addressId);
+                break;
+
+        }
+
+        /*if (!TextUtils.isEmpty(cart_ids)){
             isOrderBuy = false;
-            if (TYPE_CART.equals(type)) {//购物车
+            if (TYPE_CART.equals(from)) {//购物车
                 confirmOrderPresenter.orderConfirm(cart_ids,addressId);
             }else {//套餐
                 confirmOrderPresenter.buyCombo(cart_ids,addressId);
             }
-        }else if (TYPE_PLUSFREE.equals(type)){//plus免费专区
+        }else if (TYPE_PLUSFREE.equals(from)){//plus免费专区
             isOrderBuy = false;
             confirmOrderPresenter.plusfree(goods_id, qty, sku_id,addressId);
         }else if (!isEmpty(goods_id)){//商品详情页直接购买
@@ -406,7 +436,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         }else {//新人专享
             isOrderBuy = false;
             confirmOrderPresenter.newexclusive(addressId);
-        }
+        }*/
     }
 
     /**
@@ -432,6 +462,20 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                     return;
                 }
 
+                if (TYPE_NEW_USER_PAGE.equals(from) && "1".equals(device_order)){
+                    //代表新人享受过该福利，不能再次享受
+                    Common.staticToast("您已享受过此福利");
+                    return;
+                }
+
+                /********防止没有绑定成功上级 去下单的情况*********/
+                if (!ConfirmOrderPresenter.isHasSuperior){
+                    if (confirmOrderPresenter != null){//没有绑定成功再去验证
+                        confirmOrderPresenter.checkBindShareidV2();
+                    }
+                    return;
+                }
+
                 String shop_goods = null;
                 try {
                     shop_goods = mOM.writeValueAsString(mosaicParams());
@@ -452,7 +496,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 }else {
                     params.isNewExclusive = false;
                 }
-                if (TYPE_PLUSFREE.equals(type)){
+                if (TYPE_PLUSFREE.equals(from)){
                     params.gid = goods_id;
                     params.isPlusfree = true;
                 }else {

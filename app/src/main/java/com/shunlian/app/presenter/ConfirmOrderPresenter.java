@@ -11,11 +11,11 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.new3_login.EditInviteCodeDialog;
 import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 import com.shunlian.app.ui.new3_login.VerifyPicDialog;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IConfirmOrderView;
 
 import java.util.HashMap;
@@ -37,10 +37,12 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
 
     private EditInviteCodeDialog mInviteCodeDialog;
     private VerifyPicDialog mVerifyPicDialog;
+    /********是否有上级***********/
+    public static boolean isHasSuperior;
 
     public ConfirmOrderPresenter(Context context, IConfirmOrderView iView) {
         super(context, iView);
-        isCanBindShareID();
+        checkBindShareidV2();
     }
 
     @Override
@@ -54,6 +56,8 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             mInviteCodeDialog.release();
         if (mVerifyPicDialog != null)
             mVerifyPicDialog.release();
+
+        isHasSuperior = false;
     }
 
     @Override
@@ -66,23 +70,21 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
      */
     private void isCanBindShareID() {
         //share_status == 2 表示该用户没有上级，需要绑定上级才能购买
-        String share_status = SharedPrefUtil.getSharedUserString("share_status", "");
-        if ("2".equals(share_status)){
-            loginInfoTip();
-            mInviteCodeDialog = new EditInviteCodeDialog((Activity) context);
-            mInviteCodeDialog.setOnClickListener(v -> {
-                mInviteCodeDialog.release();
-                ((Activity) context).finish();
-            }, v -> {
-                String inviteCode = mInviteCodeDialog.getInviteCode();
-                if (isEmpty(inviteCode)) {
-                    Common.staticToast("请填写邀请码");
-                } else {
-                    codeDetail(inviteCode);
-                }
-            });
-            mInviteCodeDialog.show();
-        }
+        loginInfoTip();
+        mInviteCodeDialog = new EditInviteCodeDialog((Activity) context);
+        mInviteCodeDialog.setOnClickListener(v -> {
+            mInviteCodeDialog.release();
+            ((Activity) context).finish();
+        }, v -> {
+            String inviteCode = mInviteCodeDialog.getInviteCode();
+            if (isEmpty(inviteCode)) {
+                Common.staticToast("请填写邀请码");
+            } else {
+                codeDetail(inviteCode);
+            }
+        });
+        mInviteCodeDialog.show();
+
     }
 
 
@@ -229,6 +231,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
         iView.stageVoucher(data.user_stage_voucher,data.stage_voucher);
         iView.goldenEggs(data.egg_tip,data.gold_egg,data.egg_reduce);
         iView.receivingPrompt(data.receiving_prompt);
+        ((ConfirmOrderAct) context).device_order = data.device_order;
     }
 
     /**
@@ -269,7 +272,6 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 super.onSuccess(entity);
                 iView.bindShareID("");
                 Common.staticToasts(context,"已确认",R.mipmap.icon_common_duihao);
-                SharedPrefUtil.saveSharedUserString("share_status", "1");
                 if (mVerifyPicDialog != null){
                     mVerifyPicDialog.release();
                 }
@@ -311,15 +313,15 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 MemberCodeListEntity bean = entity.data;
                 if (bean != null) {
                     mVerifyPicDialog = new VerifyPicDialog((Activity) context);
-                    mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
+                    mVerifyPicDialog.setTvSureColor(R.color.pink_color);
                     mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
                     mVerifyPicDialog.setMessage("请确认您的导购专员");
                     mVerifyPicDialog.showState(2);
                     mVerifyPicDialog.setMemberDetail(bean.info);
-                    mVerifyPicDialog.setSureAndCancleListener("确认绑定", v -> {
+                    mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
                         bindShareid(bean.info.code);
                         mVerifyPicDialog.dismiss();
-                    }, "取消", v -> {
+                    }, "返回", v -> {
                         mVerifyPicDialog.dismiss();
                         if (mInviteCodeDialog != null)mInviteCodeDialog.show();
                     }).show();
@@ -370,13 +372,35 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
         sortAndMD5(map);
 
         Call<BaseEntity<ConfirmOrderEntity>>
-                baseEntityCall = getAddCookieApiService().plusfree(getRequestBody(map));
+                baseEntityCall = getAddCookieApiService().plusfree(map);
 
         getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
                 setDate(entity);
+            }
+        });
+    }
+
+
+    public void checkBindShareidV2(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>>
+                baseEntityCall = getApiService().checkBindShareidV2(map);
+
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                isHasSuperior = true;
+                CommonEntity data = entity.data;
+                if (data != null && "2".equals(data.share_status)){//需要绑定上级
+                    isCanBindShareID();
+                }
             }
         });
     }

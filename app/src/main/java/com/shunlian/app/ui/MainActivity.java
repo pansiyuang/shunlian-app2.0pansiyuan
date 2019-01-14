@@ -29,9 +29,11 @@ import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
+import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -386,13 +388,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
                     //判断跳转逻辑:非plus和非内部账号不跳转发布界面
                     if (Common.isPlus()) {
-                        //FindSendPictureTextAct.startAct(this, sendConfig);
                         EventBus.getDefault().postSticky(sendConfig);
                         SelectPicVideoAct.startAct(this,
                                 FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
                     } else {
                         if (baseInfo.is_inner == 1) {
-                            FindSendPictureTextAct.startAct(this, sendConfig);
+                            EventBus.getDefault().postSticky(sendConfig);
+                            SelectPicVideoAct.startAct(this,
+                                    FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
                         } else {
                             initHintDialog();
                         }
@@ -904,10 +907,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             dialog_new = new Dialog(this, R.style.popAd);
             dialog_new.setContentView(R.layout.dialog_user_new);
             MyImageView miv_close = (MyImageView) dialog_new.findViewById(R.id.miv_close);
-            ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_user_bOne);
             ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
-            ntv_aOne.setText(HighLightKeyWordUtil.getHighLightKeyWord(getResources().getColor(R.color.pink_color),
-                    prize, "现金红包"));
             miv_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -923,6 +923,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             });
             //dialog_new.setCancelable(false);
         }
+        ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_user_bOne);
+        ntv_aOne.setText(HighLightKeyWordUtil.getHighLightKeyWord(getResources().getColor(R.color.pink_color),
+                prize, "现金红包"));
         dialog_new.show();
     }
 
@@ -1033,6 +1036,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     @Override
+    public void showVoucherSuspension(ShowVoucherSuspension voucherSuspension) {
+        if(mainPageFrag!=null){
+            mainPageFrag.updateUserNewToast(voucherSuspension);
+        }
+    }
+
+    @Override
     public void showFailureView(int request_code) {
         if (0 == request_code && dialog_new != null)
             dialog_new.dismiss();
@@ -1080,10 +1090,16 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginRefresh(DefMessageEvent event) {
         if (event.loginSuccess && pMain != null) {
-            pMain.isShowNewPersonPrize();
+            pMain.isShowUserNewPersonPrize();
+            pMain.showVoucherSuspension();
         }
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void suspensionRefresh(SuspensionRefresh suspensionRefresh) {
+        if (suspensionRefresh.isRefresh && pMain != null) {
+            pMain.showVoucherSuspension();
+        }
+    }
     /**
      * 处理网络请求
      */

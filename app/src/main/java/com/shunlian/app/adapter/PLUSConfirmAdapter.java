@@ -134,7 +134,7 @@ public class PLUSConfirmAdapter extends BaseRecyclerAdapter<PLUSConfirmEntity.Pr
 
             mHolder.recy_view.setVisibility(View.VISIBLE);
             mHolder.recy_view.setAdapter(new AppointGoodsAdapter(context,
-                    false, mGoods));
+                    false, mGoods,""));
 
 
             mHolder.mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)

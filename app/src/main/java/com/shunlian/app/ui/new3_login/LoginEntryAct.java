@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.presenter.TestWXLoginPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
@@ -38,7 +37,7 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
 
     /***************登录条款************/
     public static final String TERMS_OF_SERVICE = "agreement/1";
-    private TestWXLoginPresenter presenterTest;
+    //private TestWXLoginPresenter presenterTest;
 
     @BindView(R.id.mtv_pwd_login)
     MyTextView mtv_pwd_login;
@@ -94,12 +93,12 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
 
     @OnClick(R.id.llayout_wechat_login)
     public void wechatLogin(){
-        //WXLogin();
-        if (presenterTest == null) {
+        WXLogin();
+        /*if (presenterTest == null) {
             presenterTest = new TestWXLoginPresenter(this, this);
         }else {
             presenterTest.wxLoginV2();
-        }
+        }*/
     }
 
     @OnClick({R.id.mbtn_login,R.id.mtv_register})
@@ -107,8 +106,6 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
         New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
         config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
         New3LoginAct.startAct(this,config);
-        /*RegisterAndBindingAct.startAct(this,
-                RegisterAndBindingAct.FLAG_LOGIN,null,null,null);*/
         finish();
     }
 
@@ -117,8 +114,6 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
         New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
         config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.PASSWORD_TO_LOGIN;
         New3LoginAct.startAct(this,config);
-        /*RegisterAndBindingAct.startAct(this,
-                RegisterAndBindingAct.FLAG_PWD_LOGIN,null,null,null);*/
         finish();
     }
 
@@ -218,7 +213,7 @@ public class LoginEntryAct extends BaseActivity implements INew3LoginView{
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void notifClose(DefMessageEvent n){
+    public void notifyClose(DefMessageEvent n){
         if (n != null && n.loginSuccess){
             finish();
         }

@@ -5,16 +5,22 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.TransformUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +38,10 @@ public class WheelSurfView extends RelativeLayout {
     private ImageView mStart;
     //动画回调监听
     private RotateListener rotateListener;
+
+    private LinearLayout llRoot;
+    private TextView tvStart;
+    private TextView tvGold;
 
     public void setRotateListener(RotateListener rotateListener) {
         mWheelSurfPanView.setRotateListener(rotateListener);
@@ -120,7 +130,38 @@ public class WheelSurfView extends RelativeLayout {
             mWheelSurfPanView.setmVarTime(builder.mVarTime);
         if (builder.mTypeNum != 0)
             mWheelSurfPanView.setmTypeNum(builder.mTypeNum);
+
+        initStartContentLayout(builder.mStartContent);
+
         mWheelSurfPanView.show();
+    }
+
+    public void initStartContentLayout(String content) {
+        if (TextUtils.isEmpty(content)) {
+            return;
+        }
+        llRoot = new LinearLayout(mContext);
+        llRoot.setGravity(Gravity.CENTER);
+        llRoot.setOrientation(LinearLayout.VERTICAL);
+        tvStart = new TextView(mContext);
+        tvGold = new TextView(mContext);
+        tvStart.setText("抽奖");
+        tvGold.setText("20金蛋一次");
+        tvStart.setTextColor(mContext.getResources().getColor(R.color.white));
+        tvGold.setTextColor(mContext.getResources().getColor(R.color.white));
+        tvGold.setMaxLines(2);
+        tvGold.setTextSize(8);
+        tvStart.setGravity(Gravity.CENTER);
+        tvStart.getPaint().setFakeBoldText(true);
+        tvGold.setGravity(Gravity.CENTER);
+        tvStart.setTextSize(12);
+
+        llRoot.addView(tvStart);
+        llRoot.addView(tvGold);
+        RelativeLayout.LayoutParams rootLayout = new RelativeLayout.LayoutParams(TransformUtil.dip2px(mContext, 30), ViewGroup.LayoutParams.WRAP_CONTENT);
+        rootLayout.addRule(RelativeLayout.CENTER_IN_PARENT);
+        llRoot.setLayoutParams(rootLayout);
+        addView(llRoot);
     }
 
     /**
@@ -202,6 +243,8 @@ public class WheelSurfView extends RelativeLayout {
         private float mTextSize = 0;
         //文字颜色
         private int mTextColor = 0;
+        //抽奖内容
+        private String mStartContent;
 
         public final WheelSurfView.Builder setmType(int mType) {
             this.mType = mType;
@@ -260,6 +303,11 @@ public class WheelSurfView extends RelativeLayout {
 
         public final WheelSurfView.Builder setmTextColor(int mTextColor) {
             this.mTextColor = mTextColor;
+            return this;
+        }
+
+        public final WheelSurfView.Builder setStartContent(String startContent) {
+            this.mStartContent = startContent;
             return this;
         }
 

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:wheelSurfView="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/myScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_renwu_zhuanpan_beijing" />
+
+            <TextSwitcher
+                android:id="@+id/text_switcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="44dp"
+                android:background="@mipmap/img_dazhaunpan_dongxiao" />
+
+            <com.shunlian.app.widget.luckWheel.WheelSurfView
+                android:id="@+id/wheelPan"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="210dp"
+                wheelSurfView:goImg="@mipmap/img_renwu_zhuanpan_zhizhen"
+                wheelSurfView:huanImg="@mipmap/img_renwu_zhuanpan"
+                wheelSurfView:typenum="-1"></com.shunlian.app.widget.luckWheel.WheelSurfView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/wheelPan"
+                android:background="#E6B198"
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/img_renwu_jianbian"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="195dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/rounded_corner_stroke_d9_20px"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_top"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/rounded_corner_solid_ebd9c0_20px"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:paddingLeft="21dp"
+                            android:paddingRight="21dp"
+                            android:text="中奖纪录"
+                            android:textColor="@color/value_49"
+                            android:textSize="12sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/miv_logo"
+                            android:layout_below="@+id/tv_top"
+                            android:layout_marginLeft="24dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginRight="24dp"
+                            android:layout_marginBottom="11dp"
+                            android:background="@drawable/rounded_corner_stroke_d8c397_20px"
+                            android:orientation="vertical"
+                            android:paddingTop="12dp">
+
+                            <LinearLayout
+                                android:id="@+id/ll_top"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="日期"
+                                    android:textColor="@color/value_49"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="奖品"
+                                    android:textColor="@color/value_49"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <com.shunlian.app.widget.MyRecyclerView
+                                android:id="@+id/recycler_list"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ll_top"
+                                android:layout_marginBottom="3dp"
+                                android:overScrollMode="never"
+                                android:scrollbars="none"></com.shunlian.app.widget.MyRecyclerView>
+                        </LinearLayout>
+
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_logo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="13dp"
+                            android:src="@mipmap/img_renwu_logo" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="vertical">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="16dp"
+            android:src="@mipmap/icon_common_back_white" />
+
+        <TextView
+            android:id="@+id/tv_title_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/miv_close"
+            android:gravity="center"
+            android:textColor="@color/new_text"
+            android:textSize="14.5dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="金蛋抽奖"
+            android:textColor="@color/white"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_title_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="10dp"
+            android:text="活动规则"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+</RelativeLayout>

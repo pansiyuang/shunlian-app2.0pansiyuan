@@ -119,7 +119,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
             mHolder.mtv_discount_price.setStrikethrough();
             if(!TextUtils.isEmpty(goods.market_price)) {
                 mHolder.mtv_discount_price.setVisibility(View.VISIBLE);
-                mHolder.mtv_discount_price.setText(getString(R.string.rmb)+goods.market_price);
+                mHolder.mtv_discount_price.setText(getString(R.string.common_yuan)+goods.market_price);
             }else{
                 mHolder.mtv_discount_price.setVisibility(View.GONE);
             }
@@ -149,6 +149,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                     mHolder.tv_user_shopping_car.setEnabled(true);
                     mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
                     mHolder.tv_show_num.setVisibility(View.VISIBLE);
+                    mHolder.tv_show_num.setText(goods.share_total+"次分享");
                     mHolder.tv_user_shopping_car.setText("立即分享");
               }
              mHolder.progress_view.setVisibility(View.VISIBLE);
@@ -158,7 +159,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                   mHolder.view_head_view.setVisibility(View.GONE);
                   if (position == fristPostionNewGood) {
                       mHolder.line_new_title.setVisibility(View.VISIBLE);
-                      mHolder.line_new_title.setBackgroundColor(context.getResources().getColor(R.color.white));
+                      mHolder.line_new_title.setBackgroundResource(R.drawable.bg_border_line_bottom);
                       mHolder.tv_usew_desc.setText("新人专区");
                       Drawable drawable = context.getResources().getDrawable(R.mipmap.icon_xinren_zhuanqu);
                       drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -176,7 +177,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                    mHolder.tv_usew_desc.setCompoundDrawables(drawable, null, null, null);
                    mHolder.tv_usew_desc.setCompoundDrawablePadding(DensityUtil.dip2px(context,5));
-                   mHolder.line_new_title.setBackgroundResource(R.drawable.bg_border_line_bottom);
+                  mHolder.line_new_title.setBackgroundColor(context.getResources().getColor(R.color.white));
                   int seconds=(int)(System.currentTimeMillis()/1000)-second;
                   mHolder.downTime_firsts.cancelDownTimer();
                   try {

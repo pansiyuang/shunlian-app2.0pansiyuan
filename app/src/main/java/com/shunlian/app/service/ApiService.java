@@ -3022,6 +3022,54 @@ public interface ApiService {
     Call<BaseEntity<CommonEntity>> bindShareidV2(@Body RequestBody body);
 
     /**
+     * 转转转获取奖品列表
+     *
+     * @return
+     */
+    @GET("task/getPrizeList")
+    Call<BaseEntity<GoldEggPrizeEntity>> getPrizeList(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转抽奖
+     *
+     * @return
+     */
+    @GET("task/draw")
+    Call<BaseEntity<TaskDrawEntity>> getTaskDraw(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转获取轮播中奖记录
+     *
+     * @return
+     */
+    @GET("task/getDrawRecordList")
+    Call<BaseEntity<DrawRecordEntity>> getDrawRecordList(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转未填收货地址订单
+     *
+     * @return
+     */
+    @GET("task/getNoAddressOrder")
+    Call<BaseEntity<NoAddressOrderEntity>> getNoAddressOrder(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转获取我的中奖记录
+     *
+     * @return
+     */
+    @GET("task/getMyDrawRecordList")
+    Call<BaseEntity<MyDrawRecordEntity>> getMyDrawRecordList(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转保存收货地址
+     *
+     * @return
+     */
+    @POST("task/updateOrderAddress")
+    Call<BaseEntity<CommonEntity>> updateOrderAddress(@Body RequestBody body);
+
+    /**
      * 新人专享banner
      */
     @GET("newexclusive/showVoucherSuspension")
@@ -3035,16 +3083,20 @@ public interface ApiService {
 
     /**
      * plus免费专区 确认订单
-     * @param body
+     * @param map
      * @return
      */
-    @POST("plusfree/buy")
-    Call<BaseEntity<ConfirmOrderEntity>> plusfree(@Body RequestBody body);
+    @GET("plusfree/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> plusfree(@QueryMap Map<String, String> map);
 
     /**
      * plus免费专区 订单结算
      * @param body
      * @return
      */
+    @POST("plusfree/checkoutOrder")
     Call<BaseEntity<PayOrderEntity>> plusfreePay(@Body RequestBody body);
+
+    @GET("member/userinfo/checkBindShareidV2")
+    Call<BaseEntity<CommonEntity>> checkBindShareidV2(@QueryMap Map<String, String> map);
 }

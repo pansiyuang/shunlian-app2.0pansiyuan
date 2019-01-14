@@ -255,19 +255,16 @@
             android:layout_marginBottom="45dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"/>
-        <TextView
+        <com.shunlian.app.utils.timer.HoneRedDownTimerView
             android:id="@+id/tv_new_user_time"
             android:layout_width="wrap_content"
-            android:gravity="center"
-            android:text="2天09:26:08"
-            android:textColor="@color/pink_color"
-            android:textSize="8sp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_alignParentBottom="true"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp"
+            android:visibility="visible"
             android:background="@drawable/rounded_corner_solid_white_24px"
-            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 

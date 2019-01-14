@@ -1172,11 +1172,6 @@
             android:label="新人专享"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.new_user.ConfirmNewUserOrderAct"
-            android:exported="true"
-            android:label="新人确认订单"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.member.MemberPageActivity"
             android:exported="true"
             android:label="会员管理"
@@ -1210,6 +1205,11 @@
             android:name=".widget.BlogGoodsShareDialog"
             android:exported="false"
             android:theme="@style/chatDialog"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.GoldEggLuckyWheelPanActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
     </application>
 

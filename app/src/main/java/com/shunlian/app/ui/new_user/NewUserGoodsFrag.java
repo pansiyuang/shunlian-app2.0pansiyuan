@@ -257,8 +257,9 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         shareInfoParam.shareLink = goodList.get(postion).thumb;
         shareInfoParam.img = goodList.get(postion).thumb;
         shareInfoParam.goods_id = goodList.get(postion).id;
-        shareInfoParam.start_time = "0元3件";
-        shareInfoParam.act_label = "新人专享";
+        shareInfoParam.isNewUserGood = true;
+        shareInfoParam.time_text = "0元3件";
+        shareInfoParam.little_word = "新人专享";
     }
 
     @Override
@@ -303,9 +304,12 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         shareInfoParam.market_price = baseEntity.data.market_price;
         shareInfoParam.shareLink = baseEntity.data.shareLink;
         shareInfoParam.img = baseEntity.data.img;
+        shareInfoParam.voucher = baseEntity.data.voucher;
         shareInfoParam.desc = baseEntity.data.desc;
-        shareInfoParam.start_time = "0元3件";
-        shareInfoParam.act_label = "新人专享";
+
+        shareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+        shareInfoParam.time_text = "0元3件";
+        shareInfoParam.little_word = "新人专享";
         shareGoodDialogUtil.shareGoodDialog(shareInfoParam,true,false);
     }
 }

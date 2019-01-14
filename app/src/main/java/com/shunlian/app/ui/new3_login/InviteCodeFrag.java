@@ -99,20 +99,23 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     public void initStatus(New3LoginAct.LoginConfig config) {
         mConfig = config;
         //如果有推荐人，直接填写推荐人
-        String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
+        /*String inviteCode = SharedPrefUtil.getSharedUserString("share_code", "");
         if (!isEmpty(inviteCode)){
             invite_code.setInviteCodeText(inviteCode);
         }else if (mConfig != null && !isEmpty(mConfig.invite_code)){
 
         }else {
             invite_code.setInviteCodeText("");
-        }
+        }*/
+        if (invite_code != null)
+        invite_code.setInviteCodeText("");
     }
 
 
     @OnClick(R.id.mbtn_login)
     public void bindInviteCode(){
         if (invite_code == null || isEmpty(invite_code.getText())){
+            ((New3LoginAct) baseActivity).loginNotify();
             SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
             Common.goGoGo(baseActivity,"home");
             ((New3LoginAct) baseActivity).finish();
@@ -134,18 +137,18 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     public void codeInfo(MemberCodeListEntity bean,String error) {
         if (bean != null) {
             mVerifyPicDialog = new VerifyPicDialog(baseActivity);
-            mVerifyPicDialog.setTvSureColor(R.color.value_007AFF);
+            mVerifyPicDialog.setTvSureColor(R.color.pink_color);
             mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
             mVerifyPicDialog.setMessage("请确认您的导购专员");
             mVerifyPicDialog.showState(2);
             mVerifyPicDialog.setMemberDetail(bean.info);
-            mVerifyPicDialog.setSureAndCancleListener("确认绑定", v -> {
+            mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
                 String code = invite_code.getText().toString();
                 if (presenter != null) {
                     presenter.bindShareid(code);
                 }
                 mVerifyPicDialog.dismiss();
-            }, "取消", v -> mVerifyPicDialog.dismiss()).show();
+            }, "返回", v -> mVerifyPicDialog.dismiss()).show();
         }else {
             mtv_tip.setText(error);
             mtv_tip.setVisibility(View.VISIBLE);
@@ -158,6 +161,7 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
             mtv_tip.setText(tip);
             mtv_tip.setVisibility(View.VISIBLE);
         }else {
+            ((New3LoginAct) baseActivity).loginNotify();
             Common.goGoGo(baseActivity,"home");
             ((New3LoginAct)baseActivity).finish();
         }

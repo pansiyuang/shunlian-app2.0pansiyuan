@@ -50,17 +50,19 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
     private List<ConfirmOrderEntity.NoDelivery> mNoDeliveryList;
     private ISelectVoucherListener mListener;
     private PromptDialog promptDialog;
+    private String mFrom;//上一个页面来源
 
     public ConfirmOrderAdapter(Context context,
                                List<ConfirmOrderEntity.Enabled> lists,
                                List<GoodsDeatilEntity.Goods> disabled,
                                ConfirmOrderEntity.Address address, boolean isOrderBuy,
-                               List<ConfirmOrderEntity.NoDelivery> noDeliveryList) {
+                               List<ConfirmOrderEntity.NoDelivery> noDeliveryList,String from) {
         super(context, false, lists);
         this.disabled = disabled;
         mAddress = address;
         mIsOrderBuy = isOrderBuy;
         mNoDeliveryList = noDeliveryList;
+        mFrom = from;
     }
 
 
@@ -204,7 +206,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     MyTextView mtv_title = holder.getView(R.id.mtv_title);
 
                     MyTextView mtv_price = holder.getView(R.id.mtv_price);
-                    mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+s.price,11));
+                    mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb) + s.price, 11));
                     MyTextView mtv_attribute = holder.getView(R.id.mtv_attribute);
                     mtv_attribute.setText(s.sku);
                     MyTextView mtv_count = holder.getView(R.id.mtv_count);
@@ -245,7 +247,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             if (!isEmpty(goods)) {
                 visible(mHolder.recy_view);
                 mHolder.recy_view.setAdapter(new AppointGoodsAdapter(context,
-                        false, goods));
+                        false, goods,mFrom));
             }else {
                 gone(mHolder.recy_view);
             }

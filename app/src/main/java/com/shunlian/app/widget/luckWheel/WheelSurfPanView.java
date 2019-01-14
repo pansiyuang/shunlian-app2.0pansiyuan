@@ -37,7 +37,6 @@ import java.util.List;
 public class WheelSurfPanView extends View {
 
     private boolean isRotating = false;
-
     private Context mContext;
     //记录视图的大小
     private int mWidth;
