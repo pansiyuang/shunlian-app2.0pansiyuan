@@ -6,9 +6,14 @@ import android.text.SpannableStringBuilder;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.NewTaskListAdapter;
 import com.shunlian.app.adapter.TaskListAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.DayGiveEggEntity;
+import com.shunlian.app.bean.EggDetailEntity;
+import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.NewEggDetailEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
@@ -43,7 +48,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     private List<TaskListEntity.ItemTask> taskLists = new ArrayList<>();
     private List<TaskListEntity.ItemTask> newUserTaskLists;//新手任务列表
     private List<TaskListEntity.ItemTask> dailyTaskLists;//日常任务列表
-    private TaskListAdapter taskListAdapter;
+//    private TaskListAdapter taskListAdapter;
+    private NewTaskListAdapter taskListAdapter;
     private Call<BaseEntity<TaskHomeEntity>> homeCall;
     private Call<BaseEntity<TaskListEntity>> taskListCall;
     private Call<BaseEntity<SignEggEntity>> signEggsCall;
@@ -54,6 +60,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     private String share_pic_url;
     private int updatePosition;
     private boolean isShowLoading;//是否显示加载动画
+    private List<NewEggDetailEntity.In> mDatas = new ArrayList<>();
 
     public TaskCenterPresenter(Context context, ITaskCenterView iView) {
         super(context, iView);
@@ -131,6 +138,11 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      */
     @Override
     protected void initApi() {
+        initApis();
+    }
+
+
+    public void initApis() {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
@@ -148,12 +160,12 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                         iView.setPic(data.ad_pic_url, data.ad_url,data.ad_roll);
                         iView.setTip(data.faq_url, data.rule_url);
                         iView.setSignData(data.sign_days,data.sign_continue_num);
+                        iView.setMid(data.get_gold_egg);
                         iView.popAd(data.pop_ad_pic_url,data.pop_ad_url);
                         //LogUtil.zhLogW("TaskHomeEntity:>>>>"+data.toString());
                     }
                 });
     }
-
     public void initDialogs(CommonEntity data) {
         Dialog dialog_new = new Dialog(context, R.style.popAd);
         dialog_new.setContentView(R.layout.dialog_new);
@@ -202,6 +214,81 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                 }
             }
         });
+    }
+
+    public void refreshBaby() {
+        if (!pageIsLoading && currentPage <= allPage) {
+            pageIsLoading = true;
+            getEggDetail();
+        }
+    }
+
+    public void setRemind() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().setRemind(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(entity.message);
+            }
+        });
+
+    }
+
+    public void everyDayGiveEgg() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+
+        Call<BaseEntity<DayGiveEggEntity>> baseEntityCall = getApiService().everyDayGiveEgg(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<DayGiveEggEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<DayGiveEggEntity> entity) {
+                super.onSuccess(entity);
+                DayGiveEggEntity data = entity.data;
+                iView.dayGiveEgg(data);
+            }
+        });
+
+    }
+
+    public void getEggDetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("page", String.valueOf(currentPage));
+        map.put("page_size", "10");
+        sortAndMD5(map);
+
+        Call<BaseEntity<NewEggDetailEntity>> baseEntityCall = getApiService().eggDetail2(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<NewEggDetailEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<NewEggDetailEntity> entity) {
+                super.onSuccess(entity);
+                NewEggDetailEntity data = entity.data;
+                pageIsLoading = false;
+                currentPage++;
+                allPage = Integer.parseInt(data.total);
+                allPage = Integer.parseInt(data.total);
+                mDatas.addAll(data.list);
+                iView.getEggDetail(allPage,currentPage,mDatas);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
+                pageIsLoading=false;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                isLoading = false;
+                pageIsLoading=false;
+            }
+        });
+
     }
 
     /**
@@ -261,7 +348,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
 
     private void creatAdapter() {
         if (taskListAdapter == null) {
-            taskListAdapter = new TaskListAdapter(context, taskLists);
+//            taskListAdapter = new TaskListAdapter(context, taskLists);
+            taskListAdapter = new NewTaskListAdapter(context, taskLists);
             iView.setAdapter(taskListAdapter);
             taskListAdapter.setOnItemClickListener((view, position) -> {
                 TaskListEntity.ItemTask itemTask = taskLists.get(position);
@@ -389,9 +477,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                 SignEggEntity signEggEntity = entity.data;
                 iView.signEgg(signEggEntity);
             }
-
         });
     }
+
 
     /**
      * 限时领金蛋

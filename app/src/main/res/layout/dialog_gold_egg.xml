@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_rootView"
+        android:layout_width="300dp"
+        android:layout_height="349dp"
+        android:background="@drawable/rounded_corner_white_8px"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|center_horizontal"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/image_xiaohaojindan"
+                android:visibility="visible" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_draw_icon"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:src="@mipmap/image_xiaohaojindan"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_voucher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="23dp"
+            android:layout_marginTop="46dp"
+            android:layout_marginRight="23dp"
+            android:background="@drawable/rounded_corner_solid_f7_8px"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp">
+
+                <TextView
+                    android:id="@+id/tv_voucher_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/tv_voucher_name"
+                    android:gravity="center_horizontal"
+                    android:text="¥5"
+                    android:textColor="@color/pink_color"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_voucher_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="平台优惠券"
+                    android:textColor="@color/new_text"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_expire_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/tv_voucher_name"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="3天后过期"
+                    android:textColor="@color/pink_color"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_useType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="无门槛"
+                    android:textColor="@color/value_555555"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tv_voucher_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:text="有效期：2019.6.29-2019.12.26"
+                    android:textColor="@color/value_555555"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/value_D7" />
+
+            <TextView
+                android:id="@+id/tv_voucher_desc"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="14sp"
+                android:text="顺联动力优惠券"
+                android:textColor="@color/value_555555"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="19dp"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingLeft="27dp"
+                android:paddingRight="27dp"
+                android:text="确定消耗20个金蛋？"
+                android:textColor="@color/value_FC4240"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_notice"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:paddingLeft="27dp"
+                android:paddingRight="27dp"
+                android:text="恭喜您获得优惠券"
+                android:textColor="@color/value_484848"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/ll_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btn_bottom"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_select"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/icon_nor" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="之后不在提醒"
+                    android:textColor="@color/value_484848"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/rounded_corner_solid_pink_44px"
+                android:gravity="center"
+                android:text="@string/SelectRecommendAct_sure"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:src="@mipmap/icon_write_close" />
+</LinearLayout>

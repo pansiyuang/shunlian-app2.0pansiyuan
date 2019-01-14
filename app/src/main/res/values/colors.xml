@@ -94,6 +94,7 @@
     <color name="new_text">#1c1b20</color>
     <color name="search_bg">#F7F7F7</color>
     <color name="app_main_color">#ff8202</color>
+    <color name="task_orange">#FB7213</color>
     <color name="tab_text_n">#3e3e3e</color>
     <color name="color_value_6c">#cccccc</color>
     <color name="text_black_one">#1d1c21</color>
@@ -269,6 +270,9 @@
     <color name="value_d9">#d9d9d9</color>
     <color name="value_ebd9c0">#EBD9C0</color>
     <color name="value_BB913E">#BB913E</color>
+    <color name="value_FC4240">#FC4240</color>
+    <color name="value_D7">#D7D7D7</color>
+    <color name="value_D8C397">#D8C397</color>
 
     <!--新版发现-->
     <color name="value_343434">#343434</color>

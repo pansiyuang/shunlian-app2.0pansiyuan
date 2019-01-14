@@ -32,6 +32,7 @@ public class TaskHomeEntity {
     public String account_eggs;
 
     public List<SignDaysBean> sign_days;
+    public List<GoldEgg> get_gold_egg;
     public String share_pic_url;
     public String pop_ad_pic_url;
     public AdUrlBean pop_ad_url;
@@ -55,6 +56,7 @@ public class TaskHomeEntity {
                 '}';
     }
 
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AdUrlBean {
         public String type;
@@ -70,8 +72,19 @@ public class TaskHomeEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class SignDaysBean {
+    public static class GoldEgg {
+        public String title;
+        public String icon_url;
+        public String content;
+        public String status;
+        public String is_remind;
+        public String all_task;
+        public String over_task;
 
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SignDaysBean {
         public String date;
         public String sign_status;
         public String gold_num;

@@ -233,6 +233,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
             blogViewHolder.tv_tag.setText(blog.activity_title);
             blogViewHolder.tv_content.setText(blog.text);
+            blogViewHolder.tv_content.setBlogText(blog.text);
             blogViewHolder.tv_address.setText(blog.place);
             blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
             blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
@@ -335,9 +336,11 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             if (blog.is_praise == 1) {
                 blogViewHolder.animation_zan.setProgress(1f);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.pink_color));
+                blogViewHolder.ll_zan.setClickable(false);
             } else {
                 blogViewHolder.animation_zan.setProgress(0f);
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
+                blogViewHolder.ll_zan.setClickable(true);
             }
 
             if (blog.is_self == 0) {

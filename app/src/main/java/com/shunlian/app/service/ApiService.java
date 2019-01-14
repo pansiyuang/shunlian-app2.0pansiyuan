@@ -1148,6 +1148,24 @@ public interface ApiService {
     Call<BaseEntity<EggDetailEntity>> eggDetail(@QueryMap Map<String, String> map);
 
     /**
+     * 个人金蛋明细2
+     *
+     * @param map
+     * @return
+     */
+    @GET("task/goldEggDetail2")
+    Call<BaseEntity<NewEggDetailEntity>> eggDetail2(@QueryMap Map<String, String> map);
+
+    /**
+     * 限时提醒
+     *
+     * @param map
+     * @return
+     */
+    @GET("goldegglimit/setRemind")
+    Call<BaseEntity<EmptyEntity>> setRemind(@QueryMap Map<String, String> map);
+
+    /**
      * 足迹列表足迹批量删除
      *
      * @param map
@@ -2671,6 +2689,14 @@ public interface ApiService {
     Call<BaseEntity<TaskHomeEntity>> taskHome(@QueryMap Map<String,String> map);
 
     /**
+     * 拆分百万金蛋
+     * @param map
+     * @return
+     */
+    @GET("task/everyDayGiveEgg")
+    Call<BaseEntity<DayGiveEggEntity>> everyDayGiveEgg(@QueryMap Map<String,String> map);
+
+    /**
      *任务列表
      * @param map
      * @return
@@ -2994,6 +3020,54 @@ public interface ApiService {
      */
     @POST("member/userinfo/bindShareidV2")
     Call<BaseEntity<CommonEntity>> bindShareidV2(@Body RequestBody body);
+
+    /**
+     * 转转转获取奖品列表
+     *
+     * @return
+     */
+    @GET("task/getPrizeList")
+    Call<BaseEntity<GoldEggPrizeEntity>> getPrizeList(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转抽奖
+     *
+     * @return
+     */
+    @GET("task/draw")
+    Call<BaseEntity<TaskDrawEntity>> getTaskDraw(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转获取轮播中奖记录
+     *
+     * @return
+     */
+    @GET("task/getDrawRecordList")
+    Call<BaseEntity<DrawRecordEntity>> getDrawRecordList(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转未填收货地址订单
+     *
+     * @return
+     */
+    @GET("task/getNoAddressOrder")
+    Call<BaseEntity<NoAddressOrderEntity>> getNoAddressOrder(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转获取我的中奖记录
+     *
+     * @return
+     */
+    @GET("task/getMyDrawRecordList")
+    Call<BaseEntity<MyDrawRecordEntity>> getMyDrawRecordList(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转保存收货地址
+     *
+     * @return
+     */
+    @POST("task/updateOrderAddress")
+    Call<BaseEntity<CommonEntity>> updateOrderAddress(@Body RequestBody body);
 
     /**
      * 新人专享banner

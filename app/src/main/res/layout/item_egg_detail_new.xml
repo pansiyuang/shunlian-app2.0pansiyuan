@@ -1,0 +1,47 @@
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="10dp">
+
+  <com.shunlian.app.widget.NewTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/ntv_desc"
+      android:textColor="@color/new_text"
+      android:textSize="15sp"
+      android:text="逛商城领金蛋"
+      android:textStyle="bold"/>
+
+    <com.shunlian.app.widget.NewTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ntv_date"
+        android:textColor="@color/new_text"
+        android:textSize="12sp"
+        android:layout_below="@id/ntv_desc"
+        android:text="逛商城领金蛋"
+        android:layout_marginTop="8dp"/>
+
+    <com.shunlian.app.widget.MyImageView
+        android:layout_width="15dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/img_renwu_fenxiang_jindan" />
+
+    <com.shunlian.app.widget.NewTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ntv_number"
+        android:textColor="@color/pink_color"
+        android:textSize="16sp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_below="@id/ntv_desc"
+        android:text="逛商城领金蛋"
+        android:layout_centerVertical="true" />
+</com.shunlian.app.widget.MyRelativeLayout>
