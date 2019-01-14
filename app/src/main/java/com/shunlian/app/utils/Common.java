@@ -940,7 +940,7 @@ public class Common {
     public static String getPlaceholder(int num) {
         String str = "\u3000";
         if (num == 1)str += " ";
-        for (int i = 0; i < num - 1; i++) {
+        for (int i = 0; i < num; i++) {
             str = str.concat("\u3000");
         }
         return str;
