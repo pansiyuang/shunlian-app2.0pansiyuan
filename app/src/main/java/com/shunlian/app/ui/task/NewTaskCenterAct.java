@@ -35,7 +35,6 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.utils.timer.TaskDownTimerView;
 import com.shunlian.app.view.ITaskCenterView;
 import com.shunlian.app.widget.CompileScrollView;
@@ -418,12 +417,9 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
                 ntv_desc.setText(desc);
                 ntv_desc.setVisibility(View.VISIBLE);
                 ntv_btn.setText("准点提醒");
-                ntv_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mPresenter.setRemind();
-                        dialog_hint.dismiss();
-                    }
+                ntv_btn.setOnClickListener(view -> {
+                    mPresenter.setRemind();
+                    dialog_hint.dismiss();
                 });
                 break;
             case "goget":
@@ -438,14 +434,12 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
                 ntv_title.setText(title);
                 ntv_desc.setText(desc);
                 ntv_desc.setVisibility(View.VISIBLE);
-                ntv_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if ("0".equals(is_remind)) {
-                            initHintialog("remind", "在过去的几天里错过了" + miss_eggs + "个金蛋", "现在设置准点提醒，让您“蛋”无虚发! ");
-                        }else {
-                            dialog_hint.dismiss();
-                        }
+                ntv_btn.setOnClickListener(view -> {
+                    if ("0".equals(is_remind)) {
+                        initHintialog("remind", "在过去的几天里错过了"
+                                + miss_eggs + "个金蛋", "现在设置准点提醒，让您“蛋”无虚发! ");
+                    }else {
+                        dialog_hint.dismiss();
                     }
                 });
                 break;
@@ -533,15 +527,13 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
             String times = isEmpty(second) ? "0" : second;
             ddp_downTime.setDownTime(Integer.parseInt(times));
             ddp_downTime.startDownTimer();
-            ddp_downTime.setDownTimerListener(new OnCountDownTimerListener() {
-                @Override
-                public void onFinish() {
-                    setGoldEggsAnim("eggs_hatch.json", miv_golden_eggs, animation_view, true, "eggs/img_1.png");
-                    if (mPresenter != null) mPresenter.getTaskList();
-                    if (mPresenter != null &&
-                            mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
-                        mPresenter.updateItem(0, "0");
-                }
+            ddp_downTime.setDownTimerListener(() -> {
+                setGoldEggsAnim("eggs_hatch.json", miv_golden_eggs,
+                        animation_view, true, "eggs/img_1.png");
+                if (mPresenter != null) mPresenter.getTaskList();
+                if (mPresenter != null &&
+                        mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
+                    mPresenter.updateItem(0, "0");
             });
         }
     }
@@ -683,7 +675,10 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         GlideUtils.getInstance().loadImageZheng(baseAct, miv_two, list.get(1).icon_url);
         ntv_task.setVisibility(View.GONE);
         mrlayout_goGet.setClickable(true);
-        if (!isEmpty(list.get(1).over_task) && !isEmpty(list.get(1).all_task) && Integer.parseInt(list.get(1).over_task) > 0) {
+
+        if (!isEmpty(list.get(1).over_task) && !isEmpty(list.get(1).all_task)
+                && Integer.parseInt(list.get(1).over_task) > 0) {
+
             if (list.get(1).over_task.equals(list.get(1).all_task)) {
                 miv_gets.setVisibility(View.VISIBLE);
                 mrlayout_goGet.setClickable(false);
