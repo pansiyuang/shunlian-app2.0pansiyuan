@@ -481,7 +481,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         }else {
             if (miv_airbubble != null) {
                 miv_airbubble.setPivotX(0.0f);
-                miv_airbubble.setPivotY(miv_airbubble.getMeasuredHeight());
+                miv_airbubble.setPivotY(0.0f);
                 ValueAnimator va = ValueAnimator.ofFloat(0.0f, 1.0f,//0.5秒
                         1.0f, 1.0f, 1.0f, 1.0f,//1秒
                         1.0f, 1.0f, 1.0f, 1.0f,//1秒
