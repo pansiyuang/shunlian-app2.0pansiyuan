@@ -24,6 +24,8 @@ import android.widget.RelativeLayout;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.DayGiveEggEntity;
+import com.shunlian.app.bean.NewEggDetailEntity;
 import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.eventbus_bean.GoldEggsTaskEvent;
@@ -205,7 +207,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     }
 
     /**
-     * 签到规则
+     * 签到
      */
     @OnClick(R.id.rlayout_sign)
     public void signPostSend() {
@@ -470,6 +472,16 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
+    @Override
+    public void dayGiveEgg(DayGiveEggEntity dayGiveEggEntity) {
+
+    }
+
+    @Override
+    public void getEggDetail(int allPage, int page, List<NewEggDetailEntity.In> list) {
+
+    }
+
     private String re = "(w=|h=)(\\d+)";
     private Pattern p = Pattern.compile(re);
     /**
@@ -594,6 +606,11 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                 mtvSignDay.setText(sign_continue_num);
             }
         }
+
+    }
+
+    @Override
+    public void setMid(List<TaskHomeEntity.GoldEgg> list) {
 
     }
 

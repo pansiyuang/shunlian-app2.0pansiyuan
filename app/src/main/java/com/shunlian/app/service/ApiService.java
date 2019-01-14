@@ -1148,6 +1148,24 @@ public interface ApiService {
     Call<BaseEntity<EggDetailEntity>> eggDetail(@QueryMap Map<String, String> map);
 
     /**
+     * 个人金蛋明细2
+     *
+     * @param map
+     * @return
+     */
+    @GET("task/goldEggDetail2")
+    Call<BaseEntity<NewEggDetailEntity>> eggDetail2(@QueryMap Map<String, String> map);
+
+    /**
+     * 限时提醒
+     *
+     * @param map
+     * @return
+     */
+    @GET("goldegglimit/setRemind")
+    Call<BaseEntity<EmptyEntity>> setRemind(@QueryMap Map<String, String> map);
+
+    /**
      * 足迹列表足迹批量删除
      *
      * @param map
@@ -2669,6 +2687,14 @@ public interface ApiService {
      */
     @GET("task/home")
     Call<BaseEntity<TaskHomeEntity>> taskHome(@QueryMap Map<String,String> map);
+
+    /**
+     * 拆分百万金蛋
+     * @param map
+     * @return
+     */
+    @GET("task/everyDayGiveEgg")
+    Call<BaseEntity<DayGiveEggEntity>> everyDayGiveEgg(@QueryMap Map<String,String> map);
 
     /**
      *任务列表
