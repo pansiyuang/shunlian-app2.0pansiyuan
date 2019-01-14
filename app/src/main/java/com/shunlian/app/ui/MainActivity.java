@@ -388,13 +388,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
                     //判断跳转逻辑:非plus和非内部账号不跳转发布界面
                     if (Common.isPlus()) {
-                        //FindSendPictureTextAct.startAct(this, sendConfig);
                         EventBus.getDefault().postSticky(sendConfig);
                         SelectPicVideoAct.startAct(this,
                                 FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
                     } else {
                         if (baseInfo.is_inner == 1) {
-                            FindSendPictureTextAct.startAct(this, sendConfig);
+                            EventBus.getDefault().postSticky(sendConfig);
+                            SelectPicVideoAct.startAct(this,
+                                    FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
                         } else {
                             initHintDialog();
                         }
