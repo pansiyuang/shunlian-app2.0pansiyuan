@@ -11,7 +11,6 @@ import com.shunlian.app.adapter.TaskListAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DayGiveEggEntity;
-import com.shunlian.app.bean.EggDetailEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.NewEggDetailEntity;
 import com.shunlian.app.bean.ShareInfoParam;
