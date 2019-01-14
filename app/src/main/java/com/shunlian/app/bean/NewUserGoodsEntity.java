@@ -44,5 +44,6 @@ public class NewUserGoodsEntity {
         public boolean is_recommend= false;
         public int  process;//进度
         public long    finish;
+        public String  share_total;
     }
 }

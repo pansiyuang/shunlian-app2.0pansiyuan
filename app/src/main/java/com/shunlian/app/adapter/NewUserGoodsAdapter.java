@@ -119,7 +119,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
             mHolder.mtv_discount_price.setStrikethrough();
             if(!TextUtils.isEmpty(goods.market_price)) {
                 mHolder.mtv_discount_price.setVisibility(View.VISIBLE);
-                mHolder.mtv_discount_price.setText(getString(R.string.rmb)+goods.market_price);
+                mHolder.mtv_discount_price.setText(getString(R.string.common_yuan)+goods.market_price);
             }else{
                 mHolder.mtv_discount_price.setVisibility(View.GONE);
             }
@@ -149,6 +149,7 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                     mHolder.tv_user_shopping_car.setEnabled(true);
                     mHolder.tv_user_shopping_car.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
                     mHolder.tv_show_num.setVisibility(View.VISIBLE);
+                    mHolder.tv_show_num.setText(goods.share_total+"次分享");
                     mHolder.tv_user_shopping_car.setText("立即分享");
               }
              mHolder.progress_view.setVisibility(View.VISIBLE);
