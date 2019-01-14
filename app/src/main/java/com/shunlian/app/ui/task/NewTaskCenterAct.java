@@ -418,24 +418,34 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
                 ntv_desc.setText(desc);
                 ntv_desc.setVisibility(View.VISIBLE);
                 ntv_btn.setText("准点提醒");
-                ntv_btn.setOnClickListener(view -> mPresenter.setRemind());
+                ntv_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mPresenter.setRemind();
+                        dialog_hint.dismiss();
+                    }
+                });
                 break;
             case "goget":
                 ntv_title.setBackgroundResource(R.mipmap.image_renwu_cg03);
                 mllayout_goget.setVisibility(View.VISIBLE);
                 ntv_title.setTextSize(18);
                 ntv_title.setText(title);
-                ntv_btn.setOnClickListener(view -> dialog_rule.dismiss());
+                ntv_btn.setOnClickListener(view -> dialog_hint.dismiss());
                 break;
             case "getok":
                 ntv_title.setBackgroundResource(R.mipmap.image_renwu_cg01);
                 ntv_title.setText(title);
                 ntv_desc.setText(desc);
                 ntv_desc.setVisibility(View.VISIBLE);
-                ntv_btn.setOnClickListener(view -> {
-                    if ("0".equals(is_remind)) {
-                        initHintialog("remind", "在过去的几天里错过了"
-                                + miss_eggs + "个金蛋", "现在设置准点提醒，让您“蛋”无虚发! ");
+                ntv_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if ("0".equals(is_remind)) {
+                            initHintialog("remind", "在过去的几天里错过了" + miss_eggs + "个金蛋", "现在设置准点提醒，让您“蛋”无虚发! ");
+                        }else {
+                            dialog_hint.dismiss();
+                        }
                     }
                 });
                 break;
@@ -782,7 +792,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void showGoldEggsNum(String got_eggs) {
-        initHintialog("", "+" + got_eggs, "恭喜你！成功领取" + got_eggs + "个金蛋");
+        initHintialog("getok", "+" + got_eggs, "恭喜你！成功领取" + got_eggs + "个金蛋");
     }
 
     /**
