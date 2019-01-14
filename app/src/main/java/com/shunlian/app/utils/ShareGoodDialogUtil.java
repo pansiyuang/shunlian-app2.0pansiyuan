@@ -276,7 +276,7 @@ public class ShareGoodDialogUtil {
         } else {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_goods_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().setWidth(Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 80))
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().setWidth(Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 100))
                     .setView(inflate);
             showGoodBuild = nomalBuild.create();
             showGoodBuild.setCancelable(false);
@@ -296,10 +296,17 @@ public class ShareGoodDialogUtil {
             if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
                 mtv_coupon_title.setVisibility(View.VISIBLE);
                 mtv_coupon_title.setText(mShareInfoParam.voucher);
-                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher+mShareInfoParam.title);
-                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
-                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                mtv_title.setText(span);
+                if(mShareInfoParam.voucher.length()>2) {
+                    SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher.substring(0, mShareInfoParam.voucher.length() - 1) + mShareInfoParam.title);
+                    span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length() - 1,
+                            Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    mtv_title.setText(span);
+                }else{
+                    SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher.substring(0, mShareInfoParam.voucher.length() - 1) + mShareInfoParam.title);
+                    span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length() - 1,
+                            Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    mtv_title.setText(span);
+                }
             }else{
                mtv_title.setText(mShareInfoParam.title);
                 mtv_coupon_title.setVisibility(View.GONE);
@@ -357,18 +364,18 @@ public class ShareGoodDialogUtil {
                     llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
                     mtv_act_label.setTextColor(context.getResources().getColor(R.color.value_007AFF));
                     mtv_time.setTextColor(context.getResources().getColor(R.color.white));
-                    mtv_time.setBackgroundColor(context.getResources().getColor(R.color.value_007AFF));
+                    mtv_time.setBackgroundResource(R.drawable.edge_007aff_right_1px);
                 }else{
                     llayout_day.setBackgroundResource(R.drawable.edge_pink_1px);
                     mtv_act_label.setTextColor(context.getResources().getColor(R.color.pink_color));
                     mtv_time.setTextColor(context.getResources().getColor(R.color.white));
-                    mtv_time.setBackgroundColor(context.getResources().getColor(R.color.pink_color));
+                    mtv_time.setBackgroundResource(R.drawable.edge_pink_right_1px);
                 }
                 mtv_time.setText(mShareInfoParam.time_text);
                 mtv_act_label.setText(mShareInfoParam.little_word);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
-            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 80);
+            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, mShareInfoParam.isNewUserGood?120:100);
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
             layoutParams.width = width;
             layoutParams.height = width;
@@ -458,7 +465,7 @@ public class ShareGoodDialogUtil {
 //            mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
 //            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
 
-            GlideUtils.getInstance().loadImageZheng(context, miv_store, mShareInfoParam.shop_logo);
+            GlideUtils.getInstance().loadCornerImage(context, miv_store, mShareInfoParam.shop_logo);
             MyImageView miv_code =  showShopBuild.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(context, 92.5f);
             Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
@@ -477,18 +484,17 @@ public class ShareGoodDialogUtil {
                 });
                 storeBabyAdapter.showStoreGoodView();
             }
+            showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
             if(isCircleShare) {
                 miv_close.setVisibility(View.GONE);
-                showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
 
             }else{
-                showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
+
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
             }
             miv_close.setOnClickListener(view -> showShopBuild.dismiss());
             mllayout_save.setOnClickListener(view -> {
-                showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                 showShopBuild.getView(R.id.line_share_boottom).setMinimumHeight(0);
                 miv_close.setVisibility(View.GONE);

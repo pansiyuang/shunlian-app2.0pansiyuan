@@ -356,8 +356,8 @@ public class GlideUtils {
         if (imageView == null||context==null) return;
         Glide.with(context)
                 .load(imgUrl)
-//                .error(R.mipmap.error)
-//                .placeholder(R.mipmap.error)
+                .error(R.mipmap.img_default_common)
+                .placeholder(R.mipmap.img_default_common)
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
