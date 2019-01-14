@@ -336,7 +336,7 @@ public class ShareGoodDialogUtil {
                 if (!TextUtils.isEmpty(mShareInfoParam.market_price)) {
                     mtv_newuser_mark_price.setVisibility(View.VISIBLE);
                     mtv_newuser_mark_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                    mtv_newuser_mark_price.setText("￥" + mShareInfoParam.market_price);
+                    mtv_newuser_mark_price.setText(context.getResources().getString(R.string.common_yuan)+ mShareInfoParam.market_price);
                 } else {
                     mtv_newuser_mark_price.setVisibility(View.VISIBLE);
                 }
@@ -483,7 +483,7 @@ public class ShareGoodDialogUtil {
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
 
             }else{
-                showShopBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
+                showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
             }
             miv_close.setOnClickListener(view -> showShopBuild.dismiss());

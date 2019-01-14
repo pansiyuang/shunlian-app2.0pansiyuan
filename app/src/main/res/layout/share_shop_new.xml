@@ -273,7 +273,12 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="10dp"
                 android:id="@+id/line_share_line"
+                android:visibility="gone"
                 android:background="@color/light_gray_three" />
+            <View
+                android:background="@drawable/rounded_corner_bottom_shop_8px"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"></View>
         </LinearLayout>
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"
