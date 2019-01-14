@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -70,10 +71,10 @@ public class StoreViewUtil {
         if (datas.size() >= 1) {
             StoreGoodsListEntity.MData data = datas.get(0);
             mtv_descl.setText(data.title);
-            mtv_pricel.setText(context.getResources().getString(R.string.common_yuan) +data.price);
+            mtv_pricel.setText(Html.fromHtml("&yen") +data.price);
             mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
             miv_onel.setScaleType(ImageView.ScaleType.FIT_START);
-            mtv_pricer.setText(context.getResources().getString(R.string.common_yuan) + data.market_price);
+            mtv_pricer.setText(Html.fromHtml("&yen") + data.market_price);
             if (!isCircle) {
                 GlideUtils.getInstance().loadImage(context, miv_onel, data.thumb);
             } else {
@@ -100,10 +101,10 @@ public class StoreViewUtil {
         if (datas.size() >= 2) {
             StoreGoodsListEntity.MData data2 = datas.get(1);
             mtv_descl2.setText(data2.title);
-            mtv_pricel2.setText(context.getResources().getString(R.string.common_yuan) +data2.price);
+            mtv_pricel2.setText(Html.fromHtml("&yen")  +data2.price);
             mtv_pricer2.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
             miv_onel2.setScaleType(ImageView.ScaleType.FIT_START);
-            mtv_pricer2.setText(context.getResources().getString(R.string.common_yuan) + data2.market_price);
+            mtv_pricer2.setText(Html.fromHtml("&yen") + data2.market_price);
             if (!isCircle) {
                 GlideUtils.getInstance().loadImage(context, miv_onel2, data2.thumb);
             } else {
