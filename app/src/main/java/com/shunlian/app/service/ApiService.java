@@ -3020,6 +3020,30 @@ public interface ApiService {
     Call<BaseEntity<DrawRecordEntity>> getDrawRecordList(@QueryMap Map<String, String> map);
 
     /**
+     * 转转转未填收货地址订单
+     *
+     * @return
+     */
+    @GET("task/getNoAddressOrder")
+    Call<BaseEntity<NoAddressOrderEntity>> getNoAddressOrder(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转获取我的中奖记录
+     *
+     * @return
+     */
+    @GET("task/getMyDrawRecordList")
+    Call<BaseEntity<MyDrawRecordEntity>> getMyDrawRecordList(@QueryMap Map<String, String> map);
+
+    /**
+     * 转转转保存收货地址
+     *
+     * @return
+     */
+    @POST("task/updateOrderAddress")
+    Call<BaseEntity<CommonEntity>> updateOrderAddress(@Body RequestBody body);
+
+    /**
      * 新人专享banner
      */
     @GET("newexclusive/showVoucherSuspension")

@@ -18,42 +18,49 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.TurnTableAdapter;
+import com.shunlian.app.adapter.GoldRecordAdapter;
 import com.shunlian.app.bean.GoldEggPrizeEntity;
+import com.shunlian.app.bean.MyDrawRecordEntity;
+import com.shunlian.app.bean.NoAddressOrderEntity;
 import com.shunlian.app.bean.TaskDrawEntity;
 import com.shunlian.app.presenter.GoldEggLuckyWheelPresenter;
+import com.shunlian.app.ui.receive_adress.AddressListActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoldEggLuckyWheelView;
+import com.shunlian.app.widget.GoldEggDialog;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRecyclerView;
 import com.shunlian.app.widget.MyWebView;
 import com.shunlian.app.widget.luckWheel.RotateListener;
 import com.shunlian.app.widget.luckWheel.WheelSurfView;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldEggLuckyWheelView {
+public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldEggLuckyWheelView, GoldEggDialog.OnDialogBtnClickListener {
     @BindView(R.id.wheelPan)
     WheelSurfView wheelPan;
 
-    @BindView(R.id.tv_title)
-    TextView tv_title;
-
     @BindView(R.id.tv_title_right)
     TextView tv_title_right;
+
+    @BindView(R.id.rl_title)
+    RelativeLayout rl_title;
 
     @BindView(R.id.recycler_list)
     MyRecyclerView recycler_list;
@@ -66,19 +73,22 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     private HttpDialog httpDialog;
     private List<Bitmap> mListBitmap;
     private List<GoldEggPrizeEntity.Prize> myPrizeList;
-    private List<String> drawRecordList;
     private int luckPosition = 0;
-    private TurnTableAdapter mAdapter;
+    private GoldRecordAdapter mAdapter;
     private Dialog dialog_ad;
     private TaskDrawEntity currentTaskDraw;
-    private String currentTmtId;
+    private String currentPrizeId;
     private String currentRuleUrl;
+    private int goldEggCount;
     private boolean isFirstLoad = true;
 
     private int index = 0;//textview上下滚动下标
     private Handler handler = new Handler();
     private boolean isFlipping = false; // 是否启用预警信息轮播
     private List<String> mWarningTextList = new ArrayList<>();
+    private int statusBarHeight;
+    private GoldEggDialog goldEggDialog;
+    private boolean isAttention;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, GoldEggLuckyWheelPanActivity.class);
@@ -87,26 +97,35 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_lucky_wheel;
+        return R.layout.activity_goldegg_lucky_wheel;
     }
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
 
-        tv_title.setText("金蛋抽奖");
-        tv_title_right.setVisibility(View.VISIBLE);
-        tv_title_right.setText("活动规则");
-        tv_title_right.setTextColor(getColorResouce(R.color.white));
+        statusBarHeight = ImmersionBar.getStatusBarHeight(this);
+        RelativeLayout.LayoutParams titleLayoutParams = (RelativeLayout.LayoutParams) rl_title.getLayoutParams();
+        titleLayoutParams.setMargins(0, statusBarHeight, 0, 0);
+        rl_title.setLayoutParams(titleLayoutParams);
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) text_switcher.getLayoutParams();
+        layoutParams.setMargins(0, statusBarHeight + TransformUtil.dip2px(this, 44), 0, 0);
+        text_switcher.setLayoutParams(layoutParams);
 
         httpDialog = new HttpDialog(this);
+        goldEggDialog = new GoldEggDialog(this);
+        goldEggDialog.setOnDialogBtnClickListener(this);
         mPresenter = new GoldEggLuckyWheelPresenter(this, this);
+        mPresenter.getPrizeList();
+        mPresenter.getDrawRecordList();
+        mPresenter.getNoAddressOrder();
+        mPresenter.getMyDrawRecordList();
         httpDialog.show();
         //添加滚动监听
         wheelPan.setRotateListener(new RotateListener() {
             @Override
             public void rotateEnd(int position, String des) {
+                goldEggDialog.setShowType(currentTaskDraw);
             }
 
             @Override
@@ -115,10 +134,14 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
             @Override
             public void rotateBefore(ImageView goImg) {
-                mPresenter.getTaskDraw();
+                isAttention = SharedPrefUtil.getCacheSharedPrfBoolean("isAttention", false);
+                if (isAttention) {
+                    mPresenter.getTaskDraw();
+                } else {
+                    goldEggDialog.setShowType(-1, goldEggCount);
+                }
             }
         });
-        drawRecordList = new ArrayList<>();
         myPrizeList = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -150,14 +173,12 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
             if (isEmpty(url))
                 return;
             dialog_ad = new Dialog(this, R.style.popAd);
-            dialog_ad.setContentView(R.layout.dialog_rule);
+            dialog_ad.setContentView(R.layout.dialog_gold_egg_draw_rule);
             MyImageView miv_close = dialog_ad.findViewById(R.id.miv_close);
-            MyImageView miv_ad = dialog_ad.findViewById(R.id.miv_ad);
-            MyWebView mwv_rule = dialog_ad.findViewById(R.id.mwv_rule);
+            MyWebView mwv_rule = dialog_ad.findViewById(R.id.mWebView);
             mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
             mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
             mwv_rule.loadUrl(url);
-            miv_ad.setImageResource(R.mipmap.image_renwu_dazhuanpan);
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
             dialog_ad.setCancelable(false);
         }
@@ -272,6 +293,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
                 .setmTextColor(Color.parseColor("#80561D"))
                 .setmTextSize(TransformUtil.dip2px(this, 10))
                 .setmTypeNum(prizeList.size())
+                .setStartContent(goldEggCount + "金蛋一次")
                 .build();
         wheelPan.setConfig(build);
         httpDialog.dismiss();
@@ -300,11 +322,20 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 100 && Activity.RESULT_OK == resultCode) {
             String addressId = data.getStringExtra("addressId");
-//            if (currentTaskDraw != null) {
-//                mPresenter.turntableAddAddress(addressId, currentTaskDraw.tmt_id);
-//            } else if (!isEmpty(currentTmtId)) {
-//                mPresenter.turntableAddAddress(addressId, currentTmtId);
-//            }
+            if (goldEggDialog != null) {
+                switch (goldEggDialog.getShowType()) {
+                    case 1://中奖商品
+                        if (currentTaskDraw != null) {
+                            mPresenter.updateOrderAddress(currentTaskDraw.draw_id, addressId);
+                        }
+                        break;
+                    case 4: //未填写收获地址奖品
+                        if (!isEmpty(currentPrizeId)) {
+                            mPresenter.updateOrderAddress(currentPrizeId, addressId);
+                        }
+                        break;
+                }
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -323,10 +354,9 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
     @Override
     public void getPrizeData(GoldEggPrizeEntity prizeEntity) {
-        if (tv_title == null)
-            return;
         if (isFirstLoad) {
-//            currentRuleUrl = turnTableEntity.rule;
+            currentRuleUrl = prizeEntity.rule_url;
+            goldEggCount = prizeEntity.consume;
             initDialogs(currentRuleUrl);
             myPrizeList.clear();
             myPrizeList.addAll(prizeEntity.list);
@@ -334,12 +364,6 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
         }
         myPrizeList.clear();
         myPrizeList.addAll(prizeEntity.list);
-//        if (mAdapter == null) {
-//            mAdapter = new TurnTableAdapter(this, myPrizeList);
-//            recycler_list.setAdapter(mAdapter);
-//        } else {
-//            mAdapter.notifyDataSetChanged();
-//        }
         isFirstLoad = false;
     }
 
@@ -347,8 +371,8 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     public void getTaskDraw(TaskDrawEntity taskDrawEntity) {
         currentTaskDraw = taskDrawEntity;
         String luckId;
-        if (!isEmpty(currentTaskDraw.prize.id)) {
-            luckId = currentTaskDraw.prize.id;
+        if (!isEmpty(currentTaskDraw.id)) {
+            luckId = currentTaskDraw.id;
             for (int i = 0; i < myPrizeList.size(); i++) {
                 if (luckId.equals(myPrizeList.get(i).id)) {
                     if (i == 0) {
@@ -365,8 +389,6 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
     @Override
     public void getDrawRecordList(List<String> recordList) {
-        drawRecordList = recordList;
-
         if (isEmpty(recordList)) {
             text_switcher.setVisibility(View.GONE);
             return;
@@ -389,5 +411,44 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
             text_switcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_top));
             startFlipping();
         }
+    }
+
+    @Override
+    public void getNoAddressData(NoAddressOrderEntity noAddressOrderEntity) {
+        if (noAddressOrderEntity.status == 0) {
+            return;
+        }
+        currentPrizeId = noAddressOrderEntity.id;
+        goldEggDialog.setShowType(noAddressOrderEntity);
+    }
+
+    @Override
+    public void getMyRecordList(List<MyDrawRecordEntity.DrawRecord> drawRecordList) {
+        if (mAdapter == null) {
+            mAdapter = new GoldRecordAdapter(this, drawRecordList);
+            recycler_list.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void taskDrawFail() {
+        goldEggDialog.setShowType(5, 0);
+    }
+
+    @Override
+    public void onDraw() {
+        mPresenter.getTaskDraw();
+    }
+
+    @Override
+    public void onSetAddress() {
+        AddressListActivity.startAct(this, null);
+    }
+
+    @Override
+    public void onToVisit(TaskDrawEntity.Url url) {
+        Common.goGoGo(this, url.type, url.item_id);
     }
 }
