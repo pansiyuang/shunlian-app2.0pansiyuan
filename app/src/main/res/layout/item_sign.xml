@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.NewTextView
+        android:id="@+id/ntv_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/new_text"
+        android:textSize="9sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_denglong"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:scaleType="fitXY" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:lottie_cacheStrategy="strong"
+        android:visibility="gone"/>
+
+
+    <com.shunlian.app.widget.NewTextView
+        android:id="@+id/ntv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/new_text"
+        android:textSize="9sp" />
+</com.shunlian.app.widget.MyLinearLayout>

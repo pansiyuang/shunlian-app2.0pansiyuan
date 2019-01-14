@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="346dp"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/img_windowsnew" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_detail"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:overScrollMode="never"
+        android:background="@drawable/bg_dialog_bottoms"/>
+
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:visibility="gone"/>
+
+   <com.shunlian.app.widget.MyImageView
+       android:id="@+id/miv_close"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:src="@mipmap/icon_write_close"
+       android:layout_marginTop="30dp"/>
+
+</com.shunlian.app.widget.MyLinearLayout>

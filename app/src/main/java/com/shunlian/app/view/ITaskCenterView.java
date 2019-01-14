@@ -1,6 +1,9 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.DayGiveEggEntity;
+import com.shunlian.app.bean.EggDetailEntity;
+import com.shunlian.app.bean.NewEggDetailEntity;
 import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 
@@ -58,6 +61,11 @@ public interface ITaskCenterView extends IView {
     void setSignData(List<TaskHomeEntity.SignDaysBean> list,String sign_continue_num);
 
     /**
+     * 签到
+     */
+    void setMid(List<TaskHomeEntity.GoldEgg> list);
+
+    /**
      * 签到成功
      * @param signEggEntity
      */
@@ -75,4 +83,11 @@ public interface ITaskCenterView extends IView {
      * @param pop_ad_url
      */
     void popAd(String url, TaskHomeEntity.AdUrlBean pop_ad_url);
+
+
+    void dayGiveEgg(DayGiveEggEntity dayGiveEggEntity);
+
+
+
+    void getEggDetail(int allPage, int page, List<NewEggDetailEntity.In> list );
 }

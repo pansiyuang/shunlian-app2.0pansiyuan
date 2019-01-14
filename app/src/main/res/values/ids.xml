@@ -4,5 +4,6 @@
   <item type="id" name="new3_pwd" />
   <item type="id" name="new3_invite_code" />
   <item type="id" name="iv_task" />
+  <item type="id" name="iv_task_new" />
   <item type="id" name="view_line" />
 </resources>

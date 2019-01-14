@@ -12,6 +12,8 @@ public class SignEggEntity {
     public String gold_egg;//总金蛋数
     public String sign_continue_num;//总签到天数
     public String ad_pic_url;
+    public String miss_eggs;
+    public String is_remind;
     public Url url;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
