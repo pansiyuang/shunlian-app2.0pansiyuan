@@ -3057,17 +3057,18 @@ public interface ApiService {
 
     /**
      * plus免费专区 确认订单
-     * @param body
+     * @param map
      * @return
      */
-    @POST("plusfree/buy")
-    Call<BaseEntity<ConfirmOrderEntity>> plusfree(@Body RequestBody body);
+    @GET("plusfree/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> plusfree(@QueryMap Map<String, String> map);
 
     /**
      * plus免费专区 订单结算
      * @param body
      * @return
      */
+    @POST("plusfree/checkoutOrder")
     Call<BaseEntity<PayOrderEntity>> plusfreePay(@Body RequestBody body);
 
     @GET("member/userinfo/checkBindShareidV2")

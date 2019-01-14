@@ -12,12 +12,12 @@ import android.widget.RelativeLayout;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AttentionAdapter;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.adapter.TieziAvarAdapter;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.presenter.AttentionPresenter;
@@ -70,6 +70,8 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private LottieAnimationView mAnimationView;
 
+    private ShareInfoParam mShareInfoParam;
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -84,14 +86,15 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     @Override
     protected void initData() {
         //分享
-        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
-        shareGoodDialogUtil.setOnShareBlogCallBack(this);
+
     }
 
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
         EventBus.getDefault().register(this);
+        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
         NestedSlHeader header = new NestedSlHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
         recycler_list.setNestedScrollingEnabled(false);
@@ -284,6 +287,33 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     }
 
     @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        if(mShareInfoParam==null){
+            mShareInfoParam = new ShareInfoParam();
+        }
+        if (mShareInfoParam != null) {
+            mShareInfoParam.isShowTiltle = false;
+            mShareInfoParam.userName = baseEntity.data.userName;
+            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            mShareInfoParam.shareLink = baseEntity.data.shareLink;
+            mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+            mShareInfoParam.price = baseEntity.data.price;
+            mShareInfoParam.img = baseEntity.data.img;
+            mShareInfoParam.title = baseEntity.data.title;
+            mShareInfoParam.little_word = baseEntity.data.little_word;
+            mShareInfoParam.time_text = baseEntity.data.time_text;
+            mShareInfoParam.is_start = baseEntity.data.is_start;
+            mShareInfoParam.market_price = baseEntity.data.market_price;
+            mShareInfoParam.voucher = baseEntity.data.voucher;
+            if (shareGoodDialogUtil != null) {
+                shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
+                shareGoodDialogUtil.setShareGoods();
+            }
+        }
+    }
+
+    @Override
     public void toFocusUser(int isFocus, String memberId, String nickName) {
         focusType = 0;
         if (isFocus == 1) {
@@ -336,6 +366,16 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
     @Override
     public void toDown(String blogId) {
         mPresenter.downCount(blogId);
+    }
+
+    @Override
+    public void getShareInfo(String blogId, String goodid) {
+        mShareInfoParam = new ShareInfoParam();
+        mShareInfoParam.goods_id = goodid;
+        mShareInfoParam.blogId = blogId;
+        if(mPresenter!=null) {
+            mPresenter.getShareInfo(mPresenter.goods, goodid);
+        }
     }
 
     @Override

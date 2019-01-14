@@ -33,6 +33,7 @@ import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
+import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
@@ -1092,7 +1093,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             pMain.showVoucherSuspension();
         }
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void suspensionRefresh(SuspensionRefresh suspensionRefresh) {
+        if (suspensionRefresh.isRefresh && pMain != null) {
+            pMain.showVoucherSuspension();
+        }
+    }
     /**
      * 处理网络请求
      */

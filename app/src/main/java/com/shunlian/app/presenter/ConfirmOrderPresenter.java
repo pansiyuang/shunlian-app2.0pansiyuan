@@ -372,7 +372,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
         sortAndMD5(map);
 
         Call<BaseEntity<ConfirmOrderEntity>>
-                baseEntityCall = getAddCookieApiService().plusfree(getRequestBody(map));
+                baseEntityCall = getAddCookieApiService().plusfree(map);
 
         getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
             @Override

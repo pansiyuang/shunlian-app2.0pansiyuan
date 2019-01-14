@@ -161,6 +161,7 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
             mtv_tip.setText(tip);
             mtv_tip.setVisibility(View.VISIBLE);
         }else {
+            ((New3LoginAct) baseActivity).loginNotify();
             Common.goGoGo(baseActivity,"home");
             ((New3LoginAct)baseActivity).finish();
         }

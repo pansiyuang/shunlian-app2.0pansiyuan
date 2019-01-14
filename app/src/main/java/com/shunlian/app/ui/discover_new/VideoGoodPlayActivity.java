@@ -188,8 +188,29 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-
-
+        if(mShareInfoParam==null){
+            mShareInfoParam = new ShareInfoParam();
+        }
+        if (mShareInfoParam != null) {
+            mShareInfoParam.isShowTiltle = false;
+            mShareInfoParam.userName = baseEntity.data.userName;
+            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            mShareInfoParam.shareLink = baseEntity.data.shareLink;
+            mShareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+            mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.price = baseEntity.data.price;
+            mShareInfoParam.img = baseEntity.data.img;
+            mShareInfoParam.title = baseEntity.data.title;
+            mShareInfoParam.little_word = baseEntity.data.little_word;
+            mShareInfoParam.time_text = baseEntity.data.time_text;
+            mShareInfoParam.is_start = baseEntity.data.is_start;
+            mShareInfoParam.market_price = baseEntity.data.market_price;
+            mShareInfoParam.voucher = baseEntity.data.voucher;
+            if (shareGoodDialogUtil != null) {
+                shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
+                shareGoodDialogUtil.setShareGoods();
+            }
+        }
     }
 
     @Override
@@ -236,27 +257,16 @@ public class VideoGoodPlayActivity extends BaseActivity implements GoodVideoPlay
         //分享
       if(blog.related_goods!=null&&blog.related_goods.size()>0){
           GoodsDeatilEntity.Goods goods = blog.related_goods.get(0);
+          mShareInfoParam = new ShareInfoParam();
+          mShareInfoParam.goods_id = goods.goods_id;
+          mShareInfoParam.blogId =blog.id;
           shareGoodDialogUtil.setOnShareBlogCallBack(new ShareGoodDialogUtil.OnShareBlogCallBack() {
               @Override
               public void shareSuccess(String blogId, String goodsId) {
                   hotBlogPresenter.goodsShare("blog_goods", blogId, goodsId);
               }
           });
-//          hotBlogPresenter.getShareInfo(hotBlogPresenter.nice, goods.goods_id);
-          mShareInfoParam = new ShareInfoParam();
-          mShareInfoParam.blogId =blog.id;
-          mShareInfoParam.shareLink=goods.share_url;
-          mShareInfoParam.title =goods.title;
-          mShareInfoParam.desc =goods.desc;
-          mShareInfoParam.goods_id =goods.goods_id;
-          mShareInfoParam.share_buy_earn = goods.share_buy_earn;
-          mShareInfoParam.price =goods.price;
-          mShareInfoParam.market_price =goods.market_price;
-          mShareInfoParam.img =goods.thumb;
-          mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
-          mShareInfoParam.userName= SharedPrefUtil.getSharedUserString("nickname", "");
-          mShareInfoParam.userAvatar= SharedPrefUtil.getSharedUserString("avatar", "");
-          shareGoodDialogUtil.shareGoodDialog(mShareInfoParam,true,true);
+          hotBlogPresenter.getShareInfo(hotBlogPresenter.goods, goods.goods_id);
       }
     }
 

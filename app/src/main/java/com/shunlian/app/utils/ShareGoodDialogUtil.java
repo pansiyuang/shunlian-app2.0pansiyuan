@@ -88,14 +88,11 @@ public class ShareGoodDialogUtil {
         }
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, v -> {
             setEddType();
-            Common.copyTextNoToast(context,mShareInfoParam.title+mShareInfoParam.shareLink);
+            Common.copyTextNoToast(context,mShareInfoParam.title);
             nomalBuildl.dismiss();
             if(isGood) {
                 WXEntryActivity.startAct(context,
                         "shareFriend", mShareInfoParam);
-                if(isFound&&mCallBack!=null){
-//                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
-                }
             }else{
                 WXEntryActivity.startAct(context,
                         "shareFriend", mShareInfoParam);
@@ -107,7 +104,7 @@ public class ShareGoodDialogUtil {
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, v -> {
             setEddType();
-            Common.copyTextNoToast(context,mShareInfoParam.title+mShareInfoParam.shareLink);
+            Common.copyTextNoToast(context,mShareInfoParam.title);
             nomalBuildl.dismiss();
             if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
                 createSpecialCode( false);
@@ -116,7 +113,6 @@ public class ShareGoodDialogUtil {
             if(isGood) {
                 createGoodCode(isFound,true);
                 if(isFound&&mCallBack!=null){
-//                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                 }
             }else{
                 createShopCode(true);
@@ -129,7 +125,7 @@ public class ShareGoodDialogUtil {
         nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, v -> {
             setEddType();
             nomalBuildl.dismiss();
-            Common.copyTextNoToast(context,mShareInfoParam.title+mShareInfoParam.shareLink);
+            Common.copyTextNoToast(context,mShareInfoParam.title);
             if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
                 createSpecialCode(true);
                 return;
@@ -144,15 +140,12 @@ public class ShareGoodDialogUtil {
                         mShareInfoParam.shop_id,mShareInfoParam.shop_name,"图文");
             }
         });
-        nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, true);
-                nomalBuildl.dismiss();
-                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
-                            mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"复制链接");
-                }
+        nomalBuildl.setOnClickListener(R.id.mllayout_shangping, v -> {
+            Common.copyText(context, mShareInfoParam.shareLink, mShareInfoParam.isCopyTitle ? mShareInfoParam.title : mShareInfoParam.desc, true);
+            nomalBuildl.dismiss();
+            if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                        mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"复制链接");
             }
         });
     }
@@ -299,12 +292,12 @@ public class ShareGoodDialogUtil {
             miv_code.setImageBitmap(qrImage);
             MyTextView mtv_title =  showGoodBuild.findViewById(R.id.mtv_title);
             MyTextView  mtv_coupon_title =  showGoodBuild.findViewById(R.id.mtv_coupon_title);
-
-            if(!TextUtils.isEmpty(mShareInfoParam.coupon_name)){
+            RelativeLayout relt_share_image = showGoodBuild.findViewById(R.id.relt_share_image);
+            if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
                 mtv_coupon_title.setVisibility(View.VISIBLE);
-                mtv_coupon_title.setText(mShareInfoParam.coupon_name);
-                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.coupon_name+mShareInfoParam.title);
-                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.coupon_name.length(),
+                mtv_coupon_title.setText(mShareInfoParam.voucher);
+                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher+mShareInfoParam.title);
+                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
                         Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 mtv_title.setText(span);
             }else{
@@ -336,13 +329,14 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_newuser_mark_price = showGoodBuild.findViewById(R.id.mtv_newuser_mark_price);
 
             if(mShareInfoParam.isNewUserGood) {
+                relt_share_image.setPadding(DensityUtil.dip2px(context,10),0,DensityUtil.dip2px(context,10),0);
                 line_old_user.setVisibility(View.GONE);
                 re_newuser_layout.setVisibility(View.VISIBLE);
                 mtv_newuser_price.setText(context.getResources().getString(R.string.common_yuan)+mShareInfoParam.price);
                 if (!TextUtils.isEmpty(mShareInfoParam.market_price)) {
                     mtv_newuser_mark_price.setVisibility(View.VISIBLE);
                     mtv_newuser_mark_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                    mtv_newuser_mark_price.setText("￥" + mShareInfoParam.market_price);
+                    mtv_newuser_mark_price.setText(context.getResources().getString(R.string.common_yuan)+ mShareInfoParam.market_price);
                 } else {
                     mtv_newuser_mark_price.setVisibility(View.VISIBLE);
                 }
@@ -355,23 +349,23 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_time  = showGoodBuild.findViewById(R.id.mtv_time);
             MyTextView mtv_act_label  = showGoodBuild.findViewById(R.id.mtv_act_label);
 
-            if (TextUtils.isEmpty(mShareInfoParam.start_time)||mShareInfoParam.isNewUserGood) {
+            if (TextUtils.isEmpty(mShareInfoParam.time_text)||mShareInfoParam.isNewUserGood) {
                 llayout_day.setVisibility(View.GONE);
-            } else {
+            } else if(!TextUtils.isEmpty(mShareInfoParam.time_text)){
                 llayout_day.setVisibility(View.VISIBLE);
-                if(mShareInfoParam.isActivityStart){
+                if(mShareInfoParam.is_start==0){
                     llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
-                    mtv_time.setTextColor(context.getResources().getColor(R.color.value_007AFF));
-                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.white));
-                    mtv_act_label.setBackgroundColor(context.getResources().getColor(R.color.value_007AFF));
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.value_007AFF));
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundColor(context.getResources().getColor(R.color.value_007AFF));
                 }else{
                     llayout_day.setBackgroundResource(R.drawable.edge_pink_1px);
-                    mtv_time.setTextColor(context.getResources().getColor(R.color.pink_color));
-                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.white));
-                    mtv_act_label.setBackgroundColor(context.getResources().getColor(R.color.pink_color));
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.pink_color));
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundColor(context.getResources().getColor(R.color.pink_color));
                 }
-                mtv_time.setText(mShareInfoParam.start_time);
-                mtv_act_label.setText(mShareInfoParam.act_label);
+                mtv_time.setText(mShareInfoParam.time_text);
+                mtv_act_label.setText(mShareInfoParam.little_word);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
             int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 80);
@@ -456,12 +450,14 @@ public class ShareGoodDialogUtil {
            View ll_root= showShopBuild.findViewById(R.id.ll_root);
             MyImageView miv_close = showShopBuild.findViewById(R.id.miv_close);
             MyLinearLayout mllayout_save = showShopBuild.findViewById(R.id.mllayout_save);
-            MyImageView miv_user_head = showShopBuild.findViewById(R.id.miv_user_head);
-            MyImageView  miv_store = showShopBuild.findViewById(R.id.miv_store);
-            MyTextView mtv_nickname = showShopBuild.findViewById(R.id.mtv_nickname);
 
-            mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
-            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
+            MyImageView  miv_store = showShopBuild.findViewById(R.id.miv_store);
+
+//            MyImageView miv_user_head = showShopBuild.findViewById(R.id.miv_user_head);
+//            MyTextView mtv_nickname = showShopBuild.findViewById(R.id.mtv_nickname);
+//            mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
+//            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
+
             GlideUtils.getInstance().loadImageZheng(context, miv_store, mShareInfoParam.shop_logo);
             MyImageView miv_code =  showShopBuild.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(context, 92.5f);
@@ -487,7 +483,7 @@ public class ShareGoodDialogUtil {
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
 
             }else{
-                showShopBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
+                showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
             }
             miv_close.setOnClickListener(view -> showShopBuild.dismiss());

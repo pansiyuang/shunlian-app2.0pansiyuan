@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
@@ -24,8 +25,11 @@ import butterknife.BindView;
 public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
 
-    public AppointGoodsAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
+    private String mFrom;
+
+    public AppointGoodsAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, String from) {
         super(context, isShowFooter, lists);
+        mFrom = from;
     }
 
     @Override
@@ -40,7 +44,13 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         GoodsDeatilEntity.Goods goods = lists.get(position);
         GlideUtils.getInstance().loadImage(context,mHolder.miv_goods,goods.thumb);
         mHolder.mtv_count.setText("x"+goods.qty);
-        mHolder.mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+goods.price,11));
+        if (ConfirmOrderAct.TYPE_PLUSFREE.equals(mFrom)){
+            mHolder.mtv_price.setText(goods.price+"元购");
+            mHolder.mtv_price.setTextColor(getColor(R.color.pink_color));
+        }else {
+            mHolder.mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb) + goods.price, 11));
+            mHolder.mtv_price.setTextColor(getColor(R.color.new_text));
+        }
         mHolder.mtv_attribute.setText(goods.sku);
 
         String label = goods.big_label;

@@ -267,7 +267,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
 
         this.enabled = enabled;
         ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
-                enabled, disabled,address,isOrderBuy,noDeliveryList);
+                enabled, disabled,address,isOrderBuy,noDeliveryList,from);
         recy_view.setAdapter(df);
 
         df.setSelectVoucherListener(position ->calculateAmount(enabled));

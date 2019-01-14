@@ -266,7 +266,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     }
 
     public void updateUserNewToast(ShowVoucherSuspension voucherSuspension){
-        if(voucherSuspension.suspensionShow.equals("1")){
+        if(voucherSuspension.suspensionShow.equals("1")&&Common.isAlreadyLogin()){
             tv_new_user_title.setText(voucherSuspension.suspension.prize);
             show_new_user_view.setVisibility(View.VISIBLE);
             if(miv_entry.getVisibility() == View.VISIBLE){

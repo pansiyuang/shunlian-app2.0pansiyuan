@@ -22,6 +22,8 @@ import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UserNewDataEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.listener.ICallBackResult;
 import com.shunlian.app.presenter.NewUserPagePresenter;
@@ -62,7 +64,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     private  List<AdUserEntity.AD> adList;
     private List<NewUserGoodsEntity.Goods> goodsList;
     private ShareGoodDialogUtil shareGoodDialogUtil;
-    private boolean isEvent =false;
     private CommonPagerAdapter commonLazyPagerAdapter;
 
     private CommonDialogUtil commonDialogUtil;
@@ -167,16 +168,21 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshPayData(UserPaySuccessEvent event) {
-        if (event!=null && event.isSuccess&&!event.isFragmet) {
-            CURRENT_NUM=0;
-            isEvent = true;
-            mPresenter.adlist();
-        }else if(event!=null && !event.isSuccess&&!event.isFragmet){
-            line_user_buy.setVisibility(View.VISIBLE);
-            tv_buy_num.setText("邀请记录");
-            tv_go_pay.setText("去邀请赚钱");
+//        if (event!=null && event.isSuccess&&!event.isFragmet) {
+//            CURRENT_NUM=0;
+//            isEvent = true;
+//            mPresenter.adlist();
+//        }else if(event!=null && !event.isSuccess&&!event.isFragmet){
+//            line_user_buy.setVisibility(View.VISIBLE);
+//            tv_buy_num.setText("邀请记录");
+//            tv_go_pay.setText("去邀请赚钱");
+//        }
+        if (event!=null && event.isSuccess) {
+            resreshQuest();
+            SuspensionRefresh eventRefresh = new SuspensionRefresh();
+            eventRefresh.isRefresh = true;
+            EventBus.getDefault().post(eventRefresh);
         }
-        mPresenter.showVoucherSuspension();
     }
 
     @Override
@@ -315,6 +321,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         img_guize.setOnClickListener(v -> {
             if(newUserGoodsEntity!=null&&!TextUtils.isEmpty(newUserGoodsEntity.h5_rule)){
                 H5X5Act.startAct(NewUserPageActivity.this, newUserGoodsEntity.h5_rule, H5X5Act.MODE_SONIC);
+
             }
         });
 
@@ -508,6 +515,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     public void getvoucher(UserNewDataEntity userNewDataEntity) {
         if(commonDialogUtil!=null&&commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
             if(userNewDataEntity.isNew) {
+                SuspensionRefresh event = new SuspensionRefresh();
+                event.isRefresh = true;
+                EventBus.getDefault().post(event);
                 TextView tv_new_submit = commonDialogUtil.dialog_user_info.findViewById(R.id.tv_new_submit);
                 TextView ntv_user_page_price = commonDialogUtil.dialog_user_info.findViewById(R.id.ntv_user_page_price);
                 tv_new_submit.setText("前往使用");
@@ -543,7 +553,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @Override
     public void showVoucherSuspension(ShowVoucherSuspension voucherSuspension) {
-        if(voucherSuspension.suspensionShow.equals("1")&&isNew){
+        if(voucherSuspension.suspensionShow.equals("1")&&isNew&&Common.isAlreadyLogin()){
             tv_new_user_title.setText(voucherSuspension.suspension.prize);
             show_new_user_view.setVisibility(View.VISIBLE);
             if(voucherSuspension.suspension.finish>0) {

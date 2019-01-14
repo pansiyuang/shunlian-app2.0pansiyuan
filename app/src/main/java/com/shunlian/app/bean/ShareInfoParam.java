@@ -51,8 +51,11 @@ public class ShareInfoParam implements Serializable {
     public String blogId;
     //发现
     public String thumb_type;//0小图（左右布局，图在右侧），1大图（上下布局，图是通栏显示）
-    public String start_time;//活动开始时间
-    public String act_label;//活动开始时间
+    public String time_text;//活动开始时间
+    public String little_word;//活动标签
+    public int is_start;
+    public String   voucher;//领券满0减4
+
     public String video_url;//视频地址
 
     public boolean isShowTiltle = false;
@@ -63,7 +66,7 @@ public class ShareInfoParam implements Serializable {
     public String logo;
     public boolean isSpecial = false;
     public boolean isNewUserGood = false;
-    public boolean isActivityStart = false;
+
     public String cate1;
     public String cate2;
     public String store_id;
@@ -91,8 +94,6 @@ public class ShareInfoParam implements Serializable {
                 ", goodsPrice='" + price + '\'' +
                 ", downloadPic=" + downloadPic +
                 ", thumb_type='" + thumb_type + '\'' +
-                ", start_time='" + start_time + '\'' +
-                ", act_label='" + act_label + '\'' +
                 ", market_price='" + market_price + '\'' +
                 ", isSuperiorProduct=" + isSuperiorProduct +
                 '}';

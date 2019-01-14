@@ -13,8 +13,10 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
@@ -58,7 +60,10 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private LinearLayoutManager manager;
     private ObjectMapper objectMapper;
     private PromptDialog promptDialog;
+
     private ShareGoodDialogUtil shareGoodDialogUtil;
+    private ShareInfoParam mShareInfoParam;
+
     private LottieAnimationView mAnimationView;
 
     @Override
@@ -76,14 +81,14 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     @Override
     protected void initData() {
         //分享
-        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
-        shareGoodDialogUtil.setOnShareBlogCallBack(this);
     }
 
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
         EventBus.getDefault().register(this);
+        shareGoodDialogUtil = new ShareGoodDialogUtil(baseActivity);
+        shareGoodDialogUtil.setOnShareBlogCallBack(this);
         NestedSlHeader header = new NestedSlHeader(baseActivity);
         lay_refresh.setRefreshHeaderView(header);
         recycler_list.setNestedScrollingEnabled(false);
@@ -231,6 +236,33 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     }
 
     @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        if(mShareInfoParam==null){
+            mShareInfoParam = new ShareInfoParam();
+        }
+        if (mShareInfoParam != null) {
+            mShareInfoParam.isShowTiltle = false;
+            mShareInfoParam.userName = baseEntity.data.userName;
+            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            mShareInfoParam.shareLink = baseEntity.data.shareLink;
+            mShareInfoParam.desc = baseEntity.data.desc;
+            mShareInfoParam.price = baseEntity.data.price;
+            mShareInfoParam.title = baseEntity.data.title;
+            mShareInfoParam.img = baseEntity.data.img;
+            mShareInfoParam.share_buy_earn = baseEntity.data.share_buy_earn;
+            mShareInfoParam.little_word = baseEntity.data.little_word;
+            mShareInfoParam.time_text = baseEntity.data.time_text;
+            mShareInfoParam.is_start = baseEntity.data.is_start;
+            mShareInfoParam.market_price = baseEntity.data.market_price;
+            mShareInfoParam.voucher = baseEntity.data.voucher;
+            if (shareGoodDialogUtil != null) {
+                shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
+                shareGoodDialogUtil.setShareGoods();
+            }
+        }
+    }
+
+    @Override
     public void toFocusUser(int isFocus, String memberId, String nickName) {
         if (isFocus == 1) {
             if (promptDialog == null) {
@@ -264,6 +296,16 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     @Override
     public void toDown(String id) {
         hotBlogPresenter.downCount(id);
+    }
+
+    @Override
+    public void getShareInfo(String blogId, String goodid) {
+        mShareInfoParam = new ShareInfoParam();
+        mShareInfoParam.goods_id = goodid;
+        mShareInfoParam.blogId = blogId;
+        if(hotBlogPresenter!=null) {
+            hotBlogPresenter.getShareInfo(hotBlogPresenter.goods, goodid);
+        }
     }
 
     public void saveBaseInfo(HotBlogsEntity.BaseInfo baseInfo) {
