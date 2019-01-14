@@ -291,7 +291,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
                 .setmIcons(mListBitmap)
                 .setmType(1)
                 .setmTextColor(Color.parseColor("#80561D"))
-                .setmTextSize(TransformUtil.dip2px(this, 10))
+                .setmTextSize(TransformUtil.dip2px(this, 9))
                 .setmTypeNum(prizeList.size())
                 .setStartContent(goldEggCount + "金蛋一次")
                 .build();
