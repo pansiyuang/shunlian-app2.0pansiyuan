@@ -137,12 +137,17 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @BindView(R.id.miv_mid)
     MyImageView miv_mid;
+
+    @BindView(R.id.miv_airbubble)
+    MyImageView miv_airbubble;
+
     LinearLayoutManager linearLayoutManager;
     NewEggDetailAdapter eggDetailAdapter;
     private TaskCenterPresenter mPresenter;
     private SignAdapter signAdapter;
     private Dialog dialog_rule, dialog_detail;
     private String miss_eggs, is_remind;
+    private boolean isReceive;//是否可以领取金蛋
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, NewTaskCenterAct.class);
@@ -217,7 +222,8 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     protected void initData() {
         immersionBar.statusBarView(R.id.view_state).init();
         mPresenter = new TaskCenterPresenter(this, this);
-        setGoldEggsAnim("eggs_not_hatch.json", miv_golden_eggs, animation_view, true, "eggs/img_1.png");
+        setGoldEggsAnim("eggs_not_hatch.json", miv_golden_eggs,
+                animation_view, true, "eggs/img_1.png");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyView.setLayoutManager(manager);
         recyView.setNestedScrollingEnabled(false);
@@ -470,27 +476,29 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @OnClick({R.id.animation_view, R.id.miv_golden_eggs, R.id.miv_get})
     public void goldEggs() {
-//        if (dtime_layout != null && !dtime_layout.isClickable()&&miv_airbubble != null) {
-//            miv_airbubble.setPivotX(0.0f);
-//            miv_airbubble.setPivotY(miv_airbubble.getMeasuredHeight());
-//            ValueAnimator va = ValueAnimator.ofFloat(0.0f, 1.0f,//0.5秒
-//                    1.0f, 1.0f, 1.0f, 1.0f,//1秒
-//                    1.0f, 1.0f, 1.0f, 1.0f,//1秒
-//                    1.0f, 0.0f);//0.5秒
-//            va.setDuration(3000);
-//            va.setInterpolator(new LinearInterpolator());
-//            va.addUpdateListener(animation -> {
-//                float value = (float) animation.getAnimatedValue();
-//                if (miv_airbubble != null) {
-//                    miv_airbubble.setAlpha(value);
-//                    miv_airbubble.setScaleX(value);
-//                    miv_airbubble.setScaleY(value);
-//                }
-//            });
-//            va.start();
-//        }else {
-        mPresenter.goldegglimit();
-//        }
+        if (mPresenter != null && isReceive){
+            mPresenter.goldegglimit();
+        }else {
+            if (miv_airbubble != null) {
+                miv_airbubble.setPivotX(0.0f);
+                miv_airbubble.setPivotY(miv_airbubble.getMeasuredHeight());
+                ValueAnimator va = ValueAnimator.ofFloat(0.0f, 1.0f,//0.5秒
+                        1.0f, 1.0f, 1.0f, 1.0f,//1秒
+                        1.0f, 1.0f, 1.0f, 1.0f,//1秒
+                        1.0f, 0.0f);//0.5秒
+                va.setDuration(3000);
+                va.setInterpolator(new LinearInterpolator());
+                va.addUpdateListener(animation -> {
+                    float value = (float) animation.getAnimatedValue();
+                    if (miv_airbubble != null) {
+                        miv_airbubble.setAlpha(value);
+                        miv_airbubble.setScaleX(value);
+                        miv_airbubble.setScaleY(value);
+                    }
+                });
+                va.start();
+            }
+        }
     }
 
     /**
@@ -501,35 +509,25 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void obtainDownTime(String second, String maxProgress, String task_status) {
         if ("0".equals(task_status)) {
-            setGoldEggsAnim("eggs_hatch.json", miv_golden_eggs, animation_view, true, "eggs/img_1.png");
+            isReceive = true;
+            setGoldEggsAnim("eggs_hatch.json", miv_golden_eggs,
+                    animation_view, true, "eggs/img_1.png");
             if (mPresenter != null) mPresenter.getTaskList();
-            miv_get.setVisibility(View.VISIBLE);
+            visible(miv_get);
             ddp_downTime.setVisibility(View.INVISIBLE);
-//            if (dtime_layout != null) {
-//                dtime_layout.setSecond(1, 1);
-//                dtime_layout.startDownTimer();
-//            }
         } else {
-            setGoldEggsAnim("eggs_not_hatch.json", miv_golden_eggs, animation_view, true, "eggs/img_1.png");
-//            if (dtime_layout != null && !isEmpty(second) && !isEmpty(maxProgress)) {
-//                dtime_layout.setSecond(Long.parseLong(second), Long.parseLong(maxProgress));
-//                dtime_layout.startDownTimer();
-//                dtime_layout.setDownTimeComplete(() -> {
-//                    setGoldEggsAnim("eggs_hatch.json",miv_golden_eggs,animation_view,true,"eggs/img_1.png");
-//                    if (mPresenter != null) mPresenter.getTaskList();
-//                    if (mPresenter != null &&
-//                            mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
-//                        mPresenter.updateItem(0, "0");
-//                });
-//            }
-            miv_get.setVisibility(View.GONE);
-            ddp_downTime.setVisibility(View.VISIBLE);
+            isReceive = false;
+            setGoldEggsAnim("eggs_not_hatch.json", miv_golden_eggs,
+                    animation_view, true, "eggs/img_1.png");
+            gone(miv_get);
+            visible(ddp_downTime);
             String times = isEmpty(second) ? "0" : second;
             ddp_downTime.setDownTime(Integer.parseInt(times));
             ddp_downTime.startDownTimer();
             ddp_downTime.setDownTimerListener(() -> {
                 setGoldEggsAnim("eggs_hatch.json", miv_golden_eggs,
                         animation_view, true, "eggs/img_1.png");
+                isReceive = true;
                 if (mPresenter != null) mPresenter.getTaskList();
                 if (mPresenter != null &&
                         mPresenter.current_task_state == TaskCenterPresenter.DAILY_TASK)
