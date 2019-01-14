@@ -451,4 +451,9 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     public void onToVisit(TaskDrawEntity.Url url) {
         Common.goGoGo(this, url.type, url.item_id);
     }
+
+    @Override
+    public void jumpTaskCenter() {
+        Common.goGoGo(this,"taskSystems");
+    }
 }
