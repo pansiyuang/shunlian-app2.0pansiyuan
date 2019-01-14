@@ -18,7 +18,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="70dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="visible">
@@ -50,13 +50,13 @@
                 </LinearLayout>
                 <RelativeLayout
                     android:id="@+id/right"
-                    android:paddingRight="@dimen/xx20"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="@dimen/yy228"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="113dp"
+                    android:paddingRight="10dp"
                     android:layout_height="match_parent">
                     <ImageView
-                        android:layout_width="@dimen/yy208"
-                        android:layout_height="@dimen/yy44"
+                        android:layout_width="103dp"
+                        android:layout_height="24dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:scaleType="fitXY"
@@ -210,8 +210,8 @@
                     android:orientation="vertical">
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_code"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:scaleType="fitXY"
                         android:layout_gravity="center_horizontal"
                      />
@@ -224,7 +224,7 @@
                         android:gravity="center"
                         android:textColor="@color/my_gray_one"
                         android:layout_gravity="center_horizontal"
-                        android:textSize="@dimen/xx22" />
+                        android:textSize="9sp" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -303,8 +303,8 @@
                 android:orientation="horizontal">
 
                 <com.shunlian.app.widget.MyImageView
-                    android:layout_width="@dimen/xx70"
-                    android:layout_height="@dimen/xx70"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/icon_download" />
 
