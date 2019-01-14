@@ -28,6 +28,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
@@ -37,6 +38,7 @@ import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.PMain;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
 import com.shunlian.app.ui.find_send.SelectPicVideoAct;
@@ -1094,6 +1096,30 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             pMain.showVoucherSuspension();
         }
     }
+
+    /**
+     * 选择商品信息
+     *
+     * @param sku
+     * @param count
+     */
+    public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count, boolean isAddcart,String goodId) {
+        //LogUtil.zhLogW("=goodsCount=========="+goodsCount);
+        if (isAddcart) {
+            pMain.addCart(goodId, sku == null ? "" : sku.id, String.valueOf(count));
+        }else {
+            ConfirmOrderAct.startAct(this, goodId,
+                    String.valueOf(count),
+                    sku == null ? "" : sku.id,
+                    ConfirmOrderAct.TYPE_GOODS_DETAIL);
+        }
+    }
+
+    @Override
+    public void addCart(String msg) {
+        Common.staticToastAct(this,"添加购物车成功");
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void suspensionRefresh(SuspensionRefresh suspensionRefresh) {
         if (suspensionRefresh.isRefresh && pMain != null) {
