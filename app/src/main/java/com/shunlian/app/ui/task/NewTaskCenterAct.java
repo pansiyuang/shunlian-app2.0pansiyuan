@@ -63,32 +63,46 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @BindView(R.id.ntv_sign)
     public NewTextView ntv_sign;
+
     @BindView(R.id.recy_view)
     RecyclerView recyView;
+
     @BindView(R.id.kanner)
     MyKanner kanner;
+
     @BindView(R.id.tab_layout)
     TabLayout tab_layout;
+
     @BindView(R.id.csv_out)
     CompileScrollView csv_out;
+
     @BindView(R.id.view_eggdetail)
     View view_eggdetail;
+
     @BindView(R.id.view_eggdetails)
     View view_eggdetails;
+
     @BindView(R.id.mllayout_mid)
     MyLinearLayout mllayout_mid;
+
     @BindView(R.id.rv_sign)
     RecyclerView rv_sign;
+
     @BindView(R.id.ntv_eggnum)
     NewTextView ntv_eggnum;
+
     @BindView(R.id.ntv_titleOne)
     NewTextView ntv_titleOne;
+
     @BindView(R.id.ntv_content)
     NewTextView ntv_content;
+
     @BindView(R.id.miv_chose)
     MyImageView miv_chose;
+
     @BindView(R.id.mrlayout_goGet)
     MyRelativeLayout mrlayout_goGet;
+
     @BindView(R.id.animation_view)
     LottieAnimationView animation_view;
 
@@ -151,45 +165,76 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     protected void initListener() {
         super.initListener();
-        csv_out.setOnScrollListener(new CompileScrollView.OnScrollListener() {
-            @Override
-//            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
-            public void scrollCallBack(int y, int oldy) {
-                if (y > 30) {
-                    view_eggdetail.setAlpha(1);
-                    view_eggdetails.setAlpha(0);
-                } else if (y > 0) {
-                    float alpha = ((float) y) / 30;
-                    view_eggdetail.setAlpha(alpha);
-                    view_eggdetails.setAlpha(1 - alpha);
-                } else {
-                    view_eggdetail.setAlpha(0);
-                    view_eggdetails.setAlpha(1);
-                    csv_out.setFocusable(false);
-                }
+        csv_out.setOnScrollListener((y, oldy) -> {
+            if (y > 30) {
+                view_eggdetail.setAlpha(1);
+                view_eggdetails.setAlpha(0);
+            } else if (y > 0) {
+                float alpha = ((float) y) / 30;
+                view_eggdetail.setAlpha(alpha);
+                view_eggdetails.setAlpha(1 - alpha);
+            } else {
+                view_eggdetail.setAlpha(0);
+                view_eggdetails.setAlpha(1);
+                csv_out.setFocusable(false);
             }
         });
+
+
         tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 View customView = tab.getCustomView();
-                visible(customView.findViewById(R.id.view_line));
+                if (customView != null)
+                    visible(customView.findViewById(R.id.view_line));
+                if ((int)tab.getTag() == TaskCenterPresenter.NEW_USER_TASK){
+                    if (mPresenter != null) {
+                        mPresenter.current_task_state = TaskCenterPresenter.NEW_USER_TASK;
+                        mPresenter.cacheTaskList();
+                    }
+                }else if ((int)tab.getTag() == TaskCenterPresenter.DAILY_TASK){
+                    if (mPresenter != null) {
+                        mPresenter.current_task_state = TaskCenterPresenter.DAILY_TASK;
+                        mPresenter.cacheTaskList();
+                    }
+                }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 View customView = tab.getCustomView();
+                if (customView != null)
                 customView.findViewById(R.id.view_line).setVisibility(View.INVISIBLE);
             }
-
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
     }
 
-    public void setGoldEggsAnim(String filename, MyImageView miv_denglong, LottieAnimationView animation_view, boolean isLoop, String photo) {
+    /**
+     * 初始化数据
+     */
+    @Override
+    protected void initData() {
+        immersionBar.statusBarView(R.id.view_state).init();
+        mPresenter = new TaskCenterPresenter(this, this);
+        setGoldEggsAnim("eggs_not_hatch.json", miv_golden_eggs, animation_view, true, "eggs/img_1.png");
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        recyView.setLayoutManager(manager);
+        recyView.setNestedScrollingEnabled(false);
+
+        view_eggdetail.setAlpha(0);
+        view_eggdetails.setAlpha(1);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (mPresenter != null) mPresenter.attachView();
+    }
+
+    public void setGoldEggsAnim(String filename, MyImageView miv_denglong,
+                                LottieAnimationView animation_view, boolean isLoop, String photo) {
         AssetManager assets = null;
         InputStream is = null;
         try {
@@ -221,29 +266,6 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
-    /**
-     * 初始化数据
-     */
-    @Override
-    protected void initData() {
-        immersionBar.statusBarView(R.id.view_state).init();
-        mPresenter = new TaskCenterPresenter(this, this);
-        setGoldEggsAnim("eggs_not_hatch.json", miv_golden_eggs, animation_view, true, "eggs/img_1.png");
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        recyView.setLayoutManager(manager);
-        recyView.setNestedScrollingEnabled(false);
-
-
-        for (int i = 0; i < 2; i++) {
-            TabLayout.Tab tab = tab_layout.newTab();
-            tab.setCustomView(getTabView(i));
-            tab_layout.addTab(tab);
-        }
-
-        view_eggdetail.setAlpha(0);
-        view_eggdetails.setAlpha(1);
-    }
-
 
     private View getTabView(int position) {
         LinearLayout layout = new LinearLayout(this);
@@ -253,10 +275,10 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
 
         ImageView imageView = new ImageView(this);
         layout.addView(imageView);
-        if (0 == position) {
+        if (TaskCenterPresenter.NEW_USER_TASK == position) {
             imageView.setImageResource(R.mipmap.img_task_xinshourenwu);
             imageView.setId(R.id.iv_task_new);
-        } else {
+        } else if (TaskCenterPresenter.DAILY_TASK == position){
             imageView.setImageResource(R.mipmap.img_task_richangrenwu);
             imageView.setId(R.id.iv_task);
         }
@@ -269,7 +291,6 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         viewParams.height = i;
         viewParams.topMargin = i * 4;
         view.setLayoutParams(viewParams);
-//        view.setBackgroundColor(Color.RED);
         view.setBackgroundResource(R.mipmap.btn_sel);
         view.setId(R.id.view_line);
         view.setVisibility(View.INVISIBLE);
@@ -285,26 +306,24 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     public void initDialog(SignEggEntity data) {
         Dialog dialog_commond = new Dialog(baseAct, R.style.popAd);
         dialog_commond.setContentView(R.layout.dialog_sign);
-        MyImageView miv_close = (MyImageView) dialog_commond.findViewById(R.id.miv_close);
-        MyImageView miv_photo = (MyImageView) dialog_commond.findViewById(R.id.miv_photo);
-        NewTextView ntv_detail = (NewTextView) dialog_commond.findViewById(R.id.ntv_detail);
-        NewTextView ntv_from = (NewTextView) dialog_commond.findViewById(R.id.ntv_from);
+
+        MyImageView miv_close = dialog_commond.findViewById(R.id.miv_close);
+        MyImageView miv_photo = dialog_commond.findViewById(R.id.miv_photo);
+        NewTextView ntv_detail = dialog_commond.findViewById(R.id.ntv_detail);
+        NewTextView ntv_from = dialog_commond.findViewById(R.id.ntv_from);
+
         GlideUtils.getInstance().loadImageZheng(baseAct, miv_photo, data.ad_pic_url);
+
         ntv_from.setText(String.format(getStringResouce(R.string.mission_gongxininhuode), data.gold_num));
-        miv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog_commond.dismiss();
-            }
+
+        miv_close.setOnClickListener(view -> dialog_commond.dismiss());
+
+        ntv_detail.setOnClickListener(view -> {
+            if (data.url != null)
+                Common.goGoGo(baseAct, data.url.type, data.url.item_id);
+            dialog_commond.dismiss();
         });
-        ntv_detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (data.url != null)
-                    Common.goGoGo(baseAct, data.url.type, data.url.item_id);
-                dialog_commond.dismiss();
-            }
-        });
+
         dialog_commond.setCancelable(false);
         dialog_commond.show();
     }
@@ -374,7 +393,6 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
         mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
         mwv_rule.loadUrl(url);
-//        mwv_rule.loadData("ddddddfsdfsfsfsdfsfsdfd","text/html", "UTF-8");
 
         miv_close.setOnClickListener(view -> dialog_rule.dismiss());
         dialog_rule.setCancelable(false);
@@ -392,7 +410,6 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         MyLinearLayout mllayout_goget = dialog_hint.findViewById(R.id.mllayout_goget);
         ntv_desc.setText(desc);
 
-//        mwv_rule.loadData("ddddddfsdfsfsfsdfsfsdfd","text/html", "UTF-8");
         switch (type) {
             case "remind":
                 ntv_title.setBackgroundResource(R.mipmap.image_renwu_cg02);
@@ -401,12 +418,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
                 ntv_desc.setText(desc);
                 ntv_desc.setVisibility(View.VISIBLE);
                 ntv_btn.setText("准点提醒");
-                ntv_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mPresenter.setRemind();
-                    }
-                });
+                ntv_btn.setOnClickListener(view -> mPresenter.setRemind());
                 break;
             case "goget":
                 ntv_title.setBackgroundResource(R.mipmap.image_renwu_cg03);
@@ -420,12 +432,10 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
                 ntv_title.setText(title);
                 ntv_desc.setText(desc);
                 ntv_desc.setVisibility(View.VISIBLE);
-                ntv_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if ("0".equals(is_remind)) {
-                            initHintialog("remind", "在过去的几天里错过了" + miss_eggs + "个金蛋", "现在设置准点提醒，让您“蛋”无虚发! ");
-                        }
+                ntv_btn.setOnClickListener(view -> {
+                    if ("0".equals(is_remind)) {
+                        initHintialog("remind", "在过去的几天里错过了"
+                                + miss_eggs + "个金蛋", "现在设置准点提醒，让您“蛋”无虚发! ");
                     }
                 });
                 break;
@@ -475,7 +485,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
 //            });
 //            va.start();
 //        }else {
-            mPresenter.goldegglimit();
+        mPresenter.goldegglimit();
 //        }
     }
 
@@ -606,7 +616,28 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void closeNewUserList(boolean isClose) {
-
+        if (tab_layout != null) {
+            tab_layout.removeAllTabs();
+            if (isClose) {//只有日常任务
+                TabLayout.Tab tab = tab_layout.newTab();
+                tab.setCustomView(getTabView(TaskCenterPresenter.DAILY_TASK));
+                tab.setTag(TaskCenterPresenter.DAILY_TASK);
+                tab_layout.addTab(tab);
+            }else {//新手任务和日常任务
+                for (int i = 0; i < 2; i++) {
+                    TabLayout.Tab tab = tab_layout.newTab();
+                    int tag = 0;
+                    if (i == 0){
+                        tag = TaskCenterPresenter.NEW_USER_TASK;
+                    }else {
+                        tag = TaskCenterPresenter.DAILY_TASK;
+                    }
+                    tab.setCustomView(getTabView(tag));
+                    tab.setTag(tag);
+                    tab_layout.addTab(tab);
+                }
+            }
+        }
     }
 
     /**
@@ -648,35 +679,29 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
                 mrlayout_goGet.setClickable(false);
                 if ("0".equals(list.get(1).status)) {
                     miv_gets.setImageResource(R.mipmap.icon_lingjiang);
-                    miv_gets.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                    miv_gets.setOnClickListener(view -> {
 
-                        }
                     });
                 } else {
                     miv_gets.setImageResource(R.mipmap.icon_yilingjiang);
-                    miv_gets.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            miv_mid.setPivotX(0.0f);
-                            miv_mid.setPivotY(miv_mid.getMeasuredHeight());
-                            ValueAnimator va = ValueAnimator.ofFloat(0.0f, 1.0f,//0.5秒
-                                    1.0f, 1.0f, 1.0f, 1.0f,//1秒
-                                    1.0f, 1.0f, 1.0f, 1.0f,//1秒
-                                    1.0f, 0.0f);//0.5秒
-                            va.setDuration(3000);
-                            va.setInterpolator(new LinearInterpolator());
-                            va.addUpdateListener(animation -> {
-                                float value = (float) animation.getAnimatedValue();
-                                if (miv_mid != null) {
-                                    miv_mid.setAlpha(value);
-                                    miv_mid.setScaleX(value);
-                                    miv_mid.setScaleY(value);
-                                }
-                            });
-                            va.start();
-                        }
+                    miv_gets.setOnClickListener(view -> {
+                        miv_mid.setPivotX(0.0f);
+                        miv_mid.setPivotY(miv_mid.getMeasuredHeight());
+                        ValueAnimator va = ValueAnimator.ofFloat(0.0f, 1.0f,//0.5秒
+                                1.0f, 1.0f, 1.0f, 1.0f,//1秒
+                                1.0f, 1.0f, 1.0f, 1.0f,//1秒
+                                1.0f, 0.0f);//0.5秒
+                        va.setDuration(3000);
+                        va.setInterpolator(new LinearInterpolator());
+                        va.addUpdateListener(animation -> {
+                            float value = (float) animation.getAnimatedValue();
+                            if (miv_mid != null) {
+                                miv_mid.setAlpha(value);
+                                miv_mid.setScaleX(value);
+                                miv_mid.setScaleY(value);
+                            }
+                        });
+                        va.start();
                     });
                 }
             } else {
@@ -711,7 +736,8 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         ntv_sign.setClickable(false);
         if (ntv_eggnum != null) ntv_eggnum.setText(signEggEntity.gold_egg);
         if (signAdapter != null && signAdapter.miv_denglong != null)
-            setGoldEggsAnim("signning.json", signAdapter.miv_denglong, signAdapter.animation_view, false, "eggs/sign_two.png");
+            setGoldEggsAnim("signning.json", signAdapter.miv_denglong,
+                    signAdapter.animation_view, false, "eggs/sign_two.png");
 
         miss_eggs = signEggEntity.miss_eggs;
         is_remind = signEggEntity.is_remind;
