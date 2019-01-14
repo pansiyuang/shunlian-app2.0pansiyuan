@@ -9,10 +9,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.shunlian.app.R;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,6 +33,9 @@ public class New3LoginAct extends BaseActivity{
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
+
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
 
     private FragmentManager mFragmentManager;
     private Map<String, BaseFragment> fragments;
@@ -66,6 +74,8 @@ public class New3LoginAct extends BaseActivity{
         super.initListener();
         miv_close.setOnClickListener(v -> {
            if (mCurrentPage == 1 || mCurrentPage == 3){
+               if (mCurrentPage == 3)loginNotify();
+               SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
                Common.goGoGo(this,"home");
                finish();
            }else {
@@ -82,29 +92,26 @@ public class New3LoginAct extends BaseActivity{
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         mConfig = getIntent().getParcelableExtra("config");
+        fragments = new HashMap<>();
         if (mConfig != null){
-            fragments = new HashMap<>();
             mFragmentManager = getSupportFragmentManager();
-            if (!isEmpty(mConfig.status))
-            {
-                loginSms(1, mConfig);
+            switch (mConfig.login_mode){
+                case PASSWORD_TO_LOGIN:
+                    //密码登录
+                    loginPwd();
+                    break;
+                case SMS_TO_LOGIN:
+                    //短信登录
+                    loginSms(1, mConfig);
+                    break;
+                case BIND_INVITE_CODE:
+                    //绑定推荐人
+                    loginInviteCode(mConfig);
+                    break;
+                default:
+                    loginSms(1, mConfig);
+                    break;
             }
-            else
-
-                switch (mConfig.login_mode){
-                    case PASSWORD_TO_LOGIN:
-                        //密码登录
-                        loginPwd();
-                        break;
-                    case SMS_TO_LOGIN:
-                        //短信登录
-                        loginSms(1, mConfig);
-                        break;
-                    case BIND_INVITE_CODE:
-                        //绑定推荐人
-                        loginInviteCode(mConfig);
-                        break;
-                }
         }
     }
 
@@ -112,6 +119,9 @@ public class New3LoginAct extends BaseActivity{
      * 密码登录
      */
     public void loginPwd(){
+        if (mtv_title != null){
+            mtv_title.setText("");
+        }
         mLoginPwdFrag = (LoginPwdFrag) fragments.get(ACCOUNT_PWD_LOGIN);
         if (mLoginPwdFrag == null){
             mLoginPwdFrag = new LoginPwdFrag();
@@ -124,6 +134,9 @@ public class New3LoginAct extends BaseActivity{
      * 短信登录
      */
     public void loginSms(int page, LoginConfig config){
+        if (mtv_title != null){
+            mtv_title.setText("");
+        }
         if (page == 1){
             mCurrentPage = 1;
             mLoginMobileFrag = (LoginMobileFrag) fragments.get(MOBILE_1_LOGIN);
@@ -157,6 +170,9 @@ public class New3LoginAct extends BaseActivity{
      * 邀请码
      */
     public void loginInviteCode(LoginConfig config){
+        if (mtv_title != null){
+            mtv_title.setText("填写邀请码");
+        }
         mCurrentPage = 3;
         mInviteCodeFrag = (InviteCodeFrag) fragments.get(INVITE_CODE);
         if (mInviteCodeFrag == null){
@@ -208,11 +224,23 @@ public class New3LoginAct extends BaseActivity{
     @Override
     public void onBackPressed() {
         if (mCurrentPage == 1 || mCurrentPage == 3){
+            if (mCurrentPage == 3)loginNotify();
+            SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
             Common.goGoGo(this,"home");
             super.onBackPressed();
         }else {
             loginSms(1, mConfig);
         }
+    }
+
+    /**
+     * 登录成功通知
+     */
+    public void loginNotify(){
+        //通知登录成功
+        DefMessageEvent event = new DefMessageEvent();
+        event.loginSuccess = true;
+        EventBus.getDefault().post(event);
     }
 
     /**
@@ -232,6 +260,7 @@ public class New3LoginAct extends BaseActivity{
         public String invite_code;//邀请码
         public LOGIN_MODE login_mode;//登录模式
         public boolean isUseMobile = true;//手机号是否可用 true可用  默认可用
+        public boolean isShowInviteSource;//是否显示邀请码来源 true显示 默认不显示
 
         public enum LOGIN_MODE{
 
@@ -269,6 +298,7 @@ public class New3LoginAct extends BaseActivity{
             dest.writeString(this.invite_code);
             dest.writeInt(this.login_mode == null ? -1 : this.login_mode.ordinal());
             dest.writeByte(this.isUseMobile ? (byte) 1 : (byte) 0);
+            dest.writeByte(this.isShowInviteSource ? (byte) 1 : (byte) 0);
         }
 
         protected LoginConfig(Parcel in) {
@@ -282,6 +312,7 @@ public class New3LoginAct extends BaseActivity{
             int tmpLogin_mode = in.readInt();
             this.login_mode = tmpLogin_mode == -1 ? null : LOGIN_MODE.values()[tmpLogin_mode];
             this.isUseMobile = in.readByte() != 0;
+            this.isShowInviteSource = in.readByte() != 0;
         }
 
         public static final Creator<LoginConfig> CREATOR = new Creator<LoginConfig>() {

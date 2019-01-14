@@ -29,6 +29,7 @@ import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
@@ -53,6 +54,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HighLightKeyWordUtil;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -287,9 +289,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        } else {
 //            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
 //        }
-        if (Common.isAlreadyLogin()) {
-            Common.handleTheRelayJump(this);
-        }
+        Common.handleTheRelayJump(this);
         super.onResume();
     }
 
@@ -602,6 +602,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     public void personCenterClick() {
         isFirst = false;
+        LogUtil.zhLogW("点击个人中心personCenterClick");
         if (!Common.isAlreadyLogin()) {
             Common.goGoGo(this, "login");
             Common.theRelayJump("personCenter", null);
@@ -900,16 +901,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     public void initDialogs(String prize) {
-//        if (dialog_new == null) {
+        if (dialog_new == null) {
             dialog_new = new Dialog(this, R.style.popAd);
             dialog_new.setContentView(R.layout.dialog_user_new);
             MyImageView miv_close = (MyImageView) dialog_new.findViewById(R.id.miv_close);
-             ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_user_bOne);
-             ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
-             ntv_aOne.setText(HighLightKeyWordUtil.getHighLightKeyWord(getResources().getColor(R.color.pink_color),
-                     prize,"现金红包"));
-//            SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(String.format(getStringResouce(R.string.new_zuigaokede), prize), prize, 34);
-//            ntv_bThree.setText(spannableStringBuilder);
+            ntv_get = (NewTextView) dialog_new.findViewById(R.id.ntv_get);
             miv_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -920,17 +916,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 @Override
                 public void onClick(View view) {
                     dialog_new.dismiss();
-                    NewUserPageActivity.startAct(MainActivity.this,true);
-//                    if (Common.isAlreadyLogin()) {
-////                        pMain.getPrizeByRegister();
-//                    } else {
-////                      isGetAward=true;
-//                        Common.goGoGo(baseAct,"login");
-//                        dialog_new.dismiss();
-//                    }
+                    NewUserPageActivity.startAct(MainActivity.this, true);
                 }
             });
-            dialog_new.setCancelable(false);
+            //dialog_new.setCancelable(false);
+        }
+        ntv_aOne = (NewTextView) dialog_new.findViewById(R.id.ntv_user_bOne);
+        ntv_aOne.setText(HighLightKeyWordUtil.getHighLightKeyWord(getResources().getColor(R.color.pink_color),
+                prize, "现金红包"));
         dialog_new.show();
     }
 
@@ -1041,6 +1034,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     @Override
+    public void showVoucherSuspension(ShowVoucherSuspension voucherSuspension) {
+        if(mainPageFrag!=null){
+            mainPageFrag.updateUserNewToast(voucherSuspension);
+        }
+    }
+
+    @Override
     public void showFailureView(int request_code) {
         if (0 == request_code && dialog_new != null)
             dialog_new.dismiss();
@@ -1088,7 +1088,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginRefresh(DefMessageEvent event) {
         if (event.loginSuccess && pMain != null) {
-            pMain.isShowNewPersonPrize();
+            pMain.isShowUserNewPersonPrize();
+            pMain.showVoucherSuspension();
         }
     }
 

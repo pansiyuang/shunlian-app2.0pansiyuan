@@ -1241,7 +1241,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             rnview.setVisibility(View.VISIBLE);
             goodsDetailPresenter.addCart(goodsId, sku == null ? "" : sku.id, String.valueOf(goodsCount));
         }else {
-            ConfirmOrderAct.startAct(this, goodsId, String.valueOf(goodsCount), sku == null ? "" : sku.id);
+            ConfirmOrderAct.startAct(this, goodsId,
+                    String.valueOf(goodsCount),
+                    sku == null ? "" : sku.id,
+                    ConfirmOrderAct.TYPE_GOODS_DETAIL);
         }
 
         /*if (isNowBuy) {

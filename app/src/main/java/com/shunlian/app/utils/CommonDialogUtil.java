@@ -46,7 +46,7 @@ public class CommonDialogUtil {
     }
 
     //新人领取优惠劵
-    public void userNewShowDialog(ICallBackResult<String> callBackResult,String defaultValue) {
+    public void userNewShowDialog(ICallBackResult<String> callBackResult,String defaultValue,String warn_txt) {
         if(((Activity)context).isFinishing()){
             return;
         }
@@ -57,8 +57,12 @@ public class CommonDialogUtil {
         dialog_user_info.show();
         TextView tv_new_submit = dialog_user_info.findViewById(R.id.tv_new_submit);
         TextView  ntv_user_page_price= dialog_user_info.findViewById(R.id.ntv_user_page_price);
+        TextView tv_desc_text= dialog_user_info.findViewById(R.id.tv_desc_text);
         if(!TextUtils.isEmpty(defaultValue)){
             tv_new_submit.setText(defaultValue);
+        }
+        if(!TextUtils.isEmpty(warn_txt)){
+            tv_desc_text.setText(warn_txt);
         }
         tv_new_submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +73,11 @@ public class CommonDialogUtil {
     }
 
     //老用户领取优惠劵
-    public void userOldShowDialog(ICallBackResult<String> callBackResult,String content) {
+    public void userOldShowDialog(ICallBackResult<String> callBackResult,String content,int code) {
         if(((Activity)context).isFinishing()){
             return;
         }
-        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,260))
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,280))
                 .setView(R.layout.dialog_page_user_old);
         dialog_user_old = nomalBuild.create();
         dialog_user_old.setCancelable(false);
@@ -81,21 +85,35 @@ public class CommonDialogUtil {
         TextView tv_messages = dialog_user_old.findViewById(R.id.tv_messages);
         TextView  tv_sure= dialog_user_old.findViewById(R.id.tv_sure);
         TextView  tv_cancel= dialog_user_old.findViewById(R.id.tv_cancel);
-        if(!TextUtils.isEmpty(content)){
-            tv_messages.setText(content);
+       ImageView image_pic= dialog_user_old.findViewById(R.id.image_pic);
+        TextView  tv_title= dialog_user_old.findViewById(R.id.tv_title);
+
+        if(code==6201){
+            tv_cancel.setText("去新人专享");
+            image_pic.setVisibility(View.GONE);
+            tv_title.setVisibility(View.INVISIBLE);
+            tv_messages.setText("您已经领取过新人专享优惠券了哦，赶紧去使用吧");
+        }else{
+            tv_cancel.setText("确定");
+            tv_title.setVisibility(View.VISIBLE);
+            image_pic.setVisibility(View.VISIBLE);
+            if(!TextUtils.isEmpty(content)){
+                tv_messages.setText(content);
+            }
         }
         tv_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog_user_old.dismiss();
-                callBackResult.onTagClick("page");
+                callBackResult.onTagClick("home");
             }
         });
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog_user_old.dismiss();
-                callBackResult.onTagClick("home");
+
+                callBackResult.onTagClick("page");
             }
         });
     }

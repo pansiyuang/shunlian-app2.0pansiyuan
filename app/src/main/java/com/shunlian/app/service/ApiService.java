@@ -2569,6 +2569,14 @@ public interface ApiService {
     Call<BaseEntity<WXLoginEntity>> checkTest(@QueryMap Map<String, String> map);
 
     /**
+     *模拟微信登录
+     * @param map
+     * @return
+     */
+    @GET("member/oauth/checkTestV2")
+    Call<BaseEntity<LoginFinishEntity>> checkTestV2(@QueryMap Map<String, String> map);
+
+    /**
      * 导购员详情
      * @param map
      * @return
@@ -3010,4 +3018,34 @@ public interface ApiService {
      */
     @GET("task/getDrawRecordList")
     Call<BaseEntity<DrawRecordEntity>> getDrawRecordList(@QueryMap Map<String, String> map);
+
+    /**
+     * 新人专享banner
+     */
+    @GET("newexclusive/showVoucherSuspension")
+    Call<BaseEntity<ShowVoucherSuspension>> showVoucherSuspension(@QueryMap Map<String, String> map);
+
+    /**
+     * 邀请好友列表
+     */
+    @GET("newexclusive/inviteLog")
+    Call<BaseEntity<InviteLogUserEntity>> inviteLog(@QueryMap Map<String, String> map);
+
+    /**
+     * plus免费专区 确认订单
+     * @param body
+     * @return
+     */
+    @POST("plusfree/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> plusfree(@Body RequestBody body);
+
+    /**
+     * plus免费专区 订单结算
+     * @param body
+     * @return
+     */
+    Call<BaseEntity<PayOrderEntity>> plusfreePay(@Body RequestBody body);
+
+    @GET("member/userinfo/checkBindShareidV2")
+    Call<BaseEntity<CommonEntity>> checkBindShareidV2(@QueryMap Map<String, String> map);
 }

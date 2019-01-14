@@ -6,19 +6,21 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.CommonLazyPagerAdapter;
-import com.shunlian.app.adapter.SimpleRecyclerAdapter;
+import com.shunlian.app.adapter.CommonPagerAdapter;
 import com.shunlian.app.bean.AdUserEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UserNewDataEntity;
 import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.listener.ICallBackResult;
@@ -27,12 +29,15 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.UserBuyGoodsDialog;
+import com.shunlian.app.utils.timer.HoneRedDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.INewUserPageView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.banner.MyKanner;
@@ -58,7 +63,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     private List<NewUserGoodsEntity.Goods> goodsList;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private boolean isEvent =false;
-    private  CommonLazyPagerAdapter commonLazyPagerAdapter;
+    private CommonPagerAdapter commonLazyPagerAdapter;
 
     private CommonDialogUtil commonDialogUtil;
     /**
@@ -66,6 +71,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
      */
     public static final int MAX_COUNT = 3;
     public static int CURRENT_NUM = 0;
+    private NewUserGoodsEntity newUserGoodsEntity;
 
     @BindView(R.id.viewpager)
     ViewPager viewpager;
@@ -85,6 +91,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @BindView(R.id.img_share)
     ImageView img_share;
 
+    @BindView(R.id.img_guize)
+    ImageView img_guize;
+
     @BindView(R.id.kanner)
     MyKanner kanner;
 
@@ -92,7 +101,12 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     LinearLayout line_user_buy;
     public static boolean isNew = false;
 
-    public boolean isDialogNew = false;
+    @BindView(R.id.tv_new_user_title)
+    TextView tv_new_user_title;
+    @BindView(R.id.tv_new_user_time)
+    HoneRedDownTimerView tv_new_user_time;
+    @BindView(R.id.show_new_user_view)
+    RelativeLayout show_new_user_view;
 
     private String[] titlesOld = {"精选商品"};
     private List<BaseFragment> goodsFrags;
@@ -162,6 +176,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             tv_buy_num.setText("邀请记录");
             tv_go_pay.setText("去邀请赚钱");
         }
+        mPresenter.showVoucherSuspension();
     }
 
     @Override
@@ -267,12 +282,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         }
     }
 
-//    public static void startAct(Context context, String memberId) {
-//        Intent intent = new Intent(context, NewUserPageActivity.class);
-//        intent.putExtra("member_id", memberId);
-//        context.startActivity(intent);
-//    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.act_new_user_layout;
@@ -282,7 +291,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         EventBus.getDefault().register(this);
-        isDialogNew = this.getIntent().getBooleanExtra("isDialogNew",false);
+//        isDialogNew = this.getIntent().getBooleanExtra("isDialogNew",false);
         shareInfoParam = new ShareInfoParam();
         commonDialogUtil = new CommonDialogUtil(this);
         shareGoodDialogUtil = new ShareGoodDialogUtil(this);
@@ -295,32 +304,51 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         userBuyGoodsDialog.setCartDelGoodListen(this);
         mPresenter = new NewUserPagePresenter(this, this);
         goodsFrags = new ArrayList<>();
-         commonLazyPagerAdapter = new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld);
+         commonLazyPagerAdapter = new CommonPagerAdapter(getSupportFragmentManager(), goodsFrags, titlesOld);
         viewpager.setAdapter(commonLazyPagerAdapter);
         if(Common.isAlreadyLogin()) {
             mPresenter.adlist();
+            mPresenter.showVoucherSuspension();
+        }else{
+            showDialogView("");
         }
-        tv_head.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        img_guize.setOnClickListener(v -> {
+            if(newUserGoodsEntity!=null&&!TextUtils.isEmpty(newUserGoodsEntity.h5_rule)){
+                H5X5Act.startAct(NewUserPageActivity.this, newUserGoodsEntity.h5_rule, H5X5Act.MODE_SONIC);
             }
         });
 
-        if(isDialogNew) {
-            commonDialogUtil.userNewShowDialog(new ICallBackResult<String>() {
-                @Override
-                public void onTagClick(String data) {
-                    if(!Common.isAlreadyLogin()){
-                        Common.goGoGo(NewUserPageActivity.this, "login");
-                    }else if(Common.isAlreadyLogin()&&data.equals("立即领取")){
-                        mPresenter.getvoucher();
-                    }else if(Common.isAlreadyLogin()&&data.equals("前往使用")){
-                        mPresenter.adlist();
-                        beginToast();
+    }
+
+    /**
+     * 刷选页面
+     */
+    public void resreshQuest(){
+        mPresenter.adlist();
+        mPresenter.showVoucherSuspension();
+    }
+
+    /**
+     * 显示新人的dialog
+     */
+    private void showDialogView(String warn_txt){
+        commonDialogUtil.userNewShowDialog(new ICallBackResult<String>() {
+            @Override
+            public void onTagClick(String data) {
+                if(!Common.isAlreadyLogin()){
+                    Common.goGoGo(NewUserPageActivity.this, "login");
+                }else if(Common.isAlreadyLogin()&&data.equals("立即领取")){
+                    mPresenter.getvoucher();
+                }else if(Common.isAlreadyLogin()&&data.equals("前往使用")){
+                    if(commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
+                        commonDialogUtil.dialog_user_info.dismiss();
                     }
+                    beginToast();
+                    mPresenter.adlist();
+                    mPresenter.showVoucherSuspension();
                 }
-            }, "立即领取");
-        }
+            }
+        }, "立即领取",warn_txt);
     }
 
     public static void startAct(Context context) {
@@ -387,9 +415,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             line_user_buy.setVisibility(View.VISIBLE);
         }
         commonLazyPagerAdapter.notifyDataSetChanged();
-        if(isEvent){
-            EventBus.getDefault().post(new UserPaySuccessEvent(true,true));
-        }
     }
 
 
@@ -453,10 +478,10 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             CommonDialogUtil promptDialog = new CommonDialogUtil(this);
             promptDialog.defaultCommonDialog("你已经领取了" + CURRENT_NUM + "件商品\n还可以再免费领" + (MAX_COUNT - CURRENT_NUM) + "件商品哦", "去支付", view -> {
                 promptDialog.dismiss();
-                ConfirmOrderAct.startAct(this);
+                ConfirmOrderAct.startAct(this,ConfirmOrderAct.TYPE_NEW_USER_PAGE);
             }, "再逛逛", view -> promptDialog.dismiss());
         }else{
-            ConfirmOrderAct.startAct(this);
+            ConfirmOrderAct.startAct(this,ConfirmOrderAct.TYPE_NEW_USER_PAGE);
         }
 
     }
@@ -482,15 +507,19 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @Override
     public void getvoucher(UserNewDataEntity userNewDataEntity) {
         if(commonDialogUtil!=null&&commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
-            TextView tv_new_submit = commonDialogUtil.dialog_user_info.findViewById(R.id.tv_new_submit);
-            TextView  ntv_user_page_price= commonDialogUtil.dialog_user_info.findViewById(R.id.ntv_user_page_price);
-            tv_new_submit.setText("前往使用");
-            ntv_user_page_price.setText(getStringResouce(R.string.common_yuan)+userNewDataEntity.prize);
+            if(userNewDataEntity.isNew) {
+                TextView tv_new_submit = commonDialogUtil.dialog_user_info.findViewById(R.id.tv_new_submit);
+                TextView ntv_user_page_price = commonDialogUtil.dialog_user_info.findViewById(R.id.ntv_user_page_price);
+                tv_new_submit.setText("前往使用");
+                ntv_user_page_price.setText(getStringResouce(R.string.common_yuan) + userNewDataEntity.prize);
+            }else{
+                getOldMessage("您不是新用户哦，无法领取该优惠券",0);
+            }
         }
     }
 
     @Override
-    public void getOldMessage(String message) {
+    public void getOldMessage(String message,int code) {
         commonDialogUtil.userOldShowDialog(new ICallBackResult<String>() {
             @Override
             public void onTagClick(String data) {
@@ -505,10 +534,37 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                     finish();
                 }else{
                     mPresenter.adlist();
+                    mPresenter.showVoucherSuspension();
                     beginToast();
                 }
             }
-        }, message);
+        }, message, code);
+    }
+
+    @Override
+    public void showVoucherSuspension(ShowVoucherSuspension voucherSuspension) {
+        if(voucherSuspension.suspensionShow.equals("1")&&isNew){
+            tv_new_user_title.setText(voucherSuspension.suspension.prize);
+            show_new_user_view.setVisibility(View.VISIBLE);
+            if(voucherSuspension.suspension.finish>0) {
+                tv_new_user_time.setVisibility(View.VISIBLE);
+                tv_new_user_time.cancelDownTimer();
+                tv_new_user_time.setDownTime(voucherSuspension.suspension.finish);
+                tv_new_user_time.startDownTimer();
+                tv_new_user_time.setDownTimerListener(new OnCountDownTimerListener() {
+                    @Override
+                    public void onFinish() {
+                        tv_new_user_time.cancelDownTimer();
+                        show_new_user_view.setVisibility(View.GONE);
+                        mPresenter.adlist();
+                    }
+                });
+            }else{
+                tv_new_user_time.setVisibility(View.GONE);
+            }
+        }else{
+             show_new_user_view.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -521,9 +577,13 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     /**
      * 更新购物车数量
      */
-    public void initCartNum(int currentNum){
+    public void initCartNum(int currentNum,int show,NewUserGoodsEntity newUserGoodsEntity){
         this.CURRENT_NUM = currentNum;
+        this.newUserGoodsEntity = newUserGoodsEntity;
         updateCartNum();
+        if(show!=1&&isNew){
+            showDialogView(newUserGoodsEntity.warn_txt);
+        }
     }
     /**
      * 更新购物车数量
@@ -575,6 +635,9 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        if(tv_new_user_time!=null){
+            tv_new_user_time.cancelDownTimer();
+        }
         super.onDestroy();
     }
 }

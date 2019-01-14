@@ -3,9 +3,13 @@ package com.shunlian.app.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.zxing.common.StringUtils;
+import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -60,19 +65,11 @@ public class ShareGoodDialogUtil {
         nomalBuildl.setCancelable(true);
         nomalBuildl.setCanceledOnTouchOutside(true);
         nomalBuildl.show();
-        nomalBuildl.getWindow().getDecorView().setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                nomalBuildl.dismiss();
-                return false;
-            }
+        nomalBuildl.getWindow().getDecorView().setOnTouchListener((v, event) -> {
+            nomalBuildl.dismiss();
+            return false;
         });
-        nomalBuildl.setOnClickListener(R.id.ntv_cancel, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nomalBuildl.dismiss();
-            }
-        });
+        nomalBuildl.setOnClickListener(R.id.ntv_cancel, v -> nomalBuildl.dismiss());
         if(shareInfoParam.isSpecial){
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.GONE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
@@ -89,73 +86,63 @@ public class ShareGoodDialogUtil {
         }else {
             line_share_title.setVisibility(View.GONE);
         }
-        nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEddType();
-                Common.copyText(context,mShareInfoParam.title+mShareInfoParam.shareLink);
-                nomalBuildl.dismiss();
-                if(isGood) {
-                    WXEntryActivity.startAct(context,
-                            "shareFriend", mShareInfoParam);
-                    if(isFound&&mCallBack!=null){
+        nomalBuildl.setOnClickListener(R.id.mllayout_weixinhaoyou, v -> {
+            setEddType();
+            Common.copyTextNoToast(context,mShareInfoParam.title+mShareInfoParam.shareLink);
+            nomalBuildl.dismiss();
+            if(isGood) {
+                WXEntryActivity.startAct(context,
+                        "shareFriend", mShareInfoParam);
+                if(isFound&&mCallBack!=null){
 //                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
-                    }
-                }else{
-                    WXEntryActivity.startAct(context,
-                            "shareFriend", mShareInfoParam);
                 }
-                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
-                            mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"微信好友");
-                }
+            }else{
+                WXEntryActivity.startAct(context,
+                        "shareFriend", mShareInfoParam);
+            }
+            if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                        mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"微信好友");
             }
         });
-        nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEddType();
-                Common.copyText(context,mShareInfoParam.title+mShareInfoParam.shareLink);
-                nomalBuildl.dismiss();
-                if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
-                    createSpecialCode( false);
-                    return;
-                }
-                if(isGood) {
-                    createGoodCode(isFound,true);
-                    if(isFound&&mCallBack!=null){
+        nomalBuildl.setOnClickListener(R.id.mllayout_weixinpenyou, v -> {
+            setEddType();
+            Common.copyTextNoToast(context,mShareInfoParam.title+mShareInfoParam.shareLink);
+            nomalBuildl.dismiss();
+            if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
+                createSpecialCode( false);
+                return;
+            }
+            if(isGood) {
+                createGoodCode(isFound,true);
+                if(isFound&&mCallBack!=null){
 //                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
-                    }
-                }else{
-                    createShopCode(true);
                 }
-                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
-                            mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"朋友圈");
-                }
+            }else{
+                createShopCode(true);
+            }
+            if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,
+                        mShareInfoParam.price,mShareInfoParam.shop_id,mShareInfoParam.shop_name,"朋友圈");
             }
         });
-        nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEddType();
-                nomalBuildl.dismiss();
-                Common.copyText(context,mShareInfoParam.title+mShareInfoParam.shareLink);
-                if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
-                    createSpecialCode(true);
-                    return;
-                }
-                if(isGood) {
-                    createGoodCode(isFound,false);
-                }else{
-                    createShopCode(false);
-                }
-                if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
-                    JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,
-                            mShareInfoParam.shop_id,mShareInfoParam.shop_name,"图文");
-                }
+        nomalBuildl.setOnClickListener(R.id.mllayout_tuwenerweima, v -> {
+            setEddType();
+            nomalBuildl.dismiss();
+            Common.copyTextNoToast(context,mShareInfoParam.title+mShareInfoParam.shareLink);
+            if(!TextUtils.isEmpty(mShareInfoParam.special_img_url)){
+                createSpecialCode(true);
+                return;
             }
-
+            if(isGood) {
+                createGoodCode(isFound,false);
+            }else{
+                createShopCode(false);
+            }
+            if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
+                JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,mShareInfoParam.price,
+                        mShareInfoParam.shop_id,mShareInfoParam.shop_name,"图文");
+            }
         });
         nomalBuildl.setOnClickListener(R.id.mllayout_shangping, new View.OnClickListener() {
             @Override
@@ -198,7 +185,7 @@ public class ShareGoodDialogUtil {
     private void createSpecialCode(boolean isShow) {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_special_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle()
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().setWidth(DensityUtil.dip2px(context,280))
                     .setView(inflate);
             showSpecialBuild = nomalBuild.create();
             showSpecialBuild.setCancelable(false);
@@ -234,12 +221,7 @@ public class ShareGoodDialogUtil {
                            }
                        });
            }
-            miv_close.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showSpecialBuild.dismiss();
-                }
-            });
+            miv_close.setOnClickListener(view -> showSpecialBuild.dismiss());
             mllayout_save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -266,13 +248,11 @@ public class ShareGoodDialogUtil {
                                 }
                             });
                     showSpecialBuild.dismiss();
-//                    goodsPic(inflate,mShareInfoParam.img,true,false);
                 }
             });
          mllayout_wexin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                 showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                 miv_close.setVisibility(View.GONE);
                 GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
@@ -290,7 +270,6 @@ public class ShareGoodDialogUtil {
                             }
                         });
                 showSpecialBuild.dismiss();
-//                goodsPic(inflate,mShareInfoParam.shop_logo,false,false);
             }
         });
     }
@@ -304,7 +283,7 @@ public class ShareGoodDialogUtil {
         } else {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_goods_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle()
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().setWidth(Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 80))
                     .setView(inflate);
             showGoodBuild = nomalBuild.create();
             showGoodBuild.setCancelable(false);
@@ -314,76 +293,105 @@ public class ShareGoodDialogUtil {
             MyImageView miv_close = showGoodBuild.findViewById(R.id.miv_close);
             MyLinearLayout mllayout_wexin = showGoodBuild.findViewById(R.id.mllayout_wexin);
             MyLinearLayout mllayout_save = showGoodBuild.findViewById(R.id.mllayout_save);
-            MyImageView miv_user_head = showGoodBuild.findViewById(R.id.miv_user_head);
-            MyTextView mtv_nickname = showGoodBuild.findViewById(R.id.mtv_nickname);
-           TextView mtv_market_price = showGoodBuild.findViewById(R.id.mtv_market_price);
-            mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
-            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
             MyImageView miv_code =  showGoodBuild.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(context, 92.5f);
             Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
             miv_code.setImageBitmap(qrImage);
             MyTextView mtv_title =  showGoodBuild.findViewById(R.id.mtv_title);
-            mtv_title.setText(mShareInfoParam.title);
-            if (!TextUtils.isEmpty(mShareInfoParam.market_price)) {
-                mtv_market_price.setVisibility(View.VISIBLE);
-                mtv_market_price.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG);
-                mtv_market_price.setText("￥" + mShareInfoParam.market_price);
+            MyTextView  mtv_coupon_title =  showGoodBuild.findViewById(R.id.mtv_coupon_title);
+
+            if(!TextUtils.isEmpty(mShareInfoParam.coupon_name)){
+                mtv_coupon_title.setVisibility(View.VISIBLE);
+                mtv_coupon_title.setText(mShareInfoParam.coupon_name);
+                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.coupon_name+mShareInfoParam.title);
+                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.coupon_name.length(),
+                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                mtv_title.setText(span);
             }else{
-                mtv_market_price.setVisibility(View.VISIBLE);
+               mtv_title.setText(mShareInfoParam.title);
+                mtv_coupon_title.setVisibility(View.GONE);
             }
-            MyTextView mtv_desc =  showGoodBuild.findViewById(R.id.mtv_desc);
-            if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
-                mtv_desc.setVisibility(View.GONE);
-                mtv_desc.setText(mShareInfoParam.desc);
-            } else {
-                mtv_desc.setVisibility(View.GONE);
-            }
+
+//            MyTextView mtv_goodsID =  showGoodBuild.findViewById(R.id.mtv_goodsID);
+//            mtv_goodsID.setText("商品编号:" + mShareInfoParam.goods_id + "(搜索可直达)");
+//            MyTextView mtv_desc =  showGoodBuild.findViewById(R.id.mtv_desc);
+//            if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
+//                mtv_desc.setVisibility(View.GONE);
+//                mtv_desc.setText(mShareInfoParam.desc);
+//            } else {
+//                mtv_desc.setVisibility(View.GONE);
+//            }
+//            MyTextView mtv_SuperiorProduct = showGoodBuild.findViewById(R.id.mtv_SuperiorProduct);
+//            if (mShareInfoParam.isSuperiorProduct) {
+//                mtv_SuperiorProduct.setVisibility(View.VISIBLE);
+//            } else {
+//                mtv_SuperiorProduct.setVisibility(View.GONE);
+//            }
+            //不是新用户商品显示价格
+            LinearLayout line_old_user= showGoodBuild.findViewById(R.id.line_old_user);
             MyTextView mtv_price =  showGoodBuild.findViewById(R.id.mtv_price);
-            mtv_price.setText("￥" + mShareInfoParam.price);
-            MyTextView mtv_goodsID =  showGoodBuild.findViewById(R.id.mtv_goodsID);
-            mtv_goodsID.setText("商品编号:" + mShareInfoParam.goods_id + "(搜索可直达)");
+            //新用户商品显示价格
+            RelativeLayout re_newuser_layout = showGoodBuild.findViewById(R.id.re_newuser_layout);
+            MyTextView mtv_newuser_price = showGoodBuild.findViewById(R.id.mtv_newuser_price);
+            MyTextView mtv_newuser_mark_price = showGoodBuild.findViewById(R.id.mtv_newuser_mark_price);
 
-
-            //显示优品图标
-            MyTextView mtv_SuperiorProduct = showGoodBuild.findViewById(R.id.mtv_SuperiorProduct);
-            if (mShareInfoParam.isSuperiorProduct) {
-                mtv_SuperiorProduct.setVisibility(View.VISIBLE);
-            } else {
-                mtv_SuperiorProduct.setVisibility(View.GONE);
+            if(mShareInfoParam.isNewUserGood) {
+                line_old_user.setVisibility(View.GONE);
+                re_newuser_layout.setVisibility(View.VISIBLE);
+                mtv_newuser_price.setText(context.getResources().getString(R.string.common_yuan)+mShareInfoParam.price);
+                if (!TextUtils.isEmpty(mShareInfoParam.market_price)) {
+                    mtv_newuser_mark_price.setVisibility(View.VISIBLE);
+                    mtv_newuser_mark_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                    mtv_newuser_mark_price.setText("￥" + mShareInfoParam.market_price);
+                } else {
+                    mtv_newuser_mark_price.setVisibility(View.VISIBLE);
+                }
+            }else{
+                re_newuser_layout.setVisibility(View.GONE);
+                line_old_user.setVisibility(View.VISIBLE);
+                mtv_price.setText(Common.dotPointAfterSmall(mShareInfoParam.price,11));
             }
-
             LinearLayout  llayout_day =showGoodBuild.findViewById(R.id.llayout_day);
             MyTextView mtv_time  = showGoodBuild.findViewById(R.id.mtv_time);
             MyTextView mtv_act_label  = showGoodBuild.findViewById(R.id.mtv_act_label);
-            if (TextUtils.isEmpty(mShareInfoParam.start_time)) {
+
+            if (TextUtils.isEmpty(mShareInfoParam.start_time)||mShareInfoParam.isNewUserGood) {
                 llayout_day.setVisibility(View.GONE);
             } else {
                 llayout_day.setVisibility(View.VISIBLE);
+                if(mShareInfoParam.isActivityStart){
+                    llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.value_007AFF));
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_act_label.setBackgroundColor(context.getResources().getColor(R.color.value_007AFF));
+                }else{
+                    llayout_day.setBackgroundResource(R.drawable.edge_pink_1px);
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.pink_color));
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_act_label.setBackgroundColor(context.getResources().getColor(R.color.pink_color));
+                }
                 mtv_time.setText(mShareInfoParam.start_time);
                 mtv_act_label.setText(mShareInfoParam.act_label);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
             int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 80);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
             layoutParams.width = width;
             layoutParams.height = width;
 
             if(!isCircleShare) {
                 GlideUtils.getInstance().loadImageZheng(context, miv_goods_pic, mShareInfoParam.img);
-                showGoodBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
                 showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
             }else{
                 miv_close.setVisibility(View.GONE);
-                showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                 showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                 GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
                         new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource,
                                                         GlideAnimation<? super Bitmap> glideAnimation) {
-                                int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
-                                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+                                int width = Common.getScreenWidth((Activity) context);
+                                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
                                 layoutParams.width = width;
                                 layoutParams.height = width;
 
@@ -400,43 +408,30 @@ public class ShareGoodDialogUtil {
                             }
                         });
             }
-            miv_close.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showGoodBuild.dismiss();
-                }
-            });
+            miv_close.setOnClickListener(view -> showGoodBuild.dismiss());
 
-            mllayout_wexin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
-                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-                    layoutParams.width = width;
-                    layoutParams.height = width;
-                    showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
-                    showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
-                    miv_close.setVisibility(View.GONE);
-                    showGoodBuild.dismiss();
-                    goodsPic(inflate,mShareInfoParam.img,false,false);
-                    if(isFound&&mCallBack!=null){
-                        mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
-                    }
+            mllayout_wexin.setOnClickListener(view -> {
+                int width1 = Common.getScreenWidth((Activity) context);
+                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+                layoutParams1.width = width1;
+                layoutParams1.height = width1;
+                showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                miv_close.setVisibility(View.GONE);
+                showGoodBuild.dismiss();
+                goodsPic(inflate,mShareInfoParam.img,false,false);
+                if(isFound&&mCallBack!=null){
+                    mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                 }
             });
-            mllayout_save.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
-                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-                    layoutParams.width = width;
-                    layoutParams.height = width;
-                    showGoodBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
-                    showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
-                    miv_close.setVisibility(View.GONE);
-                    showGoodBuild.dismiss();
-                    goodsPic(inflate,mShareInfoParam.img,true,false);
-                }
+            mllayout_save.setOnClickListener(view -> {
+                int width12 = Common.getScreenWidth((Activity) context);
+                RelativeLayout.LayoutParams layoutParams12 = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+                layoutParams12.width = width12;
+                layoutParams12.height = width12;
+                showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                miv_close.setVisibility(View.GONE);
+                showGoodBuild.dismiss();
+                goodsPic(inflate,mShareInfoParam.img,true,false);
             });
         }
     }
@@ -475,16 +470,13 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_title =  showShopBuild.findViewById(R.id.mtv_title);
             mtv_title.setText(mShareInfoParam.title);
             if(mShareInfoParam.share_goods!=null&&mShareInfoParam.share_goods.size()>0) {
-                StoreViewUtil storeBabyAdapter = new StoreViewUtil(showShopBuild, context, mShareInfoParam.share_goods, isCircleShare, new StoreShareBabyAdapter.LoadImageCount() {
-                    @Override
-                    public void imageSuccessCount(int successCount) {
-                        if(successCount==mShareInfoParam.share_goods.size()){
-                            Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                            if(bitmapByView==null){
-                                return;
-                            }
-                            BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
+                StoreViewUtil storeBabyAdapter = new StoreViewUtil(showShopBuild, context, mShareInfoParam.share_goods, isCircleShare, successCount -> {
+                    if(successCount==mShareInfoParam.share_goods.size()){
+                        Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                        if(bitmapByView==null){
+                            return;
                         }
+                        BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
                     }
                 });
                 storeBabyAdapter.showStoreGoodView();
@@ -498,22 +490,14 @@ public class ShareGoodDialogUtil {
                 showShopBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
             }
-            miv_close.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showShopBuild.dismiss();
-                }
-            });
-            mllayout_save.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
-                    showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
-                    showShopBuild.getView(R.id.line_share_boottom).setMinimumHeight(0);
-                    miv_close.setVisibility(View.GONE);
-                    showShopBuild.dismiss();
-                    goodsPic(inflate,mShareInfoParam.shop_logo,true,false);
-                }
+            miv_close.setOnClickListener(view -> showShopBuild.dismiss());
+            mllayout_save.setOnClickListener(view -> {
+                showShopBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
+                showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+                showShopBuild.getView(R.id.line_share_boottom).setMinimumHeight(0);
+                miv_close.setVisibility(View.GONE);
+                showShopBuild.dismiss();
+                goodsPic(inflate,mShareInfoParam.shop_logo,true,false);
             });
         }
     }

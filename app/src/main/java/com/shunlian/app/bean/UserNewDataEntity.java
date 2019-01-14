@@ -14,4 +14,5 @@ public class UserNewDataEntity {
     public String prize;
     public String type;//newuser
     public String item_id;
+    public boolean isNew;
 }

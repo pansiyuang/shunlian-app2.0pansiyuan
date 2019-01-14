@@ -8,7 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
         android:background="@drawable/bg_dialog_top"
         android:orientation="vertical">
 
@@ -33,18 +36,19 @@
             android:layout_marginTop="5dp"
             android:text="您不是新用户哦，无法领取该优惠券"
             android:gravity="center"
+            android:lineSpacingExtra="5dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:textColor="@color/text_gray2"
-            android:textSize="14sp"
+            android:textSize="16sp"
+            android:layout_marginBottom="20dp"
             android:visibility="visible"/>
       <ImageView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="20dp"
-          android:layout_marginBottom="20dp"
+          android:id="@+id/image_pic"
           android:src="@mipmap/img_huiyuan_ji"/>
-
     </LinearLayout>
-
 
     <View
         android:layout_width="match_parent"
@@ -63,7 +67,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="确定"
+            android:text="回到首页"
             android:textColor="@color/value_484848"
             android:textSize="15sp"
             android:textStyle="bold"
@@ -81,7 +85,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="回到首页"
+            android:text="确定"
             android:textColor="#FB0036"
             android:textSize="15sp"
             android:background="@drawable/bg_dialog_bottomr"

@@ -101,14 +101,14 @@ public class NewUserGoodsPresenter extends BasePresenter<INewUserGoodsView> {
                 }else{
                     allPage = currentPage+1;
                 }
-                iView.userGoodsList(currentPage, allPage, data.list);
+                iView.userGoodsList(currentPage, allPage, data.list,data.recommend);
                 if(currentPage==1){
                     iView.refreshFinish();
                     if(!TextUtils.isEmpty(data.unpaid)) {
                         iView.showNoPayDialog(data.unpaid);
                     }
                     if(type.equals("1")) {
-                        ((NewUserPageActivity) context).initCartNum(data.cartTotal);
+                        ((NewUserPageActivity) context).initCartNum(data.cartTotal,data.show,entity.data);
                     }
                 }
                 currentPage++;

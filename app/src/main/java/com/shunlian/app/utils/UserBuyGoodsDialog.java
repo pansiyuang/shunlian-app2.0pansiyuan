@@ -71,15 +71,15 @@ public class UserBuyGoodsDialog {
                 MyTextView mtv_price = holder.getView(R.id.mtv_price);
                 MyTextView mtv_shux = holder.getView(R.id.mtv_shux);
                 MyTextView mtv_discount_price = holder.getView(R.id.mtv_discount_price);
-                MyTextView tv_shopping_car = holder.getView(R.id.tv_shopping_car);
+                MyTextView tv_user_shopping_car = holder.getView(R.id.tv_user_shopping_car);
+                holder.getView(R.id.tv_show_num).setVisibility(View.GONE);;
                 holder.getView(R.id.tv_usew_desc).setVisibility(View.GONE);
-
                 GlideUtils.getInstance().loadOverrideImage(context,
                         miv_goods_pic, goods.thumb,220,220);
                 mtv_title.setText(goods.title);
                 String source = context.getString(R.string.rmb).concat(goods.price);
                 mtv_price.setText(Common.changeTextSize(source, context.getString(R.string.rmb), 12));
-                tv_shopping_car.setText("删除");
+                tv_user_shopping_car.setText("删除");
                 mtv_discount_price.setStrikethrough();
                 mtv_discount_price.setText(goods.market_price);
                 if(TextUtils.isEmpty(goods.sku)){
@@ -89,7 +89,7 @@ public class UserBuyGoodsDialog {
                     mtv_shux.setVisibility(View.VISIBLE);
                 }
 
-                tv_shopping_car.setOnClickListener(new View.OnClickListener() {
+                tv_user_shopping_car.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(cartDelGoodListenl!=null){

@@ -15,6 +15,15 @@ public class New3LoginInfoTipEntity {
     public InciteCodeRuleBean incite_code_rule;
     public String voucher;
     public String login_title;
+    public V2 v2;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class V2{
+        public String incite_code_title;
+        public String incite_code_rule;
+        public String voucher;
+        public String register_title;
+    }
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)

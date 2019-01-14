@@ -62,11 +62,13 @@ public class ShareInfoParam implements Serializable {
     public String pic;
     public String logo;
     public boolean isSpecial = false;
-
+    public boolean isNewUserGood = false;
+    public boolean isActivityStart = false;
     public String cate1;
     public String cate2;
     public String store_id;
     public String store_name;
+    public String coupon_name;
 
     public List<StoreGoodsListEntity.MData> share_goods;
     public int egg_type = 0;//0:没有金蛋 1：商品详情有金蛋 2：店铺详情有金蛋

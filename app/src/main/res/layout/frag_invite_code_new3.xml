@@ -9,10 +9,11 @@
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_InviteTip"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="35dp"
+        android:gravity="center"
         android:layout_marginTop="20dp"
+        android:textStyle="bold"
         android:textColor="@color/value_484848"
         android:textSize="15sp" />
 
@@ -20,7 +21,7 @@
         android:id="@+id/miv_coupon"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="105dp" />
 
 
@@ -58,7 +59,7 @@
         android:layout_marginTop="15dp"
         android:background="@drawable/rounded_corner_solid_pink_50px"
         android:gravity="center"
-        android:text="立即绑定"
+        android:text="下一步"
         android:textColor="@color/white"
         android:textSize="16dp"
         android:textStyle="bold" />

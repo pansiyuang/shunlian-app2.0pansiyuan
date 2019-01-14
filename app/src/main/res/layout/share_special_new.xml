@@ -8,20 +8,21 @@
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_centerInParent="true">
         <LinearLayout
             android:id="@+id/ll_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_white_8px"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:id="@+id/img_hight"
-                android:layout_height="450dp"
+                android:layout_height="400dp"
                 android:layout_marginTop="10dp"
                 android:paddingBottom="@dimen/xx10">
                 <ImageView
@@ -82,12 +83,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="12dp"
+                android:visibility="gone"
                 android:id="@+id/line_share_line"
                 android:background="@color/light_gray_three" />
 
             <com.shunlian.app.widget.MyLinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
+                android:layout_width="150dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
                 android:id="@+id/line_share_boottom"
                 android:orientation="horizontal">
 
@@ -100,8 +103,8 @@
                     android:orientation="vertical">
 
                     <com.shunlian.app.widget.MyImageView
-                        android:layout_width="@dimen/xx120"
-                        android:layout_height="@dimen/xx120"
+                        android:layout_width="@dimen/xx140"
+                        android:layout_height="@dimen/xx140"
                         android:scaleType="fitXY"
                         android:src="@mipmap/icon_wechat" />
 
@@ -109,9 +112,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="@string/discover_weiixnhaoyou"
+                        android:text="分享好友"
                         android:textColor="@color/share_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </com.shunlian.app.widget.MyLinearLayout>
                 <com.shunlian.app.widget.MyLinearLayout
                     android:id="@+id/mllayout_save"
@@ -122,8 +125,8 @@
                     android:orientation="vertical">
 
                     <com.shunlian.app.widget.MyImageView
-                        android:layout_width="@dimen/xx120"
-                        android:layout_height="@dimen/xx120"
+                        android:layout_width="@dimen/xx140"
+                        android:layout_height="@dimen/xx140"
                         android:scaleType="fitXY"
                         android:src="@mipmap/icon_erweimass" />
 
@@ -131,9 +134,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="@string/discover_baocuntupian"
+                        android:text="保存到相册"
                         android:textColor="@color/share_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </com.shunlian.app.widget.MyLinearLayout>
             </com.shunlian.app.widget.MyLinearLayout>
         </LinearLayout>
