@@ -22,6 +22,7 @@ import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.EmptyPresenter;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.KouBeiAct;
@@ -42,6 +43,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
 
@@ -54,7 +56,7 @@ import butterknife.BindView;
  * Created by augus on 2017/11/13 0013.
  */
 
-public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> implements IView {
+public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> implements IView ,ParamDialog.OnGoodsBuyCallBack{
     private static final int TYPE9 = 9;//轮播
     private static final int TYPE2 = 2;//导航
     private static final int TYPE3 = 3;//会场
@@ -596,6 +598,16 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                             }
                         }
                     });
+                    fiveHolder.mtv_buy.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(!Common.isAlreadyLogin()){
+                                Common.goGoGo(context, "login");
+                                return;
+                            }
+                            basePresenter.getGoodsSku(data.url.item_id);
+                        }
+                    });
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -849,6 +861,35 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
         }
         textView.setLayoutParams(params);
         return textView;
+    }
+
+    private String goodId;
+    @Override
+    public void showGoodsSku(GoodsDeatilEntity.Goods goods) {
+        this.goodId = goods.goods_id;
+        ParamDialog paramDialog  = new ParamDialog(context, goods);
+        paramDialog.setOnGoodsBuyCallBack(FirstPageAdapter.this);
+        if (paramDialog != null){
+            paramDialog.show();
+        }
+    }
+
+    @Override
+    public void onAddCar(GoodsDeatilEntity.Sku sku, int count) {
+        onSelectComplete(sku,count,true);
+    }
+
+    @Override
+    public void onBuyNow(GoodsDeatilEntity.Sku sku, int count) {
+        onSelectComplete(sku,count,false);
+    }
+    //@Override
+
+    public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count,boolean isAddcart) {
+        if (context instanceof MainActivity) {
+            MainActivity goodsDetailAct = (MainActivity) context;
+            goodsDetailAct.selectGoodsInfo(sku, count,isAddcart,this.goodId);
+        }
     }
 
 
