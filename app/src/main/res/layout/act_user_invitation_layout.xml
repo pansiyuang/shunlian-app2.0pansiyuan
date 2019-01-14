@@ -89,7 +89,7 @@
                    android:layout_height="wrap_content"
                    android:layout_centerHorizontal="true"
                    android:textColor="#F05A63"
-                   android:layout_marginBottom="123dp"
+                   android:layout_marginBottom="125dp"
                    android:layout_alignParentBottom="true"
                    android:text="立即邀请"/>
            </RelativeLayout>
