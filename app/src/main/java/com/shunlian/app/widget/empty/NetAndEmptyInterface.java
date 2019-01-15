@@ -51,6 +51,7 @@ public class NetAndEmptyInterface extends LinearLayout {
 
     }
 
+
     private void addImageView() {
         imageView = new MyImageView(getContext());
         addView(imageView,0);

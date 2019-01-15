@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,11 +18,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
+import com.shunlian.app.bean.DiscoverActivityEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.ICallBackResult;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -50,10 +54,10 @@ public class CommonDialogUtil {
         if(((Activity)context).isFinishing()){
             return;
         }
-        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fullWidth()
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAdLiuhai).fullWidth()
                 .setView(R.layout.dialog_page_user_new);
         dialog_user_info = nomalBuild.create();
-        dialog_user_info.setCancelable(false);
+        dialog_user_info.getWindow().getAttributes().flags= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         dialog_user_info.show();
         MyImageView miv_close= dialog_user_info.findViewById(R.id.miv_close);
         TextView tv_new_submit = dialog_user_info.findViewById(R.id.tv_new_submit);
