@@ -75,6 +75,7 @@ import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
@@ -254,6 +255,8 @@ public class Common {
                 return "TaskCenterAct";
             case "businessSchool":
                 return "HelpClassAct";
+            case "plusFreeConfirmOrder":
+                return "ConfirmOrderAct";
             case "myBalance":
                 return "BalanceMainAct";
             case "shunlianKefu":
@@ -568,6 +571,10 @@ public class Common {
             case "myBalance":
                 Constant.ISBALANCE = true;
                 BalanceMainAct.startAct(context, false);
+                break;
+            case "plusFreeConfirmOrder":
+//                slmall://plusFreeConfirmOrder?gid=123&qty=1&sku_id=345
+                ConfirmOrderAct.startAct(context,params[0],params[1],params[2],ConfirmOrderAct.TYPE_PLUSFREE);
                 break;
             default://首页
                 MainActivity.startAct(context, "");
