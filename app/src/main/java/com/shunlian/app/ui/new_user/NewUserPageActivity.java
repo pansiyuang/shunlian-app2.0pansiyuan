@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,12 +32,14 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.UserBuyGoodsDialog;
 import com.shunlian.app.utils.timer.HoneRedDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
@@ -163,6 +166,22 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                     handler.removeCallbacks(runnableC);
                 }
             }
+        }
+    }
+
+    public void scrollListen(RecyclerView recyclerView, int dx, int dy){
+        if(show_new_user_view.getVisibility()==View.VISIBLE){
+            int valuew = TransformUtil.dip2px(this, 104);
+            int valueh = TransformUtil.dip2px(this, 112);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(valuew, valueh);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            if (dy > 0) {
+                layoutParams.setMargins(0, 0, -valuew / 2, TransformUtil.dip2px(this, 60));
+            } else {
+                layoutParams.setMargins(0, 0, 0, TransformUtil.dip2px(this, 60));
+            }
+            show_new_user_view.setLayoutParams(layoutParams);
         }
     }
 

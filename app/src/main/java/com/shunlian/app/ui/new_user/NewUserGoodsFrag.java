@@ -145,6 +145,9 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                if(baseActivity instanceof NewUserPageActivity){
+                    ((NewUserPageActivity)baseActivity).scrollListen(recyclerView,dx,dy);
+                }
                 if (manager != null) {
                     int lastPosition = manager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == manager.getItemCount()) {
