@@ -339,6 +339,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
      * 显示新人的dialog
      */
     private void showDialogView(String warn_txt){
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
         commonDialogUtil.userNewShowDialog(new ICallBackResult<String>() {
             @Override
             public void onTagClick(String data) {
@@ -347,6 +349,10 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                 }else if(Common.isAlreadyLogin()&&data.equals("立即领取")){
                     mPresenter.getvoucher();
                 }else if(Common.isAlreadyLogin()&&data.equals("前往使用")){
+                    ImmersionBar.with(NewUserPageActivity.this).fitsSystemWindows(true)
+                            .statusBarColor(R.color.pink_color)
+                            .statusBarDarkFont(false, 0)
+                            .init();
                     if(commonDialogUtil.dialog_user_info!=null&&commonDialogUtil.dialog_user_info.isShowing()){
                         commonDialogUtil.dialog_user_info.dismiss();
                     }
@@ -543,6 +549,10 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                     MainActivity.startAct(NewUserPageActivity.this, "mainPage");
                     finish();
                 }else{
+                    ImmersionBar.with(NewUserPageActivity.this).fitsSystemWindows(true)
+                            .statusBarColor(R.color.pink_color)
+                            .statusBarDarkFont(false, 0)
+                            .init();
                     mPresenter.adlist();
                     mPresenter.showVoucherSuspension();
                     beginToast();

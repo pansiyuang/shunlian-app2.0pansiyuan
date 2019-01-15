@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/transparent">
 
     <RelativeLayout
     android:background="@color/white"
@@ -15,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:padding="10dp"
+        android:layout_centerVertical="true"
         android:src="@mipmap/icon_common_back_black" />
 
     <com.shunlian.app.widget.MyTextView
@@ -23,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textColor="@color/text_gray2"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:text="新人专享优惠券"
      />
 
@@ -37,36 +39,38 @@
         android:background="@mipmap/img_xinren_beijing"
         >
         <ImageView
-            android:layout_width="350dp"
-            android:layout_height="320dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/yy920"
             android:id="@+id/image_show"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_centerHorizontal="true"
             android:background="@mipmap/img_hongbao"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="@dimen/yy420"
             />
         <TextView
             android:id="@+id/tv_new_submit"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="立即领取"
-            android:paddingLeft="2dp"
+            android:paddingLeft="5dp"
             android:gravity="center"
             android:textColor="#F05A63"
             android:textSize="16sp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="324.5dp"/>
+            android:layout_marginTop="@dimen/yy920"/>
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mllayout_before"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginTop="220dp"
+            android:layout_marginTop="@dimen/yy620"
             android:layout_centerHorizontal="true">
             <com.shunlian.app.widget.NewTextView
                 android:id="@+id/ntv_user_page_price"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/pink_color"
                 android:layout_width="152dp"
@@ -78,7 +82,7 @@
             <LinearLayout
                 android:layout_width="152dp"
                 android:orientation="horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:layout_height="20dp">
                 <com.shunlian.app.widget.NewTextView
