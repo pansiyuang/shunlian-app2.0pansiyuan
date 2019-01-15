@@ -29,7 +29,7 @@
                 android:id="@+id/ntv_user_bOne"
                 android:textSize="15sp"
                 android:textColor="@color/new_text"
-                android:layout_width="152dp"
+                android:layout_width="158dp"
                 android:lineSpacingExtra="5dp"
                 android:text="恭喜您获得现金红包,新人专享特供"
                 android:layout_height="wrap_content" />

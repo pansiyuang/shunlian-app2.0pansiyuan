@@ -14,9 +14,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_white_8px"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="15dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -24,7 +25,7 @@
                 android:id="@+id/img_hight"
                 android:layout_height="400dp"
                 android:layout_marginTop="10dp"
-                android:paddingBottom="@dimen/xx10">
+                android:paddingBottom="10dp">
                 <ImageView
                     android:id="@+id/imv_special_pic"
                     android:layout_width="match_parent"
@@ -86,69 +87,71 @@
                 android:visibility="gone"
                 android:id="@+id/line_share_line"
                 android:background="@color/light_gray_three" />
+        </LinearLayout>
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ll_root"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/line_share_boottom"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
             <com.shunlian.app.widget.MyLinearLayout
-                android:layout_width="150dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/line_share_boottom"
-                android:orientation="horizontal">
+                android:id="@+id/mllayout_wexin"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <com.shunlian.app.widget.MyLinearLayout
-                    android:id="@+id/mllayout_wexin"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="@dimen/xx180"
+                    android:layout_height="@dimen/xx180"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/icon_wechat" />
 
-                    <com.shunlian.app.widget.MyImageView
-                        android:layout_width="@dimen/xx180"
-                        android:layout_height="@dimen/xx180"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/icon_wechat" />
-
-                    <com.shunlian.app.widget.NewTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="分享好友"
-                        android:textColor="@color/share_text"
-                        android:textSize="11sp" />
-                </com.shunlian.app.widget.MyLinearLayout>
-                <com.shunlian.app.widget.MyLinearLayout
-                    android:id="@+id/mllayout_save"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <com.shunlian.app.widget.MyImageView
-                        android:layout_width="@dimen/xx180"
-                        android:layout_height="@dimen/xx180"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/icon_erweimass" />
-
-                    <com.shunlian.app.widget.NewTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="保存到相册"
-                        android:textColor="@color/share_text"
-                        android:textSize="11sp" />
-                </com.shunlian.app.widget.MyLinearLayout>
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="分享好友"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
             </com.shunlian.app.widget.MyLinearLayout>
-        </LinearLayout>
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_save"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="@dimen/xx180"
+                    android:layout_height="@dimen/xx180"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/icon_erweimass" />
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="保存到相册"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+            </com.shunlian.app.widget.MyLinearLayout>
+        </com.shunlian.app.widget.MyLinearLayout>
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_below="@id/ll_root"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:src="@mipmap/icon_write_close" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@mipmap/icon_close" />
     </com.shunlian.app.widget.MyRelativeLayout>
 </com.shunlian.app.widget.MyRelativeLayout>

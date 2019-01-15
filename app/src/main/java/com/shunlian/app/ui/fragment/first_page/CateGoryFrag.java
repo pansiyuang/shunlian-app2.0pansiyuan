@@ -97,18 +97,35 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy != 0) {
-                    int value = TransformUtil.dip2px(baseActivity, 80);
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
-                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    if (dy > 0) {
-                        layoutParams.setMargins(0, 0, -value / 2, value);
-                        FirstPageFrag.isHide = true;
-                    } else {
-                        layoutParams.setMargins(0, 0, 0, value);
-                        FirstPageFrag.isHide = false;
+                    if( FirstPageFrag.miv_entry.getVisibility()==View.VISIBLE) {
+                        int value = TransformUtil.dip2px(baseActivity, 80);
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        if (dy > 0) {
+                            layoutParams.setMargins(0, 0, -value / 2, value);
+                            FirstPageFrag.isHide = true;
+                        } else {
+                            layoutParams.setMargins(0, 0, 0, value);
+                            FirstPageFrag.isHide = false;
+                        }
+                        FirstPageFrag.miv_entry.setLayoutParams(layoutParams);
+                    }else if(FirstPageFrag.show_new_user_view.getVisibility()==View.VISIBLE){
+                        int valuew = TransformUtil.dip2px(baseActivity, 104);
+                        int valueh = TransformUtil.dip2px(baseActivity, 112);
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(valuew, valueh);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        if (dy > 0) {
+                            layoutParams.setMargins(0, 0, -valuew / 2, TransformUtil.dip2px(baseActivity, 60));
+                            FirstPageFrag.isNewUserHide = true;
+                        } else {
+                            layoutParams.setMargins(0, 0, 0, TransformUtil.dip2px(baseActivity, 60));
+                            FirstPageFrag.isNewUserHide = false;
+                        }
+                        FirstPageFrag.show_new_user_view.setLayoutParams(layoutParams);
+
                     }
-                    FirstPageFrag.miv_entry.setLayoutParams(layoutParams);
                 }
                 if (!FirstPageFrag.isExpand && 0 >= getScollYDistance())
                     FirstPageFrag.mAppbar.setExpanded(true);

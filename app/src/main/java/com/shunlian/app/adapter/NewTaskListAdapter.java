@@ -1,12 +1,13 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
@@ -65,7 +66,25 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
             mHolder.mtvEggsCount.setText(itemTask.gold_num);
             visible(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
         }
+        try {
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
+                    mHolder.miv_image.getLayoutParams();
+            if (TASK_TYPE.newer_download_app == TASK_TYPE.valueOf(itemTask.code)) {
+                visible(mHolder.miv_image);
+                mHolder.miv_image.setImageResource(R.mipmap.image_redenvelope);
+                layoutParams.leftMargin = TransformUtil.dip2px(context,10);
+                layoutParams.gravity = Gravity.CENTER;
+            } else if (TASK_TYPE.task_daily_lottery == TASK_TYPE.valueOf(itemTask.code)) {
+                visible(mHolder.miv_image);
+                mHolder.miv_image.setImageResource(R.mipmap.image_everyweekday);
+                layoutParams.leftMargin = TransformUtil.dip2px(context,2);
+            } else {
+                gone(mHolder.miv_image);
+            }
+            mHolder.miv_image.setLayoutParams(layoutParams);
+        }catch (Exception e){
 
+        }
 
         changeState(position, mHolder, itemTask);
     }
@@ -73,26 +92,24 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
     private void changeState(int position, TaskListHolder mHolder, TaskListEntity.ItemTask itemTask) {
         try {
             if ("0".equals(itemTask.task_status)) {//0 未完成；1已完成
-                if (TASK_TYPE.task_new_user_gift == TASK_TYPE.valueOf(itemTask.code)
+                /*if (TASK_TYPE.task_new_user_gift == TASK_TYPE.valueOf(itemTask.code)
                         || TASK_TYPE.task_new_user_invite == TASK_TYPE.valueOf(itemTask.code)
                          || TASK_TYPE.task_daily_hour_gold == TASK_TYPE.valueOf(itemTask.code)) {
-                    visible(mHolder.mivObtainBg);
-                    mHolder.mtvObtainTip.setText("点击领取");
+                    mHolder.mtvObtainTip.setText("领取");
                     mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
-                    mHolder.mtvObtainTip.setBackgroundDrawable(null);
+                    mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(2));
                 } else {
-                    mHolder.mtvObtainTip.setText("去完成");
-                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.pink_color));
-                    mHolder.mtvObtainTip.setBackgroundDrawable(getNotCompleteDrawable());
-                    gone(mHolder.mivObtainBg);
-                }
+
+                }*/
+                mHolder.mtvObtainTip.setText("去完成");
+                mHolder.mtvObtainTip.setTextColor(getColor(R.color.pink_color));
+                mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(1));
             } else {
-                mHolder.mtvObtainTip.setText("已完成");
+                mHolder.mtvObtainTip.setText("已领取");
                 mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
-                mHolder.mtvObtainTip.setBackgroundDrawable(getCompleteDrawable());
-                gone(mHolder.mivObtainBg);
+                mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(3));
             }
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
 
         }
     }
@@ -117,13 +134,35 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
         return drawable;
     }
 
-    private GradientDrawable getNotCompleteDrawable() {
+    /**
+     *
+     * @param status 1 去完成  2 领取   3 已完成
+     * @return
+     */
+    private GradientDrawable getBtnStatusDrawable(int status) {
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setColor(getColor(R.color.white));
+        switch (status){
+            case 1:
+                drawable.setColor(getColor(R.color.white));
+                drawable.setStroke(TransformUtil.dip2px(context, 1),
+                        getColor(R.color.pink_color));
+                break;
+
+            case 2:
+                drawable = null;
+                drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                        new int[]{Color.parseColor("#FD6503"),
+                                Color.parseColor("#FF2703")});
+                break;
+
+            case 3:
+                drawable.setColor(getColor(R.color.color_value_6c));
+                break;
+        }
+
         drawable.setCornerRadius(TransformUtil.dip2px(context, 10));
-        int i = TransformUtil.dip2px(context, 20);
-        drawable.setSize(i * 3, i);
-        drawable.setStroke(TransformUtil.dip2px(context, 1), getColor(R.color.pink_color));
+//        int i = TransformUtil.dip2px(context, 20);
+//        drawable.setSize(i * 3, i);
         return drawable;
     }
 
@@ -138,27 +177,21 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
         @BindView(R.id.mtv_task_tip)
         MyTextView mtvTaskTip;
 
-        @BindView(R.id.miv_obtain_bg)
-        MyImageView mivObtainBg;
-
         @BindView(R.id.mtv_obtain_tip)
         MyTextView mtvObtainTip;
-
-        @BindView(R.id.flayout_obtain)
-        FrameLayout flayoutObtain;
 
         @BindView(R.id.mtv_eggs_count)
         MyTextView mtvEggsCount;
 
-        @BindView(R.id.llayout_right)
-        LinearLayout llayout_right;
-
         @BindView(R.id.llayout_eggs_count)
         LinearLayout llayout_eggs_count;
 
+        @BindView(R.id.miv_image)
+        MyImageView miv_image;
+
         public TaskListHolder(View itemView) {
             super(itemView);
-            llayout_right.setOnClickListener(v -> {
+            mtvObtainTip.setOnClickListener(v -> {
                 try {
                     TaskListEntity.ItemTask itemTask = lists.get(getAdapterPosition());
                     if (listener != null && "0".equals(itemTask.task_status))
@@ -185,6 +218,19 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
          */
         task_new_user_video,
         /**
+         * 完善个人信息得金蛋
+         */
+        fill_personal_data,
+        /**
+         * 新人专区下单获金蛋
+         */
+        new_area_orders,
+
+
+
+
+
+        /**
          * 限时领金蛋
          */
         task_daily_hour_gold,
@@ -203,6 +249,10 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
         /**
          * 晒收入赚金蛋
          */
-        task_daily_show_income
+        task_daily_show_income,
+        /**
+         * 邀新用户下单获红包
+         */
+        newer_download_app
     }
 }

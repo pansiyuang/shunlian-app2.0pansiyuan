@@ -128,6 +128,7 @@ public class GoldEggDialog extends Dialog {
                     onDialogBtnClickListener.onSetAddress();
                     break;
                 case 5://金蛋数量不足
+                    onDialogBtnClickListener.jumpTaskCenter();
                     break;
             }
         });
@@ -306,5 +307,7 @@ public class GoldEggDialog extends Dialog {
         void onSetAddress();
 
         void onToVisit(TaskDrawEntity.Url url);
+
+        void jumpTaskCenter();
     }
 }

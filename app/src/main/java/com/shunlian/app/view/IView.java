@@ -24,6 +24,7 @@ package com.shunlian.app.view;
 
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 
 /**
@@ -50,4 +51,11 @@ public interface IView {
     default void shareInfo(BaseEntity<ShareInfoParam> baseEntity){}
 
     default void setAdapter(BaseRecyclerAdapter adapter){}
+
+    default  void showGoodsSku(GoodsDeatilEntity.Goods goods){}
+
+    /**
+     * 添加购物车
+     */
+    default void addCart(String msg){}
 }

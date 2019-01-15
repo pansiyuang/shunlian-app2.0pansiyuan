@@ -109,7 +109,7 @@
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:text="0元选3件仅当前页面加入购物车有效"
-                    android:textColor="@color/text_gray2"
+                    android:textColor="#734935"
                     android:background="#FFF4F0"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -192,14 +192,13 @@
             android:textSize="12sp" />
     </LinearLayout>
     <RelativeLayout
-        android:layout_width="100dp"
+        android:layout_width="104dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
         android:layout_alignParentRight="true"
-        android:paddingRight="10dp"
         android:visibility="gone"
         android:id="@+id/show_new_user_view"
-        android:layout_height="105dp">
+        android:layout_height="112dp">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

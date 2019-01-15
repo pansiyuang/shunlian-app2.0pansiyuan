@@ -191,7 +191,7 @@ public class WheelSurfPanView extends View {
                         }
 
                         //文字大小
-                        mTextSize = typedArray.getDimension(R.styleable.wheelSurfView_textSize, 14 * getScale());
+                        mTextSize = typedArray.getDimension(R.styleable.wheelSurfView_textSize, 13 * getScale());
                         //文字颜色 默认粉红色
                         mTextColor = typedArray.getColor(R.styleable.wheelSurfView_textColor, Color.parseColor("#ff00ff"));
 
@@ -455,14 +455,12 @@ public class WheelSurfPanView extends View {
             String strFirst = string.substring(0, index);
             canvas.drawTextOnPath(strFirst.trim(), circlePath, 0, vOffset, mTextPaint);
 
-            LogUtil.httpLogW("第一行文字:" + strFirst);
             Paint.FontMetrics forFontMetrics = mTextPaint.getFontMetrics();
             int textHeight = (int) (forFontMetrics.descent - forFontMetrics.ascent);
 
             //第二圈圆弧的垂直偏移
             float secondCircleWidth = (float) (mAngle * Math.PI * (vOffset - textHeight) / 180);
             String strSecond = string.substring(index, string.length());
-            LogUtil.httpLogW("第二行文字:" + strSecond);
             String newContent = getSecondString(secondCircleWidth, strSecond);
             canvas.drawTextOnPath(newContent.trim(), circlePath, 0, vOffset + textHeight, mTextPaint);
         }
@@ -493,11 +491,11 @@ public class WheelSurfPanView extends View {
         String ellipsis = "  .  .  .";
         int index = getMaxLength(maxWidth, content);
         String newContent = content.substring(0, index - 1) + ellipsis;
-        float width = mTextPaint.measureText(newContent.toString());
+        float width = mTextPaint.measureText(newContent);
         if (width > maxWidth) {
             return content.substring(0, index - 2) + ellipsis;
         } else {
-            return newContent;
+            return content.substring(0, index - 2);
         }
     }
 
@@ -535,9 +533,7 @@ public class WheelSurfPanView extends View {
             //文字颜色 默认粉红色
             if (mTextColor == 0)
                 mTextColor = Color.parseColor("#ff00ff");
-
-            if (mListBitmap.size() != mDeses.length || mListBitmap.size() != mColors.length
-                    || mDeses.length != mColors.length) {
+            if (mListBitmap.size() != mDeses.length || mListBitmap.size() != mColors.length || mDeses.length != mColors.length) {
                 return;
 //                throw new RuntimeException("Icons数量和Deses和Colors三者数量必须与mTypeNum一致");
             }

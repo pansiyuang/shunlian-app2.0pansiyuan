@@ -291,7 +291,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
                 .setmIcons(mListBitmap)
                 .setmType(1)
                 .setmTextColor(Color.parseColor("#80561D"))
-                .setmTextSize(TransformUtil.dip2px(this, 10))
+                .setmTextSize(TransformUtil.dip2px(this, 9))
                 .setmTypeNum(prizeList.size())
                 .setStartContent(goldEggCount + "金蛋一次")
                 .build();
@@ -450,5 +450,10 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     @Override
     public void onToVisit(TaskDrawEntity.Url url) {
         Common.goGoGo(this, url.type, url.item_id);
+    }
+
+    @Override
+    public void jumpTaskCenter() {
+        Common.goGoGo(this,"taskSystems");
     }
 }

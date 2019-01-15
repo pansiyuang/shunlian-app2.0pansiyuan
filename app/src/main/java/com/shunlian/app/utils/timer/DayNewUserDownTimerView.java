@@ -40,12 +40,12 @@ public class DayNewUserDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected int getCornerRadius() {
-        return 0;
+        return 2;
     }
 
     @Override
     protected int getTextSize() {
-        return 14;
+        return 13;
     }
 
     @Override
@@ -60,13 +60,13 @@ public class DayNewUserDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected int[] getLabelWidthHeight() {
-        int[] wh = {20,20};
+        int[] wh = {22,18};
         return wh;
     }
 
     @Override
     public int[] getPadding() {
-        return null;
+        return new int[]{0,0,0,0};
     }
 
     @Override

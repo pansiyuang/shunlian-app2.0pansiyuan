@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -88,6 +89,9 @@ public class NewInvitationActivity extends BaseActivity implements InvitationVie
     @BindView(R.id.empty_view)
     NetAndEmptyInterface empty_view;
 
+    @BindView(R.id.scrollview)
+    NestedScrollView scrollview;
+
     private List<InviteLogUserEntity.UserList> invitationData;
     private String code;
 
@@ -122,7 +126,7 @@ public class NewInvitationActivity extends BaseActivity implements InvitationVie
             }
         };
         recy_view_invitaion.setAdapter(adapter);
-
+        scrollview.smoothScrollTo(0,0);
         recy_view_invitaion.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -142,6 +146,7 @@ public class NewInvitationActivity extends BaseActivity implements InvitationVie
         empty_view.setImageResource(R.mipmap.img_wuguanzhu);
         empty_view.setTextPaddingTop(10);
         empty_view.setText("您还没有邀请哦");
+        empty_view.setBackgroundColor(getColorResouce(R.color.transparent));
         newInvitationPresenter.getUserList(true);
     }
 
@@ -219,6 +224,7 @@ public class NewInvitationActivity extends BaseActivity implements InvitationVie
              empty_view.setVisibility(View.GONE);
             invitationData.addAll(userLists);
             adapter.notifyDataSetChanged();
+            scrollview.smoothScrollTo(0,0);
         }
     }
 }

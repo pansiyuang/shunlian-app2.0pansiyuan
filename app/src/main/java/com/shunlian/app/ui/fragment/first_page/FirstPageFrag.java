@@ -73,6 +73,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public static MyImageView miv_entry;
     public static AppBarLayout mAppbar;
     public static boolean isHide = false;
+    public static boolean isNewUserHide = false;
     public static MyTextView mtv_search;
     public ArrayList<Fragment> fragments;
     @BindView(R.id.mll_message)
@@ -120,8 +121,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     private static Handler handler;
 
     //新用户的倒计时
-    @BindView(R.id.show_new_user_view)
-    RelativeLayout show_new_user_view;
+    public static   RelativeLayout show_new_user_view;
+
     @BindView(R.id.tv_new_user_title)
     TextView tv_new_user_title;
     @BindView(R.id.tv_new_user_time)
@@ -255,6 +256,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         View rootView = inflater.inflate(R.layout.frag_first_page, container, false);
         mAppbar = (AppBarLayout) rootView.findViewById(R.id.mAppbar);
         miv_entry = (MyImageView) rootView.findViewById(R.id.miv_entry);
+        show_new_user_view=  rootView.findViewById(R.id.show_new_user_view);
         int value = TransformUtil.dip2px(baseActivity, 80);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
         layoutParams.setMargins(0, 0, 0, value);
@@ -447,8 +449,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public void scan() {
 //        H5X5Act.startAct(baseContext,"http://soft.imtt.qq.com/browser/tes/feedback.html",H5X5Act.MODE_SONIC);
 //        H5X5Act.startAct(baseContext,"https://plus.mengtianvip.com/plus",H5X5Act.MODE_SONIC);
-//        ZXingDemoAct.startAct(baseActivity, false, 0);
-        GoldEggLuckyWheelPanActivity.startAct(baseActivity);
+        ZXingDemoAct.startAct(baseActivity, false, 0);
 //        MemberPageActivity.startAct(baseActivity);
     }
 
