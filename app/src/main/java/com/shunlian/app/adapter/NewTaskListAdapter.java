@@ -55,10 +55,15 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
         TaskListHolder mHolder = (TaskListHolder) holder;
 
         TaskListEntity.ItemTask itemTask = lists.get(position);
-        GlideUtils.getInstance().loadOverrideImage(context,
-                mHolder.mivIcon, itemTask.icon_url, 32, 32);
+        if (itemTask == null)return;
+        GlideUtils.getInstance().loadImage(context,
+                mHolder.mivIcon, itemTask.icon_url);
 
-        mHolder.mtvTaskName.setText(itemTask.title);
+        String progress = "";
+        if (!isEmpty(itemTask.progress)){
+            progress = "("+itemTask.progress+")";
+        }
+        mHolder.mtvTaskName.setText(itemTask.title+progress);
         mHolder.mtvTaskTip.setText(itemTask.info);
         if (isEmpty(itemTask.gold_num)){
             gone(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
@@ -71,6 +76,7 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
                     mHolder.miv_image.getLayoutParams();
             if (TASK_TYPE.newer_download_app == TASK_TYPE.valueOf(itemTask.code)) {
                 visible(mHolder.miv_image);
+                gone(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
                 mHolder.miv_image.setImageResource(R.mipmap.image_redenvelope);
                 layoutParams.leftMargin = TransformUtil.dip2px(context,10);
                 layoutParams.gravity = Gravity.CENTER;

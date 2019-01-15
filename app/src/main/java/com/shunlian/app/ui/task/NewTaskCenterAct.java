@@ -15,8 +15,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -278,11 +278,14 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     private View getTabView(int position) {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setGravity(Gravity.CENTER);
 
 
-        ImageView imageView = new ImageView(this);
+        MyImageView imageView = new MyImageView(this);
         layout.addView(imageView);
+        imageView.setWHProportion(220,48);
         if (TaskCenterPresenter.NEW_USER_TASK == position) {
             imageView.setImageResource(R.mipmap.img_task_xinshourenwu);
             imageView.setId(R.id.iv_task_new);

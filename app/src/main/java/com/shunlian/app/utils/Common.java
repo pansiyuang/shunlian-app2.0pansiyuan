@@ -95,6 +95,7 @@ import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.new3_login.LoginEntryAct;
+import com.shunlian.app.ui.new_user.NewInvitationActivity;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
@@ -261,6 +262,8 @@ public class Common {
             case "goodsCollection":
             case "storeCollection":
                 return "MyCollectionAct";
+            case "newuserhistorylist":
+                return "NewInvitationActivity";
             default:
                 return "";
         }
@@ -275,6 +278,9 @@ public class Common {
             return;
         }
         switch (type) {
+            case "newuserhistorylist"://新人专享邀请记录
+                NewInvitationActivity.startAct(context);
+                break;
             case "popLastView":
                 ((Activity) context).finish();
                 break;
