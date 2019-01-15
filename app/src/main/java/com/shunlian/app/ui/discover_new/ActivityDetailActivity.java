@@ -149,10 +149,6 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 Common.goGoGo(this, "login");
                 return;
             }
-            if (!Common.isPlus()) {
-                initHintDialog();
-                return;
-            }
             try {
                 String baseInfoStr = SharedPrefUtil.getSharedUserString("base_info", "");
                 HotBlogsEntity.BaseInfo baseInfo = objectMapper.readValue(baseInfoStr, HotBlogsEntity.BaseInfo.class);
@@ -167,10 +163,21 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                     sendConfig.activityTitle = "#" + currentDetail.title + "#";
                 }
                 sendConfig.memberId = baseInfo.member_id;
-                //FindSendPictureTextAct.startAct(ActivityDetailActivity.this, sendConfig);
-                EventBus.getDefault().postSticky(sendConfig);
-                SelectPicVideoAct.startAct(this,
-                        FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
+
+                //判断跳转逻辑:非plus和非内部账号不跳转发布界面
+                if (Common.isPlus()) {
+                    EventBus.getDefault().postSticky(sendConfig);
+                    SelectPicVideoAct.startAct(this,
+                            FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
+                } else {
+                    if (baseInfo.is_inner == 1) {
+                        EventBus.getDefault().postSticky(sendConfig);
+                        SelectPicVideoAct.startAct(this,
+                                FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
+                    } else {
+                        initHintDialog();
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

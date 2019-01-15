@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <RelativeLayout
     android:background="@color/white"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textColor="@color/text_gray2"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:text="新人专享优惠券"
      />
 
@@ -39,6 +39,7 @@
         <ImageView
             android:layout_width="350dp"
             android:layout_height="320dp"
+            android:id="@+id/image_show"
             android:layout_centerHorizontal="true"
             android:background="@mipmap/img_hongbao"
             android:layout_alignParentTop="true"
@@ -46,15 +47,15 @@
             />
         <TextView
             android:id="@+id/tv_new_submit"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="立即领取"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
+            android:paddingLeft="2dp"
+            android:gravity="center"
             android:textColor="#F05A63"
             android:textSize="16sp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="325dp"/>
+            android:layout_marginTop="324.5dp"/>
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mllayout_before"
             android:layout_width="wrap_content"
@@ -114,8 +115,8 @@
             android:layout_height="wrap_content"
             android:text="温馨提示：优惠券有效期为领取之日起3天"
             android:textColor="#FFACDF"
-            android:layout_marginBottom="25dp"
-            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/image_show"
             android:textSize="11sp"
             android:layout_centerHorizontal="true"
           />
