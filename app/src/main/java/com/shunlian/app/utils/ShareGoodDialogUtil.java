@@ -178,7 +178,7 @@ public class ShareGoodDialogUtil {
     private void createSpecialCode(boolean isShow) {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_special_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().setWidth(DensityUtil.dip2px(context,280))
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().setWidth(DensityUtil.dip2px(context,250))
                     .setView(inflate);
             showSpecialBuild = nomalBuild.create();
             showSpecialBuild.setCancelable(false);
@@ -191,10 +191,10 @@ public class ShareGoodDialogUtil {
            ImageView imv_special_pic =  showSpecialBuild.findViewById(R.id.imv_special_pic);
            RelativeLayout img_hight=  showSpecialBuild.findViewById(R.id.img_hight);
            LinearLayout.LayoutParams layoutParams =( (LinearLayout.LayoutParams)img_hight.getLayoutParams());
-          layoutParams.height = DensityUtil.getScreenHeight(context)*3/5;
+          layoutParams.height = DensityUtil.getScreenHeight(context)*3/5-DensityUtil.dip2px(context,30);
            if(isShow) {
                GlideUtils.getInstance().loadImageZheng(context, imv_special_pic, mShareInfoParam.img);
-               showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.VISIBLE);
+               showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
            }else{
                showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);

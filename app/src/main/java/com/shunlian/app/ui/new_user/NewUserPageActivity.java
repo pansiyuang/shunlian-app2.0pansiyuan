@@ -111,6 +111,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
     HoneRedDownTimerView tv_new_user_time;
     @BindView(R.id.show_new_user_view)
     RelativeLayout show_new_user_view;
+    @BindView(R.id.show_title_info)
+    LinearLayout show_title_info;
 
     private String[] titlesOld = {"精选商品"};
     private List<BaseFragment> goodsFrags;
@@ -436,6 +438,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
         line_user_buy.setBackgroundResource(R.drawable.rounded_corner_solid_pink_50px);
         if(this.isNew) {
             tv_head.setText("新人专享");
+            show_title_info.setVisibility(View.VISIBLE);
             userGoodFragFrist = NewUserGoodsFrag.getInstance(titlesOld[0], "1",isNew);
             goodsFrags.add(userGoodFragFrist);
         }else{
@@ -444,6 +447,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
             goodsFrags.add(userGoodFragFrist);
             tv_buy_num.setText("邀请记录");
             tv_go_pay.setText("去邀请赚钱");
+            show_title_info.setVisibility(View.GONE);
             line_user_buy.setVisibility(View.VISIBLE);
         }
         commonLazyPagerAdapter.notifyDataSetChanged();
