@@ -1,17 +1,19 @@
 package com.shunlian.app.presenter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.NewTaskListAdapter;
-import com.shunlian.app.adapter.TaskListAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DayGiveEggEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.NewEggDetailEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.SignEggEntity;
@@ -20,6 +22,10 @@ import com.shunlian.app.bean.TaskListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.coupon.CouponListAct;
+import com.shunlian.app.ui.new3_login.EditInviteCodeDialog;
+import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
+import com.shunlian.app.ui.new3_login.VerifyPicDialog;
+import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.ITaskCenterView;
@@ -60,6 +66,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
     private int updatePosition;
     private boolean isShowLoading;//是否显示加载动画
     private List<NewEggDetailEntity.In> mDatas = new ArrayList<>();
+    private EditInviteCodeDialog mInviteCodeDialog;
+    private VerifyPicDialog mVerifyPicDialog;
 
     public TaskCenterPresenter(Context context, ITaskCenterView iView) {
         super(context, iView);
@@ -389,7 +397,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      */
     private void handlerDailyTask(int position, String code) {
         try {
-            switch (TaskListAdapter.TASK_TYPE.valueOf(code)) {
+            switch (NewTaskListAdapter.TASK_TYPE.valueOf(code)) {
                 case task_daily_hour_gold://限时领金蛋
                     goldegglimit();
                     break;
@@ -410,6 +418,13 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     TaskListEntity.ItemTask task = taskLists.get(position);
                     share_pic_url = task.share_pic_url;
                     share();
+                    break;
+                case task_new_user_invite:
+                    TaskListEntity.ItemTask itemTask1 = taskLists.get(position);
+                    TaskListEntity.Url url1 = itemTask1.ad_url;
+                    if (url1 != null){
+                        Common.goGoGo(context,url1.type,url1.item_id);
+                    }
                     break;
             }
         }catch (Exception e){
@@ -438,12 +453,13 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      */
     private void handlerNewUserTask(int position, String code) {
         try {
-            switch (TaskListAdapter.TASK_TYPE.valueOf(code)) {
+            switch (NewTaskListAdapter.TASK_TYPE.valueOf(code)) {
                 case task_new_user_gift://注册猜红包
                     getPrizeByRegister();
                     break;
                 case task_new_user_invite://邀请码得金蛋
-                    getGoldByCode();
+                    //getGoldByCode();
+                    checkBindShareidV2();
                     break;
                 case task_new_user_video://看视频得金蛋
                     if (Common.isPlus()){//plus用户直接领取金蛋
@@ -453,6 +469,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                             Common.goGoGo(context, "url", taskLists.get(position).video_url);
                         }
                     }
+                    break;
+                case new_area_orders:
+                    NewUserPageActivity.startAct(context);
                     break;
             }
         }catch (Exception e){
@@ -542,4 +561,144 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         });
     }
 
+
+    public void checkBindShareidV2(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>>
+                baseEntityCall = getApiService().checkBindShareidV2(map);
+
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null && "2".equals(data.share_status)){//需要绑定上级
+                    isCanBindShareID();
+                }
+            }
+        });
+    }
+
+    /**
+     * 是否需要绑定上级
+     */
+    private void isCanBindShareID() {
+        //share_status == 2 表示该用户没有上级，需要绑定上级才能购买
+        loginInfoTip();
+        mInviteCodeDialog = new EditInviteCodeDialog((Activity) context);
+        mInviteCodeDialog.setOnClickListener(v -> {
+            mInviteCodeDialog.release();
+        }, v -> {
+            String inviteCode = mInviteCodeDialog.getInviteCode();
+            if (isEmpty(inviteCode)) {
+                Common.staticToast("请填写邀请码");
+            } else {
+                codeDetail(inviteCode);
+            }
+        });
+        mInviteCodeDialog.show();
+    }
+
+    /**
+     * 邀请码详情
+     * @param id
+     */
+    public void codeDetail(String id){
+        Map<String,String> map = new HashMap<>();
+        map.put("code",id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<MemberCodeListEntity>>
+                baseEntityCall = getApiService().codeInfo(map);
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback
+                <BaseEntity<MemberCodeListEntity>>(){
+
+            @Override
+            public void onSuccess(BaseEntity<MemberCodeListEntity> entity) {
+                super.onSuccess(entity);
+
+                if (mInviteCodeDialog != null)mInviteCodeDialog.dismiss();
+
+
+                MemberCodeListEntity bean = entity.data;
+                if (bean != null) {
+                    mVerifyPicDialog = new VerifyPicDialog((Activity) context);
+                    mVerifyPicDialog.setTvSureColor(R.color.pink_color);
+                    mVerifyPicDialog.setTvSureBgColor(Color.WHITE);
+                    mVerifyPicDialog.setMessage("请确认您的导购专员");
+                    mVerifyPicDialog.showState(2);
+                    mVerifyPicDialog.setMemberDetail(bean.info);
+                    mVerifyPicDialog.setSureAndCancleListener("确认", v -> {
+                        bindShareid(bean.info.code);
+                        mVerifyPicDialog.dismiss();
+                    }, "返回", v -> {
+                        mVerifyPicDialog.dismiss();
+                        if (mInviteCodeDialog != null)mInviteCodeDialog.show();
+                    }).show();
+                }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+            }
+        });
+    }
+
+    /**
+     * 登录界面提示信息
+     */
+    public void loginInfoTip(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<New3LoginInfoTipEntity>> baseEntityCall = getApiService().loginInfoTip(map);
+        getNetData(false,baseEntityCall,new
+                SimpleNetDataCallback<BaseEntity<New3LoginInfoTipEntity>>(){
+                    @Override
+                    public void onSuccess(BaseEntity<New3LoginInfoTipEntity> entity) {
+                        super.onSuccess(entity);
+                        if (entity.data != null && mInviteCodeDialog != null){
+                            mInviteCodeDialog.setStrategyUrl(entity.data.incite_code_url);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 绑定上级
+     * @param code
+     */
+    public void bindShareid(String code){
+        Map<String, String> map = new HashMap<>();
+        map.put("code", code);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>>
+                baseEntityCall = getAddCookieApiService().bindShareidV2(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToasts(context,"已确认",R.mipmap.icon_common_duihao);
+                if (mVerifyPicDialog != null){
+                    mVerifyPicDialog.release();
+                }
+                if (mInviteCodeDialog != null){
+                    mInviteCodeDialog.release();
+                }
+                if (current_task_state == NEW_USER_TASK)
+                    updateItem(getUpdatePosition(),"1");
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+            }
+        });
+    }
 }
