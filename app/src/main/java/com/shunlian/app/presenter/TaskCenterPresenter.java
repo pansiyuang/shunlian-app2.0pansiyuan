@@ -26,6 +26,7 @@ import com.shunlian.app.ui.new3_login.EditInviteCodeDialog;
 import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 import com.shunlian.app.ui.new3_login.VerifyPicDialog;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
+import com.shunlian.app.ui.setting.PersonalDataAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.ITaskCenterView;
@@ -419,7 +420,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     share_pic_url = task.share_pic_url;
                     share();
                     break;
-                case task_new_user_invite:
+                case newer_download_app://邀请码得金蛋
                     TaskListEntity.ItemTask itemTask1 = taskLists.get(position);
                     TaskListEntity.Url url1 = itemTask1.ad_url;
                     if (url1 != null){
@@ -470,8 +471,11 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                         }
                     }
                     break;
-                case new_area_orders:
+                case new_area_orders://新人专区下单获金蛋
                     NewUserPageActivity.startAct(context);
+                    break;
+                case fill_personal_data://完善个人信息得金蛋
+                    PersonalDataAct.startAct(context);
                     break;
             }
         }catch (Exception e){
