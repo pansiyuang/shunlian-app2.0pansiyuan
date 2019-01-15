@@ -54,16 +54,13 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         mHolder.mtv_attribute.setText(goods.sku);
 
         String label = goods.big_label;
-        int pref_length = 0;
         if (!isEmpty(label)){
             visible(mHolder.mtv_label);
             mHolder.mtv_label.setText(label);
-            pref_length = label.length();
         }else {
             gone(mHolder.mtv_label);
-            pref_length = 0;
         }
-        mHolder.mtv_title.setText(Common.getPlaceholder(pref_length) + goods.title);
+        mHolder.mtv_title.setText(Common.getPlaceholder(label) + goods.title);
     }
 
     public class AppointGoodsHolder extends BaseRecyclerViewHolder{

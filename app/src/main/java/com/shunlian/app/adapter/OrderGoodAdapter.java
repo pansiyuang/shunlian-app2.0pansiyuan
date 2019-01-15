@@ -14,7 +14,6 @@ import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.ui.plus.PlusGifDetailAct;
-import com.shunlian.app.ui.plus.PlusLogisticsDetailAct;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -90,7 +89,7 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
             GradientDrawable background = (GradientDrawable) mHolder.mtv_label.getBackground();
             background.setColor(getColor(R.color.pink_color));
             mHolder.mtv_label.setText(offered);
-            mHolder.mtv_title.setText(Common.getPlaceholder(offered.length())
+            mHolder.mtv_title.setText(Common.getPlaceholder(offered)
                     .concat(orderGoodsBean.title));
         }
         if (!TextUtils.isEmpty(orderGoodsBean.refund_button_desc)){

@@ -950,6 +950,7 @@ public class Common {
      * @param num
      * @return
      */
+    @Deprecated
     public static String getPlaceholder(int num) {
         String str = "\u3000";
         if (num == 1)str += " ";
@@ -957,6 +958,37 @@ public class Common {
             str = str.concat("\u3000");
         }
         return str;
+    }
+
+    /**
+     * 自动计算所需占位空间
+     * @param content
+     * @return
+     */
+    public static String getPlaceholder(String content){
+        int placeholderByte = getPlaceholderByte(content);
+        int length = (int) (placeholderByte * 1.0f / 3.0f + 0.5f);
+        return getPlaceholder(length);
+    }
+
+    /**
+     * 将字符串中所有字符转为字节
+     * @param content
+     * @return
+     */
+    public static int getPlaceholderByte(String content){
+        if (TextUtils.isEmpty(content))return 0;
+        int chars = 0;
+        for (int i=0; i<content.length(); i++){
+            char at = content.charAt(i);
+            Integer integer = Integer.valueOf(at);
+            if (integer < 128){
+                chars += 1;
+            }else {
+                chars += 3;
+            }
+        }
+        return chars;
     }
 
     public static Boolean checkIsVisible(Context context, View view) {

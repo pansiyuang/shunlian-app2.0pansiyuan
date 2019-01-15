@@ -600,15 +600,12 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
 
 
     private void setLabel(TextView tv_label,TextView tv_title,String str_title,String str_label){
-        int pref_length = 0;
         if (!isEmpty(str_label)){
             visible(tv_label);
             tv_label.setText(str_label);
-            pref_length = str_label.length();
         }else {
             gone(tv_label);
-            pref_length = 0;
         }
-        tv_title.setText(Common.getPlaceholder(pref_length) + str_title);
+        tv_title.setText(Common.getPlaceholder(str_label) + str_title);
     }
 }
