@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.NewTaskListAdapter;
-import com.shunlian.app.adapter.TaskListAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DayGiveEggEntity;
@@ -26,6 +25,7 @@ import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.new3_login.EditInviteCodeDialog;
 import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
 import com.shunlian.app.ui.new3_login.VerifyPicDialog;
+import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.ITaskCenterView;
@@ -397,7 +397,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      */
     private void handlerDailyTask(int position, String code) {
         try {
-            switch (TaskListAdapter.TASK_TYPE.valueOf(code)) {
+            switch (NewTaskListAdapter.TASK_TYPE.valueOf(code)) {
                 case task_daily_hour_gold://限时领金蛋
                     goldegglimit();
                     break;
@@ -418,6 +418,13 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     TaskListEntity.ItemTask task = taskLists.get(position);
                     share_pic_url = task.share_pic_url;
                     share();
+                    break;
+                case task_new_user_invite:
+                    TaskListEntity.ItemTask itemTask1 = taskLists.get(position);
+                    TaskListEntity.Url url1 = itemTask1.ad_url;
+                    if (url1 != null){
+                        Common.goGoGo(context,url1.type,url1.item_id);
+                    }
                     break;
             }
         }catch (Exception e){
@@ -446,7 +453,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
      */
     private void handlerNewUserTask(int position, String code) {
         try {
-            switch (TaskListAdapter.TASK_TYPE.valueOf(code)) {
+            switch (NewTaskListAdapter.TASK_TYPE.valueOf(code)) {
                 case task_new_user_gift://注册猜红包
                     getPrizeByRegister();
                     break;
@@ -462,6 +469,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                             Common.goGoGo(context, "url", taskLists.get(position).video_url);
                         }
                     }
+                    break;
+                case new_area_orders:
+                    NewUserPageActivity.startAct(context);
                     break;
             }
         }catch (Exception e){
@@ -681,6 +691,8 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                 if (mInviteCodeDialog != null){
                     mInviteCodeDialog.release();
                 }
+                if (current_task_state == NEW_USER_TASK)
+                    updateItem(getUpdatePosition(),"1");
             }
 
             @Override

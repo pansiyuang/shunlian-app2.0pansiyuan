@@ -196,6 +196,10 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
          */
         task_new_user_video,
         /**
+         * 新人专区下单获金蛋
+         */
+        new_area_orders,
+        /**
          * 限时领金蛋
          */
         task_daily_hour_gold,
