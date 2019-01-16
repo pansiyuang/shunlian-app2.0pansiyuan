@@ -161,7 +161,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         }else {
             mtv_label.setVisibility(VISIBLE);
             mtv_label.setText(label);
-            tv_goods_name.setText(Common.getPlaceholder(label.length())
+            tv_goods_name.setText(Common.getPlaceholder(label)
                     .concat(title));
         }
         return this;

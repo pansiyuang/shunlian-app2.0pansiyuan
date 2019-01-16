@@ -30,13 +30,22 @@
             android:textSize="15sp"
             android:textStyle="bold" />
 
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/image_everyweekday"
+            android:visibility="gone"
+            android:layout_marginLeft="2dp"/>
+
         <LinearLayout
             android:id="@+id/llayout_eggs_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="11dp"
-            android:layout_marginTop="3dp"
             android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="horizontal">
 
             <com.shunlian.app.widget.MyImageView
@@ -66,7 +75,7 @@
         android:layout_below="@+id/ll_title_top"
         android:layout_marginRight="15dp"
         android:layout_marginTop="2dp"
-        android:layout_toLeftOf="@+id/llayout_right"
+        android:layout_toLeftOf="@+id/mtv_obtain_tip"
         android:text="按照时间节点，金蛋成熟领取金蛋"
         android:textColor="@color/value_484848"
         android:textSize="12sp" />

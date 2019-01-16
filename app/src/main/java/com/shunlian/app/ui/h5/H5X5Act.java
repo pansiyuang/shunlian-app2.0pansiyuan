@@ -163,7 +163,9 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
      * @return
      */
     protected void jsCallback(H5CallEntity h5CallEntity) {
-
+//        switch (h5CallEntity.type){
+            LogUtil.augusLogW("yxftest----"+h5CallEntity.scene);
+//        }
     }
 
     @Override
@@ -245,6 +247,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         }
         initWebView();
         loadUrl();
+        addJs("JSWXShare");
     }
 
     public void initSonic() {

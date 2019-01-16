@@ -48,6 +48,7 @@ public class ArticleH5Act extends H5X5Act implements IArticleDetailView, Message
 
     @Override
     protected void jsCallback(H5CallEntity h5CallEntity) {
+        super.jsCallback(h5CallEntity);
         EventBus.getDefault().post(new ArticleEvent(articleId, h5CallEntity.istates));
     }
 

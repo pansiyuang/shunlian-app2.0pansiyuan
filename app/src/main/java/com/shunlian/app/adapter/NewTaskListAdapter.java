@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -54,10 +55,15 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
         TaskListHolder mHolder = (TaskListHolder) holder;
 
         TaskListEntity.ItemTask itemTask = lists.get(position);
-        GlideUtils.getInstance().loadOverrideImage(context,
-                mHolder.mivIcon, itemTask.icon_url, 32, 32);
+        if (itemTask == null)return;
+        GlideUtils.getInstance().loadImage(context,
+                mHolder.mivIcon, itemTask.icon_url);
 
-        mHolder.mtvTaskName.setText(itemTask.title);
+        String progress = "";
+        if (!isEmpty(itemTask.progress)){
+            progress = "("+itemTask.progress+")";
+        }
+        mHolder.mtvTaskName.setText(itemTask.title+progress);
         mHolder.mtvTaskTip.setText(itemTask.info);
         if (isEmpty(itemTask.gold_num)){
             gone(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
@@ -65,7 +71,26 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
             mHolder.mtvEggsCount.setText(itemTask.gold_num);
             visible(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
         }
+        try {
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
+                    mHolder.miv_image.getLayoutParams();
+            if (TASK_TYPE.newer_download_app == TASK_TYPE.valueOf(itemTask.code)) {
+                visible(mHolder.miv_image);
+                gone(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
+                mHolder.miv_image.setImageResource(R.mipmap.image_redenvelope);
+                layoutParams.leftMargin = TransformUtil.dip2px(context,10);
+                layoutParams.gravity = Gravity.CENTER;
+            } else if (TASK_TYPE.task_daily_lottery == TASK_TYPE.valueOf(itemTask.code)) {
+                visible(mHolder.miv_image);
+                mHolder.miv_image.setImageResource(R.mipmap.image_everyweekday);
+                layoutParams.leftMargin = TransformUtil.dip2px(context,2);
+            } else {
+                gone(mHolder.miv_image);
+            }
+            mHolder.miv_image.setLayoutParams(layoutParams);
+        }catch (Exception e){
 
+        }
 
         changeState(position, mHolder, itemTask);
     }
@@ -90,7 +115,7 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
                 mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
                 mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(3));
             }
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
 
         }
     }
@@ -167,6 +192,9 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
         @BindView(R.id.llayout_eggs_count)
         LinearLayout llayout_eggs_count;
 
+        @BindView(R.id.miv_image)
+        MyImageView miv_image;
+
         public TaskListHolder(View itemView) {
             super(itemView);
             mtvObtainTip.setOnClickListener(v -> {
@@ -196,9 +224,18 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
          */
         task_new_user_video,
         /**
+         * 完善个人信息得金蛋
+         */
+        fill_personal_data,
+        /**
          * 新人专区下单获金蛋
          */
         new_area_orders,
+
+
+
+
+
         /**
          * 限时领金蛋
          */

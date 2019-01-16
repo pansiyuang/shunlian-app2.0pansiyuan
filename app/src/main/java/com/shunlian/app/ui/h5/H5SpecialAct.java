@@ -44,6 +44,7 @@ public class H5SpecialAct extends H5X5Act implements IH5View, MessageCountManage
     }
 
     protected void jsCallback(H5CallEntity h5CallEntity) {
+        super.jsCallback(h5CallEntity);
 
     }
 

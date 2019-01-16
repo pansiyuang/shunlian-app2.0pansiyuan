@@ -192,14 +192,13 @@
             android:textSize="12sp" />
     </LinearLayout>
     <RelativeLayout
-        android:layout_width="100dp"
+        android:layout_width="104dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
         android:layout_alignParentRight="true"
-        android:paddingRight="10dp"
         android:visibility="gone"
         android:id="@+id/show_new_user_view"
-        android:layout_height="105dp">
+        android:layout_height="112dp">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

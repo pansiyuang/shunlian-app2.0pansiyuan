@@ -13,5 +13,22 @@ import java.util.List;
 public class H5CallEntity {
     public String istates;
     public String type;
+    public String scene;
+    public String title;
+    public String description;
+    public String thumb;
+    public String contentUrl;
 
+    @Override
+    public String toString() {
+        return "H5CallEntity{" +
+                "istates='" + istates + '\'' +
+                ", type='" + type + '\'' +
+                ", scene='" + scene + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", thumb='" + thumb + '\'' +
+                ", contentUrl='" + contentUrl + '\'' +
+                '}';
+    }
 }
