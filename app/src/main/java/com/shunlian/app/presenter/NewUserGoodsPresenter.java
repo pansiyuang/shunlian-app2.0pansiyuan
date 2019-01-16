@@ -101,7 +101,7 @@ public class NewUserGoodsPresenter extends BasePresenter<INewUserGoodsView> {
                 }else{
                     allPage = currentPage+1;
                 }
-                iView.userGoodsList(currentPage, allPage, data.list,data.recommend);
+                iView.userGoodsList(currentPage, allPage,data.share_url, data.list,data.recommend);
                 if(currentPage==1){
                     iView.refreshFinish();
                     if(!TextUtils.isEmpty(data.unpaid)) {
