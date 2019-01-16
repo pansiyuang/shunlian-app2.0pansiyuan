@@ -19,7 +19,7 @@ public class JosnSensorsDataAPI {
                                          String bannerID,String url,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("bannerBelongs", pageType);
+            properties.put("bannerType", pageType);
 //            properties.put("bannerName", bannerName);
             properties.put("bannerID", bannerID);
             String mUrl="";
