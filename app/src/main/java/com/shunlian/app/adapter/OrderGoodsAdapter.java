@@ -64,7 +64,7 @@ public class OrderGoodsAdapter extends BaseRecyclerAdapter<MyOrderEntity.OrderGo
         }else {
             visible(mHolder.mtv_label);
             mHolder.mtv_label.setText(offered);
-            mHolder.mtv_title.setText(Common.getPlaceholder(offered.length())
+            mHolder.mtv_title.setText(Common.getPlaceholder(offered)
                     .concat(orderGoodsBean.title));
         }
 
