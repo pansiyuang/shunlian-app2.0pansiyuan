@@ -181,7 +181,6 @@ public class GoldEggDialog extends Dialog {
                 ll_notice.setVisibility(View.VISIBLE);
                 tv_content.setVisibility(View.GONE);
                 btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
-                miv_close.setVisibility(View.VISIBLE);
                 break;
             case 0:
                 tv_notice.setTextSize(24);
@@ -195,7 +194,6 @@ public class GoldEggDialog extends Dialog {
                 tv_content.setVisibility(View.VISIBLE);
                 tv_content.setText("差点中奖了");
                 btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
-                miv_close.setVisibility(View.GONE);
                 setLinearLayoutParam(194, 147, miv_draw_icon);
                 break;
             case 1:
@@ -213,7 +211,6 @@ public class GoldEggDialog extends Dialog {
                     tv_content.setText(mTaskDraw.desc);
                 }
                 btn_bottom.setText("填写收货地址");
-                miv_close.setVisibility(View.GONE);
                 break;
             case 2:
                 tv_notice.setTextSize(24);
@@ -234,7 +231,6 @@ public class GoldEggDialog extends Dialog {
                     tv_voucher_desc.setText(voucher.desc);
                 }
                 btn_bottom.setText(getContext().getResources().getText(R.string.go_to_visit));
-                miv_close.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 tv_notice.setTextSize(24);
@@ -251,7 +247,6 @@ public class GoldEggDialog extends Dialog {
                     tv_content.setText(mTaskDraw.desc);
                 }
                 btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
-                miv_close.setVisibility(View.GONE);
                 break;
             case 4:
                 tv_notice.setTextSize(20);
@@ -267,7 +262,6 @@ public class GoldEggDialog extends Dialog {
                     tv_content.setText(mOrderEntity.desc);
                 }
                 btn_bottom.setText("填写收货地址");
-                miv_close.setVisibility(View.VISIBLE);
                 setLinearLayoutParam(190, 133, miv_draw_icon);
                 miv_draw_icon.setImageResource(R.mipmap.image_dizhi);
                 break;
@@ -281,7 +275,6 @@ public class GoldEggDialog extends Dialog {
                 miv_draw_icon.setVisibility(View.VISIBLE);
                 ll_notice.setVisibility(View.GONE);
                 btn_bottom.setText(getContext().getResources().getText(R.string.go_to_visit));
-                miv_close.setVisibility(View.GONE);
                 setLinearLayoutParam(190, 133, miv_draw_icon);
                 miv_draw_icon.setImageResource(R.mipmap.image_shuliangbuzu);
                 break;
