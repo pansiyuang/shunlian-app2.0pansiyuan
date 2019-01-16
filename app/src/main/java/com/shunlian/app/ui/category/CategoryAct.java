@@ -3,7 +3,9 @@ package com.shunlian.app.ui.category;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -375,7 +377,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             case R.id.tv_general_sort:
                 popupWindow.initData(currentSortPosition);
                 if (!popupWindow.isShowing()) {
-                    popupWindow.showAsDropDown(view_category_line);
+                    showAsDropDown(popupWindow,view_category_line,0,0);
+
                     miv_general_sort.setRotation(180);
                 }
                 break;
@@ -601,5 +604,17 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @Override
     public void OnLoadFail() {
 
+    }
+
+    public void showAsDropDown(final PopupWindow pw, final View anchor, final int xoff, final int yoff) {
+        if (Build.VERSION.SDK_INT >= 24) {
+            Rect visibleFrame = new Rect();
+            anchor.getGlobalVisibleRect(visibleFrame);
+            int height = anchor.getResources().getDisplayMetrics().heightPixels - visibleFrame.bottom;
+            pw.setHeight(height);
+            pw.showAsDropDown(anchor, xoff, yoff);
+        } else {
+            pw.showAsDropDown(anchor, xoff, yoff);
+        }
     }
 }
