@@ -30,6 +30,7 @@ import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
+import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
 import com.shunlian.app.widget.GoodsServiceDialog;
@@ -1223,9 +1224,26 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_plus_des)
         MyTextView mtv_plus_des;
 
+        @BindView(R.id.store_notify)
+        LinearLayout store_notify;
+
+        @BindView(R.id.mtv_notify_content)
+        MyTextView mtv_notify_content;
+
         public TitleHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
+            GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
+            if (store_info != null && !isEmpty(store_info.notice_content)){
+                visible(store_notify);
+                store_notify.setBackgroundDrawable(ShapeUtils.commonShape( context,Color.parseColor("#F13B4A"),
+                        8,2, Color.parseColor("#FFD582")));
+                mtv_notify_content.setBackgroundDrawable(
+                        ShapeUtils.commonShape( context,Color.parseColor("#fdf3e7"),4));
+                mtv_notify_content.setText(store_info.notice_content);
+            }else {
+                gone(store_notify);
+            }
 
             TransformUtil.expandViewTouchDelegate(ll_fav,40,40,40,40);
 
