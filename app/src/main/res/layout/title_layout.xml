@@ -373,6 +373,40 @@
 
     </com.shunlian.app.widget.MyLinearLayout>
 
+    <!--商家公告-->
+    <LinearLayout
+        android:id="@+id/store_notify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/image_gonggaobiaoti" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_notify_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/value_484848"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
     <!--标题-->
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
