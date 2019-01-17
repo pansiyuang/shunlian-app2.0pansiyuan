@@ -14,7 +14,7 @@
     <com.shunlian.app.widget.MyWebView
         android:id="@+id/mWebView"
         android:layout_width="wrap_content"
-        android:layout_height="364dp"
+        android:layout_height="match_parent"
         android:layout_below="@+id/miv_icon"
         android:layout_alignLeft="@+id/miv_icon"
         android:layout_alignRight="@+id/miv_icon"></com.shunlian.app.widget.MyWebView>

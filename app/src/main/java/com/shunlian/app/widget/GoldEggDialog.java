@@ -274,6 +274,7 @@ public class GoldEggDialog extends Dialog {
                 miv_icon.setVisibility(View.GONE);
                 miv_draw_icon.setVisibility(View.VISIBLE);
                 ll_notice.setVisibility(View.GONE);
+                tv_content.setVisibility(View.GONE);
                 btn_bottom.setText(getContext().getResources().getText(R.string.go_to_visit));
                 setLinearLayoutParam(190, 133, miv_draw_icon);
                 miv_draw_icon.setImageResource(R.mipmap.image_shuliangbuzu);
