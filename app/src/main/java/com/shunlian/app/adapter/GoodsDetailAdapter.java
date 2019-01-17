@@ -580,26 +580,27 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 pref_length = "天天特惠";//显示天天特惠标题
                 title = mGoodsEntity.tt_act.title;
                 visible(mHolder.miv_pref);
+                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length) + title);
             } else {
                 gone(mHolder.miv_pref);
                 if (!isEmpty(is_preferential)) {//显示正常标题
-                    mHolder.mtv_discount_info.setText(is_preferential);
-                    visible(mHolder.mtv_discount_info);
+                    //mHolder.mtv_discount_info.setText(is_preferential);
+                    gone(mHolder.mtv_discount_info);
                     pref_length = is_preferential;
                 } else {
                     gone(mHolder.mtv_discount_info);
                     pref_length = "";
                 }
-            }
-              if (TextUtils.isEmpty(mGoodsEntity.is_fav) || "0".equals(mGoodsEntity.is_fav)) {
-                    mHolder.miv_fav.setImageResource(R.mipmap.icon_heart_nor);
+                if (!isEmpty(pref_length)) {
+                    mHolder.mtv_title.setText(Common.getPlaceholder(context,pref_length,title,12));
                 } else {
-                   mHolder.miv_fav.setImageResource(R.mipmap.icon_heart_sel);
+                    mHolder.mtv_title.setText(title);
                 }
-            if (!isEmpty(pref_length)) {
-                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length) + title);
+            }
+            if (TextUtils.isEmpty(mGoodsEntity.is_fav) || "0".equals(mGoodsEntity.is_fav)) {
+                mHolder.miv_fav.setImageResource(R.mipmap.icon_heart_nor);
             } else {
-                mHolder.mtv_title.setText(title);
+                mHolder.miv_fav.setImageResource(R.mipmap.icon_heart_sel);
             }
 
             mHolder.mtv_price.setText(mGoodsEntity.price);

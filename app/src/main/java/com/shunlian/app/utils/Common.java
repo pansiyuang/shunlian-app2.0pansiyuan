@@ -972,12 +972,50 @@ public class Common {
      * @param content
      * @return
      */
+    @Deprecated
     public static String getPlaceholder(String content){
         int placeholderByte = getPlaceholderByte(content);
         int length = (int) (placeholderByte * 1.0f / 3.0f + 0.5f);
         return getPlaceholder(length);
     }
 
+    /**
+     * 给textview添加label标签 默认标签字体颜色白色 字体大小10sp
+     * @param context
+     * @param label
+     * @param content
+     * @return
+     */
+    public static SpannableString getPlaceholder(Context context,String label,String content){
+        return getPlaceholder(context,label,content,10, Color.WHITE,
+                Color.parseColor("#fb0036"),2);
+    }
+
+    /**
+     * 给textview添加label标签 默认标签字体颜色白色
+     * @param context
+     * @param label
+     * @param content
+     * @param labelFontSize
+     * @return
+     */
+    public static SpannableString getPlaceholder(Context context,String label,
+                                                 String content,float labelFontSize){
+        return getPlaceholder(context,label,content,labelFontSize, Color.WHITE,
+                Color.parseColor("#fb0036"),2);
+    }
+
+    /**
+     * 给textview添加label标签
+     * @param context
+     * @param label 标签内容
+     * @param content textview 内容
+     * @param labelFontSize 标签字体大小
+     * @param labelFontColor 标签字体颜色
+     * @param labelBgColor 标签背景颜色
+     * @param labelBgRadius 标签背景圆角弧度
+     * @return
+     */
     public static SpannableString getPlaceholder(Context context, String label, String content,
                                            float labelFontSize, int labelFontColor,
                                            int labelBgColor, float labelBgRadius){
@@ -992,33 +1030,13 @@ public class Common {
         tv_tag.setTextSize(labelFontSize);
         tv_tag.setTextColor(labelFontColor);
         tv_tag.setBackgroundDrawable(ShapeUtils.commonShape(context,labelBgColor,labelBgRadius));
-        Bitmap bitmap = convertViewToBitmap(view);
+        Bitmap bitmap = BitmapUtil.convertViewToBitmap(view);
         if (bitmap == null)return spannableString;
         Drawable d = new BitmapDrawable(bitmap);
         d.setBounds(0, 0, tv_tag.getWidth(), tv_tag.getHeight());//缺少这句的话，不会报错，但是图片不回显示
         ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);//图片将对齐底部边线
         spannableString.setSpan(span,0,label.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
-    }
-
-
-    public static SpannableString getPlaceholder(Context context,String label,String content){
-        return getPlaceholder(context,label,content,10, Color.WHITE,
-                Color.parseColor("#fb0036"),2);
-    }
-
-    private static Bitmap convertViewToBitmap(View view) {
-        if (view == null)return null;
-        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-
-        view.buildDrawingCache();
-
-        Bitmap bitmap = view.getDrawingCache();
-
-        return bitmap;
-
     }
 
     /**
