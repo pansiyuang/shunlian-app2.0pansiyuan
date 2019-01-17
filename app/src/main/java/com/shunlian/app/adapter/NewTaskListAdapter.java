@@ -98,22 +98,23 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
     private void changeState(int position, TaskListHolder mHolder, TaskListEntity.ItemTask itemTask) {
         try {
             if ("0".equals(itemTask.task_status)) {//0 未完成；1已完成
-                /*if (TASK_TYPE.task_new_user_gift == TASK_TYPE.valueOf(itemTask.code)
-                        || TASK_TYPE.task_new_user_invite == TASK_TYPE.valueOf(itemTask.code)
-                         || TASK_TYPE.task_daily_hour_gold == TASK_TYPE.valueOf(itemTask.code)) {
-                    mHolder.mtvObtainTip.setText("领取");
-                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
-                    mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(2));
-                } else {
-
-                }*/
                 mHolder.mtvObtainTip.setText("去完成");
                 mHolder.mtvObtainTip.setTextColor(getColor(R.color.pink_color));
                 mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(1));
             } else {
-                mHolder.mtvObtainTip.setText("已领取");
-                mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
-                mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(3));
+                if (TASK_TYPE.task_daily_hour_gold == TASK_TYPE.valueOf(itemTask.code)) {
+                    mHolder.mtvObtainTip.setText("已领取");
+                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
+                    mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(3));
+                }else if (TASK_TYPE.newer_download_app == TASK_TYPE.valueOf(itemTask.code)){
+                    mHolder.mtvObtainTip.setText("去查看");
+                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.pink_color));
+                    mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(1));
+                }else {
+                    mHolder.mtvObtainTip.setText("已完成");
+                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
+                    mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(3));
+                }
             }
         } catch (Exception e) {
 

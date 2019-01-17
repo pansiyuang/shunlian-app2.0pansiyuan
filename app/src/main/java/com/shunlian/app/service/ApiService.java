@@ -1162,7 +1162,7 @@ public interface ApiService {
      * @param map
      * @return
      */
-    @GET("goldegglimit/setRemind")
+    @GET("task/setRemind")
     Call<BaseEntity<EmptyEntity>> setRemind(@QueryMap Map<String, String> map);
 
     /**

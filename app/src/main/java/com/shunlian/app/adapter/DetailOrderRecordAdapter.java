@@ -221,10 +221,9 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
                 gone(mHolder.mtv_label);
                 mHolder.mtv_goods_title.setText(item.title);
             }else {
-                visible(mHolder.mtv_label);
-                mHolder.mtv_label.setText(offered);
-                mHolder.mtv_goods_title.setText(Common.getPlaceholder(offered)
-                        .concat(item.title));
+                gone(mHolder.mtv_label);
+                //mHolder.mtv_label.setText(offered);
+                mHolder.mtv_goods_title.setText(Common.getPlaceholder(context,offered,item.title));
             }
             if(isShow){
                 mHolder.mtv_assertion.setVisibility(View.VISIBLE);

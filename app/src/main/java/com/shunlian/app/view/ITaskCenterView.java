@@ -1,6 +1,7 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.DayGiveEggEntity;
 import com.shunlian.app.bean.EggDetailEntity;
 import com.shunlian.app.bean.NewEggDetailEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public interface ITaskCenterView extends IView {
 
+    void setBubble(BubbleEntity data);
     /**
      * 金蛋数量
      * @param count
@@ -75,7 +77,7 @@ public interface ITaskCenterView extends IView {
      * 限时领金蛋弹窗
      * @param got_eggs
      */
-    void showGoldEggsNum(String got_eggs);
+    void showGoldEggsNum(String got_eggs,String isRemind,String missEgg);
 
     /**
      * 广告弹窗

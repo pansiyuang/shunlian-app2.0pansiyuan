@@ -7,9 +7,14 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +29,12 @@ import android.widget.TextView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.H5CallEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
@@ -38,6 +46,7 @@ import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.WebViewProgressBar;
 import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.wxapi.WXEntryActivity;
 import com.tencent.smtt.export.external.interfaces.SslError;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
@@ -118,6 +127,14 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 
     SonicSessionClientImplX sonicSessionClient = null;
     private boolean isContinue = false;
+    private H5CallEntity h5CallEntity;
+    Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            dealJs();
+            super.handleMessage(msg);
+        }
+    };
 
     public static void startAct(Context context, String url, int mode) {
         Intent intentH5 = new Intent(context, H5X5Act.class);
@@ -148,6 +165,44 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         context.startActivity(intentH5);
     }
 
+    public void dealJs() {
+        LogUtil.augusLogW("yxftest--" + h5CallEntity.toString());
+        ShareInfoParam shareInfoParam = new ShareInfoParam();
+        switch (h5CallEntity.origin) {
+            case "shareImage":
+                shareInfoParam.photo = h5CallEntity.contentUrl;
+                break;
+            case "shareWebpage":
+                shareInfoParam.shareLink = h5CallEntity.contentUrl;
+                shareInfoParam.title = h5CallEntity.title;
+                shareInfoParam.desc = h5CallEntity.description;
+                shareInfoParam.img = h5CallEntity.thumb;
+                break;
+            case "saveVideo":
+
+                return;
+            case "saveImage":
+                try{
+                if (h5CallEntity.contentUrl.startsWith("http")) {
+                    GlideUtils.getInstance().savePicture(baseAct, h5CallEntity.contentUrl);
+                } else {
+                    byte[] b = Base64.decode(h5CallEntity.contentUrl.split(",")[1], Base64.DEFAULT);
+                    if (b != null) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+                        BitmapUtil.saveImageToAlbumn(baseAct, bitmap, false, false);
+                        Common.staticToasts(baseAct, "已保存到手机相册", R.mipmap.icon_common_duihao);
+                    } else {
+                        Common.staticToasts(baseAct, "保存失败", R.mipmap.icon_common_tanhao);
+                    }
+                }
+                }catch (Exception e){
+                    Common.staticToasts(baseAct, "保存失败", R.mipmap.icon_common_tanhao);
+                }
+                return;
+        }
+        share(shareInfoParam, h5CallEntity.scene);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && mwv_h5.canGoBack()) {
@@ -157,15 +212,24 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         return super.onKeyDown(keyCode, event);
     }
 
+    public void share(ShareInfoParam shareInfoParam, String type) {
+        if ("session".equals(type)) {
+            WXEntryActivity.startAct(this, "shareFriend", shareInfoParam);
+        } else {
+            WXEntryActivity.startAct(this, "shareCircle", shareInfoParam);
+        }
+    }
+
     /**
      * 布局id
      *
      * @return
      */
     protected void jsCallback(H5CallEntity h5CallEntity) {
-//        switch (h5CallEntity.type){
-            LogUtil.augusLogW("yxftest----"+h5CallEntity.scene);
-//        }
+        if (h5CallEntity != null && !isEmpty(h5CallEntity.origin)) {
+            this.h5CallEntity = h5CallEntity;
+            handler.sendMessage(new Message());
+        }
     }
 
     @Override
@@ -672,10 +736,10 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 //            mwv_h5.destroy();
 //        }
 
-        try{
+        try {
             ViewGroup view = (ViewGroup) getWindow().getDecorView();
             view.removeAllViews();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         super.onDestroy();

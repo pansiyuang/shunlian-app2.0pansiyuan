@@ -202,7 +202,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
                 recycler_list.setVisibility(View.VISIBLE);
                 nestedScrollView.setVisibility(View.GONE);
             }
-            if(recommend!=null){//添加推荐商品
+            if(recommend!=null&&!TextUtils.isEmpty(recommend.id)){//添加推荐商品
                 recommend.is_recommend = true;
                 goodList.add(recommend);
             }

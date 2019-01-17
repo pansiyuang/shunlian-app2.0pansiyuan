@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.DayGiveEggEntity;
 import com.shunlian.app.bean.NewEggDetailEntity;
 import com.shunlian.app.bean.SignEggEntity;
@@ -397,6 +398,11 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     }
 
+    @Override
+    public void setBubble(BubbleEntity data) {
+
+    }
+
     /**
      * 金蛋数量
      *
@@ -448,12 +454,15 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
+
+
     /**
      * 限时领金蛋弹窗
      *
      * @param num
      */
-    public void showGoldEggsNum(String num) {
+    @Override
+    public void showGoldEggsNum(String num, String isRemind, String missEgg) {
         if (oget != null) {
             //领取金蛋
             oget.setTopTextView("恭喜获得");

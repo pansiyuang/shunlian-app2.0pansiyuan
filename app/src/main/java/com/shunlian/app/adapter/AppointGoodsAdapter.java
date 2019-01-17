@@ -55,12 +55,12 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
 
         String label = goods.big_label;
         if (!isEmpty(label)){
-            visible(mHolder.mtv_label);
-            mHolder.mtv_label.setText(label);
+            gone(mHolder.mtv_label);
+            //mHolder.mtv_label.setText(label);
         }else {
             gone(mHolder.mtv_label);
         }
-        mHolder.mtv_title.setText(Common.getPlaceholder(label) + goods.title);
+        mHolder.mtv_title.setText(Common.getPlaceholder(context,label,goods.title));
     }
 
     public class AppointGoodsHolder extends BaseRecyclerViewHolder{

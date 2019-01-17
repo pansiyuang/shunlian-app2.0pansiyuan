@@ -229,7 +229,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (SharedPrefUtil.getSharedUserBoolean("hide_first", false)) {
             miv_hint.setVisibility(View.GONE);
         } else {
-            GlideUtils.getInstance().loadLocal(this, miv_hint, R.drawable.firsts_hint);
+            GlideUtils.getInstance().loadLocal(this, miv_hint, R.drawable.firsts_hints);
             miv_hint.setVisibility(View.VISIBLE);
         }
 
