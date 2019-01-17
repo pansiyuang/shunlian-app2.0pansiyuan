@@ -1,5 +1,7 @@
 package com.shunlian.app.utils;
 
+import android.text.TextUtils;
+
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 
 import org.json.JSONException;
@@ -19,7 +21,9 @@ public class JosnSensorsDataAPI {
                                          String bannerID,String url,int rank){
         try {
             JSONObject properties = new JSONObject();
-            properties.put("bannerBelongs", pageType);
+            if(!TextUtils.isEmpty(pageType)) {
+                properties.put("bannerType", pageType.equals("精选")?"首页":pageType);
+            }
 //            properties.put("bannerName", bannerName);
             properties.put("bannerID", bannerID);
             String mUrl="";

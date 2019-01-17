@@ -58,6 +58,7 @@ public class CommonDialogUtil {
                 .setView(R.layout.dialog_page_user_new);
         dialog_user_info = nomalBuild.create();
         dialog_user_info.getWindow().getAttributes().flags= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        dialog_user_info.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog_user_info.show();
         MyImageView miv_close= dialog_user_info.findViewById(R.id.miv_close);
         TextView tv_new_submit = dialog_user_info.findViewById(R.id.tv_new_submit);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +81,7 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
     private LinearLayoutManager manager;
 
     private String type;
+    private String share_url;
 
     @Override
     public void onDestroyView() {
@@ -189,9 +191,10 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
     }
 
     @Override
-    public void userGoodsList(int currentPage, int totalPage, List<NewUserGoodsEntity.Goods> collectionGoodsLists,NewUserGoodsEntity.Goods recommend) {
+    public void userGoodsList(int currentPage, int totalPage,String share_url, List<NewUserGoodsEntity.Goods> collectionGoodsLists,NewUserGoodsEntity.Goods recommend) {
         if (currentPage == 1) {
             goodList.clear();
+            this.share_url = share_url;
             if (isEmpty(collectionGoodsLists)) {
                 recycler_list.setVisibility(View.GONE);
                 nestedScrollView.setVisibility(View.VISIBLE);
@@ -257,7 +260,11 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         shareInfoParam.title = goodList.get(postion).title;
         shareInfoParam.price = goodList.get(postion).price;
         shareInfoParam.market_price = goodList.get(postion).market_price;
-        shareInfoParam.shareLink = goodList.get(postion).thumb;
+        if(!TextUtils.isEmpty(share_url)){
+            shareInfoParam.shareLink = share_url;
+        }else {
+            shareInfoParam.shareLink = goodList.get(postion).thumb;
+        }
         shareInfoParam.img = goodList.get(postion).thumb;
         shareInfoParam.goods_id = goodList.get(postion).id;
         shareInfoParam.isNewUserGood = true;
@@ -305,7 +312,11 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
         shareInfoParam.title = baseEntity.data.title;
         shareInfoParam.price = baseEntity.data.price;
         shareInfoParam.market_price = baseEntity.data.market_price;
-        shareInfoParam.shareLink = baseEntity.data.shareLink;
+        if(!TextUtils.isEmpty(share_url)){
+            shareInfoParam.shareLink = share_url;
+        }else {
+            shareInfoParam.shareLink = baseEntity.data.shareLink;
+        }
         shareInfoParam.img = baseEntity.data.img;
         shareInfoParam.voucher = baseEntity.data.voucher;
         shareInfoParam.desc = baseEntity.data.desc;

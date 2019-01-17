@@ -753,6 +753,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String is_attention;     //1是已经收藏， 未登录就返回0
         public String store_id;     //店铺id
         public String store_icon;     //店铺icon
+        public String notice_content;     //商家公告通知内容
         public ArrayList<Item> hot;//店铺热销
         public ArrayList<Item> push;//店主推荐
         public ArrayList<ActItem> push_goods;//灵活版的hot 和 push
@@ -873,9 +874,10 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.is_attention);
             dest.writeString(this.store_id);
             dest.writeString(this.store_icon);
+            dest.writeString(this.notice_content);
             dest.writeTypedList(this.hot);
             dest.writeTypedList(this.push);
-            dest.writeList(this.push_goods);
+            dest.writeTypedList(this.push_goods);
         }
 
         protected StoreInfo(Parcel in) {
@@ -890,10 +892,10 @@ public class GoodsDeatilEntity implements Parcelable {
             this.is_attention = in.readString();
             this.store_id = in.readString();
             this.store_icon = in.readString();
+            this.notice_content = in.readString();
             this.hot = in.createTypedArrayList(Item.CREATOR);
             this.push = in.createTypedArrayList(Item.CREATOR);
-            this.push_goods = new ArrayList<ActItem>();
-            in.readList(this.push_goods, ActItem.class.getClassLoader());
+            this.push_goods = in.createTypedArrayList(ActItem.CREATOR);
         }
 
         public static final Creator<StoreInfo> CREATOR = new Creator<StoreInfo>() {
