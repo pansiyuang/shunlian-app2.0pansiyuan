@@ -12,6 +12,8 @@ import java.util.List;
 public class TaskHomeEntity {
 
     public String gold_egg;
+    public String miss_eggs;
+    public String is_remind;
 
     public String gold_egg_second;
     public String gold_egg_total_second;
