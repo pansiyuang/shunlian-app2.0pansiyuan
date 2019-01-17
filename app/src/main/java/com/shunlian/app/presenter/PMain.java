@@ -268,7 +268,9 @@ public class PMain extends BasePresenter<IMain> {
                 if (data != null) {
                     iView.setAD(data);
                 }
-                showVoucherSuspension();
+                if(Common.isAlreadyLogin()) {
+                    showVoucherSuspension();
+                }
             }
 
             @Override
@@ -283,7 +285,7 @@ public class PMain extends BasePresenter<IMain> {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
         Call<BaseEntity<ShowVoucherSuspension>> setinfo = getAddCookieApiService().showVoucherSuspension(map);
-        getNetData(true, setinfo, new SimpleNetDataCallback<BaseEntity<ShowVoucherSuspension>>() {
+        getNetData(false, setinfo, new SimpleNetDataCallback<BaseEntity<ShowVoucherSuspension>>() {
             @Override
             public void onSuccess(BaseEntity<ShowVoucherSuspension> entity) {
                 super.onSuccess(entity);

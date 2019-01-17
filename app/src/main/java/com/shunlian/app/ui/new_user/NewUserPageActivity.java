@@ -586,7 +586,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @Override
     public void showVoucherSuspension(ShowVoucherSuspension voucherSuspension) {
-        if(voucherSuspension.suspensionShow.equals("1")&&isNew&&Common.isAlreadyLogin()){
+        if(voucherSuspension.suspensionShow.equals("1")&&Common.isAlreadyLogin()){
             tv_new_user_title.setText(voucherSuspension.suspension.prize);
             show_new_user_view.setVisibility(View.VISIBLE);
             if(voucherSuspension.suspension.finish>0) {
