@@ -55,10 +55,15 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
         TaskListHolder mHolder = (TaskListHolder) holder;
 
         TaskListEntity.ItemTask itemTask = lists.get(position);
-        GlideUtils.getInstance().loadOverrideImage(context,
-                mHolder.mivIcon, itemTask.icon_url, 32, 32);
+        if (itemTask == null)return;
+        GlideUtils.getInstance().loadImage(context,
+                mHolder.mivIcon, itemTask.icon_url);
 
-        mHolder.mtvTaskName.setText(itemTask.title);
+        String progress = "";
+        if (!isEmpty(itemTask.progress)){
+            progress = "("+itemTask.progress+")";
+        }
+        mHolder.mtvTaskName.setText(itemTask.title+progress);
         mHolder.mtvTaskTip.setText(itemTask.info);
         if (isEmpty(itemTask.gold_num)){
             gone(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
@@ -71,6 +76,7 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
                     mHolder.miv_image.getLayoutParams();
             if (TASK_TYPE.newer_download_app == TASK_TYPE.valueOf(itemTask.code)) {
                 visible(mHolder.miv_image);
+                gone(mHolder.mtvEggsCount,mHolder.llayout_eggs_count);
                 mHolder.miv_image.setImageResource(R.mipmap.image_redenvelope);
                 layoutParams.leftMargin = TransformUtil.dip2px(context,10);
                 layoutParams.gravity = Gravity.CENTER;
@@ -92,22 +98,23 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
     private void changeState(int position, TaskListHolder mHolder, TaskListEntity.ItemTask itemTask) {
         try {
             if ("0".equals(itemTask.task_status)) {//0 未完成；1已完成
-                /*if (TASK_TYPE.task_new_user_gift == TASK_TYPE.valueOf(itemTask.code)
-                        || TASK_TYPE.task_new_user_invite == TASK_TYPE.valueOf(itemTask.code)
-                         || TASK_TYPE.task_daily_hour_gold == TASK_TYPE.valueOf(itemTask.code)) {
-                    mHolder.mtvObtainTip.setText("领取");
-                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
-                    mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(2));
-                } else {
-
-                }*/
                 mHolder.mtvObtainTip.setText("去完成");
                 mHolder.mtvObtainTip.setTextColor(getColor(R.color.pink_color));
                 mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(1));
             } else {
-                mHolder.mtvObtainTip.setText("已领取");
-                mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
-                mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(3));
+                if (TASK_TYPE.task_daily_hour_gold == TASK_TYPE.valueOf(itemTask.code)) {
+                    mHolder.mtvObtainTip.setText("已领取");
+                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
+                    mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(3));
+                }else if (TASK_TYPE.newer_download_app == TASK_TYPE.valueOf(itemTask.code)){
+                    mHolder.mtvObtainTip.setText("去查看");
+                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.pink_color));
+                    mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(1));
+                }else {
+                    mHolder.mtvObtainTip.setText("已完成");
+                    mHolder.mtvObtainTip.setTextColor(getColor(R.color.white));
+                    mHolder.mtvObtainTip.setBackgroundDrawable(getBtnStatusDrawable(3));
+                }
             }
         } catch (Exception e) {
 

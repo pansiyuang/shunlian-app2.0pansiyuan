@@ -75,7 +75,7 @@
         android:layout_below="@+id/ll_title_top"
         android:layout_marginRight="15dp"
         android:layout_marginTop="2dp"
-        android:layout_toLeftOf="@+id/llayout_right"
+        android:layout_toLeftOf="@+id/mtv_obtain_tip"
         android:text="按照时间节点，金蛋成熟领取金蛋"
         android:textColor="@color/value_484848"
         android:textSize="12sp" />

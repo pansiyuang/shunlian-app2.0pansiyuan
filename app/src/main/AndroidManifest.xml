@@ -224,6 +224,9 @@
         <meta-data
             android:name="com.shunlian.app.glidemodule.OkHttpGlideModule"
             android:value="GlideModule"/>
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" />
         <!-- Required. For publish channel feature -->
         <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。-->
         <!-- 例如: -->
@@ -280,7 +283,14 @@
 
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
-
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="heatmap"
+                    android:scheme="saca893e57" />
+            </intent-filter>
         </activity>
 
         <activity

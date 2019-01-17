@@ -113,7 +113,11 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                     mHolder.miv_goods_pic, goods.thumb,220,220);
 //            mHolder.mtv_title.setText(goods.title);
 //             mHolder.mtv_title.setText();
-             getSubString(mHolder.mtv_title,goods.title,1);
+             if(!TextUtils.isEmpty(goods.title)) {
+                 getSubString(mHolder.mtv_title, goods.title, 1);
+             }else{
+                 mHolder.mtv_title.setText("");
+             }
             String source = getString(R.string.rmb).concat(goods.price);
             mHolder.mtv_price.setText(Common.changeTextSize(source, getString(R.string.rmb), 12));
             mHolder.mtv_discount_price.setStrikethrough();

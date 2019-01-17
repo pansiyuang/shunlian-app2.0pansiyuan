@@ -13,7 +13,6 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -75,9 +74,8 @@ public class New3LoginAct extends BaseActivity{
         miv_close.setOnClickListener(v -> {
            if (mCurrentPage == 1 || mCurrentPage == 3){
                if (mCurrentPage == 3)loginNotify();
-               SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
-               Common.goGoGo(this,"home");
                finish();
+               Common.handleTheRelayJump(this);
            }else {
                loginSms(1, mConfig);
            }
@@ -225,9 +223,8 @@ public class New3LoginAct extends BaseActivity{
     public void onBackPressed() {
         if (mCurrentPage == 1 || mCurrentPage == 3){
             if (mCurrentPage == 3)loginNotify();
-            SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
-            Common.goGoGo(this,"home");
             super.onBackPressed();
+            Common.handleTheRelayJump(this);
         }else {
             loginSms(1, mConfig);
         }

@@ -207,6 +207,8 @@ public class App extends Application {
         // $AppClick
         eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_CLICK);
         SensorsDataAPI.sharedInstance(this).enableAutoTrack(eventTypeList);
+        SensorsDataAPI.sharedInstance().enableHeatMap();
+        SensorsDataAPI.sharedInstance().enableAppHeatMapConfirmDialog(false);
         SensorsDataAPI.sharedInstance().trackFragmentAppViewScreen();
         try {
             JSONObject properties = new JSONObject();

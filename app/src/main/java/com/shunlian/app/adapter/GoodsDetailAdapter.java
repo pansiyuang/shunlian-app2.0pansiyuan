@@ -30,6 +30,7 @@ import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
+import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
 import com.shunlian.app.widget.GoodsServiceDialog;
@@ -572,11 +573,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 //                GlideUtils.getInstance().loadLocal(context,mHolder.miv_hint,R.drawable.goods_hint);
 //                mHolder.miv_hint.setVisibility(View.VISIBLE);
 //            }
-            int pref_length = 0;
+            String pref_length = "";
             String title = mGoodsEntity.title;
             String is_preferential = mGoodsEntity.is_preferential;
             if (mGoodsEntity.tt_act != null) {
-                pref_length = 5;//显示天天特惠标题
+                pref_length = "天天特惠";//显示天天特惠标题
                 title = mGoodsEntity.tt_act.title;
                 visible(mHolder.miv_pref);
             } else {
@@ -584,10 +585,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 if (!isEmpty(is_preferential)) {//显示正常标题
                     mHolder.mtv_discount_info.setText(is_preferential);
                     visible(mHolder.mtv_discount_info);
-                    pref_length = is_preferential.length();
+                    pref_length = is_preferential;
                 } else {
                     gone(mHolder.mtv_discount_info);
-                    pref_length = 0;
+                    pref_length = "";
                 }
             }
               if (TextUtils.isEmpty(mGoodsEntity.is_fav) || "0".equals(mGoodsEntity.is_fav)) {
@@ -595,8 +596,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 } else {
                    mHolder.miv_fav.setImageResource(R.mipmap.icon_heart_sel);
                 }
-            if (pref_length != 0) {
-                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length-1) + title);
+            if (!isEmpty(pref_length)) {
+                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length) + title);
             } else {
                 mHolder.mtv_title.setText(title);
             }
@@ -1223,9 +1224,26 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_plus_des)
         MyTextView mtv_plus_des;
 
+        @BindView(R.id.store_notify)
+        LinearLayout store_notify;
+
+        @BindView(R.id.mtv_notify_content)
+        MyTextView mtv_notify_content;
+
         public TitleHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
+            GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
+            if (store_info != null && !isEmpty(store_info.notice_content)){
+                visible(store_notify);
+                store_notify.setBackgroundDrawable(ShapeUtils.commonShape( context,Color.parseColor("#F13B4A"),
+                        8,2, Color.parseColor("#FFD582")));
+                mtv_notify_content.setBackgroundDrawable(
+                        ShapeUtils.commonShape( context,Color.parseColor("#fdf3e7"),4));
+                mtv_notify_content.setText(store_info.notice_content);
+            }else {
+                gone(store_notify);
+            }
 
             TransformUtil.expandViewTouchDelegate(ll_fav,40,40,40,40);
 

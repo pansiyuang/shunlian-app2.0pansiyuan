@@ -16,7 +16,7 @@ public interface INewUserGoodsView extends IView {
      * 用户商品信息
      * @param collectionGoodsLists
      */
-    void userGoodsList(int page, int allPage, List<NewUserGoodsEntity.Goods> collectionGoodsLists,NewUserGoodsEntity.Goods recommend);
+    void userGoodsList(int page, int allPage,String share_url, List<NewUserGoodsEntity.Goods> collectionGoodsLists,NewUserGoodsEntity.Goods recommend);
 
     /**
      * 显示商品属性

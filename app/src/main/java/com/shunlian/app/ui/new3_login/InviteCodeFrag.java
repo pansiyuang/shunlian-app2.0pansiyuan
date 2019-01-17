@@ -116,9 +116,8 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
     public void bindInviteCode(){
         if (invite_code == null || isEmpty(invite_code.getText())){
             ((New3LoginAct) baseActivity).loginNotify();
-            SharedPrefUtil.saveCacheSharedPrf("wx_jump", "");
-            Common.goGoGo(baseActivity,"home");
             ((New3LoginAct) baseActivity).finish();
+            Common.handleTheRelayJump(baseActivity);
             return;
         }
 
@@ -162,8 +161,8 @@ public class InviteCodeFrag extends BaseFragment implements INew3LoginView{
             mtv_tip.setVisibility(View.VISIBLE);
         }else {
             ((New3LoginAct) baseActivity).loginNotify();
-            Common.goGoGo(baseActivity,"home");
             ((New3LoginAct)baseActivity).finish();
+            Common.handleTheRelayJump(baseActivity);
         }
     }
 

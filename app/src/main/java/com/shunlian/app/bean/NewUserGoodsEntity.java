@@ -22,6 +22,7 @@ public class NewUserGoodsEntity {
     public String   warn_txt;//邀请提示
     public int   device_order;//是否享用过1：是
     public  Goods recommend;//推荐的商品
+    public String  share_url;//分享地址
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Cates {
         public String id;

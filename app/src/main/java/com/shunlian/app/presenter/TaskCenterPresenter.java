@@ -420,9 +420,9 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                     share_pic_url = task.share_pic_url;
                     share();
                     break;
-                case newer_download_app://邀请码得金蛋
+                case newer_download_app://邀新用户下单获红包
                     TaskListEntity.ItemTask itemTask1 = taskLists.get(position);
-                    TaskListEntity.Url url1 = itemTask1.ad_url;
+                    TaskListEntity.Url url1 = itemTask1.jump_url;
                     if (url1 != null){
                         Common.goGoGo(context,url1.type,url1.item_id);
                     }
