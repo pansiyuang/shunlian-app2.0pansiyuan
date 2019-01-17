@@ -194,11 +194,11 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 
                 return;
             case "saveImage":
-                try{
+//                try{
                     if (h5CallEntity.contentUrl.startsWith("http")){
                         GlideUtils.getInstance().savePicture(baseAct,h5CallEntity.contentUrl);
                     }else {
-                        byte[] b = Base64.decode(h5CallEntity.contentUrl, Base64.DEFAULT);
+                        byte[] b = Base64.decode(h5CallEntity.contentUrl.split(",")[1], Base64.DEFAULT);
                         if (b != null) {
                             Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
                             BitmapUtil.saveImageToAlbumn(baseAct, bitmap,false,false);
@@ -207,9 +207,9 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
                             Common.staticToasts(baseAct, "保存失败", R.mipmap.icon_common_tanhao);
                         }
                     }
-                }catch (Exception e){
-                    Common.staticToasts(baseAct, "保存失败", R.mipmap.icon_common_tanhao);
-                }
+//                }catch (Exception e){
+//                    Common.staticToasts(baseAct, "保存失败", R.mipmap.icon_common_tanhao);
+//                }
                 return;
         }
         share(shareInfoParam,h5CallEntity.scene);

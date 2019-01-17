@@ -40,7 +40,7 @@
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_goget"
                 android:layout_width="wrap_content"
-                android:layout_height="19dp"
+                android:layout_height="22dp"
                 android:adjustViewBounds="true"
                 android:src="@mipmap/icon_lingjiang"
                 android:layout_marginLeft="8dp"

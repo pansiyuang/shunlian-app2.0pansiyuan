@@ -62,10 +62,8 @@ public class OrderGoodsAdapter extends BaseRecyclerAdapter<MyOrderEntity.OrderGo
             gone(mHolder.mtv_label);
             mHolder.mtv_title.setText(orderGoodsBean.title);
         }else {
-            visible(mHolder.mtv_label);
-            mHolder.mtv_label.setText(offered);
-            mHolder.mtv_title.setText(Common.getPlaceholder(offered)
-                    .concat(orderGoodsBean.title));
+            gone(mHolder.mtv_label);
+            mHolder.mtv_title.setText(Common.getPlaceholder(context,offered,orderGoodsBean.title));
         }
 
         String is_refund = orderGoodsBean.is_refund;

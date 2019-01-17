@@ -82,15 +82,16 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
         });
         String offered = orderGoodsBean.offered;
         if (isEmpty(offered)){
-            mHolder.mtv_label.setVisibility(View.GONE);
+            gone(mHolder.mtv_label);
+            //mHolder.mtv_label.setVisibility(View.GONE);
             mHolder.mtv_title.setText(orderGoodsBean.title);
         }else {
-            mHolder.mtv_label.setVisibility(View.VISIBLE);
-            GradientDrawable background = (GradientDrawable) mHolder.mtv_label.getBackground();
-            background.setColor(getColor(R.color.pink_color));
-            mHolder.mtv_label.setText(offered);
-            mHolder.mtv_title.setText(Common.getPlaceholder(offered)
-                    .concat(orderGoodsBean.title));
+            gone(mHolder.mtv_label);
+            //mHolder.mtv_label.setVisibility(View.VISIBLE);
+            //GradientDrawable background = (GradientDrawable) mHolder.mtv_label.getBackground();
+            //background.setColor(getColor(R.color.pink_color));
+            //mHolder.mtv_label.setText(offered);
+            mHolder.mtv_title.setText(Common.getPlaceholder(context,offered,orderGoodsBean.title));
         }
         if (!TextUtils.isEmpty(orderGoodsBean.refund_button_desc)){
             mHolder.mtv_refund.setText(orderGoodsBean.refund_button_desc);
@@ -98,14 +99,11 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
         }else {
             mHolder.mtv_refund.setVisibility(View.GONE);
         }
-        mHolder.mtv_refund.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if ("apply".equals(orderGoodsBean.refund_button_type)){
-                    SelectServiceActivity.startAct(context, orderGoodsBean.og_id);
-                }else {
-                    ExchangeDetailAct.startAct(context,orderGoodsBean.refund_id);
-                }
+        mHolder.mtv_refund.setOnClickListener(view -> {
+            if ("apply".equals(orderGoodsBean.refund_button_type)){
+                SelectServiceActivity.startAct(context, orderGoodsBean.og_id);
+            }else {
+                ExchangeDetailAct.startAct(context,orderGoodsBean.refund_id);
             }
         });
         GradientDrawable copyBackground = (GradientDrawable) mHolder.mtv_refund.getBackground();

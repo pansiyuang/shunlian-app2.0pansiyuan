@@ -35,8 +35,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -46,11 +50,14 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -965,10 +972,71 @@ public class Common {
      * @param content
      * @return
      */
+    @Deprecated
     public static String getPlaceholder(String content){
         int placeholderByte = getPlaceholderByte(content);
         int length = (int) (placeholderByte * 1.0f / 3.0f + 0.5f);
         return getPlaceholder(length);
+    }
+
+    /**
+     * 给textview添加label标签 默认标签字体颜色白色 字体大小10sp
+     * @param context
+     * @param label
+     * @param content
+     * @return
+     */
+    public static SpannableString getPlaceholder(Context context,String label,String content){
+        return getPlaceholder(context,label,content,10, Color.WHITE,
+                Color.parseColor("#fb0036"),2);
+    }
+
+    /**
+     * 给textview添加label标签 默认标签字体颜色白色
+     * @param context
+     * @param label
+     * @param content
+     * @param labelFontSize
+     * @return
+     */
+    public static SpannableString getPlaceholder(Context context,String label,
+                                                 String content,float labelFontSize){
+        return getPlaceholder(context,label,content,labelFontSize, Color.WHITE,
+                Color.parseColor("#fb0036"),2);
+    }
+
+    /**
+     * 给textview添加label标签
+     * @param context
+     * @param label 标签内容
+     * @param content textview 内容
+     * @param labelFontSize 标签字体大小
+     * @param labelFontColor 标签字体颜色
+     * @param labelBgColor 标签背景颜色
+     * @param labelBgRadius 标签背景圆角弧度
+     * @return
+     */
+    public static SpannableString getPlaceholder(Context context, String label, String content,
+                                           float labelFontSize, int labelFontColor,
+                                           int labelBgColor, float labelBgRadius){
+        String format = "%s %s";
+        if (label == null) label = "";
+        if (content == null) content = "\u3000";
+        SpannableString spannableString = new SpannableString(String.format(format,label,content));
+        if (label.length() < 1)return spannableString;
+        View view = LayoutInflater.from(context).inflate(R.layout.label_textview, null);//R.layout.tag是每个标签的布局
+        TextView tv_tag = view.findViewById(R.id.tv_label);
+        tv_tag.setText(label);
+        tv_tag.setTextSize(labelFontSize);
+        tv_tag.setTextColor(labelFontColor);
+        tv_tag.setBackgroundDrawable(ShapeUtils.commonShape(context,labelBgColor,labelBgRadius));
+        Bitmap bitmap = BitmapUtil.convertViewToBitmap(view);
+        if (bitmap == null)return spannableString;
+        Drawable d = new BitmapDrawable(bitmap);
+        d.setBounds(0, 0, tv_tag.getWidth(), tv_tag.getHeight());//缺少这句的话，不会报错，但是图片不回显示
+        ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);//图片将对齐底部边线
+        spannableString.setSpan(span,0,label.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableString;
     }
 
     /**
