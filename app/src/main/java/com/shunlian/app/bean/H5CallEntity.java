@@ -18,12 +18,14 @@ public class H5CallEntity {
     public String description;
     public String thumb;
     public String contentUrl;
+    public String origin;
 
     @Override
     public String toString() {
         return "H5CallEntity{" +
                 "istates='" + istates + '\'' +
                 ", type='" + type + '\'' +
+                ", origin='" + origin + '\'' +
                 ", scene='" + scene + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +

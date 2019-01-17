@@ -30,6 +30,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.GoldEggLuckyWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.member.MemberPageActivity;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
@@ -464,7 +465,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             case R.id.mll_message:
                 mAppbar.setExpanded(false);
                 MessageActivity.startAct(getActivity());
-//                H5Act.startAct(getActivity(),"http://game.shunliandongli.com/game/farm/game",H5Act.MODE_SONIC);
+//                H5X5Act.startAct(getActivity(),"http://front.v2.shunliandongli.com/demo?sl_debug=open", H5X5Act.MODE_SONIC);
                 break;
             case R.id.miv_photo:
                 Common.goGoGo(getContext(), logoType, logoId);

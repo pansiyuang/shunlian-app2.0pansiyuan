@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -101,12 +102,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         mHandler = new MyHandler();
         //必须用getExtras
         Intent intent = getIntent();
-        if (intent.getExtras()!=null)
-        flag = intent.getExtras().getString("flag");
+        if (intent.getExtras() != null)
+            flag = intent.getExtras().getString("flag");
         ShareInfoParam shareInfoParam = (ShareInfoParam) intent.getSerializableExtra("shareInfoParam");
-        if (!isEmpty(flag)) SharedPrefUtil.saveCacheSharedPrf("wx_flag",flag);
+        if (!isEmpty(flag)) SharedPrefUtil.saveCacheSharedPrf("wx_flag", flag);
         if (!isEmpty(flag) && shareInfoParam != null) {
-             if (!isEmpty(shareInfoParam.photo)) {
+            if (!isEmpty(shareInfoParam.photo)) {
                 downloadPic(shareInfoParam);
             } else {
                 defShare(shareInfoParam);
@@ -116,11 +117,11 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     //分享添加默认数据
     private void defShare(ShareInfoParam shareInfoParam) {
-        if (!isEmpty(shareInfoParam.shop_name)){
-            currTitle=shareInfoParam.shop_name;
-            shareInfoParam.img=shareInfoParam.shop_logo;
+        if (!isEmpty(shareInfoParam.shop_name)) {
+            currTitle = shareInfoParam.shop_name;
+            shareInfoParam.img = shareInfoParam.shop_logo;
             currentDesc = "想要生活有乐趣！打开顺联动力购物去～";
-        }else {
+        } else {
             if (!isEmpty(shareInfoParam.title)) {
                 currTitle = shareInfoParam.title;
             } else {
@@ -140,15 +141,16 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (!isEmpty(shareInfoParam.img)) {
             Glide.with(this).load(shareInfoParam.img).asBitmap().into(new SimpleTarget<Bitmap>() {
                 @Override
-                public void onResourceReady(Bitmap resource,GlideAnimation<? super Bitmap> glideAnimation) {
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                     if (flag.equals("shareFriend")) {
                         shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneSession,
                                 currTitle, currentDesc, resource, "friend");
-                    }else if (flag.equals("shareCircle")){
+                    } else if (flag.equals("shareCircle")) {
                         shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneTimeline,
                                 currTitle, currentDesc, resource, "circle");
                     }
                 }
+
                 @Override
                 public void onLoadFailed(Exception e, Drawable errorDrawable) {
                     defShare();
@@ -161,26 +163,55 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     //下载图片成功后去分享
     private void downloadPic(ShareInfoParam shareInfoParam) {
-        Glide.with(this).load(shareInfoParam.photo)
-                .asBitmap().into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap resource,
-                                        GlideAnimation<? super Bitmap> glideAnimation) {
-                if (flag.equals("shareFriend")) {
-                    sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
-                }else if (flag.equals("shareCircle")){
-                    sharePicture(SendMessageToWX.Req.WXSceneTimeline, resource);
-                }
+        try {
+            if (shareInfoParam.photo.startsWith("http")) {
+                Glide.with(this).load(shareInfoParam.photo)
+                        .asBitmap().into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        if (flag.equals("shareFriend")) {
+                            sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
+                        } else if (flag.equals("shareCircle")) {
+                            sharePicture(SendMessageToWX.Req.WXSceneTimeline, resource);
+                        }
 
-            }
+                    }
 
-            @Override
-            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                Common.staticToasts(baseAct,
-                        "分享失败", R.mipmap.icon_common_tanhao);
-                mYFinish();
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        Common.staticToasts(baseAct,
+                                "分享失败", R.mipmap.icon_common_tanhao);
+                        mYFinish();
+                    }
+                });
+            } else {
+                Glide.with(this).load(Base64.decode(shareInfoParam.photo, Base64.DEFAULT))
+                        .asBitmap().into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        if (flag.equals("shareFriend")) {
+                            sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
+                        } else if (flag.equals("shareCircle")) {
+                            sharePicture(SendMessageToWX.Req.WXSceneTimeline, resource);
+                        }
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        Common.staticToasts(baseAct,
+                                "分享失败", R.mipmap.icon_common_tanhao);
+                        mYFinish();
+                    }
+                });
             }
-        });
+        }catch (Exception e){
+            Common.staticToasts(baseAct,
+                    "分享失败", R.mipmap.icon_common_tanhao);
+            mYFinish();
+        }
     }
 
     private void defShare() {
@@ -188,7 +219,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (flag.equals("shareFriend")) {
             shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneSession,
                     currTitle, currentDesc, img, "friend");
-        }else if (flag.equals("shareCircle")){
+        } else if (flag.equals("shareCircle")) {
             shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneTimeline,
                     currTitle, currentDesc, img, "circle");
         }
@@ -287,7 +318,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 } else {
                     if (!isEmpty(Constant.SHARE_TYPE)) {
                         if ("goods".equals(Constant.SHARE_TYPE)
-                                || "income".equals(Constant.SHARE_TYPE)|| "store".equals(Constant.SHARE_TYPE)) {
+                                || "income".equals(Constant.SHARE_TYPE) || "store".equals(Constant.SHARE_TYPE)) {
                             //用于分享领金蛋
                             wxEntryPresenter.goodsShare(Constant.SHARE_TYPE, Constant.SHARE_ID);
                         } else if ("article".equals(Constant.SHARE_TYPE)) {
@@ -304,7 +335,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     }
                     Common.staticToast("分享成功");
                 }
-                SharedPrefUtil.saveCacheSharedPrf("wx_flag","");
+                SharedPrefUtil.saveCacheSharedPrf("wx_flag", "");
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
                 result = R.string.errcode_cancel;
@@ -335,15 +366,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String member_id = wxLoginEntity.member_id;
             String status = wxLoginEntity.status;
 
-            if ("1".equals(status)){//登录成功
+            if ("1".equals(status)) {//登录成功
                 loginSuccess(entity, wxLoginEntity);
-            }else{
+            } else {
                 New3LoginAct.LoginConfig config = new New3LoginAct.LoginConfig();
                 config.login_mode = New3LoginAct.LoginConfig.LOGIN_MODE.SMS_TO_LOGIN;
                 config.unique_sign = unique_sign;
                 config.member_id = member_id;
                 config.status = status;
-                New3LoginAct.startAct(this,config);
+                New3LoginAct.startAct(this, config);
                 mYFinish();
             }
 
@@ -373,12 +404,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
         MessageCountManager.getInstance(this).initData();
 
-        if (!"1".equals(wxLoginEntity.is_tag)){
+        if (!"1".equals(wxLoginEntity.is_tag)) {
             SexSelectAct.startAct(this);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()) {
             finishAndRemoveTask();
-        }else {
+        } else {
             finish();
         }
     }
@@ -395,20 +426,39 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             ShareInfoEvent event = new ShareInfoEvent();
             event.isShareSuccess = true;
             event.type = Constant.SHARE_TYPE;
-            event.eggs_count = String.format(tip,eggs);
+            event.eggs_count = String.format(tip, eggs);
             EventBus.getDefault().post(event);
         }
-        Constant.SHARE_TYPE="";
+        Constant.SHARE_TYPE = "";
         cloasePage();
     }
 
     @Override
     public void cloasePage() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()) {
             finishAndRemoveTask();
-        }else {
+        } else {
             finish();
         }
+    }
+
+    @Override
+    public void showFailureView(int rquest_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int rquest_code) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    private void mYFinish() {
+        finish();
     }
 
     private class MyHandler extends Handler {
@@ -433,24 +483,5 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             }
             super.handleMessage(msg);
         }
-    }
-
-    @Override
-    public void showFailureView(int rquest_code) {
-
-    }
-
-    @Override
-    public void showDataEmptyView(int rquest_code) {
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    private void mYFinish(){
-        finish();
     }
 }
