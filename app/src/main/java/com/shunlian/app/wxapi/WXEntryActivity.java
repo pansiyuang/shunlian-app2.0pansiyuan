@@ -186,26 +186,33 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     }
                 });
             } else {
-                Glide.with(this).load(Base64.decode(shareInfoParam.photo, Base64.DEFAULT))
-                        .asBitmap().into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource,
-                                                GlideAnimation<? super Bitmap> glideAnimation) {
-                        if (flag.equals("shareFriend")) {
-                            sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
-                        } else if (flag.equals("shareCircle")) {
-                            sharePicture(SendMessageToWX.Req.WXSceneTimeline, resource);
+                byte[] b = Base64.decode(shareInfoParam.photo.split(",")[1], Base64.DEFAULT);
+                if (b != null) {
+                    Glide.with(this).load(b)
+                            .asBitmap().into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource,
+                                                    GlideAnimation<? super Bitmap> glideAnimation) {
+                            if (flag.equals("shareFriend")) {
+                                sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
+                            } else if (flag.equals("shareCircle")) {
+                                sharePicture(SendMessageToWX.Req.WXSceneTimeline, resource);
+                            }
+
                         }
 
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        Common.staticToasts(baseAct,
-                                "分享失败", R.mipmap.icon_common_tanhao);
-                        mYFinish();
-                    }
-                });
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            Common.staticToasts(baseAct,
+                                    "分享失败", R.mipmap.icon_common_tanhao);
+                            mYFinish();
+                        }
+                    });
+                }else {
+                    Common.staticToasts(baseAct,
+                            "分享失败", R.mipmap.icon_common_tanhao);
+                    mYFinish();
+                }
             }
         }catch (Exception e){
             Common.staticToasts(baseAct,
