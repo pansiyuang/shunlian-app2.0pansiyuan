@@ -146,7 +146,7 @@ public class WheelSurfView extends RelativeLayout {
         tvStart = new TextView(mContext);
         tvGold = new TextView(mContext);
         tvStart.setText("抽奖");
-        tvGold.setText("20金蛋一次");
+        tvGold.setText(content);
         tvStart.setTextColor(mContext.getResources().getColor(R.color.white));
         tvGold.setTextColor(mContext.getResources().getColor(R.color.white));
         tvGold.setMaxLines(2);
