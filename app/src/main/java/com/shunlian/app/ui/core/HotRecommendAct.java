@@ -281,7 +281,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
             hotPushAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Common.goGoGo(baseAct,data.datas.get(position).url.type,data.datas.get(position).url.item_id);
+                    Common.goGoGo(baseAct,mData.get(position).url.type,mData.get(position).url.item_id);
                 }
             });
             //在CoordinatorLayout中使用添加分割线失效
