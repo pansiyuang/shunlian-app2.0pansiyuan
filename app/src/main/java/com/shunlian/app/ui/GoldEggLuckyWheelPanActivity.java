@@ -48,6 +48,7 @@ import com.shunlian.app.widget.luckWheel.WheelSurfView;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
