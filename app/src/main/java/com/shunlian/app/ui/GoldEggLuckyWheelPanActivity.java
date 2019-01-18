@@ -391,27 +391,31 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
     @Override
     public void getDrawRecordList(List<String> recordList) {
-        if (isEmpty(recordList)) {
-            text_switcher.setVisibility(View.GONE);
-            return;
-        } else {
-            text_switcher.setVisibility(View.VISIBLE);
-        }
-        mWarningTextList.clear();
-        mWarningTextList.addAll(recordList);
-        if (mWarningTextList.size() == 1) {
-            text_switcher.setText(mWarningTextList.get(0));
-            index = 0;
-        }
-        if (mWarningTextList.size() > 1) {
-            handler.postDelayed(() -> {
-                if (text_switcher != null)
-                    text_switcher.setText(mWarningTextList.get(0));
+        try{
+            if (isEmpty(recordList)) {
+                text_switcher.setVisibility(View.GONE);
+                return;
+            } else {
+                text_switcher.setVisibility(View.VISIBLE);
+            }
+            mWarningTextList.clear();
+            mWarningTextList.addAll(recordList);
+            if (mWarningTextList.size() == 1) {
+                text_switcher.setText(mWarningTextList.get(0));
                 index = 0;
-            }, 1000);
-            text_switcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom));
-            text_switcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_top));
-            startFlipping();
+            }
+            if (mWarningTextList.size() > 1) {
+                handler.postDelayed(() -> {
+                    if (text_switcher != null)
+                        text_switcher.setText(mWarningTextList.get(0));
+                    index = 0;
+                }, 1000);
+                text_switcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom));
+                text_switcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_top));
+                startFlipping();
+            }
+        }catch (Exception e){
+
         }
     }
 
