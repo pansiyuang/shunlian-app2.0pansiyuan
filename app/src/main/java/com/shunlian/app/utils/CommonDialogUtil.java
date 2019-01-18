@@ -3,14 +3,17 @@ package com.shunlian.app.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,6 +37,8 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.dialog.CommonDialog;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.zh.chartlibrary.common.DensityUtil;
+
+import static android.os.Build.VERSION_CODES.M;
 
 public class CommonDialogUtil {
     public Context context;
@@ -62,9 +67,24 @@ public class CommonDialogUtil {
         dialog_user_info.getWindow().getAttributes().flags= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         dialog_user_info.getWindow().getAttributes().height = App.hightPixels;
         dialog_user_info.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         dialog_user_info.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//        ((BaseActivity)context).setStatusBarColor(R.color.white);
-//        ((BaseActivity)context).setStatusBarFontDark();
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0 全透明实现
+                Window window = dialog_user_info.getWindow();
+                int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                uiFlags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(Color.WHITE);
+                window.getDecorView().setSystemUiVisibility(uiFlags);
+            } else {//4.4 全透明状态栏
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         dialog_user_info.show();
         MyImageView miv_close= dialog_user_info.findViewById(R.id.miv_close);
         TextView tv_new_submit = dialog_user_info.findViewById(R.id.tv_new_submit);
