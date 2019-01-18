@@ -270,7 +270,6 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.bindShareID("");
                 Common.staticToasts(context,"已确认",R.mipmap.icon_common_duihao);
                 if (mVerifyPicDialog != null){
                     mVerifyPicDialog.release();
@@ -283,7 +282,15 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                iView.bindShareID(message);
+                if (mInviteCodeDialog != null)mInviteCodeDialog.show();
+                else ((Activity) context).finish();
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                if (mInviteCodeDialog != null)mInviteCodeDialog.show();
+                else ((Activity) context).finish();
             }
         });
     }
@@ -331,6 +338,15 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
+                if (mInviteCodeDialog != null)mInviteCodeDialog.show();
+                else ((Activity) context).finish();
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                if (mInviteCodeDialog != null)mInviteCodeDialog.show();
+                else ((Activity) context).finish();
             }
         });
     }
