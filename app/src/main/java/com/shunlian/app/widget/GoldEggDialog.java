@@ -209,6 +209,8 @@ public class GoldEggDialog extends Dialog {
                     setLinearLayoutParam(150, 150, miv_draw_icon);
                     tv_content.setVisibility(View.VISIBLE);
                     tv_content.setText(mTaskDraw.desc);
+                }else{
+                    tv_content.setVisibility(View.GONE);
                 }
                 btn_bottom.setText("填写收货地址");
                 break;
@@ -219,8 +221,6 @@ public class GoldEggDialog extends Dialog {
                 tv_notice.setText("中奖啦！");
                 ll_notice.setVisibility(View.GONE);
                 if (mTaskDraw != null && mTaskDraw.voucher != null) {
-                    tv_content.setVisibility(View.VISIBLE);
-                    tv_content.setText(mTaskDraw.desc);
                     TaskDrawEntity.Voucher voucher = mTaskDraw.voucher;
                     tv_voucher_name.setText(voucher.title);
                     String price = getContext().getResources().getString(R.string.common_yuan) + voucher.denomination;
@@ -229,6 +229,10 @@ public class GoldEggDialog extends Dialog {
                     tv_useType.setText(voucher.use_condition);
                     tv_voucher_date.setText(voucher.start_time);
                     tv_voucher_desc.setText(voucher.desc);
+                    tv_content.setVisibility(View.VISIBLE);
+                    tv_content.setText(mTaskDraw.desc);
+                }else{
+                    tv_content.setVisibility(View.GONE);
                 }
                 btn_bottom.setText(getContext().getResources().getText(R.string.go_to_visit));
                 break;
