@@ -269,6 +269,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
             blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
 
+            if (blog.is_self == 1) {
+                blogViewHolder.tv_attention.setVisibility(View.GONE);
+                if (isShowMore) {
+                    blogViewHolder.miv_more.setVisibility(View.VISIBLE);
+                } else {
+                    blogViewHolder.miv_more.setVisibility(View.GONE);
+                }
+            } else {
+                blogViewHolder.miv_more.setVisibility(View.VISIBLE);
+            }
+
             if (!showAttention) {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
             }
