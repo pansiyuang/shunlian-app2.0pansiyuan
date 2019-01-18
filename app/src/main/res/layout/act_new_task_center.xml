@@ -76,7 +76,6 @@
                     android:ellipsize="end"
                     android:maxEms="5"
                     android:singleLine="true"
-                    android:text="2000000890"
                     android:textColor="@color/pink_color"
                     android:textSize="24sp" />
 
