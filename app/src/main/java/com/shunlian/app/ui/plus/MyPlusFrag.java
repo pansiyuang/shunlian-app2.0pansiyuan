@@ -513,7 +513,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
                 public void run() {
                     if (position < datas.size()) {
                         runnableB = () -> {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity.isDestroyed()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity!=null&& baseActivity.isDestroyed()) {
 //                            throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
                             }else if (position < datas.size()) {
                                 lLayout_toast.setVisibility(View.VISIBLE);

@@ -121,7 +121,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 sb.append(",");
                 delLists.add(store);
             }
-            if (i>=stores.size()-1){
+            if (i>=stores.size()-1&&sb.length()>0){
                 sb.replace(sb.length()-1,sb.length(),"");
                 mPresenter.storesFavRemove(sb.toString());
             }
