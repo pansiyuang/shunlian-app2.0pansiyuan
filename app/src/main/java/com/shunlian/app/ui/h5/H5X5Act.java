@@ -39,6 +39,9 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.download.DownLoadDialogProgress;
+import com.shunlian.app.utils.download.DownloadUtils;
+import com.shunlian.app.utils.download.JsDownloadListener;
 import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -179,7 +182,9 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
                 shareInfoParam.img = h5CallEntity.thumb;
                 break;
             case "saveVideo":
-
+                if(!TextUtils.isEmpty(h5CallEntity.contentUrl)) {
+                    downFileStart(h5CallEntity.contentUrl);
+                 }
                 return;
             case "saveImage":
                 try{
@@ -203,6 +208,47 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         share(shareInfoParam, h5CallEntity.scene);
     }
 
+    private DownLoadDialogProgress downLoadDialogProgress;
+    private DownloadUtils downloadUtils;
+    private void downFileStart(String currentUrl){
+        downloadUtils = new DownloadUtils(new JsDownloadListener() {
+            @Override
+            public void onStartDownload() {
+            }
+            @Override
+            public void onProgress(int progress) {
+                downLoadDialogProgress.showProgress(progress);
+            }
+            @Override
+            public void onFinishDownload(String filePath,boolean isCancel) {
+                if(!isCancel)
+                    downLoadDialogProgress.downLoadSuccess();
+            }
+            @Override
+            public void onFail(String errorInfo) {
+                downLoadDialogProgress.dissMissDialog();
+            }
+            @Override
+            public void onFinishEnd() {
+            }
+        });
+        boolean checkState = downloadUtils.checkDownLoadFileExists(currentUrl);
+        if (checkState) {
+            Common.staticToast("已下载过该视频,请勿重复下载!");
+            return;
+        }
+        downLoadDialogProgress.showDownLoadDialogProgress(this, new DownLoadDialogProgress.downStateListen() {
+            @Override
+            public void cancelDownLoad() {
+                downloadUtils.setCancel(true);
+            }
+
+            @Override
+            public void fileDownLoad() {
+                downloadUtils.download(currentUrl,downloadUtils.fileName);
+            }
+        }, !NetworkUtils.isWifiConnected(this));
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && mwv_h5.canGoBack()) {
@@ -290,6 +336,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         member_id = SharedPrefUtil.getSharedUserString("member_id", "");
         mIntent = getIntent();
         flag = mIntent.getStringExtra("flag");
+        downLoadDialogProgress = new DownLoadDialogProgress();
         if (!isEmpty(flag) && "noTitle".equals(flag)) {
             rl_title.setVisibility(View.GONE);
         }
