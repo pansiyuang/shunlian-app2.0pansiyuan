@@ -431,7 +431,6 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
         if (!isEmpty(drawRecordList)) {
             mReocrdList.addAll(drawRecordList);
         }
-        Collections.reverse(mReocrdList);
         if (mAdapter == null) {
             mAdapter = new GoldRecordAdapter(this, mReocrdList);
             recycler_list.setAdapter(mAdapter);

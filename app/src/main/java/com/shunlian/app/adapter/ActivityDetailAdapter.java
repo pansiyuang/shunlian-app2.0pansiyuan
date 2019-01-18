@@ -178,6 +178,13 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
             }
 
+            if (blog.is_self == 0) {
+                blogViewHolder.miv_more.setVisibility(View.VISIBLE);
+            } else {
+                blogViewHolder.tv_attention.setVisibility(View.GONE);
+                blogViewHolder.miv_more.setVisibility(View.GONE);
+            }
+
             blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
             blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
             blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
