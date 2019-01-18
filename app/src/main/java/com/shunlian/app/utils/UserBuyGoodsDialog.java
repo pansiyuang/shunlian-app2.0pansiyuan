@@ -70,6 +70,8 @@ public class UserBuyGoodsDialog {
                 MyTextView mtv_title = holder.getView(R.id.mtv_title);
                 MyTextView mtv_price = holder.getView(R.id.mtv_price);
                 MyTextView mtv_shux = holder.getView(R.id.mtv_shux);
+                LinearLayout line_new_title = holder.getView(R.id.line_new_title);
+
                 MyTextView mtv_discount_price = holder.getView(R.id.mtv_discount_price);
                 MyTextView tv_user_shopping_car = holder.getView(R.id.tv_user_shopping_car);
                 holder.getView(R.id.tv_show_num).setVisibility(View.GONE);;
@@ -82,6 +84,7 @@ public class UserBuyGoodsDialog {
                 tv_user_shopping_car.setText("删除");
                 mtv_discount_price.setStrikethrough();
                 mtv_discount_price.setText(goods.market_price);
+                line_new_title.setVisibility(View.GONE);
                 if(TextUtils.isEmpty(goods.sku)){
                     mtv_shux.setVisibility(View.GONE);
                 }else{
