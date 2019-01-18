@@ -68,70 +68,99 @@ import butterknife.OnClick;
 
 public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
 
-    private static Handler handler;
     @BindView(R.id.ntv_sign)
     public NewTextView ntv_sign;
+
     @BindView(R.id.recy_view)
     RecyclerView recyView;
+
     @BindView(R.id.kanner)
     MyKanner kanner;
+
     @BindView(R.id.tab_layout)
     TabLayout tab_layout;
+
     @BindView(R.id.csv_out)
     CompileScrollView csv_out;
+
     @BindView(R.id.view_eggdetail)
     View view_eggdetail;
+
     @BindView(R.id.view_eggdetails)
     View view_eggdetails;
+
     @BindView(R.id.mllayout_mid)
     MyLinearLayout mllayout_mid;
+
     @BindView(R.id.rv_sign)
     RecyclerView rv_sign;
+
     @BindView(R.id.ntv_eggnum)
     NewTextView ntv_eggnum;
+
     @BindView(R.id.ntv_titleOne)
     NewTextView ntv_titleOne;
+
     @BindView(R.id.ntv_content)
     NewTextView ntv_content;
+
     @BindView(R.id.miv_chose)
     MyImageView miv_chose;
+
     @BindView(R.id.mrlayout_goGet)
     MyRelativeLayout mrlayout_goGet;
+
     @BindView(R.id.animation_view)
     LottieAnimationView animation_view;
+
     @BindView(R.id.miv_golden_eggs)
     MyImageView miv_golden_eggs;
+
     @BindView(R.id.miv_one)
     MyImageView miv_one;
+
     @BindView(R.id.miv_two)
     MyImageView miv_two;
+
     @BindView(R.id.miv_get)
     MyImageView miv_get;
+
     @BindView(R.id.miv_gets)
     MyImageView miv_gets;
+
     @BindView(R.id.ntv_titleOnes)
     NewTextView ntv_titleOnes;
+
     @BindView(R.id.ntv_contents)
     NewTextView ntv_contents;
+
     @BindView(R.id.ntv_titleOness)
     NewTextView ntv_titleOness;
+
     @BindView(R.id.ntv_task)
     NewTextView ntv_task;
+
     @BindView(R.id.ddp_downTime)
     TaskDownTimerView ddp_downTime;
+
     @BindView(R.id.miv_signDetail)
     MyImageView miv_signDetail;
+
     @BindView(R.id.miv_left)
     MyImageView miv_left;
+
     @BindView(R.id.miv_mid)
     MyImageView miv_mid;
     //   气泡
     @BindView(R.id.lLayout_toast)
     LinearLayout lLayout_toast;
+
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
+
     @BindView(R.id.tv_info)
     TextView tv_info;
+
     LinearLayoutManager linearLayoutManager;
     NewEggDetailAdapter eggDetailAdapter;
     private boolean isStop, isCrash;
@@ -144,6 +173,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     private Dialog dialog_rule, dialog_detail;
     private String miss_eggs, is_remind;
     private boolean isReceive;//是否可以领取金蛋
+    private static Handler handler;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, NewTaskCenterAct.class);
@@ -202,15 +232,12 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         if (handler == null) {
             handler = new Handler();
         }
-        runnableA = new Runnable() {
-            @Override
-            public void run() {
-                if (!isStop) {
-                    LogUtil.augusLogW("mposition：delayed");
-                    mposition = 0;
-                    if (mPresenter != null)
-                        mPresenter.getBubble();
-                }
+        runnableA = () -> {
+            if (!isStop) {
+                LogUtil.augusLogW("mposition：delayed");
+                mposition = 0;
+                if (mPresenter != null)
+                    mPresenter.getBubble();
             }
         };
         handler.postDelayed(runnableA, ((Constant.BUBBLE_SHOW + Constant.BUBBLE_DUR) * size + 1) * 1000);
@@ -227,46 +254,35 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
                 @Override
                 public void run() {
                     if (mposition < datas.size()) {
-                        runnableB = new Runnable() {
-                            @Override
-                            public void run() {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct.isDestroyed()) {
+                        runnableB = () -> {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct.isDestroyed()) {
 //                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
-                                } else if (mposition < datas.size() && lLayout_toast != null && miv_icon != null && tv_info != null && !baseAct.isFinishing()) {
-                                    LogUtil.augusLogW("mposition:" + mposition);
-                                    lLayout_toast.setVisibility(View.VISIBLE);
-                                    GlideUtils.getInstance().loadCircleAvar(baseAct, miv_icon, datas.get(mposition).avatar);
-                                    tv_info.setText(datas.get(mposition).text);
-                                    lLayout_toast.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            if (datas.get(mposition).url != null)
-                                                Common.goGoGo(baseAct, datas.get(mposition).url.type, datas.get(mposition).url.item_id);
-                                        }
-                                    });
-                                }
+                            } else if (mposition < datas.size() && lLayout_toast != null
+                                    && miv_icon != null && tv_info != null && !baseAct.isFinishing()) {
+                                LogUtil.augusLogW("mposition:" + mposition);
+                                lLayout_toast.setVisibility(View.VISIBLE);
+                                GlideUtils.getInstance().loadCircleAvar(baseAct, miv_icon, datas.get(mposition).avatar);
+                                tv_info.setText(datas.get(mposition).text);
+                                lLayout_toast.setOnClickListener(v -> {
+                                    if (datas.get(mposition).url != null)
+                                        Common.goGoGo(baseAct, datas.get(mposition).url.type,
+                                                datas.get(mposition).url.item_id);
+                                });
                             }
                         };
                         if (handler == null) {
                             if (!isCrash) {
                                 isCrash = true;
                                 Handler mHandler = new Handler(Looper.getMainLooper());
-                                mHandler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        isCrash = false;
-                                    }
-                                }, ((Constant.BUBBLE_SHOW + Constant.BUBBLE_DUR) * size + 2) * 1000);
+                                mHandler.postDelayed(() -> isCrash = false,
+                                        ((Constant.BUBBLE_SHOW + Constant.BUBBLE_DUR) * size + 2) * 1000);
                             }
                         } else {
                             handler.post(runnableB);
-                            runnableC = new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (!isStop && lLayout_toast != null) {
-                                        lLayout_toast.setVisibility(View.GONE);
-                                        mposition++;
-                                    }
+                            runnableC = () -> {
+                                if (!isStop && lLayout_toast != null) {
+                                    lLayout_toast.setVisibility(View.GONE);
+                                    mposition++;
                                 }
                             };
                             handler.postDelayed(runnableC, Constant.BUBBLE_SHOW * 1000);
@@ -638,7 +654,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         if (mPresenter != null && isReceive) {
             mPresenter.goldegglimit();
         } else {
-           initBubble(miv_left);
+           initBubble(miv_left,false);
         }
     }
 
@@ -804,10 +820,16 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
-    public void initBubble(MyImageView miv_bubble) {
+    public void initBubble(MyImageView miv_bubble,boolean isAnchorCenter) {
         if (miv_bubble!=null){
-            miv_bubble.setPivotX(0.0f);
-            miv_bubble.setPivotY(miv_bubble.getMeasuredHeight());
+            float pivotX = 0.0f;
+            float pivotY = 0.0f;
+            if (isAnchorCenter){
+                pivotX = miv_bubble.getMeasuredWidth() *1.0f / 2.0f;
+                pivotY = miv_bubble.getMeasuredHeight() *1.0f / 2.0f;
+            }
+            miv_bubble.setPivotX(pivotX);
+            miv_bubble.setPivotY(pivotY);
             ValueAnimator va = ValueAnimator.ofFloat(0.0f, 1.0f,//0.5秒
                     1.0f, 1.0f, 1.0f, 1.0f,//1秒
                     1.0f, 1.0f, 1.0f, 1.0f,//1秒
@@ -840,35 +862,24 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         ntv_titleOness.setText(list.get(2).title);
         ntv_contents.setText(list.get(2).content);
         ntv_task.setVisibility(View.GONE);
-        mrlayout_goGet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                csv_out.fullScroll(ScrollView.FOCUS_DOWN);
-            }
-        });
+        mrlayout_goGet.setOnClickListener(view -> csv_out.fullScroll(ScrollView.FOCUS_DOWN));
 
         if (!isEmpty(list.get(1).over_task) && !isEmpty(list.get(1).all_task)
                 && Integer.parseInt(list.get(1).over_task) > 0) {
 
             if (list.get(1).over_task.equals(list.get(1).all_task)) {
                 miv_gets.setVisibility(View.VISIBLE);
-                mrlayout_goGet.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        initBubble(miv_mid);
-                    }
-                });
+                mrlayout_goGet.setOnClickListener(view -> initBubble(miv_mid,true));
                 if ("0".equals(list.get(1).status)) {
                     initHintialog("goget", "恭喜您完成今日全部任务", "");
                     miv_gets.setImageResource(R.mipmap.icon_lingjiang);
                     miv_gets.setOnClickListener(view -> {
+                        if (mPresenter != null)
                         mPresenter.everyDayGiveEgg();
                     });
                 } else {
                     miv_gets.setImageResource(R.mipmap.icon_yilingjiang);
-                    miv_gets.setOnClickListener(view -> {
-                        initBubble(miv_mid);
-                    });
+                    miv_gets.setOnClickListener(view -> initBubble(miv_mid,true));
                 }
             } else {
                 ntv_content.setText(list.get(1).content);
@@ -889,13 +900,10 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void signEgg(SignEggEntity signEggEntity) {
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mPresenter != null) {
-                    mPresenter.initApis();
-                    initDialog(signEggEntity);
-                }
+        handler.postDelayed(() -> {
+            if (mPresenter != null) {
+                mPresenter.initApis();
+                initDialog(signEggEntity);
             }
         }, 2 * 1000);
         ntv_sign.setText("已签到" + signEggEntity.sign_continue_num + "天");
