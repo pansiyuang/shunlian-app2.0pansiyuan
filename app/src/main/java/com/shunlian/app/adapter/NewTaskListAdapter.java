@@ -201,7 +201,8 @@ public class NewTaskListAdapter extends BaseRecyclerAdapter<TaskListEntity.ItemT
             mtvObtainTip.setOnClickListener(v -> {
                 try {
                     TaskListEntity.ItemTask itemTask = lists.get(getAdapterPosition());
-                    if (listener != null && "0".equals(itemTask.task_status))
+                    if (listener != null && ("0".equals(itemTask.task_status) ||
+                            TASK_TYPE.newer_download_app == TASK_TYPE.valueOf(itemTask.code)))
                         listener.onItemClick(v, getAdapterPosition());
                 }catch (Exception e){
 
