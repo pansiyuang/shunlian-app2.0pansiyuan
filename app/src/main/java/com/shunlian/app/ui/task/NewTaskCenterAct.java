@@ -546,7 +546,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         super.mOnClick(view);
         switch (view.getId()) {
             case R.id.miv_chose:
-                GoldEggLuckyWheelPanActivity.startAct(this);
+                Common.goGoGo(this,"taskGoldenEggTurnTable");
                 break;
         }
     }

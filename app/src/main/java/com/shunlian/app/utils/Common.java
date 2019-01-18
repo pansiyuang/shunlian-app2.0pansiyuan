@@ -77,6 +77,7 @@ import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.ui.GoldEggLuckyWheelPanActivity;
 import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
@@ -582,6 +583,9 @@ public class Common {
             case "plusFreeConfirmOrder":
 //                slmall://plusFreeConfirmOrder?gid=123&qty=1&sku_id=345
                 ConfirmOrderAct.startAct(context,params[0],params[1],params[2],ConfirmOrderAct.TYPE_PLUSFREE);
+                break;
+            case "taskGoldenEggTurnTable":
+                GoldEggLuckyWheelPanActivity.startAct(context);
                 break;
             default://首页
                 MainActivity.startAct(context, "");
