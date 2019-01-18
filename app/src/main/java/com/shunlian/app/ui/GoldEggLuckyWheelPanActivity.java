@@ -48,6 +48,7 @@ import com.shunlian.app.widget.luckWheel.WheelSurfView;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -86,6 +87,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     private Handler handler = new Handler();
     private boolean isFlipping = false; // 是否启用预警信息轮播
     private List<String> mWarningTextList = new ArrayList<>();
+    private List<MyDrawRecordEntity.DrawRecord> mReocrdList = new ArrayList<>();
     private int statusBarHeight;
     private GoldEggDialog goldEggDialog;
     private boolean isAttention;
@@ -126,6 +128,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
             @Override
             public void rotateEnd(int position, String des) {
                 goldEggDialog.setShowType(currentTaskDraw);
+                mPresenter.getMyDrawRecordList();
             }
 
             @Override
@@ -424,8 +427,13 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
     @Override
     public void getMyRecordList(List<MyDrawRecordEntity.DrawRecord> drawRecordList) {
+        mReocrdList.clear();
+        if (!isEmpty(drawRecordList)) {
+            mReocrdList.addAll(drawRecordList);
+        }
+        Collections.reverse(mReocrdList);
         if (mAdapter == null) {
-            mAdapter = new GoldRecordAdapter(this, drawRecordList);
+            mAdapter = new GoldRecordAdapter(this, mReocrdList);
             recycler_list.setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();
@@ -454,6 +462,6 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
     @Override
     public void jumpTaskCenter() {
-        Common.goGoGo(this,"taskSystems");
+        Common.goGoGo(this, "taskSystems");
     }
 }
