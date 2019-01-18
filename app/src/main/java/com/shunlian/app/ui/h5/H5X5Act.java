@@ -188,7 +188,7 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
                 return;
             case "saveImage":
                 try{
-                if (h5CallEntity.contentUrl.startsWith("http")) {
+                if (!h5CallEntity.contentUrl.contains(";base64,")) {
                     GlideUtils.getInstance().savePicture(baseAct, h5CallEntity.contentUrl);
                 } else {
                     byte[] b = Base64.decode(h5CallEntity.contentUrl.split(",")[1], Base64.DEFAULT);

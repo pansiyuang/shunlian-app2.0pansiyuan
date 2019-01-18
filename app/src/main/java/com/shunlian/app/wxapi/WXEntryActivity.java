@@ -164,7 +164,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     //下载图片成功后去分享
     private void downloadPic(ShareInfoParam shareInfoParam) {
         try {
-            if (shareInfoParam.photo.startsWith("http")) {
+            if (!shareInfoParam.photo.contains(";base64,")) {
                 Glide.with(this).load(shareInfoParam.photo)
                         .asBitmap().into(new SimpleTarget<Bitmap>() {
                     @Override
