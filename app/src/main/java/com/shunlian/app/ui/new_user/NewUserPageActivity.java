@@ -360,8 +360,6 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
      * 显示新人的dialog
      */
     private void showDialogView(String warn_txt){
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
         commonDialogUtil.userNewShowDialog(new ICallBackResult<String>() {
             @Override
             public void onTagClick(String data) {
@@ -383,6 +381,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                 }
             }
         }, "立即领取",warn_txt);
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
     }
 
     public static void startAct(Context context) {
