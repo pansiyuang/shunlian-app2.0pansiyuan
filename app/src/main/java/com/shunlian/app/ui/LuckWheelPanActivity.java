@@ -178,7 +178,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             MyImageView miv_ad = dialog_ad.findViewById(R.id.miv_ad);
             X5WebView mwv_rule = dialog_ad.findViewById(R.id.mwv_rule);
             mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
-            mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+//            mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
             mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
             mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
@@ -207,7 +207,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             mwv_rule.loadUrl(url);
             miv_ad.setImageResource(R.mipmap.image_renwu_dazhuanpan);
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
-            dialog_ad.setCancelable(false);
+//            dialog_ad.setCancelable(false);
         }
     }
 

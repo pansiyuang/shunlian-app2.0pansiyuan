@@ -212,7 +212,6 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
             mwv_h5.getSettings().setDefaultTextEncodingName("UTF-8");
             mwv_h5.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
             //web_view.loadData(map.get("NEWS_CONTENT"), "text/html", "UTF-8") ; 有时会遇到乱码问题 具体好像与sdk有关系
-            mwv_h5.setMaxHeight(TransformUtil.dip2px(this, 380));
             mwv_h5.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
             mwv_h5.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");

@@ -564,7 +564,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         MyImageView miv_close = dialog_rule.findViewById(R.id.miv_close);
         X5WebView mwv_rule = dialog_rule.findViewById(R.id.mwv_rule);
         mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
-        mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+//        mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
         mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
         mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
@@ -594,7 +594,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         mwv_rule.loadUrl(url);
 
         miv_close.setOnClickListener(view -> dialog_rule.dismiss());
-        dialog_rule.setCancelable(false);
+//        dialog_rule.setCancelable(false);
     }
 
     /*

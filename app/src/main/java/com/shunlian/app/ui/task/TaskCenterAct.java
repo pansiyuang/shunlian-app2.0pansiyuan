@@ -646,8 +646,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         MyImageView miv_ad = dialog_qr.findViewById(R.id.miv_ad);
         X5WebView mwv_rule = dialog_qr.findViewById(R.id.mwv_rule);
         mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
-        mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
-        mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+//        mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
         mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
         mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
@@ -678,7 +677,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
         miv_ad.setImageResource(R.mipmap.image_renwu_changjianwenti);
         miv_close.setOnClickListener(view -> dialog_qr.dismiss());
-        dialog_qr.setCancelable(false);
+//        dialog_qr.setCancelable(false);
     }
 
     /*
@@ -694,7 +693,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         MyImageView miv_ad = dialog_rule.findViewById(R.id.miv_ad);
         X5WebView mwv_rule = dialog_rule.findViewById(R.id.mwv_rule);
         mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
-        mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+//        mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
         mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
         mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
@@ -725,7 +724,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
         miv_ad.setImageResource(R.mipmap.image_renwu_qiandaoguize);
         miv_close.setOnClickListener(view -> dialog_rule.dismiss());
-        dialog_rule.setCancelable(false);
+//        dialog_rule.setCancelable(false);
     }
 
     /**
@@ -750,7 +749,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
         ntv_sure.setOnClickListener(view -> dialog_ad.dismiss());
         ntv_hint.setText(String.format(getStringResouce(R.string.mission_gongxininhuode), data.gold_num));
-        dialog_ad.setCancelable(false);
+//        dialog_ad.setCancelable(false);
 //        }
         dialog_ad.show();
     }

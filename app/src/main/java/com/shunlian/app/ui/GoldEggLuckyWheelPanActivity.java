@@ -183,8 +183,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
             MyImageView miv_close = dialog_ad.findViewById(R.id.miv_close);
             X5WebView mwv_rule = dialog_ad.findViewById(R.id.mWebView);
             mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
-            mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
-            mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+//            mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
             mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
             mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
@@ -212,7 +211,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
             mwv_rule.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
             mwv_rule.loadUrl(url);
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
-            dialog_ad.setCancelable(false);
+//            dialog_ad.setCancelable(false);
         }
     }
 
