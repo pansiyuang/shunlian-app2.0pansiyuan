@@ -225,6 +225,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
+                        android:layout_marginRight="10dp"
                         android:maxLines="2"
                         android:text=""
                         android:lineSpacingExtra="3dp"

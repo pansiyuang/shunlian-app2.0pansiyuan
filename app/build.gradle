@@ -51,7 +51,7 @@ android {
         release {
             debuggable false
             minifyEnabled false
-//            manifestPlaceholders = [heatmapScheme : "saca893e57"]
+//            manifestPlaceholders = [heatmapScheme : "saca893e57"]0
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.ShunLianPower
         }
