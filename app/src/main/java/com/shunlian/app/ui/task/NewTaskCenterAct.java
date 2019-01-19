@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.task;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -35,7 +36,6 @@ import com.shunlian.app.bean.SignEggEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.GoldEggLuckyWheelPanActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
@@ -47,10 +47,11 @@ import com.shunlian.app.widget.CompileScrollView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
-import com.shunlian.app.widget.MyWebView;
 import com.shunlian.app.widget.NewTextView;
+import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.tencent.smtt.sdk.WebSettings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -554,15 +555,42 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     /*
        签到规则弹窗
         */
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     public void initRuleDialog(String url) {
         if (isEmpty(url))
             return;
         dialog_rule = new Dialog(this, R.style.popAd);
         dialog_rule.setContentView(R.layout.dialog_rule_new);
         MyImageView miv_close = dialog_rule.findViewById(R.id.miv_close);
-        MyWebView mwv_rule = dialog_rule.findViewById(R.id.mwv_rule);
+        X5WebView mwv_rule = dialog_rule.findViewById(R.id.mwv_rule);
         mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
         mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+        mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
+        mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
+//        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
+//        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
+        mwv_rule.getSettings().setAppCacheEnabled(true);
+        mwv_rule.getSettings().setAllowFileAccess(true);
+        //开启DOM缓存，关闭的话H5自身的一些操作是无效的
+        mwv_rule.getSettings().setDomStorageEnabled(true);
+        mwv_rule.getSettings().setAllowContentAccess(true);
+        mwv_rule.getSettings().setDatabaseEnabled(true);
+        mwv_rule.getSettings().setSavePassword(false);
+        mwv_rule.getSettings().setSaveFormData(false);
+        mwv_rule.getSettings().setUseWideViewPort(true);
+        mwv_rule.getSettings().setLoadWithOverviewMode(true);
+
+        mwv_rule.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        mwv_rule.getSettings().setSupportZoom(false);
+        mwv_rule.getSettings().setBuiltInZoomControls(false);
+        mwv_rule.getSettings().setSupportMultipleWindows(false);
+        mwv_rule.getSettings().setGeolocationEnabled(true);
+        mwv_rule.getSettings().setDatabasePath(this.getDir("databases", 0).getPath());
+        mwv_rule.getSettings().setGeolocationDatabasePath(this.getDir("geolocation", 0)
+                .getPath());
+        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+        mwv_rule.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
+
         mwv_rule.loadUrl(url);
 
         miv_close.setOnClickListener(view -> dialog_rule.dismiss());

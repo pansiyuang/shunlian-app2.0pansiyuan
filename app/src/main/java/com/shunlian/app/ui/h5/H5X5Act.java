@@ -687,6 +687,8 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         //add
         String token = SharedPrefUtil.getSharedUserString("token", "");
         String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
+        String member_id = SharedPrefUtil.getCacheSharedPrf("member_id", "");
+        String code = SharedPrefUtil.getCacheSharedPrf("member_id", "");
 
         CookieSyncManager.createInstance(this);
 //        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);

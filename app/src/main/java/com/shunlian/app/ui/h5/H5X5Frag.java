@@ -35,7 +35,6 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.MyWebView;
 import com.shunlian.app.widget.WebViewProgressBar;
 import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -76,7 +75,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by Administrator on 2017/12/26.
  */
 
-public abstract class H5X5Frag extends BaseFragment implements MyWebView.ScrollListener {
+public abstract class H5X5Frag extends BaseFragment implements X5WebView.ScrollListener {
     public static final int MODE_DEFAULT = 0;//默认模式，没有缓存
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存

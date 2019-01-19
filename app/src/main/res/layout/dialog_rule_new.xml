@@ -18,7 +18,7 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:background="@drawable/bg_dialog_bottoms">
-        <com.shunlian.app.widget.MyWebView
+        <com.shunlian.app.widget.X5WebView
             android:id="@+id/mwv_rule"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"

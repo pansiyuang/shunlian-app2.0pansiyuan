@@ -11,13 +11,13 @@
         android:layout_height="wrap_content"
         android:src="@mipmap/img_windows6" />
 
-    <com.shunlian.app.widget.MyWebView
+    <com.shunlian.app.widget.X5WebView
         android:id="@+id/mWebView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@+id/miv_icon"
         android:layout_alignLeft="@+id/miv_icon"
-        android:layout_alignRight="@+id/miv_icon"></com.shunlian.app.widget.MyWebView>
+        android:layout_alignRight="@+id/miv_icon"></com.shunlian.app.widget.X5WebView>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_close"

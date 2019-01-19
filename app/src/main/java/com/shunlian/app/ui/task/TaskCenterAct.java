@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.task;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -35,6 +36,7 @@ import com.shunlian.app.presenter.TaskCenterPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -43,12 +45,13 @@ import com.shunlian.app.view.ITaskCenterView;
 import com.shunlian.app.widget.DowntimeLayout;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.MyWebView;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.ObtainGoldenEggsTip;
 import com.shunlian.app.widget.SignGoldEggsLayout;
+import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
+import com.tencent.smtt.sdk.WebSettings;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,84 +72,63 @@ import butterknife.OnClick;
  */
 
 public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
+    public static final String TASK_AD_KEY = "task_ad_key";
     public List<TaskHomeEntity.SignDaysBean> sign_days;
     @BindView(R.id.mtv_eggs_count)
     MyTextView mtv_eggs_count;
-
     @BindView(R.id.miv_golden_eggs)
     MyImageView miv_golden_eggs;
-
     @BindView(R.id.kanner)
     MyKanner kanner;
-
     @BindView(R.id.mtv_new_task)
     MyTextView mtvNewTask;
-
     @BindView(R.id.view_new_task)
     View viewNewTask;
-
     @BindView(R.id.llayout_new_task)
     LinearLayout llayoutNewTask;
-
     @BindView(R.id.mtv_day_task)
     MyTextView mtvDayTask;
-
     @BindView(R.id.tv_sign_unit)
     MyTextView tv_sign_unit;
-
     @BindView(R.id.view_day_task)
     View viewDayTask;
-
     @BindView(R.id.llayout_day_task)
     LinearLayout llayoutDayTask;
-
     @BindView(R.id.recy_view)
     RecyclerView recyView;
-
     @BindView(R.id.animation_view)
     LottieAnimationView animation_view;
-
     @BindView(R.id.mtv_sign_state)
     MyTextView mtvSignState;
-
     @BindView(R.id.mtv_sign_day)
     MyTextView mtvSignDay;
-
     @BindView(R.id.rlayout_sign)
     RelativeLayout rlayoutSign;
-
     @BindView(R.id.sgel)
     SignGoldEggsLayout sgel;
-
     @BindView(R.id.dtime_layout)
     DowntimeLayout dtime_layout;
-
     @BindView(R.id.oget)
     ObtainGoldenEggsTip oget;
-
     @BindView(R.id.miv_sign_rule)
     MyImageView miv_sign_rule;
-
     @BindView(R.id.miv_airbubble)
     MyImageView miv_airbubble;
-
     @BindView(R.id.mtv_user)
     MyTextView mtv_user;
-
     int pick_color;
-
     int v48;
-
     private TaskCenterPresenter mPresenter;
     private Dialog dialog_rule, dialog_qr;
     private String mAdUrl;
     private int mPicWidth;
-    public static final String TASK_AD_KEY = "task_ad_key";
-
     /**
      * 常见问题url
      */
     private String question;
+    private String re = "(w=|h=)(\\d+)";
+    private Pattern p = Pattern.compile(re);
+
     public static void startAct(Context context) {
         Intent intent = new Intent(context, TaskCenterAct.class);
         if (!(context instanceof Activity))
@@ -197,12 +179,12 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         v48 = getColorResouce(R.color.value_484848);
 
         mPicWidth = DeviceInfoUtil.getDeviceWidth(this)
-                - TransformUtil.dip2px(this,24);
+                - TransformUtil.dip2px(this, 24);
 
         GradientDrawable gd = new GradientDrawable();
         int i = TransformUtil.dip2px(this, 1);
-        gd.setStroke(i,getColorResouce(R.color.white_ash));
-        gd.setCornerRadius(i*10);
+        gd.setStroke(i, getColorResouce(R.color.white_ash));
+        gd.setCornerRadius(i * 10);
         gd.setColor(getColorResouce(R.color.transparent));
         mtv_user.setBackgroundDrawable(gd);
     }
@@ -213,7 +195,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @OnClick(R.id.rlayout_sign)
     public void signPostSend() {
         GoldEggsTaskEvent event = new GoldEggsTaskEvent();
-        if(sign_days!=null&&sign_days.size()>3) {
+        if (sign_days != null && sign_days.size() > 3) {
             event.isClickSign = true;
             event.sign_date = sign_days.get(2).date;
             EventBus.getDefault().post(event);
@@ -254,7 +236,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @OnClick(R.id.mtv_question)
     public void question() {
-        if(!TextUtils.isEmpty(question)) {
+        if (!TextUtils.isEmpty(question)) {
             H5X5Act.startAct(this, question, H5X5Act.MODE_SONIC);
         }
 //        if (dialog_qr != null)
@@ -272,7 +254,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @OnClick({R.id.animation_view, R.id.miv_golden_eggs})
     public void goldEggs() {
-        if (dtime_layout != null && !dtime_layout.isClickable()&&miv_airbubble != null) {
+        if (dtime_layout != null && !dtime_layout.isClickable() && miv_airbubble != null) {
             miv_airbubble.setPivotX(0.0f);
             miv_airbubble.setPivotY(miv_airbubble.getMeasuredHeight());
             ValueAnimator va = ValueAnimator.ofFloat(0.0f, 1.0f,//0.5秒
@@ -290,7 +272,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                 }
             });
             va.start();
-        }else{
+        } else {
             mPresenter.goldegglimit();
         }
     }
@@ -328,7 +310,6 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         viewDayTask.setVisibility(state == 2 ? View.VISIBLE : View.INVISIBLE);
 
     }
-
 
     private void setSignStyle() {
         GradientDrawable topDrawable = new GradientDrawable();
@@ -411,7 +392,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void setGoldEggsCount(String count) {
         if (mtv_eggs_count != null)
-        mtv_eggs_count.setText(count);
+            mtv_eggs_count.setText(count);
     }
 
     /**
@@ -422,7 +403,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     public void setSignContinueNum(String num) {
         if (mtvSignDay != null)
-        mtvSignDay.setText(num);
+            mtvSignDay.setText(num);
     }
 
     /**
@@ -454,8 +435,6 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
     }
 
-
-
     /**
      * 限时领金蛋弹窗
      *
@@ -473,11 +452,11 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     @Override
     public void popAd(String url, TaskHomeEntity.AdUrlBean pop_ad_url) {
-        if (isEmpty(url))return;
+        if (isEmpty(url)) return;
         String cache_url = SharedPrefUtil.getCacheSharedPrf(TASK_AD_KEY, "");
-        if (!cache_url.equals(url)){
-            adDialog(url,pop_ad_url);
-            SharedPrefUtil.saveCacheSharedPrf(TASK_AD_KEY,url);
+        if (!cache_url.equals(url)) {
+            adDialog(url, pop_ad_url);
+            SharedPrefUtil.saveCacheSharedPrf(TASK_AD_KEY, url);
         }
     }
 
@@ -491,8 +470,6 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
     }
 
-    private String re = "(w=|h=)(\\d+)";
-    private Pattern p = Pattern.compile(re);
     /**
      * 广告图
      *
@@ -501,8 +478,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      */
     @Override
     public void setPic(String url, TaskHomeEntity.AdUrlBean urlBean, List<TaskHomeEntity.AdUrlRollBean> adUrlRollBean) {
-        if(adUrlRollBean!=null&&adUrlRollBean.size()>0){
-              visible(kanner);
+        if (adUrlRollBean != null && adUrlRollBean.size() > 0) {
+            visible(kanner);
             List<String> strings = new ArrayList<>();
             for (int i = 0; i < adUrlRollBean.size(); i++) {
                 strings.add(adUrlRollBean.get(i).ad_pic_url);
@@ -517,8 +494,8 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                     });
                 }
             }
-        }else{
-             gone(kanner);
+        } else {
+            gone(kanner);
         }
 //            if (Pattern.matches(".*(w=\\d+&h=\\d+).*", url))
 //        }{
@@ -591,7 +568,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
                 llayoutDayTask.setEnabled(false);
             if (mtvDayTask != null)
                 mtvDayTask.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        }else {
+        } else {
             visible(llayoutNewTask);
         }
     }
@@ -600,17 +577,17 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
      * 签到
      */
     @Override
-    public void setSignData(List<TaskHomeEntity.SignDaysBean> list,String sign_continue_num) {
+    public void setSignData(List<TaskHomeEntity.SignDaysBean> list, String sign_continue_num) {
         if (sgel != null)
             sign_days = list;
-            sgel.setData(list);
+        sgel.setData(list);
 
-            //判断连续签到次数和当前是否签到
-        if(list!=null&&list.size()>3){
-            if (mtvSignDay != null&&!list.get(2).sign_status.equals("1")){
+        //判断连续签到次数和当前是否签到
+        if (list != null && list.size() > 3) {
+            if (mtvSignDay != null && !list.get(2).sign_status.equals("1")) {
                 mtvSignDay.setText("签到");
                 mtvSignState.setText("未签到");
-            }else {
+            } else {
                 mtvSignState.setText("已签到");
                 mtvSignDay.setText(sign_continue_num);
             }
@@ -657,7 +634,6 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     }
 
 
-
     /*
     常见问题弹窗
      */
@@ -668,9 +644,35 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         dialog_qr.setContentView(R.layout.dialog_rule);
         MyImageView miv_close = dialog_qr.findViewById(R.id.miv_close);
         MyImageView miv_ad = dialog_qr.findViewById(R.id.miv_ad);
-        MyWebView mwv_rule = dialog_qr.findViewById(R.id.mwv_rule);
+        X5WebView mwv_rule = dialog_qr.findViewById(R.id.mwv_rule);
         mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
         mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+        mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+        mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
+        mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
+//        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
+//        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
+        mwv_rule.getSettings().setAppCacheEnabled(true);
+        mwv_rule.getSettings().setAllowFileAccess(true);
+        //开启DOM缓存，关闭的话H5自身的一些操作是无效的
+        mwv_rule.getSettings().setDomStorageEnabled(true);
+        mwv_rule.getSettings().setAllowContentAccess(true);
+        mwv_rule.getSettings().setDatabaseEnabled(true);
+        mwv_rule.getSettings().setSavePassword(false);
+        mwv_rule.getSettings().setSaveFormData(false);
+        mwv_rule.getSettings().setUseWideViewPort(true);
+        mwv_rule.getSettings().setLoadWithOverviewMode(true);
+
+        mwv_rule.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        mwv_rule.getSettings().setSupportZoom(false);
+        mwv_rule.getSettings().setBuiltInZoomControls(false);
+        mwv_rule.getSettings().setSupportMultipleWindows(false);
+        mwv_rule.getSettings().setGeolocationEnabled(true);
+        mwv_rule.getSettings().setDatabasePath(this.getDir("databases", 0).getPath());
+        mwv_rule.getSettings().setGeolocationDatabasePath(this.getDir("geolocation", 0)
+                .getPath());
+        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+        mwv_rule.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
         mwv_rule.loadUrl(url);
 //        mwv_rule.loadData("ddddddfsdfsfsfsdfsfsdfd","text/html", "UTF-8");
 
@@ -682,6 +684,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     /*
     签到规则弹窗
      */
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     public void initRuleDialog(String url) {
         if (isEmpty(url))
             return;
@@ -689,9 +692,34 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         dialog_rule.setContentView(R.layout.dialog_rule);
         MyImageView miv_close = dialog_rule.findViewById(R.id.miv_close);
         MyImageView miv_ad = dialog_rule.findViewById(R.id.miv_ad);
-        MyWebView mwv_rule = dialog_rule.findViewById(R.id.mwv_rule);
+        X5WebView mwv_rule = dialog_rule.findViewById(R.id.mwv_rule);
         mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
         mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+        mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
+        mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
+//        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
+//        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
+        mwv_rule.getSettings().setAppCacheEnabled(true);
+        mwv_rule.getSettings().setAllowFileAccess(true);
+        //开启DOM缓存，关闭的话H5自身的一些操作是无效的
+        mwv_rule.getSettings().setDomStorageEnabled(true);
+        mwv_rule.getSettings().setAllowContentAccess(true);
+        mwv_rule.getSettings().setDatabaseEnabled(true);
+        mwv_rule.getSettings().setSavePassword(false);
+        mwv_rule.getSettings().setSaveFormData(false);
+        mwv_rule.getSettings().setUseWideViewPort(true);
+        mwv_rule.getSettings().setLoadWithOverviewMode(true);
+
+        mwv_rule.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        mwv_rule.getSettings().setSupportZoom(false);
+        mwv_rule.getSettings().setBuiltInZoomControls(false);
+        mwv_rule.getSettings().setSupportMultipleWindows(false);
+        mwv_rule.getSettings().setGeolocationEnabled(true);
+        mwv_rule.getSettings().setDatabasePath(this.getDir("databases", 0).getPath());
+        mwv_rule.getSettings().setGeolocationDatabasePath(this.getDir("geolocation", 0)
+                .getPath());
+        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+        mwv_rule.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
         mwv_rule.loadUrl(url);
 //        mwv_rule.loadData("ddddddfsdfsfsfsdfsfsdfd","text/html", "UTF-8");
 
@@ -756,7 +784,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
 
                 int r_w = TransformUtil.countRealWidth(this, 600);
                 int i = (int) (r_w * h * 1.0f / w);
-                GlideUtils.getInstance().loadOverrideImage(this, miv_pic, url,r_w,i);
+                GlideUtils.getInstance().loadOverrideImage(this, miv_pic, url, r_w, i);
 
                 /*int radius = TransformUtil.dip2px(this, 4f);
                 GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
@@ -773,7 +801,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
         }
 
         miv_pic.setOnClickListener(v -> {
-            if (dialog_ad != null)dialog_ad.dismiss();
+            if (dialog_ad != null) dialog_ad.dismiss();
             if (urlBean != null) {
                 Common.goGoGo(this, urlBean.type, urlBean.item_id);
             }
@@ -786,7 +814,7 @@ public class TaskCenterAct extends BaseActivity implements ITaskCenterView {
     @Override
     protected void onStop() {
         super.onStop();
-        if (dtime_layout != null){
+        if (dtime_layout != null) {
             dtime_layout.cancelDownTimer();
         }
     }

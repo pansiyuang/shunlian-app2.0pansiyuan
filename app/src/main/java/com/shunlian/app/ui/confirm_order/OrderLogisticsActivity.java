@@ -143,7 +143,7 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
         if (logisticsEntity == null) {
             return;
         }
-        if (!isEmpty(logisticsEntity.traces)) {
+        if (!isEmpty(logisticsEntity.traces)&&recycler_order_logistics!=null) {
             List<OrderLogisticsEntity.Trace> traces = logisticsEntity.traces;
             Collections.reverse(traces);
 

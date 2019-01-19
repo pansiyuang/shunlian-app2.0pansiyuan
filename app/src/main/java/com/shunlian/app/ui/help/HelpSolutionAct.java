@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.help;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,14 +26,17 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PHelpSolution;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IHelpSolutionView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.MyWebView;
+import com.shunlian.app.widget.X5WebView;
+import com.tencent.smtt.sdk.WebSettings;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,7 +74,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
     @BindView(R.id.mwv_h5)
-    MyWebView mwv_h5;
+    X5WebView mwv_h5;
     private PHelpSolution pHelpSolution;
     private Dialog dialog_feedback;
     private boolean isChosen = false;
@@ -195,7 +199,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
 
     }
 
-
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     @Override
     public void setApiData(final HelpcenterSolutionEntity solution) {
         mtv_question.setText(solution.question);
@@ -208,6 +212,32 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
             mwv_h5.getSettings().setDefaultTextEncodingName("UTF-8");
             mwv_h5.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
             //web_view.loadData(map.get("NEWS_CONTENT"), "text/html", "UTF-8") ; 有时会遇到乱码问题 具体好像与sdk有关系
+            mwv_h5.setMaxHeight(TransformUtil.dip2px(this, 380));
+            mwv_h5.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
+            mwv_h5.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
+//        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
+//        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
+            mwv_h5.getSettings().setAppCacheEnabled(true);
+            mwv_h5.getSettings().setAllowFileAccess(true);
+            //开启DOM缓存，关闭的话H5自身的一些操作是无效的
+            mwv_h5.getSettings().setDomStorageEnabled(true);
+            mwv_h5.getSettings().setAllowContentAccess(true);
+            mwv_h5.getSettings().setDatabaseEnabled(true);
+            mwv_h5.getSettings().setSavePassword(false);
+            mwv_h5.getSettings().setSaveFormData(false);
+            mwv_h5.getSettings().setUseWideViewPort(true);
+            mwv_h5.getSettings().setLoadWithOverviewMode(true);
+
+            mwv_h5.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+            mwv_h5.getSettings().setSupportZoom(false);
+            mwv_h5.getSettings().setBuiltInZoomControls(false);
+            mwv_h5.getSettings().setSupportMultipleWindows(false);
+            mwv_h5.getSettings().setGeolocationEnabled(true);
+            mwv_h5.getSettings().setDatabasePath(this.getDir("databases", 0).getPath());
+            mwv_h5.getSettings().setGeolocationDatabasePath(this.getDir("geolocation", 0)
+                    .getPath());
+            // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+            mwv_h5.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
             mwv_h5.loadDataWithBaseURL(null, solution.answer, "text/html", "UTF-8", null);
         }
         rv_about.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
