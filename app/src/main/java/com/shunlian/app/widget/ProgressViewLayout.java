@@ -106,7 +106,20 @@ public class ProgressViewLayout extends View {
             progressRect.right = currentProgressW;
 //        }
         progressRect.bottom = maxProgressH;
-        canvas.drawRoundRect(progressRect, progressrad, progressrad, mProgressPaint);
+        if(currentProgressW<maxProgressH){
+            canvas.drawCircle(currentProgressW / 2, maxProgressH / 2, maxProgressH / 2, mProgressPaint);
+        }else {
+            canvas.drawRoundRect(progressRect, progressrad, progressrad, mProgressPaint);
+        }
+//        PorterDuffXfermode xfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP);
+//        int saved = canvas.saveLayer(null, null, Canvas.ALL_SAVE_FLAG);
+//        mProgressPaint.setColor(Color.parseColor("#1B1E33"));
+//        canvas.drawRoundRect(new RectF(0, 0, currentProgressW, maxProgressH), maxProgressH / 2, maxProgressH / 2, mProgressPaint);
+//        mProgressPaint.setXfermode(xfermode);
+//        mProgressPaint.setColor(Color.parseColor("#FFD600"));
+//        canvas.drawRoundRect(new RectF(maxProgressW-currentProgressW, 0, maxProgressW, maxProgressH), maxProgressH / 2, maxProgressH / 2, mProgressPaint);
+//        mProgressPaint.setXfermode(null);
+//        canvas.restoreToCount(saved);
 //
 //        //绘制文字
         srcBitmap = Bitmap.createBitmap(maxProgressW, maxProgressH, Bitmap.Config.ARGB_8888);
