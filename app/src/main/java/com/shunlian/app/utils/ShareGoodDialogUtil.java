@@ -111,9 +111,8 @@ public class ShareGoodDialogUtil {
                 return;
             }
             if(isGood) {
-                createGoodCode(isFound,true);
-                if(isFound&&mCallBack!=null){
-                }
+//                createGoodCode(isFound,true);
+                createFullGoodCode(mShareInfoParam,true,false);
             }else{
                 createShopCode(true);
             }
@@ -131,7 +130,8 @@ public class ShareGoodDialogUtil {
                 return;
             }
             if(isGood) {
-                createGoodCode(isFound,false);
+//                createGoodCode(isFound,false);
+                createGoodCode();
             }else{
                 createShopCode(false);
             }
@@ -191,9 +191,10 @@ public class ShareGoodDialogUtil {
            ImageView imv_special_pic =  showSpecialBuild.findViewById(R.id.imv_special_pic);
            RelativeLayout img_hight=  showSpecialBuild.findViewById(R.id.img_hight);
            LinearLayout.LayoutParams layoutParams =( (LinearLayout.LayoutParams)img_hight.getLayoutParams());
-          layoutParams.height = DensityUtil.getScreenHeight(context)*3/5-DensityUtil.dip2px(context,30);
+          layoutParams.weight = DensityUtil.dip2px(context,250);
+          layoutParams.height =DensityUtil.dip2px(context,250)*16/9;
            if(isShow) {
-               GlideUtils.getInstance().loadImageZheng(context, imv_special_pic, mShareInfoParam.img);
+               GlideUtils.getInstance().loadCornerImage(context, imv_special_pic, mShareInfoParam.img,5);
                showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);
                showSpecialBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
            }else{
@@ -270,19 +271,20 @@ public class ShareGoodDialogUtil {
      * isCircleShare 是否直接分享到朋友圈
      * 创建商品视图
      */
-    public void createGoodCode(boolean isFound,boolean isCircleShare) {
+    public void createGoodCode() {
         if (!Common.isAlreadyLogin()) {
             Common.goGoGo(context, "login");
         } else {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_goods_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().setWidth(Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 100))
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().
+                    setWidth(Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 100))
                     .setView(inflate);
             showGoodBuild = nomalBuild.create();
             showGoodBuild.setCancelable(false);
-            if(!isCircleShare) {
-                showGoodBuild.show();
-            }
+//            if(!isCircleShare) {
+            showGoodBuild.show();
+//            }
             MyImageView miv_close = showGoodBuild.findViewById(R.id.miv_close);
             MyLinearLayout mllayout_wexin = showGoodBuild.findViewById(R.id.mllayout_wexin);
             MyLinearLayout mllayout_save = showGoodBuild.findViewById(R.id.mllayout_save);
@@ -312,21 +314,6 @@ public class ShareGoodDialogUtil {
                 mtv_coupon_title.setVisibility(View.GONE);
             }
 
-//            MyTextView mtv_goodsID =  showGoodBuild.findViewById(R.id.mtv_goodsID);
-//            mtv_goodsID.setText("商品编号:" + mShareInfoParam.goods_id + "(搜索可直达)");
-//            MyTextView mtv_desc =  showGoodBuild.findViewById(R.id.mtv_desc);
-//            if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
-//                mtv_desc.setVisibility(View.GONE);
-//                mtv_desc.setText(mShareInfoParam.desc);
-//            } else {
-//                mtv_desc.setVisibility(View.GONE);
-//            }
-//            MyTextView mtv_SuperiorProduct = showGoodBuild.findViewById(R.id.mtv_SuperiorProduct);
-//            if (mShareInfoParam.isSuperiorProduct) {
-//                mtv_SuperiorProduct.setVisibility(View.VISIBLE);
-//            } else {
-//                mtv_SuperiorProduct.setVisibility(View.GONE);
-//            }
             //不是新用户商品显示价格
             LinearLayout line_old_user= showGoodBuild.findViewById(R.id.line_old_user);
             MyTextView mtv_price =  showGoodBuild.findViewById(R.id.mtv_price);
@@ -336,7 +323,7 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_newuser_mark_price = showGoodBuild.findViewById(R.id.mtv_newuser_mark_price);
 
             if(mShareInfoParam.isNewUserGood) {
-                relt_share_image.setPadding(DensityUtil.dip2px(context,10),0,DensityUtil.dip2px(context,10),0);
+                relt_share_image.setPadding(DensityUtil.dip2px(context,12),0,DensityUtil.dip2px(context,12),0);
                 line_old_user.setVisibility(View.GONE);
                 re_newuser_layout.setVisibility(View.VISIBLE);
                 mtv_newuser_price.setText(context.getResources().getString(R.string.common_yuan)+mShareInfoParam.price);
@@ -375,64 +362,66 @@ public class ShareGoodDialogUtil {
                 mtv_act_label.setText(mShareInfoParam.little_word);
             }
             MyImageView miv_goods_pic =  showGoodBuild.findViewById(R.id.miv_goods_pic);
-            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, mShareInfoParam.isNewUserGood?120:100);
+            int width = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, mShareInfoParam.isNewUserGood?124:100);
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
             layoutParams.width = width;
             layoutParams.height = width;
 
-            if(!isCircleShare) {
+//            if(!isCircleShare) {
                 GlideUtils.getInstance().loadImageZheng(context, miv_goods_pic, mShareInfoParam.img);
                 showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
-            }else{
-                miv_close.setVisibility(View.GONE);
-                showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
-                GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
-                        new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource,
-                                                        GlideAnimation<? super Bitmap> glideAnimation) {
-                                int width = Common.getScreenWidth((Activity) context);
-                                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-                                layoutParams.width = width;
-                                layoutParams.height = width;
-
-                                miv_goods_pic.setImageBitmap(resource);
-                                Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                                if(bitmapByView==null){
-                                    return;
-                                }
-                                BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
-                            }
-                            @Override
-                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                super.onLoadFailed(e, errorDrawable);
-                            }
-                        });
-            }
+//            }else{
+//                miv_close.setVisibility(View.GONE);
+//                showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+//                GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
+//                        new SimpleTarget<Bitmap>() {
+//                            @Override
+//                            public void onResourceReady(Bitmap resource,
+//                                                        GlideAnimation<? super Bitmap> glideAnimation) {
+//                                int width = Common.getScreenWidth((Activity) context);
+//                                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+//                                layoutParams.width = width;
+//                                layoutParams.height = width;
+//
+//                                miv_goods_pic.setImageBitmap(resource);
+//                                Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+//                                if(bitmapByView==null){
+//                                    return;
+//                                }
+//                                BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
+//                            }
+//                            @Override
+//                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+//                                super.onLoadFailed(e, errorDrawable);
+//                            }
+//                        });
+//            }
             miv_close.setOnClickListener(view -> showGoodBuild.dismiss());
 
             mllayout_wexin.setOnClickListener(view -> {
-                int width1 = Common.getScreenWidth((Activity) context);
-                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-                layoutParams1.width = width1;
-                layoutParams1.height = width1;
-                showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
-                miv_close.setVisibility(View.GONE);
+//                int width1 = Common.getScreenWidth((Activity) context);
+//                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+//                layoutParams1.width = width1;
+//                layoutParams1.height = width1;
+//                showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+//                miv_close.setVisibility(View.GONE);
                 showGoodBuild.dismiss();
-                goodsPic(inflate,mShareInfoParam.img,false,false);
-                if(isFound&&mCallBack!=null){
+//                goodsPic(inflate,mShareInfoParam.img,false,false);
+                createFullGoodCode(mShareInfoParam,true,true);
+                if(mCallBack!=null){
                     mCallBack.shareSuccess(mShareInfoParam.blogId,mShareInfoParam.goods_id);
                 }
             });
             mllayout_save.setOnClickListener(view -> {
-                int width12 = Common.getScreenWidth((Activity) context);
-                RelativeLayout.LayoutParams layoutParams12 = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-                layoutParams12.width = width12;
-                layoutParams12.height = width12;
-                showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
-                miv_close.setVisibility(View.GONE);
+//                int width12 = Common.getScreenWidth((Activity) context);
+//                RelativeLayout.LayoutParams layoutParams12 = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+//                layoutParams12.width = width12;
+//                layoutParams12.height = width12;
+//                showGoodBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
+//                miv_close.setVisibility(View.GONE);
                 showGoodBuild.dismiss();
-                goodsPic(inflate,mShareInfoParam.img,true,false);
+//                goodsPic(inflate,mShareInfoParam.img,true,false);
+                createFullGoodCode(mShareInfoParam,false,false);
             });
         }
     }
@@ -464,7 +453,7 @@ public class ShareGoodDialogUtil {
 //            MyTextView mtv_nickname = showShopBuild.findViewById(R.id.mtv_nickname);
 //            mtv_nickname.setText("来自" + SharedPrefUtil.getSharedUserString("nickname", "") + "的分享");
 //            GlideUtils.getInstance().loadCircleAvar(context,miv_user_head,SharedPrefUtil.getSharedUserString("avatar", ""));
-
+            StoreViewUtil storeBabyAdapter = null;
             GlideUtils.getInstance().loadCornerImage(context, miv_store, mShareInfoParam.shop_logo);
             MyImageView miv_code =  showShopBuild.findViewById(R.id.miv_code);
             int i = TransformUtil.dip2px(context, 92.5f);
@@ -473,13 +462,15 @@ public class ShareGoodDialogUtil {
             MyTextView mtv_title =  showShopBuild.findViewById(R.id.mtv_title);
             mtv_title.setText(mShareInfoParam.title);
             if(mShareInfoParam.share_goods!=null&&mShareInfoParam.share_goods.size()>0) {
-                StoreViewUtil storeBabyAdapter = new StoreViewUtil(showShopBuild, context, mShareInfoParam.share_goods, isCircleShare, successCount -> {
+                 storeBabyAdapter = new StoreViewUtil(showShopBuild, context, mShareInfoParam.share_goods, isCircleShare, successCount -> {
                     if(successCount==mShareInfoParam.share_goods.size()){
                         Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
                         if(bitmapByView==null){
                             return;
                         }
-                        BitmapUtil.saveImageToAlbumn(context, bitmapByView,isCircleShare,false);
+                        if(isCircleShare) {
+                            BitmapUtil.saveImageToAlbumn(context, bitmapByView, isCircleShare, false);
+                        }
                     }
                 });
                 storeBabyAdapter.showStoreGoodView();
@@ -488,13 +479,18 @@ public class ShareGoodDialogUtil {
             if(isCircleShare) {
                 miv_close.setVisibility(View.GONE);
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
-
+                if(storeBabyAdapter !=null) {
+                    storeBabyAdapter.updateImageHight();
+                }
             }else{
-
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.VISIBLE);
             }
             miv_close.setOnClickListener(view -> showShopBuild.dismiss());
+            StoreViewUtil finalStoreBabyAdapter = storeBabyAdapter;
             mllayout_save.setOnClickListener(view -> {
+                if(finalStoreBabyAdapter !=null) {
+                    finalStoreBabyAdapter.updateImageHight();
+                }
                 showShopBuild.getView(R.id.line_share_boottom).setVisibility(View.GONE);
                 showShopBuild.getView(R.id.line_share_boottom).setMinimumHeight(0);
                 miv_close.setVisibility(View.GONE);
@@ -553,6 +549,135 @@ public class ShareGoodDialogUtil {
                     }
                 });
     }
+
+
+    public void createFullGoodCode(ShareInfoParam mShareInfoParam,boolean isShare,boolean isFriend) {
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(context, "login");
+        } else {
+            final View inflate = LayoutInflater.from(context).inflate(R.layout.share_goods_new_full, null, false);
+            MyImageView miv_code = inflate.findViewById(R.id.miv_code);
+            int i = TransformUtil.dip2px(context, 92.5f);
+            Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
+            miv_code.setImageBitmap(qrImage);
+            MyTextView mtv_title =  inflate.findViewById(R.id.mtv_title);
+            MyTextView  mtv_coupon_title =  inflate.findViewById(R.id.mtv_coupon_title);
+            RelativeLayout relt_share_image = inflate.findViewById(R.id.relt_share_image);
+            if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
+                mtv_coupon_title.setVisibility(View.VISIBLE);
+                mtv_coupon_title.setText(mShareInfoParam.voucher);
+                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher+mShareInfoParam.title);
+                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
+                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                mtv_title.setText(span);
+            }else{
+                mtv_title.setText(mShareInfoParam.title);
+                mtv_coupon_title.setVisibility(View.GONE);
+            }
+            //不是新用户商品显示价格
+            LinearLayout line_old_user= inflate.findViewById(R.id.line_old_user);
+            MyTextView mtv_price =  inflate.findViewById(R.id.mtv_price);
+            //新用户商品显示价格
+            RelativeLayout re_newuser_layout = inflate.findViewById(R.id.re_newuser_layout);
+            MyTextView mtv_newuser_price = inflate.findViewById(R.id.mtv_newuser_price);
+            MyTextView mtv_newuser_mark_price = inflate.findViewById(R.id.mtv_newuser_mark_price);
+
+            if(mShareInfoParam.isNewUserGood) {
+                relt_share_image.setPadding(DensityUtil.dip2px(context,15),0,DensityUtil.dip2px(context,15),0);
+                line_old_user.setVisibility(View.GONE);
+                re_newuser_layout.setVisibility(View.VISIBLE);
+                mtv_newuser_price.setText(context.getResources().getString(R.string.common_yuan)+mShareInfoParam.price);
+                if (!TextUtils.isEmpty(mShareInfoParam.market_price)) {
+                    mtv_newuser_mark_price.setVisibility(View.VISIBLE);
+                    mtv_newuser_mark_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                    mtv_newuser_mark_price.setText(context.getResources().getString(R.string.common_yuan)+ mShareInfoParam.market_price);
+                } else {
+                    mtv_newuser_mark_price.setVisibility(View.VISIBLE);
+                }
+            }else{
+                re_newuser_layout.setVisibility(View.GONE);
+                line_old_user.setVisibility(View.VISIBLE);
+                mtv_price.setText(Common.dotPointAfterSmall(mShareInfoParam.price,13));
+            }
+            LinearLayout  llayout_day =inflate.findViewById(R.id.llayout_day);
+            MyTextView mtv_time  = inflate.findViewById(R.id.mtv_time);
+            MyTextView mtv_act_label  = inflate.findViewById(R.id.mtv_act_label);
+
+            if (TextUtils.isEmpty(mShareInfoParam.time_text)||mShareInfoParam.isNewUserGood) {
+                llayout_day.setVisibility(View.GONE);
+            } else if(!TextUtils.isEmpty(mShareInfoParam.time_text)){
+                llayout_day.setVisibility(View.VISIBLE);
+                if(mShareInfoParam.is_start==0){
+                    llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.value_007AFF));
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundResource(R.drawable.edge_007aff_right_1px);
+                }else{
+                    llayout_day.setBackgroundResource(R.drawable.edge_pink_1px);
+                    mtv_act_label.setTextColor(context.getResources().getColor(R.color.pink_color));
+                    mtv_time.setTextColor(context.getResources().getColor(R.color.white));
+                    mtv_time.setBackgroundResource(R.drawable.edge_pink_right_1px);
+                }
+                mtv_time.setText(mShareInfoParam.time_text);
+                mtv_act_label.setText(mShareInfoParam.little_word);
+            }
+
+            MyImageView miv_goods_pic =  inflate.findViewById(R.id.miv_goods_pic);
+            int width = Common.getScreenWidth((Activity) context);
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+            if(mShareInfoParam.isNewUserGood) {
+                layoutParams.width = width-DensityUtil.dip2px(context,30);
+                layoutParams.height = width-DensityUtil.dip2px(context,30);
+            }else{
+                layoutParams.width = width;
+                layoutParams.height = width;
+            }
+            GlideUtils.getInstance().loadBitmapSync(context, mShareInfoParam.img,
+                    new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource,
+                                                    GlideAnimation<? super Bitmap> glideAnimation) {
+                            miv_goods_pic.setImageBitmap(resource);
+                            Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            if (bitmapByView == null) {
+                                return;
+                            }
+                            boolean isSuccess =   BitmapUtil.saveImageToAlbumn(context, bitmapByView, isShare, isFriend);
+                            if (!isShare) {
+                                if (isSuccess) {
+                                    Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
+                                } else {
+                                    Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
+                                }
+                            } else {
+                                if (!isSuccess)
+                                    Common.staticToast("分享失败");
+                            }
+                        }
+
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            super.onLoadFailed(e, errorDrawable);
+                            Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+                            if (bitmapByView == null) {
+                                return;
+                            }
+                            boolean isSuccess =   BitmapUtil.saveImageToAlbumn(context, bitmapByView, isShare, isFriend);
+                            if (!isShare) {
+                                if (isSuccess) {
+                                    Common.staticToast(context.getString(R.string.operate_tupianyibaocun));
+                                } else {
+                                    Common.staticToast(context.getString(R.string.operate_tupianbaocunshibai));
+                                }
+                            } else {
+                                if (!isSuccess)
+                                    Common.staticToast("分享失败");
+                            }
+                        }
+                    });
+        }
+    }
+
 
 
     public void setOnShareBlogCallBack(OnShareBlogCallBack callBack) {
