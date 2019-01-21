@@ -175,6 +175,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     private String miss_eggs, is_remind;
     private boolean isReceive;//是否可以领取金蛋
     private static Handler handler;
+    private List<TaskHomeEntity.SignDaysBean> mlist=new ArrayList<>();
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, NewTaskCenterAct.class);
@@ -708,6 +709,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
             gone(miv_get);
             visible(ddp_downTime);
             String times = isEmpty(second) ? "0" : second;
+            ddp_downTime.cancelDownTimer();
             ddp_downTime.setDownTime(Integer.parseInt(times));
             ddp_downTime.startDownTimer();
             ddp_downTime.setDownTimerListener(() -> {
@@ -839,8 +841,10 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     public void setSignData(List<TaskHomeEntity.SignDaysBean> list, String sign_continue_num) {
         ntv_sign.setText("已签到" + sign_continue_num + "天");
         ntv_sign.setClickable(false);
+        mlist.clear();
+        mlist.addAll(list);
         if (signAdapter == null) {
-            signAdapter = new SignAdapter(baseAct, false, list);
+            signAdapter = new SignAdapter(baseAct, false, mlist);
             GridLayoutManager manager = new GridLayoutManager(this, 7);
             rv_sign.setLayoutManager(manager);
             rv_sign.setAdapter(signAdapter);
@@ -894,7 +898,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         mrlayout_goGet.setOnClickListener(view -> csv_out.fullScroll(ScrollView.FOCUS_DOWN));
 
         if (!isEmpty(list.get(1).over_task) && !isEmpty(list.get(1).all_task)
-                && Integer.parseInt(list.get(1).over_task) > 0) {
+                && Integer.parseInt(list.get(1).over_task) >=0) {
 
             if (list.get(1).over_task.equals(list.get(1).all_task)) {
                 miv_gets.setVisibility(View.VISIBLE);
