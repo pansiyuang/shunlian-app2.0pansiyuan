@@ -180,7 +180,7 @@ public class SaleProgressView extends View {
         Bitmap fgBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas fgCanvas = new Canvas(fgBitmap);
         if (fgSrc == null) {
-            fgSrc = BitmapFactory.decodeResource(getResources(),R.mipmap.fg);
+            fgSrc = BitmapFactory.decodeResource(getResources(),R.mipmap.img_xinren_jindutiao);
         }
         fgCanvas.drawRoundRect(
                 new RectF(sideWidth, sideWidth, (width - sideWidth) * scale, height - sideWidth),

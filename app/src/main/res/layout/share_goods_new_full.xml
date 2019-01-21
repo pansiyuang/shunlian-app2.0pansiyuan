@@ -194,6 +194,7 @@
                     android:layout_width="95dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:paddingTop="4dp"
                     android:orientation="vertical">
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_code"

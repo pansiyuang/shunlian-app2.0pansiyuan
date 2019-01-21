@@ -191,6 +191,7 @@
                     android:layout_width="75dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:paddingTop="4dp"
                     android:orientation="vertical">
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_code"
@@ -225,10 +226,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
+                        android:gravity="top"
                         android:layout_marginRight="10dp"
                         android:maxLines="2"
-                        android:text=""
                         android:lineSpacingExtra="3dp"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="14sp" />
                         <com.shunlian.app.widget.MyTextView
