@@ -203,6 +203,7 @@ public class NewInvitationActivity extends BaseActivity implements InvitationVie
 
     @Override
     public void refreshFinish(List<InviteLogUserEntity.UserList> userLists, InviteLogUserEntity inviteLogUserEntity,int currentPage) {
+        try{
             if (!TextUtils.isEmpty(inviteLogUserEntity.code)) {
                 tv_my_invitaion.setText("我的邀请码：" + inviteLogUserEntity.code);
                 this.code  = inviteLogUserEntity.code;
@@ -215,16 +216,19 @@ public class NewInvitationActivity extends BaseActivity implements InvitationVie
             if (!TextUtils.isEmpty(inviteLogUserEntity.prize)) {
                 tv_total_price.setText(getStringResouce(R.string.common_yuan) + inviteLogUserEntity.prize);
             }
-          if(userLists==null||userLists.size()==0&&currentPage==1){
-              recy_view_invitaion.setVisibility(View.GONE);
-              empty_view.setVisibility(View.VISIBLE);
-              empty_view.setButtonText("");
-          }else {
-             recy_view_invitaion.setVisibility(View.VISIBLE);
-             empty_view.setVisibility(View.GONE);
-            invitationData.addAll(userLists);
-            adapter.notifyDataSetChanged();
-            scrollview.smoothScrollTo(0,0);
+            if(userLists==null||userLists.size()==0&&currentPage==1){
+                recy_view_invitaion.setVisibility(View.GONE);
+                empty_view.setVisibility(View.VISIBLE);
+                empty_view.setButtonText("");
+            }else {
+                recy_view_invitaion.setVisibility(View.VISIBLE);
+                empty_view.setVisibility(View.GONE);
+                invitationData.addAll(userLists);
+                adapter.notifyDataSetChanged();
+                scrollview.smoothScrollTo(0,0);
+            }
+        }catch (Exception e){
+
         }
     }
 }

@@ -534,6 +534,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
                             handler.post(runnableB);
                             runnableC = () -> {
                                 if (!isStop) {
+                                    if (lLayout_toast!=null)
                                     lLayout_toast.setVisibility(View.GONE);
                                     position++;
                                 }

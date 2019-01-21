@@ -294,6 +294,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                                 @Override
                                 public void run() {
                                     if (!isStop) {
+                                        if (lLayout_toast!=null)
                                         lLayout_toast.setVisibility(View.GONE);
                                         mposition++;
                                     }

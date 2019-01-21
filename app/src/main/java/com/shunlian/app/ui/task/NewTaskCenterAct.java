@@ -281,7 +281,8 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
                         } else {
                             handler.post(runnableB);
                             runnableC = () -> {
-                                if (!isStop && lLayout_toast != null) {
+                                if (!isStop ) {
+                                    if (lLayout_toast!=null)
                                     lLayout_toast.setVisibility(View.GONE);
                                     mposition++;
                                 }
