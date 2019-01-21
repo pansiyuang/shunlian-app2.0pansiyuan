@@ -192,7 +192,7 @@ public class ShareGoodDialogUtil {
            RelativeLayout img_hight=  showSpecialBuild.findViewById(R.id.img_hight);
            LinearLayout.LayoutParams layoutParams =( (LinearLayout.LayoutParams)img_hight.getLayoutParams());
           layoutParams.weight = DensityUtil.dip2px(context,250);
-          layoutParams.height =DensityUtil.dip2px(context,250)*16/9;
+          layoutParams.height =DensityUtil.dip2px(context,250)*16/9-DensityUtil.dip2px(context,20);
            if(isShow) {
                GlideUtils.getInstance().loadCornerImage(context, imv_special_pic, mShareInfoParam.img,5);
                showSpecialBuild.getView(R.id.line_share_line).setVisibility(View.GONE);

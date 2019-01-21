@@ -8,6 +8,7 @@
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/transparent"
         android:layout_centerInParent="true">
         <LinearLayout
             android:id="@+id/ll_root"
