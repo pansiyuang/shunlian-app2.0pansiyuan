@@ -192,28 +192,33 @@ public class NewUserGoodsFrag extends BaseLazyFragment implements INewUserGoodsV
 
     @Override
     public void userGoodsList(int currentPage, int totalPage,String share_url, List<NewUserGoodsEntity.Goods> collectionGoodsLists,NewUserGoodsEntity.Goods recommend) {
-        if (currentPage == 1) {
-            goodList.clear();
-            this.share_url = share_url;
-            if (isEmpty(collectionGoodsLists)) {
-                recycler_list.setVisibility(View.GONE);
-                nestedScrollView.setVisibility(View.VISIBLE);
-            } else {
-                recycler_list.setVisibility(View.VISIBLE);
-                nestedScrollView.setVisibility(View.GONE);
+        try{
+            if (currentPage == 1) {
+                goodList.clear();
+                this.share_url = share_url;
+                if (isEmpty(collectionGoodsLists)) {
+                    recycler_list.setVisibility(View.GONE);
+                    nestedScrollView.setVisibility(View.VISIBLE);
+                } else {
+                    recycler_list.setVisibility(View.VISIBLE);
+                    nestedScrollView.setVisibility(View.GONE);
+                }
+                if(recommend!=null&&!TextUtils.isEmpty(recommend.id)){//添加推荐商品
+                    recommend.is_recommend = true;
+                    goodList.add(recommend);
+                }
+                hotBlogAdapter.updateUserTime();
             }
-            if(recommend!=null&&!TextUtils.isEmpty(recommend.id)){//添加推荐商品
-                recommend.is_recommend = true;
-                goodList.add(recommend);
+            if (!isEmpty(collectionGoodsLists)) {
+                goodList.addAll(collectionGoodsLists);
             }
-            hotBlogAdapter.updateUserTime();
-        }
-        if (!isEmpty(collectionGoodsLists)) {
-            goodList.addAll(collectionGoodsLists);
+
+            hotBlogAdapter.setPageLoading(currentPage, totalPage);
+            hotBlogAdapter.notifyDataSetChanged();
+        }catch (Exception e){
+
         }
 
-        hotBlogAdapter.setPageLoading(currentPage, totalPage);
-        hotBlogAdapter.notifyDataSetChanged();
     }
 
     /**

@@ -348,7 +348,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                             runnableC = new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (!isStop&&lLayout_toast!=null) {
+                                    if (!isStop) {
+                                        if (lLayout_toast!=null)
                                         lLayout_toast.setVisibility(View.GONE);
                                         mposition++;
                                     }

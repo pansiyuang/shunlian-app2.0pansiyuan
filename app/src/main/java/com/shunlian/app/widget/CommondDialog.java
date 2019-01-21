@@ -50,12 +50,16 @@ public class CommondDialog implements IMain {
      * @param
      */
     public void parseCommond(){
-        ClipboardManager cm = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (!TextUtils.isEmpty(cm.getText()) &&!Constant.SHARE_LINK.equals(cm.getText().toString())&&cm.getText().toString().contains("slAppWord")) {
-            if (pMain==null)
-            pMain = new PMain(activity, this);
-            pMain.getCommond(cm.getText().toString());
-            cm.setText("");
+        try {
+            ClipboardManager cm = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+            if (!TextUtils.isEmpty(cm.getText()) &&!Constant.SHARE_LINK.equals(cm.getText().toString())&&cm.getText().toString().contains("slAppWord")) {
+                if (pMain==null)
+                    pMain = new PMain(activity, this);
+                pMain.getCommond(cm.getText().toString());
+                cm.setText("");
+            }
+        }catch (Exception e){
+
         }
     }
 

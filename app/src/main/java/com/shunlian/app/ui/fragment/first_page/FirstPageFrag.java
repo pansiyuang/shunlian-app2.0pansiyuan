@@ -235,7 +235,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                             runnableC = new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (!isStop&&lLayout_toast!=null) {
+                                    if (!isStop) {
+                                        if (lLayout_toast!=null)
                                         lLayout_toast.setVisibility(View.GONE);
                                         mposition++;
                                     }

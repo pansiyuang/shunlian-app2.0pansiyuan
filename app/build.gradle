@@ -28,7 +28,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 44
-        versionName "2.6.1.0"
+        versionName "2.6.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.ShunLianPower
 
@@ -147,5 +147,5 @@ bugly {
     appId = '1400008795' // 注册时分配的App ID
     appKey = '8fd19263-5cbe-45ff-be6c-000be537123f' // 注册时分配的App Key5+‘’
     appPackage='com.shunlian.app'
-    appVersion='2.6.1.0'
+    appVersion='2.6.1.1'
 }

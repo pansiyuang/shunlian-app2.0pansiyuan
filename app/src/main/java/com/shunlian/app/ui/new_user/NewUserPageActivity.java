@@ -294,6 +294,7 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
                                 @Override
                                 public void run() {
                                     if (!isStop) {
+                                        if (lLayout_toast!=null)
                                         lLayout_toast.setVisibility(View.GONE);
                                         mposition++;
                                     }
@@ -586,6 +587,8 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
 
     @Override
     public void showVoucherSuspension(ShowVoucherSuspension voucherSuspension) {
+        if (show_new_user_view==null)
+            return;
         if(voucherSuspension.suspensionShow.equals("1")&&Common.isAlreadyLogin()){
             tv_new_user_title.setText(voucherSuspension.suspension.prize);
             show_new_user_view.setVisibility(View.VISIBLE);

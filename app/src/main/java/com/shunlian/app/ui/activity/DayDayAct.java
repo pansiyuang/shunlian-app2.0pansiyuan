@@ -193,7 +193,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
             dayListAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    if (position<list.size()){
+                    if (position<list.size()&&!isEmpty(list)&&list.get(position)!=null){
                         // activityListEntity.from;//踩点
                         JosnSensorsDataAPI.daydayGoodClick(activityListEntity.menu.get(dayDayMenuAdapter.selectPosition).time,list.get(position).goods_id,list.get(position).title,position);
                         GoodsDetailAct.startAct(DayDayAct.this, list.get(position).goods_id);
