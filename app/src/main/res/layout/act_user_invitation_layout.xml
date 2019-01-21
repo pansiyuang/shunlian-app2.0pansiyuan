@@ -141,13 +141,13 @@
                <RelativeLayout
                    android:layout_width="match_parent"
                    android:layout_height="@dimen/yy165"
-                   android:paddingTop="@dimen/yy20">
+                   android:paddingTop="@dimen/yy5">
 
                    <TextView
                        android:layout_width="wrap_content"
                        android:layout_height="match_parent"
                        android:gravity="center_vertical"
-                       android:paddingLeft="20dp"
+                       android:paddingLeft="18dp"
                        android:paddingRight="20dp"
                        android:text="累计获得红包"
                        android:textColor="#6E4700"
@@ -159,9 +159,9 @@
                        android:layout_height="match_parent"
                        android:layout_alignParentRight="true"
                        android:gravity="center_vertical"
-                       android:paddingLeft="20dp"
-                       android:paddingRight="20dp"
-                       android:text=""
+                       android:paddingLeft="15dp"
+                       android:paddingRight="15dp"
+                       android:text="ddd"
                        android:textColor="@color/pink_color"
                        android:textSize="12sp" />
                </RelativeLayout>
