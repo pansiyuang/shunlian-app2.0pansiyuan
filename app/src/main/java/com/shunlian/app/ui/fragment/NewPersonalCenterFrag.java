@@ -187,6 +187,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @BindView(R.id.line_anim)
     LinearLayout line_anim;
 
+    @BindView(R.id.mtv_hint)
+    MyTextView mtv_hint;
+
     public PersonalcenterPresenter personalcenterPresenter;
     private PersonalcenterEntity personalcenterEntity;
     private String invite_code;
@@ -443,6 +446,14 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                     }
                 }, 1000);
             }
+        }
+        personalcenterEntity.note="尊敬的客户，您好：你的账户因违规操作已被暂停部分服务！暂停时间：2018.01.04 18:00至2018.04.04 18:00。" +
+                "在此期间将暂停小店锁粉和小店收益。如需帮助，请联系平台客服处理！";
+        if (isEmpty(personalcenterEntity.note)) {
+            gone(mtv_hint);
+        } else {
+            visible(mtv_hint);
+            mtv_hint.setText(personalcenterEntity.note);
         }
 
         SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
