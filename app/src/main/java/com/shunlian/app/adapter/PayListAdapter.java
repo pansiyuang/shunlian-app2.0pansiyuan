@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
@@ -28,8 +29,11 @@ import butterknife.BindView;
 
 public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> {
 
-    public PayListAdapter(Context context, boolean isShowFooter, List<PayListEntity.PayTypes> lists) {
-        super(context, isShowFooter, lists);
+    public int mCurrentPosition = 0;
+    private boolean isShowMore = true;
+
+    public PayListAdapter(Context context, List<PayListEntity.PayTypes> lists) {
+        super(context, false, lists);
     }
 
     /**
@@ -66,7 +70,7 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         }else if ("3".equals(payTypes.style)&&!isEmpty(payTypes.name)){
             mHolder.mtv_pay_name.setText(payTypes.name);
             visible(mHolder.mtv_pay_name,mHolder.miv_pic_end);
-            setWH(payTypes.end_pic,mHolder.miv_pic_end,155);
+            setWH(payTypes.end_pic,mHolder.miv_pic_end,155, payTypes.code);
             GlideUtils.getInstance().loadImage(context,mHolder.miv_pic_end,payTypes.end_pic);
         }else {
             gone(mHolder.mtv_pay_name);
@@ -74,15 +78,46 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
 
         if (!isEmpty(payTypes.pic)&&!isEmpty(Common.getURLParameterValue(payTypes.pic, "w"))
                 &&!isEmpty(Common.getURLParameterValue(payTypes.pic, "h"))){
-            setWH(payTypes.pic,mHolder.miv_pay_pic,10);
+            setWH(payTypes.pic,mHolder.miv_pay_pic,10,payTypes.code);
         }
 
         GlideUtils.getInstance().loadImage(context,mHolder.miv_pay_pic,payTypes.pic);
+
+
+
+        if (position == 0){
+            mHolder.mtv_pay_name.setTextSize(18);
+        }else {
+            mHolder.mtv_pay_name.setTextSize(14);
+        }
+
+        if (mCurrentPosition == position){
+            mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+        }else {
+            mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+        }
+
+        if (isShowMore){
+            if (position == 0){
+                visible(mHolder.ll_more);
+                mHolder.setVisibility(true);
+            }else {
+                mHolder.setVisibility(false);
+            }
+        }else {
+            gone(mHolder.ll_more);
+            mHolder.setVisibility(true);
+        }
     }
 
     @NonNull
-    private void setWH(String url,MyImageView imageView,int marginLeft) {
-        int picHeight= TransformUtil.dip2px(context,20);
+    private void setWH(String url, MyImageView imageView, int marginLeft, String code) {
+        int picHeight = 0;
+        if ("alipay".equals(code)){
+            picHeight = TransformUtil.dip2px(context,38);
+        }else {
+            picHeight= TransformUtil.dip2px(context,20);
+        }
         int picWidth= Integer.valueOf(Common.getURLParameterValue(url, "w"))
                 *picHeight/Integer.valueOf(Common.getURLParameterValue(url, "h"));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(picWidth,picHeight);
@@ -106,9 +141,31 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         @BindView(R.id.miv_pic_end)
         MyImageView miv_pic_end;
 
+        @BindView(R.id.miv_select)
+        MyImageView miv_select;
+
+        @BindView(R.id.ll_more)
+        LinearLayout ll_more;
+
         public PayListHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+
+            ll_more.setOnClickListener(this);
+        }
+
+        public void setVisibility(boolean isVisible) {
+            RecyclerView.LayoutParams param = (RecyclerView.LayoutParams) itemView.getLayoutParams();
+            if (isVisible) {
+                param.width = RecyclerView.LayoutParams.MATCH_PARENT;// 这里注意使用自己布局的根布局类型
+                param.height = RecyclerView.LayoutParams.WRAP_CONTENT;// 这里注意使用自己布局的根布局类型
+                visible(itemView);
+            } else {
+                gone(itemView);
+                param.height = 0;
+                param.width = 0;
+            }
+            itemView.setLayoutParams(param);
         }
 
         /**
@@ -118,8 +175,13 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
          */
         @Override
         public void onClick(View v) {
-            if (listener != null){
-                listener.onItemClick(v,getAdapterPosition());
+            if (v.getId() == R.id.ll_more){
+                isShowMore = false;
+                notifyDataSetChanged();
+            }else {
+                if (listener != null){
+                    listener.onItemClick(v,getAdapterPosition());
+                }
             }
         }
     }
