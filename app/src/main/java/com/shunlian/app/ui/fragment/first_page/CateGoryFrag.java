@@ -97,6 +97,20 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy != 0) {
+                    if( FirstPageFrag.miv_entrys.getVisibility()==View.VISIBLE) {
+                        int value = TransformUtil.dip2px(baseActivity, 72);
+                        int values = TransformUtil.dip2px(baseActivity, 100);
+                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) FirstPageFrag.miv_entrys.getLayoutParams();
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        if (dy > 0) {
+                            layoutParams.setMargins(0, values, -value / 2, 0);
+                            FirstPageFrag.isHides = true;
+                        } else {
+                            layoutParams.setMargins(0, values, 0, 0);
+                            FirstPageFrag.isHides = false;
+                        }
+                        FirstPageFrag.miv_entrys.setLayoutParams(layoutParams);
+                    }
                     if( FirstPageFrag.miv_entry.getVisibility()==View.VISIBLE) {
                         int value = TransformUtil.dip2px(baseActivity, 80);
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);

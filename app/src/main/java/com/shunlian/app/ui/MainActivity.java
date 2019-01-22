@@ -31,6 +31,7 @@ import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShowSignEntity;
 import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -96,6 +97,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.mtv_message_count)
     public MyTextView mtv_message_count;
     public AdEntity adEntity;
+    public ShowSignEntity adEntitys;
     @BindView(R.id.fl_main)
     MyFrameLayout fl_main;
     @BindView(R.id.ll_tab_main_page)
@@ -256,6 +258,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 public void initDialogFinish() {
                     if (updateDialogV.updateDialog == null) {
                         pMain.getPopAD();
+                        pMain.isShowSign();
                     }
                 }
             };
@@ -934,6 +937,19 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         CommondDialog commondDialog = new CommondDialog(this);
         commondDialog.parseCommond();
+    }
+
+    @Override
+    public void setADs(ShowSignEntity data) {
+        adEntitys=data;
+        if ("1".equals(data.is_show) && mainPageFrag != null) {
+            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImageChang(this, FirstPageFrag.miv_entrys, data.pic);
+//            GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, "http://i.imgur.com/GP1m9.png");//apng图片不支持
+//            GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, "https://upload-images.jianshu.io/upload_images/2625875-9a044086b7de0a45.gif");
+        } else {
+            FirstPageFrag.miv_entrys.setVisibility(View.GONE);
+        }
     }
 
 

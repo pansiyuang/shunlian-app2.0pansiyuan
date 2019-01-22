@@ -2366,6 +2366,14 @@ public interface ApiService {
     Call<BaseEntity<AdEntity>> popup(@QueryMap Map<String, String> map);
 
     /**
+     * 是否显示签到引流
+     *
+     * @return
+     */
+    @GET("task/isShowSign")
+    Call<BaseEntity<ShowSignEntity>> isShowSign(@QueryMap Map<String, String> map);
+
+    /**
      * 专题页数据
      *
      * @return

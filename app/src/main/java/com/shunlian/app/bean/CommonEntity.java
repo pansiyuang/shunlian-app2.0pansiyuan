@@ -82,8 +82,9 @@ public class CommonEntity {
     public String prize;
     public String type;
     public String item_id;
-
     public String name;
+
+
 
     //发现未读消息统计
     public int praise_share;
