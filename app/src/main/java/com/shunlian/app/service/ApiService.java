@@ -2601,7 +2601,13 @@ public interface ApiService {
      */
     @GET("member/register/codeInfo")
     Call<BaseEntity<MemberCodeListEntity>> codeInfo(@QueryMap Map<String, String> map);
-
+    /**
+     * 我的导师
+     * @param map
+     * @return
+     */
+    @GET("member/follower/myTeacher")
+    Call<BaseEntity<MemberTeacherEntity>> codeTeacherInfo(@QueryMap Map<String, String> map);
     /**
      * 我还想要
      * @param map

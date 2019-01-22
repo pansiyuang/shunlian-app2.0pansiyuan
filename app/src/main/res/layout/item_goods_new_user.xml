@@ -203,7 +203,7 @@
             app:tv_margin_right="30" />
         <com.shunlian.app.widget.SaleProgressView
             android:id="@+id/progress_view_sale"
-            android:layout_width="105dp"
+            android:layout_width="115dp"
             android:layout_height="12dp"
             android:layout_alignBottom="@+id/miv_goods_pic"
             android:layout_marginBottom="30dp"
