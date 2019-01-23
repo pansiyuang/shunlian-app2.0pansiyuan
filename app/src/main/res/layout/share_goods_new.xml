@@ -98,7 +98,7 @@
                     android:orientation="horizontal"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="10dp"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="8dp"
                     android:paddingRight="10dp"
                     android:id="@+id/line_old_user"
                     android:layout_alignBottom="@+id/miv_goods_pic"
@@ -108,12 +108,12 @@
                     <com.shunlian.app.widget.MyTextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:paddingTop="8dp"
+                        android:paddingTop="5.5dp"
                         android:paddingBottom="5dp"
                         android:textColor="@color/white"
                         android:gravity="top"
                         android:text="@string/common_yuan"
-                        android:textSize="8sp" />
+                        android:textSize="11sp" />
                     <com.shunlian.app.widget.MyTextView
                         android:id="@+id/mtv_price"
                         android:layout_width="wrap_content"
@@ -121,7 +121,6 @@
                         android:textColor="@color/white"
                         android:gravity="top"
                         android:text=""
-                        android:paddingTop="1dp"
                         android:paddingBottom="5dp"
                         android:textSize="23sp" />
                     <com.shunlian.app.widget.MyTextView

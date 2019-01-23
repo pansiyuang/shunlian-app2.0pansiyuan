@@ -178,7 +178,7 @@ public class ShareGoodDialogUtil {
     private void createSpecialCode(boolean isShow) {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_special_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().setWidth(DensityUtil.dip2px(context,250))
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,250))
                     .setView(inflate);
             showSpecialBuild = nomalBuild.create();
             showSpecialBuild.setCancelable(false);
@@ -277,7 +277,7 @@ public class ShareGoodDialogUtil {
         } else {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_goods_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle().
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).
                     setWidth(Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 100))
                     .setView(inflate);
             showGoodBuild = nomalBuild.create();
@@ -436,7 +436,7 @@ public class ShareGoodDialogUtil {
         } else {
             final View inflate = LayoutInflater.from(context)
                     .inflate(R.layout.share_shop_new, null, false);
-            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).fromBottomToMiddle()
+            CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd)
                     .setView(inflate);
             showShopBuild = nomalBuild.create();
             showShopBuild.setCancelable(false);
