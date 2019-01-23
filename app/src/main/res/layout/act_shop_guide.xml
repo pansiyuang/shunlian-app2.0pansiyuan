@@ -202,7 +202,7 @@
                 android:layout_marginLeft="@dimen/xx52"
                 android:layout_marginRight="@dimen/xx52"
                 android:orientation="vertical"
-                android:background="@mipmap/img_daogou_baise_da"
+                android:background="@mipmap/img_daoshi_dibu"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -212,7 +212,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/xx855"
+                        android:layout_height="@dimen/xx840"
                         android:gravity="center"
                         android:orientation="vertical"
                        >
@@ -268,7 +268,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/xx460"
+                        android:layout_height="@dimen/xx470"
                         android:gravity="center"
                         android:orientation="vertical"
                         >
