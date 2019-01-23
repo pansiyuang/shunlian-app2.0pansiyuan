@@ -201,13 +201,15 @@
         android:id="@+id/miv_entry"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:visibility="gone"/>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_entrys"
         android:layout_width="72dp"
         android:layout_height="24dp"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/lLayout_toast"
