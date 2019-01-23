@@ -299,8 +299,8 @@ public class ShareGoodDialogUtil {
                 mtv_coupon_title.setVisibility(View.VISIBLE);
                 mtv_coupon_title.setText(mShareInfoParam.voucher);
                 if(mShareInfoParam.voucher.length()>2) {
-                    SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher.substring(0, mShareInfoParam.voucher.length() - 1) + mShareInfoParam.title);
-                    span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length() - 1,
+                    SpannableStringBuilder span = new SpannableStringBuilder((mShareInfoParam.voucher).substring(0, mShareInfoParam.voucher.length() - 1) + mShareInfoParam.title);
+                    span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, (mShareInfoParam.voucher).length() - 1,
                             Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     mtv_title.setText(span);
                 }else{

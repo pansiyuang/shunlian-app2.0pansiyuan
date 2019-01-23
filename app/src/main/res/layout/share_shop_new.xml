@@ -259,7 +259,7 @@
                         android:layout_marginTop="5dp"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:text="要想生活有乐趣！打开顺联动力购物去~"
+                        android:text="要想生活有乐趣!打开顺联动力购物去~"
                         android:lineSpacingExtra="@dimen/xx10"
                         android:textColor="@color/my_gray_three"
                         android:textSize="13sp" />
