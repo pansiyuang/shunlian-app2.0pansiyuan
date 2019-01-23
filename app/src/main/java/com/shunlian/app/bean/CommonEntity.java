@@ -92,6 +92,8 @@ public class CommonEntity {
     public int notice;
     public int download;
 
+    public int comment_id;
+
     @Override
     public String toString() {
         return "CommonEntity{" +
