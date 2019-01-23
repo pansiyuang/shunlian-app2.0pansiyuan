@@ -10,6 +10,7 @@ public class RefreshTokenEntity {
     public String token;
     public String refresh_token;
     public String member_id;
+    public String code;
     public String avatar;
     public String nickname;
     public String login_status;

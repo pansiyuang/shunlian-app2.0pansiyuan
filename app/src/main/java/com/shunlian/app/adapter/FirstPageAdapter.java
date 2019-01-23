@@ -485,25 +485,33 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                     fourHolder.mllayout_one.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            DayDayAct.startAct(context);
+                            if (data.ttth.url!=null)
+                            Common.goGoGo(context,data.ttth.url.type,data.ttth.url.item_id);
+//                            DayDayAct.startAct(context);
                         }
                     });
                     fourHolder.mllayout_two.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            PingpaiAct.startAct(context);
+                            if (data.pptm.url!=null)
+                            Common.goGoGo(context,data.pptm.url.type,data.pptm.url.item_id);
+//                            PingpaiAct.startAct(context);
                         }
                     });
                     fourHolder.mllayout_three.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            AishangAct.startAct(context);
+                            if (data.asxp.url!=null)
+                                Common.goGoGo(context,data.asxp.url.type,data.asxp.url.item_id);
+//                            AishangAct.startAct(context);
                         }
                     });
                     fourHolder.mllayout_four.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            KouBeiAct.startAct(context);
+                            if (data.kbrx.url!=null)
+                                Common.goGoGo(context,data.kbrx.url.type,data.kbrx.url.item_id);
+//                            KouBeiAct.startAct(context);
                         }
                     });
                 }

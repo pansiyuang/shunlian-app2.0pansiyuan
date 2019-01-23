@@ -8,6 +8,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,13 @@ import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HoneRedDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
@@ -486,8 +489,15 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     miv_entrys.setLayoutParams(layoutParamss);
                     isHides = false;
                 } else {
-                    if (mainActivity != null && mainActivity.adEntitys != null && mainActivity.adEntitys.url != null )
-                        Common.goGoGo(baseActivity, mainActivity.adEntitys.url.type, mainActivity.adEntitys.url.item_id);
+                    String token = SharedPrefUtil.getSharedUserString("token", "");
+                    if (TextUtils.isEmpty(token)) {
+                        Common.goGoGo(baseActivity,"login");
+                        Common.theRelayJump("taskSystems",null);
+                    } else {
+                        if (mainActivity != null && mainActivity.adEntitys != null && mainActivity.adEntitys.url != null )
+                            Common.goGoGo(baseActivity, mainActivity.adEntitys.url.type, mainActivity.adEntitys.url.item_id);
+                    }
+
                 }
                 break;
             case R.id.miv_entry:

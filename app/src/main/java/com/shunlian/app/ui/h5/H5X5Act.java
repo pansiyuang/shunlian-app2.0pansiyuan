@@ -699,6 +699,8 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
         cookieManager.setCookie(domain, "Client-Type=Android");
         cookieManager.setCookie(domain, "token=" + token);
         cookieManager.setCookie(domain, "User-Agent=" + ua);
+        cookieManager.setCookie(domain, "member_id=" + member_id);
+        cookieManager.setCookie(domain, "code=" + code);
 //        cookieSyncManager.sync();
 
         if (Build.VERSION.SDK_INT < 21) {
