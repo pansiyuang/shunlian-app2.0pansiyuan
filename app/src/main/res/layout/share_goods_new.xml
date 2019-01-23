@@ -241,9 +241,9 @@
                             android:text=""
                             android:textStyle="bold"
                             android:layout_marginTop="4dp"
-                            android:paddingLeft="6dp"
+                            android:paddingLeft="5dp"
                             android:visibility="gone"
-                            android:paddingRight="6dp"
+                            android:paddingRight="5dp"
                             android:textSize="9.5sp" />
                         <com.shunlian.app.widget.MyTextView
                             android:id="@+id/mtv_SuperiorProduct"
