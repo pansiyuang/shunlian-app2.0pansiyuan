@@ -11,13 +11,17 @@ import android.widget.EditText;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.eventbus_bean.ModifyNumEvent;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.ShapeUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -32,14 +36,16 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
 
     private String mFrom;
 
-    public AppointGoodsAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, String from) {
+    public AppointGoodsAdapter(Context context, boolean isShowFooter,
+                               List<GoodsDeatilEntity.Goods> lists, String from) {
         super(context, isShowFooter, lists);
         mFrom = from;
     }
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        View item_appoint_goods = LayoutInflater.from(context).inflate(R.layout.item_appoint_goods, parent, false);
+        View item_appoint_goods = LayoutInflater.from(context)
+                .inflate(R.layout.item_appoint_goods, parent, false);
         return new AppointGoodsHolder(item_appoint_goods);
     }
 
@@ -72,10 +78,13 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
             visible(mHolder.mllayout_count);
             mHolder.mllayout_count.setBackgroundDrawable(ShapeUtils.commonShape(context,
                     Color.WHITE,2,1,getColor(R.color.e4_color)));
+            mHolder.mtv_edit_count.setText(goods.qty);
         }else {
             gone(mHolder.mllayout_count);
             visible(mHolder.mtv_count);
         }
+
+        mHolder.setModifyNum(position);
     }
 
     public class AppointGoodsHolder extends BaseRecyclerViewHolder{
@@ -110,48 +119,76 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         @BindView(R.id.mtv_count_add)
         MyImageView mtv_count_add;
 
+        int min_count = 0;//最少购买数量
+        int max_count = 0;//最大购买数量
+
         public AppointGoodsHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(null);
-            mtv_count_reduce.setOnClickListener(v -> {
-                try {
-                    String content = mtv_edit_count.getText().toString();
-                    int i = Integer.parseInt(content);
-                    i -= 1;
-                    if (i <= 0){
-                        i = 1;
+            int i = TransformUtil.dip2px(context, 10);
+            TransformUtil.expandViewTouchDelegate(mtv_count_add,i,i,0,i);
+            TransformUtil.expandViewTouchDelegate(mtv_count_reduce,i,i,i,0);
+        }
+
+        public void setModifyNum(int postion){
+            if (ConfirmOrderAct.TYPE_GOODS_DETAIL.equals(mFrom)){
+                try{
+                    GoodsDeatilEntity.Goods goods = lists.get(postion);
+                    String min_buy_limit = goods.min_buy_limit;
+                    String stock = goods.stock;
+
+                    if (!isEmpty(min_buy_limit) && !isEmpty(stock)){
+                        min_count = Integer.parseInt(min_buy_limit);
+                        max_count = Integer.parseInt(stock);
                     }
-                    mtv_edit_count.setText(String.valueOf(i));
-                }catch (Exception e){
+                }catch (Exception e){}
 
-                }
-            });
-
-            mtv_count_add.setOnClickListener(v -> {
-                try {
-                    String content = mtv_edit_count.getText().toString();
-                    int i = Integer.parseInt(content);
-                    mtv_edit_count.setText(String.valueOf(++i));
-                }catch (Exception e){
-
-                }
-            });
-
-            mtv_edit_count.setOnEditorActionListener((v, actionId, event) -> {
-                try {
-                    if (actionId == EditorInfo.IME_ACTION_DONE){
-                        String s = mtv_edit_count.getText().toString();
-                        int i = Integer.parseInt(s);
-                        if (i < 1){
-                            mtv_edit_count.setText("1");
+                mtv_count_reduce.setOnClickListener(v -> {
+                     try {
+                        String content = mtv_edit_count.getText().toString();
+                        int i = Integer.parseInt(content);
+                        i -= 1;
+                        if (i < min_count){
+                            i = min_count;
                         }
-                    }
-                }catch (Exception e){
+                        mtv_edit_count.setText(String.valueOf(i));
+                        ModifyNumEvent event = new ModifyNumEvent(String.valueOf(i));
+                        EventBus.getDefault().post(event);
+                     }catch (Exception e){}
+                });
 
-                }
+                mtv_count_add.setOnClickListener(v -> {
+                     try {
+                        String content = mtv_edit_count.getText().toString();
+                        int i = Integer.parseInt(content);
+                        i += 1;
+                        if (i > max_count){
+                            i = max_count;
+                        }
 
-                return false;
-            });
+                        mtv_edit_count.setText(String.valueOf(i));
+                        ModifyNumEvent event = new ModifyNumEvent(String.valueOf(i));
+                        EventBus.getDefault().post(event);
+                     }catch (Exception e){}
+                });
+
+                mtv_edit_count.setOnEditorActionListener((v, actionId, event) -> {
+                    try {
+                        if (actionId == EditorInfo.IME_ACTION_DONE){
+                            String s = mtv_edit_count.getText().toString();
+                            int i = Integer.parseInt(s);
+                            if (i < min_count){
+                                i = min_count;
+                            }
+
+                            mtv_edit_count.setText(String.valueOf(i));
+                            ModifyNumEvent event1 = new ModifyNumEvent(String.valueOf(i));
+                            EventBus.getDefault().post(event1);
+                        }
+                     }catch (Exception e){}
+                    return false;
+                });
+
+            }
         }
     }
 }

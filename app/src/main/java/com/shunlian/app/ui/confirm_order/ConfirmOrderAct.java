@@ -18,6 +18,7 @@ import com.shunlian.app.bean.BuyGoodsParams;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SubmitGoodsEntity;
+import com.shunlian.app.eventbus_bean.ModifyNumEvent;
 import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -29,6 +30,10 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyNestedScrollView;
 import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +133,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         if (confirmOrderPresenter != null){
             confirmOrderPresenter.detachView();
         }
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -209,6 +215,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         mOM = new ObjectMapper();
@@ -631,5 +638,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             tip = "平台优惠券和店铺优惠券\n不能叠加使用，请先取消\n店铺优惠券再进行选择";
         }
         Common.staticToasts(Common.getApplicationContext(), tip,R.mipmap.icon_common_tanhao);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void modifyNum(ModifyNumEvent event){
+        qty = event.num;
+        getConfirmOrderData(addressId);
     }
 }
