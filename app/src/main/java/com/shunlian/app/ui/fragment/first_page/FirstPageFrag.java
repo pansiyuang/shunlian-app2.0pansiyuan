@@ -492,7 +492,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     String token = SharedPrefUtil.getSharedUserString("token", "");
                     if (TextUtils.isEmpty(token)) {
                         Common.goGoGo(baseActivity,"login");
-                        Common.theRelayJump("taskSystems",null);
+//                        Common.theRelayJump("taskSystems",null);
                     } else {
                         if (mainActivity != null && mainActivity.adEntitys != null && mainActivity.adEntitys.url != null )
                             Common.goGoGo(baseActivity, mainActivity.adEntitys.url.type, mainActivity.adEntitys.url.item_id);

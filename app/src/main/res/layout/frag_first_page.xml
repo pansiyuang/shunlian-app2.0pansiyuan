@@ -206,9 +206,8 @@
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_entrys"
         android:layout_width="72dp"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"/>
+        android:layout_height="24dp"
+        android:scaleType="fitXY"/>
 
     <LinearLayout
         android:id="@+id/lLayout_toast"

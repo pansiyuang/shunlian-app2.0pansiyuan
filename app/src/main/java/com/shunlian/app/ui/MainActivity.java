@@ -207,6 +207,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         } else {
             initMessage();
         }
+        pMain.isShowSign();
     }
 
     public void initMessage() {
