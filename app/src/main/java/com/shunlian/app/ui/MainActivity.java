@@ -36,6 +36,7 @@ import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
+import com.shunlian.app.eventbus_bean.MeLocationEvent;
 import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -68,6 +69,7 @@ import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.app.widget.DiscoveryGuideView;
+import com.shunlian.app.widget.MeGuideView;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -165,6 +167,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private int[] currentLocation;
     private int currentImgWidth;
     private boolean isShowGuide = false;
+    private boolean isShowGuideMe = false;
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
     private String currentDiscoverFlag;
@@ -1067,6 +1070,30 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshMeData(MeLocationEvent event) {
+        isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
+        currentLocation = event.location;
+        currentImgWidth = event.imgWidth;
+        if (currentLocation != null && currentImgWidth != 0 && !isShowGuideMe) {
+            showGuideViewMe();
+        }
+    }
+
+    public void showGuideViewMe() {
+        currentLocation[0] = currentLocation[0] + currentImgWidth / 2;
+        currentLocation[1] = currentLocation[1] + currentImgWidth / 2;
+        MeGuideView guide_view = new MeGuideView(this);
+        guide_view.setOnClickListener(v -> {
+            guide_view.setVisibility(View.GONE);
+        });
+        guide_view.setImageLocation(currentLocation);
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        guide_view.setLayoutParams(layoutParams);
+        decorView.addView(guide_view);
+        SharedPrefUtil.saveCacheSharedPrfBoolean("showGuideMe", true);
+    }
 
     public void showGuideView() {
         int[] location2 = new int[2];

@@ -8,6 +8,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MemberInfoEntity;
+import com.shunlian.app.bean.MemberTeacherEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMemberCodePageView;
@@ -41,7 +42,30 @@ public class MemberAddPresenter extends BasePresenter<IMemberCodePageView> {
     protected void initApi() {
     }
 
+    /**
+     * 我的导师
+     */
+    public void codeTeacherDetail(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<MemberTeacherEntity>>
+                baseEntityCall = getApiService().codeTeacherInfo(map);
 
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback
+                <BaseEntity<MemberTeacherEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<MemberTeacherEntity> entity) {
+                super.onSuccess(entity);
+                iView.teacherCodeInfo(entity.data);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.teacherCodeInfo(null);
+            }
+        });
+    }
     /**
      * 邀请码详情
      * @param id
@@ -80,7 +104,7 @@ public class MemberAddPresenter extends BasePresenter<IMemberCodePageView> {
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<EmptyEntity>>
-                baseEntityCall = getApiService().bindShareidAfter(requestBody);
+                baseEntityCall = getApiService().bindShareidV(requestBody);
 
         getNetData(true,baseEntityCall,new SimpleNetDataCallback
                 <BaseEntity<EmptyEntity>>(){
@@ -96,5 +120,23 @@ public class MemberAddPresenter extends BasePresenter<IMemberCodePageView> {
                 super.onErrorCode(code, message);
             }
         });
+    }
+
+    public void setInfo(String key, String value) {
+        Map<String, String> map = new HashMap<>();
+        map.put(key, value);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> setinfo = getAddCookieApiService().setinfo(getRequestBody(map));
+        getNetData(true, setinfo, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                if ("weixin".equals(key)){
+                    iView.setWeixin(value);
+                }
+                Common.staticToast(entity.message);
+            }
+        });
+
     }
 }

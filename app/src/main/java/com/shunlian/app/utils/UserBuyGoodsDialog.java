@@ -71,11 +71,12 @@ public class UserBuyGoodsDialog {
                 MyTextView mtv_price = holder.getView(R.id.mtv_price);
                 MyTextView mtv_shux = holder.getView(R.id.mtv_shux);
                 LinearLayout line_new_title = holder.getView(R.id.line_new_title);
-
                 MyTextView mtv_discount_price = holder.getView(R.id.mtv_discount_price);
                 MyTextView tv_user_shopping_car = holder.getView(R.id.tv_user_shopping_car);
                 holder.getView(R.id.tv_show_num).setVisibility(View.GONE);;
                 holder.getView(R.id.tv_usew_desc).setVisibility(View.GONE);
+                holder.getView(R.id.view_head_view).setVisibility(View.GONE);
+                holder.getView(R.id.progress_view_sale).setVisibility(View.GONE);
                 GlideUtils.getInstance().loadOverrideImage(context,
                         miv_goods_pic, goods.thumb,220,220);
                 mtv_title.setText(goods.title);

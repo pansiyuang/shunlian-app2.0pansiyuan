@@ -803,52 +803,78 @@
             android:layout_height="44dp"
             android:layout_centerVertical="true">
 
-            <com.shunlian.app.widget.MyImageView
+            <com.shunlian.app.widget.MyTextView
                 android:id="@+id/miv_shezhi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
-                android:padding="10dp"
-                android:src="@mipmap/icon_personalcenter_shezhi" />
+                android:drawablePadding="5dp"
+                android:textSize="10sp"
+                android:textColor="@color/white"
+                android:text="设置"
+                android:drawableTop="@mipmap/icon_personalcenter_shezhi" />
 
             <com.shunlian.app.widget.MyRelativeLayout
                 android:id="@+id/rl_more"
-                android:layout_width="30dp"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp">
+                android:layout_marginRight="0dp">
 
-                <com.shunlian.app.widget.MyImageView
-                    android:layout_width="23dp"
-                    android:layout_height="20dp"
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginRight="9.5dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@mipmap/icon_personalcenter_xiaoxi" />
+                    android:drawablePadding="4.5dp"
+                    android:textSize="10sp"
+                    android:textColor="@color/white"
+                    android:text="消息"
+                    android:drawableTop="@mipmap/icon_personalcenter_xiaoxi" />
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/tv_msg_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
+                    android:layout_marginTop="0dp"
                     android:background="@drawable/rounded_corner_white_100"
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
+                    android:text="44"
                     android:textColor="@color/pink_color"
                     android:textSize="8.5sp"
                     android:visibility="gone" />
             </com.shunlian.app.widget.MyRelativeLayout>
 
-            <com.shunlian.app.widget.MyImageView
+            <com.shunlian.app.widget.MyTextView
                 android:id="@+id/miv_kefu"
-                android:layout_width="23dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="3dp"
                 android:layout_toLeftOf="@id/rl_more"
-                android:src="@mipmap/icon_linear_service" />
+                android:textSize="10sp"
+                android:textColor="@color/white"
+                android:drawablePadding="3dp"
+                android:paddingBottom="2dp"
+                android:text="客服"
+                android:drawableTop="@mipmap/icon_service" />
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/miv_daoshi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp"
+                android:drawablePadding="5dp"
+                android:textSize="10sp"
+                android:textColor="@color/white"
+                android:text="导师"
+                android:layout_toLeftOf="@id/miv_kefu"
+                android:drawableTop="@mipmap/icon_daoshi" />
 
             <com.shunlian.app.widget.NewTextView
                 android:id="@+id/ntv_names"

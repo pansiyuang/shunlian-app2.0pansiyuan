@@ -2609,7 +2609,13 @@ public interface ApiService {
      */
     @GET("member/register/codeInfo")
     Call<BaseEntity<MemberCodeListEntity>> codeInfo(@QueryMap Map<String, String> map);
-
+    /**
+     * 我的导师
+     * @param map
+     * @return
+     */
+    @GET("member/follower/myTeacher")
+    Call<BaseEntity<MemberTeacherEntity>> codeTeacherInfo(@QueryMap Map<String, String> map);
     /**
      * 我还想要
      * @param map
@@ -3105,6 +3111,33 @@ public interface ApiService {
     @POST("plusfree/checkoutOrder")
     Call<BaseEntity<PayOrderEntity>> plusfreePay(@Body RequestBody body);
 
+    /**
+     * 检查是否有上级
+     * @param map
+     * @return
+     */
     @GET("member/userinfo/checkBindShareidV2")
     Call<BaseEntity<CommonEntity>> checkBindShareidV2(@QueryMap Map<String, String> map);
+
+    /**
+     * 绑定导师
+     * @return
+     */
+    @POST("member/userinfo/bindShareidV2")
+    Call<BaseEntity<EmptyEntity>> bindShareidV(@Body RequestBody body);
+
+    /**
+     * 发现  评论 快捷驳回列表
+     * @param map
+     * @return
+     */
+    @GET("discovery/comment/checkSetList")
+    Call<BaseEntity<CommentRejectedEntity>> checkSetList(@QueryMap Map<String,String> map);
+
+    /**
+     * 白名单会员审核评论
+     * @return
+     */
+    @POST("discovery/comment/check")
+    Call<BaseEntity<CommonEntity>> commentCheck(@Body RequestBody body);
 }

@@ -1131,4 +1131,6 @@
 <dimen name="xx1078">1078px</dimen>
 <dimen name="xx1079">1079px</dimen>
 <dimen name="xx1080">1080px</dimen>
+    <dimen name="xx1115">1115px</dimen>
+    <dimen name="xx1315">1315px</dimen>
 </resources>

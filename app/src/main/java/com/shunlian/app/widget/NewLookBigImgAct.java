@@ -181,7 +181,8 @@ public class NewLookBigImgAct extends BaseActivity implements QuickActions.OnSha
                         mShareInfoParam.share_buy_earn = goods.share_buy_earn;
                         mShareInfoParam.isSuperiorProduct =(goods.isSuperiorProduct==1?true:false);
                         shareGoodDialogUtil.setShareInfoParam(mShareInfoParam);
-                        shareGoodDialogUtil.createGoodCode(true,false);
+//                        shareGoodDialogUtil.createGoodCode(true,false);
+                        shareGoodDialogUtil.createGoodCode();
 //                        quick_actions.createCode(goods.share_url, goods.title, goods.desc, goods.price, goods.goods_id, goods.thumb,
 //                                1 == goods.isSuperiorProduct, SharedPrefUtil.getSharedUserString("nickname", ""),
 //                                SharedPrefUtil.getSharedUserString("avatar", ""));

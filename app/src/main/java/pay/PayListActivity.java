@@ -42,10 +42,12 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IPayListView;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelpay.PayReq;
@@ -69,18 +71,24 @@ import butterknife.BindView;
 
 public class PayListActivity extends BaseActivity implements View.OnClickListener, IPayListView {
 
-
-    public static final int FINISH_ACT_WHAT = 100;//finish act
-    private static final int SDK_PAY_FLAG = 1;
-    private static Activity activity;
     @BindView(R.id.miv_close)
     MyImageView miv_close;
+
     @BindView(R.id.recy_pay)
     RecyclerView recy_pay;
+
     @BindView(R.id.h5_pay)
     WebView h5_pay;
+
     @BindView(R.id.lLayout_pay)
     LinearLayout lLayout_pay;
+
+    @BindView(R.id.mtv_pay)
+    MyTextView mtv_pay;
+
+    @BindView(R.id.mtv_price)
+    MyTextView mtv_price;
+
     private PayListPresenter payListPresenter;
     private IWXAPI wxapi;
     //订单内id
@@ -93,6 +101,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String currentPayType="";//当前支付方式
     private String pay_sn;
     private boolean isPLUS=false;
+    public static final int FINISH_ACT_WHAT = 100;//finish act
+    private static final int SDK_PAY_FLAG = 1;
+    private static Activity activity;
     /****plus id****/
     private String mProductId;
     private String mSkuId;
@@ -182,6 +193,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     public static final int PLUGIN_NEED_UPGRADE = 2;
     private boolean isNewExclusive;
     private boolean isPlusfree;
+    private PayListEntity.PayTypes mPayTypes;
 
     /**
      * 传参使用json格式，减少字段
@@ -254,6 +266,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     protected void initListener() {
         super.initListener();
         miv_close.setOnClickListener(this);
+        mtv_pay.setOnClickListener(this);
     }
 
     /**
@@ -292,6 +305,16 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_pay.setLayoutManager(manager);
         EventBus.getDefault().register(this);
+
+        mtv_pay.setBackgroundDrawable(ShapeUtils.commonShape(this,
+                getColorResouce(R.color.pink_color),25));
+
+        if (!isEmpty(price)){
+            mtv_price.setText(Common.changeTextSize(getString(R.string.rmb)+price,
+                    getString(R.string.rmb),18));
+        }else {
+            gone(mtv_price);
+        }
     }
 
     /*
@@ -334,6 +357,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.miv_close:
                 backSelect();
+                break;
+            case R.id.mtv_pay:
+                submitOrder(mPayTypes);
                 break;
         }
     }
@@ -391,14 +417,15 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     @Override
     public void payList(final List<PayListEntity.PayTypes> payTypes) {
-        if (recy_pay==null)
+        if (recy_pay==null || payTypes == null)
             return;
-        PayListAdapter adapter = new PayListAdapter(this, false, payTypes);
+        PayListAdapter adapter = new PayListAdapter(this,payTypes);
         recy_pay.setAdapter(adapter);
-
+        mPayTypes = payTypes.get(0);
         adapter.setOnItemClickListener((view, position) -> {
-            PayListEntity.PayTypes pay_types = payTypes.get(position);
-            submitOrder(pay_types);
+            adapter.mCurrentPosition  = position;
+            adapter.notifyDataSetChanged();
+            mPayTypes = payTypes.get(position);
         });
     }
 

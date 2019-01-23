@@ -67,6 +67,15 @@ public class StoreViewUtil {
         layoutParams2.height = width;
     }
 
+
+    public void updateImageHight(){
+        int width = Common.getScreenWidth((Activity) context)/2 ;
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_onel.getLayoutParams();
+        layoutParams.height = width;
+
+        RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) miv_onel2.getLayoutParams();
+        layoutParams2.height = width;
+    }
     public void showStoreGoodView() {
         if (datas.size() >= 1) {
             StoreGoodsListEntity.MData data = datas.get(0);

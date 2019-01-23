@@ -2,6 +2,8 @@ package com.shunlian.app.ui.member;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,6 +20,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.MemberUserAdapter;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MemberInfoEntity;
+import com.shunlian.app.bean.MemberTeacherEntity;
 import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.eventbus_bean.MemberInfoEvent;
 import com.shunlian.app.listener.ICallBackResult;
@@ -26,6 +29,7 @@ import com.shunlian.app.presenter.MemberPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.CommonDialogUtil;
+import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IMemberCodePageView;
 import com.shunlian.app.widget.EditTextImage;
@@ -35,6 +39,8 @@ import com.shunlian.mylibrary.ImmersionBar;
 import com.zh.chartlibrary.common.DensityUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +60,8 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.tv_head)
     TextView tv_head;
 
-    @BindView(R.id.nei_empty)
-    NetAndEmptyInterface nei_empty;
-    @BindView(R.id.relt_empty_guide)
-    RelativeLayout relt_empty_guide;
+    @BindView(R.id.line_empty_guide)
+    LinearLayout line_empty_guide;
     @BindView(R.id.tv_add_guide)
     TextView tv_add_guide;
 
@@ -83,14 +87,23 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.tv_weixin_copy)
     TextView tv_weixin_copy;
 
+    @BindView(R.id.img_sys_code)
+    ImageView img_sys_code;
+    @BindView(R.id.tv_weixin_sys)
+    TextView tv_weixin_sys;
+    @BindView(R.id.tv_weixin_sys_copy)
+    TextView tv_weixin_sys_copy;
+    @BindView(R.id.tv_add_save)
+    TextView tv_add_save;
+    @BindView(R.id.tv_add_meweixin)
+    TextView tv_add_meweixin;
+
     @BindView(R.id.line_bg)
     LinearLayout line_bg;
 
     private CommonDialogUtil commonDialogUtil;
 
-    private MemberInfoEntity.Followfrom followfrom;
-
-    private MemberCodeListEntity bean;
+    private MemberTeacherEntity memberTeacherEntity;
     @Override
     public void onStop() {
         super.onStop();
@@ -107,28 +120,16 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
     }
     @Override
     protected void initData() {
-        ImmersionBar.with(this).fitsSystemWindows(false)
-                .statusBarColor(R.color.transparent)
+        ImmersionBar.with(this).fitsSystemWindows(true)
+                .statusBarColor(R.color.white)
                 .statusBarDarkFont(true)
                 .init();
-        followfrom = (MemberInfoEntity.Followfrom)this.getIntent().getSerializableExtra("followfrom");
-        if(followfrom==null){
-            followfrom = new MemberInfoEntity.Followfrom();
-        }
-
-        LinearLayout.LayoutParams layoutParams1 =  (LinearLayout.LayoutParams)title_bar.getLayoutParams();
-        layoutParams1.height= DensityUtil.dip2px(this,44);
-        layoutParams1.topMargin=Common.getStatusBarHeight(this);
-
+        EventBus.getDefault().register(this);
+        tv_add_meweixin.setOnClickListener(this);
+        tv_add_save.setOnClickListener(this);
         memberAddPresenter = new MemberAddPresenter(this,this);
         commonDialogUtil = new CommonDialogUtil(this);
-        nei_empty.setImageResource(R.mipmap.img_huiyuan_ji).setText("您还没有导购专员，快去绑定吧！").setButtonText(null);
-        if(followfrom!=null&&followfrom.code!=null) {
-            memberAddPresenter.codeDetail(true,followfrom.code);
-        }else{
-            relt_empty_guide.setVisibility(View.VISIBLE);
-        }
-
+        memberAddPresenter.codeTeacherDetail();
     }
 
     public static void startAct(Context context, MemberInfoEntity.Followfrom followfrom) {
@@ -146,6 +147,7 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
             }
         });
         tv_add_guide.setOnClickListener(this);
+        tv_weixin_sys_copy.setOnClickListener(this);
     }
 
     @Override
@@ -169,12 +171,53 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
                 }
             });
         }else if(view.getId()==R.id.tv_weixin_copy){
-            if(!TextUtils.isEmpty(followfrom.weixin)){
+            if(memberTeacherEntity!=null&&memberTeacherEntity.follow_from!=null
+                    &&!TextUtils.isEmpty(memberTeacherEntity.follow_from.weixin)){
                 Common.staticToastAct(this,"复制成功");
-                Common.copyText(this,followfrom.weixin);
+                Common.copyText(this,memberTeacherEntity.follow_from.weixin);
+            }
+        }else if(view.getId() == R.id.tv_add_meweixin){
+            if(memberTeacherEntity!=null&&memberTeacherEntity.my_weinxin!=null) {
+                commonDialogUtil.defaultEditDialog(new ICallBackResult<String>() {
+                    @Override
+                    public void onTagClick(String data) {
+                        if(memberAddPresenter!=null){
+                            memberAddPresenter.setInfo("weixin",data);
+                        }
+                    }
+                },memberTeacherEntity.my_weinxin!=null?memberTeacherEntity.my_weinxin:"");
+            }
+        }else if(view.getId()==R.id.tv_weixin_sys_copy){
+            if(memberTeacherEntity!=null&&memberTeacherEntity.system_weixin!=null
+                    &&!TextUtils.isEmpty(memberTeacherEntity.system_weixin.weixin)){
+                Common.staticToastAct(this,"复制成功");
+                Common.copyText(this,memberTeacherEntity.system_weixin.weixin);
+            }
+        }else if(view.getId()==R.id.tv_add_save){
+            if(memberTeacherEntity!=null&&memberTeacherEntity.system_weixin!=null
+                    &&!TextUtils.isEmpty(memberTeacherEntity.system_weixin.weixin_qrcode)){
+                new DownLoadImageThread(this, memberTeacherEntity.system_weixin.weixin_qrcode, new DownLoadImageThread.MyCallBack() {
+                    @Override
+                    public void successBack() {
+                        downLoadHand.sendEmptyMessage(0);
+                    }
+                    @Override
+                    public void errorBack() {
+                    }
+                }).start();
             }
         }
     }
+
+    /**
+     * 发送下载消息
+     */
+    public Handler downLoadHand = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            Common.staticToastAct(ShoppingGuideActivity.this,"已存入手机相册");
+        }
+    };
 
     /**
      * 确认绑定
@@ -192,61 +235,79 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void codeInfo(MemberCodeListEntity bean, String error,boolean intoPage) {
-        this.bean = bean;
         if(bean!=null&&bean.info!=null){
-            if(intoPage){
-                bindSuccess(bean.info.code);
-                //直接进入app
-            }else {
-                showGuideUserInfo(bean);
-            }
-        }else{
-            relt_empty_guide.setVisibility(View.VISIBLE);
+            showGuideUserInfo(bean);
         }
     }
 
     @Override
     public void bindSuccess(String code) {
-        this.followfrom.code = this.bean.info.code;
-        this.followfrom.avatar = this.bean.info.avatar;
-        this.followfrom.nickname = this.bean.info.nickname;
-        this.followfrom.weixin = this.bean.info.weixin;
-        relt_empty_guide.setVisibility(View.GONE);
-        setBindGuideWeixin();
-        EventBus.getDefault().post(new MemberInfoEvent(followfrom.code,followfrom.avatar
-                ,followfrom.nickname,followfrom.weixin));
+        memberAddPresenter.codeTeacherDetail();
+    }
+
+    @Override
+    public void teacherCodeInfo(MemberTeacherEntity memberTeacherEntity) {
+        if(memberTeacherEntity!=null){
+            this.memberTeacherEntity =memberTeacherEntity;
+            if(memberTeacherEntity.follow_from==null||memberTeacherEntity.follow_from.code==null){
+                line_empty_guide.setVisibility(View.VISIBLE);
+            }else {
+                line_empty_guide.setVisibility(View.GONE);
+                setBindGuideWeixin();
+            }
+
+            if(memberTeacherEntity.system_weixin!=null){
+                tv_weixin_sys.setText("微信号："+memberTeacherEntity.system_weixin.weixin);
+                GlideUtils.getInstance().loadBgImageZheng(this,img_sys_code,memberTeacherEntity.system_weixin.weixin_qrcode);
+            }
+
+            if(!TextUtils.isEmpty(memberTeacherEntity.my_weinxin)){
+                tv_add_meweixin.setText("编辑我的微信");
+            }else{
+                tv_add_meweixin.setText("添加我的微信");
+            }
+        }
+    }
+
+    @Override
+    public void setWeixin(String weixin) {
+        if (weixin!=null&&memberTeacherEntity!=null&&memberTeacherEntity.my_weinxin!=null) {
+            memberTeacherEntity.my_weinxin = weixin;
+            tv_add_meweixin.setText("编辑我的微信");
+        }
     }
 
     /**
      * 绑定过导购显示内容
      */
     private void setBindGuideWeixin(){
-        line_bg.setBackgroundResource(R.mipmap.img_daogou_beijing);
-        title_bar.setBackgroundColor(getColorResouce(R.color.transparent));
-        miv_close.setImageResource(R.mipmap.icon_common_back_white);
-        tv_head.setTextColor(getColorResouce(R.color.white));
-        immersionBar.statusBarDarkFont(false).init();
-        if(!TextUtils.isEmpty(followfrom.weixin)){
+        if(!TextUtils.isEmpty(memberTeacherEntity.follow_from.weixin)){
             line_have_weixin.setVisibility(View.VISIBLE);
             line_no_weixin.setVisibility(View.GONE);
-            GlideUtils.getInstance().loadCircleAvar(this, img__weixin_member_head, followfrom.avatar);
-            tv_weixin_member_name.setText(followfrom.nickname);
-            tv_weixin_member_number.setText("Ta的邀请码:"+followfrom.code);
-            tv_weixin_number.setText(followfrom.weixin);
+            line_empty_guide.setVisibility(View.GONE);
+            GlideUtils.getInstance().loadCircleAvar(this, img__weixin_member_head, memberTeacherEntity.follow_from.avatar);
+            tv_weixin_member_name.setText(memberTeacherEntity.follow_from.nickname);
+            tv_weixin_member_number.setText("Ta的邀请码:"+memberTeacherEntity.follow_from.code);
+            tv_weixin_number.setText(memberTeacherEntity.follow_from.weixin);
             tv_weixin_copy.setOnClickListener(this);
             //没有微信显示
          }else{
             line_have_weixin.setVisibility(View.GONE);
             line_no_weixin.setVisibility(View.VISIBLE);
-            GlideUtils.getInstance().loadCircleAvar(this, img__member_head, followfrom.avatar);
-            tv_member_name.setText(followfrom.nickname);
-            tv_member_number.setText("Ta的邀请码:"+followfrom.code);
+            line_empty_guide.setVisibility(View.GONE);
+            GlideUtils.getInstance().loadCircleAvar(this, img__member_head, memberTeacherEntity.follow_from.avatar);
+            tv_member_name.setText(memberTeacherEntity.follow_from.nickname);
+            tv_member_number.setText("Ta的邀请码:"+memberTeacherEntity.follow_from.code);
             //有微信显示
         }
-
     }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshWeixin(MemberInfoEvent memberInfoEvent) {
+        if (memberInfoEvent!=null&&memberTeacherEntity!=null&&memberTeacherEntity.my_weinxin!=null) {
+            memberTeacherEntity.my_weinxin = memberInfoEvent.weixinNum;
+        }
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

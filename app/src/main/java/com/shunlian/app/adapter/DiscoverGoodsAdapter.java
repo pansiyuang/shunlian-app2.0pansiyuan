@@ -204,7 +204,8 @@ public class DiscoverGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.
                 shareGoodDialogUtil.setShareGoods();
             }else if(shareGoodDialogUtil != null&&isCode){
                 shareGoodDialogUtil.setShareInfoParam(mShareInfoParam);
-                shareGoodDialogUtil.createGoodCode(true, false);
+//                shareGoodDialogUtil.createGoodCode(true, false);
+                shareGoodDialogUtil.createGoodCode();
             }
              if (dialog != null) {
                  dialog.dismiss();
