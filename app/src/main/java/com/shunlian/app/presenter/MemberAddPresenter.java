@@ -104,7 +104,7 @@ public class MemberAddPresenter extends BasePresenter<IMemberCodePageView> {
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<EmptyEntity>>
-                baseEntityCall = getApiService().bindShareidAfter(requestBody);
+                baseEntityCall = getApiService().bindShareidV(requestBody);
 
         getNetData(true,baseEntityCall,new SimpleNetDataCallback
                 <BaseEntity<EmptyEntity>>(){

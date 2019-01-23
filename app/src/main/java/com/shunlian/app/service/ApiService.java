@@ -3105,4 +3105,11 @@ public interface ApiService {
 
     @GET("member/userinfo/checkBindShareidV2")
     Call<BaseEntity<CommonEntity>> checkBindShareidV2(@QueryMap Map<String, String> map);
+
+    /**
+     * 绑定导师
+     * @return
+     */
+    @POST("member/userinfo/bindShareidV2")
+    Call<BaseEntity<EmptyEntity>> bindShareidV(@Body RequestBody body);
 }
