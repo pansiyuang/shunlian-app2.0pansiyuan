@@ -80,4 +80,62 @@
         app:tv_control_adapter="true"
         app:tv_margin_top="30" />
 
+    <!--可加减数量-->
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/mtv_title"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:weightSum="1"
+        android:visibility="gone"
+        app:ll_control_adapter="true"
+        app:ll_control_height="46"
+        app:ll_control_width="158"
+        app:ll_margin_top="20">
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/mtv_count_reduce"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:src="@mipmap/img_aftersalesservice_jian"/>
+
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/e4_color" />
+
+        <EditText
+            android:id="@+id/mtv_edit_count"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:text="1"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:inputType="number"
+            android:background="@null"
+            android:textColor="@color/share_text"
+            android:textSize="10sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/e4_color" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/mtv_count_add"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:src="@mipmap/img_aftersalesservice_jia"/>
+
+    </com.shunlian.app.widget.MyLinearLayout>
+
 </com.shunlian.app.widget.MyRelativeLayout>

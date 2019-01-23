@@ -1,17 +1,22 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -61,6 +66,16 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
             gone(mHolder.mtv_label);
         }
         mHolder.mtv_title.setText(Common.getPlaceholder(context,label,goods.title));
+
+        if (ConfirmOrderAct.TYPE_GOODS_DETAIL.equals(mFrom)){
+            gone(mHolder.mtv_count);
+            visible(mHolder.mllayout_count);
+            mHolder.mllayout_count.setBackgroundDrawable(ShapeUtils.commonShape(context,
+                    Color.WHITE,2,1,getColor(R.color.e4_color)));
+        }else {
+            gone(mHolder.mllayout_count);
+            visible(mHolder.mtv_count);
+        }
     }
 
     public class AppointGoodsHolder extends BaseRecyclerViewHolder{
@@ -83,8 +98,60 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         @BindView(R.id.mtv_label)
         MyTextView mtv_label;
 
+        @BindView(R.id.mllayout_count)
+        MyLinearLayout mllayout_count;
+
+        @BindView(R.id.mtv_edit_count)
+        EditText mtv_edit_count;
+
+        @BindView(R.id.mtv_count_reduce)
+        MyImageView mtv_count_reduce;
+
+        @BindView(R.id.mtv_count_add)
+        MyImageView mtv_count_add;
+
         public AppointGoodsHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(null);
+            mtv_count_reduce.setOnClickListener(v -> {
+                try {
+                    String content = mtv_edit_count.getText().toString();
+                    int i = Integer.parseInt(content);
+                    i -= 1;
+                    if (i <= 0){
+                        i = 1;
+                    }
+                    mtv_edit_count.setText(String.valueOf(i));
+                }catch (Exception e){
+
+                }
+            });
+
+            mtv_count_add.setOnClickListener(v -> {
+                try {
+                    String content = mtv_edit_count.getText().toString();
+                    int i = Integer.parseInt(content);
+                    mtv_edit_count.setText(String.valueOf(++i));
+                }catch (Exception e){
+
+                }
+            });
+
+            mtv_edit_count.setOnEditorActionListener((v, actionId, event) -> {
+                try {
+                    if (actionId == EditorInfo.IME_ACTION_DONE){
+                        String s = mtv_edit_count.getText().toString();
+                        int i = Integer.parseInt(s);
+                        if (i < 1){
+                            mtv_edit_count.setText("1");
+                        }
+                    }
+                }catch (Exception e){
+
+                }
+
+                return false;
+            });
         }
     }
 }
