@@ -11,6 +11,7 @@ import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.PunishEntity;
+import com.shunlian.app.bean.ShowSignEntity;
 import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -250,6 +251,29 @@ public class PMain extends BasePresenter<IMain> {
                 if (data != null) {
                     iView.setUpdateInfo(data);
                 }
+            }
+        });
+    }
+
+    public void isShowSign() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<ShowSignEntity>> baseEntityCall = getApiService().isShowSign(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShowSignEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<ShowSignEntity> entity) {
+                super.onSuccess(entity);
+                ShowSignEntity data = entity.data;
+                if (data != null) {
+                    iView.setADs(data);
+                }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
             }
         });
     }

@@ -26,6 +26,8 @@ import com.shunlian.app.adapter.ShangAdapter;
 import com.shunlian.app.adapter.ZiChanAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
+import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
+import com.shunlian.app.eventbus_bean.MeLocationEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.MessageActivity;
@@ -37,6 +39,7 @@ import com.shunlian.app.ui.balance.BalanceDetailAct;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.member.MemberPageActivity;
+import com.shunlian.app.ui.member.ShoppingGuideActivity;
 import com.shunlian.app.ui.my_profit.DetailOrderRecordAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
@@ -126,11 +129,11 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @BindView(R.id.miv_pluss)
     MyImageView miv_pluss;
     @BindView(R.id.miv_kefu)
-    MyImageView miv_kefu;
+    MyTextView miv_kefu;
     @BindView(R.id.miv_levels)
     MyImageView miv_levels;
     @BindView(R.id.miv_shezhi)
-    MyImageView miv_shezhi;
+    MyTextView miv_shezhi;
     @BindView(R.id.miv_huiyuan)
     MyImageView miv_huiyuan;
     @BindView(R.id.rl_more)
@@ -187,6 +190,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @BindView(R.id.line_anim)
     LinearLayout line_anim;
 
+    @BindView(R.id.mtv_hint)
+    MyTextView mtv_hint;
+
     public PersonalcenterPresenter personalcenterPresenter;
     private PersonalcenterEntity personalcenterEntity;
     private String invite_code;
@@ -198,6 +204,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     private String managerUrl;
     private PromptDialog promptDialog;
     private String currentChatUserId;
+
+    @BindView(R.id.miv_daoshi)
+    MyTextView miv_daoshi;
     //    private Timer outTimer;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -268,6 +277,12 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             line_anim.setTranslationY(0);
         }
 
+        miv_daoshi.post(() -> {
+            int[] location = new int[2];
+            miv_daoshi.getLocationInWindow(location);
+            int imgWidth = miv_daoshi.getHeight();
+            EventBus.getDefault().post(new MeLocationEvent(location, imgWidth));
+        });
     }
 
 
@@ -312,6 +327,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         mllayout_shouhuo.setOnClickListener(this);
         miv_huiyuan.setOnClickListener(this);
         ntv_left.setOnClickListener(this);
+        miv_daoshi.setOnClickListener(this);
         csv_out.setOnScrollListener(new CompileScrollView.OnScrollListener() {
             @Override
 //            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -444,8 +460,18 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 }, 1000);
             }
         }
+//        personalcenterEntity.note="尊敬的客户，您好：你的账户因违规操作已被暂停部分服务！暂停时间：2018.01.04 18:00至2018.04.04 18:00。" +
+//                "在此期间将暂停小店锁粉和小店收益。如需帮助，请联系平台客服处理！";
+        if (isEmpty(personalcenterEntity.note)) {
+            gone(mtv_hint);
+        } else {
+            visible(mtv_hint);
+            mtv_hint.setText(personalcenterEntity.note);
+        }
 
         SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
+        if (!isEmpty(personalcenterEntity.invite_code))
+            SharedPrefUtil.saveSharedUserString("invite_code", personalcenterEntity.invite_code);
         this.personalcenterEntity = personalcenterEntity;
         String avatar = SharedPrefUtil.getSharedUserString("personal_avatar", "null");
         if (!equals(avatar, personalcenterEntity.avatar) || miv_avar.getDrawable() == null) {
@@ -730,6 +756,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 break;
             case R.id.ntv_name:
                 ntv_name.startScroll();
+                break;
+            case R.id.miv_daoshi:
+                ShoppingGuideActivity.startAct(baseActivity,null);
                 break;
         }
     }

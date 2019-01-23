@@ -31,10 +31,12 @@ import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShowSignEntity;
 import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
+import com.shunlian.app.eventbus_bean.MeLocationEvent;
 import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -67,6 +69,7 @@ import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.app.widget.DiscoveryGuideView;
+import com.shunlian.app.widget.MeGuideView;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -96,6 +99,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.mtv_message_count)
     public MyTextView mtv_message_count;
     public AdEntity adEntity;
+    public ShowSignEntity adEntitys;
     @BindView(R.id.fl_main)
     MyFrameLayout fl_main;
     @BindView(R.id.ll_tab_main_page)
@@ -163,6 +167,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private int[] currentLocation;
     private int currentImgWidth;
     private boolean isShowGuide = false;
+    private boolean isShowGuideMe = false;
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
     private String currentDiscoverFlag;
@@ -256,6 +261,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 public void initDialogFinish() {
                     if (updateDialogV.updateDialog == null) {
                         pMain.getPopAD();
+                        pMain.isShowSign();
                     }
                 }
             };
@@ -936,6 +942,19 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         commondDialog.parseCommond();
     }
 
+    @Override
+    public void setADs(ShowSignEntity data) {
+        adEntitys=data;
+        if ("1".equals(data.is_show) && mainPageFrag != null) {
+            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImageChang(this, FirstPageFrag.miv_entrys, data.pic);
+//            GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, "http://i.imgur.com/GP1m9.png");//apng图片不支持
+//            GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, "https://upload-images.jianshu.io/upload_images/2625875-9a044086b7de0a45.gif");
+        } else {
+            FirstPageFrag.miv_entrys.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     public void setContent(GetDataEntity data) {
@@ -1050,6 +1069,30 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshMeData(MeLocationEvent event) {
+        isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
+        currentLocation = event.location;
+        currentImgWidth = event.imgWidth;
+        if (currentLocation != null && currentImgWidth != 0 && !isShowGuideMe) {
+            showGuideViewMe();
+        }
+    }
+
+    public void showGuideViewMe() {
+        currentLocation[0] = currentLocation[0] + currentImgWidth / 2;
+        currentLocation[1] = currentLocation[1] + currentImgWidth / 2;
+        MeGuideView guide_view = new MeGuideView(this);
+        guide_view.setOnClickListener(v -> {
+            guide_view.setVisibility(View.GONE);
+        });
+        guide_view.setImageLocation(currentLocation);
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        guide_view.setLayoutParams(layoutParams);
+        decorView.addView(guide_view);
+        SharedPrefUtil.saveCacheSharedPrfBoolean("showGuideMe", true);
+    }
 
     public void showGuideView() {
         int[] location2 = new int[2];

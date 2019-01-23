@@ -529,7 +529,8 @@ public abstract class H5X5Frag extends BaseFragment implements X5WebView.ScrollL
         //add
         String token = SharedPrefUtil.getSharedUserString("token", "");
         String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
-
+        String member_id = SharedPrefUtil.getCacheSharedPrf("member_id", "");
+        String code = SharedPrefUtil.getCacheSharedPrf("member_id", "");
 
         CookieSyncManager.createInstance(activity);
 //        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(activity);
@@ -540,6 +541,8 @@ public abstract class H5X5Frag extends BaseFragment implements X5WebView.ScrollL
         cookieManager.setCookie(domain, "Client-Type=Android");
         cookieManager.setCookie(domain, "token=" + token);
         cookieManager.setCookie(domain, "User-Agent=" + ua);
+        cookieManager.setCookie(domain, "member_id=" + member_id);
+        cookieManager.setCookie(domain, "code=" + code);
 //        cookieSyncManager.sync();
 
         if (Build.VERSION.SDK_INT < 21) {

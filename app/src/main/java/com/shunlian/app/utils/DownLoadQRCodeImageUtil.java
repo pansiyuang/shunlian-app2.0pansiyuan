@@ -65,86 +65,88 @@ public class DownLoadQRCodeImageUtil implements IView {
         if (!Common.isAlreadyLogin()) {
             Common.goGoGo(mContext, "login");
         } else {
-            final View inflate = LayoutInflater.from(mContext).inflate(R.layout.share_goods_new, null, false);
-            MyImageView miv_close = inflate.findViewById(R.id.miv_close);
-            MyImageView miv_code = inflate.findViewById(R.id.miv_code);
-            int i = TransformUtil.dip2px(mContext, 92.5f);
-            Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
-            miv_code.setImageBitmap(qrImage);
-            miv_close.setVisibility(View.GONE);
-            MyTextView mtv_title =  inflate.findViewById(R.id.mtv_title);
-            MyTextView  mtv_coupon_title =  inflate.findViewById(R.id.mtv_coupon_title);
-
-            if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
-                mtv_coupon_title.setVisibility(View.VISIBLE);
-                mtv_coupon_title.setText(mShareInfoParam.voucher);
-                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher+mShareInfoParam.title);
-                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
-                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                mtv_title.setText(span);
-            }else{
-                mtv_title.setText(mShareInfoParam.title);
-                mtv_coupon_title.setVisibility(View.GONE);
-            }
-            //不是新用户商品显示价格
-            LinearLayout line_old_user= inflate.findViewById(R.id.line_old_user);
-            MyTextView mtv_price =  inflate.findViewById(R.id.mtv_price);
-            //新用户商品显示价格
-            RelativeLayout re_newuser_layout = inflate.findViewById(R.id.re_newuser_layout);
-
-            re_newuser_layout.setVisibility(View.GONE);
-            line_old_user.setVisibility(View.VISIBLE);
-             mtv_price.setText(Common.dotPointAfterSmall(mShareInfoParam.price,11));
-            LinearLayout  llayout_day =inflate.findViewById(R.id.llayout_day);
-            MyTextView mtv_time  = inflate.findViewById(R.id.mtv_time);
-            MyTextView mtv_act_label  = inflate.findViewById(R.id.mtv_act_label);
-
-         if(!TextUtils.isEmpty(mShareInfoParam.time_text)){
-                llayout_day.setVisibility(View.VISIBLE);
-                if(mShareInfoParam.is_start==0){
-                    llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
-                    mtv_act_label.setTextColor(mContext.getResources().getColor(R.color.value_007AFF));
-                    mtv_time.setTextColor(mContext.getResources().getColor(R.color.white));
-                    mtv_time.setBackgroundColor(mContext.getResources().getColor(R.color.value_007AFF));
-                }else{
-                    llayout_day.setBackgroundResource(R.drawable.edge_pink_1px);
-                    mtv_act_label.setTextColor(mContext.getResources().getColor(R.color.pink_color));
-                    mtv_time.setTextColor(mContext.getResources().getColor(R.color.white));
-                    mtv_time.setBackgroundColor(mContext.getResources().getColor(R.color.pink_color));
-                }
-                mtv_time.setText(mShareInfoParam.time_text);
-                mtv_act_label.setText(mShareInfoParam.little_word);
-            }
-            MyImageView miv_goods_pic =  inflate.findViewById(R.id.miv_goods_pic);
-            int width = Common.getScreenWidth((Activity) mContext) - TransformUtil.dip2px(mContext, 80);
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-            layoutParams.width = width;
-            layoutParams.height = width;
-
-            inflate.findViewById(R.id.line_share_boottom).setVisibility(View.GONE);
-            GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.img,
-                    new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource,
-                                                    GlideAnimation<? super Bitmap> glideAnimation) {
-                            int width = Common.getScreenWidth((Activity) mContext) - TransformUtil.dip2px(mContext, 10);
-                            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
-                            layoutParams.width = width;
-                            layoutParams.height = width;
-
-                            miv_goods_pic.setImageBitmap(resource);
-                            Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
-                            if (bitmapByView == null) {
-                                return;
-                            }
-                            BitmapUtil.saveImageToAlbumn(mContext, bitmapByView, false, false);
-                        }
-
-                        @Override
-                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                            super.onLoadFailed(e, errorDrawable);
-                        }
-                    });
+            ShareGoodDialogUtil shareGoodDialogUtil = new ShareGoodDialogUtil(mContext);
+            shareGoodDialogUtil.createFullGoodCode(mShareInfoParam,false,false);
+//            final View inflate = LayoutInflater.from(mContext).inflate(R.layout.share_goods_new, null, false);
+//            MyImageView miv_close = inflate.findViewById(R.id.miv_close);
+//            MyImageView miv_code = inflate.findViewById(R.id.miv_code);
+//            int i = TransformUtil.dip2px(mContext, 92.5f);
+//            Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
+//            miv_code.setImageBitmap(qrImage);
+//            miv_close.setVisibility(View.GONE);
+//            MyTextView mtv_title =  inflate.findViewById(R.id.mtv_title);
+//            MyTextView  mtv_coupon_title =  inflate.findViewById(R.id.mtv_coupon_title);
+//
+//            if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
+//                mtv_coupon_title.setVisibility(View.VISIBLE);
+//                mtv_coupon_title.setText(mShareInfoParam.voucher);
+//                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher+mShareInfoParam.title);
+//                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
+//                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//                mtv_title.setText(span);
+//            }else{
+//                mtv_title.setText(mShareInfoParam.title);
+//                mtv_coupon_title.setVisibility(View.GONE);
+//            }
+//            //不是新用户商品显示价格
+//            LinearLayout line_old_user= inflate.findViewById(R.id.line_old_user);
+//            MyTextView mtv_price =  inflate.findViewById(R.id.mtv_price);
+//            //新用户商品显示价格
+//            RelativeLayout re_newuser_layout = inflate.findViewById(R.id.re_newuser_layout);
+//
+//            re_newuser_layout.setVisibility(View.GONE);
+//            line_old_user.setVisibility(View.VISIBLE);
+//             mtv_price.setText(Common.dotPointAfterSmall(mShareInfoParam.price,11));
+//            LinearLayout  llayout_day =inflate.findViewById(R.id.llayout_day);
+//            MyTextView mtv_time  = inflate.findViewById(R.id.mtv_time);
+//            MyTextView mtv_act_label  = inflate.findViewById(R.id.mtv_act_label);
+//
+//         if(!TextUtils.isEmpty(mShareInfoParam.time_text)){
+//                llayout_day.setVisibility(View.VISIBLE);
+//                if(mShareInfoParam.is_start==0){
+//                    llayout_day.setBackgroundResource(R.drawable.edge_007aff_1px);
+//                    mtv_act_label.setTextColor(mContext.getResources().getColor(R.color.value_007AFF));
+//                    mtv_time.setTextColor(mContext.getResources().getColor(R.color.white));
+//                    mtv_time.setBackgroundColor(mContext.getResources().getColor(R.color.value_007AFF));
+//                }else{
+//                    llayout_day.setBackgroundResource(R.drawable.edge_pink_1px);
+//                    mtv_act_label.setTextColor(mContext.getResources().getColor(R.color.pink_color));
+//                    mtv_time.setTextColor(mContext.getResources().getColor(R.color.white));
+//                    mtv_time.setBackgroundColor(mContext.getResources().getColor(R.color.pink_color));
+//                }
+//                mtv_time.setText(mShareInfoParam.time_text);
+//                mtv_act_label.setText(mShareInfoParam.little_word);
+//            }
+//            MyImageView miv_goods_pic =  inflate.findViewById(R.id.miv_goods_pic);
+//            int width = Common.getScreenWidth((Activity) mContext) - TransformUtil.dip2px(mContext, 80);
+//            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+//            layoutParams.width = width;
+//            layoutParams.height = width;
+//
+//            inflate.findViewById(R.id.line_share_boottom).setVisibility(View.GONE);
+//            GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.img,
+//                    new SimpleTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(Bitmap resource,
+//                                                    GlideAnimation<? super Bitmap> glideAnimation) {
+//                            int width = Common.getScreenWidth((Activity) mContext) - TransformUtil.dip2px(mContext, 10);
+//                            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_goods_pic.getLayoutParams();
+//                            layoutParams.width = width;
+//                            layoutParams.height = width;
+//
+//                            miv_goods_pic.setImageBitmap(resource);
+//                            Bitmap bitmapByView = BitmapUtil.getBitmapByView(inflate);
+//                            if (bitmapByView == null) {
+//                                return;
+//                            }
+//                            BitmapUtil.saveImageToAlbumn(mContext, bitmapByView, false, false);
+//                        }
+//
+//                        @Override
+//                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+//                            super.onLoadFailed(e, errorDrawable);
+//                        }
+//                    });
         }
     }
 

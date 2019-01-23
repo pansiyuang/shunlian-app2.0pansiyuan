@@ -60,13 +60,13 @@ public class DayNewUserDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected int[] getLabelWidthHeight() {
-        int[] wh = {22,18};
+        int[] wh = {22,15};
         return wh;
     }
 
     @Override
     public int[] getPadding() {
-        return new int[]{0,0,0,0};
+        return new int[]{0,-2,0,2};
     }
 
     @Override

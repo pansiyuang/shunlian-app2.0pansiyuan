@@ -41,14 +41,14 @@
         >
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/yy920"
+            android:layout_height="@dimen/yy960"
             android:id="@+id/image_show"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_centerHorizontal="true"
             android:background="@mipmap/img_hongbao"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/yy420"
+            android:layout_marginTop="@dimen/yy428"
             />
         <TextView
             android:id="@+id/tv_new_submit"
@@ -58,32 +58,31 @@
             android:paddingLeft="5dp"
             android:gravity="center"
             android:textColor="#F05A63"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/yy920"/>
+            android:layout_marginTop="@dimen/yy952"/>
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mllayout_before"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/yy390"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginTop="@dimen/yy620"
+            android:layout_marginTop="@dimen/yy528"
             android:layout_centerHorizontal="true">
             <com.shunlian.app.widget.NewTextView
                 android:id="@+id/ntv_user_page_price"
-                android:textSize="28sp"
+                android:textSize="32sp"
                 android:textStyle="bold"
                 android:textColor="@color/pink_color"
                 android:layout_width="152dp"
                 android:gravity="center"
-                android:lineSpacingExtra="5dp"
-                android:text="￥？"
+                android:text="¥?"
                 android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="152dp"
                 android:orientation="horizontal"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:layout_height="20dp">
                 <com.shunlian.app.widget.NewTextView
@@ -120,7 +119,7 @@
             android:layout_height="wrap_content"
             android:text="温馨提示：优惠券有效期为领取之日起3天"
             android:textColor="#FFACDF"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_below="@+id/image_show"
             android:textSize="11sp"
             android:layout_centerHorizontal="true"

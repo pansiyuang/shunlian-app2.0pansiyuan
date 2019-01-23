@@ -2,7 +2,6 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,19 +17,14 @@ import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.SwipeMenuLayout;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DayNewUserDownTimerView;
-import com.shunlian.app.utils.timer.DayNoBlackDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.ProgressViewLayout;
+import com.shunlian.app.widget.SaleProgressView;
 import com.zh.chartlibrary.common.DensityUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -156,8 +150,8 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
                     mHolder.tv_show_num.setText(goods.share_total+"次分享");
                     mHolder.tv_user_shopping_car.setText("立即分享");
               }
-             mHolder.progress_view.setVisibility(View.VISIBLE);
-             mHolder.progress_view.setSecond(goods.process,100);
+             mHolder.progress_view_sale.setVisibility(View.VISIBLE);
+             mHolder.progress_view_sale.setTotalAndCurrentCount(100,goods.process);
               if(!goods.is_recommend) {
                   mHolder.line_time_view.setVisibility(View.GONE);
                   mHolder.view_head_view.setVisibility(View.GONE);
@@ -229,8 +223,8 @@ public class NewUserGoodsAdapter extends BaseRecyclerAdapter<NewUserGoodsEntity.
         @BindView(R.id.view_head_view)
         View view_head_view;
 
-        @BindView(R.id.progress_view)
-        ProgressViewLayout progress_view;
+        @BindView(R.id.progress_view_sale)
+        SaleProgressView progress_view_sale;
 
         @BindView(R.id.line_time_view)
         LinearLayout line_time_view;
