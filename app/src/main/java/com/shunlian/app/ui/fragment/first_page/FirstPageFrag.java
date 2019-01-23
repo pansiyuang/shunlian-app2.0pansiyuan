@@ -8,6 +8,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,17 +28,15 @@ import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.GoldEggLuckyWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.h5.H5X5Act;
-import com.shunlian.app.ui.member.MemberPageActivity;
-import com.shunlian.app.ui.new_user.NewUserPageActivity;
+import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HoneRedDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
@@ -72,10 +71,15 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public static boolean isExpand = false;
     //    @BindView(R.id.mAppbar)
     public static MyImageView miv_entry;
+    public static MyImageView miv_entrys;
     public static AppBarLayout mAppbar;
     public static boolean isHide = false;
+    public static boolean isHides = false;
     public static boolean isNewUserHide = false;
     public static MyTextView mtv_search;
+    //新用户的倒计时
+    public static RelativeLayout show_new_user_view;
+    private static Handler handler;
     public ArrayList<Fragment> fragments;
     @BindView(R.id.mll_message)
     MyLinearLayout mll_message;
@@ -101,39 +105,34 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     CoordinatorLayout data_coorLayout;
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
-    private PFirstPage pFirstPage;
-    private String logoType, logoId;
-    private MessageCountManager messageCountManager;
-    private MainActivity mainActivity;
-    private boolean isRefresh = false;
-
-//   气泡
+    //   气泡
     @BindView(R.id.lLayout_toast)
     LinearLayout lLayout_toast;
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
     @BindView(R.id.tv_info)
     TextView tv_info;
+    @BindView(R.id.tv_new_user_title)
+    TextView tv_new_user_title;
+    @BindView(R.id.tv_new_user_time)
+    HoneRedDownTimerView tv_new_user_time;
+    private PFirstPage pFirstPage;
+    private String logoType, logoId;
+    private MessageCountManager messageCountManager;
+    private MainActivity mainActivity;
+    private boolean isRefresh = false;
     private boolean isStop, misHide, isCrash;
     private boolean isPause = true;
     private Runnable runnableA, runnableB, runnableC;
     private Timer outTimer;
     private int mposition, size;
-    private static Handler handler;
 
-    //新用户的倒计时
-    public static   RelativeLayout show_new_user_view;
-
-    @BindView(R.id.tv_new_user_title)
-    TextView tv_new_user_title;
-    @BindView(R.id.tv_new_user_time)
-    HoneRedDownTimerView tv_new_user_time;
     public void beginToast() {
         if (isPause) {
             mposition = 0;
             isStop = false;
-            if (pFirstPage!=null)
-            pFirstPage.getBubble();
+            if (pFirstPage != null)
+                pFirstPage.getBubble();
             isPause = false;
         }
     }
@@ -181,12 +180,12 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 if (!isStop) {
                     LogUtil.augusLogW("mposition：delayed");
                     mposition = 0;
-                    if (pFirstPage!=null)
-                    pFirstPage.getBubble();
+                    if (pFirstPage != null)
+                        pFirstPage.getBubble();
                 }
             }
         };
-        handler.postDelayed(runnableA, ((Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR) * size + 1) * 1000);
+        handler.postDelayed(runnableA, ((Constant.BUBBLE_SHOW + Constant.BUBBLE_DUR) * size + 1) * 1000);
     }
 
     public void startToast(final List<BubbleEntity.Content> datas) {
@@ -202,18 +201,18 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                         runnableB = new Runnable() {
                             @Override
                             public void run() {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity.isDestroyed()) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseActivity != null && baseActivity.isDestroyed()) {
 //                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
-                                }else if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseActivity.isFinishing()) {
+                                } else if (mposition < datas.size() && lLayout_toast != null && miv_icon != null && tv_info != null && !baseActivity.isFinishing()) {
                                     LogUtil.augusLogW("mposition:" + mposition);
                                     lLayout_toast.setVisibility(View.VISIBLE);
-                                    GlideUtils.getInstance().loadCircleAvar(baseActivity,miv_icon,datas.get(mposition).avatar);
+                                    GlideUtils.getInstance().loadCircleAvar(baseActivity, miv_icon, datas.get(mposition).avatar);
                                     tv_info.setText(datas.get(mposition).text);
                                     lLayout_toast.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            if (datas.get(mposition).url!=null)
-                                                Common.goGoGo(baseContext,datas.get(mposition).url.type,datas.get(mposition).url.item_id);
+                                            if (datas.get(mposition).url != null)
+                                                Common.goGoGo(baseContext, datas.get(mposition).url.type, datas.get(mposition).url.item_id);
                                         }
                                     });
                                 }
@@ -228,15 +227,16 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                                     public void run() {
                                         isCrash = false;
                                     }
-                                }, ((Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR) * size + 2) * 1000);
+                                }, ((Constant.BUBBLE_SHOW + Constant.BUBBLE_DUR) * size + 2) * 1000);
                             }
                         } else {
                             handler.post(runnableB);
                             runnableC = new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (!isStop&&lLayout_toast!=null) {
-                                        lLayout_toast.setVisibility(View.GONE);
+                                    if (!isStop) {
+                                        if (lLayout_toast != null)
+                                            lLayout_toast.setVisibility(View.GONE);
                                         mposition++;
                                     }
                                 }
@@ -245,8 +245,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                         }
                     }
                 }
-            }, 0, (Constant.BUBBLE_SHOW +Constant.BUBBLE_DUR) * 1000);
-        }catch (Exception e){
+            }, 0, (Constant.BUBBLE_SHOW + Constant.BUBBLE_DUR) * 1000);
+        } catch (Exception e) {
 
         }
     }
@@ -257,25 +257,31 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         View rootView = inflater.inflate(R.layout.frag_first_page, container, false);
         mAppbar = (AppBarLayout) rootView.findViewById(R.id.mAppbar);
         miv_entry = (MyImageView) rootView.findViewById(R.id.miv_entry);
-        show_new_user_view=  rootView.findViewById(R.id.show_new_user_view);
+        miv_entrys = (MyImageView) rootView.findViewById(R.id.miv_entrys);
+        show_new_user_view = rootView.findViewById(R.id.show_new_user_view);
         int value = TransformUtil.dip2px(baseActivity, 80);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
         layoutParams.setMargins(0, 0, 0, value);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         miv_entry.setLayoutParams(layoutParams);
+        int values = TransformUtil.dip2px(baseActivity, 100);
+        RelativeLayout.LayoutParams layoutParamss = (RelativeLayout.LayoutParams) miv_entrys.getLayoutParams();
+        layoutParamss.setMargins(0, values, 0, 0);
+        layoutParamss.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        miv_entrys.setLayoutParams(layoutParamss);
         mtv_search = (MyTextView) rootView.findViewById(R.id.mtv_search);
         return rootView;
     }
 
-    public void updateUserNewToast(ShowVoucherSuspension voucherSuspension){
-        if(voucherSuspension.suspensionShow.equals("1")&&Common.isAlreadyLogin()){
+    public void updateUserNewToast(ShowVoucherSuspension voucherSuspension) {
+        if (voucherSuspension.suspensionShow.equals("1") && Common.isAlreadyLogin()) {
             tv_new_user_title.setText(voucherSuspension.suspension.prize);
             show_new_user_view.setVisibility(View.VISIBLE);
-            if(miv_entry.getVisibility() == View.VISIBLE){
+            if (miv_entry.getVisibility() == View.VISIBLE) {
                 miv_entry.setVisibility(View.GONE);
             }
-            if(voucherSuspension.suspension.finish>0) {
+            if (voucherSuspension.suspension.finish > 0) {
                 tv_new_user_time.setVisibility(View.VISIBLE);
                 tv_new_user_time.cancelDownTimer();
                 tv_new_user_time.setDownTime(voucherSuspension.suspension.finish);
@@ -287,10 +293,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                         show_new_user_view.setVisibility(View.GONE);
                     }
                 });
-            }else{
+            } else {
                 tv_new_user_time.setVisibility(View.GONE);
             }
-        }else{
+        } else {
             show_new_user_view.setVisibility(View.GONE);
         }
     }
@@ -354,6 +360,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         mll_message.setOnClickListener(this);
         miv_photo.setOnClickListener(this);
         miv_entry.setOnClickListener(this);
+        miv_entrys.setOnClickListener(this);
         show_new_user_view.setOnClickListener(this);
         mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -473,6 +480,26 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             case R.id.show_new_user_view:
                 Common.goGoGo(getContext(), "newuser");
                 break;
+            case R.id.miv_entrys:
+                if (isHides) {
+                    int values = TransformUtil.dip2px(baseActivity, 100);
+                    RelativeLayout.LayoutParams layoutParamss = (RelativeLayout.LayoutParams) miv_entrys.getLayoutParams();
+                    layoutParamss.setMargins(0, values, 0, 0);
+                    layoutParamss.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    miv_entrys.setLayoutParams(layoutParamss);
+                    isHides = false;
+                } else {
+                    String token = SharedPrefUtil.getSharedUserString("token", "");
+                    if (TextUtils.isEmpty(token)) {
+                        Common.goGoGo(baseActivity,"login");
+                        Common.theRelayJump("taskSystems",null);
+                    } else {
+                        if (mainActivity != null && mainActivity.adEntitys != null && mainActivity.adEntitys.url != null )
+                            Common.goGoGo(baseActivity, mainActivity.adEntitys.url.type, mainActivity.adEntitys.url.item_id);
+                    }
+
+                }
+                break;
             case R.id.miv_entry:
                 if (isHide) {
                     int value = TransformUtil.dip2px(baseActivity, 80);
@@ -483,7 +510,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     miv_entry.setLayoutParams(layoutParams);
                     isHide = false;
                 } else {
-                    if (mainActivity != null && mainActivity.adEntity != null&&mainActivity.adEntity.suspension!=null&&mainActivity.adEntity.suspension.link!=null)
+                    if (mainActivity != null && mainActivity.adEntity != null && mainActivity.adEntity.suspension != null && mainActivity.adEntity.suspension.link != null)
                         Common.goGoGo(baseActivity, mainActivity.adEntity.suspension.link.type, mainActivity.adEntity.suspension.link.item_id);
                 }
                 break;
@@ -508,7 +535,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         }
         fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {
-            fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id,getMenuEntiy.datas.get(i).channel_name));
+            fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id, getMenuEntiy.datas.get(i).channel_name));
             if (i >= getMenuEntiy.datas.size() - 1 && isAdded()) {
                 firstId = getMenuEntiy.datas.get(0).id;
                 pager.setAdapter(new MyFrPagerAdapter(getChildFragmentManager(), getMenuEntiy.datas, fragments));
@@ -522,7 +549,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public void setTab(GetMenuEntity getMenuEntiy) {
         if (Constant.getMenuData == null || isRefresh)
             setMenu(getMenuEntiy);
-        isRefresh=false;
+        isRefresh = false;
         Constant.getMenuData = getMenuEntiy;
     }
 
@@ -548,10 +575,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void showFailureView(int request_code) {
-        if (666==request_code){
+        if (666 == request_code) {
             size = 2;
             startTimer();
-        }else if (888==request_code){
+        } else if (888 == request_code) {
             visible(nei_empty);
             gone(data_coorLayout);
         }
@@ -559,7 +586,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void showDataEmptyView(int request_code) {
-        if (888==request_code){
+        if (888 == request_code) {
             visible(nei_empty);
             gone(data_coorLayout);
         }

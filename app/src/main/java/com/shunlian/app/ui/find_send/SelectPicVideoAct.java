@@ -547,7 +547,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
             isVideo = isImage = false;
 
             /********将所有图片保存到一个类目******/
-            if (!"图片和视频".equals(mResultFolder.get(0).name)) {
+            if (!isEmpty(mResultFolder)&&!"图片和视频".equals(mResultFolder.get(0).name)) {
                 List<ImageVideo> allFile = new ArrayList<>();
                 allFile.addAll(mImageVideos);
 

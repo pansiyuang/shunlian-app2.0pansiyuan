@@ -315,7 +315,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                         runnableB = new Runnable() {
                             @Override
                             public void run() {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct.isDestroyed()) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseAct!=null&& baseAct.isDestroyed()) {
 //                                throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
                                 }else if (mposition < datas.size()&&lLayout_toast!=null&&miv_icon!=null&&tv_info!=null&&!baseAct.isFinishing()) {
                                     LogUtil.augusLogW("mposition:" + mposition);
@@ -348,7 +348,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                             runnableC = new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (!isStop&&lLayout_toast!=null) {
+                                    if (!isStop) {
+                                        if (lLayout_toast!=null)
                                         lLayout_toast.setVisibility(View.GONE);
                                         mposition++;
                                     }
@@ -1396,7 +1397,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if(mShareInfoParam==null){
             mShareInfoParam = new ShareInfoParam();
         }
-        if (mShareInfoParam != null) {
+        if (mShareInfoParam != null&&mGoodsDeatilEntity!=null) {
             mShareInfoParam.isShowTiltle = false;
             mShareInfoParam.userName = baseEntity.data.userName;
             mShareInfoParam.userAvatar = baseEntity.data.userAvatar;

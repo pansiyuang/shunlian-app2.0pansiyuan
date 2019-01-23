@@ -398,6 +398,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         SharedPrefUtil.saveSharedUserString("avatar", wxLoginEntity.avatar);
         SharedPrefUtil.saveSharedUserString("nickname", wxLoginEntity.nickname);
         SharedPrefUtil.saveSharedUserString("plus_role", wxLoginEntity.plus_role);
+        if (!isEmpty(wxLoginEntity.code))
+            SharedPrefUtil.saveSharedUserString("invite_code", wxLoginEntity.code);
         SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(wxLoginEntity.member_id);
         if (wxLoginEntity.tag != null)

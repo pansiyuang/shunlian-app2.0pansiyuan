@@ -2366,6 +2366,14 @@ public interface ApiService {
     Call<BaseEntity<AdEntity>> popup(@QueryMap Map<String, String> map);
 
     /**
+     * 是否显示签到引流
+     *
+     * @return
+     */
+    @GET("task/isShowSign")
+    Call<BaseEntity<ShowSignEntity>> isShowSign(@QueryMap Map<String, String> map);
+
+    /**
      * 专题页数据
      *
      * @return
@@ -3103,6 +3111,11 @@ public interface ApiService {
     @POST("plusfree/checkoutOrder")
     Call<BaseEntity<PayOrderEntity>> plusfreePay(@Body RequestBody body);
 
+    /**
+     * 检查是否有上级
+     * @param map
+     * @return
+     */
     @GET("member/userinfo/checkBindShareidV2")
     Call<BaseEntity<CommonEntity>> checkBindShareidV2(@QueryMap Map<String, String> map);
 
@@ -3112,4 +3125,19 @@ public interface ApiService {
      */
     @POST("member/userinfo/bindShareidV2")
     Call<BaseEntity<EmptyEntity>> bindShareidV(@Body RequestBody body);
+
+    /**
+     * 发现  评论 快捷驳回列表
+     * @param map
+     * @return
+     */
+    @GET("discovery/comment/checkSetList")
+    Call<BaseEntity<CommentRejectedEntity>> checkSetList(@QueryMap Map<String,String> map);
+
+    /**
+     * 白名单会员审核评论
+     * @return
+     */
+    @POST("discovery/comment/check")
+    Call<BaseEntity<CommonEntity>> commentCheck(@Body RequestBody body);
 }

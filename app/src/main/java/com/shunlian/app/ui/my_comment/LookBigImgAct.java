@@ -93,9 +93,9 @@ public class LookBigImgAct extends BaseActivity{
                 entity.items = new ArrayList<>();
             entity.items.add(0, getString(R.string.operate_baocuntupian));
             entity.items.add(entity.items.size(), getString(R.string.errcode_cancel));
+            SamplePagerAdapter adapter = new SamplePagerAdapter(entity.itemList);
+            view_pager.setAdapter(adapter);
         }
-        SamplePagerAdapter adapter = new SamplePagerAdapter(entity.itemList);
-        view_pager.setAdapter(adapter);
 
         view_pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 

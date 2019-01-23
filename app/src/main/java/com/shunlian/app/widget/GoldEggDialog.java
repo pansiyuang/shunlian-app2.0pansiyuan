@@ -169,122 +169,126 @@ public class GoldEggDialog extends Dialog {
     }
 
     private void initPrizeView(int type) {
-        switch (type) {
-            case -1:
-                tv_notice.setTextSize(24);
-                tv_notice.setText("确定消耗" + goldCount + "个金蛋？");
-                ll_voucher.setVisibility(View.GONE);
-                ll_icon.setVisibility(View.VISIBLE);
-                miv_icon.setVisibility(View.VISIBLE);
-                miv_draw_icon.setVisibility(View.GONE);
-                miv_icon.setImageResource(R.mipmap.image_xiaohaojindan);
-                ll_notice.setVisibility(View.VISIBLE);
-                tv_content.setVisibility(View.GONE);
-                btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
-                break;
-            case 0:
-                tv_notice.setTextSize(24);
-                tv_notice.setText("哎呀，太可惜了！");
-                ll_voucher.setVisibility(View.GONE);
-                ll_icon.setVisibility(View.VISIBLE);
-                miv_icon.setVisibility(View.GONE);
-                miv_draw_icon.setVisibility(View.VISIBLE);
-                miv_draw_icon.setImageResource(R.mipmap.image_weizhongjiang);
-                ll_notice.setVisibility(View.GONE);
-                tv_content.setVisibility(View.VISIBLE);
-                tv_content.setText("差点中奖了");
-                btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
-                setLinearLayoutParam(194, 147, miv_draw_icon);
-                break;
-            case 1:
-                tv_notice.setTextSize(24);
-                tv_notice.setText("中奖啦！");
-                ll_voucher.setVisibility(View.GONE);
-                ll_icon.setVisibility(View.VISIBLE);
-                ll_notice.setVisibility(View.GONE);
-                if (mTaskDraw != null) {
+        try {
+            switch (type) {
+                case -1:
+                    tv_notice.setTextSize(24);
+                    tv_notice.setText("确定消耗" + goldCount + "个金蛋？");
+                    ll_voucher.setVisibility(View.GONE);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    miv_icon.setVisibility(View.VISIBLE);
+                    miv_draw_icon.setVisibility(View.GONE);
+                    miv_icon.setImageResource(R.mipmap.image_xiaohaojindan);
+                    ll_notice.setVisibility(View.VISIBLE);
+                    tv_content.setVisibility(View.GONE);
+                    btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
+                    break;
+                case 0:
+                    tv_notice.setTextSize(24);
+                    tv_notice.setText("哎呀，太可惜了！");
+                    ll_voucher.setVisibility(View.GONE);
+                    ll_icon.setVisibility(View.VISIBLE);
                     miv_icon.setVisibility(View.GONE);
                     miv_draw_icon.setVisibility(View.VISIBLE);
-                    GlideUtils.getInstance().loadOverrideImage(getContext(), miv_draw_icon, mTaskDraw.image, TransformUtil.dip2px(getContext(), 150), TransformUtil.dip2px(getContext(), 150));
-                    setLinearLayoutParam(150, 150, miv_draw_icon);
+                    miv_draw_icon.setImageResource(R.mipmap.image_weizhongjiang);
+                    ll_notice.setVisibility(View.GONE);
                     tv_content.setVisibility(View.VISIBLE);
-                    tv_content.setText(mTaskDraw.desc);
-                }else{
+                    tv_content.setText("差点中奖了");
+                    btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
+                    setLinearLayoutParam(194, 147, miv_draw_icon);
+                    break;
+                case 1:
+                    tv_notice.setTextSize(24);
+                    tv_notice.setText("中奖啦！");
+                    ll_voucher.setVisibility(View.GONE);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    ll_notice.setVisibility(View.GONE);
+                    if (mTaskDraw != null) {
+                        miv_icon.setVisibility(View.GONE);
+                        miv_draw_icon.setVisibility(View.VISIBLE);
+                        GlideUtils.getInstance().loadOverrideImage(getContext(), miv_draw_icon, mTaskDraw.image, TransformUtil.dip2px(getContext(), 150), TransformUtil.dip2px(getContext(), 150));
+                        setLinearLayoutParam(150, 150, miv_draw_icon);
+                        tv_content.setVisibility(View.VISIBLE);
+                        tv_content.setText(mTaskDraw.desc);
+                    }else{
+                        tv_content.setVisibility(View.GONE);
+                    }
+                    btn_bottom.setText("填写收货地址");
+                    break;
+                case 2:
+                    tv_notice.setTextSize(24);
+                    ll_voucher.setVisibility(View.VISIBLE);
+                    ll_icon.setVisibility(View.GONE);
+                    tv_notice.setText("中奖啦！");
+                    ll_notice.setVisibility(View.GONE);
+                    if (mTaskDraw != null && mTaskDraw.voucher != null) {
+                        TaskDrawEntity.Voucher voucher = mTaskDraw.voucher;
+                        tv_voucher_name.setText(voucher.title);
+                        String price = getContext().getResources().getString(R.string.common_yuan) + voucher.denomination;
+                        tv_voucher_price.setText(Common.changeTextSize(price, getContext().getResources().getString(R.string.common_yuan), 12));
+                        tv_expire_date.setText(voucher.limit_time);
+                        tv_useType.setText(voucher.use_condition);
+                        tv_voucher_date.setText(voucher.start_time);
+                        tv_voucher_desc.setText(voucher.desc);
+                        tv_content.setVisibility(View.VISIBLE);
+                        tv_content.setText(mTaskDraw.desc);
+                    }else{
+                        tv_content.setVisibility(View.GONE);
+                    }
+                    btn_bottom.setText(getContext().getResources().getText(R.string.go_to_visit));
+                    break;
+                case 3:
+                    tv_notice.setTextSize(24);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    tv_notice.setText("中奖啦！");
+                    ll_voucher.setVisibility(View.GONE);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    miv_icon.setVisibility(View.VISIBLE);
+                    miv_draw_icon.setVisibility(View.GONE);
+                    miv_icon.setImageResource(R.mipmap.image_huodejindan);
+                    ll_notice.setVisibility(View.GONE);
+                    if (mTaskDraw != null) {
+                        tv_content.setVisibility(View.VISIBLE);
+                        tv_content.setText(mTaskDraw.desc);
+                    }
+                    btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
+                    break;
+                case 4:
+                    tv_notice.setTextSize(20);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    tv_notice.setText("你还有奖品未填写收货地址");
+                    ll_voucher.setVisibility(View.GONE);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    miv_icon.setVisibility(View.GONE);
+                    miv_draw_icon.setVisibility(View.VISIBLE);
+                    ll_notice.setVisibility(View.GONE);
+                    if (mOrderEntity != null) {
+                        tv_content.setVisibility(View.VISIBLE);
+                        tv_content.setText(mOrderEntity.desc);
+                    }
+                    btn_bottom.setText("填写收货地址");
+                    setLinearLayoutParam(190, 133, miv_draw_icon);
+                    miv_draw_icon.setImageResource(R.mipmap.image_dizhi);
+                    break;
+                case 5:
+                    tv_notice.setTextSize(20);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    tv_notice.setText("抱歉，您的金蛋数量不足,快去做任务领金蛋吧");
+                    ll_voucher.setVisibility(View.GONE);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    miv_icon.setVisibility(View.GONE);
+                    miv_draw_icon.setVisibility(View.VISIBLE);
+                    ll_notice.setVisibility(View.GONE);
                     tv_content.setVisibility(View.GONE);
-                }
-                btn_bottom.setText("填写收货地址");
-                break;
-            case 2:
-                tv_notice.setTextSize(24);
-                ll_voucher.setVisibility(View.VISIBLE);
-                ll_icon.setVisibility(View.GONE);
-                tv_notice.setText("中奖啦！");
-                ll_notice.setVisibility(View.GONE);
-                if (mTaskDraw != null && mTaskDraw.voucher != null) {
-                    TaskDrawEntity.Voucher voucher = mTaskDraw.voucher;
-                    tv_voucher_name.setText(voucher.title);
-                    String price = getContext().getResources().getString(R.string.common_yuan) + voucher.denomination;
-                    tv_voucher_price.setText(Common.changeTextSize(price, getContext().getResources().getString(R.string.common_yuan), 12));
-                    tv_expire_date.setText(voucher.limit_time);
-                    tv_useType.setText(voucher.use_condition);
-                    tv_voucher_date.setText(voucher.start_time);
-                    tv_voucher_desc.setText(voucher.desc);
-                    tv_content.setVisibility(View.VISIBLE);
-                    tv_content.setText(mTaskDraw.desc);
-                }else{
-                    tv_content.setVisibility(View.GONE);
-                }
-                btn_bottom.setText(getContext().getResources().getText(R.string.go_to_visit));
-                break;
-            case 3:
-                tv_notice.setTextSize(24);
-                ll_icon.setVisibility(View.VISIBLE);
-                tv_notice.setText("中奖啦！");
-                ll_voucher.setVisibility(View.GONE);
-                ll_icon.setVisibility(View.VISIBLE);
-                miv_icon.setVisibility(View.VISIBLE);
-                miv_draw_icon.setVisibility(View.GONE);
-                miv_icon.setImageResource(R.mipmap.image_huodejindan);
-                ll_notice.setVisibility(View.GONE);
-                if (mTaskDraw != null) {
-                    tv_content.setVisibility(View.VISIBLE);
-                    tv_content.setText(mTaskDraw.desc);
-                }
-                btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
-                break;
-            case 4:
-                tv_notice.setTextSize(20);
-                ll_icon.setVisibility(View.VISIBLE);
-                tv_notice.setText("你还有奖品未填写收货地址");
-                ll_voucher.setVisibility(View.GONE);
-                ll_icon.setVisibility(View.VISIBLE);
-                miv_icon.setVisibility(View.GONE);
-                miv_draw_icon.setVisibility(View.VISIBLE);
-                ll_notice.setVisibility(View.GONE);
-                if (mOrderEntity != null) {
-                    tv_content.setVisibility(View.VISIBLE);
-                    tv_content.setText(mOrderEntity.desc);
-                }
-                btn_bottom.setText("填写收货地址");
-                setLinearLayoutParam(190, 133, miv_draw_icon);
-                miv_draw_icon.setImageResource(R.mipmap.image_dizhi);
-                break;
-            case 5:
-                tv_notice.setTextSize(20);
-                ll_icon.setVisibility(View.VISIBLE);
-                tv_notice.setText("抱歉，您的金蛋数量不足,快去做任务领金蛋吧");
-                ll_voucher.setVisibility(View.GONE);
-                ll_icon.setVisibility(View.VISIBLE);
-                miv_icon.setVisibility(View.GONE);
-                miv_draw_icon.setVisibility(View.VISIBLE);
-                ll_notice.setVisibility(View.GONE);
-                tv_content.setVisibility(View.GONE);
-                btn_bottom.setText(getContext().getResources().getText(R.string.go_to_visit));
-                setLinearLayoutParam(190, 133, miv_draw_icon);
-                miv_draw_icon.setImageResource(R.mipmap.image_shuliangbuzu);
-                break;
+                    btn_bottom.setText(getContext().getResources().getText(R.string.go_to_visit));
+                    setLinearLayoutParam(190, 133, miv_draw_icon);
+                    miv_draw_icon.setImageResource(R.mipmap.image_shuliangbuzu);
+                    break;
+            }
+            show();
+        }catch (Exception e){
+
         }
-        show();
     }
 
     public void setLinearLayoutParam(int width, int height, MyImageView myImageView) {

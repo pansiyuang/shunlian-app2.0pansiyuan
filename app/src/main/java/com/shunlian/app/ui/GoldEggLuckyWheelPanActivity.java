@@ -1,6 +1,7 @@
 package com.shunlian.app.ui;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -33,6 +34,7 @@ import com.shunlian.app.bean.TaskDrawEntity;
 import com.shunlian.app.presenter.GoldEggLuckyWheelPresenter;
 import com.shunlian.app.ui.receive_adress.AddressListActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -42,13 +44,13 @@ import com.shunlian.app.widget.GoldEggDialog;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRecyclerView;
-import com.shunlian.app.widget.MyWebView;
+import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.luckWheel.RotateListener;
 import com.shunlian.app.widget.luckWheel.WheelSurfView;
 import com.shunlian.mylibrary.ImmersionBar;
+import com.tencent.smtt.sdk.WebSettings;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -171,6 +173,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
     }
 
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     public void initDialogs(String url) {
         if (dialog_ad == null) {
             if (isEmpty(url))
@@ -178,12 +181,37 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
             dialog_ad = new Dialog(this, R.style.popAd);
             dialog_ad.setContentView(R.layout.dialog_gold_egg_draw_rule);
             MyImageView miv_close = dialog_ad.findViewById(R.id.miv_close);
-            MyWebView mwv_rule = dialog_ad.findViewById(R.id.mWebView);
+            X5WebView mwv_rule = dialog_ad.findViewById(R.id.mWebView);
             mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
-            mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+//            mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+            mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
+            mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
+//        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
+//        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
+            mwv_rule.getSettings().setAppCacheEnabled(true);
+            mwv_rule.getSettings().setAllowFileAccess(true);
+            //开启DOM缓存，关闭的话H5自身的一些操作是无效的
+            mwv_rule.getSettings().setDomStorageEnabled(true);
+            mwv_rule.getSettings().setAllowContentAccess(true);
+            mwv_rule.getSettings().setDatabaseEnabled(true);
+            mwv_rule.getSettings().setSavePassword(false);
+            mwv_rule.getSettings().setSaveFormData(false);
+            mwv_rule.getSettings().setUseWideViewPort(true);
+            mwv_rule.getSettings().setLoadWithOverviewMode(true);
+
+            mwv_rule.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+            mwv_rule.getSettings().setSupportZoom(false);
+            mwv_rule.getSettings().setBuiltInZoomControls(false);
+            mwv_rule.getSettings().setSupportMultipleWindows(false);
+            mwv_rule.getSettings().setGeolocationEnabled(true);
+            mwv_rule.getSettings().setDatabasePath(this.getDir("databases", 0).getPath());
+            mwv_rule.getSettings().setGeolocationDatabasePath(this.getDir("geolocation", 0)
+                    .getPath());
+            // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+            mwv_rule.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
             mwv_rule.loadUrl(url);
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
-            dialog_ad.setCancelable(false);
+//            dialog_ad.setCancelable(false);
         }
     }
 
@@ -392,27 +420,31 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
     @Override
     public void getDrawRecordList(List<String> recordList) {
-        if (isEmpty(recordList)) {
-            text_switcher.setVisibility(View.GONE);
-            return;
-        } else {
-            text_switcher.setVisibility(View.VISIBLE);
-        }
-        mWarningTextList.clear();
-        mWarningTextList.addAll(recordList);
-        if (mWarningTextList.size() == 1) {
-            text_switcher.setText(mWarningTextList.get(0));
-            index = 0;
-        }
-        if (mWarningTextList.size() > 1) {
-            handler.postDelayed(() -> {
-                if (text_switcher != null)
-                    text_switcher.setText(mWarningTextList.get(0));
+        try{
+            if (isEmpty(recordList)) {
+                text_switcher.setVisibility(View.GONE);
+                return;
+            } else {
+                text_switcher.setVisibility(View.VISIBLE);
+            }
+            mWarningTextList.clear();
+            mWarningTextList.addAll(recordList);
+            if (mWarningTextList.size() == 1) {
+                text_switcher.setText(mWarningTextList.get(0));
                 index = 0;
-            }, 1000);
-            text_switcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom));
-            text_switcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_top));
-            startFlipping();
+            }
+            if (mWarningTextList.size() > 1) {
+                handler.postDelayed(() -> {
+                    if (text_switcher != null)
+                        text_switcher.setText(mWarningTextList.get(0));
+                    index = 0;
+                }, 1000);
+                text_switcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom));
+                text_switcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_top));
+                startFlipping();
+            }
+        }catch (Exception e){
+
         }
     }
 

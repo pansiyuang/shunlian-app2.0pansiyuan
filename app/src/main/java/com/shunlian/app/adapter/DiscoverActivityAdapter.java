@@ -68,7 +68,8 @@ public class DiscoverActivityAdapter extends BaseRecyclerAdapter<DiscoverActivit
             int screenWidth = DeviceInfoUtil.getDeviceWidth(context) - TransformUtil.dip2px(context, 32);
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) activityViewHolder.miv_icon.getLayoutParams();
             layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
-            double height = screenWidth / 710d * 400;
+//            double height = screenWidth / 710d * 400;
+            double height = screenWidth / 686d * 350;
             layoutParams.height = (int) Math.round(height);
             activityViewHolder.miv_icon.setLayoutParams(layoutParams);
         }
