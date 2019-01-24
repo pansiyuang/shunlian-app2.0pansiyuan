@@ -103,12 +103,10 @@ public class SubCommentItemView extends FrameLayout {
         return this;
     }
 
-    public SubCommentItemView setMoreCount(boolean isShow, String count) {
+    public SubCommentItemView setMoreCount(boolean isShow, int count) {
         if (mtv_more_count != null) {
-            if (!TextUtils.isEmpty(count)) {
-                String format = "共%s条回复>";
-                mtv_more_count.setText(String.format(format, count));
-            }
+            String format = "共%d条回复>";
+            mtv_more_count.setText(String.format(format, count));
             mtv_more_count.setVisibility(isShow ? VISIBLE : GONE);
         }
         return this;
@@ -157,6 +155,5 @@ public class SubCommentItemView extends FrameLayout {
 
         void OnReply();
 
-        void OnDel();
     }
 }

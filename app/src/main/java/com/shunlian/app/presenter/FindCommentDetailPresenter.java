@@ -214,7 +214,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     }
 
     @Override
-    protected void delSuccess() {
+    protected void delSuccess(String commentId, String parentCommentId) {
         mReplyListBeans.remove(currentTouchItem);
         adapter.notifyDataSetChanged();
     }
@@ -273,7 +273,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
-                delSuccess();
+                delSuccess("","");
             }
         });
     }

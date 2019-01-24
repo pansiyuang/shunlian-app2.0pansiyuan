@@ -29,7 +29,7 @@ public class FindCommentListEntity {
         public String nickname;
         public String content;
         public int like_count;
-        public String reply_count;
+        public int reply_count;
         public int status;
         public String level;
         public String create_time;

@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.UseCommentEntity;
@@ -52,15 +53,15 @@ public abstract class FindCommentPresenter<T extends IFindCommentView> extends B
         map.put("comment_id", comment_id);
         sortAndMD5(map);
 
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().delComment(getRequestBody(map));
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().delComment(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                delSuccess();
+                delSuccess(entity.data.comment_id, entity.data.reply_parent_comment_id);
             }
         });
     }
 
-    protected abstract void delSuccess();
+    protected abstract void delSuccess(String commentId, String parentCommentId);
 }

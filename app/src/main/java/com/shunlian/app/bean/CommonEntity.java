@@ -92,7 +92,9 @@ public class CommonEntity {
     public int notice;
     public int download;
 
-    public int comment_id;
+    //发现评论
+    public String comment_id;
+    public String reply_parent_comment_id;
 
     @Override
     public String toString() {

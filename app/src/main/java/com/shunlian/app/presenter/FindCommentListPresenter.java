@@ -145,19 +145,24 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     } else {
                         currentLevel = "2";
                         itemComment = mItemComments.get(position).reply_list.get(childPosition);
-                        iView.showorhideKeyboard("@".concat(itemComment.nickname));
+                    }
+                    iView.showorhideKeyboard("@".concat(itemComment.nickname));
+                }
+
+                @Override
+                public void onDel(int position, int childPosition) {
+                    currentTouchItem = position;
+                    if (childPosition == -1) {
+                        itemComment = mItemComments.get(position);
+                        iView.delPrompt();
+                    } else {
+                        itemComment = mItemComments.get(position).reply_list.get(childPosition);
+                        iView.delPrompt();
                     }
                 }
 
                 @Override
-                public void onDel(int position) {
-                    currentTouchItem = position;
-                    itemComment = mItemComments.get(position);
-                    iView.delPrompt();
-                }
-
-                @Override
-                public void onVerify(int position) {
+                public void onVerify(int position, int childPosition) {
 
                 }
             });
@@ -253,10 +258,17 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 //        }
         if ("0".equals(insert_item.level)) {
             mItemComments.add(0, insert_item);
-        } else {
+        } else if ("1".equals(insert_item.level)) {
             for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
                 if (itemComment.id.equals(insert_item.reply_comment_id)) {
-                    itemComment.reply_list.add(0, insert_item);
+                    itemComment.reply_list.add(insert_item);
+                    break;
+                }
+            }
+        } else if ("2".equals(insert_item.level)) {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (itemComment.id.equals(insert_item.reply_parent_comment_id)) {
+                    itemComment.reply_list.add(insert_item);
                     break;
                 }
             }
@@ -270,12 +282,25 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
 
     @Override
-    protected void delSuccess() {
-        mItemComments.remove(currentTouchItem);
-        adapter.notifyDataSetChanged();
-        currentTouchItem = -1;
-        itemComment = null;
-        isEmpty();
+    protected void delSuccess(String commentId, String parentId) {
+        if (isEmpty(parentId)) {
+            mItemComments.remove(currentTouchItem);
+            adapter.notifyDataSetChanged();
+            currentTouchItem = -1;
+            itemComment = null;
+            isEmpty();
+        } else {
+            for (FindCommentListEntity.ItemComment comment : mItemComments) {
+                if (parentId.equals(comment.id)) {
+                    List<FindCommentListEntity.ItemComment> list = comment.reply_list;
+                    list.remove(currentTouchItem);
+                    adapter.notifyDataSetChanged();
+                    currentTouchItem = -1;
+                    itemComment = null;
+                    break;
+                }
+            }
+        }
     }
 
 

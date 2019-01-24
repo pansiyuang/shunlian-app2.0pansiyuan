@@ -23,6 +23,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.CommentBottmDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.SubCommentItemView;
@@ -40,6 +41,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
     //    private final int ITEM_TITLE = 10;
     public int mHotCommentCount;
     private String mCommentType;
+    private CommentBottmDialog mDialog;
     private OnPointFabulousListener mFabulousListener;
 
     public FindCommentListAdapter(Context context, List<FindCommentListEntity.ItemComment> lists, int hotCommentCount, String comment_type) {
@@ -242,14 +244,10 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             view.setHeadPic(replyList.avatar)
                     .setTime(replyList.create_time)
                     .setContent(replyList.content);
-            if (reply_list.size() > 2) {
-                if (j + 1 == reply_list.size()) {
-                    view.setMoreCount(true, itemComment.reply_count);
-                } else {
-                    view.setMoreCount(false, null);
-                }
+            if (j == reply_list.size() - 1) {
+                view.setMoreCount(true, itemComment.reply_count);
             } else {
-                view.setMoreCount(false, null);
+                view.setMoreCount(false, itemComment.reply_count);
             }
 
             int finalJ = j;
@@ -264,13 +262,12 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                 @Override
                 public void OnReply() {
                     if (mFabulousListener != null) {
-                        mFabulousListener.onReply(position, finalJ);
+                        if (replyList.is_self == 1) {
+                            mFabulousListener.onDel(position, finalJ);
+                        } else {
+                            mFabulousListener.onReply(position, finalJ);
+                        }
                     }
-                }
-
-                @Override
-                public void OnDel() {
-
                 }
             });
             mHolder.ll_sub_bg.addView(view);
@@ -370,15 +367,20 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                         return;
                     }
                     if (itemComment.is_self == 1) {
-                        mFabulousListener.onDel(getAdapterPosition());
+                        mFabulousListener.onDel(getAdapterPosition(), -1);
                     } else {
                         mFabulousListener.onReply(getAdapterPosition(), -1);
                     }
                     break;
                 case R.id.tv_verify:
-                    if (mFabulousListener != null) {
-                        mFabulousListener.onVerify(getAdapterPosition());
+                    if (mDialog == null) {
+                        mDialog = new CommentBottmDialog(context);
                     }
+                    mDialog.setCommentData(lists.get(getAdapterPosition()));
+                    mDialog.show();
+//                    if (mFabulousListener != null) {
+//                        mFabulousListener.onVerify(getAdapterPosition(), -1);
+//                    }
                     break;
                 default:
                     if (listener != null) {
@@ -413,8 +415,8 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
 
         void onReply(int position, int childPosition);
 
-        void onDel(int position);
+        void onDel(int position, int childPosition);
 
-        void onVerify(int position);
+        void onVerify(int position, int childPosition);
     }
 }

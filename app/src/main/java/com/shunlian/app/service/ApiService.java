@@ -1324,7 +1324,7 @@ public interface ApiService {
      * @return
      */
     @POST("discovery/comment/delete")
-    Call<BaseEntity<EmptyEntity>> delComment(@Body RequestBody body);
+    Call<BaseEntity<CommonEntity>> delComment(@Body RequestBody body);
 
     /**
      * 导航信息
