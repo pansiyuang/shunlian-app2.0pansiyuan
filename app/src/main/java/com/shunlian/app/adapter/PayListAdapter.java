@@ -48,6 +48,21 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         return new PayListHolder(view);
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
+        if (isEmpty(payloads)) {
+            super.onBindViewHolder(holder, position, payloads);
+        } else {
+            PayListHolder mHolder = (PayListHolder) holder;
+            if (mCurrentPosition == position){
+                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+            }else {
+                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            }
+        }
+
+    }
+
     /**
      * 处理列表
      *
@@ -67,13 +82,14 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         if ("1".equals(payTypes.style)&&!isEmpty(payTypes.name)){
             mHolder.mtv_pay_name.setText(payTypes.name);
             visible(mHolder.mtv_pay_name);
+            gone(mHolder.miv_pic_end);
         }else if ("3".equals(payTypes.style)&&!isEmpty(payTypes.name)){
             mHolder.mtv_pay_name.setText(payTypes.name);
             visible(mHolder.mtv_pay_name,mHolder.miv_pic_end);
-            setWH(payTypes.end_pic,mHolder.miv_pic_end,155, payTypes.code);
+            setWH(payTypes.end_pic,mHolder.miv_pic_end,170, payTypes.code);
             GlideUtils.getInstance().loadImage(context,mHolder.miv_pic_end,payTypes.end_pic);
         }else {
-            gone(mHolder.mtv_pay_name);
+            gone(mHolder.miv_pic_end,mHolder.mtv_pay_name);
         }
 
         if (!isEmpty(payTypes.pic)&&!isEmpty(Common.getURLParameterValue(payTypes.pic, "w"))
@@ -121,8 +137,7 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         int picWidth= Integer.valueOf(Common.getURLParameterValue(url, "w"))
                 *picHeight/Integer.valueOf(Common.getURLParameterValue(url, "h"));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(picWidth,picHeight);
-        params.setMargins(TransformUtil.dip2px(context,marginLeft),
-                0,0,0);
+        params.leftMargin = TransformUtil.dip2px(context,marginLeft);
         imageView.setLayoutParams(params);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
     }

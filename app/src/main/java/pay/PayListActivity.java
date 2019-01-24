@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -40,6 +41,7 @@ import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShapeUtils;
@@ -280,6 +282,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         String paramsStr = intent.getStringExtra("params");
         parseParams(paramsStr);
 
+        setLayoutHeight();
+
         if (!isEmpty(mProductId)) isPLUS = true;
         UPPayAssistEx.getSEPayInfo(this, new UPQuerySEPayInfoCallback() {
             @Override
@@ -315,6 +319,14 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         }else {
             gone(mtv_price);
         }
+    }
+
+    private void setLayoutHeight() {
+        ViewGroup.LayoutParams layoutParams = lLayout_pay.getLayoutParams();
+        int deviceHeight = DeviceInfoUtil.getDeviceHeight(this);
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams.height = (int) (deviceHeight * 0.63f + 0.5f);
+        lLayout_pay.setLayoutParams(layoutParams);
     }
 
     /*
@@ -424,7 +436,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         mPayTypes = payTypes.get(0);
         adapter.setOnItemClickListener((view, position) -> {
             adapter.mCurrentPosition  = position;
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0,payTypes.size(),payTypes);
             mPayTypes = payTypes.get(position);
         });
     }
