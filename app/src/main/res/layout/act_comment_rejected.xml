@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/value_ECECEC" />
+
+
+    <EditText
+        android:id="@+id/met_rejected_content"
+        android:layout_width="match_parent"
+        android:layout_height="116dp"
+        android:layout_margin="12dp"
+        android:background="@color/white_ash"
+        android:gravity="center"
+        android:padding="7.5dp"
+        android:hint="请输入驳回原因"
+        android:textColor="@color/text_gray2"
+        android:textColorHint="@color/text_gray2"
+        android:textSize="17sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="16dp"
+        android:text="快捷驳回原因列表"
+        android:textColor="@color/value_484848"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/value_ECECEC" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

@@ -307,6 +307,8 @@ public class VerifyMobileFrag extends BaseFragment implements INew3LoginView {
         SharedPrefUtil.saveSharedUserString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedUserString("member_id", content.member_id);
         SharedPrefUtil.saveSharedUserString("nickname", content.nickname);
+        if (!isEmpty(content.code))
+            SharedPrefUtil.saveSharedUserString("invite_code", content.code);
         SensorsDataAPI.sharedInstance().login(SharedPrefUtil.getSharedUserString("member_id", ""));
         CrashReport.setUserId(content.member_id);
         if (content.tag != null)

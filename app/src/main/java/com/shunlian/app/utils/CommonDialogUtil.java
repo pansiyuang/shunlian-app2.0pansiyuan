@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +91,7 @@ public class CommonDialogUtil {
         TextView tv_new_submit = dialog_user_info.findViewById(R.id.tv_new_submit);
         TextView  ntv_user_page_price= dialog_user_info.findViewById(R.id.ntv_user_page_price);
         TextView tv_desc_text= dialog_user_info.findViewById(R.id.tv_desc_text);
+        ntv_user_page_price.setText(Common.changeTextSize( context.getResources().getString(R.string.common_yuan)+"?", context.getResources().getString(R.string.common_yuan), 16));
         if(!TextUtils.isEmpty(defaultValue)){
             tv_new_submit.setText(defaultValue);
         }

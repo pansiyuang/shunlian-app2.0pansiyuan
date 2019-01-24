@@ -1,6 +1,7 @@
 package com.shunlian.app.ui;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -31,6 +32,7 @@ import com.shunlian.app.bean.TurnTableEntity;
 import com.shunlian.app.bean.TurnTablePopEntity;
 import com.shunlian.app.presenter.TurnTablePresenter;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -38,11 +40,12 @@ import com.shunlian.app.view.ITurnTableView;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRecyclerView;
-import com.shunlian.app.widget.MyWebView;
 import com.shunlian.app.widget.TurnTableDialog;
+import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.luckWheel.RotateListener;
 import com.shunlian.app.widget.luckWheel.WheelSurfView;
 import com.shunlian.app.wxapi.WXEntryActivity;
+import com.tencent.smtt.sdk.WebSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,6 +167,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
     }
 
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     public void initDialogs(String url) {
         if (dialog_ad == null) {
             if (isEmpty(url))
@@ -172,13 +176,38 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             dialog_ad.setContentView(R.layout.dialog_rule);
             MyImageView miv_close = dialog_ad.findViewById(R.id.miv_close);
             MyImageView miv_ad = dialog_ad.findViewById(R.id.miv_ad);
-            MyWebView mwv_rule = dialog_ad.findViewById(R.id.mwv_rule);
+            X5WebView mwv_rule = dialog_ad.findViewById(R.id.mwv_rule);
             mwv_rule.getSettings().setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
-            mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+//            mwv_rule.setMaxHeight(TransformUtil.dip2px(this, 380));
+            mwv_rule.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
+            mwv_rule.getSettings().setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
+//        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
+//        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
+            mwv_rule.getSettings().setAppCacheEnabled(true);
+            mwv_rule.getSettings().setAllowFileAccess(true);
+            //开启DOM缓存，关闭的话H5自身的一些操作是无效的
+            mwv_rule.getSettings().setDomStorageEnabled(true);
+            mwv_rule.getSettings().setAllowContentAccess(true);
+            mwv_rule.getSettings().setDatabaseEnabled(true);
+            mwv_rule.getSettings().setSavePassword(false);
+            mwv_rule.getSettings().setSaveFormData(false);
+            mwv_rule.getSettings().setUseWideViewPort(true);
+            mwv_rule.getSettings().setLoadWithOverviewMode(true);
+
+            mwv_rule.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+            mwv_rule.getSettings().setSupportZoom(false);
+            mwv_rule.getSettings().setBuiltInZoomControls(false);
+            mwv_rule.getSettings().setSupportMultipleWindows(false);
+            mwv_rule.getSettings().setGeolocationEnabled(true);
+            mwv_rule.getSettings().setDatabasePath(this.getDir("databases", 0).getPath());
+            mwv_rule.getSettings().setGeolocationDatabasePath(this.getDir("geolocation", 0)
+                    .getPath());
+            // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+            mwv_rule.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
             mwv_rule.loadUrl(url);
             miv_ad.setImageResource(R.mipmap.image_renwu_dazhuanpan);
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
-            dialog_ad.setCancelable(false);
+//            dialog_ad.setCancelable(false);
         }
     }
 

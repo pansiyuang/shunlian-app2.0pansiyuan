@@ -219,14 +219,15 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
         coreNewMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                coreNewMenuAdapter.selectedPosition = position;
-                coreNewMenuAdapter.notifyDataSetChanged();
-                cate_name = coreNewEntity.cate_name.get(position).cate_name;
-                cate_id = coreNewEntity.cate_name.get(position).cate_id;
-                if (rv_category.getScrollState() == 0) {
-                    pAishang.resetBaby("new", cate_id);
+                if (position>=0&&coreNewEntity!=null&&coreNewEntity.cate_name.size()>position){
+                    coreNewMenuAdapter.selectedPosition = position;
+                    coreNewMenuAdapter.notifyDataSetChanged();
+                    cate_name = coreNewEntity.cate_name.get(position).cate_name;
+                    cate_id = coreNewEntity.cate_name.get(position).cate_id;
+                    if (rv_category.getScrollState() == 0) {
+                        pAishang.resetBaby("new", cate_id);
+                    }
                 }
-
             }
         });
         rv_categoryMenu.setAdapter(coreNewMenuAdapter);

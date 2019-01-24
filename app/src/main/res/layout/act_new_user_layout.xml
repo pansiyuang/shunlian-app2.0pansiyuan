@@ -65,28 +65,28 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/yy555"
+                    android:layout_height="@dimen/xx560"
                     app:layout_collapseMode="parallax"
                     android:background="@color/white"
                     android:orientation="vertical">
                     <View
                         android:background="@color/pink_color"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/yy276" />
+                        android:layout_height="@dimen/xx280" />
                     <View
                         android:background="@color/white"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/yy276" />
+                        android:layout_height="@dimen/xx280" />
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/yy30"
+                        android:layout_height="@dimen/xx20"
                           android:background="@color/white"></View>
                 </LinearLayout>
                 <com.shunlian.app.widget.banner.MyKanner
                     android:id="@+id/kanner"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/yy480"
-                    android:layout_marginTop="@dimen/yy42"
+                    android:layout_height="@dimen/xx470"
+                    android:layout_marginTop="@dimen/xx30"
                     android:layout_marginLeft="@dimen/yy48"
                     android:layout_marginRight="@dimen/yy48"
                     app:bb_delay="5"

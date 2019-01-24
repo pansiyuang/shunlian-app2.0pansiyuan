@@ -486,4 +486,13 @@
         <attr name="maxHeight" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="SaleProgressView">
+        <attr name="sideColor" format="reference|color" />
+        <attr name="textColorSale" format="reference|color" />
+        <attr name="sideWidth" format="dimension" />
+        <attr name="overText" format="string" />
+        <attr name="nearOverText" format="string" />
+        <attr name="textSizeSale" format="dimension" />
+        <attr name="isNeedAnim" format="boolean" />
+    </declare-styleable>
 </resources>

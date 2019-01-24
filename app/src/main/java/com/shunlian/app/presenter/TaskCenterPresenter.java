@@ -521,6 +521,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                 iView.setGoldEggsCount(data.account_eggs);
                 if (current_task_state == DAILY_TASK)
                     updateItem(0,"1");
+                initApis();
             }
         });
     }

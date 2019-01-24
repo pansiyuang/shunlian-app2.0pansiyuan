@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:id="@+id/title_bar"
-        android:layout_marginTop="20dp"
         android:background="@drawable/bg_border_line_bottom"
         >
         <com.shunlian.app.widget.MyImageView
@@ -28,227 +27,416 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:gravity="center"
-            android:text="我的导购"
+            android:text="我的培训导师"
             android:textColor="@color/value_484848"
             android:textSize="18sp" />
     </RelativeLayout>
 
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/relt_empty_guide"
-        android:visibility="gone"
-        >
-    <com.shunlian.app.widget.empty.NetAndEmptyInterface
-        android:id="@+id/nei_empty"
-        android:layout_below="@+id/search_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="30dp"
-     ></com.shunlian.app.widget.empty.NetAndEmptyInterface>
+        android:background="@mipmap/img_daoshi_beijing">
 
-        <TextView
-            android:id="@+id/tv_add_guide"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="38dp"
-            android:gravity="center"
-            android:background="@drawable/rounded_corner_solid_pink_50px"
-            android:text="去添加导购"
-            android:textSize="15sp"
-            android:textColor="@color/white"
-            android:layout_height="48dp" />
-
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:id="@+id/line_no_weixin"
-        android:background="@mipmap/img_daogou_baise_xiao">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="15dp"
-        android:layout_weight="1">
-        <ImageView
-            android:id="@+id/img__member_head"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="centerCrop"
-            />
-        <TextView
-            android:id="@+id/tv_member_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:gravity="center_horizontal"
-            android:text=""
-            android:textStyle="bold"
-            android:textColor="@color/value_484848"
-            android:layout_marginTop="10dp"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/tv_member_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:gravity="center_horizontal"
-            android:textStyle="normal"
-            android:textColor="@color/value_484848"
-            android:layout_marginTop="10dp"
-            android:textSize="14sp" />
-      </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:paddingBottom="45dp"
+            android:orientation="vertical">
+
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:padding="@dimen/xx52"
+                android:textColor="#AEAEAE"
+                android:lineSpacingExtra="2dp"
+                android:text="想要快速提高销售收入，建议你添加以下社群导师及官方导师为微信好友，获取专属开店培训指导~"/>
+            <LinearLayout
+                android:id="@+id/line_empty_guide"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:ellipsize="end"
-                android:singleLine="true"
+                android:layout_marginLeft="@dimen/xx52"
+                android:layout_marginRight="@dimen/xx52"
+                android:background="@drawable/rounded_corner_white_8px"
                 android:gravity="center"
-                android:text="您的导购暂未上传微信号"
-                android:textStyle="normal"
-                android:textColor="@color/color_value_6c"
-                android:textSize="16sp" />
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/line_have_weixin"
-        android:layout_width="match_parent"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="vertical"
-        android:visibility="visible"
-        android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:orientation="vertical"
-        android:background="@mipmap/img_daogou_baise_da">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="15dp"
-            >
-            <ImageView
-                android:id="@+id/img__weixin_member_head"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:scaleType="centerCrop"
+                android:orientation="vertical"
+                android:padding="25dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加社群导师"
+                    android:textColor="#484848"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="获取导师一对一辅导帮助！"
+                    android:textColor="#484848"
+                    android:textSize="16sp"
+                   />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@mipmap/img_huiyuan_ji"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="您还没有社群导师，赶快去寻找吧！"
+                    android:textColor="#484848"
+                    android:textSize="16sp"
+                    />
+                <TextView
+                    android:id="@+id/tv_add_guide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/img_huiyuan_anniu"
+                    android:gravity="center"
+                    android:paddingLeft="80dp"
+                    android:paddingRight="80dp"
+                    android:text="去添加导师"
+                    android:layout_marginTop="20dp"
+                    android:textColor="#2A2122"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/line_no_weixin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/xx1115"
+                android:layout_marginLeft="@dimen/xx52"
+                android:layout_marginRight="@dimen/xx52"
+                android:background="@mipmap/img_daogou_baise_xiao"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="@dimen/xx855"
+                    android:orientation="vertical"
+                   >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="添加社群导师"
+                        android:textColor="#484848"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/xx40"
+                        android:text="获取导师一对一辅导帮助！"
+                        android:textColor="#484848"
+                        android:textSize="16sp"
+                        />
+                    <ImageView
+                        android:id="@+id/img__member_head"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="@dimen/xx40"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/tv_member_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/xx40"
+                        android:ellipsize="end"
+                        android:gravity="center_horizontal"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="@color/value_484848"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_member_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/xx40"
+                        android:ellipsize="end"
+                        android:gravity="center_horizontal"
+                        android:singleLine="true"
+                        android:textColor="@color/value_484848"
+                        android:textSize="16sp"
+                        android:text=""
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/xx260"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="您的社群导师暂未上传微信号"
+                        android:textColor="@color/color_value_6c"
+                        android:textSize="19sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/line_have_weixin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/xx1315"
+                android:layout_marginLeft="@dimen/xx52"
+                android:layout_marginRight="@dimen/xx52"
+                android:orientation="vertical"
+                android:background="@mipmap/img_daoshi_dibu"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/xx840"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                       >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="添加社群导师"
+                            android:textColor="#484848"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/xx40"
+                            android:text="获取导师一对一辅导帮助！"
+                            android:textColor="#484848"
+                            android:textSize="16sp"
+                            />
+                        <ImageView
+                            android:id="@+id/img__weixin_member_head"
+                            android:layout_width="70dp"
+                            android:layout_marginTop="@dimen/xx40"
+                            android:layout_height="70dp"
+                            android:scaleType="centerCrop" />
+
+                        <TextView
+                            android:id="@+id/tv_weixin_member_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/xx40"
+                            android:ellipsize="end"
+                            android:gravity="center_horizontal"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textColor="@color/value_484848"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_weixin_member_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/xx40"
+                            android:ellipsize="end"
+                            android:gravity="center_horizontal"
+                            android:singleLine="true"
+                            android:textColor="@color/value_484848"
+                            android:textSize="14sp"
+                            android:text=""
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/xx470"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:gravity="center_horizontal"
+                            android:singleLine="true"
+                            android:text="社群导师微信"
+                            android:textColor="@color/text_gray2"
+                            android:textSize="16sp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/tv_weixin_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:ellipsize="end"
+                            android:gravity="center_horizontal"
+                            android:singleLine="true"
+                            android:textColor="#E0B054"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_weixin_copy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:paddingLeft="85dp"
+                            android:paddingRight="85dp"
+                            android:layout_marginTop="15dp"
+                            android:background="@mipmap/img_huiyuan_anniu"
+                            android:gravity="center"
+                            android:text="复制微信号"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="4dp"
+                        android:src="@mipmap/img_dian_zuo" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:gravity="center"
+                        android:lineSpacingExtra="5dp"
+                        android:text="您可以添加您的导购为微信好友，向他了解如何快速无门槛创业。"
+                        android:textColor="#B1B1B1"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="4dp"
+                        android:src="@mipmap/img_dian_you" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/line_bottom_guide"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/xx52"
+                android:layout_marginRight="@dimen/xx52"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_corner_white_8px"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="25dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加官方导师"
+                    android:textColor="#484848"
+                    android:textSize="24sp"
+                    android:paddingTop="8dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="获取官方一手重要资料及培训辅导！"
+                    android:textColor="#484848"
+                    android:textSize="16sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/img_sys_code"
+                    android:layout_width="135dp"
+                    android:layout_height="135dp"
+                    android:layout_marginTop="35dp"
+                    android:scaleType="fitXY"
+                  />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_weixin_sys"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text=""
+                    android:textColor="#484848"
+                    android:textSize="16sp"
+                    />
+                    <TextView
+                        android:id="@+id/tv_weixin_sys_copy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="复制"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="#E0B054"
+                        android:textSize="16sp"
+                        />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_add_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/img_huiyuan_anniu"
+                    android:gravity="center"
+                    android:paddingLeft="55dp"
+                    android:paddingRight="55dp"
+                    android:text="保存二维码到相册"
+                    android:layout_marginTop="20dp"
+                    android:textColor="#2A2122"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_add_meweixin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:text="添加我的微信"
+                android:layout_gravity="center"
+                android:textColor="#E7C37E"
+                android:textSize="16sp"
                 />
-            <TextView
-                android:id="@+id/tv_weixin_member_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:gravity="center_horizontal"
-                android:text=""
-                android:textStyle="bold"
-                android:textColor="@color/value_484848"
-                android:layout_marginTop="10dp"
-                android:textSize="15sp" />
-            <TextView
-                android:id="@+id/tv_weixin_member_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:gravity="center_horizontal"
-                android:textStyle="normal"
-                android:textColor="@color/value_484848"
-                android:layout_marginTop="10dp"
-                android:textSize="14sp" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:orientation="vertical"
-            android:padding="15dp"
-            android:gravity="center"
-          >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:gravity="center_horizontal"
-                android:text="导购专员微信号"
-                android:textStyle="normal"
-                android:textColor="@color/text_gray2"
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/tv_weixin_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:gravity="center_horizontal"
-                android:textStyle="bold"
-                android:textColor="#E0B054"
-                android:layout_marginTop="10dp"
-                android:textSize="18sp" />
-            <TextView
-                android:id="@+id/tv_weixin_copy"
-                android:layout_width="100dp"
-                android:layout_height="30dp"
-                android:gravity="center"
-                android:text="复制微信号"
-                android:textStyle="normal"
-                android:background="@drawable/rounded_corner_solid_e0b054_60px"
-                android:textColor="@color/black"
-                android:layout_marginTop="10dp"
-                android:textSize="12sp" />
-        </LinearLayout>
-    </LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="4dp"
-                android:src="@mipmap/img_dian_zuo"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:textColor="#B1B1B1"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:lineSpacingExtra="5dp"
-                android:text="您可以添加您的导购为微信好友，向他了解如何快速无门槛创业。"
-                android:layout_centerHorizontal="true"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/img_dian_you"/>
-        </RelativeLayout>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

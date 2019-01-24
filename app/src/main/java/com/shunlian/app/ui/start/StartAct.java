@@ -17,6 +17,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
+import com.shunlian.app.bean.ShowSignEntity;
 import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
@@ -230,6 +231,11 @@ public class StartAct extends MBaseActivity implements IMain {
             }
             SharedPrefUtil.saveSharedUserString("plus_role", data.plus_role);
         }
+    }
+
+    @Override
+    public void setADs(ShowSignEntity data) {
+
     }
 
     @Override
