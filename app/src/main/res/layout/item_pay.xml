@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="165dp"
+                android:layout_marginLeft="170dp"
                 android:visibility="gone"/>
 
             <com.shunlian.app.widget.MyImageView
