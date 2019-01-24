@@ -21,6 +21,7 @@
                 android:id="@+id/miv_pay_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_centerVertical="true"
                 android:adjustViewBounds="true"
                 android:layout_marginLeft="10dp"
                 android:scaleType="fitXY" />
@@ -39,7 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:layout_marginLeft="145dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="165dp"
                 android:visibility="gone"/>
 
             <com.shunlian.app.widget.MyImageView

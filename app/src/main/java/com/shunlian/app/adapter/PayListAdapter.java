@@ -67,13 +67,14 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         if ("1".equals(payTypes.style)&&!isEmpty(payTypes.name)){
             mHolder.mtv_pay_name.setText(payTypes.name);
             visible(mHolder.mtv_pay_name);
+            gone(mHolder.miv_pic_end);
         }else if ("3".equals(payTypes.style)&&!isEmpty(payTypes.name)){
             mHolder.mtv_pay_name.setText(payTypes.name);
             visible(mHolder.mtv_pay_name,mHolder.miv_pic_end);
-            setWH(payTypes.end_pic,mHolder.miv_pic_end,155, payTypes.code);
+            setWH(payTypes.end_pic,mHolder.miv_pic_end,165, payTypes.code);
             GlideUtils.getInstance().loadImage(context,mHolder.miv_pic_end,payTypes.end_pic);
         }else {
-            gone(mHolder.mtv_pay_name);
+            gone(mHolder.miv_pic_end,mHolder.mtv_pay_name);
         }
 
         if (!isEmpty(payTypes.pic)&&!isEmpty(Common.getURLParameterValue(payTypes.pic, "w"))
