@@ -984,31 +984,35 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     public void getHistoryMsg(List<MsgInfo> msgInfoList, String lasetSendTime, boolean noMore) {
-        refreshview.stopRefresh(true);
+        try{
+            refreshview.stopRefresh(true);
 
-        if (isFirst) {
-            messages.clear();
+            if (isFirst) {
+                messages.clear();
 
-            if (mGoodsDeatilEntity != null) {
-                buildLinkMessage(mGoodsDeatilEntity);
+                if (mGoodsDeatilEntity != null) {
+                    buildLinkMessage(mGoodsDeatilEntity);
+                }
             }
-        }
 
-        if (!isEmpty(msgInfoList)) {
-            mAdapter.addMsgInfos(0, msgInfoList);
-        }
-        if (noMore) {
-            refreshview.setCanRefresh(false);
-        } else {
-            refreshview.setCanRefresh(true);
-        }
+            if (!isEmpty(msgInfoList)) {
+                mAdapter.addMsgInfos(0, msgInfoList);
+            }
+            if (noMore) {
+                refreshview.setCanRefresh(false);
+            } else {
+                refreshview.setCanRefresh(true);
+            }
 
-        lastMessageSendTime = lasetSendTime;
+            lastMessageSendTime = lasetSendTime;
 
-        if (isFirst) {
-            recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
+            if (isFirst) {
+                recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
+            }
+            isFirst = false;
+        }catch (Exception e){
+
         }
-        isFirst = false;
     }
 
     //压缩图片
