@@ -1,13 +1,27 @@
 package com.shunlian.app.ui.discover_new;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
+import android.app.Service;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,21 +34,27 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
+import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,17 +74,19 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
+    @BindView(R.id.rl_rootView)
+    RelativeLayout rl_rootView;
+
     private HotBlogPresenter hotBlogPresenter;
     private HotBlogAdapter hotBlogAdapter;
     private List<BigImgEntity.Blog> blogList;
     private LinearLayoutManager manager;
     private ObjectMapper objectMapper;
     private PromptDialog promptDialog;
-
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private ShareInfoParam mShareInfoParam;
-
     private LottieAnimationView mAnimationView;
+    private PopupWindow popupWindow;
 
     @Override
     public void onDestroyView() {
@@ -128,6 +150,19 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
                 }
             }
         });
+        SoftKeyBoardListener.setListener(getActivity(), new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+                if (popupWindow != null) {
+                    popupWindow.dismiss();
+                }
+            }
+        });
         super.initListener();
     }
 
@@ -135,7 +170,6 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     public void getBlogList(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage) {
         if (currentPage == 1) {
             blogList.clear();
-
             if (isEmpty(hotBlogsEntity.list)) {
                 nei_empty.setVisibility(View.VISIBLE);
                 recycler_list.setVisibility(View.GONE);
@@ -149,9 +183,12 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(baseActivity, blogList, hotBlogsEntity.ad_list, shareGoodDialogUtil);
+            hotBlogAdapter = new HotBlogAdapter(baseActivity, blogList, hotBlogsEntity.ad_list);
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
+        }
+        if (currentPage == 1 && hotBlogsEntity.base_info != null & hotBlogsEntity.base_info.avatar != null) {
+            hotBlogAdapter.setMyIcon(hotBlogsEntity.base_info.avatar);
         }
         hotBlogAdapter.setPageLoading(currentPage, totalPage);
         hotBlogAdapter.notifyDataSetChanged();
@@ -237,7 +274,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        if(mShareInfoParam==null){
+        if (mShareInfoParam == null) {
             mShareInfoParam = new ShareInfoParam();
         }
         if (mShareInfoParam != null) {
@@ -303,9 +340,14 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         mShareInfoParam = new ShareInfoParam();
         mShareInfoParam.goods_id = goodid;
         mShareInfoParam.blogId = blogId;
-        if(hotBlogPresenter!=null) {
+        if (hotBlogPresenter != null) {
             hotBlogPresenter.getShareInfo(hotBlogPresenter.goods, goodid);
         }
+    }
+
+    @Override
+    public void showCommentView(String blogId) {
+        showPopupComment();
     }
 
     public void saveBaseInfo(HotBlogsEntity.BaseInfo baseInfo) {
@@ -381,5 +423,49 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
             hotBlogPresenter.initPage();
             hotBlogPresenter.getHotBlogList(true);
         }
+    }
+
+    private void popupInputMethodWindow() {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }.start();
+    }
+
+    @SuppressLint("WrongConstant")
+    private void showPopupComment() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_comment_send, null);
+        final EditText inputComment = view.findViewById(R.id.edt_comment);
+        final TextView tvSend = view.findViewById(R.id.tv_send);
+        popupWindow = new PopupWindow(view, RecyclerView.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT, true);
+
+        popupWindow.setTouchable(true);
+        popupWindow.setTouchInterceptor((v, event) -> false);
+        popupWindow.setFocusable(true);
+        // 设置点击窗口外边窗口消失
+        popupWindow.setOutsideTouchable(true);
+
+        // 设置弹出窗体需要软键盘
+        popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+        ColorDrawable cd = new ColorDrawable(0x000000);
+        popupWindow.setBackgroundDrawable(cd);
+        WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
+        params.alpha = 0.4f;
+        getActivity().getWindow().setAttributes(params);
+        popupWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
+        popupWindow.update();
+        popupInputMethodWindow();
+        popupWindow.setOnDismissListener(() -> {
+            WindowManager.LayoutParams params1 = getActivity().getWindow().getAttributes();
+            params1.alpha = 1f;
+            getActivity().getWindow().setAttributes(params1);
+        });
     }
 }

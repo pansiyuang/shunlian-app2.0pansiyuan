@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
@@ -151,7 +152,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), shareGoodDialogUtil);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity());
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }
@@ -309,6 +310,11 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
         if(mPresenter!=null) {
             mPresenter.getShareInfo(mPresenter.goods, goodid);
         }
+    }
+
+    @Override
+    public void showCommentView(String blogId) {
+
     }
 
     @Override

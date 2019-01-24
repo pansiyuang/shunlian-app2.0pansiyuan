@@ -1,7 +1,9 @@
 package com.shunlian.app.presenter;
 
+import android.animation.Animator;
 import android.content.Context;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.FindCommentListAdapter;
 import com.shunlian.app.bean.BaseEntity;
@@ -33,6 +35,8 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     private FindCommentListEntity.ItemComment itemComment;
     private String comment_type;
     private Call<BaseEntity<FindCommentListEntity>> baseEntityCall;
+    private LottieAnimationView mAnimationView;
+    private String currentLevel;
 
     public FindCommentListPresenter(Context context, IFindCommentListView iView, String article_id) {
         super(context, iView);
@@ -50,12 +54,12 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         currentPage = 1;
         allPage = 1;
         isLoading = false;
-        if (baseEntityCall != null)baseEntityCall.cancel();
-        if (adapter != null){
+        if (baseEntityCall != null) baseEntityCall.cancel();
+        if (adapter != null) {
             adapter.unbind();
             adapter = null;
         }
-        if (mItemComments != null){
+        if (mItemComments != null) {
             mItemComments.clear();
             mItemComments = null;
         }
@@ -74,28 +78,28 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(page_size));
-        map.put("article_id", mArticle_id);
+        map.put("discovery_id", mArticle_id);
         sortAndMD5(map);
         baseEntityCall = getApiService().findcommentList(map);
-        getNetData(0, failureCode, isShow, baseEntityCall,
-                new SimpleNetDataCallback<BaseEntity<FindCommentListEntity>>() {
+        getNetData(0, failureCode, isShow, baseEntityCall, new SimpleNetDataCallback<BaseEntity<FindCommentListEntity>>() {
             @Override
             public void onSuccess(BaseEntity<FindCommentListEntity> entity) {
                 super.onSuccess(entity);
                 isLoading = false;
                 FindCommentListEntity data = entity.data;
-                if ("1".equals(data.page)) {
+                FindCommentListEntity.Pager pager = data.pager;
+                if ("1".equals(pager.page)) {
                     if (!isEmpty(data.top_list)) {
                         hotCommentCount = data.top_list.size();
                         mItemComments.addAll(data.top_list);
                     }
                 }
-                currentPage = Integer.parseInt(data.page);
-                allPage = Integer.parseInt(data.total_page);
-                mItemComments.addAll(data.comment_list);
+                currentPage = Integer.parseInt(pager.page);
+                allPage = Integer.parseInt(pager.allPage);
+                mItemComments.addAll(data.list);
                 comment_type = data.comment_type;
                 setCommentList(currentPage, allPage);
-                iView.setCommentAllCount(data.count);
+                iView.setCommentAllCount(data.total);
                 currentPage++;
             }
 
@@ -115,29 +119,47 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
     private void setCommentList(int currentPage, int allPage) {
         if (adapter == null) {
-            adapter = new FindCommentListAdapter(context, mItemComments,
-                    hotCommentCount,comment_type);
+            adapter = new FindCommentListAdapter(context, mItemComments, hotCommentCount, comment_type);
             iView.setAdapter(adapter);
             adapter.setOnReloadListener(() -> onRefresh());
 
-            adapter.setOnItemClickListener((view, position) -> {
-                position = adapter.getPosition(position);
-                currentTouchItem = position;
-                itemComment = mItemComments.get(position);
-                if ("1".equals(itemComment.delete_enable)) {//删除
-                    iView.delPrompt();
-                } else {
-                    if (getIsAllType())
-                    iView.showorhideKeyboard("@".concat(itemComment.nickname));
+            adapter.setPointFabulousListener(new FindCommentListAdapter.OnPointFabulousListener() {
+                @Override
+                public void onPointFabulous(int position, int childPosition, LottieAnimationView lottieAnimationView) {
+                    mAnimationView = lottieAnimationView;
+                    currentTouchItem = position;
+                    FindCommentListEntity.ItemComment itemComment;
+                    if (childPosition != -1) {
+                        itemComment = mItemComments.get(position).reply_list.get(childPosition);
+                    } else {
+                        itemComment = mItemComments.get(position);
+                    }
+                    pointFabulous(itemComment.id, childPosition);
                 }
-            });
 
+                @Override
+                public void onReply(int position, int childPosition) {
+                    if (childPosition == -1) {
+                        currentLevel = "1";
+                        itemComment = mItemComments.get(position);
+                    } else {
+                        currentLevel = "2";
+                        itemComment = mItemComments.get(position).reply_list.get(childPosition);
+                        iView.showorhideKeyboard("@".concat(itemComment.nickname));
+                    }
+                }
 
-            adapter.setPointFabulousListener(position -> {
-                position = adapter.getPosition(position);
-                currentTouchItem = position;
-                FindCommentListEntity.ItemComment itemComment = mItemComments.get(position);
-                pointFabulous(itemComment.item_id, itemComment.had_like);
+                @Override
+                public void onDel(int position) {
+                    currentTouchItem = position;
+                    itemComment = mItemComments.get(position);
+                    iView.delPrompt();
+                }
+
+                @Override
+                public void onVerify(int position) {
+
+                }
             });
         } else {
             adapter.notifyDataSetChanged();
@@ -158,62 +180,93 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     }
 
 
-    public void pointFabulous(String item_id, String opt) {
+    public void pointFabulous(String item_id, int childPosition) {
         Map<String, String> map = new HashMap<>();
-        map.put("item_id", item_id);
-        if ("1".equals(opt)) {
-            map.put("opt", "unlike");
-        } else {
-            map.put("opt", "like");
-        }
+        map.put("comment_id", item_id);
+        map.put("like_status", "1");
         sortAndMD5(map);
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().pointFabulous(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().pointFabulous(getRequestBody(map));
         getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                setPointFabulous(entity.data.new_likes);
+                setPointFabulous(childPosition);
             }
         });
     }
 
-    private void setPointFabulous(String new_likes) {
-        FindCommentListEntity.ItemComment itemComment = mItemComments.get(currentTouchItem);
-        itemComment.likes = new_likes;
-        itemComment.had_like = "0".equals(itemComment.had_like) ? "1" : "0";
-        adapter.notifyDataSetChanged();
-        currentTouchItem = -1;
+    private void setPointFabulous(int childPosition) {
+        if (mAnimationView != null) {
+            mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    FindCommentListEntity.ItemComment itemComment;
+                    if (childPosition == -1) {
+                        itemComment = mItemComments.get(currentTouchItem);
+                    } else {
+                        itemComment = mItemComments.get(currentTouchItem).reply_list.get(childPosition);
+                    }
+                    itemComment.like_count++;
+                    itemComment.like_status = "1";
+                    adapter.notifyDataSetChanged();
+                    currentTouchItem = -1;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            mAnimationView.playAnimation();
+        }
     }
 
-
-    public void sendComment(String content) {
+    public void sendComment(String content, String level) {
         String pid = "";
         if (itemComment != null) {
-            pid = itemComment.item_id;
+            pid = itemComment.id;
         }
-        sendComment(content, pid, mArticle_id, "list");
+        sendComment(content, pid, mArticle_id, level);
     }
 
     @Override
     protected void refreshItem(FindCommentListEntity.ItemComment insert_item, String message) {
-        if (!getIsAllType()){
-            Common.staticToasts(context, message, R.mipmap.icon_common_duihao);
-            return;
-        }
-        Common.staticToasts(context, getStringResouce(R.string.send_success),
-                R.mipmap.icon_common_duihao);
-        if (currentTouchItem != -1) {
-            mItemComments.remove(currentTouchItem);
-            mItemComments.add(currentTouchItem, insert_item);
+//        if (!getIsAllType()) {
+//            Common.staticToasts(context, message, R.mipmap.icon_common_duihao);
+//            return;
+//        }
+        Common.staticToasts(context, getStringResouce(R.string.send_success), R.mipmap.icon_common_duihao);
+//        if (currentTouchItem != -1) {
+//            mItemComments.remove(currentTouchItem);
+//            mItemComments.add(currentTouchItem, insert_item);
+//        } else {
+//        }
+        if ("0".equals(insert_item.level)) {
+            mItemComments.add(0, insert_item);
         } else {
-            mItemComments.add(hotCommentCount, insert_item);
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (itemComment.id.equals(insert_item.reply_comment_id)) {
+                    itemComment.reply_list.add(0, insert_item);
+                    break;
+                }
+            }
         }
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         itemComment = null;
         isEmpty();
+        currentLevel = "0";
     }
-
 
 
     @Override
@@ -227,14 +280,22 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
 
     public void delComment() {
-        delComment(itemComment.item_id);
+        delComment(itemComment.id);
+    }
+
+    public String getCommentLevel() {
+        if (isEmpty(currentLevel)) {
+            return "0";
+        }
+        return currentLevel;
     }
 
     /**
      * 评论类型，true是all，否则精选
+     *
      * @return
      */
-    private boolean getIsAllType(){
+    private boolean getIsAllType() {
         if ("all".equals(comment_type))
             return true;
         else
@@ -242,9 +303,9 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     }
 
     private void isEmpty() {
-        if (isEmpty(mItemComments)){
+        if (isEmpty(mItemComments)) {
             iView.showDataEmptyView(100);
-        }else {
+        } else {
             iView.showDataEmptyView(0);
         }
     }

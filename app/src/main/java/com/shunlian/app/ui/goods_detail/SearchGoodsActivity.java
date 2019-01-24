@@ -240,10 +240,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                             SharedPrefUtil.saveCacheSharedPrf(save_shop_history, concat);
                         }
                         JosnSensorsDataAPI.isHistory = false;
-                        if (currentKeyWord!=null){
-                            if(currentKeyWord.equals(text.toString())||text==null||text.toString().equals("")){
+                        if (currentKeyWord != null) {
+                            if (currentKeyWord.equals(text.toString()) || text == null || text.toString().equals("")) {
                                 JosnSensorsDataAPI.isRecommend = true;
-                            }else{
+                            } else {
                                 JosnSensorsDataAPI.isRecommend = false;
                             }
                         }
@@ -251,12 +251,12 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         finish();
                     }
                     return true;
-                } else if (text!=null){
+                } else if (text != null) {
                     JosnSensorsDataAPI.isHistory = false;
-                    if (currentKeyWord!=null){
-                        if(text==null||currentKeyWord.equals(text.toString())||text.toString().equals("")){
+                    if (currentKeyWord != null) {
+                        if (text == null || currentKeyWord.equals(text.toString()) || text.toString().equals("")) {
                             JosnSensorsDataAPI.isRecommend = true;
-                        }else{
+                        } else {
                             JosnSensorsDataAPI.isRecommend = false;
                         }
                     }
@@ -320,8 +320,8 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 TextView tv = view.findViewById(R.id.tv_history_tag);
                 tv.setText(hotKeyword.label);
                 if (1 == hotKeyword.high_light) {
-                    tv.setBackgroundResource(R.drawable.rounded_corner_solid_ff5c7f_8px);
-                    tv.setTextColor(getColorResouce(R.color.white));
+                    tv.setBackgroundResource(R.drawable.rounded_corner_stroke_pink_4px);
+                    tv.setTextColor(getColorResouce(R.color.pink_color));
                 } else {
                     tv.setBackgroundResource(R.drawable.rounded_corner_solid_f7_8px);
                     tv.setTextColor(getColorResouce(R.color.text_gray2));

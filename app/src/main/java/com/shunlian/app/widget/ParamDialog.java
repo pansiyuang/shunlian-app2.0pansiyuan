@@ -57,7 +57,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     @BindView(R.id.tv_count)
     TextView tv_count;
     @BindView(R.id.recycler_param)
-    RecyclerView recycler_param;
+    MaxHeightRecyclerView recycler_param;
     @BindView(R.id.btn_minus)
     Button btn_minus;
     @BindView(R.id.btn_add)
@@ -89,7 +89,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private List<GoodsDeatilEntity.Values> mCurrentValues;
     private OnSelectCallBack selectCallBack;
     private OnGoodsBuyCallBack goodsBuyCallBack;
-    private int recycleHeight;
+//    private int recycleHeight;
     private int totalStock;
     private String hasOption = "0";//是否有参数
     private int limit_min_buy = 1;//团购最小购买数
@@ -146,7 +146,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         initListeners();
         setCanceledOnTouchOutside(false);
 
-        recycleHeight = getDeviceHeight(mContext) * 1 / 3;
+//        recycleHeight = getDeviceHeight(mContext) * 1 / 3;
         Window win = getWindow();
         WindowManager.LayoutParams lp = win.getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -154,8 +154,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         lp.gravity = Gravity.BOTTOM;
         win.setAttributes(lp);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
-        recycler_param.setLayoutParams(params);
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
+//        recycler_param.setLayoutParams(params);
         edt_number.setText(String.valueOf(currentCount));
         edt_number.setSelection(String.valueOf(currentCount).length());
         edt_number.addTextChangedListener(new TextWatcher() {

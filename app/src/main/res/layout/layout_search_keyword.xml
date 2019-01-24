@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingTop="9dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="23dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="亲,暂时没有搜索结果,您是不是要搜："
+            android:textColor="@color/value_484848"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.flowlayout.TagFlowLayout
+            android:id="@+id/taglayout_keyword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:max_select="1"></com.shunlian.app.widget.flowlayout.TagFlowLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_ash"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="0.5dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/color_value_6c" />
+
+        <TextView
+            android:id="@+id/tv_keyword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我们为您推荐了“牛仔裤”"
+            android:textColor="@color/value_484848"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:background="@color/color_value_6c" />
+    </LinearLayout>
+</LinearLayout>

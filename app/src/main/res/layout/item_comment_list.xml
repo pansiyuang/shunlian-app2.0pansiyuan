@@ -2,8 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/white"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
     <RelativeLayout
         android:id="@+id/rlayout_comment"
@@ -13,27 +13,44 @@
 
         <View
             android:id="@+id/view_line"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="15dp" />
+            android:layout_height="15dp"
+            android:visibility="gone" />
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/civ_head"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:scaleType="fitXY"
+        <RelativeLayout
+            android:id="@+id/rl_head"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_below="@+id/view_line"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="12dp">
 
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/civ_head"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:scaleType="fitXY" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_v"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:scaleType="fitXY" />
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/ll_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/civ_head"
+            android:layout_height="32dp"
+            android:layout_alignTop="@+id/rl_head"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_toRightOf="@+id/civ_head"
+            android:layout_toRightOf="@+id/rl_head"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -41,9 +58,17 @@
                 android:id="@+id/mtv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/new_text"
-                android:textSize="14sp" />
+                android:text="撒个亚希哈亚米吉"
+                android:textColor="@color/value_484848"
+                android:textSize="15sp" />
 
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_expert"
+                android:layout_width="40dp"
+                android:layout_height="14dp"
+                android:layout_marginLeft="5dp"
+                android:scaleType="fitXY"
+                android:visibility="gone" />
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_vip"
@@ -52,7 +77,7 @@
                 app:iv_control_adapter="true"
                 app:iv_control_height="26"
                 app:iv_control_width="26"
-                app:iv_margin_left="10"/>
+                app:iv_margin_left="10" />
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_medal"
@@ -66,71 +91,99 @@
                 android:layout_height="0.5dp"
                 android:layout_weight="1" />
 
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_zan_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:gravity="right"
-                android:textColor="@color/share_text"
-                android:textSize="12sp" />
-
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_zan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/img_pingjia_zan_n" />
         </LinearLayout>
-
-
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ll_title"
-            android:layout_below="@+id/ll_title"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/share_text"
-            android:textSize="12sp" />
-
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/mtv_time"
-            android:layout_alignRight="@+id/ll_title"
-            android:layout_below="@+id/mtv_time"
-            android:layout_marginTop="15dp"
-            android:textColor="@color/new_text"
+            android:layout_below="@+id/ll_title"
+            android:layout_alignLeft="@+id/ll_title"
+            android:layout_marginRight="22dp"
+            android:text="学恶乎始？恶乎终？曰：其数则始乎诵经终乎读礼；其义则始乎为士，终乎为圣人真积力久则入，学至乎没而后止也。故学数有终若其义则不可须臾舍也。"
+            android:textColor="@color/value_484848"
             android:textSize="14sp" />
 
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_sanjiao"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/rl_bottom"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/mtv_content"
             android:layout_below="@+id/mtv_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="6dp"
-            android:src="@mipmap/img_sanjiao" />
+            android:layout_alignLeft="@+id/ll_title">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="2小时前"
+                android:textColor="@color/text_gray2"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_zan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="27dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animation_zan"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp" />
+
+                    <TextView
+                        android:id="@+id/tv_zan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-13dp"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/value_343434"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="27dp"
+                    android:text="回复"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_verify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="27dp"
+                    android:text="审核"
+                    android:textColor="@color/pink_color"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/ll_sub_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_bottom"
             android:layout_alignLeft="@+id/mtv_content"
-            android:layout_alignRight="@+id/mtv_content"
-            android:layout_below="@+id/miv_sanjiao"
+            android:layout_marginRight="10dp"
             android:background="@drawable/rounded_rectangle_gray_6px"
             android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="10dp">
-
-        </LinearLayout>
-
+            android:paddingBottom="10dp"></LinearLayout>
     </RelativeLayout>
 
     <!--空页面-->

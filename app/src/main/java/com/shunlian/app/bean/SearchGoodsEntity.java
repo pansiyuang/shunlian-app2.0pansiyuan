@@ -14,6 +14,7 @@ public class SearchGoodsEntity {
     public String total_page;
     public String page;
     public String page_size;
+    public List<String> keyword_list;
     public List<GoodsDeatilEntity.Goods> goods_list;
     public RefStore ref_store;
 

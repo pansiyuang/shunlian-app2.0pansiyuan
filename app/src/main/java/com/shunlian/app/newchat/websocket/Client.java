@@ -18,8 +18,8 @@ public class Client extends WebSocketClient {
     private static long timeout = 15 * 1000;
     private TimeOutThread timeOutThread;
 
-    public Client(URI serverUri, Draft draft) {
-        super(serverUri, draft);
+    public Client(URI serverUri) {
+        super(serverUri);
     }
 
     /**

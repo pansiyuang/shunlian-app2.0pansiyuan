@@ -13,12 +13,17 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
+import com.shunlian.app.ui.category.CategoryAct;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.flowlayout.FlowLayout;
+import com.shunlian.app.widget.flowlayout.TagAdapter;
+import com.shunlian.app.widget.flowlayout.TagFlowLayout;
 
 import java.util.List;
 
@@ -31,19 +36,22 @@ import butterknife.BindView;
 
 public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
     public static final int BANANER_LAYOUT = 11;
+    public static final int KEYWORD_LAYOUT = 12;
 
     private LayoutInflater mInflater;
     private SearchGoodsEntity.RefStore mStore;
     private RecyclerView.LayoutParams params;
     private List<GoodsDeatilEntity.Goods> mGoods;
+    private List<String> mKeywords;
     private StringBuffer mSb;
 
-    public DoubleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, SearchGoodsEntity.RefStore store) {
+    public DoubleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, SearchGoodsEntity.RefStore store, List<String> keywordList) {
         super(context, isShowFooter, lists);
         mInflater = LayoutInflater.from(context);
         params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mStore = store;
         this.mGoods = lists;
+        this.mKeywords = keywordList;
         mSb = new StringBuffer();
     }
 
@@ -53,6 +61,10 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
     public void setStoreData(SearchGoodsEntity.RefStore store) {
         this.mStore = store;
+    }
+
+    public void setKeywordData(List<String> keywordList) {
+        this.mKeywords = keywordList;
     }
 
     /**
@@ -83,6 +95,9 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             case BANANER_LAYOUT:
                 TitleViewHolder viewHolder = new TitleViewHolder(mInflater.inflate(R.layout.layout_sort_title, parent, false));
                 return viewHolder;
+            case KEYWORD_LAYOUT:
+                KeywordViewHolder keywordViewHolder = new KeywordViewHolder(mInflater.inflate(R.layout.layout_search_keyword, parent, false));
+                return keywordViewHolder;
             default:
                 return super.onCreateViewHolder(parent, viewType);
         }
@@ -93,12 +108,18 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         if (position == 0 && mStore != null) {
             return BANANER_LAYOUT;
         }
+        if (position == 0 && !isEmpty(mKeywords)) {
+            return KEYWORD_LAYOUT;
+        }
         return super.getItemViewType(position);
     }
 
     @Override
     public int getItemCount() {
         if (mStore != null) {
+            return super.getItemCount() + 1;
+        }
+        if (mKeywords != null) {
             return super.getItemCount() + 1;
         }
         return super.getItemCount();
@@ -262,11 +283,40 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         }
     }
 
+    public void handlKeyword(RecyclerView.ViewHolder holder) {
+        if (holder instanceof KeywordViewHolder) {
+            KeywordViewHolder keywordViewHolder = (KeywordViewHolder) holder;
+            TagAdapter historyAdapter = new TagAdapter<String>(mKeywords) {
+                @Override
+                public View getView(FlowLayout parent, int position, String s) {
+                    View view = LayoutInflater.from(context).inflate(R.layout.item_goods_tag_layout, keywordViewHolder.taglayout_keyword, false);
+                    TextView tv = view.findViewById(R.id.tv_history_tag);
+                    tv.setText(s);
+                    return view;
+                }
+            };
+            keywordViewHolder.taglayout_keyword.setAdapter(historyAdapter);
+            if (!isEmpty(mKeywords.get(0))) {
+                keywordViewHolder.tv_keyword.setText("我们为您推荐了“" + mKeywords.get(0) + "”");
+            }
+            keywordViewHolder.taglayout_keyword.setOnTagClickListener((view, position, parent) -> {
+                String s = mKeywords.get(position);
+                if (context instanceof CategoryAct) {
+                    ((CategoryAct) context).requestData(s);
+                }
+                return false;
+            });
+        }
+    }
+
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case BANANER_LAYOUT:
                 handTitle(holder);
+                break;
+            case KEYWORD_LAYOUT:
+                handlKeyword(holder);
                 break;
             default:
                 handItem(holder, position);
@@ -291,6 +341,8 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                     int type = getItemViewType(position);
                     switch (type) {
                         case BANANER_LAYOUT:
+                            return gridManager.getSpanCount();
+                        case KEYWORD_LAYOUT:
                             return gridManager.getSpanCount();
                         default:
                             return 1;
@@ -348,14 +400,24 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         public TitleViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mStore != null) {
-                        StoreAct.startAct(context, mStore.store_id);
-                    }
+            itemView.setOnClickListener(v -> {
+                if (mStore != null) {
+                    StoreAct.startAct(context, mStore.store_id);
                 }
             });
+        }
+    }
+
+    public class KeywordViewHolder extends BaseRecyclerViewHolder {
+
+        @BindView(R.id.taglayout_keyword)
+        TagFlowLayout taglayout_keyword;
+
+        @BindView(R.id.tv_keyword)
+        TextView tv_keyword;
+
+        public KeywordViewHolder(View itemView) {
+            super(itemView);
         }
     }
 
