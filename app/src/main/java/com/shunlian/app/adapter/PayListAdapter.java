@@ -48,6 +48,21 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         return new PayListHolder(view);
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
+        if (isEmpty(payloads)) {
+            super.onBindViewHolder(holder, position, payloads);
+        } else {
+            PayListHolder mHolder = (PayListHolder) holder;
+            if (mCurrentPosition == position){
+                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+            }else {
+                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            }
+        }
+
+    }
+
     /**
      * 处理列表
      *
@@ -122,8 +137,7 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         int picWidth= Integer.valueOf(Common.getURLParameterValue(url, "w"))
                 *picHeight/Integer.valueOf(Common.getURLParameterValue(url, "h"));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(picWidth,picHeight);
-        params.setMargins(TransformUtil.dip2px(context,marginLeft),
-                0,0,0);
+        params.leftMargin = TransformUtil.dip2px(context,marginLeft);
         imageView.setLayoutParams(params);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
     }

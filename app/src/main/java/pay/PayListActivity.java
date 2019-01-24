@@ -436,7 +436,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         mPayTypes = payTypes.get(0);
         adapter.setOnItemClickListener((view, position) -> {
             adapter.mCurrentPosition  = position;
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0,payTypes.size(),payTypes);
             mPayTypes = payTypes.get(position);
         });
     }
