@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
@@ -172,7 +173,7 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
             attentionAdapter.setHasFocus(hotBlogsEntity.is_have_focus);
         } else {
             if (hotBlogAdapter == null) {
-                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList, shareGoodDialogUtil);
+                hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), recomandFocusList);
                 hotBlogAdapter.setAdapterCallBack(this);
                 hotBlogAdapter.setShowAttention(false);
             }
@@ -376,6 +377,11 @@ public class AttentionFrag extends BaseLazyFragment implements IAttentionView, H
         if(mPresenter!=null) {
             mPresenter.getShareInfo(mPresenter.goods, goodid);
         }
+    }
+
+    @Override
+    public void showCommentView(String blogId) {
+
     }
 
     @Override

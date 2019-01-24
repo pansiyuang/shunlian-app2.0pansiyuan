@@ -222,7 +222,8 @@
                         android:text="长按识别二维码"
                         android:layout_marginTop="@dimen/xx16"
                         android:gravity="center"
-                        android:textColor="@color/my_gray_one"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_gray2"
                         android:layout_gravity="center_horizontal"
                         android:textSize="9sp" />
                 </LinearLayout>

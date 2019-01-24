@@ -1270,7 +1270,7 @@ public interface ApiService {
      * @param map
      * @return
      */
-    @GET("discovery/nice/commentList")
+    @GET("discovery/comment/list")
     Call<BaseEntity<FindCommentListEntity>> findcommentList(@QueryMap Map<String, String> map);
 
     /**
@@ -1278,8 +1278,8 @@ public interface ApiService {
      *
      * @return
      */
-    @POST("discovery/user/comment")
-    Call<BaseEntity<UseCommentEntity>> sendComment(@Body RequestBody body);
+    @POST("discovery/comment/save")
+    Call<BaseEntity<FindCommentListEntity.ItemComment>> sendComment(@Body RequestBody body);
 
     /**
      * 推荐关注
@@ -1309,13 +1309,13 @@ public interface ApiService {
     Call<BaseEntity<GuanzhuEntity>> foucsHome(@QueryMap Map<String, String> map);
 
     /**
-     * 点赞
+     * 发现点赞
      *
-     * @param map
+     * @param body
      * @return
      */
-    @GET("discovery/user/likeCommentOrReply")
-    Call<BaseEntity<CommonEntity>> pointFabulous(@QueryMap Map<String, String> map);
+    @POST("discovery/comment/like")
+    Call<BaseEntity<CommonEntity>> pointFabulous(@Body RequestBody body);
 
     /**
      * 删除评论
@@ -1323,8 +1323,8 @@ public interface ApiService {
      * @param map
      * @return
      */
-    @GET("discovery/user/deleteComment")
-    Call<BaseEntity<EmptyEntity>> delComment(@QueryMap Map<String, String> map);
+    @POST("discovery/comment/delete")
+    Call<BaseEntity<EmptyEntity>> delComment(@Body RequestBody body);
 
     /**
      * 导航信息

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:orientation="vertical">
 
     <com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout
         android:id="@+id/lay_refresh"
-        app:mode="follow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_ash">
+        android:background="@color/white_ash"
+        app:mode="follow">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_list"
@@ -25,11 +26,11 @@
         android:id="@+id/nei_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_title"
         android:visibility="gone" />
+
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+</RelativeLayout>

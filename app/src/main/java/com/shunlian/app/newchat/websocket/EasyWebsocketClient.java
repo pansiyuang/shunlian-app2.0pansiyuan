@@ -23,7 +23,6 @@ import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 
 import org.greenrobot.eventbus.EventBus;
-import org.java_websocket.drafts.Draft_17;
 import org.json.JSONObject;
 
 import java.net.URI;
@@ -115,7 +114,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                 mClient.removeListener();
                 mClient = null;
             }
-            mClient = new Client(new URI(InterentTools.HTTPADDR_IM), new Draft_17());//ws://123.207.107.21:8086.
+            mClient = new Client(new URI(InterentTools.HTTPADDR_IM));//ws://123.207.107.21:8086.
             mClient.setOnClientConnetListener(this);
             mClient.connect();
         } catch (java.net.URISyntaxException e) {

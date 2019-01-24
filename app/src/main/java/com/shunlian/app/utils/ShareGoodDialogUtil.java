@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -299,13 +300,15 @@ public class ShareGoodDialogUtil {
                 mtv_coupon_title.setVisibility(View.VISIBLE);
                 mtv_coupon_title.setText(mShareInfoParam.voucher);
                 if(mShareInfoParam.voucher.length()>2) {
-                    SpannableStringBuilder span = new SpannableStringBuilder((mShareInfoParam.voucher).substring(0, mShareInfoParam.voucher.length() - 1) + mShareInfoParam.title);
-                    span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, (mShareInfoParam.voucher).length() - 1,
+                    AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(12, true);
+                    SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher + mShareInfoParam.title);
+                    span.setSpan(sizeSpan, 0,  mShareInfoParam.voucher.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, (mShareInfoParam.voucher).length(),
                             Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     mtv_title.setText(span);
                 }else{
-                    SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher.substring(0, mShareInfoParam.voucher.length() - 1) + mShareInfoParam.title);
-                    span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length() - 1,
+                    SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher.substring(0, mShareInfoParam.voucher.length()) + mShareInfoParam.title);
+                    span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
                             Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     mtv_title.setText(span);
                 }
@@ -564,10 +567,12 @@ public class ShareGoodDialogUtil {
             MyTextView  mtv_coupon_title =  inflate.findViewById(R.id.mtv_coupon_title);
             RelativeLayout relt_share_image = inflate.findViewById(R.id.relt_share_image);
             if(!TextUtils.isEmpty(mShareInfoParam.voucher)){
+                AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(15, true);
                 mtv_coupon_title.setVisibility(View.VISIBLE);
                 mtv_coupon_title.setText(mShareInfoParam.voucher);
-                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher+mShareInfoParam.title);
-                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, mShareInfoParam.voucher.length(),
+                SpannableStringBuilder span = new SpannableStringBuilder(mShareInfoParam.voucher + mShareInfoParam.title);
+                span.setSpan(sizeSpan, 0,  mShareInfoParam.voucher.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, (mShareInfoParam.voucher).length(),
                         Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 mtv_title.setText(span);
             }else{
