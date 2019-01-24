@@ -336,51 +336,55 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         csv_out.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
-                    LogUtil.longW(csv_out.getScrollY()+"");
-                    if(csv_out.getScrollY()==0) {
-                        int action = event.getAction();
-                        switch (action) {
-                            case MotionEvent.ACTION_DOWN:
-                                lastY = event.getY();
-                                isDownUp = true;
-                                break;
-                            case MotionEvent.ACTION_UP:
+                try {
+                    if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
+                        LogUtil.longW(csv_out.getScrollY() + "");
+                        if (csv_out.getScrollY() == 0) {
+                            int action = event.getAction();
+                            switch (action) {
+                                case MotionEvent.ACTION_DOWN:
+                                    lastY = event.getY();
+                                    isDownUp = true;
+                                    break;
+                                case MotionEvent.ACTION_UP:
+                                    spring.removeAllListeners();
+                                    isDownUp = false;
+                                    lastY = 0;
+                                    handler.sendEmptyMessage(0);
+                                    break;
+                                case MotionEvent.ACTION_MOVE:
+                                    if (isDownUp) {
+                                        float nowY = event.getY();
+                                        if (nowY - lastY > 0) {
+                                            int deltaY = (int) ((nowY - lastY) * lastY_damping);
+                                            if (line_anim.getTranslationY() < DensityUtil.dip2px(baseContext, 65)) {
+                                                line_anim.setTranslationY(deltaY);
+                                            }
+                                        } else {
+                                            line_anim.setTranslationY(0);
+                                        }
+                                    } else {
+                                        lastY = event.getY();
+                                        isDownUp = true;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                            return false;
+                        } else {
+                            if (line_anim.getTranslationY() != 0 && isDownUp) {
                                 spring.removeAllListeners();
                                 isDownUp = false;
                                 lastY = 0;
                                 handler.sendEmptyMessage(0);
-                                break;
-                            case MotionEvent.ACTION_MOVE:
-                                if (isDownUp) {
-                                    float nowY = event.getY();
-                                    if (nowY - lastY > 0) {
-                                        int deltaY = (int) ((nowY - lastY) * lastY_damping);
-                                        if (line_anim.getTranslationY() < DensityUtil.dip2px(baseContext, 65)) {
-                                              line_anim.setTranslationY(deltaY);
-                                        }
-                                    } else {
-                                        line_anim.setTranslationY(0);
-                                    }
-                                } else {
-                                    lastY = event.getY();
-                                    isDownUp = true;
-                                }
-                                break;
-                            default:
-                                break;
+                            }
+                            return false;
                         }
-                        return false;
-                    }else{
-                        if(line_anim.getTranslationY()!=0&&isDownUp){
-                            spring.removeAllListeners();
-                            isDownUp = false;
-                            lastY = 0;
-                            handler.sendEmptyMessage(0);
-                        }
+                    } else {
                         return false;
                     }
-                }else{
+                } catch (Exception e) {
                     return false;
                 }
             }

@@ -250,7 +250,8 @@ public class Common {
                 return "NewUserPageActivity";
             case "url":
             case "noTitleUrl":
-                return "H5Act";
+                return "H5X5Act";
+//                return "H5Act";
             case "HTMLShare":
                 return "WXEntryActivity";
             case "attentionList":
