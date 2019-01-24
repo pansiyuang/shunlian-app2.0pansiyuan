@@ -481,6 +481,11 @@
         <attr name="hint_text_color" format="color" />
         <attr name="is_mobile" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="MaxHeightRecyclerView">
+        <attr name="maxHeight" format="dimension" />
+    </declare-styleable>
+
     <declare-styleable name="SaleProgressView">
         <attr name="sideColor" format="reference|color" />
         <attr name="textColorSale" format="reference|color" />

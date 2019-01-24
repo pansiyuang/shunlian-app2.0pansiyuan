@@ -65,7 +65,7 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
     public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
         super.setFooterHolderParams(baseFooterHolder);
         baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
-        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white));
         baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_no_more.setTextSize(12);
         baseFooterHolder.layout_load_error.setTextSize(12);

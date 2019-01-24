@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
@@ -25,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -38,6 +40,7 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.discover_new.ActivityDetailActivity;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.VideoGoodPlayActivity;
@@ -66,6 +69,7 @@ import com.shunlian.app.widget.NewLookBigImgAct;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.SaveImgDialog;
 import com.shunlian.app.widget.banner.MyKanner;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -97,6 +101,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private DownloadUtils downloadUtils;
     private HttpDialog httpDialog;
     private String currentBlogId;
+    private String myImageUrl;
 
     private DownLoadQRCodeImageUtil downLoadQRCodeImageUtil;
     private Handler mHandler = new Handler() {
@@ -146,17 +151,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         }
     };
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, ShareGoodDialogUtil mShareGoodDialogUtil) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity) {
         super(context, true, lists);
         this.mActivity = activity;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads, ShareGoodDialogUtil mShareGoodDialogUtil) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads) {
         super(context, true, lists);
         this.adList = ads;
     }
 
-    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list, ShareGoodDialogUtil mShareGoodDialogUtil) {
+    public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list) {
         super(context, true, lists);
         this.mActivity = activity;
         this.recomandFocusList = list;
@@ -168,6 +173,10 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
     public void setShowMore(boolean isShow) {
         isShowMore = isShow;
+    }
+
+    public void setMyIcon(String url) {
+        myImageUrl = url;
     }
 
     @Override
@@ -334,6 +343,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             blogViewHolder.tv_address.setText(blog.place);
             blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
             blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
+            GlideUtils.getInstance().loadCircleAvar(context, blogViewHolder.miv_comment_icon, myImageUrl);
 
             if (isEmpty(blog.activity_title)) {
                 blogViewHolder.tv_tag.setVisibility(View.GONE);
@@ -357,7 +367,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 int i = TransformUtil.dip2px(context, 10);
                 TransformUtil.expandViewTouchDelegate(blogViewHolder.tv_share_count, i, i, i, i);
                 blogViewHolder.tv_share_count.setOnClickListener(view -> {
-                    if(mCallBack!=null) {
+                    if (mCallBack != null) {
                         mCallBack.getShareInfo(blog.id, goods.goods_id);
                     }
                 });
@@ -510,6 +520,15 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             if (!showAttention) {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
             }
+            blogViewHolder.tv_comment.setOnClickListener(v -> {
+                Common.showKeyboard(blogViewHolder.tv_comment);
+                if (mCallBack != null) {
+                    mCallBack.showCommentView(blog.id);
+                }
+            });
+            blogViewHolder.tv_total_comment.setOnClickListener(v -> {
+                CommentListAct.startAct((Activity) context, blog.id);
+            });
         }
     }
 
@@ -672,6 +691,15 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         @BindView(R.id.recylcer_attention)
         RecyclerView recylcer_attention;
 
+        @BindView(R.id.miv_comment_icon)
+        MyImageView miv_comment_icon;
+
+        @BindView(R.id.tv_comment)
+        TextView tv_comment;
+
+        @BindView(R.id.tv_total_comment)
+        TextView tv_total_comment;
+
         public BlogViewHolder(View itemView) {
             super(itemView);
         }
@@ -698,7 +726,9 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
         void toDown(String blogId);
 
-        void getShareInfo(String blogId,String goodid);
+        void getShareInfo(String blogId, String goodid);
+
+        void showCommentView(String blogId);
     }
 
     public interface OnDelBlogListener {
