@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/line_bg"
+    android:fillViewport="true"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -35,12 +36,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/img_daoshi_beijing">
+        android:layout_below="@+id/title_bar"
+        android:fillViewport="true"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="45dp"
+            android:background="@mipmap/img_daoshi_beijing"
             android:orientation="vertical">
 
             <TextView
@@ -97,7 +101,7 @@
                 <TextView
                     android:id="@+id/tv_add_guide"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="42dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:background="@mipmap/img_huiyuan_anniu"
@@ -299,7 +303,7 @@
                         <TextView
                             android:id="@+id/tv_weixin_copy"
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="42dp"
                             android:paddingLeft="85dp"
                             android:paddingRight="85dp"
                             android:layout_marginTop="15dp"
@@ -413,7 +417,7 @@
                 <TextView
                     android:id="@+id/tv_add_save"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="42dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:background="@mipmap/img_huiyuan_anniu"
@@ -439,4 +443,4 @@
                 />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+</RelativeLayout>
