@@ -383,9 +383,9 @@
 
                 <ImageView
                     android:id="@+id/img_sys_code"
-                    android:layout_width="135dp"
-                    android:layout_height="135dp"
-                    android:layout_marginTop="35dp"
+                    android:layout_width="145dp"
+                    android:layout_height="145dp"
+                    android:layout_marginTop="25dp"
                     android:scaleType="fitXY"
                   />
 
