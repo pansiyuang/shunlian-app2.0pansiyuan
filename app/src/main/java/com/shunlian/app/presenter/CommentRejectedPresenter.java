@@ -1,5 +1,6 @@
 package com.shunlian.app.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -12,11 +13,14 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommentRejectedEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.eventbus_bean.RejectedNotifyEvent;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICommentRejectedView;
 import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -130,6 +134,8 @@ public class CommentRejectedPresenter extends BasePresenter<ICommentRejectedView
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 Common.staticToast(entity.message);
+                EventBus.getDefault().post(new RejectedNotifyEvent(true));
+                ((Activity) context).finish();
             }
         });
     }
