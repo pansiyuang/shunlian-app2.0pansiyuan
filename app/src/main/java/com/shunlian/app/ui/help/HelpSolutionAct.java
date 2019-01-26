@@ -73,6 +73,8 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     QuickActions quick_actions;
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+    @BindView(R.id.mlLayout_bottom)
+    MyLinearLayout mlLayout_bottom;
     @BindView(R.id.mwv_h5)
     X5WebView mwv_h5;
     private PHelpSolution pHelpSolution;
@@ -85,6 +87,13 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     public static void startAct(Context context, String id) {
         Intent intent = new Intent(context, HelpSolutionAct.class);
         intent.putExtra("id", id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+    public static void startAct(Context context, String id,boolean isShow) {
+        Intent intent = new Intent(context, HelpSolutionAct.class);
+        intent.putExtra("id", id);
+        intent.putExtra("isShow", isShow);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -148,6 +157,12 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         mtv_title.setText(getStringResouce(R.string.help_jiejuefangan));
 //        storeId = getIntent().getStringExtra("storeId");
         pHelpSolution = new PHelpSolution(this, getIntent().getStringExtra("id"), this);
+        if (getIntent().getBooleanExtra("isShow",false)){
+            mlLayout_bottom.setVisibility(View.VISIBLE);
+        }else {
+            mlLayout_bottom.setVisibility(View.GONE);
+        }
+
     }
 
     @Override

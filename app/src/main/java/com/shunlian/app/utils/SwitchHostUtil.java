@@ -41,7 +41,7 @@ public class SwitchHostUtil {
                 //正式
                 InterentTools.HTTPADDR = "https://api.shunliandongli.com/v2/front/";
                 InterentTools.H5_HOST ="https://wx.shunliandongli.com/";
-                InterentTools.HTTPADDR_IM = "ws://api.shunliandongli.com/v2/im";
+                InterentTools.HTTPADDR_IM = "wss://api.shunliandongli.com/v2/im";
             }
 
             SharedPrefUtil.saveCacheSharedPrf("netState", InterentTools.HTTPADDR);
@@ -70,7 +70,7 @@ public class SwitchHostUtil {
             }else{//正式
 
                 InterentTools.H5_HOST ="https://wx.shunliandongli.com/";
-                InterentTools.HTTPADDR_IM = "ws://api.shunliandongli.com/v2/im";
+                InterentTools.HTTPADDR_IM = "wss://api.shunliandongli.com/v2/im";
             }
         }else {
             //此句话保证开发环境没有切换环境的情况下也能选择帐号

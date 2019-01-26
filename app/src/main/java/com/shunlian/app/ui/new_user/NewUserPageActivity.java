@@ -635,17 +635,21 @@ public class NewUserPageActivity extends BaseActivity implements INewUserPageVie
      * 更新购物车数量
      */
     public void updateCartNum(){
-        tv_buy_num.setText("已购商品("+CURRENT_NUM+")");
+        try{
+            tv_buy_num.setText("已购商品("+CURRENT_NUM+")");
 
-       if(CURRENT_NUM==0){
-           line_user_buy.setVisibility(View.GONE);
-       }else{
-           line_user_buy.setVisibility(isNew?View.VISIBLE:View.GONE);
-       }
-        if(!isNew) {
-            tv_buy_num.setText("邀请记录");
-            tv_go_pay.setText("去邀请赚钱");
-            line_user_buy.setVisibility(View.VISIBLE);
+            if(CURRENT_NUM==0){
+                line_user_buy.setVisibility(View.GONE);
+            }else{
+                line_user_buy.setVisibility(isNew?View.VISIBLE:View.GONE);
+            }
+            if(!isNew) {
+                tv_buy_num.setText("邀请记录");
+                tv_go_pay.setText("去邀请赚钱");
+                line_user_buy.setVisibility(View.VISIBLE);
+            }
+        }catch (Exception e){
+
         }
     }
     @Override

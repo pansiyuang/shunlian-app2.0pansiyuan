@@ -12,6 +12,15 @@ public class SortFragEntity {
 
     public List<Toplist> categoryList;
     public String search;
+    public GetDataEntity.KeyWord input_keyword;
+
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class KeyWord {
+        public String type;
+        public String item_id;
+        public String keyword;
+    }
 
 
 

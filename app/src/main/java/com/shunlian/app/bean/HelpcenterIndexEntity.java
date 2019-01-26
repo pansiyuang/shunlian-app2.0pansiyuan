@@ -20,6 +20,8 @@ public class HelpcenterIndexEntity {
         public String name;
         public String keyword;
         public String icon;
+        public String direct;
+        public String is_show;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

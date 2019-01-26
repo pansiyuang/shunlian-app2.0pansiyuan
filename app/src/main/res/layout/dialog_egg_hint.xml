@@ -1,75 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
-
-    <com.shunlian.app.widget.NewTextView
-        android:id="@+id/ntv_title"
-        android:textColor="@color/white"
-        android:textSize="36sp"
-        android:gravity="center"
-        android:maxEms="10"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="218dp"
-        android:background="@mipmap/image_renwu_cg01"/>
+    android:layout_height="match_parent">
 
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:gravity="center_horizontal"
-        android:layout_marginTop="-28dp"
-        android:background="@drawable/bg_dialog_bottoms"
         android:orientation="vertical">
-        <com.shunlian.app.widget.MyLinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/mllayout_goget"
-            android:visibility="gone">
-            <com.shunlian.app.widget.NewTextView
-                android:textColor="@color/new_text"
-                android:textSize="15sp"
-                android:text="点击"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_goget"
-                android:layout_width="wrap_content"
-                android:layout_height="22dp"
-                android:adjustViewBounds="true"
-                android:src="@mipmap/icon_lingjiang"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"/>
-            <com.shunlian.app.widget.NewTextView
-                android:textColor="@color/new_text"
-                android:textSize="15sp"
-                android:text="瓜分百万金蛋！"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </com.shunlian.app.widget.MyLinearLayout>
+
         <com.shunlian.app.widget.NewTextView
-            android:id="@+id/ntv_desc"
-            android:textColor="@color/new_text"
-            android:textSize="15sp"
-            android:visibility="visible"
-            android:text="恭喜您"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <com.shunlian.app.widget.NewTextView
-            android:layout_width="250dp"
-            android:layout_height="44dp"
-            android:id="@+id/ntv_btn"
-            android:textSize="15sp"
-            android:text="知道了"
-            android:layout_marginTop="26dp"
+            android:id="@+id/ntv_title"
+            android:layout_width="match_parent"
+            android:layout_height="218dp"
+            android:background="@mipmap/image_renwu_cg01"
+            android:ellipsize="end"
             android:gravity="center"
-            android:background="@drawable/rounded_corner_pink_48px"
-            android:textColor="@color/white"/>
+            android:maxEms="10"
+            android:maxLines="2"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_below="@+id/ntv_title"
+            android:layout_marginTop="-28dp"
+            android:background="@drawable/bg_dialog_bottoms"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_goget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="点击"
+                    android:textColor="@color/new_text"
+                    android:textSize="15sp" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_goget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/icon_lingjiang" />
+
+                <com.shunlian.app.widget.NewTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="瓜分百万金蛋！"
+                    android:textColor="@color/new_text"
+                    android:textSize="15sp" />
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="恭喜您"
+                android:textColor="@color/new_text"
+                android:textSize="15sp"
+                android:visibility="visible" />
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_btn"
+                android:layout_width="250dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/rounded_corner_pink_48px"
+                android:gravity="center"
+                android:text="知道了"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </com.shunlian.app.widget.MyLinearLayout>
+
     </com.shunlian.app.widget.MyLinearLayout>
 
-</com.shunlian.app.widget.MyLinearLayout>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:src="@mipmap/icon_write_close"
+        android:visibility="gone" />
+
+</com.shunlian.app.widget.MyRelativeLayout>

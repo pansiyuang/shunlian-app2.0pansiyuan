@@ -573,7 +573,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 NetDialog netDialog = dialogLists.get(next);
                 if (netDialog != null && netDialog.isShowing()&&netDialog.getOwnerActivity()!=null
                         &&!netDialog.getOwnerActivity().isFinishing()){
-                    netDialog.dismiss();
+                    try{
+                        netDialog.dismiss();
+                    }catch (Exception e){}
                 }
                 netDialog = null;
             }

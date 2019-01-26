@@ -102,7 +102,7 @@
                     android:paddingRight="10dp"
                     android:id="@+id/line_old_user"
                     android:layout_alignBottom="@+id/miv_goods_pic"
-                    android:background="@drawable/rounded_corner_solid_pink_50px"
+                    android:background="@drawable/rounded_corner_solid_pink_60px"
                     android:layout_marginBottom="10dp"
                     >
                     <com.shunlian.app.widget.MyTextView
