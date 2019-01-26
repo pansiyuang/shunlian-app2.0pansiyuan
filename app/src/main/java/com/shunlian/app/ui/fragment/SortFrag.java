@@ -15,6 +15,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.SortCategoryAdapter;
 import com.shunlian.app.adapter.SortFragAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SortFragEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -74,6 +75,7 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
     private GoodsSearchParam mParam;
     private GridLayoutManager manager;
     private int lvTotalHeight;//listview总高度
+    private GetDataEntity.KeyWord keyworld;
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,SortFrag.class));
@@ -150,7 +152,11 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
     @OnClick(R.id.mtv_search)
     public void onClickSearch() {
         CharSequence text = mtv_search.getText();
-        SearchGoodsActivity.startAct(baseActivity, text.toString(), "sortFrag");
+        if (keyworld!=null&&!isEmpty(keyworld.type)){
+            SearchGoodsActivity.startAct(baseActivity, text.toString(), "sortFrag",keyworld.type,keyworld.item_id);
+        }else {
+            SearchGoodsActivity.startAct(baseActivity, text.toString(), "sortFrag");
+        }
     }
 
     /**
@@ -256,16 +262,14 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
         });
     }
 
-    /**
-     * 设置搜索关键字
-     *
-     * @param keyworld
-     */
     @Override
-    public void setKeyworld(String keyworld) {
-        mtv_search.setText(keyworld);
+    public void setKeyworld(GetDataEntity.KeyWord keyworld) {
+        if (keyworld != null ) {
+            this.keyworld= keyworld;
+            if (!isEmpty(keyworld.keyword))
+                mtv_search.setText(keyworld.keyword);
+        }
     }
-
 
     @Override
     public void onDestroyView() {

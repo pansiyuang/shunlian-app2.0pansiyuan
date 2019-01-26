@@ -191,7 +191,17 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         rv_qOne.setNestedScrollingEnabled(false);
         helpQoneAdapter.setOnItemClickListener((view, position) -> {
             HelpcenterIndexEntity.QuestionCategory questionCategory = helpcenterIndexEntity.questionCategory.get(position);
-            HelpTwoAct.startAct(baseAct, questionCategory.id, questionCategory.name);
+            boolean isShow;
+            if ("1".equals(questionCategory.direct)){
+                if ("0".equals(questionCategory.is_show)){
+                    isShow=false;
+                }else {
+                    isShow=true;
+                }
+                HelpSolutionAct.startAct(baseAct, questionCategory.id,isShow);
+            }else {
+                HelpTwoAct.startAct(baseAct, questionCategory.id, questionCategory.name);
+            }
         });
         rv_article.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rv_article.addItemDecoration(new MHorItemDecoration(this, 5, 10, 10));

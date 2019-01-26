@@ -77,6 +77,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public static boolean isHides = false;
     public static boolean isNewUserHide = false;
     public static MyTextView mtv_search;
+    public static GetDataEntity.KeyWord keyWord;
     //新用户的倒计时
     public static RelativeLayout show_new_user_view;
     private static Handler handler;
@@ -312,6 +313,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         super.onDestroy();
     }
 
+
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         messageCountManager.setTextCount(tv_msg_count);
@@ -463,7 +465,11 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_search)
     public void search() {
-        SearchGoodsActivity.startAct(baseActivity, getStringResouce(R.string.first_souni).equals(mtv_search.getText().toString()) ? "" : mtv_search.getText().toString(), "sortFrag");
+        if (keyWord!=null&&!isEmpty(keyWord.type)){
+            SearchGoodsActivity.startAct(baseActivity, getStringResouce(R.string.first_souni).equals(mtv_search.getText().toString()) ? "" : mtv_search.getText().toString(), "sortFrag",keyWord.type,keyWord.item_id);
+        }else {
+            SearchGoodsActivity.startAct(baseActivity, getStringResouce(R.string.first_souni).equals(mtv_search.getText().toString()) ? "" : mtv_search.getText().toString(), "sortFrag");
+        }
     }
 
     @Override
@@ -481,14 +487,14 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 Common.goGoGo(getContext(), "newuser");
                 break;
             case R.id.miv_entrys:
-                if (isHides) {
-                    int values = TransformUtil.dip2px(baseActivity, 100);
-                    RelativeLayout.LayoutParams layoutParamss = (RelativeLayout.LayoutParams) miv_entrys.getLayoutParams();
-                    layoutParamss.setMargins(0, values, 0, 0);
-                    layoutParamss.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    miv_entrys.setLayoutParams(layoutParamss);
-                    isHides = false;
-                } else {
+//                if (isHides) {
+//                    int values = TransformUtil.dip2px(baseActivity, 100);
+//                    RelativeLayout.LayoutParams layoutParamss = (RelativeLayout.LayoutParams) miv_entrys.getLayoutParams();
+//                    layoutParamss.setMargins(0, values, 0, 0);
+//                    layoutParamss.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//                    miv_entrys.setLayoutParams(layoutParamss);
+//                    isHides = false;
+//                } else {
                     String token = SharedPrefUtil.getSharedUserString("token", "");
                     if (TextUtils.isEmpty(token)) {
                         Common.goGoGo(baseActivity,"login");
@@ -496,7 +502,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     } else {
                         if (mainActivity != null && mainActivity.adEntitys != null && mainActivity.adEntitys.url != null )
                             Common.goGoGo(baseActivity, mainActivity.adEntitys.url.type, mainActivity.adEntitys.url.item_id);
-                    }
+//                    }
 
                 }
                 break;
