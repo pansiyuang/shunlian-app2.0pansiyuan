@@ -2,7 +2,6 @@ package com.shunlian.app.widget;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -86,11 +85,18 @@ public class BlogCommentSendPopwindow {
 
     public void dismiss() {
         inputComment.setText("");
-        inputComment.clearFocus();
-        inputComment.setFocusable(false);
-        inputComment.setFocusableInTouchMode(false);
-        Common.hideKeyboard(inputComment);
+        hintPopInput(mContext,inputComment);
         popupWindow.dismiss();
+    }
+
+
+    public void hintPopInput(final Context context, final View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null && view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 2);
+        }
+        if (context instanceof Activity)
+        ((Activity)context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     public void setOnPopClickListener(OnPopClickListener listener) {
