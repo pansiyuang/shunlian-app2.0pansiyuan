@@ -85,6 +85,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     private List<String> histotyTags = new ArrayList<>();
     private String currentKeyWord;
     private String currentFlag;
+    private String type, itemId;
     private boolean isShowHotSearch;
     private PromptDialog promptDialog;
     private String save_goods_history;
@@ -114,7 +115,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         context.startActivity(intent);
     }
 
-    public static void startAct(Activity context, String keyWord, String flag,String type,String item_id) {
+    public static void startAct(Activity context, String keyWord, String flag, String type, String item_id) {
         Intent intent = new Intent(context, SearchGoodsActivity.class);
         intent.putExtra("keyword", keyWord);
         intent.putExtra("flag", flag);
@@ -135,6 +136,8 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         Intent intent = getIntent();
         currentKeyWord = intent.getStringExtra("keyword");
         currentFlag = intent.getStringExtra("flag");
+        type = intent.getStringExtra("type");
+        itemId = intent.getStringExtra("item_id");
         isShowHotSearch = intent.getBooleanExtra("isShowHotSearch", true);
         presenter = new SearchGoodsPresenter(this, this);
 
@@ -332,7 +335,8 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                     tv.setBackgroundResource(R.drawable.rounded_corner_stroke_pink_4px);
                     tv.setTextColor(getColorResouce(R.color.pink_color));
                 } else {
-                    tv.setBackgroundResource(R.drawable.rounded_corner_solid_f7_8px);
+//                    tv.setBackgroundResource(R.drawable.rounded_corner_solid_f7_8px);
+                    tv.setBackgroundResource(R.drawable.rounded_corner_stroke_85_4px);
                     tv.setTextColor(getColorResouce(R.color.text_gray2));
                 }
                 view.setOnClickListener(view1 -> {
@@ -446,8 +450,12 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         }
         GoodsSearchParam param = new GoodsSearchParam();
         if ("sortFrag".equals(currentFlag)) {
-            param.keyword = tag;
-            CategoryAct.startAct(SearchGoodsActivity.this, param);
+            if (!isEmpty(type)) {
+                Common.goGoGo(baseAct, type, itemId);
+            } else {
+                param.keyword = tag;
+                CategoryAct.startAct(SearchGoodsActivity.this, param);
+            }
         } else if ("store_goods".equals(currentFlag)) {
             param.keyword = tag;
             GoodsSearchAct.startAct(SearchGoodsActivity.this, param);
