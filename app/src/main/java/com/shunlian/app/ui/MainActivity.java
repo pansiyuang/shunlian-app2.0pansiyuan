@@ -210,7 +210,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         } else {
             initMessage();
         }
-        pMain.isShowSign();
+//        if (Common.isAlreadyLogin()){
+            pMain.isShowSign();
+//        }else {
+//            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
+//        }
     }
 
     public void initMessage() {
@@ -262,7 +266,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 public void initDialogFinish() {
                     if (updateDialogV.updateDialog == null) {
                         pMain.getPopAD();
-                        pMain.isShowSign();
+//                        if (Common.isAlreadyLogin()){
+                            pMain.isShowSign();
+//                        }else {
+//                            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
+//                        }
                     }
                 }
             };
