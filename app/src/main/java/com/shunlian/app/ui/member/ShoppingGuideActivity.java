@@ -98,9 +98,6 @@ public class ShoppingGuideActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.tv_add_meweixin)
     TextView tv_add_meweixin;
 
-    @BindView(R.id.line_bg)
-    LinearLayout line_bg;
-
     private CommonDialogUtil commonDialogUtil;
 
     private MemberTeacherEntity memberTeacherEntity;
