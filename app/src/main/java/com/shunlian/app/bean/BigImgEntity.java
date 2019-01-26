@@ -50,6 +50,10 @@ public class BigImgEntity implements Parcelable {
         public int expert;
         public String v_icon;
         public String expert_icon;
+        public CommentEntity comment_list;
+
+        public Blog() {
+        }
 
         @Override
         public int describeContents() {
@@ -85,9 +89,7 @@ public class BigImgEntity implements Parcelable {
             dest.writeInt(this.expert);
             dest.writeString(this.v_icon);
             dest.writeString(this.expert_icon);
-        }
-
-        public Blog() {
+            dest.writeParcelable(this.comment_list, flags);
         }
 
         protected Blog(Parcel in) {
@@ -118,6 +120,7 @@ public class BigImgEntity implements Parcelable {
             this.expert = in.readInt();
             this.v_icon = in.readString();
             this.expert_icon = in.readString();
+            this.comment_list = in.readParcelable(CommentEntity.class.getClassLoader());
         }
 
         public static final Creator<Blog> CREATOR = new Creator<Blog>() {
@@ -134,6 +137,65 @@ public class BigImgEntity implements Parcelable {
     }
 
     public BigImgEntity() {
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class CommentEntity implements Parcelable {
+        public int total;
+        public List<CommentItem> list;
+
+        public CommentEntity() {
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.total);
+            dest.writeList(this.list);
+        }
+
+        protected CommentEntity(Parcel in) {
+            this.total = in.readInt();
+            this.list = new ArrayList<CommentItem>();
+            in.readList(this.list, CommentItem.class.getClassLoader());
+        }
+
+        public static final Creator<CommentEntity> CREATOR = new Creator<CommentEntity>() {
+            @Override
+            public CommentEntity createFromParcel(Parcel source) {
+                return new CommentEntity(source);
+            }
+
+            @Override
+            public CommentEntity[] newArray(int size) {
+                return new CommentEntity[size];
+            }
+        };
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class CommentItem {
+        public String id;
+        public String member_id;
+        public String avatar;
+        public String nickname;
+        public String content;
+
+        public CommentItem() {
+
+        }
+
+        public CommentItem(FindCommentListEntity.ItemComment itemComment) {
+            this.avatar = itemComment.avatar;
+            this.content = itemComment.content;
+            this.id = itemComment.id;
+            this.member_id = itemComment.member_id;
+            this.nickname = itemComment.nickname;
+        }
     }
 
     @Override

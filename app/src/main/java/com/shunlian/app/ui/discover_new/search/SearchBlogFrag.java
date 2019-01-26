@@ -332,4 +332,9 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
         }
         hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
+
+    @Override
+    public void replySuccess(BigImgEntity.CommentItem commentItem) {
+
+    }
 }

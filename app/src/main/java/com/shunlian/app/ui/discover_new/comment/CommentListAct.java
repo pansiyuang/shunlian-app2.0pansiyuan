@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover.other;
+package com.shunlian.app.ui.discover_new.comment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,6 +27,8 @@ import com.shunlian.app.view.IFindCommentListView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +45,9 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
+
+    @BindView(R.id.refreshview)
+    SlRefreshView refreshview;
 
     @BindView(R.id.edt_content)
     EditText edt_content;
@@ -111,6 +116,17 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 }
             }
         });
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.initData();
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
     }
 
     @Override
@@ -121,8 +137,6 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 .init();
 
         EventBus.getDefault().register(this);
-
-        mtv_toolbar_title.setText(getStringResouce(R.string.comments));
 
         GradientDrawable gradientDrawable = (GradientDrawable) edt_content.getBackground();
         gradientDrawable.setColor(getColorResouce(R.color.value_F2F6F9));
@@ -137,6 +151,8 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
         recy_view.addItemDecoration(new VerticalItemDecoration(space,
                 0, 0, getColorResouce(R.color.white)));
 
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
     }
 
     @Override
@@ -174,7 +190,6 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @Override
     public void showDataEmptyView(int request_code) {
-
         if (request_code == 100) {
             visible(nei_empty);
             gone(recy_view);
@@ -193,10 +208,8 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
      */
     @Override
     public void setCommentAllCount(String count) {
-        GradientDrawable background = (GradientDrawable) mtv_msg_count.getBackground();
-        int w = TransformUtil.dip2px(this, 0.5f);
-        background.setStroke(w, getColorResouce(R.color.white));
-        mtv_msg_count.setText(count);
+        mtv_toolbar_title.setText(String.format("共%s条评论", count));
+        refreshview.stopRefresh(true);
     }
 
     /**

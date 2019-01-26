@@ -107,22 +107,23 @@
         <RelativeLayout
             android:id="@+id/rl_bottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_below="@+id/mtv_content"
             android:layout_alignLeft="@+id/ll_title">
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
+                android:gravity="center_vertical"
                 android:text="2小时前"
                 android:textColor="@color/text_gray2"
                 android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
@@ -156,7 +157,8 @@
                 <TextView
                     android:id="@+id/tv_reply"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:paddingRight="27dp"
                     android:text="回复"
                     android:textColor="@color/text_gray2"
@@ -165,7 +167,8 @@
                 <TextView
                     android:id="@+id/tv_verify"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:paddingRight="27dp"
                     android:text="审核"
                     android:textColor="@color/pink_color"

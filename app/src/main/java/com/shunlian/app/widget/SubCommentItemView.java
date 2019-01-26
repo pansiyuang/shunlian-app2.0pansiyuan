@@ -1,6 +1,5 @@
 package com.shunlian.app.widget;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
+import com.shunlian.app.ui.discover_new.comment.CommentDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 
 /**
@@ -71,6 +71,24 @@ public class SubCommentItemView extends FrameLayout {
             if (mCallBack != null) {
                 mCallBack.OnReply();
             }
+        });
+
+        tv_verify.setOnClickListener(v -> {
+            if (mEntity.check_is_show == 1) {
+                if (mCallBack != null) {
+                    mCallBack.onVerify();
+                }
+            } else if (mEntity.check_is_show == 2) {
+                if (mCallBack != null) {
+                    mCallBack.onRejected();
+                }
+            }
+        });
+        mtv_more_count.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(mEntity.reply_parent_comment_id)) {
+                return;
+            }
+            CommentDetailAct.startAct(getContext(), mEntity.reply_parent_comment_id);
         });
     }
 
@@ -155,5 +173,8 @@ public class SubCommentItemView extends FrameLayout {
 
         void OnReply();
 
+        void onVerify();
+
+        void onRejected();
     }
 }

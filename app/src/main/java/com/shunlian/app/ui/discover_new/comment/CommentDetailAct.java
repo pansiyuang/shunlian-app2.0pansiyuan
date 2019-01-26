@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover.other;
+package com.shunlian.app.ui.discover_new.comment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -20,10 +22,12 @@ import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IFindCommentDetailView;
-import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,20 +42,17 @@ import butterknife.OnClick;
 
 public class CommentDetailAct extends BaseActivity implements IFindCommentDetailView, MessageCountManager.OnGetMessageListener {
 
+    @BindView(R.id.refreshview)
+    SlRefreshView refreshview;
+
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
-
-    @BindView(R.id.met_text)
-    MyEditText met_text;
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
     @BindView(R.id.mtv_msg_count)
     MyTextView mtv_msg_count;
-
-    @BindView(R.id.mtv_send)
-    MyTextView mtv_send;
 
     @BindView(R.id.mtv_toolbar_msgCount)
     MyTextView mtv_toolbar_msgCount;
@@ -62,14 +63,19 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
+    @BindView(R.id.edt_content)
+    EditText edt_content;
+
+    @BindView(R.id.tv_send)
+    TextView tv_send;
+
     private FindCommentDetailPresenter presenter;
     private LinearLayoutManager manager;
     private MessageCountManager messageCountManager;
 
-    public static void startAct(Context context,String experience_id,String comment_id){
+    public static void startAct(Context context, String comment_id) {
         Intent intent = new Intent(context, CommentDetailAct.class);
-        intent.putExtra("comment_id",comment_id);
-        intent.putExtra("experience_id",experience_id);
+        intent.putExtra("comment_id", comment_id);
         context.startActivity(intent);
     }
 
@@ -97,31 +103,36 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (manager != null && presenter != null){
+                if (manager != null && presenter != null) {
                     int lastPosition = manager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == manager.getItemCount()){
+                    if (lastPosition + 1 == manager.getItemCount()) {
                         presenter.onRefresh();
                     }
                 }
             }
         });
 
-        met_text.addTextChangedListener(new SimpleTextWatcher(){
+        edt_content.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-                if (!isEmpty(s)){
-                    visible(mtv_send);
-                    gone(miv_icon,mtv_msg_count);
-                }else {
-                    gone(mtv_send);
-                    visible(miv_icon,mtv_msg_count);
-                }
-                if (s.length() > 140){
-                    met_text.setText(s.subSequence(0,140));
-                    met_text.setSelection(140);
+                if (s.length() > 140) {
+                    edt_content.setText(s.subSequence(0, 140));
+                    edt_content.setSelection(140);
                     Common.staticToast("字数不能超过140");
                 }
+            }
+        });
+
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.initData();
+            }
+
+            @Override
+            public void onLoadMore() {
+
             }
         });
     }
@@ -135,23 +146,26 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         EventBus.getDefault().register(this);
 
         mtv_toolbar_title.setText(getStringResouce(R.string.comment_details));
-        GradientDrawable gradientDrawable = (GradientDrawable) met_text.getBackground();
+        GradientDrawable gradientDrawable = (GradientDrawable) edt_content.getBackground();
         gradientDrawable.setColor(getColorResouce(R.color.value_F2F6F9));
 
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
+        int space = TransformUtil.dip2px(this, 15);
+        recy_view.addItemDecoration(new VerticalItemDecoration(space, 0, 0, getColorResouce(R.color.white)));
 
         String comment_id = getIntent().getStringExtra("comment_id");
-        String experience_id = getIntent().getStringExtra("experience_id");
-        presenter = new FindCommentDetailPresenter(this,this,experience_id,comment_id);
+        presenter = new FindCommentDetailPresenter(this, this, comment_id);
 
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
 
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
     }
 
     @OnClick(R.id.mrlayout_toolbar_more)
-    public void more(){
+    public void more() {
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.findCommentList();
     }
@@ -166,19 +180,19 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
 
     }
 
-    @OnClick(R.id.met_text)
-    public void onClick(){
-        setEdittextFocusable(true,met_text);
+    @OnClick(R.id.edt_content)
+    public void onClick() {
+        setEdittextFocusable(true, edt_content);
     }
 
     @Override
-    public void showorhideKeyboard(String hint){
-        setEdittextFocusable(true,met_text);
-        met_text.setHint(hint);
+    public void showorhideKeyboard(String hint) {
+        setEdittextFocusable(true, edt_content);
+        edt_content.setHint(hint);
         if (!isSoftShowing()) {
-            Common.showKeyboard(met_text);
-        }else {
-            Common.hideKeyboard(met_text);
+            Common.showKeyboard(edt_content);
+        } else {
+            Common.hideKeyboard(edt_content);
         }
     }
 
@@ -189,20 +203,12 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     public void delPrompt() {
         final PromptDialog dialog = new PromptDialog(this);
         dialog.setSureAndCancleListener(getStringResouce(R.string.are_you_sure_del_comment),
-                getStringResouce(R.string.confirm), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (presenter != null){
-                    presenter.delComment();
-                }
-                dialog.dismiss();
-            }
-        }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        }).show();
+                getStringResouce(R.string.confirm), v -> {
+                    if (presenter != null) {
+                        presenter.delComment();
+                    }
+                    dialog.dismiss();
+                }, getStringResouce(R.string.errcode_cancel), v -> dialog.dismiss()).show();
     }
 
     /**
@@ -212,10 +218,8 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
      */
     @Override
     public void setCommentAllCount(String count) {
-        GradientDrawable background = (GradientDrawable) mtv_msg_count.getBackground();
-        int w = TransformUtil.dip2px(this, 0.5f);
-        background.setStroke(w,getColorResouce(R.color.white));
-        mtv_msg_count.setText(count);
+        mtv_toolbar_title.setText(String.format("共%s条回复", count));
+        refreshview.stopRefresh(true);
     }
 
     /**
@@ -235,7 +239,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
      */
     @Override
     public void setHint(String hint) {
-        met_text.setHint(hint);
+        edt_content.setHint(hint);
     }
 
     private boolean isSoftShowing() {
@@ -247,18 +251,18 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         return screenHeight - rect.bottom != 0;
     }
 
-    @OnClick(R.id.mtv_send)
-    public void send(){
-        String s = met_text.getText().toString();
-        if (isEmpty(s)){
+    @OnClick(R.id.tv_send)
+    public void send() {
+        String s = edt_content.getText().toString();
+        if (isEmpty(s)) {
             Common.staticToast("评论内容不能为空");
             return;
         }
         presenter.sendComment(s);
-        met_text.setText("");
-        met_text.setHint(getStringResouce(R.string.add_comments));
-        setEdittextFocusable(false,met_text);
-        Common.hideKeyboard(met_text);
+        edt_content.setText("");
+        edt_content.setHint(getStringResouce(R.string.add_comments));
+        setEdittextFocusable(false, edt_content);
+        Common.hideKeyboard(edt_content);
     }
 
     @Override
@@ -266,7 +270,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
         super.onDestroy();
-        if (presenter != null){
+        if (presenter != null) {
             presenter.detachView();
             presenter = null;
         }

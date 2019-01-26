@@ -1,46 +1,26 @@
 package com.shunlian.app.adapter;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.ActionMode;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
-import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
-import com.shunlian.app.bean.ShareInfoParam;
-import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.discover_new.ActivityDetailActivity;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.VideoGoodPlayActivity;
@@ -50,30 +30,22 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.DownLoadQRCodeImageUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
-import com.shunlian.app.utils.QuickActions;
-import com.shunlian.app.utils.ShareGoodDialogUtil;
-import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.download.DownLoadDialogProgress;
 import com.shunlian.app.utils.download.DownloadUtils;
 import com.shunlian.app.utils.download.JsDownloadListener;
 import com.shunlian.app.widget.BlogBottomDialog;
+import com.shunlian.app.widget.BlogCommentSendPopwindow;
 import com.shunlian.app.widget.BlogGoodsShareDialog;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.NewLookBigImgAct;
-import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.SaveImgDialog;
+import com.shunlian.app.widget.SubBlogCommentItemView;
 import com.shunlian.app.widget.banner.MyKanner;
-import com.shunlian.mylibrary.ImmersionBar;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -291,6 +263,13 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
             if (!showAttention) {
                 blogViewHolder.tv_attention.setVisibility(View.GONE);
+            }
+
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
+                gone(blogViewHolder.ll_comment);
+            } else {
+                visible(blogViewHolder.ll_comment);
+                reply(blogViewHolder.ll_comment, blog.comment_list);
             }
         } else {
             super.onBindViewHolder(holder, position, payloads);
@@ -526,9 +505,33 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                     mCallBack.showCommentView(blog.id);
                 }
             });
-            blogViewHolder.tv_total_comment.setOnClickListener(v -> {
-                CommentListAct.startAct((Activity) context, blog.id);
-            });
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
+                gone(blogViewHolder.ll_comment);
+            } else {
+                visible(blogViewHolder.ll_comment);
+                reply(blogViewHolder.ll_comment, blog.comment_list);
+            }
+        }
+    }
+
+    public void reply(LinearLayout ll_sub_bg, BigImgEntity.CommentEntity commentEntity) {
+        ll_sub_bg.removeAllViews();
+        int maxSize;
+        if (commentEntity.list.size() >= 2) {
+            maxSize = 2;
+        } else {
+            maxSize = commentEntity.list.size();
+        }
+        for (int j = 0; j < maxSize; j++) {
+            SubBlogCommentItemView view = new SubBlogCommentItemView(context);
+            BigImgEntity.CommentItem itemComment = commentEntity.list.get(j);
+            view.setCommentData(itemComment);
+            if (j == maxSize - 1) {
+                view.setNumShow(true, commentEntity.total);
+            } else {
+                view.setNumShow(false, commentEntity.total);
+            }
+            ll_sub_bg.addView(view);
         }
     }
 
@@ -697,8 +700,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         @BindView(R.id.tv_comment)
         TextView tv_comment;
 
-        @BindView(R.id.tv_total_comment)
-        TextView tv_total_comment;
+        @BindView(R.id.ll_comment)
+        LinearLayout ll_comment;
 
         public BlogViewHolder(View itemView) {
             super(itemView);

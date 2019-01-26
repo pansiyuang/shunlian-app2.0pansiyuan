@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -18,10 +19,13 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
-import com.shunlian.app.ui.discover.other.CommentDetailAct;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CommentBottmDialog;
 import com.shunlian.app.widget.MyImageView;
@@ -42,6 +46,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
     public int mHotCommentCount;
     private String mCommentType;
     private CommentBottmDialog mDialog;
+    private PromptDialog mPromptDialog;
     private OnPointFabulousListener mFabulousListener;
 
     public FindCommentListAdapter(Context context, List<FindCommentListEntity.ItemComment> lists, int hotCommentCount, String comment_type) {
@@ -157,7 +162,6 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
 
             mHolder.mtv_time.setText(itemComment.create_time);
             mHolder.tv_zan.setText(String.valueOf(itemComment.like_count));
-            mHolder.mtv_content.setText(itemComment.content);
 
             List<FindCommentListEntity.ItemComment> reply_list = itemComment.reply_list;
 
@@ -176,11 +180,17 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             }
 
             if (!isEmpty(itemComment.expert_icon)) {
+                visible(mHolder.miv_expert);
                 GlideUtils.getInstance().loadImage(context, mHolder.miv_expert, itemComment.expert_icon);
+            } else {
+                gone(mHolder.miv_expert);
             }
 
             if (!isEmpty(itemComment.v_icon)) {
+                visible(mHolder.miv_v);
                 GlideUtils.getInstance().loadImage(context, mHolder.miv_v, itemComment.v_icon);
+            } else {
+                gone(mHolder.miv_v);
             }
 
             mHolder.animation_zan.setAnimation("praise.json");
@@ -197,38 +207,37 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             }
 
             mHolder.tv_reply.setText(itemComment.is_self == 1 ? "删除" : "回复");
-
-            if (!isEmpty(itemComment.plus_role)) {//大于0为plus以上等级，1PLUS店主，2主管，>=3经理
-                visible(mHolder.miv_medal);
-                int plusRole = Integer.parseInt(itemComment.plus_role);
-                if (plusRole == 1) {
-                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_dianzhu);
-                } else if (plusRole == 2) {
-                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_zhuguan);
-                } else if (plusRole >= 3) {
-                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_jingli);
-                } else {
-                    gone(mHolder.miv_medal);
-                }
-            } else {
-                gone(mHolder.miv_medal);
+            gone(mHolder.miv_medal);
+            if (itemComment.check_is_show == 1) {
+                mHolder.tv_verify.setText("审核");
+                mHolder.tv_verify.setTextColor(getColor(R.color.pink_color));
+            } else if (itemComment.check_is_show == 2) {
+                mHolder.tv_verify.setText("撤回");
+                mHolder.tv_verify.setTextColor(getColor(R.color.text_gray2));
             }
 
-            if (itemComment.check_is_show == 0) { //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
-                mHolder.tv_verify.setVisibility(View.GONE);
-            } else if (itemComment.check_is_show == 1) {
-                mHolder.tv_verify.setVisibility(View.VISIBLE);
-                mHolder.tv_verify.setText("审核");
-            } else if (itemComment.check_is_show == 2) {
-                mHolder.tv_verify.setVisibility(View.VISIBLE);
-                mHolder.tv_verify.setText("撤回");
+            if (itemComment.status == 3) { // 0未审核，1已审核，2已驳回，3已删除
+                mHolder.mtv_content.setTextColor(getColor(R.color.color_value_6c));
+                mHolder.mtv_content.setText("该条评论已被删除");
+                gone(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
+            } else {
+                mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
+                visible(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
+                mHolder.mtv_content.setText(itemComment.content);
+                mHolder.tv_verify.setVisibility(itemComment.check_is_show == 0 ? View.GONE : View.VISIBLE);  //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
             }
         }
     }
 
-    private void reply(FindCommentListHolder mHolder, int position, FindCommentListEntity.ItemComment itemComment, List<FindCommentListEntity.ItemComment> reply_list) {
+    private void reply(FindCommentListHolder mHolder, int position, FindCommentListEntity.ItemComment itemComment, final List<FindCommentListEntity.ItemComment> reply_list) {
         mHolder.ll_sub_bg.removeAllViews();
-        for (int j = 0; j < reply_list.size(); j++) {
+        int maxSize;
+        if (reply_list.size() < 3) {
+            maxSize = reply_list.size();
+        } else {
+            maxSize = 3;
+        }
+        for (int j = 0; j < maxSize; j++) {
             SubCommentItemView view = new SubCommentItemView(context);
             FindCommentListEntity.ItemComment replyList = reply_list.get(j);
             view.setCommentData(replyList);
@@ -244,7 +253,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             view.setHeadPic(replyList.avatar)
                     .setTime(replyList.create_time)
                     .setContent(replyList.content);
-            if (j == reply_list.size() - 1) {
+            if (j == maxSize - 1) {
                 view.setMoreCount(true, itemComment.reply_count);
             } else {
                 view.setMoreCount(false, itemComment.reply_count);
@@ -268,6 +277,38 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                             mFabulousListener.onReply(position, finalJ);
                         }
                     }
+                }
+
+                @Override
+                public void onVerify() {
+                    if (mDialog == null) {
+                        mDialog = new CommentBottmDialog(context);
+                    }
+                    mDialog.setCommentData(replyList);
+                    mDialog.setOnPassListener(() -> {
+                        if (mFabulousListener != null) {
+                            mFabulousListener.onVerify(position, finalJ);
+                        }
+                    });
+                    mDialog.show();
+                }
+
+                @Override
+                public void onRejected() {
+                    if (mPromptDialog == null) {
+                        mPromptDialog = new PromptDialog((Activity) context);
+                        mPromptDialog.setTvSureColor(R.color.white);
+                        mPromptDialog.setTvSureBGColor(getColor(R.color.pink_color));
+                        mPromptDialog.setSureAndCancleListener("确定撤回当前评论吗？", "确定", v1 -> {
+                            if (mFabulousListener != null) {
+                                mFabulousListener.onRejected(position, finalJ);
+                            }
+                            mPromptDialog.dismiss();
+                        }, "取消", v12 -> {
+                            mPromptDialog.dismiss();
+                        });
+                    }
+                    mPromptDialog.show();
                 }
             });
             mHolder.ll_sub_bg.addView(view);
@@ -350,15 +391,8 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_zan:
-                    LogUtil.httpLogW("点赞");
                     if (mFabulousListener != null) {
                         mFabulousListener.onPointFabulous(getAdapterPosition(), -1, animation_zan);
-                    }
-                    break;
-                case R.id.ll_sub_bg:
-                    if ("all".equals(mCommentType)) {
-                        FindCommentListEntity.ItemComment itemComment = lists.get(FindCommentListAdapter.this.getPosition(getAdapterPosition()));
-                        CommentDetailAct.startAct(context, null, itemComment.id);
                     }
                     break;
                 case R.id.tv_reply:
@@ -373,14 +407,34 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                     }
                     break;
                 case R.id.tv_verify:
-                    if (mDialog == null) {
-                        mDialog = new CommentBottmDialog(context);
+                    FindCommentListEntity.ItemComment comment = lists.get(getAdapterPosition());
+                    if (comment.check_is_show == 1) { //审核
+                        if (mDialog == null) {
+                            mDialog = new CommentBottmDialog(context);
+                        }
+                        mDialog.setCommentData(comment);
+                        mDialog.setOnPassListener(() -> {
+                            if (mFabulousListener != null) {
+                                mFabulousListener.onVerify(getAdapterPosition(), -1);
+                            }
+                        });
+                        mDialog.show();
+                    } else {  //撤回
+                        if (mPromptDialog == null) {
+                            mPromptDialog = new PromptDialog((Activity) context);
+                            mPromptDialog.setTvSureColor(R.color.white);
+                            mPromptDialog.setTvSureBGColor(getColor(R.color.pink_color));
+                            mPromptDialog.setSureAndCancleListener("确定撤回当前评论吗？", "确定", v1 -> {
+                                if (mFabulousListener != null) {
+                                    mFabulousListener.onRejected(getAdapterPosition(), -1);
+                                }
+                                mPromptDialog.dismiss();
+                            }, "取消", v12 -> {
+                                mPromptDialog.dismiss();
+                            });
+                        }
+                        mPromptDialog.show();
                     }
-                    mDialog.setCommentData(lists.get(getAdapterPosition()));
-                    mDialog.show();
-//                    if (mFabulousListener != null) {
-//                        mFabulousListener.onVerify(getAdapterPosition(), -1);
-//                    }
                     break;
                 default:
                     if (listener != null) {
@@ -418,5 +472,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         void onDel(int position, int childPosition);
 
         void onVerify(int position, int childPosition);
+
+        void onRejected(int position, int childPosition);
     }
 }

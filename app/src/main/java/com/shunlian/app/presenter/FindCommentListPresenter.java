@@ -11,6 +11,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFindCommentListView;
 
 import java.util.ArrayList;
@@ -74,7 +75,11 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         requestData(true, 0);
     }
 
-    private void requestData(boolean isShow, int failureCode) {
+    public void initData() {
+        initApi();
+    }
+
+    public void requestData(boolean isShow, int failureCode) {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(page_size));
@@ -154,16 +159,32 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     currentTouchItem = position;
                     if (childPosition == -1) {
                         itemComment = mItemComments.get(position);
-                        iView.delPrompt();
                     } else {
                         itemComment = mItemComments.get(position).reply_list.get(childPosition);
-                        iView.delPrompt();
                     }
+                    iView.delPrompt();
                 }
 
                 @Override
                 public void onVerify(int position, int childPosition) {
+                    currentTouchItem = position;
+                    if (childPosition == -1) {
+                        itemComment = mItemComments.get(position);
+                    } else {
+                        itemComment = mItemComments.get(position).reply_list.get(childPosition);
+                    }
+                    verifyComment(itemComment.id);
+                }
 
+                @Override
+                public void onRejected(int position, int childPosition) {
+                    currentTouchItem = position;
+                    if (childPosition == -1) {
+                        itemComment = mItemComments.get(position);
+                    } else {
+                        itemComment = mItemComments.get(position).reply_list.get(childPosition);
+                    }
+                    retractComment(itemComment.id);
                 }
             });
         } else {
@@ -184,7 +205,6 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         }
     }
 
-
     public void pointFabulous(String item_id, int childPosition) {
         Map<String, String> map = new HashMap<>();
         map.put("comment_id", item_id);
@@ -201,7 +221,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     }
 
     private void setPointFabulous(int childPosition) {
-        if (mAnimationView != null) {
+        if (mAnimationView != null && !mAnimationView.isAnimating()) {
             mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -258,17 +278,11 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 //        }
         if ("0".equals(insert_item.level)) {
             mItemComments.add(0, insert_item);
-        } else if ("1".equals(insert_item.level)) {
-            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
-                if (itemComment.id.equals(insert_item.reply_comment_id)) {
-                    itemComment.reply_list.add(insert_item);
-                    break;
-                }
-            }
-        } else if ("2".equals(insert_item.level)) {
-            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
-                if (itemComment.id.equals(insert_item.reply_parent_comment_id)) {
-                    itemComment.reply_list.add(insert_item);
+        } else {
+            for (FindCommentListEntity.ItemComment item : mItemComments) {
+                if (item.id.equals(insert_item.reply_parent_comment_id)) {
+                    item.reply_list.add(0, insert_item);
+                    item.reply_count++;
                     break;
                 }
             }
@@ -282,9 +296,18 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
 
     @Override
-    protected void delSuccess(String commentId, String parentId) {
-        if (isEmpty(parentId)) {
-            mItemComments.remove(currentTouchItem);
+    protected void delSuccess(String commentId, String parentId, List<FindCommentListEntity.ItemComment> itemComments, int replyCount) {
+        if (isEmpty(parentId) || "0".equals(parentId)) {
+            for (FindCommentListEntity.ItemComment comment : mItemComments) {
+                if (commentId.equals(comment.id)) {
+                    if (comment.reply_count != 0) {
+                        comment.status = 3;
+                    } else {
+                        mItemComments.remove(comment);
+                    }
+                    break;
+                }
+            }
             adapter.notifyDataSetChanged();
             currentTouchItem = -1;
             itemComment = null;
@@ -292,11 +315,63 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         } else {
             for (FindCommentListEntity.ItemComment comment : mItemComments) {
                 if (parentId.equals(comment.id)) {
-                    List<FindCommentListEntity.ItemComment> list = comment.reply_list;
-                    list.remove(currentTouchItem);
+                    comment.reply_list = itemComments;
+                    comment.reply_count = replyCount;
                     adapter.notifyDataSetChanged();
-                    currentTouchItem = -1;
-                    itemComment = null;
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void verifySuccess(String commentId, String parentCommentId) {
+        if (isEmpty(parentCommentId) || "0".equals(parentCommentId)) {
+            for (FindCommentListEntity.ItemComment comment : mItemComments) {
+                if (commentId.equals(comment.id)) {
+                    comment.check_is_show = 2;
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (parentCommentId.equals(itemComment.id)) {
+                    List<FindCommentListEntity.ItemComment> list = itemComment.reply_list;
+                    for (FindCommentListEntity.ItemComment item : list) {
+                        if (commentId.equals(item.id)) {
+                            item.check_is_show = 2;
+                            adapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void retractComment(String commentId, String parentCommentId) {
+        if (isEmpty(parentCommentId) || "0".equals(parentCommentId)) {
+            for (FindCommentListEntity.ItemComment comment : mItemComments) {
+                if (commentId.equals(comment.id)) {
+                    comment.check_is_show = 1;
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (parentCommentId.equals(itemComment.id)) {
+                    List<FindCommentListEntity.ItemComment> list = itemComment.reply_list;
+                    for (FindCommentListEntity.ItemComment item : list) {
+                        if (commentId.equals(item.id)) {
+                            item.check_is_show = 1;
+                            adapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
                     break;
                 }
             }

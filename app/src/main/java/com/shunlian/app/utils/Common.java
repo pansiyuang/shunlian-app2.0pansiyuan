@@ -93,7 +93,7 @@ import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.coupon.CouponGoodsAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.coupon.UserCouponListAct;
-import com.shunlian.app.ui.discover.other.CommentListAct;
+import com.shunlian.app.ui.discover_new.comment.CommentListAct;
 import com.shunlian.app.ui.fragment.SortAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;

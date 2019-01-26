@@ -302,7 +302,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="63dp"
         android:orientation="vertical"
-        android:paddingTop="28dp"
         android:visibility="visible">
 
         <TextView
@@ -318,17 +317,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"></LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_total_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:drawableRight="@mipmap/icon_found_home_jiantou"
-            android:drawablePadding="4dp"
-            android:text="查看全部100条评论"
-            android:textColor="@color/value_484848"
-            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout

@@ -23,7 +23,6 @@ public interface IFindCommentView extends IView {
      * 删除提示
      */
     void delPrompt();
-
     /**
      * 软键盘处理
      */

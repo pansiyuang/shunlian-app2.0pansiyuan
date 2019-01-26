@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
+import com.shunlian.app.ui.discover_new.comment.CommentRejectedAct;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +33,7 @@ public class CommentBottmDialog extends Dialog implements View.OnClickListener {
 
     private Unbinder bind;
     private FindCommentListEntity.ItemComment currentComment;
+    private OnPassListener mListener;
 
     public CommentBottmDialog(Context context) {
         this(context, R.style.MyDialogStyleBottom);
@@ -74,12 +76,25 @@ public class CommentBottmDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_pass:
+                if (mListener != null) {
+                    mListener.onPass();
+                }
+                dismiss();
                 break;
             case R.id.tv_rejected:
+                CommentRejectedAct.startAct(getContext(), currentComment.id);
                 break;
             case R.id.tv_cancel:
                 dismiss();
                 break;
         }
+    }
+
+    public void setOnPassListener(OnPassListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnPassListener {
+        void onPass();
     }
 }

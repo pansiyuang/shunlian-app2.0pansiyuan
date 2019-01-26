@@ -11,6 +11,7 @@ import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IFindCommentView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -58,10 +59,45 @@ public abstract class FindCommentPresenter<T extends IFindCommentView> extends B
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                delSuccess(entity.data.comment_id, entity.data.reply_parent_comment_id);
+                delSuccess(entity.data.comment_id, entity.data.reply_parent_comment_id,entity.data.reply_result,entity.data.reply_count);
             }
         });
     }
 
-    protected abstract void delSuccess(String commentId, String parentCommentId);
+    protected abstract void delSuccess(String commentId, String parentCommentId, List<FindCommentListEntity.ItemComment> itemCommentList,int replyCount);
+
+    public void verifyComment(String comment_id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("comment_id", comment_id);
+        map.put("check_status", "1");
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().commentCheck(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                verifySuccess(entity.data.comment_id, entity.data.reply_parent_comment_id);
+            }
+        });
+    }
+
+    protected abstract void verifySuccess(String commentId, String parentCommentId);
+
+    public void retractComment(String comment_id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("comment_id", comment_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().retractComment(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                retractComment(entity.data.comment_id, entity.data.reply_parent_comment_id);
+            }
+        });
+    }
+
+    protected abstract void retractComment(String commentId, String parentCommentId);
 }

@@ -95,6 +95,8 @@ public class CommonEntity {
     //发现评论
     public String comment_id;
     public String reply_parent_comment_id;
+    public List<FindCommentListEntity.ItemComment> reply_result;
+    public int reply_count;
 
     @Override
     public String toString() {

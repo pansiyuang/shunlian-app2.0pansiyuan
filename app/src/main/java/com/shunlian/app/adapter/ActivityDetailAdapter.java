@@ -57,6 +57,7 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewLookBigImgAct;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.SaveImgDialog;
+import com.shunlian.app.widget.SubBlogCommentItemView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -188,6 +189,13 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
             blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
             blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
+
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
+                gone(blogViewHolder.ll_comment);
+            } else {
+                visible(blogViewHolder.ll_comment);
+                reply(blogViewHolder.ll_comment, blog.comment_list);
+            }
         } else {
             super.onBindViewHolder(holder, position, payloads);
         }
@@ -254,24 +262,21 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 int i = TransformUtil.dip2px(context, 10);
                 TransformUtil.expandViewTouchDelegate(blogViewHolder.tv_share_count, i, i, i, i);
                 blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
-                blogViewHolder.tv_share_count.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mShareInfoParam = new ShareInfoParam();
-                        mShareInfoParam.blogId = blog.id;
-                        mShareInfoParam.shareLink = goods.share_url;
-                        mShareInfoParam.title = goods.title;
-                        mShareInfoParam.desc = goods.desc;
-                        mShareInfoParam.goods_id = goods.goods_id;
-                        mShareInfoParam.price = goods.price;
-                        mShareInfoParam.market_price = goods.market_price;
-                        mShareInfoParam.img = goods.thumb;
-                        mShareInfoParam.isSuperiorProduct = (goods.isSuperiorProduct == 1 ? true : false);
-                        mShareInfoParam.userName = SharedPrefUtil.getSharedUserString("nickname", "");
-                        mShareInfoParam.userAvatar = SharedPrefUtil.getSharedUserString("avatar", "");
-                        shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
-                        shareGoodDialogUtil.setShareGoods();
-                    }
+                blogViewHolder.tv_share_count.setOnClickListener(v -> {
+                    mShareInfoParam = new ShareInfoParam();
+                    mShareInfoParam.blogId = blog.id;
+                    mShareInfoParam.shareLink = goods.share_url;
+                    mShareInfoParam.title = goods.title;
+                    mShareInfoParam.desc = goods.desc;
+                    mShareInfoParam.goods_id = goods.goods_id;
+                    mShareInfoParam.price = goods.price;
+                    mShareInfoParam.market_price = goods.market_price;
+                    mShareInfoParam.img = goods.thumb;
+                    mShareInfoParam.isSuperiorProduct = (goods.isSuperiorProduct == 1 ? true : false);
+                    mShareInfoParam.userName = SharedPrefUtil.getSharedUserString("nickname", "");
+                    mShareInfoParam.userAvatar = SharedPrefUtil.getSharedUserString("avatar", "");
+                    shareGoodDialogUtil.shareGoodDialog(mShareInfoParam, true, true);
+                    shareGoodDialogUtil.setShareGoods();
                 });
                 blogViewHolder.rlayout_goods.setVisibility(View.VISIBLE);
             } else {
@@ -416,6 +421,34 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                     Common.goGoGo(context, "login");
                 }
             });
+
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
+                gone(blogViewHolder.ll_comment);
+            } else {
+                visible(blogViewHolder.ll_comment);
+                reply(blogViewHolder.ll_comment, blog.comment_list);
+            }
+        }
+    }
+
+    public void reply(LinearLayout ll_sub_bg, BigImgEntity.CommentEntity commentEntity) {
+        ll_sub_bg.removeAllViews();
+        int maxSize;
+        if (commentEntity.list.size() >= 2) {
+            maxSize = 2;
+        } else {
+            maxSize = commentEntity.list.size();
+        }
+        for (int j = 0; j < maxSize; j++) {
+            SubBlogCommentItemView view = new SubBlogCommentItemView(context);
+            BigImgEntity.CommentItem itemComment = commentEntity.list.get(j);
+            view.setCommentData(itemComment);
+            if (j == maxSize - 1) {
+                view.setNumShow(true, commentEntity.total);
+            } else {
+                view.setNumShow(false, commentEntity.total);
+            }
+            ll_sub_bg.addView(view);
         }
     }
 
@@ -637,6 +670,9 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
         @BindView(R.id.recylcer_attention)
         RecyclerView recylcer_attention;
+
+        @BindView(R.id.ll_comment)
+        LinearLayout ll_comment;
 
         public BlogViewHolder(View itemView) {
             super(itemView);

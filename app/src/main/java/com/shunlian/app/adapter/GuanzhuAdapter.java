@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GuanzhuEntity;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
-import com.shunlian.app.ui.discover.other.CommentListAct;
+import com.shunlian.app.ui.discover_new.comment.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
