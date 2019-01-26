@@ -55,7 +55,7 @@ public class SortFragPresenter extends BasePresenter<ISortFragView> {
             public void onSuccess(BaseEntity<SortFragEntity> entity) {
                 super.onSuccess(entity);
                 iView.categoryAll(entity.data.categoryList);
-                iView.setKeyworld(entity.data.search);
+                iView.setKeyworld(entity.data.input_keyword);
             }
         });
     }
