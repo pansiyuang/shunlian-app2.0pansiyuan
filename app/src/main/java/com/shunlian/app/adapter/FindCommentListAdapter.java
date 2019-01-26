@@ -24,10 +24,9 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CommentBottmDialog;
+import com.shunlian.app.widget.CommentToolBottomDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.SubCommentItemView;
@@ -46,6 +45,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
     public int mHotCommentCount;
     private String mCommentType;
     private CommentBottmDialog mDialog;
+    private CommentToolBottomDialog mToolDialog;
     private PromptDialog mPromptDialog;
     private OnPointFabulousListener mFabulousListener;
 
@@ -219,13 +219,53 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             if (itemComment.status == 3) { // 0未审核，1已审核，2已驳回，3已删除
                 mHolder.mtv_content.setTextColor(getColor(R.color.color_value_6c));
                 mHolder.mtv_content.setText("该条评论已被删除");
+                mHolder.mtv_content.setLongClickable(false);
                 gone(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
             } else {
                 mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
                 visible(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
                 mHolder.mtv_content.setText(itemComment.content);
+                mHolder.mtv_content.setLongClickable(true);
                 mHolder.tv_verify.setVisibility(itemComment.check_is_show == 0 ? View.GONE : View.VISIBLE);  //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
             }
+
+            mHolder.mtv_content.setOnLongClickListener(v -> {
+                if (mToolDialog == null) {
+                    mToolDialog = new CommentToolBottomDialog(context);
+                    mToolDialog.setOnToolListener(new CommentToolBottomDialog.OnToolListener() {
+                        @Override
+                        public void onReply() {
+                            if (mFabulousListener != null) {
+                                mFabulousListener.onReply(position, -1);
+                            }
+                        }
+
+                        @Override
+                        public void onDel() {
+                            if (mFabulousListener != null) {
+                                mFabulousListener.onDel(position, -1);
+                            }
+                        }
+
+                        @Override
+                        public void onVerify() {
+                            if (mFabulousListener != null) {
+                                mFabulousListener.onVerify(position, -1);
+                            }
+                        }
+
+                        @Override
+                        public void onRejected() {
+                            if (mFabulousListener != null) {
+                                mFabulousListener.onRejected(position, -1);
+                            }
+                        }
+                    });
+                }
+                mToolDialog.setCommentData(itemComment);
+                mToolDialog.show();
+                return false;
+            });
         }
     }
 
