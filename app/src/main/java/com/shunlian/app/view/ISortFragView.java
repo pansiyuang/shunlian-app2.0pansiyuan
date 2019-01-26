@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.SortFragEntity;
 
 import java.util.List;
@@ -20,5 +21,5 @@ public interface ISortFragView extends IView {
      * 设置搜索关键字
      * @param keyworld
      */
-    void setKeyworld(String keyworld);
+    void setKeyworld(GetDataEntity.KeyWord keyworld);
 }

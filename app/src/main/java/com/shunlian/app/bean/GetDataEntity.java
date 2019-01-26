@@ -14,7 +14,15 @@ public class GetDataEntity {
     @JsonProperty(value = "data")//关键字重名
     public List<MData> datas;
     public String default_keyword;
+    public KeyWord input_keyword;
 
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class KeyWord {
+        public String type;
+        public String item_id;
+        public String keyword;
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class MData {

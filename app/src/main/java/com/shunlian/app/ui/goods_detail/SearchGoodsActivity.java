@@ -114,6 +114,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         context.startActivity(intent);
     }
 
+    public static void startAct(Activity context, String keyWord, String flag,String type,String item_id) {
+        Intent intent = new Intent(context, SearchGoodsActivity.class);
+        intent.putExtra("keyword", keyWord);
+        intent.putExtra("flag", flag);
+        intent.putExtra("type", type);
+        intent.putExtra("item_id", item_id);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_search_goods;
