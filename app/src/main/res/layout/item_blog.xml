@@ -238,7 +238,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:drawableLeft="@mipmap/icon_found_remeng"
+            android:drawableLeft="@mipmap/icon_message_nor"
             android:drawablePadding="5dp"
             android:gravity="center"
             android:paddingRight="35dp"
@@ -305,6 +305,7 @@
         android:visibility="visible">
 
         <TextView
+            android:id="@+id/tv_comment_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="14dp"

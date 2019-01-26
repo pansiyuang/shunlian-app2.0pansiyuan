@@ -296,7 +296,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
 
     @Override
-    protected void delSuccess(String commentId, String parentId, List<FindCommentListEntity.ItemComment> itemComments, int replyCount) {
+    protected void delSuccess(String commentId, String parentId, List<FindCommentListEntity.ItemComment> itemComments, int replyCount,int replyStatus) {
         if (isEmpty(parentId) || "0".equals(parentId)) {
             for (FindCommentListEntity.ItemComment comment : mItemComments) {
                 if (commentId.equals(comment.id)) {
@@ -322,6 +322,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 }
             }
         }
+        Common.staticToasts(context,"删除成功",R.mipmap.icon_common_duihao);
     }
 
     @Override
@@ -349,6 +350,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 }
             }
         }
+        Common.staticToasts(context,"审核成功",R.mipmap.icon_common_duihao);
     }
 
     @Override
@@ -376,6 +378,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 }
             }
         }
+        Common.staticToasts(context,"撤回成功",R.mipmap.icon_common_duihao);
     }
 
 

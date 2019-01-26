@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 
 /**
@@ -17,6 +18,8 @@ public interface ICommonBlogView extends IView {
     void downCountSuccess(String blogId);
 
     void shareGoodsSuccess(String blogId,String goodsId);
+
+    void replySuccess(BigImgEntity.CommentItem commentItem);
 
     void refreshFinish();
 }

@@ -17,11 +17,14 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.IHotBlogView;
+import com.shunlian.app.widget.BlogCommentSendPopwindow;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
@@ -53,9 +56,11 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     private String currentKeyword;
     private PromptDialog promptDialog;
     private LottieAnimationView mAnimationView;
-
+    private String currentCommentBlogId;
+    private BlogCommentSendPopwindow mPopWindow;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private ShareInfoParam mShareInfoParam;
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -108,6 +113,19 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
                             mPresenter.onRefresh();
                         }
                     }
+                }
+            }
+        });
+        SoftKeyBoardListener.setListener(getActivity(), new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+                if (mPopWindow != null) {
+                    mPopWindow.dismiss();
                 }
             }
         });
@@ -240,7 +258,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        if(mShareInfoParam==null){
+        if (mShareInfoParam == null) {
             mShareInfoParam = new ShareInfoParam();
         }
         if (mShareInfoParam != null) {
@@ -307,14 +325,15 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
         mShareInfoParam = new ShareInfoParam();
         mShareInfoParam.goods_id = goodid;
         mShareInfoParam.blogId = blogId;
-        if(mPresenter!=null) {
+        if (mPresenter != null) {
             mPresenter.getShareInfo(mPresenter.goods, goodid);
         }
     }
 
     @Override
     public void showCommentView(String blogId) {
-
+        currentCommentBlogId = blogId;
+        showPopupComment();
     }
 
     @Override
@@ -335,6 +354,29 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
 
     @Override
     public void replySuccess(BigImgEntity.CommentItem commentItem) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (currentCommentBlogId.equals(blog.id)) {
+                blog.comment_list.list.add(0, commentItem);
+                blog.comment_list.total++;
+                break;
+            }
+        }
+        Common.staticToasts(getActivity(), "评论成功", R.mipmap.icon_common_duihao);
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+        currentCommentBlogId = null;
+        mPopWindow.dismiss();
+    }
 
+    private void showPopupComment() {
+        if (mPopWindow == null) {
+            mPopWindow = new BlogCommentSendPopwindow(getActivity());
+            mPopWindow.setOnPopClickListener((String content) -> {
+                if (isEmpty(currentCommentBlogId)) {
+                    return;
+                }
+                mPresenter.sendComment(content, "", currentCommentBlogId, "0");
+            });
+        }
+        mPopWindow.show();
     }
 }

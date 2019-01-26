@@ -97,6 +97,7 @@ public class CommonEntity {
     public String reply_parent_comment_id;
     public List<FindCommentListEntity.ItemComment> reply_result;
     public int reply_count;
+    public int reply_status;
 
     @Override
     public String toString() {

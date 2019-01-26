@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.shunlian.app.R;
 import com.shunlian.app.adapter.FindCommentDetailAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommentDetailEntity;
@@ -12,6 +13,7 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IFindCommentDetailView;
 
 import java.util.ArrayList;
@@ -284,17 +286,23 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;
+        Common.staticToasts(context,"评论成功",R.mipmap.icon_common_duihao);
     }
 
     @Override
-    protected void delSuccess(String commentId, String parentCommentId, List<FindCommentListEntity.ItemComment> itemCommentList, int replyCount) {
+    protected void delSuccess(String commentId, String parentCommentId, List<FindCommentListEntity.ItemComment> itemCommentList, int replyCount, int replyStatus) {
         if (isParent) {
             currentComment = null;
             parentList.clear();
         } else {
-            mReplyListBeans.remove(currentTouchItem);
-            currentComment.reply_list = mReplyListBeans;
+            if (replyStatus == 1) {
+                mReplyListBeans.get(currentTouchItem).status = 3;
+            } else {
+                mReplyListBeans.remove(currentTouchItem);
+                currentComment.reply_list = mReplyListBeans;
+            }
         }
+        Common.staticToasts(context,"删除成功",R.mipmap.icon_common_duihao);
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;
@@ -313,6 +321,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
                 }
             }
         }
+        Common.staticToasts(context,"审核成功",R.mipmap.icon_common_duihao);
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;
@@ -330,6 +339,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
                 }
             }
         }
+        Common.staticToasts(context,"撤回成功",R.mipmap.icon_common_duihao);
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;

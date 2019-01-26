@@ -191,10 +191,18 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
 
             if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
-                gone(blogViewHolder.ll_comment);
+                blogViewHolder.tv_comment_count.setText("评论");
+            } else {
+                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
+            }
+
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
+                blogViewHolder.tv_comment_count.setText("评论");
+                gone(blogViewHolder.ll_comment, blogViewHolder.tv_comment_title);
             } else {
                 visible(blogViewHolder.ll_comment);
-                reply(blogViewHolder.ll_comment, blog.comment_list);
+                reply(blogViewHolder.ll_comment, blog.comment_list,blog.id);
+                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
             }
         } else {
             super.onBindViewHolder(holder, position, payloads);
@@ -252,6 +260,12 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             blogViewHolder.tv_address.setText(blog.place);
             blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
             blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
+
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
+                blogViewHolder.tv_comment_count.setText("评论");
+            } else {
+                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
+            }
 
             if (!isEmpty(blog.related_goods)) {
                 GoodsDeatilEntity.Goods goods = blog.related_goods.get(0);
@@ -422,16 +436,25 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 }
             });
 
+            blogViewHolder.tv_comment.setOnClickListener(v -> {
+                if (mCallBack != null) {
+                    mCallBack.showCommentView(blog.id);
+                }
+            });
+
             if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
-                gone(blogViewHolder.ll_comment);
+                blogViewHolder.tv_comment_count.setText("评论");
+                gone(blogViewHolder.ll_comment, blogViewHolder.tv_comment_title);
             } else {
                 visible(blogViewHolder.ll_comment);
-                reply(blogViewHolder.ll_comment, blog.comment_list);
+                reply(blogViewHolder.ll_comment, blog.comment_list,blog.id);
+                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
             }
+
         }
     }
 
-    public void reply(LinearLayout ll_sub_bg, BigImgEntity.CommentEntity commentEntity) {
+    public void reply(LinearLayout ll_sub_bg, BigImgEntity.CommentEntity commentEntity,String blogId) {
         ll_sub_bg.removeAllViews();
         int maxSize;
         if (commentEntity.list.size() >= 2) {
@@ -442,7 +465,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         for (int j = 0; j < maxSize; j++) {
             SubBlogCommentItemView view = new SubBlogCommentItemView(context);
             BigImgEntity.CommentItem itemComment = commentEntity.list.get(j);
-            view.setCommentData(itemComment);
+            view.setCommentData(itemComment,blogId);
             if (j == maxSize - 1) {
                 view.setNumShow(true, commentEntity.total);
             } else {
@@ -671,6 +694,15 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         @BindView(R.id.recylcer_attention)
         RecyclerView recylcer_attention;
 
+        @BindView(R.id.tv_comment)
+        TextView tv_comment;
+
+        @BindView(R.id.tv_comment_title)
+        TextView tv_comment_title;
+
+        @BindView(R.id.tv_comment_count)
+        TextView tv_comment_count;
+
         @BindView(R.id.ll_comment)
         LinearLayout ll_comment;
 
@@ -700,6 +732,8 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         void toDown(String blogId);
 
         void OnTopSize(int height);
+
+        void showCommentView(String blogId);
     }
 
     public void readyToDownLoad(BigImgEntity.Blog blog) {

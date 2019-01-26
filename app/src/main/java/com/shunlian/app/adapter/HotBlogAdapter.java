@@ -36,7 +36,6 @@ import com.shunlian.app.utils.download.DownLoadDialogProgress;
 import com.shunlian.app.utils.download.DownloadUtils;
 import com.shunlian.app.utils.download.JsDownloadListener;
 import com.shunlian.app.widget.BlogBottomDialog;
-import com.shunlian.app.widget.BlogCommentSendPopwindow;
 import com.shunlian.app.widget.BlogGoodsShareDialog;
 import com.shunlian.app.widget.FolderTextView;
 import com.shunlian.app.widget.HttpDialog;
@@ -247,7 +246,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
             blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
             blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
-
             blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
 
             if (blog.is_self == 1) {
@@ -266,10 +264,12 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             }
 
             if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
-                gone(blogViewHolder.ll_comment);
+                blogViewHolder.tv_comment_count.setText("评论");
+                gone(blogViewHolder.ll_comment, blogViewHolder.tv_comment_title);
             } else {
                 visible(blogViewHolder.ll_comment);
-                reply(blogViewHolder.ll_comment, blog.comment_list);
+                reply(blogViewHolder.ll_comment, blog.comment_list,blog.id);
+                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
             }
         } else {
             super.onBindViewHolder(holder, position, payloads);
@@ -315,7 +315,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             } else {
                 blogViewHolder.miv_expert.setVisibility(View.GONE);
             }
-
             blogViewHolder.tv_tag.setText(blog.activity_title);
             blogViewHolder.tv_content.setText(blog.text);
             blogViewHolder.tv_content.setBlogText(blog.text);
@@ -506,15 +505,17 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 }
             });
             if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
-                gone(blogViewHolder.ll_comment);
+                blogViewHolder.tv_comment_count.setText("评论");
+                gone(blogViewHolder.ll_comment, blogViewHolder.tv_comment_title);
             } else {
                 visible(blogViewHolder.ll_comment);
-                reply(blogViewHolder.ll_comment, blog.comment_list);
+                reply(blogViewHolder.ll_comment, blog.comment_list,blog.id);
+                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
             }
         }
     }
 
-    public void reply(LinearLayout ll_sub_bg, BigImgEntity.CommentEntity commentEntity) {
+    public void reply(LinearLayout ll_sub_bg, BigImgEntity.CommentEntity commentEntity,String blogId) {
         ll_sub_bg.removeAllViews();
         int maxSize;
         if (commentEntity.list.size() >= 2) {
@@ -525,7 +526,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         for (int j = 0; j < maxSize; j++) {
             SubBlogCommentItemView view = new SubBlogCommentItemView(context);
             BigImgEntity.CommentItem itemComment = commentEntity.list.get(j);
-            view.setCommentData(itemComment);
+            view.setCommentData(itemComment, blogId);
             if (j == maxSize - 1) {
                 view.setNumShow(true, commentEntity.total);
             } else {
@@ -699,6 +700,12 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
 
         @BindView(R.id.tv_comment)
         TextView tv_comment;
+
+        @BindView(R.id.tv_comment_title)
+        TextView tv_comment_title;
+
+        @BindView(R.id.tv_comment_count)
+        TextView tv_comment_count;
 
         @BindView(R.id.ll_comment)
         LinearLayout ll_comment;

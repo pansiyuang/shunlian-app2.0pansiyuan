@@ -59,12 +59,12 @@ public abstract class FindCommentPresenter<T extends IFindCommentView> extends B
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                delSuccess(entity.data.comment_id, entity.data.reply_parent_comment_id,entity.data.reply_result,entity.data.reply_count);
+                delSuccess(entity.data.comment_id, entity.data.reply_parent_comment_id, entity.data.reply_result, entity.data.reply_count, entity.data.reply_status);
             }
         });
     }
 
-    protected abstract void delSuccess(String commentId, String parentCommentId, List<FindCommentListEntity.ItemComment> itemCommentList,int replyCount);
+    protected abstract void delSuccess(String commentId, String parentCommentId, List<FindCommentListEntity.ItemComment> itemCommentList, int replyCount, int replyStatus);
 
     public void verifyComment(String comment_id) {
         Map<String, String> map = new HashMap<>();
