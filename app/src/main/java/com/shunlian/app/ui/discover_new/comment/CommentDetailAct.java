@@ -14,6 +14,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.eventbus_bean.RejectedNotifyEvent;
+import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.FindCommentDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -133,6 +135,19 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
             @Override
             public void onLoadMore() {
 
+            }
+        });
+
+        SoftKeyBoardListener.setListener(this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+                edt_content.setText("");
+                edt_content.setHint(getStringResouce(R.string.add_comments));
+                presenter.clearComment();
             }
         });
     }
@@ -294,6 +309,13 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
         if (quick_actions != null)
             quick_actions.setMessageCount(s);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RejectedNotifyEvent event) {
+        if (event.rejectedSuccess) {
+            presenter.rejectedComment(event.commentId, event.parentCommentId);
+        }
     }
 
 }

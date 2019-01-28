@@ -38,6 +38,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     private Call<BaseEntity<FindCommentListEntity>> baseEntityCall;
     private LottieAnimationView mAnimationView;
     private String currentLevel;
+    private String currentCommentId;
 
     public FindCommentListPresenter(Context context, IFindCommentListView iView, String article_id) {
         super(context, iView);
@@ -94,6 +95,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 FindCommentListEntity data = entity.data;
                 FindCommentListEntity.Pager pager = data.pager;
                 if ("1".equals(pager.page)) {
+                    mItemComments.clear();
                     if (!isEmpty(data.top_list)) {
                         hotCommentCount = data.top_list.size();
                         mItemComments.addAll(data.top_list);
@@ -133,7 +135,6 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 public void onPointFabulous(int position, int childPosition, LottieAnimationView lottieAnimationView) {
                     mAnimationView = lottieAnimationView;
                     currentTouchItem = position;
-                    FindCommentListEntity.ItemComment itemComment;
                     if (childPosition != -1) {
                         itemComment = mItemComments.get(position).reply_list.get(childPosition);
                     } else {
@@ -205,6 +206,34 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         }
     }
 
+    public void rejectedComment(String commentId, String parentId) {
+        if (isEmpty(commentId)) {
+            return;
+        }
+        if (isEmpty(parentId) || "0".equals(parentId)) {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (commentId.equals(itemComment.id)) {
+                    itemComment.check_is_show = 0;
+                    break;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (parentId.equals(itemComment.id)) {
+                    for (FindCommentListEntity.ItemComment comment : itemComment.reply_list) {
+                        if (commentId.equals(comment.id)) {
+                            comment.check_is_show = 0;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+
     public void pointFabulous(String item_id, int childPosition) {
         Map<String, String> map = new HashMap<>();
         map.put("comment_id", item_id);
@@ -230,7 +259,6 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    FindCommentListEntity.ItemComment itemComment;
                     if (childPosition == -1) {
                         itemComment = mItemComments.get(currentTouchItem);
                     } else {
@@ -256,12 +284,17 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         }
     }
 
+    public void clearComment() {
+        currentCommentId = "";
+        currentLevel = "";
+        itemComment = null;
+    }
+
     public void sendComment(String content, String level) {
-        String pid = "";
         if (itemComment != null) {
-            pid = itemComment.id;
+            currentCommentId = itemComment.id;
         }
-        sendComment(content, pid, mArticle_id, level);
+        sendComment(content, currentCommentId, mArticle_id, level);
     }
 
     @Override
@@ -296,7 +329,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
 
     @Override
-    protected void delSuccess(String commentId, String parentId, List<FindCommentListEntity.ItemComment> itemComments, int replyCount,int replyStatus) {
+    protected void delSuccess(String commentId, String parentId, List<FindCommentListEntity.ItemComment> itemComments, int replyCount, int replyStatus) {
         if (isEmpty(parentId) || "0".equals(parentId)) {
             for (FindCommentListEntity.ItemComment comment : mItemComments) {
                 if (commentId.equals(comment.id)) {
@@ -322,7 +355,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 }
             }
         }
-        Common.staticToasts(context,"删除成功",R.mipmap.icon_common_duihao);
+        Common.staticToasts(context, "删除成功", R.mipmap.icon_common_duihao);
     }
 
     @Override
@@ -350,7 +383,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 }
             }
         }
-        Common.staticToasts(context,"审核成功",R.mipmap.icon_common_duihao);
+        Common.staticToasts(context, "审核成功", R.mipmap.icon_common_duihao);
     }
 
     @Override
@@ -378,7 +411,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 }
             }
         }
-        Common.staticToasts(context,"撤回成功",R.mipmap.icon_common_duihao);
+        Common.staticToasts(context, "撤回成功", R.mipmap.icon_common_duihao);
     }
 
 

@@ -439,6 +439,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 changeSearchMode(true);
                 presenter.getSearchTips(s.toString());
             }
+            type = null; //主页跳转如果带了type，输入文字之后清空type，跳转搜索商品界面
         } else {
             changeSearchMode(false);
         }

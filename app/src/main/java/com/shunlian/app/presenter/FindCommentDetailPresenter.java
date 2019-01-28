@@ -38,6 +38,8 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     private LottieAnimationView mAnimationView;
     private int currentTouchItem;
     private boolean isParent = true;
+    private String currentCommentId;
+    private String currentLevel;
 
     public FindCommentDetailPresenter(Context context, IFindCommentDetailView iView, String comment_id) {
         super(context, iView);
@@ -202,6 +204,20 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         }
     }
 
+    public void rejectedComment(String commentId, String parentId) {
+        if (isEmpty(commentId)) {
+            return;
+        }
+        if (isEmpty(parentId) || "0".equals(parentId)) {
+            parentList.get(0).check_is_show = 0;
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : parentList.get(0).reply_list) {
+                itemComment.check_is_show = 0;
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 
     public void pointFabulous(String item_id) {
         Map<String, String> map = new HashMap<>();
@@ -256,16 +272,20 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         mAnimationView.playAnimation();
     }
 
+    public void clearComment() {
+        currentCommentId = mComment_id;
+        currentLevel = "1";
+    }
 
     public void sendComment(String content) {
-        String pid;
         if (isParent) {
-            pid = currentComment.id;
-            sendComment(content, pid, currentComment.discovery_id, "1");
+            currentCommentId = currentComment.id;
+            currentLevel = "1";
         } else {
-            pid = mReplyListBeans.get(currentTouchItem).id;
-            sendComment(content, pid, currentComment.discovery_id, "2");
+            currentCommentId = mReplyListBeans.get(currentTouchItem).id;
+            currentLevel = "2";
         }
+        sendComment(content, currentCommentId, currentComment.discovery_id, "2");
     }
 
 
@@ -286,7 +306,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;
-        Common.staticToasts(context,"评论成功",R.mipmap.icon_common_duihao);
+        Common.staticToasts(context, "评论成功", R.mipmap.icon_common_duihao);
     }
 
     @Override
@@ -302,7 +322,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
                 currentComment.reply_list = mReplyListBeans;
             }
         }
-        Common.staticToasts(context,"删除成功",R.mipmap.icon_common_duihao);
+        Common.staticToasts(context, "删除成功", R.mipmap.icon_common_duihao);
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;
@@ -321,7 +341,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
                 }
             }
         }
-        Common.staticToasts(context,"审核成功",R.mipmap.icon_common_duihao);
+        Common.staticToasts(context, "审核成功", R.mipmap.icon_common_duihao);
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;
@@ -339,7 +359,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
                 }
             }
         }
-        Common.staticToasts(context,"撤回成功",R.mipmap.icon_common_duihao);
+        Common.staticToasts(context, "撤回成功", R.mipmap.icon_common_duihao);
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;

@@ -6,9 +6,13 @@ package com.shunlian.app.eventbus_bean;
 
 public class RejectedNotifyEvent {
 
-    public RejectedNotifyEvent(boolean rejectedSuccess) {
+    public RejectedNotifyEvent(boolean rejectedSuccess,String id,String parentId) {
         this.rejectedSuccess = rejectedSuccess;
+        this.commentId = id;
+        this.parentCommentId = parentId;
     }
 
     public boolean rejectedSuccess;//驳回成功
+    public String commentId;
+    public String parentCommentId;
 }

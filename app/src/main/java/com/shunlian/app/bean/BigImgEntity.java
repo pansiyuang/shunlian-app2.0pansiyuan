@@ -178,7 +178,7 @@ public class BigImgEntity implements Parcelable {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class CommentItem {
+    public static class CommentItem implements Parcelable {
         public String id;
         public String member_id;
         public String avatar;
@@ -196,6 +196,40 @@ public class BigImgEntity implements Parcelable {
             this.member_id = itemComment.member_id;
             this.nickname = itemComment.nickname;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.member_id);
+            dest.writeString(this.avatar);
+            dest.writeString(this.nickname);
+            dest.writeString(this.content);
+        }
+
+        protected CommentItem(Parcel in) {
+            this.id = in.readString();
+            this.member_id = in.readString();
+            this.avatar = in.readString();
+            this.nickname = in.readString();
+            this.content = in.readString();
+        }
+
+        public static final Creator<CommentItem> CREATOR = new Creator<CommentItem>() {
+            @Override
+            public CommentItem createFromParcel(Parcel source) {
+                return new CommentItem(source);
+            }
+
+            @Override
+            public CommentItem[] newArray(int size) {
+                return new CommentItem[size];
+            }
+        };
     }
 
     @Override

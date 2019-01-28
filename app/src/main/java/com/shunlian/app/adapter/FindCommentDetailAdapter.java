@@ -24,6 +24,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CommentBottmDialog;
+import com.shunlian.app.widget.CommentToolBottomDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.SubCommentItemView;
@@ -42,6 +43,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
     private OnPointFabulousListener mFabulousListener;
     private PromptDialog promptDialog;
     private CommentBottmDialog mDialog;
+    private CommentToolBottomDialog mToolDialog;
 
     public FindCommentDetailAdapter(Context context, List<FindCommentListEntity.ItemComment> lists) {
         super(context, true, lists);
@@ -89,7 +91,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             if (!isEmpty(lastLikesBean.expert_icon)) {
                 visible(mHolder.miv_expert);
                 GlideUtils.getInstance().loadImage(context, mHolder.miv_expert, lastLikesBean.expert_icon);
-            }else{
+            } else {
                 gone(mHolder.miv_expert);
             }
 
@@ -143,6 +145,11 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             } else {
                 reply(mHolder.ll_sub_bg, lastLikesBean.reply_list);
             }
+
+            mHolder.mtv_content.setOnLongClickListener(v -> {
+                showCommentToolDialog(lastLikesBean, true, -1);
+                return false;
+            });
         }
     }
 
@@ -215,6 +222,11 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                         });
                     }
                     promptDialog.show();
+                }
+
+                @Override
+                public void onContentLongClick() {
+                    showCommentToolDialog(replyList, false, finalJ);
                 }
             });
             ll_sub_bg.addView(view);
@@ -332,6 +344,43 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                     break;
             }
         }
+    }
+
+    public void showCommentToolDialog(FindCommentListEntity.ItemComment itemComment, boolean isParent, int childPosition) {
+        if (mToolDialog == null) {
+            mToolDialog = new CommentToolBottomDialog(context);
+            mToolDialog.setOnToolListener(new CommentToolBottomDialog.OnToolListener() {
+                @Override
+                public void onReply() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onReply(isParent, childPosition);
+                    }
+                }
+
+                @Override
+                public void onDel() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onDel(isParent, childPosition);
+                    }
+                }
+
+                @Override
+                public void onVerify() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onVerify(isParent, childPosition);
+                    }
+                }
+
+                @Override
+                public void onRejected() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onRejected(isParent, childPosition);
+                    }
+                }
+            });
+        }
+        mToolDialog.setCommentData(itemComment);
+        mToolDialog.show();
     }
 
     public void setPointFabulousListener(OnPointFabulousListener fabulousListener) {

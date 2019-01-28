@@ -15,6 +15,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.ui.discover_new.comment.CommentDetailAct;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 
 /**
  * Created by Administrator on 2018/3/14.
@@ -62,6 +63,10 @@ public class SubCommentItemView extends FrameLayout {
         mAnimationView = view.findViewById(R.id.animation_zan);
         ll_zan = view.findViewById(R.id.ll_zan);
 
+        int i = TransformUtil.dip2px(getContext(), 20);
+        TransformUtil.expandViewTouchDelegate(tv_reply, i, i, i, i);
+        TransformUtil.expandViewTouchDelegate(tv_verify, i, i, i, i);
+
         ll_zan.setOnClickListener(v -> {
             if (mCallBack != null) {
                 mCallBack.OnPraise(mEntity.id, mAnimationView);
@@ -89,6 +94,13 @@ public class SubCommentItemView extends FrameLayout {
                 return;
             }
             CommentDetailAct.startAct(getContext(), mEntity.reply_parent_comment_id);
+        });
+
+        mtv_content.setOnLongClickListener(v -> {
+            if (mCallBack != null) {
+                mCallBack.onContentLongClick();
+            }
+            return false;
         });
     }
 
@@ -152,6 +164,23 @@ public class SubCommentItemView extends FrameLayout {
             ll_zan.setClickable(true);
         }
 
+        if (itemComment.status == 3) { // 0未审核，1已审核，2已驳回，3已删除
+            mtv_content.setTextColor(getContext().getResources().getColor(R.color.color_value_6c));
+            mtv_content.setText("该条评论已被删除");
+            mtv_content.setLongClickable(false);
+            ll_zan.setVisibility(GONE);
+            tv_verify.setVisibility(GONE);
+            tv_reply.setVisibility(GONE);
+        } else {
+            mtv_content.setTextColor(getContext().getResources().getColor(R.color.value_484848));
+            mtv_content.setText(itemComment.content);
+            mtv_content.setLongClickable(true);
+            tv_verify.setVisibility(itemComment.check_is_show == 0 ? View.GONE : View.VISIBLE);  //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
+            ll_zan.setVisibility(VISIBLE);
+            tv_verify.setVisibility(VISIBLE);
+            tv_reply.setVisibility(VISIBLE);
+        }
+
         if (itemComment.check_is_show == 0) { //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
             tv_verify.setVisibility(View.GONE);
         } else if (itemComment.check_is_show == 1) {
@@ -176,5 +205,7 @@ public class SubCommentItemView extends FrameLayout {
         void onVerify();
 
         void onRejected();
+
+        void onContentLongClick();
     }
 }

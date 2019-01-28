@@ -14,6 +14,9 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.eventbus_bean.RejectedNotifyEvent;
+import com.shunlian.app.eventbus_bean.SuspensionRefresh;
+import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -125,6 +128,19 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
             @Override
             public void onLoadMore() {
 
+            }
+        });
+
+        SoftKeyBoardListener.setListener(this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+                edt_content.setText("");
+                edt_content.setHint(getStringResouce(R.string.add_comments));
+                presenter.clearComment();
             }
         });
     }
@@ -303,5 +319,12 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @Override
     public void OnLoadFail() {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RejectedNotifyEvent event) {
+        if (event.rejectedSuccess) {
+            presenter.rejectedComment(event.commentId, event.parentCommentId);
+        }
     }
 }

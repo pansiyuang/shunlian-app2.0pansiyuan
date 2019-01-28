@@ -74,9 +74,23 @@ public class CommentToolBottomDialog extends Dialog implements View.OnClickListe
         if (currentComment.is_self == 1) {
             tv_del.setText("删除");
             tv_del.setTextColor(getContext().getResources().getColor(R.color.value_484848));
+            tv_del.setVisibility(View.GONE);
         } else {
-            tv_del.setText("审核");
-            tv_del.setTextColor(getContext().getResources().getColor(R.color.pink_color));
+            switch (currentComment.check_is_show) {
+                case 0:
+                    tv_del.setVisibility(View.GONE);
+                    break;
+                case 1:
+                    tv_del.setText("审核");
+                    tv_del.setTextColor(getContext().getResources().getColor(R.color.pink_color));
+                    tv_del.setVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    tv_del.setText("撤回");
+                    tv_del.setTextColor(getContext().getResources().getColor(R.color.value_484848));
+                    tv_del.setVisibility(View.VISIBLE);
+                    break;
+            }
         }
     }
 
@@ -102,10 +116,12 @@ public class CommentToolBottomDialog extends Dialog implements View.OnClickListe
                 if (mListener == null) {
                     return;
                 }
-                if (tv_del.getText().equals("删除")) {
+                if (tv_del.getText().toString().equals("删除")) {
                     mListener.onDel();
-                } else if (tv_del.getText().equals("审核")) {
+                } else if (tv_del.getText().toString().equals("审核")) {
                     mListener.onVerify();
+                } else if (tv_del.getText().toString().equals("撤回")) {
+                    mListener.onRejected();
                 }
                 dismiss();
                 break;
