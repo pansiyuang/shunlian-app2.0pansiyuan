@@ -56,7 +56,7 @@ public class CommentToolBottomDialog extends Dialog implements View.OnClickListe
         win.setAttributes(lp);
 
         setCanceledOnTouchOutside(true);
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_comment_bottom, null, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_comment_tool, null, false);
         setContentView(view);
         bind = ButterKnife.bind(this, view);
 
@@ -91,9 +91,22 @@ public class CommentToolBottomDialog extends Dialog implements View.OnClickListe
                 dismiss();
                 break;
             case R.id.tv_reply:
+                if (currentComment.is_self == 0) {
+                    if (mListener != null) {
+                        mListener.onReply();
+                    }
+                }
                 dismiss();
                 break;
             case R.id.tv_del:
+                if (mListener == null) {
+                    return;
+                }
+                if (tv_del.getText().equals("删除")) {
+                    mListener.onDel();
+                } else if (tv_del.getText().equals("审核")) {
+                    mListener.onVerify();
+                }
                 dismiss();
                 break;
             case R.id.tv_cancel:
