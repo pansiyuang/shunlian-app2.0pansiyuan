@@ -13,9 +13,9 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.ui.discover_new.comment.CommentDetailAct;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 
 /**
@@ -64,7 +64,7 @@ public class SubCommentItemView extends FrameLayout {
         mAnimationView = view.findViewById(R.id.animation_zan);
         ll_zan = view.findViewById(R.id.ll_zan);
 
-        int i = TransformUtil.dip2px(getContext(), 20);
+        int i = TransformUtil.dip2px(getContext(), 30);
         TransformUtil.expandViewTouchDelegate(tv_reply, i, i, i, i);
         TransformUtil.expandViewTouchDelegate(tv_verify, i, i, i, i);
 
@@ -103,6 +103,7 @@ public class SubCommentItemView extends FrameLayout {
             }
             return false;
         });
+        civ_head.setOnClickListener(v -> MyPageActivity.startAct(getContext(), mEntity.member_id));
     }
 
 

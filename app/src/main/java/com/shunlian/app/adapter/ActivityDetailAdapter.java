@@ -82,6 +82,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
     private ShareInfoParam mShareInfoParam;
     private HttpDialog httpDialog;
     private DownLoadQRCodeImageUtil downLoadQRCodeImageUtil;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

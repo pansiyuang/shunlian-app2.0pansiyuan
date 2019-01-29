@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
+import com.shunlian.app.presenter.FindCommentListPresenter;
+import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.PromptDialog;
@@ -234,6 +236,10 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                 showCommentToolDialog(itemComment, position, -1);
                 return false;
             });
+
+            mHolder.civ_head.setOnClickListener(v -> {
+                MyPageActivity.startAct(context, itemComment.member_id);
+            });
         }
     }
 
@@ -271,6 +277,9 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             view.setOnCallBack(new SubCommentItemView.OnSubCallBack() {
                 @Override
                 public void OnPraise(String commentId, LottieAnimationView lottieAnimationView) {
+                    if (FindCommentListPresenter.isPlaying) {
+                        return;
+                    }
                     if (mFabulousListener != null) {
                         mFabulousListener.onPointFabulous(position, finalJ, lottieAnimationView);
                     }
@@ -400,7 +409,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             tv_verify.setOnClickListener(this);
 
             //返回键扩大点击范围
-            int i = TransformUtil.dip2px(context, 20);
+            int i = TransformUtil.dip2px(context, 30);
             TransformUtil.expandViewTouchDelegate(tv_reply, i, i, i, i);
             TransformUtil.expandViewTouchDelegate(tv_verify, i, i, i, i);
         }
@@ -409,6 +418,9 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_zan:
+                    if (FindCommentListPresenter.isPlaying) {
+                        return;
+                    }
                     if (mFabulousListener != null) {
                         mFabulousListener.onPointFabulous(getAdapterPosition(), -1, animation_zan);
                     }

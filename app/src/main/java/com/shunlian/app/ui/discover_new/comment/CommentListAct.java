@@ -8,11 +8,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.eventbus_bean.RejectedNotifyEvent;
@@ -30,6 +32,7 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IFindCommentListView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
@@ -78,9 +81,13 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
+    @BindView(R.id.mrlayout_toolbar_more)
+    MyRelativeLayout mrlayout_toolbar_more;
+
     private LinearLayoutManager manager;
     private FindCommentListPresenter presenter;
     private MessageCountManager messageCountManager;
+    private FindCommentListEntity.ItemComment currentComment;
 
     public static void startAct(Activity activity, String article_id) {
         Intent intent = new Intent(activity, CommentListAct.class);
@@ -136,13 +143,15 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
         SoftKeyBoardListener.setListener(this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
             @Override
             public void keyBoardShow(int height) {
+
             }
 
             @Override
             public void keyBoardHide(int height) {
-                edt_content.setText("");
-                edt_content.setHint(getStringResouce(R.string.add_comments));
-                presenter.clearComment();
+                if (isEmpty(edt_content.getText().toString())) {
+                    currentComment = null;
+                    edt_content.setHint("留下你的精彩评论吧~");
+                }
             }
         });
     }
@@ -155,6 +164,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 .init();
 
         EventBus.getDefault().register(this);
+        mrlayout_toolbar_more.setVisibility(View.GONE);
 
         GradientDrawable gradientDrawable = (GradientDrawable) edt_content.getBackground();
         gradientDrawable.setColor(getColorResouce(R.color.value_F2F6F9));
@@ -198,7 +208,9 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @OnClick(R.id.edt_content)
     public void onClick() {
-        edt_content.setHint(Common.getRandomWord());
+        if (isEmpty(edt_content.getText().toString())) {
+            edt_content.setHint(Common.getRandomWord());
+        }
         setEdittextFocusable(true, edt_content);
     }
 
@@ -260,19 +272,15 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
      * 软键盘处理
      */
     @Override
-    public void showorhideKeyboard(String hint) {
+    public void showorhideKeyboard(FindCommentListEntity.ItemComment comment) {
+        currentComment = comment;
         setEdittextFocusable(true, edt_content);
-        edt_content.setHint(hint);
+        if (currentComment == null) {
+            edt_content.setHint(Common.getRandomWord());
+        } else {
+            edt_content.setHint("@" + comment.nickname);
+        }
         Common.showKeyboard(edt_content);
-    }
-
-    private boolean isSoftShowing() {
-        //获取当前屏幕内容的高度
-        int screenHeight = getWindow().getDecorView().getHeight();
-        //获取View可见区域的bottom
-        Rect rect = new Rect();
-        getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-        return screenHeight - rect.bottom != 0;
     }
 
     @OnClick(R.id.tv_send)
@@ -282,9 +290,13 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
             Common.staticToast("评论内容不能为空");
             return;
         }
-        presenter.sendComment(s, presenter.getCommentLevel());
+        if (currentComment == null) {
+            presenter.sendComment(s, null, "0");
+        } else {
+            presenter.sendComment(s, currentComment, presenter.getCommentLevel());
+        }
         edt_content.setText("");
-        edt_content.setHint(getStringResouce(R.string.add_comments));
+        edt_content.setHint("留下你的精彩评论吧~");
         setEdittextFocusable(false, edt_content);
         Common.hideKeyboard(edt_content);
     }
