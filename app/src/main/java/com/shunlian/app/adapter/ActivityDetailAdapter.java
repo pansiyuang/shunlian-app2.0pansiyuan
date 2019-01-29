@@ -192,6 +192,12 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
             }
 
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list) || blog.comment_list.total == 0) {
+                blogViewHolder.tv_comment_count.setText("评论");
+            } else {
+                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
+            }
+
             if (blog.praise_num == 0) {
                 blogViewHolder.tv_zan.setText("点赞");
             } else {
@@ -202,12 +208,6 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.tv_share_count.setText("分享");
             } else {
                 blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
-            }
-
-            if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
-                blogViewHolder.tv_comment_count.setText("评论");
-            } else {
-                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
             }
 
             if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
@@ -283,7 +283,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
             }
 
-            if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list) || blog.comment_list.total == 0) {
                 blogViewHolder.tv_comment_count.setText("评论");
             } else {
                 blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));

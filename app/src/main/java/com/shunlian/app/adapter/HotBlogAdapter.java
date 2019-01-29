@@ -244,6 +244,12 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 blogViewHolder.ll_zan.setClickable(true);
             }
 
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list) || blog.comment_list.total == 0) {
+                blogViewHolder.tv_comment_count.setText("评论");
+            } else {
+                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
+            }
+
             if (blog.down_num == 0) {
                 blogViewHolder.tv_download.setText("下载");
             } else {
@@ -282,7 +288,6 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             } else {
                 visible(blogViewHolder.ll_comment_rootView);
                 reply(blogViewHolder.ll_comment, blog.comment_list, blog.id);
-                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
             }
         } else {
             super.onBindViewHolder(holder, position, payloads);
@@ -343,6 +348,13 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             } else {
                 blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
             }
+
+            if (blog.comment_list == null || isEmpty(blog.comment_list.list) || blog.comment_list.total == 0) {
+                blogViewHolder.tv_comment_count.setText("评论");
+            } else {
+                blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
+            }
+
             GlideUtils.getInstance().loadCircleAvar(context, blogViewHolder.miv_comment_icon, myImageUrl);
 
             if (isEmpty(blog.activity_title)) {

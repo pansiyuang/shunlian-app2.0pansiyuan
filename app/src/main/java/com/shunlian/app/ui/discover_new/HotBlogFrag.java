@@ -126,6 +126,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         blogList = new ArrayList<>();
         hotBlogPresenter = new HotBlogPresenter(baseActivity, this);
         hotBlogPresenter.getHotBlogList(true);
+        hotBlogPresenter.wordList();
 
         manager = new LinearLayoutManager(baseActivity);
         recycler_list.setLayoutManager(manager);

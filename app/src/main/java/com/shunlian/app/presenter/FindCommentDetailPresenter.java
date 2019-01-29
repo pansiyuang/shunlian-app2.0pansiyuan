@@ -314,6 +314,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         currentTouchItem = -1;
         isParent = true;
         Common.staticToasts(context, "评论成功", R.mipmap.icon_common_duihao);
+        iView.setCommentAllCount(String.valueOf(insert_item.comment_count));
         if (mReplyListBeans.size() <= 3) {
             insert_item.discovery_id = currentComment.discovery_id;
             EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.ADD_TYPE, insert_item));
@@ -330,6 +331,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
             } else {
                 mReplyListBeans.remove(currentTouchItem);
                 currentComment.reply_list = mReplyListBeans;
+                iView.setCommentAllCount(String.valueOf(comment.reply_count));
             }
         }
         comment.discovery_id = currentComment.discovery_id;
@@ -357,6 +359,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;
+        EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.VERIFY_TYPE, commentId, parentCommentId, ""));
     }
 
     @Override
@@ -375,6 +378,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         isParent = true;
+        EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.RETRACT_TYPE, commentId, parentCommentId, ""));
     }
 
     private void isEmpty() {
