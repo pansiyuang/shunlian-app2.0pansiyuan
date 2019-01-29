@@ -55,9 +55,9 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         } else {
             PayListHolder mHolder = (PayListHolder) holder;
             if (mCurrentPosition == position){
-                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+                mHolder.miv_select.setImageResource(R.mipmap.ic_fukuan_xuanzhong);
             }else {
-                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+                mHolder.miv_select.setImageResource(R.mipmap.ic_fukuan_moren);
             }
         }
 
@@ -108,9 +108,9 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         }
 
         if (mCurrentPosition == position){
-            mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+            mHolder.miv_select.setImageResource(R.mipmap.ic_fukuan_xuanzhong);
         }else {
-            mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            mHolder.miv_select.setImageResource(R.mipmap.ic_fukuan_moren);
         }
 
         if (isShowMore){
