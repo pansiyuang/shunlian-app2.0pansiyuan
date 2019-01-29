@@ -376,7 +376,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         if (view.getId() == R.id.ll_tab_discover) {
             mtv_message_count.setVisibility(View.GONE);
-
+            data.count = 0;
             try {
                 if (discoverFrag != null && discoverFrag.isVisible()) {
 
@@ -752,7 +752,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         miv_first.setVisibility(View.GONE);
         miv_tab_main.setVisibility(View.VISIBLE);
         tv_tab_main.setVisibility(View.VISIBLE);
-        mtv_message_count.setVisibility(View.GONE);
 
         RelativeLayout.LayoutParams tvParams = (RelativeLayout.LayoutParams) tv_tab_discover.getLayoutParams();
         tvParams.setMargins(0, TransformUtil.dip2px(this, 6), 0, TransformUtil.dip2px(this, 4));
@@ -764,11 +763,21 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 miv_first.setVisibility(View.VISIBLE);
                 miv_tab_main.setVisibility(View.GONE);
                 tv_tab_main.setVisibility(View.GONE);
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
 
 //                miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_h));
 //                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 1:
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
                 miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_h));
                 tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
@@ -781,10 +790,20 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 mtv_message_count.setVisibility(View.GONE);
                 break;
             case 3:
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
                 miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_h));
                 tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 4:
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
                 miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_h));
                 tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
