@@ -115,7 +115,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         context.startActivity(intent);
     }
 
-    public static void startAct(Activity context, String keyWord, String flag, String type, String item_id) {
+    public static void startAct(Activity context, String keyWord, String flag, String type, String item_id) {//新增跳转类型
         Intent intent = new Intent(context, SearchGoodsActivity.class);
         intent.putExtra("keyword", keyWord);
         intent.putExtra("flag", flag);
@@ -145,7 +145,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             presenter.getSearchTag();
         }
 
-        if ("sortFrag".equals(currentFlag)) {
+        if ("sortFrag".equals(currentFlag) || "FirstPageFrag".equals(currentFlag)) {
             edt_goods_search.setHint(currentKeyWord);
         } else {
             if (!isEmpty(currentKeyWord)) {
@@ -236,7 +236,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         edt_goods_search.addTextChangedListener(this);
         edt_goods_search.setOnEditorActionListener((v, actionId, event) -> {
             String text = edt_goods_search.getText().toString();
-            if ("sortFrag".equals(currentFlag) && isEmpty(text)) {
+            if ("sortFrag".equals(currentFlag) && isEmpty(text) || "FirstPageFrag".equals(currentFlag) && isEmpty(text)) {
                 text = edt_goods_search.getHint().toString();
             }
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -346,6 +346,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         return;
                     }
                     if ("search".equals(hotky.type)) {
+                        type = null;
                         switchToJump(hotky.item_id);
                     } else {
                         Common.goGoGo(SearchGoodsActivity.this, hotky.type, hotky.item_id);
@@ -365,8 +366,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_goods_tag_layout, taglayout_history, false);
                 TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
                 tv.setText(tagStr);
-                view.setOnClickListener(v ->
-                        switchToJump(entity.history_list.get(position)));
+                view.setOnClickListener(v -> {
+                    type = null;
+                    switchToJump(entity.history_list.get(position));
+                });
                 return view;
             }
         };
@@ -435,11 +438,11 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     @Override
     public void afterTextChanged(Editable s) {
         if (!isEmpty(s)) {
+            type = null;
             if (isShowHotSearch) {
                 changeSearchMode(true);
                 presenter.getSearchTips(s.toString());
             }
-            type = null; //主页跳转如果带了type，输入文字之后清空type，跳转搜索商品界面
         } else {
             changeSearchMode(false);
         }
@@ -450,7 +453,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             return;
         }
         GoodsSearchParam param = new GoodsSearchParam();
-        if ("sortFrag".equals(currentFlag)) {
+        if ("sortFrag".equals(currentFlag) || "FirstPageFrag".equals(currentFlag)) {
             if (!isEmpty(type)) {
                 Common.goGoGo(baseAct, type, itemId);
             } else {

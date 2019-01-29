@@ -2,12 +2,10 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
@@ -19,11 +17,8 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
-import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CommentBottmDialog;
@@ -162,7 +157,12 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
 //        }
 
             mHolder.mtv_time.setText(itemComment.create_time);
-            mHolder.tv_zan.setText(String.valueOf(itemComment.like_count));
+
+            if (itemComment.like_count == 0) {
+                mHolder.tv_zan.setText("点赞");
+            } else {
+                mHolder.tv_zan.setText(String.valueOf(itemComment.like_count));
+            }
 
             List<FindCommentListEntity.ItemComment> reply_list = itemComment.reply_list;
 
@@ -203,7 +203,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                 mHolder.ll_zan.setClickable(false);
             } else {
                 mHolder.animation_zan.setProgress(0f);
-                mHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
+                mHolder.tv_zan.setTextColor(getColor(R.color.text_gray2));
                 mHolder.ll_zan.setClickable(true);
             }
 

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.eventbus_bean.RejectedNotifyEvent;
 import com.shunlian.app.eventbus_bean.SuspensionRefresh;
@@ -21,6 +22,7 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -325,6 +327,21 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     public void onRefresh(RejectedNotifyEvent event) {
         if (event.rejectedSuccess) {
             presenter.rejectedComment(event.commentId, event.parentCommentId);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(BlogCommentEvent event) {
+        switch (event.sendType) {
+            case BlogCommentEvent.PRAISE_TYPE:
+                presenter.praiseData(event.mCommentId, event.mParentCommentId);
+                break;
+            case BlogCommentEvent.ADD_TYPE:
+                presenter.addCommentData(event.mComment);
+                break;
+            case BlogCommentEvent.DEL_TYPE:
+                presenter.delCommentData(event.mComment);
+                break;
         }
     }
 }

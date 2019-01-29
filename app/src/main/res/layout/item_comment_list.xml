@@ -150,8 +150,8 @@
                         android:layout_marginLeft="-13dp"
                         android:gravity="center"
                         android:text="0"
-                        android:textColor="@color/value_343434"
-                        android:textSize="10sp" />
+                        android:textColor="@color/text_gray2"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <TextView

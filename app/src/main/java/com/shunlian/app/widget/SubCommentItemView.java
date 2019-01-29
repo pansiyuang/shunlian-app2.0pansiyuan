@@ -149,7 +149,12 @@ public class SubCommentItemView extends FrameLayout {
         } else {
             tv_reply.setText("回复");
         }
-        tv_zan.setText(String.valueOf(mEntity.like_count));
+
+        if (itemComment.like_count == 0) {
+            tv_zan.setText("点赞");
+        } else {
+            tv_zan.setText(String.valueOf(itemComment.like_count));
+        }
 
         mAnimationView.setAnimation("praise.json");
         mAnimationView.loop(false);
@@ -160,7 +165,7 @@ public class SubCommentItemView extends FrameLayout {
             ll_zan.setClickable(false);
         } else {
             mAnimationView.setProgress(0f);
-            tv_zan.setTextColor(getContext().getResources().getColor(R.color.value_343434));
+            tv_zan.setTextColor(getContext().getResources().getColor(R.color.text_gray2));
             ll_zan.setClickable(true);
         }
 

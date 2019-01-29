@@ -241,7 +241,7 @@
             android:drawableLeft="@mipmap/icon_message_nor"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:paddingRight="35dp"
+            android:paddingRight="50dp"
             android:text="0"
             android:textColor="@color/value_343434"
             android:textSize="10sp" />

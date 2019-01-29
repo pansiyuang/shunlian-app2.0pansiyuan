@@ -82,11 +82,16 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             GlideUtils.getInstance().loadCircleHeadImage(context, mHolder.civ_head, lastLikesBean.avatar);
 
             mHolder.mtv_time.setText(lastLikesBean.create_time);
-            mHolder.tv_zan.setText(String.valueOf(lastLikesBean.like_count));
             mHolder.mtv_content.setText(lastLikesBean.content);
             mHolder.mtv_name.setText(lastLikesBean.nickname);
             mHolder.miv_vip.setVisibility(View.GONE);
             mHolder.miv_medal.setVisibility(View.GONE);
+
+            if (lastLikesBean.like_count == 0) {
+                mHolder.tv_zan.setText("点赞");
+            } else {
+                mHolder.tv_zan.setText(String.valueOf(lastLikesBean.like_count));
+            }
 
             if (!isEmpty(lastLikesBean.expert_icon)) {
                 visible(mHolder.miv_expert);
@@ -117,7 +122,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                 mHolder.ll_zan.setClickable(false);
             } else {
                 mHolder.animation_zan.setProgress(0f);
-                mHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
+                mHolder.tv_zan.setTextColor(getColor(R.color.text_gray2));
                 mHolder.ll_zan.setClickable(true);
             }
 

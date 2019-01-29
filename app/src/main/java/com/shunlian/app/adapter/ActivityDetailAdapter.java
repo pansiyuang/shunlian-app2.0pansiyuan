@@ -186,9 +186,23 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.miv_more.setVisibility(View.GONE);
             }
 
-            blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
-            blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
-            blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
+            if (blog.down_num == 0) {
+                blogViewHolder.tv_download.setText("下载");
+            } else {
+                blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
+            }
+
+            if (blog.praise_num == 0) {
+                blogViewHolder.tv_zan.setText("点赞");
+            } else {
+                blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
+            }
+
+            if (blog.total_share_num == 0) {
+                blogViewHolder.tv_share_count.setText("分享");
+            } else {
+                blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
+            }
 
             if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
                 blogViewHolder.tv_comment_count.setText("评论");
@@ -197,11 +211,10 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             }
 
             if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
-                blogViewHolder.tv_comment_count.setText("评论");
-                gone(blogViewHolder.ll_comment, blogViewHolder.tv_comment_title);
+                gone(blogViewHolder.ll_comment_rootView);
             } else {
-                visible(blogViewHolder.ll_comment);
-                reply(blogViewHolder.ll_comment, blog.comment_list,blog.id);
+                visible(blogViewHolder.ll_comment_rootView);
+                reply(blogViewHolder.ll_comment, blog.comment_list, blog.id);
                 blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
             }
         } else {
@@ -258,8 +271,17 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             blogViewHolder.tv_content.setText(blog.text);
             blogViewHolder.tv_content.setBlogText(blog.text);
             blogViewHolder.tv_address.setText(blog.place);
-            blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
-            blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
+            if (blog.down_num == 0) {
+                blogViewHolder.tv_download.setText("下载");
+            } else {
+                blogViewHolder.tv_download.setText(String.valueOf(blog.down_num));
+            }
+
+            if (blog.praise_num == 0) {
+                blogViewHolder.tv_zan.setText("点赞");
+            } else {
+                blogViewHolder.tv_zan.setText(String.valueOf(blog.praise_num));
+            }
 
             if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
                 blogViewHolder.tv_comment_count.setText("评论");
@@ -275,7 +297,11 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
                 int i = TransformUtil.dip2px(context, 10);
                 TransformUtil.expandViewTouchDelegate(blogViewHolder.tv_share_count, i, i, i, i);
-                blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
+                if (blog.total_share_num == 0) {
+                    blogViewHolder.tv_share_count.setText("分享");
+                } else {
+                    blogViewHolder.tv_share_count.setText(String.valueOf(blog.total_share_num));
+                }
                 blogViewHolder.tv_share_count.setOnClickListener(v -> {
                     mShareInfoParam = new ShareInfoParam();
                     mShareInfoParam.blogId = blog.id;
@@ -443,18 +469,17 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
             });
 
             if (blog.comment_list == null || isEmpty(blog.comment_list.list)) {
-                blogViewHolder.tv_comment_count.setText("评论");
-                gone(blogViewHolder.ll_comment, blogViewHolder.tv_comment_title);
+                gone(blogViewHolder.ll_comment_rootView);
             } else {
-                visible(blogViewHolder.ll_comment);
-                reply(blogViewHolder.ll_comment, blog.comment_list,blog.id);
+                visible(blogViewHolder.ll_comment_rootView);
+                reply(blogViewHolder.ll_comment, blog.comment_list, blog.id);
                 blogViewHolder.tv_comment_count.setText(String.valueOf(blog.comment_list.total));
             }
 
         }
     }
 
-    public void reply(LinearLayout ll_sub_bg, BigImgEntity.CommentEntity commentEntity,String blogId) {
+    public void reply(LinearLayout ll_sub_bg, BigImgEntity.CommentEntity commentEntity, String blogId) {
         ll_sub_bg.removeAllViews();
         int maxSize;
         if (commentEntity.list.size() >= 2) {
@@ -465,7 +490,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
         for (int j = 0; j < maxSize; j++) {
             SubBlogCommentItemView view = new SubBlogCommentItemView(context);
             BigImgEntity.CommentItem itemComment = commentEntity.list.get(j);
-            view.setCommentData(itemComment,blogId);
+            view.setCommentData(itemComment, blogId);
             if (j == maxSize - 1) {
                 view.setNumShow(true, commentEntity.total);
             } else {
@@ -705,6 +730,9 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
         @BindView(R.id.ll_comment)
         LinearLayout ll_comment;
+
+        @BindView(R.id.ll_comment_rootView)
+        LinearLayout ll_comment_rootView;
 
         public BlogViewHolder(View itemView) {
             super(itemView);

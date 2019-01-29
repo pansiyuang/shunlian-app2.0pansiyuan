@@ -12,9 +12,13 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.UseCommentEntity;
+import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFindCommentDetailView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -246,16 +250,19 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                FindCommentListEntity.ItemComment itemComment;
                 if (isParent) {
                     parentList.get(0).like_status = "1";
                     parentList.get(0).like_count++;
                     isParent = true;
+                    itemComment = parentList.get(0);
                 } else {
-                    FindCommentListEntity.ItemComment itemComment = mReplyListBeans.get(currentTouchItem);
+                    itemComment = mReplyListBeans.get(currentTouchItem);
                     itemComment.like_count++;
                     itemComment.like_status = "1";
                     isParent = false;
                 }
+                EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.PRAISE_TYPE, itemComment.id, itemComment.reply_parent_comment_id, ""));
                 adapter.notifyDataSetChanged();
             }
 
@@ -285,7 +292,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
             currentCommentId = mReplyListBeans.get(currentTouchItem).id;
             currentLevel = "2";
         }
-        sendComment(content, currentCommentId, currentComment.discovery_id, "2");
+        sendComment(content, currentCommentId, currentComment.discovery_id, currentLevel);
     }
 
 
@@ -307,21 +314,26 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         currentTouchItem = -1;
         isParent = true;
         Common.staticToasts(context, "评论成功", R.mipmap.icon_common_duihao);
+        if (mReplyListBeans.size() <= 3) {
+            insert_item.discovery_id = currentComment.discovery_id;
+            EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.ADD_TYPE, insert_item));
+        }
     }
 
     @Override
-    protected void delSuccess(String commentId, String parentCommentId, List<FindCommentListEntity.ItemComment> itemCommentList, int replyCount, int replyStatus) {
+    protected void delSuccess(FindCommentListEntity.ItemComment comment) {
         if (isParent) {
-            currentComment = null;
-            parentList.clear();
+            parentList.get(0).status = 3;
         } else {
-            if (replyStatus == 1) {
+            if (comment.reply_status == 1) {
                 mReplyListBeans.get(currentTouchItem).status = 3;
             } else {
                 mReplyListBeans.remove(currentTouchItem);
                 currentComment.reply_list = mReplyListBeans;
             }
         }
+        comment.discovery_id = currentComment.discovery_id;
+        EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.DEL_TYPE, comment));
         Common.staticToasts(context, "删除成功", R.mipmap.icon_common_duihao);
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
