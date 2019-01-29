@@ -27,10 +27,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AppOpsManager;
+import android.app.NotificationManager;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -93,7 +96,7 @@ import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.coupon.CouponGoodsAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.coupon.UserCouponListAct;
-import com.shunlian.app.ui.discover.other.CommentListAct;
+import com.shunlian.app.ui.discover_new.comment.CommentListAct;
 import com.shunlian.app.ui.fragment.SortAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
@@ -126,6 +129,9 @@ import com.zh.chartlibrary.common.DensityUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -1736,6 +1742,91 @@ public class Common {
 
         return false;
 
+    }
+
+
+    /***
+     * 管理通知
+     */
+    private static final String CHECK_OP_NO_THROW = "checkOpNoThrow";
+    private static final String OP_POST_NOTIFICATION = "OP_POST_NOTIFICATION";
+
+    public static boolean isNotificationEnabled(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return isEnableV26(context);
+        } else {
+            return isEnableV19(context);
+        }
+    }
+    /**
+     * Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+     * 19及以上
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isEnableV19(Context context) {
+        AppOpsManager mAppOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+        ApplicationInfo appInfo = context.getApplicationInfo();
+        String pkg = context.getApplicationContext().getPackageName();
+        int uid = appInfo.uid;
+
+        Class appOpsClass;
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                appOpsClass = Class.forName(AppOpsManager.class.getName());
+                Method checkOpNoThrowMethod = appOpsClass.getMethod(CHECK_OP_NO_THROW, Integer.TYPE, Integer.TYPE,
+                        String.class);
+                Field opPostNotificationValue = appOpsClass.getDeclaredField(OP_POST_NOTIFICATION);
+
+                int value = (Integer) opPostNotificationValue.get(Integer.class);
+                return ((Integer) checkOpNoThrowMethod.invoke(mAppOps, value, uid, pkg) == AppOpsManager.MODE_ALLOWED);
+            }else {
+                return true;
+            }
+        } catch (ClassNotFoundException e) {
+
+        } catch (NoSuchMethodException e) {
+
+        } catch (NoSuchFieldException e) {
+
+        } catch (InvocationTargetException e) {
+
+        } catch (IllegalAccessException e) {
+
+        }catch (Exception e){
+
+        }
+        return false;
+    }
+
+    /**
+     * Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+     * 针对8.0及以上设备
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isEnableV26(Context context) {
+        try {
+            NotificationManager notificationManager = (NotificationManager)
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Method sServiceField = notificationManager.getClass().getDeclaredMethod("getService");
+            sServiceField.setAccessible(true);
+            Object sService = sServiceField.invoke(notificationManager);
+
+            ApplicationInfo appInfo = context.getApplicationInfo();
+            String pkg = context.getApplicationContext().getPackageName();
+            int uid = appInfo.uid;
+
+            Method method = sService.getClass().getDeclaredMethod("areNotificationsEnabledForPackage"
+                    , String.class, Integer.TYPE);
+            method.setAccessible(true);
+            return (boolean) method.invoke(sService, pkg, uid);
+        } catch (Exception e) {
+
+        }
+        return false;
     }
 
 }

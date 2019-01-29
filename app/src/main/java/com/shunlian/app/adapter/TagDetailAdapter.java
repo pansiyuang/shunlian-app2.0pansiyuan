@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
-import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
+import com.shunlian.app.ui.discover_new.comment.CommentListAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;

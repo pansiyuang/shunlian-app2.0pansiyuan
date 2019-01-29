@@ -22,7 +22,7 @@ import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.VideoPlayActivity;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
-import com.shunlian.app.ui.discover.other.CommentListAct;
+import com.shunlian.app.ui.discover_new.comment.CommentListAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;

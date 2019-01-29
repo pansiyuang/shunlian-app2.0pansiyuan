@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -151,7 +153,7 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                Common.staticToastAct((Activity)context,message);
+                Common.staticToastAct((Activity) context, message);
             }
         });
     }
@@ -177,7 +179,7 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                Common.staticToastAct((Activity)context,message);
+                Common.staticToastAct((Activity) context, message);
             }
         });
     }
@@ -208,6 +210,27 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
             }
         });
     }
+
+    public void sendComment(String content, String pid, String article_id, String level) {
+        Map<String, String> map = new HashMap<>();
+        map.put("discovery_id", article_id);
+        map.put("content", content);
+        map.put("reply_comment_id", pid);
+        map.put("level", level);//0一级评论，直接针对文章进行评论，1二级评论，对一级评论进行评论，2三级评论，对二级评论进行评论
+        sortAndMD5(map);
+
+        Call<BaseEntity<FindCommentListEntity.ItemComment>> baseEntityCall = getAddCookieApiService().sendComment(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<FindCommentListEntity.ItemComment>>() {
+            @Override
+            public void onSuccess(BaseEntity<FindCommentListEntity.ItemComment> entity) {
+                super.onSuccess(entity);
+                FindCommentListEntity.ItemComment itemComment = entity.data;
+                BigImgEntity.CommentItem commentItem = new BigImgEntity.CommentItem(itemComment);
+                iView.replySuccess(commentItem);
+            }
+        });
+    }
+
 
     @Override
     public void onRefresh() {

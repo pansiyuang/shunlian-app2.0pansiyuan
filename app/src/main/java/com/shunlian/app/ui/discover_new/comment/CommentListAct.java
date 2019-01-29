@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover.other;
+package com.shunlian.app.ui.discover_new.comment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,11 +13,16 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.eventbus_bean.RejectedNotifyEvent;
+import com.shunlian.app.eventbus_bean.SuspensionRefresh;
+import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -27,6 +32,8 @@ import com.shunlian.app.view.IFindCommentListView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +50,9 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
+
+    @BindView(R.id.refreshview)
+    SlRefreshView refreshview;
 
     @BindView(R.id.edt_content)
     EditText edt_content;
@@ -111,6 +121,30 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 }
             }
         });
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.initData();
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
+
+        SoftKeyBoardListener.setListener(this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+                edt_content.setText("");
+                edt_content.setHint(getStringResouce(R.string.add_comments));
+                presenter.clearComment();
+            }
+        });
     }
 
     @Override
@@ -121,8 +155,6 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 .init();
 
         EventBus.getDefault().register(this);
-
-        mtv_toolbar_title.setText(getStringResouce(R.string.comments));
 
         GradientDrawable gradientDrawable = (GradientDrawable) edt_content.getBackground();
         gradientDrawable.setColor(getColorResouce(R.color.value_F2F6F9));
@@ -137,6 +169,8 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
         recy_view.addItemDecoration(new VerticalItemDecoration(space,
                 0, 0, getColorResouce(R.color.white)));
 
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
     }
 
     @Override
@@ -174,7 +208,6 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @Override
     public void showDataEmptyView(int request_code) {
-
         if (request_code == 100) {
             visible(nei_empty);
             gone(recy_view);
@@ -193,10 +226,8 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
      */
     @Override
     public void setCommentAllCount(String count) {
-        GradientDrawable background = (GradientDrawable) mtv_msg_count.getBackground();
-        int w = TransformUtil.dip2px(this, 0.5f);
-        background.setStroke(w, getColorResouce(R.color.white));
-        mtv_msg_count.setText(count);
+        mtv_toolbar_title.setText(String.format("共%s条评论", count));
+        refreshview.stopRefresh(true);
     }
 
     /**
@@ -290,5 +321,27 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @Override
     public void OnLoadFail() {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RejectedNotifyEvent event) {
+        if (event.rejectedSuccess) {
+            presenter.rejectedComment(event.commentId, event.parentCommentId);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(BlogCommentEvent event) {
+        switch (event.sendType) {
+            case BlogCommentEvent.PRAISE_TYPE:
+                presenter.praiseData(event.mCommentId, event.mParentCommentId);
+                break;
+            case BlogCommentEvent.ADD_TYPE:
+                presenter.addCommentData(event.mComment);
+                break;
+            case BlogCommentEvent.DEL_TYPE:
+                presenter.delCommentData(event.mComment);
+                break;
+        }
     }
 }

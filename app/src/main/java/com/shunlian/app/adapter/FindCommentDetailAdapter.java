@@ -1,24 +1,34 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.CommentBottmDialog;
+import com.shunlian.app.widget.CommentToolBottomDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.SubCommentItemView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,8 +41,9 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
 
     private final LayoutInflater inflater;
     private OnPointFabulousListener mFabulousListener;
-    private List<FindCommentListEntity.LastLikesBean> last_likes = new ArrayList<>();
-    private SimpleRecyclerAdapter adapter;
+    private PromptDialog promptDialog;
+    private CommentBottmDialog mDialog;
+    private CommentToolBottomDialog mToolDialog;
 
     public FindCommentDetailAdapter(Context context, List<FindCommentListEntity.ItemComment> lists) {
         super(context, true, lists);
@@ -46,8 +57,20 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        View view = inflater.inflate(R.layout.item_find_comment_detail_one, parent, false);
+        View view = inflater.inflate(R.layout.item_comment_list, parent, false);
         return new FindCommentDetailHolder(view);
+    }
+
+    @Override
+    public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
+        super.setFooterHolderParams(baseFooterHolder);
+        baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white));
+        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white));
+        baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white));
+        baseFooterHolder.layout_no_more.setText("~没有更多~");
+        baseFooterHolder.layout_no_more.setTextSize(12);
+        baseFooterHolder.layout_load_error.setTextSize(12);
+        baseFooterHolder.mtv_loading.setTextSize(12);
     }
 
     @Override
@@ -58,105 +81,160 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
 
             GlideUtils.getInstance().loadCircleHeadImage(context, mHolder.civ_head, lastLikesBean.avatar);
 
+            mHolder.mtv_time.setText(lastLikesBean.create_time);
+            mHolder.mtv_content.setText(lastLikesBean.content);
             mHolder.mtv_name.setText(lastLikesBean.nickname);
+            mHolder.miv_vip.setVisibility(View.GONE);
+            mHolder.miv_medal.setVisibility(View.GONE);
 
-            if (!isEmpty(lastLikesBean.level)) {
-                String level = lastLikesBean.level;
-                Bitmap bitmap = TransformUtil.convertNewVIP(context, level);
-                mHolder.miv_vip.setImageBitmap(bitmap);
-                mHolder.miv_vip.setVisibility(View.VISIBLE);
+            if (lastLikesBean.like_count == 0) {
+                mHolder.tv_zan.setText("点赞");
             } else {
-                mHolder.miv_vip.setVisibility(View.GONE);
+                mHolder.tv_zan.setText(String.valueOf(lastLikesBean.like_count));
             }
 
-            mHolder.mtv_time.setText(lastLikesBean.create_time);
-
-            if (!isEmpty(lastLikesBean.at)) {
-                String source = lastLikesBean.at.concat(lastLikesBean.content);
-                SpannableStringBuilder changetextbold = Common.changetextbold(source, lastLikesBean.at);
-                mHolder.mtv_content.setText(changetextbold);
+            if (!isEmpty(lastLikesBean.expert_icon)) {
+                visible(mHolder.miv_expert);
+                GlideUtils.getInstance().loadImage(context, mHolder.miv_expert, lastLikesBean.expert_icon);
             } else {
-                mHolder.mtv_content.setText(lastLikesBean.content);
+                gone(mHolder.miv_expert);
+            }
+
+            if (!isEmpty(lastLikesBean.v_icon)) {
+                visible(mHolder.miv_v);
+                GlideUtils.getInstance().loadImage(context, mHolder.miv_v, lastLikesBean.v_icon);
+            } else {
+                gone(mHolder.miv_v);
             }
 
             if (position == 0) {
-                mHolder.itemView.setBackgroundColor(getColor(R.color.white));
-                gone(mHolder.mtv_zan_count, mHolder.miv_zan);
-                visible(mHolder.ll_head_portrait);
-                mHolder.mtv_zan_count1.setText(String.valueOf(lastLikesBean.like_count));
-                if ("1".equals(lastLikesBean.like_status)) {
-                    mHolder.miv_zan1.setImageResource(R.mipmap.img_pingjia_zan_h);
-                    mHolder.mtv_zan_count1.setTextColor(getColor(R.color.pink_color));
-                } else {
-                    mHolder.mtv_zan_count1.setTextColor(getColor(R.color.share_text));
-                    mHolder.miv_zan1.setImageResource(R.mipmap.img_pingjia_zan_n);
-                }
-                if (last_likes.size() == 0) {
-                    last_likes.addAll(lastLikesBean.last_likes);
-                }
-                setHeadPic(mHolder);
-
+                visible(mHolder.view_line);
             } else {
-                mHolder.itemView.setBackgroundColor(getColor(R.color.white_ash));
-                visible(mHolder.mtv_zan_count, mHolder.miv_zan);
-                gone(mHolder.ll_head_portrait);
-                mHolder.mtv_zan_count.setText(String.valueOf(lastLikesBean.like_count));
-                if ("1".equals(lastLikesBean.like_status)) {
-                    mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
-                    mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_h);
-                } else {
-                    mHolder.mtv_zan_count.setTextColor(getColor(R.color.share_text));
-                    mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
-                }
+                gone(mHolder.view_line);
             }
 
-            if (!isEmpty(lastLikesBean.plus_role)) {//大于0为plus以上等级，1PLUS店主，2主管，>=3经理
-                visible(mHolder.miv_medal);
-                int plusRole = Integer.parseInt(lastLikesBean.plus_role);
-                if (plusRole == 1) {
-                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_dianzhu);
-                } else if (plusRole == 2) {
-                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_zhuguan);
-                } else if (plusRole >= 3) {
-                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_jingli);
-                } else {
-                    gone(mHolder.miv_medal);
-                }
+            mHolder.animation_zan.setAnimation("praise.json");
+            mHolder.animation_zan.loop(false);
+            mHolder.animation_zan.setImageAssetsFolder("images/");
+            if ("1".equals(lastLikesBean.like_status)) {
+                mHolder.animation_zan.setProgress(1f);
+                mHolder.tv_zan.setTextColor(getColor(R.color.pink_color));
+                mHolder.ll_zan.setClickable(false);
             } else {
-                gone(mHolder.miv_medal);
+                mHolder.animation_zan.setProgress(0f);
+                mHolder.tv_zan.setTextColor(getColor(R.color.text_gray2));
+                mHolder.ll_zan.setClickable(true);
             }
+
+            mHolder.tv_reply.setText(lastLikesBean.is_self == 1 ? "删除" : "回复");
+
+            if (lastLikesBean.check_is_show == 1) {
+                mHolder.tv_verify.setText("审核");
+                mHolder.tv_verify.setTextColor(getColor(R.color.pink_color));
+            } else if (lastLikesBean.check_is_show == 2) {
+                mHolder.tv_verify.setText("撤回");
+                mHolder.tv_verify.setTextColor(getColor(R.color.text_gray2));
+            }
+
+            if (lastLikesBean.status == 3) { // 0未审核，1已审核，2已驳回，3已删除
+                mHolder.mtv_content.setTextColor(getColor(R.color.color_value_6c));
+                gone(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
+            } else {
+                mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
+                visible(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
+                mHolder.tv_verify.setVisibility(lastLikesBean.check_is_show == 0 ? View.GONE : View.VISIBLE);  //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
+            }
+
+            if (isEmpty(lastLikesBean.reply_list)) {
+                mHolder.ll_sub_bg.setVisibility(View.GONE);
+            } else {
+                reply(mHolder.ll_sub_bg, lastLikesBean.reply_list);
+            }
+
+            mHolder.mtv_content.setOnLongClickListener(v -> {
+                showCommentToolDialog(lastLikesBean, true, -1);
+                return false;
+            });
         }
     }
 
-    private void setHeadPic(FindCommentDetailHolder mHolder) {
-        adapter = new SimpleRecyclerAdapter<FindCommentListEntity.LastLikesBean>
-                (context, R.layout.item_pic_circle, last_likes) {
-
-            @Override
-            public void convert(SimpleViewHolder holder,
-                                FindCommentListEntity.LastLikesBean lastLikesBean,
-                                int position) {
-                MyImageView miv_pic = holder.getView(R.id.civ_pic);
-                int w = TransformUtil.dip2px(context, 25);
-                int m = TransformUtil.dip2px(context, 2);
-                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) miv_pic.getLayoutParams();
-                layoutParams.width = w;
-                layoutParams.height = w;
-                layoutParams.rightMargin = m;
-                miv_pic.setLayoutParams(layoutParams);
-                GlideUtils.getInstance().loadCircleHeadImage(context, miv_pic, lastLikesBean.avatar);
+    private void reply(LinearLayout ll_sub_bg, List<FindCommentListEntity.ItemComment> reply_list) {
+        ll_sub_bg.removeAllViews();
+        for (int j = 0; j < reply_list.size(); j++) {
+            SubCommentItemView view = new SubCommentItemView(context);
+            FindCommentListEntity.ItemComment replyList = reply_list.get(j);
+            view.setCommentData(replyList);
+            if (isEmpty(replyList.reply_member)) {
+                view.setName(replyList.nickname + "说：");
+            } else {
+                String content = replyList.nickname + " 回复 " + replyList.reply_member;
+                SpannableString spannableString = new SpannableString(content);
+                ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#484848"));
+                spannableString.setSpan(colorSpan, replyList.nickname.length(), spannableString.length() - replyList.reply_member.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                view.setName(spannableString);
             }
-        };
-        mHolder.recy_view.setAdapter(adapter);
-    }
+            view.setHeadPic(replyList.avatar)
+                    .setTime(replyList.create_time)
+                    .setContent(replyList.content)
+                    .setMoreCount(false, 0);
+            int finalJ = j;
+            view.setOnCallBack(new SubCommentItemView.OnSubCallBack() {
+                @Override
+                public void OnPraise(String commentId, LottieAnimationView lottieAnimationView) {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onPointFabulous(false, finalJ, lottieAnimationView);
+                    }
+                }
 
-    public void setHeadPic(List<FindCommentListEntity.LastLikesBean> last_likes) {
-        if (!isEmpty(last_likes)) {
-            this.last_likes.clear();
-            this.last_likes.addAll(last_likes);
-            if (adapter != null) {
-                adapter.notifyDataSetChanged();
-            }
+                @Override
+                public void OnReply() {
+                    if (mFabulousListener != null) {
+                        if (replyList.is_self == 1) {
+                            mFabulousListener.onDel(false, finalJ);
+                        } else {
+                            mFabulousListener.onReply(false, finalJ);
+                        }
+                    }
+                }
+
+                @Override
+                public void onVerify() {
+                    if (mDialog == null) {
+                        mDialog = new CommentBottmDialog(context);
+                    }
+                    mDialog.setCommentData(replyList);
+                    mDialog.setOnPassListener(() -> {
+                        if (mFabulousListener != null) {
+                            mFabulousListener.onVerify(false, finalJ);
+                        }
+                    });
+                    mDialog.show();
+                }
+
+                @Override
+                public void onRejected() {
+                    if (promptDialog == null) {
+                        promptDialog = new PromptDialog((Activity) context);
+                        promptDialog.setTvSureColor(R.color.white);
+                        promptDialog.setTvSureBGColor(getColor(R.color.pink_color));
+                        promptDialog.setSureAndCancleListener("确定撤回当前评论吗？", "确定", v1 -> {
+                            if (mFabulousListener != null) {
+                                mFabulousListener.onRejected(false, finalJ);
+                            }
+                            promptDialog.dismiss();
+                        }, "取消", v12 -> {
+                            promptDialog.dismiss();
+                        });
+                    }
+                    promptDialog.show();
+                }
+
+                @Override
+                public void onContentLongClick() {
+                    showCommentToolDialog(replyList, false, finalJ);
+                }
+            });
+            ll_sub_bg.addView(view);
         }
     }
 
@@ -171,62 +249,97 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
         @BindView(R.id.miv_vip)
         MyImageView miv_vip;
 
-        @BindView(R.id.mtv_zan_count)
-        MyTextView mtv_zan_count;
-
-        @BindView(R.id.miv_zan)
-        MyImageView miv_zan;
-
         @BindView(R.id.mtv_time)
         MyTextView mtv_time;
 
         @BindView(R.id.mtv_content)
         MyTextView mtv_content;
 
-        @BindView(R.id.ll_head_portrait)
-        LinearLayout ll_head_portrait;
+        @BindView(R.id.ll_sub_bg)
+        LinearLayout ll_sub_bg;
 
-        @BindView(R.id.mtv_zan_count1)
-        MyTextView mtv_zan_count1;
-
-        @BindView(R.id.miv_zan1)
-        MyImageView miv_zan1;
+        @BindView(R.id.view_line)
+        View view_line;
 
         @BindView(R.id.miv_medal)
         MyImageView miv_medal;
 
-        @BindView(R.id.recy_view)
-        RecyclerView recy_view;
+        @BindView(R.id.miv_expert)
+        MyImageView miv_expert;
+
+        @BindView(R.id.ll_zan)
+        LinearLayout ll_zan;
+
+        @BindView(R.id.animation_zan)
+        LottieAnimationView animation_zan;
+
+        @BindView(R.id.tv_zan)
+        TextView tv_zan;
+
+        @BindView(R.id.tv_reply)
+        TextView tv_reply;
+
+        @BindView(R.id.tv_verify)
+        TextView tv_verify;
+
+        @BindView(R.id.miv_v)
+        MyImageView miv_v;
 
         public FindCommentDetailHolder(View itemView) {
             super(itemView);
-            int i = TransformUtil.dip2px(context, 20);
-            TransformUtil.expandViewTouchDelegate(mtv_zan_count, i, i, i, i);
-            TransformUtil.expandViewTouchDelegate(mtv_zan_count1, i, i, i, i);
-
-            LinearLayoutManager manager = new LinearLayoutManager(context,
-                    LinearLayoutManager.HORIZONTAL, false);
-            recy_view.setLayoutManager(manager);
-            recy_view.setNestedScrollingEnabled(false);
-
-
             itemView.setOnClickListener(this);
-            mtv_zan_count.setOnClickListener(this);
-            mtv_zan_count1.setOnClickListener(this);
+            ll_zan.setOnClickListener(this);
+            tv_reply.setOnClickListener(this);
+            tv_verify.setOnClickListener(this);
         }
 
-        /**
-         * Called when a view has been clicked.
-         *
-         * @param v The view that was clicked.
-         */
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.mtv_zan_count:
-                case R.id.mtv_zan_count1:
+                case R.id.tv_reply:
+                    FindCommentListEntity.ItemComment itemComment = lists.get(0);
+                    if (mFabulousListener == null) {
+                        return;
+                    }
+                    if (itemComment.is_self == 1) {
+                        mFabulousListener.onDel(true, -1);
+                    } else {
+                        mFabulousListener.onReply(true, -1);
+                    }
+                    break;
+                case R.id.tv_verify:
+                    FindCommentListEntity.ItemComment comment = lists.get(getAdapterPosition());
+                    if (comment.check_is_show == 1) { //审核
+                        if (mDialog == null) {
+                            mDialog = new CommentBottmDialog(context);
+                        }
+                        mDialog.setCommentData(comment);
+                        mDialog.setOnPassListener(() -> {
+                            if (mFabulousListener != null) {
+                                mFabulousListener.onVerify(true, -1);
+                            }
+                        });
+                        mDialog.show();
+                    } else {  //撤回
+                        if (promptDialog == null) {
+                            promptDialog = new PromptDialog((Activity) context);
+                            promptDialog.setTvSureColor(R.color.white);
+                            promptDialog.setTvSureBGColor(getColor(R.color.pink_color));
+                            promptDialog.setSureAndCancleListener("确定撤回当前评论吗？", "确定", v1 -> {
+                                if (mFabulousListener != null) {
+                                    mFabulousListener.onRejected(true, -1);
+                                }
+                                promptDialog.dismiss();
+                            }, "取消", v12 -> {
+                                promptDialog.dismiss();
+                            });
+                        }
+                        promptDialog.show();
+                    }
+                    break;
+                case R.id.ll_zan:
                     if (mFabulousListener != null) {
-                        mFabulousListener.onPointFabulous(getAdapterPosition());
+                        mFabulousListener.onPointFabulous(true, -1, animation_zan);
                     }
                     break;
                 default:
@@ -238,12 +351,56 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
         }
     }
 
-    public void setPointFabulousListener(OnPointFabulousListener fabulousListener) {
+    public void showCommentToolDialog(FindCommentListEntity.ItemComment itemComment, boolean isParent, int childPosition) {
+        if (mToolDialog == null) {
+            mToolDialog = new CommentToolBottomDialog(context);
+            mToolDialog.setOnToolListener(new CommentToolBottomDialog.OnToolListener() {
+                @Override
+                public void onReply() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onReply(isParent, childPosition);
+                    }
+                }
 
+                @Override
+                public void onDel() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onDel(isParent, childPosition);
+                    }
+                }
+
+                @Override
+                public void onVerify() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onVerify(isParent, childPosition);
+                    }
+                }
+
+                @Override
+                public void onRejected() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onRejected(isParent, childPosition);
+                    }
+                }
+            });
+        }
+        mToolDialog.setCommentData(itemComment);
+        mToolDialog.show();
+    }
+
+    public void setPointFabulousListener(OnPointFabulousListener fabulousListener) {
         mFabulousListener = fabulousListener;
     }
 
     public interface OnPointFabulousListener {
-        void onPointFabulous(int position);
+        void onPointFabulous(boolean isP, int childPosition, LottieAnimationView lottieAnimationView);
+
+        void onReply(boolean isP, int childPosition);
+
+        void onDel(boolean isP, int childPosition);
+
+        void onVerify(boolean isP, int childPosition);
+
+        void onRejected(boolean isP, int childPosition);
     }
 }

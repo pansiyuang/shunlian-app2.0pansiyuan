@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 
 /**
@@ -10,16 +11,17 @@ public interface IHotBlogView extends IView {
 
     void getBlogList(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage);
 
-    void focusUser(int isFocus,String memberId);
+    void focusUser(int isFocus, String memberId);
 
     void praiseBlog(String blogId);
 
     void downCountSuccess(String blogId);
 
-    void shareGoodsSuccess(String blogId,String goodsId);
+    void shareGoodsSuccess(String blogId, String goodsId);
+
+    void replySuccess(BigImgEntity.CommentItem commentItem);
 
     /**
-     *
      * 刷新完成
      */
     void refreshFinish();

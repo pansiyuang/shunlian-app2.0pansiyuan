@@ -3,12 +3,14 @@ package com.shunlian.app.ui.discover_new;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,20 +31,24 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
+import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
+import com.shunlian.app.widget.BlogCommentSendPopwindow;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -86,7 +92,8 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private ShareInfoParam mShareInfoParam;
     private LottieAnimationView mAnimationView;
-    private PopupWindow popupWindow;
+    private String currentCommentBlogId;
+    private BlogCommentSendPopwindow mPopWindow;
 
     @Override
     public void onDestroyView() {
@@ -158,8 +165,8 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
             @Override
             public void keyBoardHide(int height) {
-                if (popupWindow != null) {
-                    popupWindow.dismiss();
+                if (mPopWindow != null) {
+                    mPopWindow.dismiss();
                 }
             }
         });
@@ -347,6 +354,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     @Override
     public void showCommentView(String blogId) {
+        currentCommentBlogId = blogId;
         showPopupComment();
     }
 
@@ -377,13 +385,27 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
+    @Override
+    public void replySuccess(BigImgEntity.CommentItem commentItem) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (currentCommentBlogId.equals(blog.id)) {
+                blog.comment_list.list.add(0, commentItem);
+                blog.comment_list.total++;
+                break;
+            }
+        }
+        Common.staticToasts(getActivity(), "评论成功", R.mipmap.icon_common_duihao);
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+        currentCommentBlogId = null;
+        mPopWindow.dismiss();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(RefreshBlogEvent event) {
         switch (event.mType) {
             case RefreshBlogEvent.ATTENITON_TYPE:
                 for (BigImgEntity.Blog blog : blogList) {
                     if (event.mData.memberId.equals(blog.member_id)) {
-                        LogUtil.httpLogW("is_focus:" + event.mData.is_focus);
                         blog.is_focus = event.mData.is_focus;
                     }
                 }
@@ -425,47 +447,49 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         }
     }
 
-    private void popupInputMethodWindow() {
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-        }.start();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(BlogCommentEvent event) {
+        switch (event.sendType) {
+            case BlogCommentEvent.ADD_TYPE:
+                insertComment(event.mComment, true);
+                break;
+            case BlogCommentEvent.DEL_TYPE:
+                insertComment(event.mComment, false);
+                break;
+        }
     }
 
-    @SuppressLint("WrongConstant")
+    public void insertComment(FindCommentListEntity.ItemComment insertItem, boolean isAdd) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (insertItem.discovery_id.equals(blog.id)) {
+                blog.comment_list.list.clear();
+                if (isAdd) {
+                    for (FindCommentListEntity.ItemComment item : insertItem.comment_list) {
+                        blog.comment_list.list.add(new BigImgEntity.CommentItem(item));
+                    }
+                    blog.comment_list.total = insertItem.comment_count;
+                } else {
+                    for (FindCommentListEntity.ItemComment item : insertItem.reply_result) {
+                        blog.comment_list.list.add(new BigImgEntity.CommentItem(item));
+                    }
+                    blog.comment_list.total = insertItem.reply_count;
+                }
+                break;
+            }
+        }
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+    }
+
     private void showPopupComment() {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_comment_send, null);
-        final EditText inputComment = view.findViewById(R.id.edt_comment);
-        final TextView tvSend = view.findViewById(R.id.tv_send);
-        popupWindow = new PopupWindow(view, RecyclerView.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT, true);
-
-        popupWindow.setTouchable(true);
-        popupWindow.setTouchInterceptor((v, event) -> false);
-        popupWindow.setFocusable(true);
-        // 设置点击窗口外边窗口消失
-        popupWindow.setOutsideTouchable(true);
-
-        // 设置弹出窗体需要软键盘
-        popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-        ColorDrawable cd = new ColorDrawable(0x000000);
-        popupWindow.setBackgroundDrawable(cd);
-        WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
-        params.alpha = 0.4f;
-        getActivity().getWindow().setAttributes(params);
-        popupWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
-        popupWindow.update();
-        popupInputMethodWindow();
-        popupWindow.setOnDismissListener(() -> {
-            WindowManager.LayoutParams params1 = getActivity().getWindow().getAttributes();
-            params1.alpha = 1f;
-            getActivity().getWindow().setAttributes(params1);
-        });
+        if (mPopWindow == null) {
+            mPopWindow = new BlogCommentSendPopwindow(getActivity());
+            mPopWindow.setOnPopClickListener((String content) -> {
+                if (isEmpty(currentCommentBlogId)) {
+                    return;
+                }
+                hotBlogPresenter.sendComment(content, "", currentCommentBlogId, "0");
+            });
+        }
+        mPopWindow.show();
     }
 }

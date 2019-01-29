@@ -29,7 +29,7 @@ public class FindCommentListEntity {
         public String nickname;
         public String content;
         public int like_count;
-        public String reply_count;
+        public int reply_count;
         public int status;
         public String level;
         public String create_time;
@@ -45,6 +45,12 @@ public class FindCommentListEntity {
         public String delete_enable;//是否能删除，1是，0否
         public List<ItemComment> reply_list;
         public List<LastLikesBean> last_likes;
+
+        public int reply_status;
+        public List<ItemComment> reply_result;
+        public List<ItemComment> comment_list;
+        public String comment_id;
+        public int comment_count;
 
         @Override
         public String toString() {

@@ -9,9 +9,13 @@ import com.shunlian.app.adapter.FindCommentListAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
+import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFindCommentListView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +41,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     private Call<BaseEntity<FindCommentListEntity>> baseEntityCall;
     private LottieAnimationView mAnimationView;
     private String currentLevel;
+    private String currentCommentId;
 
     public FindCommentListPresenter(Context context, IFindCommentListView iView, String article_id) {
         super(context, iView);
@@ -74,7 +79,11 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         requestData(true, 0);
     }
 
-    private void requestData(boolean isShow, int failureCode) {
+    public void initData() {
+        initApi();
+    }
+
+    public void requestData(boolean isShow, int failureCode) {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(page_size));
@@ -89,10 +98,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 FindCommentListEntity data = entity.data;
                 FindCommentListEntity.Pager pager = data.pager;
                 if ("1".equals(pager.page)) {
-                    if (!isEmpty(data.top_list)) {
-                        hotCommentCount = data.top_list.size();
-                        mItemComments.addAll(data.top_list);
-                    }
+                    mItemComments.clear();
                 }
                 currentPage = Integer.parseInt(pager.page);
                 allPage = Integer.parseInt(pager.allPage);
@@ -117,6 +123,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         });
     }
 
+
     private void setCommentList(int currentPage, int allPage) {
         if (adapter == null) {
             adapter = new FindCommentListAdapter(context, mItemComments, hotCommentCount, comment_type);
@@ -128,7 +135,6 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 public void onPointFabulous(int position, int childPosition, LottieAnimationView lottieAnimationView) {
                     mAnimationView = lottieAnimationView;
                     currentTouchItem = position;
-                    FindCommentListEntity.ItemComment itemComment;
                     if (childPosition != -1) {
                         itemComment = mItemComments.get(position).reply_list.get(childPosition);
                     } else {
@@ -145,20 +151,41 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     } else {
                         currentLevel = "2";
                         itemComment = mItemComments.get(position).reply_list.get(childPosition);
-                        iView.showorhideKeyboard("@".concat(itemComment.nickname));
                     }
+                    iView.showorhideKeyboard("@".concat(itemComment.nickname));
                 }
 
                 @Override
-                public void onDel(int position) {
+                public void onDel(int position, int childPosition) {
                     currentTouchItem = position;
-                    itemComment = mItemComments.get(position);
+                    if (childPosition == -1) {
+                        itemComment = mItemComments.get(position);
+                    } else {
+                        itemComment = mItemComments.get(position).reply_list.get(childPosition);
+                    }
                     iView.delPrompt();
                 }
 
                 @Override
-                public void onVerify(int position) {
+                public void onVerify(int position, int childPosition) {
+                    currentTouchItem = position;
+                    if (childPosition == -1) {
+                        itemComment = mItemComments.get(position);
+                    } else {
+                        itemComment = mItemComments.get(position).reply_list.get(childPosition);
+                    }
+                    verifyComment(itemComment.id);
+                }
 
+                @Override
+                public void onRejected(int position, int childPosition) {
+                    currentTouchItem = position;
+                    if (childPosition == -1) {
+                        itemComment = mItemComments.get(position);
+                    } else {
+                        itemComment = mItemComments.get(position).reply_list.get(childPosition);
+                    }
+                    retractComment(itemComment.id);
                 }
             });
         } else {
@@ -179,6 +206,91 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         }
     }
 
+    public void rejectedComment(String commentId, String parentId) {
+        if (isEmpty(commentId)) {
+            return;
+        }
+        if (isEmpty(parentId) || "0".equals(parentId)) {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (commentId.equals(itemComment.id)) {
+                    itemComment.check_is_show = 0;
+                    break;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (parentId.equals(itemComment.id)) {
+                    for (FindCommentListEntity.ItemComment comment : itemComment.reply_list) {
+                        if (commentId.equals(comment.id)) {
+                            comment.check_is_show = 0;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void praiseData(String commentId, String parentId) {
+        if (isEmpty(parentId) || "0".equals(parentId)) {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (commentId.equals(itemComment.id)) {
+                    itemComment.like_status = "1";
+                    itemComment.like_count++;
+                    break;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (parentId.equals(itemComment.id)) {
+                    for (FindCommentListEntity.ItemComment item : itemComment.reply_list) {
+                        if (commentId.equals(item.id)) {
+                            item.like_status = "1";
+                            item.like_count++;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void addCommentData(FindCommentListEntity.ItemComment insertItem) {
+        if (isEmpty(insertItem.reply_parent_comment_id) || "0".equals(insertItem.reply_parent_comment_id)) {
+            return;
+        }
+        for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+            if (insertItem.reply_parent_comment_id.equals(itemComment.id)) {
+                itemComment.reply_list = insertItem.comment_list;
+                break;
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void delCommentData(FindCommentListEntity.ItemComment delItem) {
+        if (isEmpty(delItem.reply_parent_comment_id) || "0".equals(delItem.reply_parent_comment_id)) {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (delItem.comment_id.equals(itemComment.id)) {
+                    itemComment.status = 3;
+                    itemComment.reply_count = delItem.reply_count;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (delItem.reply_parent_comment_id.equals(itemComment.id)) {
+                    itemComment.reply_list = delItem.reply_result;
+                    itemComment.reply_count = delItem.reply_count;
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 
     public void pointFabulous(String item_id, int childPosition) {
         Map<String, String> map = new HashMap<>();
@@ -196,7 +308,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     }
 
     private void setPointFabulous(int childPosition) {
-        if (mAnimationView != null) {
+        if (mAnimationView != null && !mAnimationView.isAnimating()) {
             mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -205,7 +317,6 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    FindCommentListEntity.ItemComment itemComment;
                     if (childPosition == -1) {
                         itemComment = mItemComments.get(currentTouchItem);
                     } else {
@@ -231,36 +342,35 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         }
     }
 
+    public void clearComment() {
+        currentCommentId = "";
+        currentLevel = "";
+        itemComment = null;
+    }
+
     public void sendComment(String content, String level) {
-        String pid = "";
         if (itemComment != null) {
-            pid = itemComment.id;
+            currentCommentId = itemComment.id;
         }
-        sendComment(content, pid, mArticle_id, level);
+        sendComment(content, currentCommentId, mArticle_id, level);
     }
 
     @Override
     protected void refreshItem(FindCommentListEntity.ItemComment insert_item, String message) {
-//        if (!getIsAllType()) {
-//            Common.staticToasts(context, message, R.mipmap.icon_common_duihao);
-//            return;
-//        }
         Common.staticToasts(context, getStringResouce(R.string.send_success), R.mipmap.icon_common_duihao);
-//        if (currentTouchItem != -1) {
-//            mItemComments.remove(currentTouchItem);
-//            mItemComments.add(currentTouchItem, insert_item);
-//        } else {
-//        }
         if ("0".equals(insert_item.level)) {
             mItemComments.add(0, insert_item);
         } else {
-            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
-                if (itemComment.id.equals(insert_item.reply_comment_id)) {
-                    itemComment.reply_list.add(0, insert_item);
+            for (FindCommentListEntity.ItemComment item : mItemComments) {
+                if (item.id.equals(insert_item.reply_parent_comment_id)) {
+                    item.reply_list.add(0, insert_item);
+                    item.reply_count++;
                     break;
                 }
             }
         }
+        insert_item.discovery_id = mArticle_id;
+        EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.ADD_TYPE, insert_item));
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         itemComment = null;
@@ -270,12 +380,91 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
 
     @Override
-    protected void delSuccess() {
-        mItemComments.remove(currentTouchItem);
-        adapter.notifyDataSetChanged();
-        currentTouchItem = -1;
-        itemComment = null;
-        isEmpty();
+    protected void delSuccess(FindCommentListEntity.ItemComment item) {
+        if (isEmpty(item.reply_parent_comment_id) || "0".equals(item.reply_parent_comment_id)) {
+            for (FindCommentListEntity.ItemComment myComment : mItemComments) {
+                if (item.comment_id.equals(myComment.id)) {
+                    if (myComment.reply_count != 0) {
+                        myComment.status = 3;
+                    } else {
+                        mItemComments.remove(myComment);
+                    }
+                    break;
+                }
+            }
+            adapter.notifyDataSetChanged();
+            currentTouchItem = -1;
+            itemComment = null;
+            isEmpty();
+        } else {
+            for (FindCommentListEntity.ItemComment comment : mItemComments) {
+                if (item.comment_id.equals(comment.id)) {
+                    comment.reply_list = item.reply_result;
+                    comment.reply_count = item.reply_count;
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+        Common.staticToasts(context, "删除成功", R.mipmap.icon_common_duihao);
+        item.discovery_id = mArticle_id;
+        EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.DEL_TYPE, item));
+    }
+
+    @Override
+    protected void verifySuccess(String commentId, String parentCommentId) {
+        if (isEmpty(parentCommentId) || "0".equals(parentCommentId)) {
+            for (FindCommentListEntity.ItemComment comment : mItemComments) {
+                if (commentId.equals(comment.id)) {
+                    comment.check_is_show = 2;
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (parentCommentId.equals(itemComment.id)) {
+                    List<FindCommentListEntity.ItemComment> list = itemComment.reply_list;
+                    for (FindCommentListEntity.ItemComment item : list) {
+                        if (commentId.equals(item.id)) {
+                            item.check_is_show = 2;
+                            adapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        Common.staticToasts(context, "审核成功", R.mipmap.icon_common_duihao);
+    }
+
+    @Override
+    protected void retractComment(String commentId, String parentCommentId) {
+        if (isEmpty(parentCommentId) || "0".equals(parentCommentId)) {
+            for (FindCommentListEntity.ItemComment comment : mItemComments) {
+                if (commentId.equals(comment.id)) {
+                    comment.check_is_show = 1;
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (parentCommentId.equals(itemComment.id)) {
+                    List<FindCommentListEntity.ItemComment> list = itemComment.reply_list;
+                    for (FindCommentListEntity.ItemComment item : list) {
+                        if (commentId.equals(item.id)) {
+                            item.check_is_show = 1;
+                            adapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        Common.staticToasts(context, "撤回成功", R.mipmap.icon_common_duihao);
     }
 
 

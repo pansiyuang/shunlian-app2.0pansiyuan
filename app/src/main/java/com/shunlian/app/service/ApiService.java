@@ -1291,12 +1291,12 @@ public interface ApiService {
     Call<BaseEntity<FindSelectShopEntity>> recommendFollow(@QueryMap Map<String, String> map);
 
     /**
-     * 评论详情
+     * 发现评论详情
      *
      * @param map
      * @return
      */
-    @GET("discovery/nice/commentDetail")
+    @GET("discovery/comment/info")
     Call<BaseEntity<CommentDetailEntity>> commentDetail(@QueryMap Map<String, String> map);
 
     /**
@@ -1320,11 +1320,20 @@ public interface ApiService {
     /**
      * 删除评论
      *
-     * @param map
+     * @param body
      * @return
      */
     @POST("discovery/comment/delete")
-    Call<BaseEntity<EmptyEntity>> delComment(@Body RequestBody body);
+    Call<BaseEntity<FindCommentListEntity.ItemComment>> delComment(@Body RequestBody body);
+
+    /**
+     * 白名单会员撤回已审核评论
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/comment/retract")
+    Call<BaseEntity<CommonEntity>> retractComment(@Body RequestBody body);
 
     /**
      * 导航信息

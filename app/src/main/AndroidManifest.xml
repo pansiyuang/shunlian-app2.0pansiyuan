@@ -688,14 +688,14 @@
             android:label="@string/publish_experience"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover.other.CommentListAct"
+            android:name=".ui.discover_new.comment.CommentListAct"
             android:exported="false"
             android:screenOrientation="portrait"
             android:label="@string/comments"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
-            android:name=".ui.discover.other.CommentDetailAct"
+            android:name=".ui.discover_new.comment.CommentDetailAct"
             android:exported="false"
             android:label="@string/comments"
             android:screenOrientation="portrait"
