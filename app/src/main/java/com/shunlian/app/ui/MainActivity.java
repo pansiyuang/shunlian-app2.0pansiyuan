@@ -254,7 +254,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     if (updateDialogV.updateDialog == null) {
                         pMain.getPopAD();
 //                        if (Common.isAlreadyLogin()){
-                        pMain.isShowSign();
+                            pMain.isShowSign();
 //                        }else {
 //                            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
 //                        }
@@ -374,7 +374,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
         if (view.getId() == R.id.ll_tab_discover) {
             mtv_message_count.setVisibility(View.GONE);
-
+            data.count = 0;
             try {
                 if (discoverFrag != null && discoverFrag.isVisible()) {
 
@@ -723,11 +723,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
         //春节活动
 
-
         miv_first.setVisibility(View.GONE);
         miv_tab_main.setVisibility(View.VISIBLE);
         tv_tab_main.setVisibility(View.VISIBLE);
-
 
         //春节活动
         switch (pageIndex) {
@@ -736,11 +734,20 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //                miv_first.setVisibility(View.VISIBLE);
 //                miv_tab_main.setVisibility(View.GONE);
 //                tv_tab_main.setVisibility(View.GONE);
-
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
                 miv_tab_main.setImageResource(R.mipmap.tab_1_h_new);
                 tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 1:
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
 //                miv_tab_sort.setImageResource(R.mipmap.tab_2_h);
                 miv_tab_sort.setImageResource(R.mipmap.tab_2_h_new);
                 tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
@@ -751,11 +758,21 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 3:
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
 //                miv_shopping_car.setImageResource(R.mipmap.tab_4_h);
                 miv_shopping_car.setImageResource(R.mipmap.tab_4_h_new);
                 tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 4:
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
 //                miv_person_center.setImageResource(R.mipmap.tab_5_h);
                 miv_person_center.setImageResource(R.mipmap.tab_5_h_new);
                 tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));

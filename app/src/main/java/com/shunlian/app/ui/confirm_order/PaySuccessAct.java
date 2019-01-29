@@ -194,7 +194,7 @@ public class PaySuccessAct extends BaseActivity implements IPaySuccessView, Mess
     @Override
     public void setData(ProbablyLikeEntity probablyLikeEntity) {
         plus_order_id=probablyLikeEntity.order_id;
-        ntv_name.setText(probablyLikeEntity.address.realname+probablyLikeEntity.address.mobile);
+        ntv_name.setText(probablyLikeEntity.address.realname+" "+probablyLikeEntity.address.mobile);
         ntv_address.setText(probablyLikeEntity.address.address);
         if (!isEmpty(probablyLikeEntity.may_be_buy_list)){
             ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
