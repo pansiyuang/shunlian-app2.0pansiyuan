@@ -326,7 +326,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefresh(RejectedNotifyEvent event) {
         if (event.rejectedSuccess) {
-            presenter.rejectedComment(event.commentId, event.parentCommentId);
+            presenter.verifyCommentData(event.commentId, event.parentCommentId, 0);
         }
     }
 
@@ -341,6 +341,12 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 break;
             case BlogCommentEvent.DEL_TYPE:
                 presenter.delCommentData(event.mComment);
+                break;
+            case BlogCommentEvent.VERIFY_TYPE:
+                presenter.verifyCommentData(event.mCommentId, event.mParentCommentId, 2);
+                break;
+            case BlogCommentEvent.RETRACT_TYPE:
+                presenter.verifyCommentData(event.mCommentId, event.mParentCommentId, 1);
                 break;
         }
     }

@@ -2819,6 +2819,12 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> praiseBlog(@QueryMap Map<String, String> map);
 
     /**
+     * 获取发表评论提示关键词
+     */
+    @GET("discovery/comment/getWord")
+    Call<BaseEntity<EmptyEntity>> getWordList(@QueryMap Map<String, String> map);
+
+    /**
      * 周达人榜
      */
     @GET("discovery/blogfront/weekExportTopList")
