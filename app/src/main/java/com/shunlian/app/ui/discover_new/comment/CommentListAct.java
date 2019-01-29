@@ -263,11 +263,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     public void showorhideKeyboard(String hint) {
         setEdittextFocusable(true, edt_content);
         edt_content.setHint(hint);
-//        if (!isSoftShowing()) {
-            Common.showKeyboard(edt_content);
-//        } else {
-//            Common.hideKeyboard(edt_content);
-//        }
+        Common.showKeyboard(edt_content);
     }
 
     private boolean isSoftShowing() {
