@@ -41,6 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:text="支付成功"
+                    android:textStyle="bold"
                     android:textColor="@color/new_text"
                     android:textSize="24sp" />
             </com.shunlian.app.widget.MyLinearLayout>
@@ -106,6 +107,7 @@
                     android:layout_toRightOf="@id/miv_address"
                     android:textColor="@color/new_text"
                     android:textSize="13sp"
+                    android:textStyle="bold"
                     android:singleLine="true"
                     android:ellipsize="end"/>
 
