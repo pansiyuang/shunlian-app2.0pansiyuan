@@ -308,12 +308,14 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 
     private void setTitle() {
         if (!TextUtils.isEmpty(title) && title.length() > 8) {
-            mar_title.setVisibility(View.VISIBLE);
-            mtv_title.setVisibility(View.GONE);
+            visible(mar_title);
+            gone(mtv_title);
+            if (mar_title != null)
             mar_title.setText(title);
         } else {
-            mar_title.setVisibility(View.GONE);
-            mtv_title.setVisibility(View.VISIBLE);
+            gone(mar_title);
+            visible(mtv_title);
+            if (mtv_title != null)
             mtv_title.setText(title);
         }
     }

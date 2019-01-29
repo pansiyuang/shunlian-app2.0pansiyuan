@@ -2082,7 +2082,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("discovery/user/getDiscoveryUnreadCount")
+    @GET("discovery/blogfront/getUnreadCount")
     Call<BaseEntity<CommonEntity>> getDiscoveryUnreadCount(@QueryMap Map<String, String> map);
 
     /**

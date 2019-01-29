@@ -30,7 +30,6 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IHelpSolutionView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -252,7 +251,9 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
                     .getPath());
             // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
             mwv_h5.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
-            mwv_h5.loadDataWithBaseURL(null, solution.answer, "text/html", "UTF-8", null);
+            String contentHtml = "<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>"+
+                    solution.answer;
+            mwv_h5.loadDataWithBaseURL(null, contentHtml, "text/html", "UTF-8", null);
         }
         rv_about.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         HelpSolutionAdapter helpQtwoAdapter = new HelpSolutionAdapter(this, false, solution.about);

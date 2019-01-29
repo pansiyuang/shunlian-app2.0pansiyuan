@@ -23,10 +23,6 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.EmptyPresenter;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.ui.activity.DayDayAct;
-import com.shunlian.app.ui.core.AishangAct;
-import com.shunlian.app.ui.core.KouBeiAct;
-import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
@@ -207,7 +203,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                     }
 //                        if (twoHolder.firstNavyAdapter==null){
                     twoHolder.firstNavyAdapter = new FirstNavyAdapter(context, false, data.datass, data.text_color);
-                    twoHolder.rv_nav.setLayoutManager(new GridLayoutManager(context, data.datass.size() > 5 ? 5 : data.datass.size()));
+                    int size = 0;
+                    if (data != null && !isEmpty(data.datass)){
+                        size = data.datass.size();
+                    }else {
+                        size = 0;
+                    }
+                    twoHolder.rv_nav.setLayoutManager(new GridLayoutManager(context,size > 5 ? 5 : size));
                     twoHolder.rv_nav.setNestedScrollingEnabled(false);
                     twoHolder.rv_nav.setAdapter(twoHolder.firstNavyAdapter);
                     twoHolder.firstNavyAdapter.setOnItemClickListener(new OnItemClickListener() {
