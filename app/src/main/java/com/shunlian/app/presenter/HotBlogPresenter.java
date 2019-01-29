@@ -158,6 +158,30 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
         });
     }
 
+    public void wordList() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().getWordList(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToastAct((Activity) context, message);
+            }
+        });
+    }
+
     public void downCount(String blogId) {
         Map<String, String> map = new HashMap<>();
         map.put("blog_id", blogId);

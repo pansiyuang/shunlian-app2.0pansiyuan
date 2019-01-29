@@ -205,10 +205,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:minHeight="78dp"
+                android:minHeight="100dp"
                 android:overScrollMode="never"
                 android:scrollbars="none"
-                app:maxHeight="273dp" />
+                app:maxHeight="300dp" />
 
         </LinearLayout>
 

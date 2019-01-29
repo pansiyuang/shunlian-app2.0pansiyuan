@@ -11,9 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="13dp"
-        android:textSize="14sp"
+        android:text="尺码"
         android:textColor="@color/new_text"
-        android:text="尺码" />
+        android:textSize="14sp" />
 
     <com.shunlian.app.widget.flowlayout.TagFlowLayout
         android:id="@+id/flowLayout_parm"
@@ -24,6 +24,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="12sp"
+        android:layout_marginRight="10dp"
         android:background="@color/line_gay"></View>
 </LinearLayout>
