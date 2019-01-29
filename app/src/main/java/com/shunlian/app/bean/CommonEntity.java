@@ -19,7 +19,7 @@ public class CommonEntity {
     public List<CalendarEntity> calendar; //获取足迹日历形式信息接口
     public String num;  //可添加的商品数量接口
     public List<RefundDetailEntity.RefundDetail.Edit.Reason> reason_list;  //获取用户可选原因列表
-
+    public int count;  //未读数
     public String likes;  //已点赞的人数
     public List<String> five_member_likes;  //最新点赞头像列表
 

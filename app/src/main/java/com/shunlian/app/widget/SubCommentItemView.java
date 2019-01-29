@@ -15,6 +15,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.ui.discover_new.comment.CommentDetailAct;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 
 /**

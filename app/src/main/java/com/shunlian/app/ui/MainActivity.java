@@ -213,15 +213,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     public void initMessage() {
-        if (Common.isAlreadyLogin()) {
-            pMain.getDiscoveryUnreadCount();
-            view_message.setVisibility(View.GONE);
-        } else {
-            if (discoverFrag != null)
-//                discoverFrag.initMessage(null);
-                mtv_message_count.setVisibility(View.GONE);
-            view_message.setVisibility(View.VISIBLE);
-        }
+        pMain.getDiscoveryUnreadCount();
     }
 
     /**
@@ -381,8 +373,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         //春节活动
 
         if (view.getId() == R.id.ll_tab_discover) {
-            view_message.setVisibility(View.GONE);
-//            mtv_message_count.setVisibility(View.GONE);
+            mtv_message_count.setVisibility(View.GONE);
 
             try {
                 if (discoverFrag != null && discoverFrag.isVisible()) {
@@ -1010,13 +1001,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void setDiscoveryUnreadCount(CommonEntity data) {
         this.data = data;
         if (mtv_message_count != null) {
-            mtv_message_count.setVisibility(View.GONE);
-            if (data.total > 99) {
+            if (data.count > 99) {
+                mtv_message_count.setVisibility(View.VISIBLE);
                 mtv_message_count.setText("99+");
-            } else if (data.total <= 0) {
+            } else if (data.count <= 0) {
                 mtv_message_count.setVisibility(View.GONE);
             } else {
-                mtv_message_count.setText(String.valueOf(data.total));
+                mtv_message_count.setVisibility(View.VISIBLE);
+                mtv_message_count.setText(String.valueOf(data.count));
             }
         }
         if (discoverFrag != null) {

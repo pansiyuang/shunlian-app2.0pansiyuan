@@ -2082,7 +2082,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("discovery/user/getDiscoveryUnreadCount")
+    @GET("discovery/blogfront/getUnreadCount")
     Call<BaseEntity<CommonEntity>> getDiscoveryUnreadCount(@QueryMap Map<String, String> map);
 
     /**
@@ -2817,6 +2817,12 @@ public interface ApiService {
      */
     @GET("discovery/discoveryuser/praise")
     Call<BaseEntity<EmptyEntity>> praiseBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取发表评论提示关键词
+     */
+    @GET("discovery/comment/getWord")
+    Call<BaseEntity<EmptyEntity>> getWordList(@QueryMap Map<String, String> map);
 
     /**
      * 周达人榜

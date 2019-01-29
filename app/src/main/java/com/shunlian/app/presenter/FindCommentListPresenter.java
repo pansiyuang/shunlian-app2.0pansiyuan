@@ -206,33 +206,6 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         }
     }
 
-    public void rejectedComment(String commentId, String parentId) {
-        if (isEmpty(commentId)) {
-            return;
-        }
-        if (isEmpty(parentId) || "0".equals(parentId)) {
-            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
-                if (commentId.equals(itemComment.id)) {
-                    itemComment.check_is_show = 0;
-                    break;
-                }
-            }
-        } else {
-            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
-                if (parentId.equals(itemComment.id)) {
-                    for (FindCommentListEntity.ItemComment comment : itemComment.reply_list) {
-                        if (commentId.equals(comment.id)) {
-                            comment.check_is_show = 0;
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        adapter.notifyDataSetChanged();
-    }
-
     public void praiseData(String commentId, String parentId) {
         if (isEmpty(parentId) || "0".equals(parentId)) {
             for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
@@ -291,6 +264,29 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         adapter.notifyDataSetChanged();
     }
 
+    public void verifyCommentData(String commentId, String parentId, int checkShow) {
+        if (isEmpty(parentId) || "0".equals(parentId)) {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (commentId.equals(itemComment.id)) {
+                    itemComment.check_is_show = checkShow;
+                    break;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (parentId.equals(itemComment.id)) {
+                    for (FindCommentListEntity.ItemComment item : itemComment.reply_list) {
+                        if (commentId.equals(item.id)) {
+                            item.check_is_show = checkShow;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
 
     public void pointFabulous(String item_id, int childPosition) {
         Map<String, String> map = new HashMap<>();
@@ -360,6 +356,9 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         Common.staticToasts(context, getStringResouce(R.string.send_success), R.mipmap.icon_common_duihao);
         if ("0".equals(insert_item.level)) {
             mItemComments.add(0, insert_item);
+            insert_item.discovery_id = mArticle_id;
+            iView.setCommentAllCount(String.valueOf(insert_item.comment_count));
+            EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.ADD_TYPE, insert_item));
         } else {
             for (FindCommentListEntity.ItemComment item : mItemComments) {
                 if (item.id.equals(insert_item.reply_parent_comment_id)) {
@@ -369,8 +368,6 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 }
             }
         }
-        insert_item.discovery_id = mArticle_id;
-        EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.ADD_TYPE, insert_item));
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         itemComment = null;
@@ -383,6 +380,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     protected void delSuccess(FindCommentListEntity.ItemComment item) {
         if (isEmpty(item.reply_parent_comment_id) || "0".equals(item.reply_parent_comment_id)) {
             for (FindCommentListEntity.ItemComment myComment : mItemComments) {
+                item.discovery_id = mArticle_id;
                 if (item.comment_id.equals(myComment.id)) {
                     if (myComment.reply_count != 0) {
                         myComment.status = 3;
@@ -392,6 +390,8 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     break;
                 }
             }
+            iView.setCommentAllCount(String.valueOf(item.reply_count));
+            EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.DEL_TYPE, item));
             adapter.notifyDataSetChanged();
             currentTouchItem = -1;
             itemComment = null;
@@ -407,8 +407,6 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
             }
         }
         Common.staticToasts(context, "删除成功", R.mipmap.icon_common_duihao);
-        item.discovery_id = mArticle_id;
-        EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.DEL_TYPE, item));
     }
 
     @Override

@@ -317,5 +317,4 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
             presenter.rejectedComment(event.commentId, event.parentCommentId);
         }
     }
-
 }
