@@ -47,6 +47,11 @@ public class SubBlogCommentItemView extends FrameLayout {
                 CommentListAct.startAct((Activity) getContext(), currentBlogId);
             }
         });
+        mtv_content.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(currentBlogId)) {
+                CommentListAct.startAct((Activity) getContext(), currentBlogId);
+            }
+        });
     }
 
     public void setCommentData(BigImgEntity.CommentItem itemComment, String blogId) {

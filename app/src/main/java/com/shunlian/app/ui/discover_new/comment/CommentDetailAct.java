@@ -197,6 +197,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
 
     @OnClick(R.id.edt_content)
     public void onClick() {
+        edt_content.setHint(Common.getRandomWord());
         setEdittextFocusable(true, edt_content);
     }
 

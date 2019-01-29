@@ -198,6 +198,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @OnClick(R.id.edt_content)
     public void onClick() {
+        edt_content.setHint(Common.getRandomWord());
         setEdittextFocusable(true, edt_content);
     }
 
@@ -262,11 +263,11 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     public void showorhideKeyboard(String hint) {
         setEdittextFocusable(true, edt_content);
         edt_content.setHint(hint);
-        if (!isSoftShowing()) {
+//        if (!isSoftShowing()) {
             Common.showKeyboard(edt_content);
-        } else {
-            Common.hideKeyboard(edt_content);
-        }
+//        } else {
+//            Common.hideKeyboard(edt_content);
+//        }
     }
 
     private boolean isSoftShowing() {

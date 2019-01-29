@@ -80,12 +80,13 @@ public class BlogCommentSendPopwindow {
                 mListener.onSendClick(content);
             }
         });
-       Common.showKeyboard(inputComment);
+        inputComment.setHint(Common.getRandomWord());
+        Common.showKeyboard(inputComment);
     }
 
     public void dismiss() {
         inputComment.setText("");
-        hintPopInput(mContext,inputComment);
+        hintPopInput(mContext, inputComment);
         popupWindow.dismiss();
     }
 
@@ -96,7 +97,7 @@ public class BlogCommentSendPopwindow {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 2);
         }
         if (context instanceof Activity)
-        ((Activity)context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     public void setOnPopClickListener(OnPopClickListener listener) {

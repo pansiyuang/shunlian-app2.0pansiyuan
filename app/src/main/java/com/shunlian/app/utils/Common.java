@@ -135,6 +135,7 @@ import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -144,9 +145,10 @@ import java.util.regex.Pattern;
 
 public class Common {
     private static Toast toast, toasts;
-    private static MyTextView mtv_toast, mtv_toasts, mtv_desc,ex_desc;
+    private static MyTextView mtv_toast, mtv_toasts, mtv_desc, ex_desc;
     private static SpannableStringBuilder ssb;
     private static MyImageView miv_logo;
+    private static List<String> currentWordList;
 
     public static boolean isColor(String value) {
         if (TextUtils.isEmpty(value))
@@ -158,8 +160,6 @@ public class Common {
     }
 
     /**
-     *
-     *
      * @return true栈顶栈底都是当前act，false不唯一
      */
 
@@ -170,7 +170,7 @@ public class Common {
             String topName = manager.getRunningTasks(1).get(0).topActivity.getClassName();
             String mBaseName = baseName.substring(baseName.lastIndexOf(".") + 1);
             String mTopName = topName.substring(topName.lastIndexOf(".") + 1);
-            return (mTopName.equals(className)&&mBaseName.equals(className));
+            return (mTopName.equals(className) && mBaseName.equals(className));
         } catch (Exception e) {
             return true;
         }
@@ -303,7 +303,7 @@ public class Common {
                 ((Activity) context).finish();
                 break;
             case "noTitleUrl":
-                H5X5Act.startAct(context, params[0], H5X5Act.MODE_SONIC,"noTitle");
+                H5X5Act.startAct(context, params[0], H5X5Act.MODE_SONIC, "noTitle");
                 break;
             case "taskSystems":
                 NewTaskCenterAct.startAct(context);
@@ -312,13 +312,13 @@ public class Common {
                 LuckWheelPanActivity.startAct(context);
                 break;
             case "HTMLShare":
-                if (!TextUtils.isEmpty(params[0])){
-                    copyText(context,params[1],params[3],false);
+                if (!TextUtils.isEmpty(params[0])) {
+                    copyText(context, params[1], params[3], false);
                     ShareInfoParam shareInfoParam = new ShareInfoParam();
-                    if ("1".equals(params[0])){
+                    if ("1".equals(params[0])) {
                         shareInfoParam.photo = params[2];
                         WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
-                    }else if ("2".equals(params[0])){
+                    } else if ("2".equals(params[0])) {
 //                        shareInfoParam.shareLink = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=95684227_hao_pg&wd=Rxjava%20%2Bre&oq=android%25E5%25AF%25B9url%25E8%25A7%25A3%25E7%25A0%2581&rsv_pq=dc1f4fe400029324&rsv_t=3a61SdbfGVa6%2BW9Dsq4tVpuDsLQVpB7q0%2BGONNSdL6LBQ35u0c1y7BXBoGsrkj2Hu1dcTf0U&rqlang=cn&rsv_enter=1&rsv_n=2&rsv_sug3=1&rsv_sug2=0&inputT=909&rsv_sug4=909";
                         shareInfoParam.shareLink = params[1];
                         shareInfoParam.title = params[3];
@@ -332,7 +332,7 @@ public class Common {
                 MoreCreditAct.startAct(context);
                 break;
             case "invite":
-                QrCodeAct.startAct(context,params[0]);
+                QrCodeAct.startAct(context, params[0]);
                 break;
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
@@ -347,18 +347,18 @@ public class Common {
                 LogUtil.augusLogW("gogogo---nojump");
                 break;
             case "shipping":
-                OrderLogisticsActivity.startAct(context,params[0]);
+                OrderLogisticsActivity.startAct(context, params[0]);
                 break;
             case "order":
-                OrderDetailAct.startAct(context,params[0]);
+                OrderDetailAct.startAct(context, params[0]);
                 break;
             case "categories":
                 SortAct.startAct(context);
                 break;
             case "coupon":
                 if (TextUtils.isEmpty(token)) {
-                    Common.goGoGo(context,"login");
-                    theRelayJump(type,params);
+                    Common.goGoGo(context, "login");
+                    theRelayJump(type, params);
                 } else {
 //                    GetCouponAct.startAct(context);
                     NewGetCouponAct.startAct(context);
@@ -366,10 +366,10 @@ public class Common {
                 break;
             case "voucher":
                 if (TextUtils.isEmpty(token)) {
-                    Common.goGoGo(context,"login");
-                    theRelayJump(type,params);
+                    Common.goGoGo(context, "login");
+                    theRelayJump(type, params);
                 } else {
-                    CouponMsgAct.startAct(context,params[0]);
+                    CouponMsgAct.startAct(context, params[0]);
                 }
 //                Common.staticToast("优惠券");
                 break;
@@ -420,8 +420,8 @@ public class Common {
 //                break;
             case "commission":
                 if (TextUtils.isEmpty(token)) {
-                    Common.goGoGo(context,"login");
-                    theRelayJump(type,params);
+                    Common.goGoGo(context, "login");
+                    theRelayJump(type, params);
                 } else {
                     MainActivity.startAct(context, "personCenter");
 //                    MyProfitAct.startAct(context, false);
@@ -434,8 +434,8 @@ public class Common {
             case "myvoucherlist":
             case "voucherlist":
                 if (TextUtils.isEmpty(token)) {
-                    Common.goGoGo(context,"login");
-                    theRelayJump(type,params);
+                    Common.goGoGo(context, "login");
+                    theRelayJump(type, params);
                 } else {
                     CouponListAct.startAct(context);
                 }
@@ -448,7 +448,7 @@ public class Common {
                 PlusGifDetailAct.startAct(context, params[0]);
                 break;
             case "login":
-                theRelayJump(null,null);
+                theRelayJump(null, null);
                 LoginEntryAct.startAct(context);
                 break;
 //            case "article":
@@ -459,14 +459,14 @@ public class Common {
                 break;
             case "myorder"://我的订单
                 if (TextUtils.isEmpty(token)) {
-                    Common.goGoGo(context,"login");
-                    theRelayJump(type,params);
+                    Common.goGoGo(context, "login");
+                    theRelayJump(type, params);
                 } else {
                     OrderDetailAct.startAct(context, params[0]);
                 }
                 break;
             case "hotpush":
-                HotRecommendAct.startAct(context, params[0],params[1]);
+                HotRecommendAct.startAct(context, params[0], params[1]);
                 break;
             case "my":
             case "personCenter"://个人中心
@@ -520,23 +520,23 @@ public class Common {
                 MainActivity.startAct(context, "myplus");
                 break;
             case "usecoupon":
-                UserCouponListAct.startAct(context,params[0]);
+                UserCouponListAct.startAct(context, params[0]);
                 break;
             case "discountgoods":
-                if (params != null && params.length > 0){
+                if (params != null && params.length > 0) {
                     String id = "";
-                    if (params != null && params.length > 1){
+                    if (params != null && params.length > 1) {
                         id = params[1];
                     }
-                    CouponGoodsAct.startAct(context,params[0],id);
+                    CouponGoodsAct.startAct(context, params[0], id);
                 }
                 break;
             case "chat"://聊天
 //               Common.goGoGo(context, toPage, id, id1,id2, id3,id4, id5,id6,to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
 
                 if (TextUtils.isEmpty(token)) {
-                    Common.goGoGo(context,"login");
-                    theRelayJump(type,params);
+                    Common.goGoGo(context, "login");
+                    theRelayJump(type, params);
                 } else {
 
                     ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
@@ -551,15 +551,15 @@ public class Common {
                     chatMember.m_user_id = params[12];
 
                     //0，普通用户，1平台客服管理员，2平台普通客服，3商家客服管理员，4商家普通客服
-                    if(context instanceof Activity){
+                    if (context instanceof Activity) {
                         ChatManager.getInstance(context).init().switch2jumpChat(params[10], params[11], chatMember);
-                    }else {
+                    } else {
                         Common.staticToast("聊天初始化失败");
                     }
                 }
                 break;
             case "submitlogisticsinfo"://提交物流信息
-                SubmitLogisticsInfoAct.startAct(context,params[0],SubmitLogisticsInfoAct.APPLY);
+                SubmitLogisticsInfoAct.startAct(context, params[0], SubmitLogisticsInfoAct.APPLY);
                 break;
             case "newuser"://新人专享
             case "olduser":
@@ -569,13 +569,13 @@ public class Common {
 
                 break;
             case "myfootprint"://足迹
-                MyCollectionAct.startAct(context,MyCollectionAct.FOOTPRINT_FLAG);
+                MyCollectionAct.startAct(context, MyCollectionAct.FOOTPRINT_FLAG);
                 break;
             case "goodsCollection"://商品收藏
-                MyCollectionAct.startAct(context,MyCollectionAct.GOODS_FLAG);
+                MyCollectionAct.startAct(context, MyCollectionAct.GOODS_FLAG);
                 break;
             case "storeCollection"://关注店铺
-                MyCollectionAct.startAct(context,MyCollectionAct.STORE_FLAG);
+                MyCollectionAct.startAct(context, MyCollectionAct.STORE_FLAG);
                 break;
             case "shunlianKefu":
                 HelpOneAct.startAct(context);
@@ -589,7 +589,7 @@ public class Common {
                 break;
             case "plusFreeConfirmOrder":
 //                slmall://plusFreeConfirmOrder?gid=123&qty=1&sku_id=345
-                ConfirmOrderAct.startAct(context,params[0],params[1],params[2],ConfirmOrderAct.TYPE_PLUSFREE);
+                ConfirmOrderAct.startAct(context, params[0], params[1], params[2], ConfirmOrderAct.TYPE_PLUSFREE);
                 break;
             case "taskGoldenEggTurnTable":
                 GoldEggLuckyWheelPanActivity.startAct(context);
@@ -602,24 +602,25 @@ public class Common {
 
     /**
      * 接力跳转
+     *
      * @param type
      * @param items
      */
-    public static void theRelayJump(String type,String[] items){
-        if (TextUtils.isEmpty(type))return;
+    public static void theRelayJump(String type, String[] items) {
+        if (TextUtils.isEmpty(type)) return;
         DispachJump dispachJump = new DispachJump();
         dispachJump.jumpType = type;
         dispachJump.items = items;
         ObjectMapper om = new ObjectMapper();
         try {
-            if (dispachJump.items == null){
+            if (dispachJump.items == null) {
                 dispachJump.items = new String[0];
             }
             String s = om.writeValueAsString(dispachJump);
             SharedPrefUtil.saveCacheSharedPrf("wx_jump", s);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             dispachJump = null;
             om = null;
         }
@@ -627,12 +628,13 @@ public class Common {
 
     /**
      * 处理接力跳转
+     *
      * @param context
      */
     public static void handleTheRelayJump(Context context) {
-        if (!Common.isAlreadyLogin())return;
+        if (!Common.isAlreadyLogin()) return;
         String jumpType = SharedPrefUtil.getCacheSharedPrf("wx_jump", "");
-        LogUtil.zhLogW("处理接力跳转："+jumpType);
+        LogUtil.zhLogW("处理接力跳转：" + jumpType);
         if (TextUtils.isEmpty(jumpType)) return;
         ObjectMapper om = new ObjectMapper();
         DispachJump dispachJump;
@@ -697,10 +699,10 @@ public class Common {
      * @return
      */
     public static int getScreenWidth(Activity ac) {
-        if (ac!=null){
+        if (ac != null) {
             return ac.getWindowManager().getDefaultDisplay().getWidth();
-        }else {
-           return 720;
+        } else {
+            return 720;
         }
     }
 
@@ -814,40 +816,40 @@ public class Common {
     private static Toast toastAnim;
     private static LottieAnimationView animation_view;
 
-    public static void staticAnimToast(String content,String desc,String jsonAnim) {
+    public static void staticAnimToast(String content, String desc, String jsonAnim) {
         if (TextUtils.isEmpty(content))
             return;
         if (toastAnim == null) {
             View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast_anim_json, null);
-            mtv_toast =  v.findViewById(R.id.mtv_toasts);
-            mtv_desc=  v.findViewById(R.id.mtv_desc);
-            animation_view=  v.findViewById(R.id.animation_view);
+            mtv_toast = v.findViewById(R.id.mtv_toasts);
+            mtv_desc = v.findViewById(R.id.mtv_desc);
+            animation_view = v.findViewById(R.id.animation_view);
             mtv_toast.setText(content);
             mtv_desc.setText(desc);
             toastAnim = new Toast(getApplicationContext());
             toastAnim.setDuration(Toast.LENGTH_LONG);
             toastAnim.setView(v);
             toastAnim.setGravity(Gravity.FILL, 0, 0);
-            showAnimJsonFile(jsonAnim,"images/img_3.png");
+            showAnimJsonFile(jsonAnim, "images/img_3.png");
         } else {
             mtv_toast.setText(content);
             mtv_desc.setText(desc);
-            showAnimJsonFile(jsonAnim,"images/img_3.png");
+            showAnimJsonFile(jsonAnim, "images/img_3.png");
         }
         toastAnim.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         toastAnim.show();
     }
 
 
-    public static void staticAnimNewToast(String content,String desc,String jsonAnim) {
+    public static void staticAnimNewToast(String content, String desc, String jsonAnim) {
         if (TextUtils.isEmpty(content))
             return;
         if (exToast == null) {
             View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast_anim_new_json, null);
-            ex_desc=  v.findViewById(R.id.mtv_desc);
-            ex_animation_view=  v.findViewById(R.id.animation_view);
+            ex_desc = v.findViewById(R.id.mtv_desc);
+            ex_animation_view = v.findViewById(R.id.animation_view);
             ex_desc.setText(content);
-            exToast =  new Toast(getApplicationContext());
+            exToast = new Toast(getApplicationContext());
             exToast.setView(v);
             exToast.setGravity(Gravity.FILL, 0, 0);
         } else {
@@ -860,13 +862,14 @@ public class Common {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                showAnimExJsonFile(jsonAnim,"images/img_11.png");
-            }});
+                showAnimExJsonFile(jsonAnim, "images/img_11.png");
+            }
+        });
         exToast.show();
         objectAnimator.start();
     }
 
-    private static void showAnimJsonFile(String jsonAnim,String defaultImage){
+    private static void showAnimJsonFile(String jsonAnim, String defaultImage) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 animation_view.setAnimation(jsonAnim);//在assets目录下的动画json文件名。
@@ -877,12 +880,12 @@ public class Common {
                 AssetManager assets = getApplicationContext().getAssets();
                 animation_view.setImageBitmap(BitmapFactory.decodeStream(assets.open(defaultImage)));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void showAnimExJsonFile(String jsonAnim,String defaultImage){
+    private static void showAnimExJsonFile(String jsonAnim, String defaultImage) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 ex_animation_view.setAnimation(jsonAnim);//在assets目录下的动画json文件名。
@@ -893,7 +896,7 @@ public class Common {
                 AssetManager assets = getApplicationContext().getAssets();
                 ex_animation_view.setImageBitmap(BitmapFactory.decodeStream(assets.open(defaultImage)));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -916,18 +919,18 @@ public class Common {
         toast.show();
     }
 
-    public static void staticToastAct(Activity activity,String content) {
+    public static void staticToastAct(Activity activity, String content) {
         if (TextUtils.isEmpty(content))
             return;
-            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
-           TextView mtv_toast = (MyTextView) v.findViewById(R.id.mtv_toast);
-            mtv_toast.setText(content);
-            Toast  toast = new Toast(activity);
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.setView(v);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            mtv_toast.setText(content);
-            toast.show();
+        View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
+        TextView mtv_toast = (MyTextView) v.findViewById(R.id.mtv_toast);
+        mtv_toast.setText(content);
+        Toast toast = new Toast(activity);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(v);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        mtv_toast.setText(content);
+        toast.show();
     }
 
     public static void staticToasts(Context context, String content, String desc, int imgSource) {
@@ -971,7 +974,7 @@ public class Common {
     @Deprecated
     public static String getPlaceholder(int num) {
         String str = "\u3000";
-        if (num == 1)str += " ";
+        if (num == 1) str += " ";
         for (int i = 0; i < num; i++) {
             str = str.concat("\u3000");
         }
@@ -980,11 +983,12 @@ public class Common {
 
     /**
      * 自动计算所需占位空间
+     *
      * @param content
      * @return
      */
     @Deprecated
-    public static String getPlaceholder(String content){
+    public static String getPlaceholder(String content) {
         int placeholderByte = getPlaceholderByte(content);
         int length = (int) (placeholderByte * 1.0f / 3.0f + 0.5f);
         return getPlaceholder(length);
@@ -992,78 +996,82 @@ public class Common {
 
     /**
      * 给textview添加label标签 默认标签字体颜色白色 字体大小10sp
+     *
      * @param context
      * @param label
      * @param content
      * @return
      */
-    public static SpannableString getPlaceholder(Context context,String label,String content){
-        return getPlaceholder(context,label,content,10, Color.WHITE,
-                Color.parseColor("#fb0036"),2);
+    public static SpannableString getPlaceholder(Context context, String label, String content) {
+        return getPlaceholder(context, label, content, 10, Color.WHITE,
+                Color.parseColor("#fb0036"), 2);
     }
 
     /**
      * 给textview添加label标签 默认标签字体颜色白色
+     *
      * @param context
      * @param label
      * @param content
      * @param labelFontSize
      * @return
      */
-    public static SpannableString getPlaceholder(Context context,String label,
-                                                 String content,float labelFontSize){
-        return getPlaceholder(context,label,content,labelFontSize, Color.WHITE,
-                Color.parseColor("#fb0036"),2);
+    public static SpannableString getPlaceholder(Context context, String label,
+                                                 String content, float labelFontSize) {
+        return getPlaceholder(context, label, content, labelFontSize, Color.WHITE,
+                Color.parseColor("#fb0036"), 2);
     }
 
     /**
      * 给textview添加label标签
+     *
      * @param context
-     * @param label 标签内容
-     * @param content textview 内容
-     * @param labelFontSize 标签字体大小
+     * @param label          标签内容
+     * @param content        textview 内容
+     * @param labelFontSize  标签字体大小
      * @param labelFontColor 标签字体颜色
-     * @param labelBgColor 标签背景颜色
-     * @param labelBgRadius 标签背景圆角弧度
+     * @param labelBgColor   标签背景颜色
+     * @param labelBgRadius  标签背景圆角弧度
      * @return
      */
     public static SpannableString getPlaceholder(Context context, String label, String content,
-                                           float labelFontSize, int labelFontColor,
-                                           int labelBgColor, float labelBgRadius){
+                                                 float labelFontSize, int labelFontColor,
+                                                 int labelBgColor, float labelBgRadius) {
         String format = "%s %s";
         if (label == null) label = "";
         if (content == null) content = "\u3000";
-        SpannableString spannableString = new SpannableString(String.format(format,label,content));
-        if (label.length() < 1)return spannableString;
+        SpannableString spannableString = new SpannableString(String.format(format, label, content));
+        if (label.length() < 1) return spannableString;
         View view = LayoutInflater.from(context).inflate(R.layout.label_textview, null);//R.layout.tag是每个标签的布局
         TextView tv_tag = view.findViewById(R.id.tv_label);
         tv_tag.setText(label);
         tv_tag.setTextSize(labelFontSize);
         tv_tag.setTextColor(labelFontColor);
-        tv_tag.setBackgroundDrawable(ShapeUtils.commonShape(context,labelBgColor,labelBgRadius));
+        tv_tag.setBackgroundDrawable(ShapeUtils.commonShape(context, labelBgColor, labelBgRadius));
         Bitmap bitmap = BitmapUtil.convertViewToBitmap(view);
-        if (bitmap == null)return spannableString;
+        if (bitmap == null) return spannableString;
         Drawable d = new BitmapDrawable(bitmap);
         d.setBounds(0, 0, tv_tag.getWidth(), tv_tag.getHeight());//缺少这句的话，不会报错，但是图片不回显示
         ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);//图片将对齐底部边线
-        spannableString.setSpan(span,0,label.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(span, 0, label.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
     }
 
     /**
      * 将字符串中所有字符转为字节
+     *
      * @param content
      * @return
      */
-    public static int getPlaceholderByte(String content){
-        if (TextUtils.isEmpty(content))return 0;
+    public static int getPlaceholderByte(String content) {
+        if (TextUtils.isEmpty(content)) return 0;
         int chars = 0;
-        for (int i=0; i<content.length(); i++){
+        for (int i = 0; i < content.length(); i++) {
             char at = content.charAt(i);
             Integer integer = Integer.valueOf(at);
-            if (integer < 128){
+            if (integer < 128) {
                 chars += 1;
-            }else {
+            } else {
                 chars += 3;
             }
         }
@@ -1161,6 +1169,7 @@ public class Common {
         }
         return ssb;
     }
+
     /**
      * 将点后面的字变小
      *
@@ -1183,6 +1192,7 @@ public class Common {
         }
         return ssb;
     }
+
     /**
      * 更改源字符串的颜色
      *
@@ -1197,7 +1207,7 @@ public class Common {
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
-        int i=-1;
+        int i = -1;
         if (!TextUtils.isEmpty(changeStr))
             i = source.indexOf(changeStr);
         if (i == -1) {
@@ -1222,14 +1232,14 @@ public class Common {
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
-        if (changeStr != null && changeStr.size() > 0){
-            for (String str: changeStr) {
-                if (TextUtils.isEmpty(str))continue;
+        if (changeStr != null && changeStr.size() > 0) {
+            for (String str : changeStr) {
+                if (TextUtils.isEmpty(str)) continue;
                 int i = source.indexOf(str);
                 if (i != -1)
-                ssb.setSpan(colorSpan, i, i + str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    ssb.setSpan(colorSpan, i, i + str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-        }else {
+        } else {
             return ssb;
         }
         return ssb;
@@ -1251,7 +1261,7 @@ public class Common {
         ssb.append(source);
         if (TextUtils.isEmpty(changeStr))
             return ssb;
-        int i=-1;
+        int i = -1;
         if (!TextUtils.isEmpty(changeStr))
             i = source.indexOf(changeStr);
         if (i == -1) {
@@ -1281,9 +1291,9 @@ public class Common {
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
-        int i=-1;
+        int i = -1;
         if (!TextUtils.isEmpty(changeStr))
-        i = source.indexOf(changeStr);
+            i = source.indexOf(changeStr);
         if (i == -1) {
             return ssb;
         } else {
@@ -1334,7 +1344,7 @@ public class Common {
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
-        int i=-1;
+        int i = -1;
         if (!TextUtils.isEmpty(changeStr))
             i = source.indexOf(changeStr);
         if (i == -1) {
@@ -1366,7 +1376,7 @@ public class Common {
      * @return
      */
     public static String getDomain(String url) {
-        if (TextUtils.isEmpty(url)||!url.startsWith("http"))
+        if (TextUtils.isEmpty(url) || !url.startsWith("http"))
             return "";
         try {
             String result = "";
@@ -1471,16 +1481,18 @@ public class Common {
         return resid;
     }
 
-    public static void copyText(Context context, String content){
+    public static void copyText(Context context, String content) {
         ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cmb.setText(content); //将内容放入粘贴管理器,在别的地方长按选择"粘贴"即可
         Common.staticToast("复制成功");
     }
-    public static void copyTextNoToast(Context context, String content){
+
+    public static void copyTextNoToast(Context context, String content) {
         ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cmb.setText(content); //将内容放入粘贴管理器,在别的地方长按选择"粘贴"即可
     }
-    public static void copyText(Context context, String shareLink, String shareDesc,boolean isToast) {
+
+    public static void copyText(Context context, String shareLink, String shareDesc, boolean isToast) {
         StringBuffer sb = new StringBuffer();
         sb.setLength(0);
 //        if (!TextUtils.isEmpty(shareTitle)) {
@@ -1494,14 +1506,14 @@ public class Common {
         if (!TextUtils.isEmpty(shareLink)) {
             sb.append(shareLink);
         }
-        if (!TextUtils.isEmpty(shareLink)&&shareLink.contains("slAppWord")) {
+        if (!TextUtils.isEmpty(shareLink) && shareLink.contains("slAppWord")) {
             sb.append("\n");
             sb.append("复制这条信息，打开顺联APP~");
         }
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cm.setText(sb.toString());
         if (isToast)
-        staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
+            staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
         Constant.SHARE_LINK = sb.toString();
     }
 
@@ -1544,13 +1556,13 @@ public class Common {
     }
 
     public static void initToast(Context context, String content, String desc, int imgSource) {
-        if (TextUtils.isEmpty(content)&&TextUtils.isEmpty(desc))
+        if (TextUtils.isEmpty(content) && TextUtils.isEmpty(desc))
             return;
         if (toasts == null) {
             View v = LayoutInflater.from(context).inflate(R.layout.toasts, null);
-            mtv_toasts =  v.findViewById(R.id.mtv_toasts);
-            mtv_desc =  v.findViewById(R.id.mtv_desc);
-            miv_logo =  v.findViewById(R.id.miv_logo);
+            mtv_toasts = v.findViewById(R.id.mtv_toasts);
+            mtv_desc = v.findViewById(R.id.mtv_desc);
+            miv_logo = v.findViewById(R.id.miv_logo);
             toasts = new Toast(context);
 //            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
             toasts.setDuration(Toast.LENGTH_SHORT);
@@ -1561,7 +1573,7 @@ public class Common {
         if (imgSource > 0) {
             miv_logo.setVisibility(View.VISIBLE);
             miv_logo.setImageResource(imgSource);
-        }else {
+        } else {
             miv_logo.setVisibility(View.GONE);
         }
         if (TextUtils.isEmpty(desc)) {
@@ -1618,7 +1630,7 @@ public class Common {
         if (TextUtils.isEmpty(url))
             return;
         try {
-            url=java.net.URLDecoder.decode(url);
+            url = java.net.URLDecoder.decode(url);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1632,7 +1644,7 @@ public class Common {
                 String id4 = "";
                 try {
                     if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
-                        id=java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id"));
+                        id = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id"));
                     if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
                         id1 = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id1"));
                     if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id2")))
@@ -1644,7 +1656,7 @@ public class Common {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Common.goGoGo(context, type, id, id1,id2,id3,id4);
+                Common.goGoGo(context, type, id, id1, id2, id3, id4);
             }
         }
     }
@@ -1707,6 +1719,7 @@ public class Common {
             return true;
         return false;
     }
+
     public static int getStatusBarHeight(Context context) {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height",
@@ -1714,19 +1727,20 @@ public class Common {
         if (resourceId > 0) {
             result = getResources().getDimensionPixelSize(resourceId);
         }
-        if(result==0&&context!=null){
-            result= DensityUtil.dip2px(context,20);
+        if (result == 0 && context != null) {
+            result = DensityUtil.dip2px(context, 20);
         }
         return result;
     }
 
     /**
      * 判断某个Activity 界面是否在前台
+     *
      * @param context
      * @param className 某个界面名称 getClass().getName()
      * @return
      */
-    public static boolean  isForeground(Context context, String className) {
+    public static boolean isForeground(Context context, String className) {
         if (context == null || TextUtils.isEmpty(className)) {
             return false;
         }
@@ -1758,6 +1772,7 @@ public class Common {
             return isEnableV19(context);
         }
     }
+
     /**
      * Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
      * 19及以上
@@ -1781,7 +1796,7 @@ public class Common {
 
                 int value = (Integer) opPostNotificationValue.get(Integer.class);
                 return ((Integer) checkOpNoThrowMethod.invoke(mAppOps, value, uid, pkg) == AppOpsManager.MODE_ALLOWED);
-            }else {
+            } else {
                 return true;
             }
         } catch (ClassNotFoundException e) {
@@ -1794,7 +1809,7 @@ public class Common {
 
         } catch (IllegalAccessException e) {
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return false;
@@ -1829,4 +1844,23 @@ public class Common {
         return false;
     }
 
+    public static void setWordList(List<String> wordList) {
+        if (currentWordList == null || currentWordList.size() == 0) {
+            currentWordList = new ArrayList<>();
+        }
+        currentWordList.clear();
+        if (wordList == null || wordList.size() == 0) {
+            currentWordList.add("留下你的精彩评论吧~");
+        } else {
+            currentWordList.addAll(wordList);
+        }
+    }
+
+    public static String getRandomWord() {
+        if (currentWordList == null || currentWordList.size() == 0) {
+            return "留下你的精彩评论吧~";
+        }
+        int randomIndex = new Random().nextInt(currentWordList.size());
+        return currentWordList.get(randomIndex);
+    }
 }

@@ -401,6 +401,11 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         mPopWindow.dismiss();
     }
 
+    @Override
+    public void getWordList(List<String> wordList) {
+        Common.setWordList(wordList);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(RefreshBlogEvent event) {
         switch (event.mType) {

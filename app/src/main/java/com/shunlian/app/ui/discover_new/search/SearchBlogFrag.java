@@ -367,6 +367,11 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
         mPopWindow.dismiss();
     }
 
+    @Override
+    public void getWordList(List<String> wordList) {
+
+    }
+
     private void showPopupComment() {
         if (mPopWindow == null) {
             mPopWindow = new BlogCommentSendPopwindow(getActivity());

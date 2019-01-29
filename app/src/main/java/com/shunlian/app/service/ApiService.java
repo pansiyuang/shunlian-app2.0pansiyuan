@@ -2822,7 +2822,7 @@ public interface ApiService {
      * 获取发表评论提示关键词
      */
     @GET("discovery/comment/getWord")
-    Call<BaseEntity<EmptyEntity>> getWordList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> getWordList(@QueryMap Map<String, String> map);
 
     /**
      * 周达人榜

@@ -162,10 +162,12 @@ public class HotBlogPresenter extends BasePresenter<IHotBlogView> {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().getWordList(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getWordList(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                CommonEntity commonEntity = entity.data;
+                iView.getWordList(commonEntity.list);
                 super.onSuccess(entity);
             }
 

@@ -98,6 +98,7 @@ public class CommonEntity {
     public List<FindCommentListEntity.ItemComment> reply_result;
     public int reply_count;
     public int reply_status;
+    public List<String> list;
 
     @Override
     public String toString() {
