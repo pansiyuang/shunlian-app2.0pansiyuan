@@ -85,7 +85,7 @@
 
             <com.shunlian.app.widget.MyRelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="24dp"
                 android:paddingLeft="18dp"
                 android:paddingRight="18dp">
@@ -115,10 +115,10 @@
                     android:ellipsize="end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/ntv_name"
                     android:layout_marginLeft="6dp"
+                    android:layout_marginTop="2dp"
                     android:layout_toRightOf="@id/miv_address"
-                    android:layout_marginBottom="8dp"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
             </com.shunlian.app.widget.MyRelativeLayout>

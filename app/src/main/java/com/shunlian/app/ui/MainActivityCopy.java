@@ -16,6 +16,8 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,6 +62,7 @@ import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
@@ -86,7 +89,7 @@ import java.util.UUID;
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
 
-public class MainActivity extends BaseActivity implements MessageCountManager.OnGetMessageListener, IMain {
+public class MainActivityCopy extends BaseActivity implements MessageCountManager.OnGetMessageListener, IMain {
     private static final String[] flags = {"mainPage", "myPlus", "discover", "shoppingcar", "personCenter"};
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
     public int position = 0;
@@ -98,13 +101,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.fl_main)
     MyFrameLayout fl_main;
     @BindView(R.id.ll_tab_main_page)
-    MyRelativeLayout ll_tab_main_page;
+    LinearLayout ll_tab_main_page;
     @BindView(R.id.miv_tab_main)
     MyImageView miv_tab_main;
     @BindView(R.id.tv_tab_main)
     TextView tv_tab_main;
     @BindView(R.id.ll_tab_sort)
-    MyRelativeLayout ll_tab_sort;
+    LinearLayout ll_tab_sort;
     @BindView(R.id.miv_tab_sort)
     MyImageView miv_tab_sort;
     @BindView(R.id.tv_tab_sort)
@@ -116,7 +119,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.tv_tab_discover)
     TextView tv_tab_discover;
     @BindView(R.id.ll_tab_shopping_car)
-    MyRelativeLayout ll_tab_shopping_car;
+    LinearLayout ll_tab_shopping_car;
     @BindView(R.id.miv_shopping_car)
     MyImageView miv_shopping_car;
     @BindView(R.id.miv_first)
@@ -124,7 +127,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.tv_shopping_car)
     TextView tv_shopping_car;
     @BindView(R.id.ll_tab_person_center)
-    MyRelativeLayout ll_tab_person_center;
+    LinearLayout ll_tab_person_center;
     @BindView(R.id.miv_person_center)
     MyImageView miv_person_center;
     @BindView(R.id.tv_person_center)
@@ -169,14 +172,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private PromptDialog promptDialog;
 
     public static void startAct(Context context, String flag) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, MainActivityCopy.class);
         intent.putExtra("flag", flag);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
     public static void startAct(Context context, String flag, String discoverFlag) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, MainActivityCopy.class);
         intent.putExtra("flag", flag);
         intent.putExtra("discover_flag", discoverFlag);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -206,7 +209,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             initMessage();
         }
 //        if (Common.isAlreadyLogin()){
-        pMain.isShowSign();
+            pMain.isShowSign();
 //        }else {
 //            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
 //        }
@@ -249,7 +252,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             });
         }
 
-        pMain = new PMain(MainActivity.this, MainActivity.this);
+        pMain = new PMain(MainActivityCopy.this, MainActivityCopy.this);
         pMain.entryInfo();
         pMain.isShowUserNewPersonPrize();
         initMessage();
@@ -262,7 +265,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     if (updateDialogV.updateDialog == null) {
                         pMain.getPopAD();
 //                        if (Common.isAlreadyLogin()){
-                        pMain.isShowSign();
+                            pMain.isShowSign();
 //                        }else {
 //                            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
 //                        }
@@ -282,7 +285,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //            gone(ll_tab_sort);
 //        }
         loadUserInfo();
-    }
+        }
 
 
 
@@ -360,26 +363,23 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (MyOnClickListener.isFastClick()) {
             return;
         }
-        //春节活动
-//        if (view.getId() == R.id.ll_tab_main_page) {
-//            miv_first.setVisibility(View.VISIBLE);
-//            miv_tab_main.setVisibility(View.GONE);
-//            tv_tab_main.setVisibility(View.GONE);
-//            miv_first.animate().rotation(0).setDuration(0).start();
-//            miv_first.animate().rotation(360).setDuration(300).start();
-//        } else {
-//            if (view.getId() == R.id.ll_tab_discover) {
-//                if (discoverFrag != null && !discoverFrag.isVisible()) {
-//                    view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-//                    view.animate().scaleX(1).scaleY(1).setDuration(300).start();
-//                }
-//            } else {
-//                view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-//                view.animate().scaleX(1).scaleY(1).setDuration(300).start();
-//            }
-//        }
-        //春节活动
-
+        if (view.getId() == R.id.ll_tab_main_page) {
+            miv_first.setVisibility(View.VISIBLE);
+            miv_tab_main.setVisibility(View.GONE);
+            tv_tab_main.setVisibility(View.GONE);
+            miv_first.animate().rotation(0).setDuration(0).start();
+            miv_first.animate().rotation(360).setDuration(300).start();
+        } else {
+            if (view.getId() == R.id.ll_tab_discover) {
+                if (discoverFrag != null && !discoverFrag.isVisible()) {
+                    view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                    view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+                }
+            } else {
+                view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+            }
+        }
         if (view.getId() == R.id.ll_tab_discover) {
             view_message.setVisibility(View.GONE);
 //            mtv_message_count.setVisibility(View.GONE);
@@ -463,10 +463,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         break;
                 }
             }
-            //春节活动
-//        }, 300);
-        }, 0);
-        //春节活动
+        }, 300);
     }
 
     public void initHintDialog() {
@@ -479,7 +476,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         promptDialog.setSureAndCancleListener("亲，您还不是PLUS会员哦,现在开通享7大专属权益", "立即开通", view -> {
             promptDialog.dismiss();
-            H5X5Act.startAct(MainActivity.this, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
+            H5X5Act.startAct(MainActivityCopy.this, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
         }, getStringResouce(R.string.errcode_cancel), view -> promptDialog.dismiss()).show();
     }
 
@@ -699,79 +696,106 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        }
         //        双十一活动
 
-        //春节活动
-//        miv_tab_main.setImageResource(R.mipmap.tab_1_n);
-//        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
-//
-//        miv_tab_sort.setImageResource(R.mipmap.tab_2_n);
-//        tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
-//
-//        miv_tab_discover.setImageResource(R.mipmap.tab_3_n);
-//        tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
-//
-//        miv_shopping_car.setImageResource(R.mipmap.tab_4_n);
-//        tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
-//
-//        miv_person_center.setImageResource(R.mipmap.tab_5_n);
-//        tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
-
-        miv_tab_main.setImageResource(R.mipmap.tab_1_n_new);
+        miv_tab_main.setImageResource(R.mipmap.tab_1_n);
         tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_tab_sort.setImageResource(R.mipmap.tab_2_n_new);
+        miv_tab_sort.setImageResource(R.mipmap.tab_2_n);
         tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_tab_discover.setImageResource(R.mipmap.tab_3_n_new);
+        miv_tab_discover.setImageResource(R.mipmap.tab_3_n);
         tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_shopping_car.setImageResource(R.mipmap.tab_4_n_new);
+        miv_shopping_car.setImageResource(R.mipmap.tab_4_n);
         tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_person_center.setImageResource(R.mipmap.tab_5_n_new);
+        miv_person_center.setImageResource(R.mipmap.tab_5_n);
         tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
-
-        //春节活动
-
 
         miv_first.setVisibility(View.GONE);
         miv_tab_main.setVisibility(View.VISIBLE);
         tv_tab_main.setVisibility(View.VISIBLE);
 
-
-        //春节活动
         switch (pageIndex) {
             case 0:
+                miv_first.setVisibility(View.VISIBLE);
+                miv_tab_main.setVisibility(View.GONE);
+                tv_tab_main.setVisibility(View.GONE);
 
-//                miv_first.setVisibility(View.VISIBLE);
-//                miv_tab_main.setVisibility(View.GONE);
-//                tv_tab_main.setVisibility(View.GONE);
-
-                miv_tab_main.setImageResource(R.mipmap.tab_1_h_new);
-                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
+//                miv_tab_main.setImageResource(getResources().getDrawable(R.mipmap.tab_1_h));
+//                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 1:
-//                miv_tab_sort.setImageResource(R.mipmap.tab_2_h);
-                miv_tab_sort.setImageResource(R.mipmap.tab_2_h_new);
+                miv_tab_sort.setImageResource(R.mipmap.tab_2_h);
                 tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 2:
-//                miv_tab_discover.setImageResource(R.mipmap.tab_03);
-                miv_tab_discover.setImageResource(R.mipmap.tab_3_h_new);
+                miv_tab_discover.setImageResource(R.mipmap.tab_03);
                 tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 3:
-//                miv_shopping_car.setImageResource(R.mipmap.tab_4_h);
-                miv_shopping_car.setImageResource(R.mipmap.tab_4_h_new);
+                miv_shopping_car.setImageResource(R.mipmap.tab_4_h);
                 tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 4:
-//                miv_person_center.setImageResource(R.mipmap.tab_5_h);
-                miv_person_center.setImageResource(R.mipmap.tab_5_h_new);
+                miv_person_center.setImageResource(R.mipmap.tab_5_h);
                 tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
         }
-        //春节活动
+//        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
+//        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
 
+        miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
+        tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_n));
+        tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_n));
+        tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_n));
+        tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_first.setVisibility(View.GONE);
+        miv_tab_main.setVisibility(View.VISIBLE);
+        tv_tab_main.setVisibility(View.VISIBLE);
+        mtv_message_count.setVisibility(View.GONE);
+
+        RelativeLayout.LayoutParams tvParams = (RelativeLayout.LayoutParams) tv_tab_discover.getLayoutParams();
+        tvParams.setMargins(0, TransformUtil.dip2px(this, 6), 0, TransformUtil.dip2px(this, 4));
+
+        RelativeLayout.LayoutParams ivParams = (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
+        ivParams.setMargins(0, TransformUtil.dip2px(this, 8), 0, 0);
+        switch (pageIndex) {
+            case 0:
+                miv_first.setVisibility(View.VISIBLE);
+                miv_tab_main.setVisibility(View.GONE);
+                tv_tab_main.setVisibility(View.GONE);
+
+//                miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_h));
+//                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 1:
+                miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_h));
+                tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 2:
+                miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
+                tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
+
+                ivParams.setMargins(0, TransformUtil.dip2px(this, -12), 0, 0);
+                tvParams.setMargins(0, 0, 0, 0);
+                mtv_message_count.setVisibility(View.GONE);
+                break;
+            case 3:
+                miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_h));
+                tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 4:
+                miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_h));
+                tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+        }
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -893,14 +917,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             miv_close.setOnClickListener(view -> dialog_new.dismiss());
             ntv_get.setOnClickListener(view -> {
                 dialog_new.dismiss();
-                NewUserPageActivity.startAct(MainActivity.this, true);
+                NewUserPageActivity.startAct(MainActivityCopy.this, true);
             });
         }
         ntv_aOne = dialog_new.findViewById(R.id.ntv_user_bOne);
         ntv_aOne.setText(HighLightKeyWordUtil.getHighLightKeyWord(
                 getResources().getColor(R.color.pink_color), prize, "现金红包"));
         Activity activity = ActivityHelper.getActivity();
-        if (activity != null && activity instanceof MainActivity){
+        if (activity != null && activity instanceof MainActivityCopy){
             dialog_new.show();
         }
     }
@@ -1145,6 +1169,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             return;
         }
         if (pMain!=null)
-            pMain.loginUserInfo();
+        pMain.loginUserInfo();
     }
 }
