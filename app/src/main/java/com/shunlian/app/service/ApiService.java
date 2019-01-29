@@ -1324,7 +1324,7 @@ public interface ApiService {
      * @return
      */
     @POST("discovery/comment/delete")
-    Call<BaseEntity<CommonEntity>> delComment(@Body RequestBody body);
+    Call<BaseEntity<FindCommentListEntity.ItemComment>> delComment(@Body RequestBody body);
 
     /**
      * 白名单会员撤回已审核评论

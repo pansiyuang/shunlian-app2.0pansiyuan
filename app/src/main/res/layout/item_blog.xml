@@ -241,7 +241,7 @@
             android:drawableLeft="@mipmap/icon_message_nor"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:paddingRight="35dp"
+            android:paddingRight="50dp"
             android:text="0"
             android:textColor="@color/value_343434"
             android:textSize="10sp" />
@@ -255,7 +255,7 @@
             android:drawableLeft="@mipmap/icon_faxian_xaizai"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:paddingRight="35dp"
+            android:paddingRight="25dp"
             android:text="0"
             android:textColor="@color/value_343434"
             android:textSize="10sp" />
@@ -265,7 +265,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/tv_download"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|left"
             android:orientation="horizontal">
 
             <com.airbnb.lottie.LottieAnimationView

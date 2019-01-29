@@ -126,15 +126,14 @@ public class CommentRejectedPresenter extends BasePresenter<ICommentRejectedView
 
         sortAndMD5(map);
 
-        Call<BaseEntity<CommonEntity>>
-                baseEntityCall = getAddCookieApiService().commentCheck(getRequestBody(map));
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().commentCheck(getRequestBody(map));
 
         getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 Common.staticToast(entity.message);
-                EventBus.getDefault().post(new RejectedNotifyEvent(true));
+                EventBus.getDefault().post(new RejectedNotifyEvent(true, entity.data.comment_id, entity.data.reply_parent_comment_id));
                 ((Activity) context).finish();
             }
         });

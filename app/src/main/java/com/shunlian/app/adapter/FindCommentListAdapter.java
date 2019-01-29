@@ -2,12 +2,10 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
@@ -19,12 +17,10 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
-import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CommentBottmDialog;
 import com.shunlian.app.widget.CommentToolBottomDialog;
 import com.shunlian.app.widget.MyImageView;
@@ -161,7 +157,12 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
 //        }
 
             mHolder.mtv_time.setText(itemComment.create_time);
-            mHolder.tv_zan.setText(String.valueOf(itemComment.like_count));
+
+            if (itemComment.like_count == 0) {
+                mHolder.tv_zan.setText("点赞");
+            } else {
+                mHolder.tv_zan.setText(String.valueOf(itemComment.like_count));
+            }
 
             List<FindCommentListEntity.ItemComment> reply_list = itemComment.reply_list;
 
@@ -202,7 +203,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                 mHolder.ll_zan.setClickable(false);
             } else {
                 mHolder.animation_zan.setProgress(0f);
-                mHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
+                mHolder.tv_zan.setTextColor(getColor(R.color.text_gray2));
                 mHolder.ll_zan.setClickable(true);
             }
 
@@ -230,40 +231,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             }
 
             mHolder.mtv_content.setOnLongClickListener(v -> {
-                if (mToolDialog == null) {
-                    mToolDialog = new CommentToolBottomDialog(context);
-                    mToolDialog.setOnToolListener(new CommentToolBottomDialog.OnToolListener() {
-                        @Override
-                        public void onReply() {
-                            if (mFabulousListener != null) {
-                                mFabulousListener.onReply(position, -1);
-                            }
-                        }
-
-                        @Override
-                        public void onDel() {
-                            if (mFabulousListener != null) {
-                                mFabulousListener.onDel(position, -1);
-                            }
-                        }
-
-                        @Override
-                        public void onVerify() {
-                            if (mFabulousListener != null) {
-                                mFabulousListener.onVerify(position, -1);
-                            }
-                        }
-
-                        @Override
-                        public void onRejected() {
-                            if (mFabulousListener != null) {
-                                mFabulousListener.onRejected(position, -1);
-                            }
-                        }
-                    });
-                }
-                mToolDialog.setCommentData(itemComment);
-                mToolDialog.show();
+                showCommentToolDialog(itemComment, position, -1);
                 return false;
             });
         }
@@ -350,6 +318,11 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                     }
                     mPromptDialog.show();
                 }
+
+                @Override
+                public void onContentLongClick() {
+                    showCommentToolDialog(replyList, position, finalJ);
+                }
             });
             mHolder.ll_sub_bg.addView(view);
         }
@@ -425,6 +398,11 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             ll_zan.setOnClickListener(this);
             tv_reply.setOnClickListener(this);
             tv_verify.setOnClickListener(this);
+
+            //返回键扩大点击范围
+            int i = TransformUtil.dip2px(context, 20);
+            TransformUtil.expandViewTouchDelegate(tv_reply, i, i, i, i);
+            TransformUtil.expandViewTouchDelegate(tv_verify, i, i, i, i);
         }
 
         @Override
@@ -497,6 +475,43 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         public FindTitleHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public void showCommentToolDialog(FindCommentListEntity.ItemComment itemComment, int parentPosition, int childPosition) {
+        if (mToolDialog == null) {
+            mToolDialog = new CommentToolBottomDialog(context);
+            mToolDialog.setOnToolListener(new CommentToolBottomDialog.OnToolListener() {
+                @Override
+                public void onReply() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onReply(parentPosition, childPosition);
+                    }
+                }
+
+                @Override
+                public void onDel() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onDel(parentPosition, childPosition);
+                    }
+                }
+
+                @Override
+                public void onVerify() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onVerify(parentPosition, childPosition);
+                    }
+                }
+
+                @Override
+                public void onRejected() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onRejected(parentPosition, childPosition);
+                    }
+                }
+            });
+        }
+        mToolDialog.setCommentData(itemComment);
+        mToolDialog.show();
     }
 
 

@@ -83,6 +83,7 @@ public class CommentBottmDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.tv_rejected:
                 CommentRejectedAct.startAct(getContext(), currentComment.id);
+                dismiss();
                 break;
             case R.id.tv_cancel:
                 dismiss();

@@ -24,6 +24,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CommentBottmDialog;
+import com.shunlian.app.widget.CommentToolBottomDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.SubCommentItemView;
@@ -42,6 +43,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
     private OnPointFabulousListener mFabulousListener;
     private PromptDialog promptDialog;
     private CommentBottmDialog mDialog;
+    private CommentToolBottomDialog mToolDialog;
 
     public FindCommentDetailAdapter(Context context, List<FindCommentListEntity.ItemComment> lists) {
         super(context, true, lists);
@@ -80,16 +82,21 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             GlideUtils.getInstance().loadCircleHeadImage(context, mHolder.civ_head, lastLikesBean.avatar);
 
             mHolder.mtv_time.setText(lastLikesBean.create_time);
-            mHolder.tv_zan.setText(String.valueOf(lastLikesBean.like_count));
             mHolder.mtv_content.setText(lastLikesBean.content);
             mHolder.mtv_name.setText(lastLikesBean.nickname);
             mHolder.miv_vip.setVisibility(View.GONE);
             mHolder.miv_medal.setVisibility(View.GONE);
 
+            if (lastLikesBean.like_count == 0) {
+                mHolder.tv_zan.setText("点赞");
+            } else {
+                mHolder.tv_zan.setText(String.valueOf(lastLikesBean.like_count));
+            }
+
             if (!isEmpty(lastLikesBean.expert_icon)) {
                 visible(mHolder.miv_expert);
                 GlideUtils.getInstance().loadImage(context, mHolder.miv_expert, lastLikesBean.expert_icon);
-            }else{
+            } else {
                 gone(mHolder.miv_expert);
             }
 
@@ -115,7 +122,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                 mHolder.ll_zan.setClickable(false);
             } else {
                 mHolder.animation_zan.setProgress(0f);
-                mHolder.tv_zan.setTextColor(getColor(R.color.value_343434));
+                mHolder.tv_zan.setTextColor(getColor(R.color.text_gray2));
                 mHolder.ll_zan.setClickable(true);
             }
 
@@ -143,6 +150,11 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             } else {
                 reply(mHolder.ll_sub_bg, lastLikesBean.reply_list);
             }
+
+            mHolder.mtv_content.setOnLongClickListener(v -> {
+                showCommentToolDialog(lastLikesBean, true, -1);
+                return false;
+            });
         }
     }
 
@@ -215,6 +227,11 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                         });
                     }
                     promptDialog.show();
+                }
+
+                @Override
+                public void onContentLongClick() {
+                    showCommentToolDialog(replyList, false, finalJ);
                 }
             });
             ll_sub_bg.addView(view);
@@ -332,6 +349,43 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                     break;
             }
         }
+    }
+
+    public void showCommentToolDialog(FindCommentListEntity.ItemComment itemComment, boolean isParent, int childPosition) {
+        if (mToolDialog == null) {
+            mToolDialog = new CommentToolBottomDialog(context);
+            mToolDialog.setOnToolListener(new CommentToolBottomDialog.OnToolListener() {
+                @Override
+                public void onReply() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onReply(isParent, childPosition);
+                    }
+                }
+
+                @Override
+                public void onDel() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onDel(isParent, childPosition);
+                    }
+                }
+
+                @Override
+                public void onVerify() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onVerify(isParent, childPosition);
+                    }
+                }
+
+                @Override
+                public void onRejected() {
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onRejected(isParent, childPosition);
+                    }
+                }
+            });
+        }
+        mToolDialog.setCommentData(itemComment);
+        mToolDialog.show();
     }
 
     public void setPointFabulousListener(OnPointFabulousListener fabulousListener) {

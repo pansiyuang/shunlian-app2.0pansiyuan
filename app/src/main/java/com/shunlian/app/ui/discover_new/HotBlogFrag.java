@@ -31,9 +31,11 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
+import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.listener.SoftKeyBoardListener;
@@ -443,6 +445,39 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
             hotBlogPresenter.initPage();
             hotBlogPresenter.getHotBlogList(true);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(BlogCommentEvent event) {
+        switch (event.sendType) {
+            case BlogCommentEvent.ADD_TYPE:
+                insertComment(event.mComment, true);
+                break;
+            case BlogCommentEvent.DEL_TYPE:
+                insertComment(event.mComment, false);
+                break;
+        }
+    }
+
+    public void insertComment(FindCommentListEntity.ItemComment insertItem, boolean isAdd) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (insertItem.discovery_id.equals(blog.id)) {
+                blog.comment_list.list.clear();
+                if (isAdd) {
+                    for (FindCommentListEntity.ItemComment item : insertItem.comment_list) {
+                        blog.comment_list.list.add(new BigImgEntity.CommentItem(item));
+                    }
+                    blog.comment_list.total = insertItem.comment_count;
+                } else {
+                    for (FindCommentListEntity.ItemComment item : insertItem.reply_result) {
+                        blog.comment_list.list.add(new BigImgEntity.CommentItem(item));
+                    }
+                    blog.comment_list.total = insertItem.reply_count;
+                }
+                break;
+            }
+        }
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
     }
 
     private void showPopupComment() {

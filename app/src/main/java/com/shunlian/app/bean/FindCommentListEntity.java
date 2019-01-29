@@ -46,6 +46,12 @@ public class FindCommentListEntity {
         public List<ItemComment> reply_list;
         public List<LastLikesBean> last_likes;
 
+        public int reply_status;
+        public List<ItemComment> reply_result;
+        public List<ItemComment> comment_list;
+        public String comment_id;
+        public int comment_count;
+
         @Override
         public String toString() {
             return "ItemComment{" +
