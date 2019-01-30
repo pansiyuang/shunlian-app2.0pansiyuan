@@ -1,6 +1,7 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.FindCommentListEntity;
 
 /**
  * Created by Administrator on 2018/3/19.
@@ -26,5 +27,5 @@ public interface IFindCommentView extends IView {
     /**
      * 软键盘处理
      */
-    void showorhideKeyboard(String hint);
+    void showorhideKeyboard(FindCommentListEntity.ItemComment itemComment);
 }

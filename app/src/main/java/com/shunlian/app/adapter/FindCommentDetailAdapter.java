@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
+import com.shunlian.app.presenter.FindCommentDetailPresenter;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.PromptDialog;
@@ -181,6 +182,9 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             view.setOnCallBack(new SubCommentItemView.OnSubCallBack() {
                 @Override
                 public void OnPraise(String commentId, LottieAnimationView lottieAnimationView) {
+                    if (FindCommentDetailPresenter.isPlaying) {
+                        return;
+                    }
                     if (mFabulousListener != null) {
                         mFabulousListener.onPointFabulous(false, finalJ, lottieAnimationView);
                     }
@@ -338,6 +342,9 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                     }
                     break;
                 case R.id.ll_zan:
+                    if (FindCommentDetailPresenter.isPlaying) {
+                        return;
+                    }
                     if (mFabulousListener != null) {
                         mFabulousListener.onPointFabulous(true, -1, animation_zan);
                     }

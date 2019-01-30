@@ -12,7 +12,6 @@ import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFindCommentListView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,9 +38,10 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     private FindCommentListEntity.ItemComment itemComment;
     private String comment_type;
     private Call<BaseEntity<FindCommentListEntity>> baseEntityCall;
-    private LottieAnimationView mAnimationView;
     private String currentLevel;
     private String currentCommentId;
+    private LottieAnimationView mAnimationView;
+    public static boolean isPlaying = false;
 
     public FindCommentListPresenter(Context context, IFindCommentListView iView, String article_id) {
         super(context, iView);
@@ -134,13 +134,12 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 @Override
                 public void onPointFabulous(int position, int childPosition, LottieAnimationView lottieAnimationView) {
                     mAnimationView = lottieAnimationView;
-                    currentTouchItem = position;
                     if (childPosition != -1) {
                         itemComment = mItemComments.get(position).reply_list.get(childPosition);
                     } else {
                         itemComment = mItemComments.get(position);
                     }
-                    pointFabulous(itemComment.id, childPosition);
+                    pointFabulous(itemComment.id, position, childPosition);
                 }
 
                 @Override
@@ -152,7 +151,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                         currentLevel = "2";
                         itemComment = mItemComments.get(position).reply_list.get(childPosition);
                     }
-                    iView.showorhideKeyboard("@".concat(itemComment.nickname));
+                    iView.showorhideKeyboard(itemComment);
                 }
 
                 @Override
@@ -288,7 +287,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         adapter.notifyDataSetChanged();
     }
 
-    public void pointFabulous(String item_id, int childPosition) {
+    public void pointFabulous(String item_id, int position, int childPosition) {
         Map<String, String> map = new HashMap<>();
         map.put("comment_id", item_id);
         map.put("like_status", "1");
@@ -298,30 +297,31 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                setPointFabulous(childPosition);
+                setPointFabulous(position, childPosition);
             }
         });
     }
 
-    private void setPointFabulous(int childPosition) {
-        if (mAnimationView != null && !mAnimationView.isAnimating()) {
+    private void setPointFabulous(int position, int childPosition) {
+        if (mAnimationView != null && !isPlaying) {
             mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-
+                    isPlaying = true;
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     if (childPosition == -1) {
-                        itemComment = mItemComments.get(currentTouchItem);
+                        itemComment = mItemComments.get(position);
                     } else {
-                        itemComment = mItemComments.get(currentTouchItem).reply_list.get(childPosition);
+                        itemComment = mItemComments.get(position).reply_list.get(childPosition);
                     }
                     itemComment.like_count++;
                     itemComment.like_status = "1";
                     adapter.notifyDataSetChanged();
                     currentTouchItem = -1;
+                    isPlaying = false;
                 }
 
                 @Override
@@ -338,17 +338,12 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         }
     }
 
-    public void clearComment() {
-        currentCommentId = "";
-        currentLevel = "";
-        itemComment = null;
-    }
-
-    public void sendComment(String content, String level) {
-        if (itemComment != null) {
-            currentCommentId = itemComment.id;
+    public void sendComment(String content, FindCommentListEntity.ItemComment itemComment, String level) {
+        if (itemComment == null) {
+            sendComment(content, "", mArticle_id, level);
+        } else {
+            sendComment(content, itemComment.id, mArticle_id, level);
         }
-        sendComment(content, currentCommentId, mArticle_id, level);
     }
 
     @Override

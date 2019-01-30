@@ -44,6 +44,8 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     private boolean isParent = true;
     private String currentCommentId;
     private String currentLevel;
+    private String currentBlogId;
+    public static boolean isPlaying = false;
 
     public FindCommentDetailPresenter(Context context, IFindCommentDetailView iView, String comment_id) {
         super(context, iView);
@@ -105,6 +107,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
 
                         if (currentPage == 1) {
                             currentComment = data.info;
+                            currentBlogId = currentComment.discovery_id;
                             mReplyListBeans.clear();
                             mReplyListBeans.addAll(currentComment.reply_list);
                         } else {
@@ -152,11 +155,13 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
                     FindCommentListEntity.ItemComment itemComment;
                     isParent = isP;
                     if (isP) {
+                        currentLevel = "1";
                         itemComment = currentComment;
                     } else {
+                        currentLevel = "2";
                         itemComment = mReplyListBeans.get(childPosition);
                     }
-                    iView.showorhideKeyboard("@".concat(itemComment.nickname));
+                    iView.showorhideKeyboard(itemComment);
                 }
 
                 @Override
@@ -239,7 +244,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     }
 
     private void setPointFabulous() {
-        if (mAnimationView == null || mAnimationView.isAnimating()) {
+        if (mAnimationView == null || mAnimationView.isAnimating() || isPlaying) {
             return;
         }
         mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
@@ -264,6 +269,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
                 }
                 EventBus.getDefault().post(new BlogCommentEvent(BlogCommentEvent.PRAISE_TYPE, itemComment.id, itemComment.reply_parent_comment_id, ""));
                 adapter.notifyDataSetChanged();
+                isPlaying = false;
             }
 
             @Override
@@ -280,19 +286,22 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     }
 
     public void clearComment() {
-        currentCommentId = mComment_id;
         currentLevel = "1";
     }
 
-    public void sendComment(String content) {
-        if (isParent) {
-            currentCommentId = currentComment.id;
-            currentLevel = "1";
+    public void sendComment(String content, FindCommentListEntity.ItemComment itemComment) {
+        if (itemComment == null) {
+            sendComment(content, parentList.get(0).id, currentBlogId, getCommentLevel());
         } else {
-            currentCommentId = mReplyListBeans.get(currentTouchItem).id;
-            currentLevel = "2";
+            sendComment(content, itemComment.id, currentBlogId, getCommentLevel());
         }
-        sendComment(content, currentCommentId, currentComment.discovery_id, currentLevel);
+    }
+
+    public String getCommentLevel() {
+        if (isEmpty(currentLevel)) {
+            return "1";
+        }
+        return currentLevel;
     }
 
 
@@ -312,6 +321,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         currentComment.reply_list = mReplyListBeans;
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
+        currentLevel = "1";
         isParent = true;
         Common.staticToasts(context, "评论成功", R.mipmap.icon_common_duihao);
         iView.setCommentAllCount(String.valueOf(insert_item.comment_count));

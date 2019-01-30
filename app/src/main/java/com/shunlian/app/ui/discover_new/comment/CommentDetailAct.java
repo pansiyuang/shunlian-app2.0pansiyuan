@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.eventbus_bean.RejectedNotifyEvent;
 import com.shunlian.app.listener.SoftKeyBoardListener;
@@ -27,6 +28,7 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IFindCommentDetailView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
@@ -71,9 +73,13 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @BindView(R.id.tv_send)
     TextView tv_send;
 
+    @BindView(R.id.mrlayout_toolbar_more)
+    MyRelativeLayout mrlayout_toolbar_more;
+
     private FindCommentDetailPresenter presenter;
     private LinearLayoutManager manager;
     private MessageCountManager messageCountManager;
+    private FindCommentListEntity.ItemComment currentComment;
 
     public static void startAct(Context context, String comment_id) {
         Intent intent = new Intent(context, CommentDetailAct.class);
@@ -145,9 +151,11 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
 
             @Override
             public void keyBoardHide(int height) {
-                edt_content.setText("");
-                edt_content.setHint(getStringResouce(R.string.add_comments));
-                presenter.clearComment();
+                if (isEmpty(edt_content.getText().toString())) {
+                    presenter.clearComment();
+                    currentComment = null;
+                    edt_content.setHint("留下你的精彩评论吧~");
+                }
             }
         });
     }
@@ -159,6 +167,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
                 .keyboardEnable(true)
                 .init();
         EventBus.getDefault().register(this);
+        mrlayout_toolbar_more.setVisibility(View.GONE);
 
         mtv_toolbar_title.setText(getStringResouce(R.string.comment_details));
         GradientDrawable gradientDrawable = (GradientDrawable) edt_content.getBackground();
@@ -198,18 +207,28 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @OnClick(R.id.edt_content)
     public void onClick() {
         setEdittextFocusable(true, edt_content);
-    }
-
-    @Override
-    public void showorhideKeyboard(String hint) {
-        setEdittextFocusable(true, edt_content);
-        edt_content.setHint(hint);
-        if (!isSoftShowing()) {
-            Common.showKeyboard(edt_content);
+        if (isEmpty(edt_content.getText().toString())) {
+            edt_content.setHint(Common.getRandomWord());
         } else {
-            Common.hideKeyboard(edt_content);
+            edt_content.setSelection(edt_content.getText().toString().length());
         }
     }
+
+    /**
+     * 软键盘处理
+     */
+    @Override
+    public void showorhideKeyboard(FindCommentListEntity.ItemComment comment) {
+        currentComment = comment;
+        setEdittextFocusable(true, edt_content);
+        if (currentComment == null) {
+            edt_content.setHint(Common.getRandomWord());
+        } else {
+            edt_content.setHint("@" + comment.nickname);
+        }
+        Common.showKeyboard(edt_content);
+    }
+
 
     /**
      * 删除提示
@@ -273,12 +292,13 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
             Common.staticToast("评论内容不能为空");
             return;
         }
-        presenter.sendComment(s);
+        presenter.sendComment(s, currentComment);
         edt_content.setText("");
-        edt_content.setHint(getStringResouce(R.string.add_comments));
+        edt_content.setHint("留下你的精彩评论吧~");
         setEdittextFocusable(false, edt_content);
         Common.hideKeyboard(edt_content);
     }
+
 
     @Override
     protected void onDestroy() {

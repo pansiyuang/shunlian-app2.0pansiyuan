@@ -1,5 +1,6 @@
 package com.shunlian.app.bean;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -51,6 +52,8 @@ public class FindCommentListEntity {
         public List<ItemComment> comment_list;
         public String comment_id;
         public int comment_count;
+
+        public boolean isPlay;
 
         @Override
         public String toString() {
