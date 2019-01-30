@@ -19,6 +19,9 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class BlogCommentSendPopwindow {
     private EditText inputComment;
     private TextView tvSend;
@@ -81,13 +84,22 @@ public class BlogCommentSendPopwindow {
             }
         });
         inputComment.setHint(Common.getRandomWord());
-        Common.showKeyboard(inputComment);
+        showPopInput(mContext, inputComment);
     }
 
     public void dismiss() {
         inputComment.setText("");
         hintPopInput(mContext, inputComment);
         popupWindow.dismiss();
+    }
+
+    public void showPopInput(final Context context, final View view) {
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.RESULT_SHOWN);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
 

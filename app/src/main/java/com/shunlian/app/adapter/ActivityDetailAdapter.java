@@ -43,6 +43,7 @@ import com.shunlian.app.utils.HorizonItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.NetworkUtils;
+import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -268,6 +269,7 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                 blogViewHolder.miv_expert.setVisibility(View.GONE);
             }
 
+            GlideUtils.getInstance().loadCircleAvar(context, blogViewHolder.miv_comment_icon, SharedPrefUtil.getSharedUserString("avatar", ""));
             blogViewHolder.tv_tag.setText(blog.activity_title);
             blogViewHolder.tv_content.setText(blog.text);
             blogViewHolder.tv_content.setBlogText(blog.text);
@@ -734,6 +736,9 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
         @BindView(R.id.ll_comment_rootView)
         LinearLayout ll_comment_rootView;
+
+        @BindView(R.id.miv_comment_icon)
+        MyImageView miv_comment_icon;
 
         public BlogViewHolder(View itemView) {
             super(itemView);
