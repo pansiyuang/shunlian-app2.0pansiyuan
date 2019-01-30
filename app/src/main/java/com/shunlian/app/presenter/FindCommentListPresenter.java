@@ -12,6 +12,7 @@ import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFindCommentListView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -184,6 +185,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     } else {
                         itemComment = mItemComments.get(position).reply_list.get(childPosition);
                     }
+                    LogUtil.httpLogW("驳回：" + position + "   childPosition:" + childPosition + "  commentId:" + itemComment.id);
                     retractComment(itemComment.id);
                 }
             });
@@ -277,6 +279,30 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     for (FindCommentListEntity.ItemComment item : itemComment.reply_list) {
                         if (commentId.equals(item.id)) {
                             item.check_is_show = checkShow;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void rejectedCommentData(String commentId, String parentId) {
+        if (isEmpty(parentId) || "0".equals(parentId)) {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (commentId.equals(itemComment.id)) {
+                    itemComment.status = 2;
+                    break;
+                }
+            }
+        } else {
+            for (FindCommentListEntity.ItemComment itemComment : mItemComments) {
+                if (parentId.equals(itemComment.id)) {
+                    for (FindCommentListEntity.ItemComment item : itemComment.reply_list) {
+                        if (commentId.equals(item.id)) {
+                            item.status = 2;
                             break;
                         }
                     }

@@ -218,10 +218,10 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
             return;
         }
         if (isEmpty(parentId) || "0".equals(parentId)) {
-            parentList.get(0).check_is_show = 0;
+            parentList.get(0).status = 2;
         } else {
             for (FindCommentListEntity.ItemComment itemComment : parentList.get(0).reply_list) {
-                itemComment.check_is_show = 0;
+                itemComment.status = 2;
             }
         }
         adapter.notifyDataSetChanged();

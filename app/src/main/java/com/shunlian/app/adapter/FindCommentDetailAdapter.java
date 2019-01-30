@@ -130,16 +130,29 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             mHolder.tv_reply.setText(lastLikesBean.is_self == 1 ? "删除" : "回复");
 
             if (lastLikesBean.check_is_show == 1) {
+                mHolder.tv_verify.setClickable(true);
                 mHolder.tv_verify.setText("审核");
                 mHolder.tv_verify.setTextColor(getColor(R.color.pink_color));
             } else if (lastLikesBean.check_is_show == 2) {
+                mHolder.tv_verify.setClickable(true);
                 mHolder.tv_verify.setText("撤回");
                 mHolder.tv_verify.setTextColor(getColor(R.color.text_gray2));
             }
 
             if (lastLikesBean.status == 3) { // 0未审核，1已审核，2已驳回，3已删除
                 mHolder.mtv_content.setTextColor(getColor(R.color.color_value_6c));
+                mHolder.mtv_content.setText("该条评论已被删除");
+                mHolder.mtv_content.setLongClickable(false);
                 gone(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
+            } else if (lastLikesBean.status == 2) {
+                mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
+                mHolder.mtv_content.setText(lastLikesBean.content);
+                mHolder.mtv_content.setLongClickable(false);
+                mHolder.tv_verify.setText("已驳回");
+                mHolder.tv_verify.setClickable(false);
+                mHolder.tv_verify.setTextColor(getColor(R.color.value_484848));
+                visible(mHolder.tv_verify);
+                gone(mHolder.ll_zan, mHolder.tv_reply);
             } else {
                 mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
                 visible(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
@@ -217,19 +230,17 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
 
                 @Override
                 public void onRejected() {
-                    if (promptDialog == null) {
-                        promptDialog = new PromptDialog((Activity) context);
-                        promptDialog.setTvSureColor(R.color.white);
-                        promptDialog.setTvSureBGColor(getColor(R.color.pink_color));
-                        promptDialog.setSureAndCancleListener("确定撤回当前评论吗？", "确定", v1 -> {
-                            if (mFabulousListener != null) {
-                                mFabulousListener.onRejected(false, finalJ);
-                            }
-                            promptDialog.dismiss();
-                        }, "取消", v12 -> {
-                            promptDialog.dismiss();
-                        });
-                    }
+                    promptDialog = new PromptDialog((Activity) context);
+                    promptDialog.setTvSureColor(R.color.white);
+                    promptDialog.setTvSureBGColor(getColor(R.color.pink_color));
+                    promptDialog.setSureAndCancleListener(String.format("撤回通过“%s”发表的评论？", replyList.nickname), "确定", v1 -> {
+                        if (mFabulousListener != null) {
+                            mFabulousListener.onRejected(false, finalJ);
+                        }
+                        promptDialog.dismiss();
+                    }, "取消", v12 -> {
+                        promptDialog.dismiss();
+                    });
                     promptDialog.show();
                 }
 
@@ -325,19 +336,17 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                         });
                         mDialog.show();
                     } else {  //撤回
-                        if (promptDialog == null) {
-                            promptDialog = new PromptDialog((Activity) context);
-                            promptDialog.setTvSureColor(R.color.white);
-                            promptDialog.setTvSureBGColor(getColor(R.color.pink_color));
-                            promptDialog.setSureAndCancleListener("确定撤回当前评论吗？", "确定", v1 -> {
-                                if (mFabulousListener != null) {
-                                    mFabulousListener.onRejected(true, -1);
-                                }
-                                promptDialog.dismiss();
-                            }, "取消", v12 -> {
-                                promptDialog.dismiss();
-                            });
-                        }
+                        promptDialog = new PromptDialog((Activity) context);
+                        promptDialog.setTvSureColor(R.color.white);
+                        promptDialog.setTvSureBGColor(getColor(R.color.pink_color));
+                        promptDialog.setSureAndCancleListener(String.format("撤回通过“%s”发表的评论？",comment.nickname), "确定", v1 -> {
+                            if (mFabulousListener != null) {
+                                mFabulousListener.onRejected(true, -1);
+                            }
+                            promptDialog.dismiss();
+                        }, "取消", v12 -> {
+                            promptDialog.dismiss();
+                        });
                         promptDialog.show();
                     }
                     break;
