@@ -39,6 +39,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
             android:layout_toLeftOf="@+id/tv_send"
+            android:visibility="gone"
             android:src="@mipmap/icon_emoji" />
 
         <TextView

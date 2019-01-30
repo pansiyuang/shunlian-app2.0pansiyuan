@@ -37,6 +37,8 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
+import com.shunlian.app.eventbus_bean.MessageReadSuccessEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.presenter.HotBlogPresenter;
@@ -267,6 +269,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     public void refreshFinish() {
         if (lay_refresh != null) {
             lay_refresh.setRefreshing(false);
+            EventBus.getDefault().post(new MessageReadSuccessEvent(true));
         }
     }
 

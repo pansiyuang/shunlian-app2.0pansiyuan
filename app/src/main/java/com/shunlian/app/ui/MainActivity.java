@@ -34,6 +34,7 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.MeLocationEvent;
+import com.shunlian.app.eventbus_bean.MessageReadSuccessEvent;
 import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -374,7 +375,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
         if (view.getId() == R.id.ll_tab_discover) {
             mtv_message_count.setVisibility(View.GONE);
-            data.count = 0;
+            if(data!=null) {
+                data.count = 0;
+            }
             try {
                 if (discoverFrag != null && discoverFrag.isVisible()) {
 
@@ -1058,6 +1061,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         currentImgWidth = event.imgWidth;
         if (currentLocation != null && currentImgWidth != 0 && !isShowGuide) {
             showGuideView();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void messageReadSuccessEvent(MessageReadSuccessEvent event) {
+        if(event.isSuccess){
+            initMessage();
         }
     }
 

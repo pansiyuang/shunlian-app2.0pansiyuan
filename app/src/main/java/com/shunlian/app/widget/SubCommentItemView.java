@@ -80,6 +80,9 @@ public class SubCommentItemView extends FrameLayout {
         });
 
         tv_verify.setOnClickListener(v -> {
+            if (mEntity.status == 2) {
+                return;
+            }
             if (mEntity.check_is_show == 1) {
                 if (mCallBack != null) {
                     mCallBack.onVerify();
@@ -171,6 +174,18 @@ public class SubCommentItemView extends FrameLayout {
             ll_zan.setClickable(true);
         }
 
+        if (itemComment.check_is_show == 0) { //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
+            tv_verify.setVisibility(View.GONE);
+        } else if (itemComment.check_is_show == 1) {
+            tv_verify.setVisibility(View.VISIBLE);
+            tv_verify.setText("审核");
+            tv_verify.setTextColor(getContext().getResources().getColor(R.color.pink_color));
+        } else if (itemComment.check_is_show == 2) {
+            tv_verify.setVisibility(View.VISIBLE);
+            tv_verify.setText("撤回");
+            tv_verify.setTextColor(getContext().getResources().getColor(R.color.text_gray2));
+        }
+
         if (itemComment.status == 3) { // 0未审核，1已审核，2已驳回，3已删除
             mtv_content.setTextColor(getContext().getResources().getColor(R.color.color_value_6c));
             mtv_content.setText("该条评论已被删除");
@@ -178,24 +193,22 @@ public class SubCommentItemView extends FrameLayout {
             ll_zan.setVisibility(GONE);
             tv_verify.setVisibility(GONE);
             tv_reply.setVisibility(GONE);
+        } else if (itemComment.status == 2) {
+            mtv_content.setTextColor(getContext().getResources().getColor(R.color.value_484848));
+            mtv_content.setText(itemComment.content);
+            mtv_content.setLongClickable(false);
+            tv_verify.setText("已驳回");
+            tv_verify.setTextColor(getContext().getResources().getColor(R.color.text_gray2));
+            tv_verify.setVisibility(VISIBLE);
+            ll_zan.setVisibility(GONE);
+            tv_reply.setVisibility(GONE);
         } else {
             mtv_content.setTextColor(getContext().getResources().getColor(R.color.value_484848));
             mtv_content.setText(itemComment.content);
             mtv_content.setLongClickable(true);
             tv_verify.setVisibility(itemComment.check_is_show == 0 ? View.GONE : View.VISIBLE);  //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
             ll_zan.setVisibility(VISIBLE);
-            tv_verify.setVisibility(VISIBLE);
             tv_reply.setVisibility(VISIBLE);
-        }
-
-        if (itemComment.check_is_show == 0) { //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
-            tv_verify.setVisibility(View.GONE);
-        } else if (itemComment.check_is_show == 1) {
-            tv_verify.setVisibility(View.VISIBLE);
-            tv_verify.setText("审核");
-        } else if (itemComment.check_is_show == 2) {
-            tv_verify.setVisibility(View.VISIBLE);
-            tv_verify.setText("撤回");
         }
     }
 

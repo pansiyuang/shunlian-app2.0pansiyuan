@@ -335,7 +335,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefresh(RejectedNotifyEvent event) {
         if (event.rejectedSuccess) {
-            presenter.verifyCommentData(event.commentId, event.parentCommentId, 0);
+            presenter.rejectedCommentData(event.commentId, event.parentCommentId);
         }
     }
 
