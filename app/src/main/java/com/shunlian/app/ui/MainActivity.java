@@ -374,7 +374,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
         if (view.getId() == R.id.ll_tab_discover) {
             mtv_message_count.setVisibility(View.GONE);
-            data.count = 0;
+            if(data!=null) {
+                data.count = 0;
+            }
             try {
                 if (discoverFrag != null && discoverFrag.isVisible()) {
 
