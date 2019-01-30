@@ -8,6 +8,7 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFindCommentView;
 
 import java.util.HashMap;
@@ -95,6 +96,7 @@ public abstract class FindCommentPresenter<T extends IFindCommentView> extends B
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
+                LogUtil.httpLogW("调用接口成功：" + comment_id);
                 retractComment(entity.data.comment_id, entity.data.reply_parent_comment_id);
             }
         });
