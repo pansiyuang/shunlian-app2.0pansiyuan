@@ -41,7 +41,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:text="支付成功"
-                    android:textStyle="bold"
                     android:textColor="@color/new_text"
                     android:textSize="24sp" />
             </com.shunlian.app.widget.MyLinearLayout>
