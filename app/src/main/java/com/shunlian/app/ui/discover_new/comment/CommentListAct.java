@@ -134,6 +134,8 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 }
             }
         });
+        refreshview.removeFooter();
+        refreshview.setCanLoad(false);
         refreshview.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {

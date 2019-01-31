@@ -46,7 +46,6 @@
             <com.shunlian.app.widget.X5WebView
                 android:id="@+id/mwv_h5"
                 android:background="@color/white"
-                android:paddingLeft="18dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
