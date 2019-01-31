@@ -88,7 +88,17 @@ public class RefreshBaseLayout extends ViewGroup {
                 LayoutParams.WRAP_CONTENT);
         addView(footer, layoutParams);
     }
-
+    /**
+     * 添加下拉加载布局作为footer
+     *
+     * @param footer 底布局
+     */
+    public void removeFooter() {
+        if(this.footer!=null){
+            removeView(this.footer);
+            this.footer = null;
+        }
+    }
     /**
      * 测量方法  遍历左右子view进行测量  当子view显示状态为GONE的时候不测量
      *
