@@ -450,8 +450,12 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             Common.staticToast("服务器连接中,稍后重试");
             return;
         }
-        if (mStatus == Status.CONNECTED) {
-            mClient.send(msg);
+        try {
+            if (mStatus == Status.CONNECTED) {
+                mClient.send(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
