@@ -233,8 +233,14 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                 mHolder.tv_verify.setClickable(false);
                 mHolder.tv_verify.setText("已驳回");
                 mHolder.tv_verify.setTextColor(getColor(R.color.text_gray2));
-                visible(mHolder.tv_verify);
-                gone(mHolder.ll_zan, mHolder.tv_reply);
+                gone(mHolder.ll_zan);
+                if (itemComment.is_self == 1) {
+                    visible(mHolder.tv_reply);
+                    gone(mHolder.tv_verify);
+                } else {
+                    visible(mHolder.tv_verify);
+                    gone(mHolder.tv_reply);
+                }
             } else {
                 mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
                 visible(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);

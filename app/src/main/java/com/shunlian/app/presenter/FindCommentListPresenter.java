@@ -419,7 +419,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
             isEmpty();
         } else {
             for (FindCommentListEntity.ItemComment comment : mItemComments) {
-                if (item.comment_id.equals(comment.id)) {
+                if (item.reply_parent_comment_id.equals(comment.id)) {
                     comment.reply_list = item.reply_result;
                     comment.reply_count = item.reply_count;
                     adapter.notifyDataSetChanged();

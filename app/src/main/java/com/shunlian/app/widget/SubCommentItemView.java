@@ -199,9 +199,15 @@ public class SubCommentItemView extends FrameLayout {
             mtv_content.setLongClickable(false);
             tv_verify.setText("已驳回");
             tv_verify.setTextColor(getContext().getResources().getColor(R.color.text_gray2));
-            tv_verify.setVisibility(VISIBLE);
             ll_zan.setVisibility(GONE);
-            tv_reply.setVisibility(GONE);
+
+            if (itemComment.is_self == 1) {
+                tv_reply.setVisibility(VISIBLE);
+                tv_verify.setVisibility(GONE);
+            } else {
+                tv_reply.setVisibility(GONE);
+                tv_verify.setVisibility(VISIBLE);
+            }
         } else {
             mtv_content.setTextColor(getContext().getResources().getColor(R.color.value_484848));
             mtv_content.setText(itemComment.content);

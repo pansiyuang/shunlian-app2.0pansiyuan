@@ -2,13 +2,12 @@ package com.shunlian.app.ui.discover_new.comment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -18,13 +17,11 @@ import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.eventbus_bean.RejectedNotifyEvent;
-import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -137,6 +134,13 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
             @Override
             public void onLoadMore() {
 
+            }
+        });
+
+        refreshview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
             }
         });
 
