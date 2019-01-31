@@ -350,12 +350,12 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             jsonObject.put("token", token);
             jsonObject.put("role_type", "member");
             jsonObject.put("client", "android");
+
+            if (mClient != null && mClient.isOpen()) {
+                mClient.send(jsonObject.toString());
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        if (mClient != null && mClient.isOpen()) {
-            LogUtil.httpLogW("connetService:" + jsonObject.toString());
-            mClient.send(jsonObject.toString());
         }
     }
 
@@ -450,8 +450,12 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             Common.staticToast("服务器连接中,稍后重试");
             return;
         }
-        if (mStatus == Status.CONNECTED) {
-            mClient.send(msg);
+        try {
+            if (mStatus == Status.CONNECTED) {
+                mClient.send(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -535,12 +539,12 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                     jsonObject.put("to_role", "admin");
                     break;
             }
+            if (mClient != null && mStatus == Status.CONNECTED) {
+                LogUtil.httpLogW("Websocket 切换身份:" + jsonObject.toString());
+                mClient.send(jsonObject.toString());
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        if (mClient != null && mStatus == Status.CONNECTED) {
-            LogUtil.httpLogW("Websocket 切换身份:" + jsonObject.toString());
-            mClient.send(jsonObject.toString());
         }
     }
 

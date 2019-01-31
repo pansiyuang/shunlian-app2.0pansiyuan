@@ -93,7 +93,10 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
                     if (httpDialog != null) {
                         httpDialog.dismiss();
                     }
-                    boolean b = (boolean) msg.obj;
+                    boolean b = false;
+                    if (msg.obj != null) {
+                        b = (boolean) msg.obj;
+                    }
                     if (saveImgDialog == null) {
                         Activity activity = (Activity) context;
                         saveImgDialog = new SaveImgDialog(activity);

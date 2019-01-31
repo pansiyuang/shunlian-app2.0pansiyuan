@@ -168,7 +168,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             if (holder instanceof DoubleViewHolder) {
                 GoodsDeatilEntity.Goods goods;
                 int margin = TransformUtil.dip2px(context, 5f);
-                if (mStore != null) {
+                if (mStore != null || !isEmpty(mKeywords)) {
                     goods = mGoods.get(position - 1);
                     if (position % 2 == 0) {
                         params.setMargins(0, 0, 0, margin);
