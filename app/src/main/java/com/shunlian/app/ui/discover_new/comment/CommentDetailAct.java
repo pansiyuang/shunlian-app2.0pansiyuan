@@ -141,7 +141,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
 
             @Override
             public void onLoadMore() {
-
+                refreshview.stopLoadMore(true);
             }
         });
 

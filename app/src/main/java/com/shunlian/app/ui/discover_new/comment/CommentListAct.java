@@ -138,7 +138,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
             @Override
             public void onLoadMore() {
-
+                refreshview.stopLoadMore(true);
             }
         });
 
@@ -156,8 +156,8 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 if (isEmpty(edt_content.getText().toString())) {
                     if (currentComment == null) {
                         edt_content.setHint(Common.getRandomWord());
-                    }else{
-                        edt_content.setHint("@"+currentComment.nickname);
+                    } else {
+                        edt_content.setHint("@" + currentComment.nickname);
                     }
                 } else {
                     edt_content.setSelection(edt_content.getText().toString().length());
