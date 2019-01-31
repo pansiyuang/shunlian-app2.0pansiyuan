@@ -195,6 +195,11 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     }
 
+    @Override
+    public void hideKeyboard() {
+
+    }
+
 //    /**
 //     * 软键盘处理
 //     */

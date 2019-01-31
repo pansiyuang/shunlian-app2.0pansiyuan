@@ -83,10 +83,10 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
-                if (s.length() > 140){
-                    met_text.setText(s.subSequence(0,140));
-                    met_text.setSelection(140);
-                    Common.staticToast("字数不能超过140");
+                if (s.length() > 300){
+                    met_text.setText(s.subSequence(0,300));
+                    met_text.setSelection(300);
+                    Common.staticToast("字数不能超过300");
                 }
             }
         });

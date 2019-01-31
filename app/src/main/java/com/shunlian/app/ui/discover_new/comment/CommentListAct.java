@@ -1,13 +1,18 @@
 package com.shunlian.app.ui.discover_new.comment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -22,6 +27,7 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -81,6 +87,9 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @BindView(R.id.mrlayout_toolbar_more)
     MyRelativeLayout mrlayout_toolbar_more;
 
+    @BindView(R.id.rl_rootView)
+    RelativeLayout rl_rootView;
+
     private LinearLayoutManager manager;
     private FindCommentListPresenter presenter;
     private MessageCountManager messageCountManager;
@@ -118,10 +127,10 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-                if (s.length() > 140) {
-                    edt_content.setText(s.subSequence(0, 140));
-                    edt_content.setSelection(140);
-                    Common.staticToast("字数不能超过140");
+                if (s.length() > 300) {
+                    edt_content.setText(s.subSequence(0, 300));
+                    edt_content.setSelection(300);
+                    Common.staticToast("字数不能超过300");
                 }
             }
         });
@@ -137,11 +146,9 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
             }
         });
 
-        refreshview.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
+        rl_rootView.setOnClickListener(v -> {
+            edt_content.setFocusable(false);
+            Common.hideKeyboard(edt_content);
         });
 
         SoftKeyBoardListener.setListener(this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
@@ -175,7 +182,6 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
         String article_id = getIntent().getStringExtra("article_id");
         presenter = new FindCommentListPresenter(this, this, article_id);
-
 
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
@@ -285,6 +291,12 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
             edt_content.setHint("@" + comment.nickname);
         }
         Common.showKeyboard(edt_content);
+    }
+
+    @Override
+    public void hideKeyboard() {
+        edt_content.setFocusable(false);
+        Common.hideKeyboard(edt_content);
     }
 
     @OnClick(R.id.tv_send)

@@ -3,6 +3,7 @@ package com.shunlian.app.widget.refreshlayout;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -12,17 +13,20 @@ import com.shunlian.app.R;
  * Created by zhouweilong on 2016/10/19.
  */
 
-public class FooterView  extends FrameLayout implements OnFooterListener {
+public class FooterView extends FrameLayout implements OnFooterListener {
     public TextView mLoadTv;
+    public LinearLayout ll_foot;
 
     public FooterView(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.refresh_footer, this, true);
         mLoadTv = (TextView) findViewById(R.id.tv);
+        ll_foot = findViewById(R.id.ll_foot);
     }
 
     /**
      * 上拉加载
+     *
      * @param scrollY
      */
     @Override
@@ -32,6 +36,7 @@ public class FooterView  extends FrameLayout implements OnFooterListener {
 
     /**
      * 松开加载
+     *
      * @param scrollY
      */
     @Override
@@ -41,6 +46,7 @@ public class FooterView  extends FrameLayout implements OnFooterListener {
 
     /**
      * 准备加载
+     *
      * @param scrollY
      */
     @Override
@@ -50,6 +56,7 @@ public class FooterView  extends FrameLayout implements OnFooterListener {
 
     /**
      * 正在加载
+     *
      * @param scrollY
      */
     @Override
@@ -59,6 +66,7 @@ public class FooterView  extends FrameLayout implements OnFooterListener {
 
     /**
      * 加载成功
+     *
      * @param scrollY
      * @param isLoadSuccess 加载的状态  是成功了 还是失败了
      */
@@ -69,10 +77,19 @@ public class FooterView  extends FrameLayout implements OnFooterListener {
 
     /**
      * 加载取消
+     *
      * @param scrollY
      */
     @Override
     public void onLoadCancel(int scrollY) {
         mLoadTv.setText("加载取消");
+    }
+
+    /**
+     * 隐藏布局
+     */
+
+    public void footGone() {
+        ll_foot.setVisibility(GONE);
     }
 }

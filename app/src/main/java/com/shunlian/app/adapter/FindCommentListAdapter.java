@@ -141,6 +141,11 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         baseFooterHolder.layout_no_more.setTextSize(12);
         baseFooterHolder.layout_load_error.setTextSize(12);
         baseFooterHolder.mtv_loading.setTextSize(12);
+        baseFooterHolder.layout_no_more.setOnClickListener(v -> {
+            if (mFabulousListener != null) {
+                mFabulousListener.hideKeyboard();
+            }
+        });
     }
 
     @Override
@@ -554,5 +559,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         void onVerify(int position, int childPosition);
 
         void onRejected(int position, int childPosition);
+
+        void hideKeyboard();
     }
 }

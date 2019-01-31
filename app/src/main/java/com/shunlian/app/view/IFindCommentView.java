@@ -28,4 +28,9 @@ public interface IFindCommentView extends IView {
      * 软键盘处理
      */
     void showorhideKeyboard(FindCommentListEntity.ItemComment itemComment);
+
+    /**
+     * 隐藏软键盘
+     */
+    void hideKeyboard();
 }

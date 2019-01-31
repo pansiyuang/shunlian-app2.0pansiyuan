@@ -124,10 +124,10 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-                if (s.length() > 140) {
-                    edt_content.setText(s.subSequence(0, 140));
-                    edt_content.setSelection(140);
-                    Common.staticToast("字数不能超过140");
+                if (s.length() > 300) {
+                    edt_content.setText(s.subSequence(0, 300));
+                    edt_content.setSelection(300);
+                    Common.staticToast("字数不能超过300");
                 }
             }
         });
@@ -227,6 +227,11 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
             edt_content.setHint("@" + comment.nickname);
         }
         Common.showKeyboard(edt_content);
+    }
+
+    @Override
+    public void hideKeyboard() {
+
     }
 
 

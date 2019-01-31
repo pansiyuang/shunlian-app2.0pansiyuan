@@ -1,10 +1,15 @@
 package com.shunlian.app.presenter;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.FindCommentListAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -124,13 +129,14 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         });
     }
 
-
     private void setCommentList(int currentPage, int allPage) {
         if (adapter == null) {
             adapter = new FindCommentListAdapter(context, mItemComments, hotCommentCount, comment_type);
             iView.setAdapter(adapter);
             adapter.setOnReloadListener(() -> onRefresh());
-
+            adapter.setOnItemClickListener((view, position) -> {
+                iView.hideKeyboard();
+            });
             adapter.setPointFabulousListener(new FindCommentListAdapter.OnPointFabulousListener() {
                 @Override
                 public void onPointFabulous(int position, int childPosition, LottieAnimationView lottieAnimationView) {
@@ -187,6 +193,11 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     }
                     LogUtil.httpLogW("驳回：" + position + "   childPosition:" + childPosition + "  commentId:" + itemComment.id);
                     retractComment(itemComment.id);
+                }
+
+                @Override
+                public void hideKeyboard() {
+                    iView.hideKeyboard();
                 }
             });
         } else {
