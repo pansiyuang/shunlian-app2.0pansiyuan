@@ -2,9 +2,11 @@ package com.shunlian.app.presenter;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.FindCommentDetailAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommentDetailEntity;
@@ -133,7 +135,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
             adapter = new FindCommentDetailAdapter(context, parentList);
             iView.setAdapter(adapter);
             adapter.setOnReloadListener(() -> onRefresh());
-
+            adapter.setOnItemClickListener((view, position) -> iView.hideKeyboard());
             adapter.setPointFabulousListener(new FindCommentDetailAdapter.OnPointFabulousListener() {
 
                 @Override
@@ -193,6 +195,11 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
                         itemComment = mReplyListBeans.get(childPosition);
                     }
                     retractComment(itemComment.id);
+                }
+
+                @Override
+                public void hideKeyboard() {
+                    iView.hideKeyboard();
                 }
             });
             iView.setHint("@" + currentComment.nickname);

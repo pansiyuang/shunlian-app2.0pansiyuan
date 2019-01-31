@@ -6,11 +6,8 @@ import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,7 +24,6 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -134,8 +130,6 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 }
             }
         });
-        refreshview.removeFooter();
-        refreshview.setCanLoad(false);
         refreshview.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -148,15 +142,26 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
             }
         });
 
-        rl_rootView.setOnClickListener(v -> {
-            edt_content.setFocusable(false);
-            Common.hideKeyboard(edt_content);
+        recy_view.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                edt_content.setFocusable(false);
+                Common.hideKeyboard(edt_content);
+            }
+            return false;
         });
 
         SoftKeyBoardListener.setListener(this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
             @Override
             public void keyBoardShow(int height) {
-
+                if (isEmpty(edt_content.getText().toString())) {
+                    if (currentComment == null) {
+                        edt_content.setHint(Common.getRandomWord());
+                    }else{
+                        edt_content.setHint("@"+currentComment.nickname);
+                    }
+                } else {
+                    edt_content.setSelection(edt_content.getText().toString().length());
+                }
             }
 
             @Override
@@ -220,9 +225,6 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @OnClick(R.id.edt_content)
     public void onClick() {
-        if (isEmpty(edt_content.getText().toString())) {
-            edt_content.setHint(Common.getRandomWord());
-        }
         setEdittextFocusable(true, edt_content);
     }
 

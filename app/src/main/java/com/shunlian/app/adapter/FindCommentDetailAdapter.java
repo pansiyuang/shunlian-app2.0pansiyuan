@@ -72,6 +72,11 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
         baseFooterHolder.layout_no_more.setTextSize(12);
         baseFooterHolder.layout_load_error.setTextSize(12);
         baseFooterHolder.mtv_loading.setTextSize(12);
+        baseFooterHolder.layout_no_more.setOnClickListener(v -> {
+            if (mFabulousListener != null) {
+                mFabulousListener.hideKeyboard();
+            }
+        });
     }
 
     @Override
@@ -424,5 +429,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
         void onVerify(boolean isP, int childPosition);
 
         void onRejected(boolean isP, int childPosition);
+
+        void hideKeyboard();
     }
 }

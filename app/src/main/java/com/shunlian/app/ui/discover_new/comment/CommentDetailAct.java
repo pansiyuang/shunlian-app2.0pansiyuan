@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -144,9 +145,26 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
             }
         });
 
+        recy_view.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                edt_content.setFocusable(false);
+                Common.hideKeyboard(edt_content);
+            }
+            return false;
+        });
+
         SoftKeyBoardListener.setListener(this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
             @Override
             public void keyBoardShow(int height) {
+                if (isEmpty(edt_content.getText().toString())) {
+                    if (currentComment == null) {
+                        edt_content.setHint(Common.getRandomWord());
+                    } else {
+                        edt_content.setHint("@" + currentComment.nickname);
+                    }
+                } else {
+                    edt_content.setSelection(edt_content.getText().toString().length());
+                }
             }
 
             @Override
@@ -207,11 +225,6 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @OnClick(R.id.edt_content)
     public void onClick() {
         setEdittextFocusable(true, edt_content);
-        if (isEmpty(edt_content.getText().toString())) {
-            edt_content.setHint(Common.getRandomWord());
-        } else {
-            edt_content.setSelection(edt_content.getText().toString().length());
-        }
     }
 
     /**
@@ -231,7 +244,8 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
 
     @Override
     public void hideKeyboard() {
-
+        edt_content.setFocusable(false);
+        Common.hideKeyboard(edt_content);
     }
 
 
