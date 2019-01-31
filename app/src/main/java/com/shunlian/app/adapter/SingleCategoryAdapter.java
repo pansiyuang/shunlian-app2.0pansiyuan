@@ -166,7 +166,7 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         try {
             if (holder instanceof SingleViewHolder) {
                 GoodsDeatilEntity.Goods goods;
-                if (mStore != null) {
+                if (mStore != null || !isEmpty(mKeywords)) {
                     goods = lists.get(position - 1);
                 } else {
                     goods = lists.get(position);
