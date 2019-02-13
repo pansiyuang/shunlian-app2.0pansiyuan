@@ -833,11 +833,11 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
     @Override
     public void teacherCodeInfo(MemberTeacherEntity memberTeacherEntity) {
-        if(memberTeacherEntity!=null){
-            if(memberTeacherEntity.type.equals("0")){
+        if(memberTeacherEntity!=null&&memberTeacherEntity.type!=null){
+            if("0".equals(memberTeacherEntity.type)){
                 return;
             }
-            if(memberTeacherEntity.type.equals("2")&&memberTeacherEntity.follow_from!=null&&memberTeacherEntity.follow_from.weixin!=null){
+            if("2".equals(memberTeacherEntity.type)&&memberTeacherEntity.follow_from!=null&&memberTeacherEntity.follow_from.weixin!=null){
                 commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.follow_from.weixin, true, v -> {
                     Common.staticToastAct(baseActivity,"复制成功");
                     Common.copyTextNoToast(baseActivity,memberTeacherEntity.follow_from.weixin);
@@ -851,7 +851,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                     commonDialogUtil.dialog_me_teach.dismiss();
                     personalcenterPresenter.neverPop();
                 });
-            }else if(memberTeacherEntity.type.equals("1")&&memberTeacherEntity.system_weixin!=null&&memberTeacherEntity.system_weixin.weixin!=null){
+            }else if("1".equals(memberTeacherEntity.type)&&memberTeacherEntity.system_weixin!=null&&memberTeacherEntity.system_weixin.weixin!=null){
                 commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.system_weixin.weixin, true, v -> {
                     Common.staticToastAct(baseActivity,"复制成功");
                     Common.copyTextNoToast(baseActivity,memberTeacherEntity.system_weixin.weixin);
