@@ -37,6 +37,7 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.MeLocationEvent;
 import com.shunlian.app.eventbus_bean.MessageReadSuccessEvent;
+import com.shunlian.app.eventbus_bean.RefreshBlogListEvent;
 import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -171,6 +172,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     NewTextView ntv_uuid;
     private String currentDiscoverFlag;
     private PromptDialog promptDialog;
+    public static boolean refreshBlogList = false;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -586,6 +588,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //            } else {
 //                discoverFrag.initMessage(null);
 //            }
+            EventBus.getDefault().post(new RefreshBlogListEvent(refreshBlogList));
         }
         switchContent(discoverFrag);
         pageIndex = 2;
@@ -1143,6 +1146,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             pMain.showVoucherSuspension();
         }
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(DefMessageEvent event) {
+        if (event.loginSuccess) {
+            refreshBlogList = true;
+        }
+    }
+
     /**
      * 处理网络请求
      */

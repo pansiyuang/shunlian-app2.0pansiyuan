@@ -103,6 +103,8 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     ScrollTextView ntv_name;
     @BindView(R.id.ntv_yue)
     NewTextView ntv_yue;
+    @BindView(R.id.ntv_credit)
+    NewTextView ntv_credit;
     @BindView(R.id.ntv_title)
     NewTextView ntv_title;
     @BindView(R.id.ntv_left)
@@ -548,6 +550,20 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             ntv_yue.setVisibility(View.VISIBLE);
         }else {
             ntv_yue.setVisibility(View.GONE);
+        }
+        if (personalcenterEntity.credit!=null&&!isEmpty(personalcenterEntity.credit.title)){
+            ntv_credit.setText(personalcenterEntity.credit.title);
+            ntv_credit.setText(personalcenterEntity.credit.title+"\n"+personalcenterEntity.credit.value);
+            ntv_credit.setVisibility(View.VISIBLE);
+            ntv_credit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (personalcenterEntity.credit.url!=null)
+                    Common.goGoGo(baseActivity,personalcenterEntity.credit.url.type,personalcenterEntity.credit.url.item_id);
+                }
+            });
+        }else {
+            ntv_credit.setVisibility(View.GONE);
         }
         isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY, true);
         changeState();
