@@ -87,7 +87,7 @@ public class PersonalcenterPresenter extends BasePresenter<IPersonalView> {
         Call<BaseEntity<MemberTeacherEntity>>
                 baseEntityCall = getApiService().codeTeacherInfo(map);
 
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback
+        getNetData(false,baseEntityCall,new SimpleNetDataCallback
                 <BaseEntity<MemberTeacherEntity>>(){
             @Override
             public void onSuccess(BaseEntity<MemberTeacherEntity> entity) {
@@ -113,7 +113,7 @@ public class PersonalcenterPresenter extends BasePresenter<IPersonalView> {
         Call<BaseEntity<EmptyEntity>>
                 baseEntityCall = getApiService().neverPop(map);
 
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback
+        getNetData(false,baseEntityCall,new SimpleNetDataCallback
                 <BaseEntity<EmptyEntity>>(){
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
