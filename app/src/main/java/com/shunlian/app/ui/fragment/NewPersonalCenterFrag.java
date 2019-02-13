@@ -858,6 +858,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.follow_from.weixin, true, v -> {
                     Common.staticToastAct(baseActivity,"复制成功");
                     Common.copyTextNoToast(baseActivity,memberTeacherEntity.follow_from.weixin);
+                    personalcenterPresenter.neverPop();
                     handlerWenxin.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -872,6 +873,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.system_weixin.weixin, true, v -> {
                     Common.staticToastAct(baseActivity,"复制成功");
                     Common.copyTextNoToast(baseActivity,memberTeacherEntity.system_weixin.weixin);
+                    personalcenterPresenter.neverPop();
                     handlerWenxin.postDelayed(new Runnable() {
                         @Override
                         public void run() {
