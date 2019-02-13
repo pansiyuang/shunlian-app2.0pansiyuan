@@ -175,7 +175,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
         singleAdapter.setOnItemClickListener((view, position) -> {
             int mposition;
-            if (mRefStore == null) {
+            if (mRefStore == null && isEmpty(mKeywords)) {
                 mposition = position;
             } else {
                 mposition = position - 1;
@@ -189,11 +189,12 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         });
         doubleAdapter.setOnItemClickListener((view, position) -> {
             int mposition;
-            if (mRefStore == null) {
+            if (mRefStore == null && isEmpty(mKeywords)) {
                 mposition = position;
             } else {
                 mposition = position - 1;
             }
+
             GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
             if (!isEmpty(goods.id)) {
                 GoodsDetailAct.startAct(CategoryAct.this, goods.id);
