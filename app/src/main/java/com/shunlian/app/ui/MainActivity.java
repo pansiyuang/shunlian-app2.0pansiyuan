@@ -16,6 +16,8 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +63,7 @@ import com.shunlian.app.utils.JosnSensorsDataAPI;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
@@ -99,13 +102,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.fl_main)
     MyFrameLayout fl_main;
     @BindView(R.id.ll_tab_main_page)
-    MyRelativeLayout ll_tab_main_page;
+    LinearLayout ll_tab_main_page;
     @BindView(R.id.miv_tab_main)
     MyImageView miv_tab_main;
     @BindView(R.id.tv_tab_main)
     TextView tv_tab_main;
     @BindView(R.id.ll_tab_sort)
-    MyRelativeLayout ll_tab_sort;
+    LinearLayout ll_tab_sort;
     @BindView(R.id.miv_tab_sort)
     MyImageView miv_tab_sort;
     @BindView(R.id.tv_tab_sort)
@@ -117,7 +120,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.tv_tab_discover)
     TextView tv_tab_discover;
     @BindView(R.id.ll_tab_shopping_car)
-    MyRelativeLayout ll_tab_shopping_car;
+    LinearLayout ll_tab_shopping_car;
     @BindView(R.id.miv_shopping_car)
     MyImageView miv_shopping_car;
     @BindView(R.id.miv_first)
@@ -125,7 +128,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.tv_shopping_car)
     TextView tv_shopping_car;
     @BindView(R.id.ll_tab_person_center)
-    MyRelativeLayout ll_tab_person_center;
+    LinearLayout ll_tab_person_center;
     @BindView(R.id.miv_person_center)
     MyImageView miv_person_center;
     @BindView(R.id.tv_person_center)
@@ -354,23 +357,23 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             return;
         }
         //春节活动
-//        if (view.getId() == R.id.ll_tab_main_page) {
-//            miv_first.setVisibility(View.VISIBLE);
-//            miv_tab_main.setVisibility(View.GONE);
-//            tv_tab_main.setVisibility(View.GONE);
-//            miv_first.animate().rotation(0).setDuration(0).start();
-//            miv_first.animate().rotation(360).setDuration(300).start();
-//        } else {
-//            if (view.getId() == R.id.ll_tab_discover) {
-//                if (discoverFrag != null && !discoverFrag.isVisible()) {
-//                    view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-//                    view.animate().scaleX(1).scaleY(1).setDuration(300).start();
-//                }
-//            } else {
-//                view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
-//                view.animate().scaleX(1).scaleY(1).setDuration(300).start();
-//            }
-//        }
+        if (view.getId() == R.id.ll_tab_main_page) {
+            miv_first.setVisibility(View.VISIBLE);
+            miv_tab_main.setVisibility(View.GONE);
+            tv_tab_main.setVisibility(View.GONE);
+            miv_first.animate().rotation(0).setDuration(0).start();
+            miv_first.animate().rotation(360).setDuration(300).start();
+        } else {
+            if (view.getId() == R.id.ll_tab_discover) {
+                if (discoverFrag != null && !discoverFrag.isVisible()) {
+                    view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                    view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+                }
+            } else {
+                view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+                view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+            }
+        }
         //春节活动
 
         if (view.getId() == R.id.ll_tab_discover) {
@@ -457,10 +460,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         break;
                 }
             }
-            //春节活动
-//        }, 300);
-        }, 0);
-        //春节活动
+        }, 300);
     }
 
     public void initHintDialog() {
@@ -694,34 +694,19 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         //        双十一活动
 
         //春节活动
-//        miv_tab_main.setImageResource(R.mipmap.tab_1_n);
-//        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
-//
-//        miv_tab_sort.setImageResource(R.mipmap.tab_2_n);
-//        tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
-//
-//        miv_tab_discover.setImageResource(R.mipmap.tab_3_n);
-//        tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
-//
-//        miv_shopping_car.setImageResource(R.mipmap.tab_4_n);
-//        tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
-//
-//        miv_person_center.setImageResource(R.mipmap.tab_5_n);
-//        tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
-
-        miv_tab_main.setImageResource(R.mipmap.tab_1_n_new);
+        miv_tab_main.setImageResource(R.mipmap.tab_1_n);
         tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_tab_sort.setImageResource(R.mipmap.tab_2_n_new);
+        miv_tab_sort.setImageResource(R.mipmap.tab_2_n);
         tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_tab_discover.setImageResource(R.mipmap.tab_3_n_new);
+        miv_tab_discover.setImageResource(R.mipmap.tab_3_n);
         tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_shopping_car.setImageResource(R.mipmap.tab_4_n_new);
+        miv_shopping_car.setImageResource(R.mipmap.tab_4_n);
         tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_person_center.setImageResource(R.mipmap.tab_5_n_new);
+        miv_person_center.setImageResource(R.mipmap.tab_5_n);
         tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
 
         //春节活动
@@ -730,20 +715,24 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         miv_tab_main.setVisibility(View.VISIBLE);
         tv_tab_main.setVisibility(View.VISIBLE);
 
+//        mtv_message_count.setVisibility(View.GONE);
+
+        RelativeLayout.LayoutParams tvParams = (RelativeLayout.LayoutParams) tv_tab_discover.getLayoutParams();
+        tvParams.setMargins(0, TransformUtil.dip2px(this, 6), 0, TransformUtil.dip2px(this, 4));
+
+        RelativeLayout.LayoutParams ivParams = (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
+        ivParams.setMargins(0, TransformUtil.dip2px(this, 8), 0, 0);
         //春节活动
         switch (pageIndex) {
             case 0:
-
-//                miv_first.setVisibility(View.VISIBLE);
-//                miv_tab_main.setVisibility(View.GONE);
-//                tv_tab_main.setVisibility(View.GONE);
+                miv_first.setVisibility(View.VISIBLE);
+                miv_tab_main.setVisibility(View.GONE);
+                tv_tab_main.setVisibility(View.GONE);
                 if(data!=null&&data.count>0) {
                     mtv_message_count.setVisibility(View.VISIBLE);
                 }else{
                     mtv_message_count.setVisibility(View.GONE);
                 }
-                miv_tab_main.setImageResource(R.mipmap.tab_1_h_new);
-                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 1:
                 if(data!=null&&data.count>0) {
@@ -751,14 +740,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 }else{
                     mtv_message_count.setVisibility(View.GONE);
                 }
-//                miv_tab_sort.setImageResource(R.mipmap.tab_2_h);
-                miv_tab_sort.setImageResource(R.mipmap.tab_2_h_new);
+                miv_tab_sort.setImageResource(R.mipmap.tab_2_h);
                 tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 2:
-//                miv_tab_discover.setImageResource(R.mipmap.tab_03);
-                miv_tab_discover.setImageResource(R.mipmap.tab_3_h_new);
+                miv_tab_discover.setImageResource(R.mipmap.tab_03);
                 tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
+                ivParams.setMargins(0, TransformUtil.dip2px(this, -12), 0, 0);
+                tvParams.setMargins(0, 0, 0, 0);
                 break;
             case 3:
                 if(data!=null&&data.count>0) {
@@ -766,8 +755,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 }else{
                     mtv_message_count.setVisibility(View.GONE);
                 }
-//                miv_shopping_car.setImageResource(R.mipmap.tab_4_h);
-                miv_shopping_car.setImageResource(R.mipmap.tab_4_h_new);
+                miv_shopping_car.setImageResource(R.mipmap.tab_4_h);
                 tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 4:
@@ -776,8 +764,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 }else{
                     mtv_message_count.setVisibility(View.GONE);
                 }
-//                miv_person_center.setImageResource(R.mipmap.tab_5_h);
-                miv_person_center.setImageResource(R.mipmap.tab_5_h_new);
+                miv_person_center.setImageResource(R.mipmap.tab_5_h);
                 tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
         }
