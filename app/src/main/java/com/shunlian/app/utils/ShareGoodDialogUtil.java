@@ -75,7 +75,7 @@ public class ShareGoodDialogUtil {
             nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.GONE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
         }else{
-            nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.VISIBLE);
+            nomalBuildl.getView(R.id.mllayout_weixinpenyou).setVisibility(View.GONE);
             nomalBuildl.getView(R.id.mllayout_tuwenerweima).setVisibility(View.VISIBLE);
         }
         TextView tv_price_state =  nomalBuildl.getView(R.id.tv_price_state);

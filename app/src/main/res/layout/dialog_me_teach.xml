@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_top"
+        android:layout_width="290dp"
+        android:layout_height="270dp"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/img_tanchuang_beijing">
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="5dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_cha"/>
+        <TextView
+            android:id="@+id/tv_teach_title"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="添加社群导师"
+            android:textColor="#afafaf"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_teach_desc"
+            android:layout_below="@+id/tv_teach_title"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="获取导师一对一辅导帮助！"
+            android:textColor="#afafaf"
+            android:textSize="13sp"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="73dp">
+            <TextView
+                android:id="@+id/tv_teach_weixin"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="添加社群导师"
+                android:textColor="#1C1B20"
+                android:textSize="16sp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_teach_weixin_code"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:text=""
+                android:textColor="#1C1B20"
+                android:textSize="19sp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_teach_copy"
+                android:layout_width="190dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="28dp"
+                android:text="复制微信号去添加"
+                android:textColor="#7F5913"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:background="@mipmap/img_anniu"
+                android:layout_height="40dp" />
+            <TextView
+                android:id="@+id/tv_teach_remind"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:text="我已添加,不再提醒"
+                android:textColor="#B2832D"
+                android:textSize="15sp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+
+</com.shunlian.app.widget.MyRelativeLayout>

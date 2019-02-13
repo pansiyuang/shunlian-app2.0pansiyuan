@@ -701,20 +701,24 @@ public class LazyViewPager extends ViewGroup {
 
         mAdapter.finishUpdate(this);
 
-        if (hasFocus()) {
-            View currentFocused = findFocus();
-            ItemInfo ii = currentFocused != null ? infoForAnyChild(currentFocused) : null;
-            if (ii == null || ii.position != mCurItem) {
-                for (int i=0; i<getChildCount(); i++) {
-                    View child = getChildAt(i);
-                    ii = infoForChild(child);
-                    if (ii != null && ii.position == mCurItem) {
-                        if (child.requestFocus(FOCUS_FORWARD)) {
-                            break;
+        try {
+            if (hasFocus()) {
+                View currentFocused = findFocus();
+                ItemInfo ii = currentFocused != null ? infoForAnyChild(currentFocused) : null;
+                if (ii == null || ii.position != mCurItem) {
+                    for (int i=0; i<getChildCount(); i++) {
+                        View child = getChildAt(i);
+                        ii = infoForChild(child);
+                        if (ii != null && ii.position == mCurItem) {
+                            if (child.requestFocus(FOCUS_FORWARD)) {
+                                break;
+                            }
                         }
                     }
                 }
             }
+        }catch (Exception e){
+
         }
     }
 

@@ -2626,6 +2626,13 @@ public interface ApiService {
     @GET("member/follower/myTeacher")
     Call<BaseEntity<MemberTeacherEntity>> codeTeacherInfo(@QueryMap Map<String, String> map);
     /**
+     * 设置永久不弹
+     * @param map
+     * @return
+     */
+    @GET("member/follower/neverPop")
+    Call<BaseEntity<EmptyEntity>> neverPop(@QueryMap Map<String, String> map);
+    /**
      * 我还想要
      * @param map
      * @return
