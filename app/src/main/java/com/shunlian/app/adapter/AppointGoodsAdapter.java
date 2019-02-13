@@ -149,6 +149,7 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
                         i -= 1;
                         if (i < min_count){
                             i = min_count;
+                            Common.staticToast("宝贝不能再减少了哦");
                         }
                         mtv_edit_count.setText(String.valueOf(i));
                         ModifyNumEvent event = new ModifyNumEvent(String.valueOf(i));
@@ -163,6 +164,7 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
                         i += 1;
                         if (i > max_count){
                             i = max_count;
+                            Common.staticToast("您选择的数量超出库存");
                         }
 
                         mtv_edit_count.setText(String.valueOf(i));
@@ -178,6 +180,8 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
                             int i = Integer.parseInt(s);
                             if (i < min_count){
                                 i = min_count;
+                            }else if (i > max_count){
+                                i = max_count;
                             }
 
                             mtv_edit_count.setText(String.valueOf(i));
