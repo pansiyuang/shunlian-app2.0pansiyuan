@@ -53,6 +53,7 @@ public class CommonDialogUtil {
     public CommonDialog inputWeixin;
     public CommonDialog dialog_user_info;
     public CommonDialog dialog_user_old;
+    public CommonDialog dialog_me_teach;
     public CommonDialogUtil(Context context){
         this.context = context;
     }
@@ -300,5 +301,45 @@ public class CommonDialogUtil {
         if(nomalBuildl!=null&&nomalBuildl.isShowing()){
             nomalBuildl.dismiss();
         }
+    }
+
+    //我的导师提示
+    public void meTeachCommonDialog(String weixinCode,boolean isTeach, View.OnClickListener sureListener,
+                                     View.OnClickListener cancleListener) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd)
+                .setView(R.layout.dialog_me_teach);
+        dialog_me_teach = nomalBuild.create();
+        dialog_me_teach.setCancelable(false);
+        dialog_me_teach.show();
+        TextView tv_teach_title = dialog_me_teach.findViewById(R.id.tv_teach_title);
+        TextView tv_teach_desc = dialog_me_teach.findViewById(R.id.tv_teach_desc);
+        TextView tv_teach_weixin = dialog_me_teach.findViewById(R.id.tv_teach_weixin);
+        TextView tv_teach_weixin_code = dialog_me_teach.findViewById(R.id.tv_teach_weixin_code);
+        TextView tv_teach_copy = dialog_me_teach.findViewById(R.id.tv_teach_copy);
+        TextView tv_teach_remind = dialog_me_teach.findViewById(R.id.tv_teach_remind);
+        MyImageView  miv_close= dialog_me_teach.findViewById(R.id.miv_close);
+        if(isTeach) {
+            tv_teach_title.setText("添加社群导师");
+            tv_teach_desc.setText("获取导师一对一辅导帮助！");
+            tv_teach_weixin.setText("社群导师微信");
+        }else{
+            tv_teach_title.setText("添加官方导师");
+            tv_teach_desc.setText("获取官方一手重要资料及培训辅导!");
+            tv_teach_weixin.setText("官方导师微信");
+        }
+        if(!TextUtils.isEmpty(weixinCode)){
+            tv_teach_weixin_code.setText(weixinCode);
+        }
+        tv_teach_remind.setOnClickListener(cancleListener);
+        tv_teach_copy.setOnClickListener(sureListener);
+        miv_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_me_teach.dismiss();
+            }
+        });
     }
 }
