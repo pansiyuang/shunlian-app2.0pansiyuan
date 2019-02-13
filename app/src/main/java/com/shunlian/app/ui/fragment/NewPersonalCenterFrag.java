@@ -248,6 +248,10 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             }
             messageCountManager.setOnGetMessageListener(this);
         }
+        isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
+        if(isShowGuideMe&&personalcenterPresenter!=null){
+            personalcenterPresenter.codeTeacherDetail();
+        }
         super.onResume();
     }
 
@@ -286,10 +290,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             mrlayout_plus.setVisibility(View.GONE);
             line_anim.setTranslationY(0);
         }
-        isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
-        if(isShowGuideMe&&personalcenterPresenter!=null){
-            personalcenterPresenter.codeTeacherDetail();
-        }
+
         miv_daoshi.post(() -> {
             int[] location = new int[2];
             miv_daoshi.getLocationInWindow(location);

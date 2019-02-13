@@ -1077,13 +1077,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         MeGuideView guide_view = new MeGuideView(this);
         guide_view.setOnClickListener(v -> {
             guide_view.setVisibility(View.GONE);
+            SharedPrefUtil.saveCacheSharedPrfBoolean("showGuideMe", true);
         });
         guide_view.setImageLocation(currentLocation);
         ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         guide_view.setLayoutParams(layoutParams);
         decorView.addView(guide_view);
-        SharedPrefUtil.saveCacheSharedPrfBoolean("showGuideMe", true);
     }
 
     public void showGuideView() {
