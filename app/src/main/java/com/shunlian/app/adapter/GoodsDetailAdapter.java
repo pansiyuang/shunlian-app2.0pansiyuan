@@ -382,11 +382,23 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mHolder.mtv_haopinglv.setText(String.format(getString(R.string.praise_rate), star_rate));
 
             if (isEmpty(comments)) {
-                gone(mHolder.recy_cardview,mHolder.view_line1);
-                visible(mHolder.view_line2,mHolder.miv_empty);
+                gone(mHolder.recy_cardview,mHolder.view_line1
+                        ,mHolder.miv_empty,mHolder.mtv_comment_num,mHolder.mtv_haopinglv);
+                visible(mHolder.view_line2,mHolder.llayout_new_tip);
+                mHolder.mtv_comment_num1.setText(String.format(getString(R.string.good_comment), comments_num));
+                String new_haoping = "暂无评价";
+                mHolder.mtv_haopinglv1.setTextColor(getColor(R.color.text_gray2));
+                try{
+                    int i = Integer.parseInt(comments_num);
+                    if (i > 0) {
+                        new_haoping = String.format(getString(R.string.praise_rate), star_rate);
+                        mHolder.mtv_haopinglv1.setTextColor(getColor(R.color.pink_color));
+                    }
+                }catch (Exception e){}
+                mHolder.mtv_haopinglv1.setText(new_haoping);
             } else {
-                visible(mHolder.recy_cardview,mHolder.view_line1);
-                gone(mHolder.view_line2,mHolder.miv_empty);
+                visible(mHolder.recy_cardview,mHolder.view_line1,mHolder.mtv_comment_num,mHolder.mtv_haopinglv);
+                gone(mHolder.view_line2,mHolder.miv_empty,mHolder.llayout_new_tip);
                 CommentCardViewAdapter commentCardViewAdapter = new
                         CommentCardViewAdapter(context, false, comments);
                 mHolder.recy_cardview.setAdapter(commentCardViewAdapter);
@@ -1541,12 +1553,22 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.view_line2)
         View view_line2;
 
+        @BindView(R.id.llayout_new_tip)
+        LinearLayout llayout_new_tip;
+
+        @BindView(R.id.mtv_comment_num1)
+        MyTextView mtv_comment_num1;
+
+        @BindView(R.id.mtv_haopinglv1)
+        MyTextView mtv_haopinglv1;
+
         public CommntHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
             mtv_comment_num.setOnClickListener(this);
-            miv_empty.setOnClickListener(this);
+            //miv_empty.setOnClickListener(this);
             mtv_haopinglv.setOnClickListener(this);
+            llayout_new_tip.setOnClickListener(this);
             LinearLayoutManager manager1 = new LinearLayoutManager
                     (context, LinearLayoutManager.HORIZONTAL, false);
             recy_cardview.setLayoutManager(manager1);
