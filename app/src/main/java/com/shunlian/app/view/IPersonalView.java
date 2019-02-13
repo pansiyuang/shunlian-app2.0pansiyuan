@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.MemberTeacherEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 
 
@@ -10,4 +11,5 @@ import com.shunlian.app.bean.PersonalcenterEntity;
 public interface IPersonalView extends IView {
     void getApiData(PersonalcenterEntity personalcenterEntity);
     void getUserId(String userId);
+    void teacherCodeInfo(MemberTeacherEntity memberTeacherEntity);
 }

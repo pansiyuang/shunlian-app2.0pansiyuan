@@ -1,6 +1,9 @@
 package com.shunlian.app.ui.fragment;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +28,7 @@ import com.shunlian.app.adapter.FuWuAdapter;
 import com.shunlian.app.adapter.ShangAdapter;
 import com.shunlian.app.adapter.ZiChanAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.MemberTeacherEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.MeLocationEvent;
@@ -47,6 +51,7 @@ import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.setting.PersonalDataAct;
 import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -98,6 +103,8 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     ScrollTextView ntv_name;
     @BindView(R.id.ntv_yue)
     NewTextView ntv_yue;
+    @BindView(R.id.ntv_credit)
+    NewTextView ntv_credit;
     @BindView(R.id.ntv_title)
     NewTextView ntv_title;
     @BindView(R.id.ntv_left)
@@ -207,6 +214,8 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
     @BindView(R.id.miv_daoshi)
     MyTextView miv_daoshi;
+    private boolean isShowGuideMe=false;//是否显示过引导 false,没有显示过
+    private CommonDialogUtil commonDialogUtil;
     //    private Timer outTimer;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -260,6 +269,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         ImmersionBar.with(this).titleBar(rLayout_title, false).init();
         view_bg.setAlpha(0);
         ntv_names.setAlpha(0);
+        commonDialogUtil = new CommonDialogUtil(baseActivity);
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
         int picWidth = Common.getScreenWidth((Activity) baseActivity) - TransformUtil.dip2px(baseActivity, 26);
         int height = ((picWidth/2) * 80)/ 165;
@@ -276,13 +286,19 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             mrlayout_plus.setVisibility(View.GONE);
             line_anim.setTranslationY(0);
         }
-
+        isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
+        if(isShowGuideMe&&personalcenterPresenter!=null){
+            personalcenterPresenter.codeTeacherDetail();
+        }
         miv_daoshi.post(() -> {
             int[] location = new int[2];
             miv_daoshi.getLocationInWindow(location);
             int imgWidth = miv_daoshi.getHeight();
             EventBus.getDefault().post(new MeLocationEvent(location, imgWidth));
+
         });
+
+
     }
 
 
@@ -534,6 +550,20 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             ntv_yue.setVisibility(View.VISIBLE);
         }else {
             ntv_yue.setVisibility(View.GONE);
+        }
+        if (personalcenterEntity.credit!=null&&!isEmpty(personalcenterEntity.credit.title)){
+            ntv_credit.setText(personalcenterEntity.credit.title);
+            ntv_credit.setText(personalcenterEntity.credit.title+"\n"+personalcenterEntity.credit.value);
+            ntv_credit.setVisibility(View.VISIBLE);
+            ntv_credit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (personalcenterEntity.credit.url!=null)
+                    Common.goGoGo(baseActivity,personalcenterEntity.credit.url.type,personalcenterEntity.credit.url.item_id);
+                }
+            });
+        }else {
+            ntv_credit.setVisibility(View.GONE);
         }
         isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY, true);
         changeState();
@@ -817,6 +847,67 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
     }
 
+    @Override
+    public void teacherCodeInfo(MemberTeacherEntity memberTeacherEntity) {
+        if(memberTeacherEntity!=null){
+            if(memberTeacherEntity.type.equals("0")){
+                return;
+            }
+            if(memberTeacherEntity.type.equals("2")&&memberTeacherEntity.follow_from!=null&&memberTeacherEntity.follow_from.weixin!=null){
+                commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.follow_from.weixin, true, v -> {
+                    Common.staticToastAct(baseActivity,"复制成功");
+                    Common.copyTextNoToast(baseActivity,memberTeacherEntity.follow_from.weixin);
+                    handlerWenxin.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            handlerWenxin.sendEmptyMessage(0);
+                        }
+                    },50);
+                }, v -> {
+                    commonDialogUtil.dialog_me_teach.dismiss();
+                    personalcenterPresenter.neverPop();
+                });
+            }else if(memberTeacherEntity.type.equals("1")&&memberTeacherEntity.system_weixin!=null&&memberTeacherEntity.system_weixin.weixin!=null){
+                commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.system_weixin.weixin, true, v -> {
+                    Common.staticToastAct(baseActivity,"复制成功");
+                    Common.copyTextNoToast(baseActivity,memberTeacherEntity.system_weixin.weixin);
+                    handlerWenxin.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            handlerWenxin.sendEmptyMessage(0);
+                        }
+                    },50);
+                }, v -> {
+                    commonDialogUtil.dialog_me_teach.dismiss();
+                    personalcenterPresenter.neverPop();
+                });
+            }
+        }
+    }
+
+    private Handler handlerWenxin = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            getWechatApi();
+        }
+    };
+        /**
+         * 跳转到微信
+         */
+        private void getWechatApi(){
+            try {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                ComponentName cmp = new ComponentName("com.tencent.mm","com.tencent.mm.ui.LauncherUI");
+                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setComponent(cmp);
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                // TODO: handle exception
+                Common.staticToastAct(baseActivity,"检查到您手机没有安装微信，请安装后使用该功能");
+            }
+    }
 
     @Override
     public void OnLoadFail() {

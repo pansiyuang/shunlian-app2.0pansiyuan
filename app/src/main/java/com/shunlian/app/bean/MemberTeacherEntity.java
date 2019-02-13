@@ -10,6 +10,8 @@ public class MemberTeacherEntity implements Serializable{
 
     public String my_weinxin;// 自己的微信
 
+    public String  type;//0不弹  1弹官方  2弹上级
+
     public MemberTeacherEntity.Followfrom system_weixin;////官网导师的微信
 
     @JsonIgnoreProperties(ignoreUnknown = true)

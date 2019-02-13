@@ -16,6 +16,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpArticleAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
+import com.shunlian.app.bean.MemberTeacherEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.ui.MessageActivity;
@@ -769,6 +770,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void getUserId(String userId) {
+
+    }
+
+    @Override
+    public void teacherCodeInfo(MemberTeacherEntity memberTeacherEntity) {
 
     }
 
