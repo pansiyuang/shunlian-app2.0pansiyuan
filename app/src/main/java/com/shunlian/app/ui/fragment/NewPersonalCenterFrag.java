@@ -216,6 +216,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     MyTextView miv_daoshi;
     private boolean isShowGuideMe=false;//是否显示过引导 false,没有显示过
     private CommonDialogUtil commonDialogUtil;
+    private boolean isHidden = false;
     //    private Timer outTimer;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -235,6 +236,15 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+        } else {
+
+        }
+    }
+
+    @Override
     public void onResume() {
         if (!isHidden()) {
             getPersonalcenterData();
@@ -249,7 +259,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             messageCountManager.setOnGetMessageListener(this);
         }
         isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
-        if(Common.isAlreadyLogin()&&isShowGuideMe&&personalcenterPresenter!=null){
+        if(!isHidden&&Common.isAlreadyLogin()&&isShowGuideMe&&personalcenterPresenter!=null){
             personalcenterPresenter.codeTeacherDetail();
         }
         super.onResume();
@@ -258,12 +268,17 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        this.isHidden = hidden;
         if (!hidden) {
 //            ImmersionBar.with(this).fitsSystemWindows(true)
 //                    .statusBarColor(R.color.white)
 //                    .statusBarDarkFont(true, 0.2f)
 //                    .init();
             ImmersionBar.with(this).titleBar(rLayout_title, false).init();
+            isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
+            if(Common.isAlreadyLogin()&&isShowGuideMe&&personalcenterPresenter!=null){
+                personalcenterPresenter.codeTeacherDetail();
+            }
         }
     }
 
@@ -870,7 +885,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                     personalcenterPresenter.neverPop();
                 });
             }else if("1".equals(memberTeacherEntity.type)&&memberTeacherEntity.system_weixin!=null&&memberTeacherEntity.system_weixin.weixin!=null){
-                commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.system_weixin.weixin, true, v -> {
+                commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.system_weixin.weixin, false, v -> {
                     Common.staticToastAct(baseActivity,"复制成功");
                     Common.copyTextNoToast(baseActivity,memberTeacherEntity.system_weixin.weixin);
                     personalcenterPresenter.neverPop();
