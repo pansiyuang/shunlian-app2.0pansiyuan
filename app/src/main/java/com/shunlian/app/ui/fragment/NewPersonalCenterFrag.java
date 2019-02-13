@@ -249,7 +249,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             messageCountManager.setOnGetMessageListener(this);
         }
         isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
-        if(isShowGuideMe&&personalcenterPresenter!=null){
+        if(Common.isAlreadyLogin()&&isShowGuideMe&&personalcenterPresenter!=null){
             personalcenterPresenter.codeTeacherDetail();
         }
         super.onResume();
