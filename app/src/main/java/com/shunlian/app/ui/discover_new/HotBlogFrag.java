@@ -40,9 +40,11 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.MessageReadSuccessEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
+import com.shunlian.app.eventbus_bean.RefreshBlogListEvent;
 import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
@@ -180,6 +182,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     public void getBlogList(HotBlogsEntity hotBlogsEntity, int currentPage, int totalPage) {
         if (currentPage == 1) {
             blogList.clear();
+            MainActivity.refreshBlogList = false;
             if (isEmpty(hotBlogsEntity.list)) {
                 nei_empty.setVisibility(View.VISIBLE);
                 recycler_list.setVisibility(View.GONE);
@@ -449,8 +452,8 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshData(DefMessageEvent event) {
-        if (hotBlogPresenter != null && event.loginSuccess) {
+    public void refreshData(RefreshBlogListEvent event) {
+        if (hotBlogPresenter != null && event.isRefresh) {
             hotBlogPresenter.initPage();
             hotBlogPresenter.getHotBlogList(true);
         }
