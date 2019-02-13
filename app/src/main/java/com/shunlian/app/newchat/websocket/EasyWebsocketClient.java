@@ -65,6 +65,13 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     private OnSwitchStatusListener switchStatusListener;
     private OnConnetListener onConnetListener;
     private JSONObject pinJson;
+    private Runnable mReconnectTask = () -> {
+        LogUtil.httpLogW("Websocket 尝试重连服务器...." + mStatus);
+        if (mStatus != Status.CONNECTING) {//不是正在重连状态
+            mStatus = Status.CONNECTING;
+        }
+        resetSocket();
+    };
 
     /**
      * 单例模式获取实例
@@ -133,16 +140,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
      */
     public Status getStatus() {
         return mStatus;
-    }
-
-    public class MyTimerTask extends TimerTask {
-        public MyTimerTask() {
-        }
-
-        @Override
-        public void run() {
-            sendPin();
-        }
     }
 
     /**
@@ -405,6 +402,10 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         }
     }
 
+    public UserInfoEntity getUserInfoEntity() {
+        return userInfoEntity;
+    }
+
     public void setUserInfoEntity(String str) {
         try {
             userInfoEntity = objectMapper.readValue(str, UserInfoEntity.class);
@@ -433,24 +434,20 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         }
     }
 
-    public UserInfoEntity getUserInfoEntity() {
-        return userInfoEntity;
-    }
-
     public void send(String msg) {
-        if (!NetworkUtils.isNetworkOpen(mContext)) {
-            Common.staticToast("网络断开,请检查网络");
-            return;
-        }
-        if (mClient == null) {
-            Common.staticToast("服务器连接断开,发送失败");
-            return;
-        }
-        if (mStatus == Status.CONNECTING) {
-            Common.staticToast("服务器连接中,稍后重试");
-            return;
-        }
         try {
+            if (!NetworkUtils.isNetworkOpen(mContext)) {
+                Common.staticToast("网络断开,请检查网络");
+                return;
+            }
+            if (mClient == null) {
+                Common.staticToast("服务器连接断开,发送失败");
+                return;
+            }
+            if (mStatus == Status.CONNECTING) {
+                Common.staticToast("服务器连接中,稍后重试");
+                return;
+            }
             if (mStatus == Status.CONNECTED) {
                 mClient.send(msg);
             }
@@ -696,14 +693,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         buildeWebsocketClient();
     }
 
-    private Runnable mReconnectTask = () -> {
-        LogUtil.httpLogW("Websocket 尝试重连服务器...." + mStatus);
-        if (mStatus != Status.CONNECTING) {//不是正在重连状态
-            mStatus = Status.CONNECTING;
-        }
-        resetSocket();
-    };
-
     private void cancelReconnect() {
         reconnectCount = 0;
         mHandler.removeCallbacks(mReconnectTask);
@@ -779,5 +768,15 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
 
     public interface OnConnetListener {
         void onConneted();
+    }
+
+    public class MyTimerTask extends TimerTask {
+        public MyTimerTask() {
+        }
+
+        @Override
+        public void run() {
+            sendPin();
+        }
     }
 }

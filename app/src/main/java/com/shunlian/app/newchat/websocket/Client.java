@@ -90,8 +90,12 @@ public class Client extends WebSocketClient {
 
     @Override
     public void onError(Exception e) {
-        if (mListener != null) {
-            mListener.onError(e);
+        try {
+            if (mListener != null) {
+                mListener.onError(e);
+            }
+        }catch (Exception e1){
+
         }
     }
 
