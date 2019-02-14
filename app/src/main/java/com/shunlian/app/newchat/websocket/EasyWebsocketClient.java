@@ -23,7 +23,6 @@ import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 
 import org.greenrobot.eventbus.EventBus;
-import org.java_websocket.drafts.Draft_17;
 import org.json.JSONObject;
 
 import java.net.URI;
@@ -66,6 +65,13 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     private OnSwitchStatusListener switchStatusListener;
     private OnConnetListener onConnetListener;
     private JSONObject pinJson;
+    private Runnable mReconnectTask = () -> {
+        LogUtil.httpLogW("Websocket 尝试重连服务器...." + mStatus);
+        if (mStatus != Status.CONNECTING) {//不是正在重连状态
+            mStatus = Status.CONNECTING;
+        }
+        resetSocket();
+    };
 
     /**
      * 单例模式获取实例
@@ -115,7 +121,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                 mClient.removeListener();
                 mClient = null;
             }
-            mClient = new Client(new URI(InterentTools.HTTPADDR_IM), new Draft_17());//ws://123.207.107.21:8086.
+            mClient = new Client(new URI(InterentTools.HTTPADDR_IM));//ws://123.207.107.21:8086.
             mClient.setOnClientConnetListener(this);
             mClient.connect();
         } catch (java.net.URISyntaxException e) {
@@ -134,16 +140,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
      */
     public Status getStatus() {
         return mStatus;
-    }
-
-    public class MyTimerTask extends TimerTask {
-        public MyTimerTask() {
-        }
-
-        @Override
-        public void run() {
-            sendPin();
-        }
     }
 
     /**
@@ -351,12 +347,12 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             jsonObject.put("token", token);
             jsonObject.put("role_type", "member");
             jsonObject.put("client", "android");
+
+            if (mClient != null && mClient.isOpen()) {
+                mClient.send(jsonObject.toString());
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        if (mClient != null && mClient.isOpen()) {
-            LogUtil.httpLogW("connetService:" + jsonObject.toString());
-            mClient.send(jsonObject.toString());
         }
     }
 
@@ -406,6 +402,10 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         }
     }
 
+    public UserInfoEntity getUserInfoEntity() {
+        return userInfoEntity;
+    }
+
     public void setUserInfoEntity(String str) {
         try {
             userInfoEntity = objectMapper.readValue(str, UserInfoEntity.class);
@@ -434,25 +434,25 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         }
     }
 
-    public UserInfoEntity getUserInfoEntity() {
-        return userInfoEntity;
-    }
-
     public void send(String msg) {
-        if (!NetworkUtils.isNetworkOpen(mContext)) {
-            Common.staticToast("网络断开,请检查网络");
-            return;
-        }
-        if (mClient == null) {
-            Common.staticToast("服务器连接断开,发送失败");
-            return;
-        }
-        if (mStatus == Status.CONNECTING) {
-            Common.staticToast("服务器连接中,稍后重试");
-            return;
-        }
-        if (mStatus == Status.CONNECTED) {
-            mClient.send(msg);
+        try {
+            if (!NetworkUtils.isNetworkOpen(mContext)) {
+                Common.staticToast("网络断开,请检查网络");
+                return;
+            }
+            if (mClient == null) {
+                Common.staticToast("服务器连接断开,发送失败");
+                return;
+            }
+            if (mStatus == Status.CONNECTING) {
+                Common.staticToast("服务器连接中,稍后重试");
+                return;
+            }
+            if (mStatus == Status.CONNECTED) {
+                mClient.send(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -536,12 +536,12 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                     jsonObject.put("to_role", "admin");
                     break;
             }
+            if (mClient != null && mStatus == Status.CONNECTED) {
+                LogUtil.httpLogW("Websocket 切换身份:" + jsonObject.toString());
+                mClient.send(jsonObject.toString());
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        if (mClient != null && mStatus == Status.CONNECTED) {
-            LogUtil.httpLogW("Websocket 切换身份:" + jsonObject.toString());
-            mClient.send(jsonObject.toString());
         }
     }
 
@@ -693,14 +693,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         buildeWebsocketClient();
     }
 
-    private Runnable mReconnectTask = () -> {
-        LogUtil.httpLogW("Websocket 尝试重连服务器...." + mStatus);
-        if (mStatus != Status.CONNECTING) {//不是正在重连状态
-            mStatus = Status.CONNECTING;
-        }
-        resetSocket();
-    };
-
     private void cancelReconnect() {
         reconnectCount = 0;
         mHandler.removeCallbacks(mReconnectTask);
@@ -776,5 +768,15 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
 
     public interface OnConnetListener {
         void onConneted();
+    }
+
+    public class MyTimerTask extends TimerTask {
+        public MyTimerTask() {
+        }
+
+        @Override
+        public void run() {
+            sendPin();
+        }
     }
 }

@@ -99,6 +99,7 @@ public class NewDiscoverFrag extends BaseFragment {
             ImmersionBar.with(this).fitsSystemWindows(true)
                     .statusBarColor(R.color.white)
                     .statusBarDarkFont(true, 0.2f)
+//                    .keyboardEnable(true)
                     .init();
         }
     }

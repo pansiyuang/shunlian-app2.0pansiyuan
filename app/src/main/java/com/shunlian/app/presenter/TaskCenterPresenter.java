@@ -3,7 +3,10 @@ package com.shunlian.app.presenter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.provider.Settings;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 
@@ -30,6 +33,7 @@ import com.shunlian.app.ui.new_user.NewUserPageActivity;
 import com.shunlian.app.ui.setting.PersonalDataAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ITaskCenterView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -241,10 +245,44 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
-                Common.staticToast(entity.message);
+                if (!Common.isNotificationEnabled(context)) {
+                    notifyTip();
+                }else {
+                    Common.staticToast(entity.message);
+                }
             }
         });
 
+    }
+
+    private void notifyTip() {
+        Dialog dialog_hint = new Dialog(context, R.style.popAd);
+        dialog_hint.setContentView(R.layout.dialog_egg_hint);
+        NewTextView ntv_btn = dialog_hint.findViewById(R.id.ntv_btn);
+        NewTextView ntv_desc = dialog_hint.findViewById(R.id.ntv_desc);
+        NewTextView ntv_title = dialog_hint.findViewById(R.id.ntv_title);
+        MyImageView miv_close = dialog_hint.findViewById(R.id.miv_close);
+        ntv_desc.setText("“通知管理”-“允许通知”开启");
+        miv_close.setVisibility(View.VISIBLE);
+        ntv_title.setBackgroundResource(R.mipmap.image_renwu_cg04);
+        ntv_title.setTextSize(18);
+        int i = TransformUtil.dip2px(context, 20);
+        ntv_title.setPadding(i,0,i,0);
+        ntv_title.setText("第一时间获取最新节日大促、平台活动和优惠福利消息");
+        ntv_desc.setVisibility(View.VISIBLE);
+        ntv_btn.setText("立即开启");
+        ntv_btn.setOnClickListener(view -> {
+            try {
+                Uri packageURI = Uri.parse("package:" + "com.shunlian.app");
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                context.startActivity(new Intent(Settings.ACTION_SETTINGS));
+            }
+            dialog_hint.dismiss();
+        });
+        miv_close.setOnClickListener(v -> dialog_hint.dismiss());
+        dialog_hint.show();
     }
 
     public void everyDayGiveEgg() {
@@ -521,6 +559,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
                 iView.setGoldEggsCount(data.account_eggs);
                 if (current_task_state == DAILY_TASK)
                     updateItem(0,"1");
+                initApis();
             }
         });
     }
@@ -745,4 +784,5 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
             }
         });
     }
+
 }

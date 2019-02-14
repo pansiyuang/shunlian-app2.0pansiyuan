@@ -1270,7 +1270,7 @@ public interface ApiService {
      * @param map
      * @return
      */
-    @GET("discovery/nice/commentList")
+    @GET("discovery/comment/list")
     Call<BaseEntity<FindCommentListEntity>> findcommentList(@QueryMap Map<String, String> map);
 
     /**
@@ -1278,8 +1278,8 @@ public interface ApiService {
      *
      * @return
      */
-    @POST("discovery/user/comment")
-    Call<BaseEntity<UseCommentEntity>> sendComment(@Body RequestBody body);
+    @POST("discovery/comment/save")
+    Call<BaseEntity<FindCommentListEntity.ItemComment>> sendComment(@Body RequestBody body);
 
     /**
      * 推荐关注
@@ -1291,12 +1291,12 @@ public interface ApiService {
     Call<BaseEntity<FindSelectShopEntity>> recommendFollow(@QueryMap Map<String, String> map);
 
     /**
-     * 评论详情
+     * 发现评论详情
      *
      * @param map
      * @return
      */
-    @GET("discovery/nice/commentDetail")
+    @GET("discovery/comment/info")
     Call<BaseEntity<CommentDetailEntity>> commentDetail(@QueryMap Map<String, String> map);
 
     /**
@@ -1309,22 +1309,31 @@ public interface ApiService {
     Call<BaseEntity<GuanzhuEntity>> foucsHome(@QueryMap Map<String, String> map);
 
     /**
-     * 点赞
+     * 发现点赞
      *
-     * @param map
+     * @param body
      * @return
      */
-    @GET("discovery/user/likeCommentOrReply")
-    Call<BaseEntity<CommonEntity>> pointFabulous(@QueryMap Map<String, String> map);
+    @POST("discovery/comment/like")
+    Call<BaseEntity<CommonEntity>> pointFabulous(@Body RequestBody body);
 
     /**
      * 删除评论
      *
-     * @param map
+     * @param body
      * @return
      */
-    @GET("discovery/user/deleteComment")
-    Call<BaseEntity<EmptyEntity>> delComment(@QueryMap Map<String, String> map);
+    @POST("discovery/comment/delete")
+    Call<BaseEntity<FindCommentListEntity.ItemComment>> delComment(@Body RequestBody body);
+
+    /**
+     * 白名单会员撤回已审核评论
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/comment/retract")
+    Call<BaseEntity<CommonEntity>> retractComment(@Body RequestBody body);
 
     /**
      * 导航信息
@@ -2073,7 +2082,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("discovery/user/getDiscoveryUnreadCount")
+    @GET("discovery/blogfront/getUnreadCount")
     Call<BaseEntity<CommonEntity>> getDiscoveryUnreadCount(@QueryMap Map<String, String> map);
 
     /**
@@ -2366,6 +2375,14 @@ public interface ApiService {
     Call<BaseEntity<AdEntity>> popup(@QueryMap Map<String, String> map);
 
     /**
+     * 是否显示签到引流
+     *
+     * @return
+     */
+    @GET("task/isShowSign")
+    Call<BaseEntity<ShowSignEntity>> isShowSign(@QueryMap Map<String, String> map);
+
+    /**
      * 专题页数据
      *
      * @return
@@ -2601,7 +2618,20 @@ public interface ApiService {
      */
     @GET("member/register/codeInfo")
     Call<BaseEntity<MemberCodeListEntity>> codeInfo(@QueryMap Map<String, String> map);
-
+    /**
+     * 我的导师
+     * @param map
+     * @return
+     */
+    @GET("member/follower/myTeacher")
+    Call<BaseEntity<MemberTeacherEntity>> codeTeacherInfo(@QueryMap Map<String, String> map);
+    /**
+     * 设置永久不弹
+     * @param map
+     * @return
+     */
+    @GET("member/follower/neverPop")
+    Call<BaseEntity<EmptyEntity>> neverPop(@QueryMap Map<String, String> map);
     /**
      * 我还想要
      * @param map
@@ -2794,6 +2824,12 @@ public interface ApiService {
      */
     @GET("discovery/discoveryuser/praise")
     Call<BaseEntity<EmptyEntity>> praiseBlog(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取发表评论提示关键词
+     */
+    @GET("discovery/comment/getWord")
+    Call<BaseEntity<CommonEntity>> getWordList(@QueryMap Map<String, String> map);
 
     /**
      * 周达人榜
@@ -3097,6 +3133,33 @@ public interface ApiService {
     @POST("plusfree/checkoutOrder")
     Call<BaseEntity<PayOrderEntity>> plusfreePay(@Body RequestBody body);
 
+    /**
+     * 检查是否有上级
+     * @param map
+     * @return
+     */
     @GET("member/userinfo/checkBindShareidV2")
     Call<BaseEntity<CommonEntity>> checkBindShareidV2(@QueryMap Map<String, String> map);
+
+    /**
+     * 绑定导师
+     * @return
+     */
+    @POST("member/userinfo/bindShareidV2")
+    Call<BaseEntity<EmptyEntity>> bindShareidV(@Body RequestBody body);
+
+    /**
+     * 发现  评论 快捷驳回列表
+     * @param map
+     * @return
+     */
+    @GET("discovery/comment/checkSetList")
+    Call<BaseEntity<CommentRejectedEntity>> checkSetList(@QueryMap Map<String,String> map);
+
+    /**
+     * 白名单会员审核评论
+     * @return
+     */
+    @POST("discovery/comment/check")
+    Call<BaseEntity<CommonEntity>> commentCheck(@Body RequestBody body);
 }

@@ -1,9 +1,6 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +8,11 @@ import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
-import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.TaskHomeEntity;
 import com.shunlian.app.ui.task.NewTaskCenterAct;
-import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import butterknife.BindView;

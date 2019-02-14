@@ -85,6 +85,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     private List<String> histotyTags = new ArrayList<>();
     private String currentKeyWord;
     private String currentFlag;
+    private String type, itemId;
     private boolean isShowHotSearch;
     private PromptDialog promptDialog;
     private String save_goods_history;
@@ -114,6 +115,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         context.startActivity(intent);
     }
 
+    public static void startAct(Activity context, String keyWord, String flag, String type, String item_id) {//新增跳转类型
+        Intent intent = new Intent(context, SearchGoodsActivity.class);
+        intent.putExtra("keyword", keyWord);
+        intent.putExtra("flag", flag);
+        intent.putExtra("type", type);
+        intent.putExtra("item_id", item_id);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_search_goods;
@@ -126,6 +136,8 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         Intent intent = getIntent();
         currentKeyWord = intent.getStringExtra("keyword");
         currentFlag = intent.getStringExtra("flag");
+        type = intent.getStringExtra("type");
+        itemId = intent.getStringExtra("item_id");
         isShowHotSearch = intent.getBooleanExtra("isShowHotSearch", true);
         presenter = new SearchGoodsPresenter(this, this);
 
@@ -133,7 +145,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             presenter.getSearchTag();
         }
 
-        if ("sortFrag".equals(currentFlag)) {
+        if ("sortFrag".equals(currentFlag) || "FirstPageFrag".equals(currentFlag)) {
             edt_goods_search.setHint(currentKeyWord);
         } else {
             if (!isEmpty(currentKeyWord)) {
@@ -224,7 +236,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         edt_goods_search.addTextChangedListener(this);
         edt_goods_search.setOnEditorActionListener((v, actionId, event) -> {
             String text = edt_goods_search.getText().toString();
-            if ("sortFrag".equals(currentFlag) && isEmpty(text)) {
+            if ("sortFrag".equals(currentFlag) && isEmpty(text) || "FirstPageFrag".equals(currentFlag) && isEmpty(text)) {
                 text = edt_goods_search.getHint().toString();
             }
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -240,10 +252,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                             SharedPrefUtil.saveCacheSharedPrf(save_shop_history, concat);
                         }
                         JosnSensorsDataAPI.isHistory = false;
-                        if (currentKeyWord!=null){
-                            if(currentKeyWord.equals(text.toString())||text==null||text.toString().equals("")){
+                        if (currentKeyWord != null) {
+                            if (currentKeyWord.equals(text.toString()) || text == null || text.toString().equals("")) {
                                 JosnSensorsDataAPI.isRecommend = true;
-                            }else{
+                            } else {
                                 JosnSensorsDataAPI.isRecommend = false;
                             }
                         }
@@ -251,12 +263,12 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         finish();
                     }
                     return true;
-                } else if (text!=null){
+                } else if (text != null) {
                     JosnSensorsDataAPI.isHistory = false;
-                    if (currentKeyWord!=null){
-                        if(text==null||currentKeyWord.equals(text.toString())||text.toString().equals("")){
+                    if (currentKeyWord != null) {
+                        if (text == null || currentKeyWord.equals(text.toString()) || text.toString().equals("")) {
                             JosnSensorsDataAPI.isRecommend = true;
-                        }else{
+                        } else {
                             JosnSensorsDataAPI.isRecommend = false;
                         }
                     }
@@ -320,10 +332,11 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 TextView tv = view.findViewById(R.id.tv_history_tag);
                 tv.setText(hotKeyword.label);
                 if (1 == hotKeyword.high_light) {
-                    tv.setBackgroundResource(R.drawable.rounded_corner_solid_ff5c7f_8px);
-                    tv.setTextColor(getColorResouce(R.color.white));
+                    tv.setBackgroundResource(R.drawable.rounded_corner_stroke_pink_4px);
+                    tv.setTextColor(getColorResouce(R.color.pink_color));
                 } else {
-                    tv.setBackgroundResource(R.drawable.rounded_corner_solid_f7_8px);
+//                    tv.setBackgroundResource(R.drawable.rounded_corner_solid_f7_8px);
+                    tv.setBackgroundResource(R.drawable.rounded_corner_stroke_85_4px);
                     tv.setTextColor(getColorResouce(R.color.text_gray2));
                 }
                 view.setOnClickListener(view1 -> {
@@ -333,6 +346,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         return;
                     }
                     if ("search".equals(hotky.type)) {
+                        type = null;
                         switchToJump(hotky.item_id);
                     } else {
                         Common.goGoGo(SearchGoodsActivity.this, hotky.type, hotky.item_id);
@@ -352,8 +366,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_goods_tag_layout, taglayout_history, false);
                 TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
                 tv.setText(tagStr);
-                view.setOnClickListener(v ->
-                        switchToJump(entity.history_list.get(position)));
+                view.setOnClickListener(v -> {
+                    type = null;
+                    switchToJump(entity.history_list.get(position));
+                });
                 return view;
             }
         };
@@ -422,6 +438,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     @Override
     public void afterTextChanged(Editable s) {
         if (!isEmpty(s)) {
+            type = null;
             if (isShowHotSearch) {
                 changeSearchMode(true);
                 presenter.getSearchTips(s.toString());
@@ -436,9 +453,13 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             return;
         }
         GoodsSearchParam param = new GoodsSearchParam();
-        if ("sortFrag".equals(currentFlag)) {
-            param.keyword = tag;
-            CategoryAct.startAct(SearchGoodsActivity.this, param);
+        if ("sortFrag".equals(currentFlag) || "FirstPageFrag".equals(currentFlag)) {
+            if (!isEmpty(type)) {
+                Common.goGoGo(baseAct, type, itemId);
+            } else {
+                param.keyword = tag;
+                CategoryAct.startAct(SearchGoodsActivity.this, param);
+            }
         } else if ("store_goods".equals(currentFlag)) {
             param.keyword = tag;
             GoodsSearchAct.startAct(SearchGoodsActivity.this, param);

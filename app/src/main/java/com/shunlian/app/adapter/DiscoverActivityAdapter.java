@@ -48,8 +48,7 @@ public class DiscoverActivityAdapter extends BaseRecyclerAdapter<DiscoverActivit
             if (isEmpty(activity.refer_member_num)) {
                 activityViewHolder.tv_join.setText("0人在参与");
             } else {
-                int memberCount = Integer.valueOf(activity.refer_member_num);
-                activityViewHolder.tv_join.setText(memberCount + "人在参与");
+                activityViewHolder.tv_join.setText(activity.refer_member_num + "人在参与");
                 activityViewHolder.tv_join.setVisibility(View.VISIBLE);
             }
 

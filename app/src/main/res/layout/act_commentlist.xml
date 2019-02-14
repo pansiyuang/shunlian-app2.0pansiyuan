@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -11,9 +13,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_status_bar"/>
+        <include layout="@layout/layout_status_bar" />
 
-        <include layout="@layout/toolbar"/>
+        <include layout="@layout/toolbar" />
 
         <View
             android:layout_width="match_parent"
@@ -22,34 +24,43 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recy_view"
+    <com.shunlian.app.widget.refresh.turkey.SlRefreshView
+        android:id="@+id/refreshview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_bottom"
-        android:layout_below="@+id/llayout_title"
-        android:layout_weight="1"
-        android:background="@color/white_ash"
-        android:overScrollMode="never" />
+        android:layout_above="@+id/layout_bottom"
+        android:layout_below="@+id/llayout_title">
 
-    <com.shunlian.app.widget.empty.NetAndEmptyInterface
-        android:id="@+id/nei_empty"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+        <com.shunlian.app.widget.empty.NetAndEmptyInterface
+            android:id="@+id/nei_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </com.shunlian.app.widget.refresh.turkey.SlRefreshView>
+
+    <include
+        android:id="@+id/layout_bottom"
+        layout="@layout/layout_comment_send"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:layout_above="@+id/ll_bottom"
-        android:layout_below="@+id/llayout_title"
-        android:layout_weight="1" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 
     <RelativeLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:paddingBottom="7.5dp"
         android:paddingLeft="10dp"
-        android:paddingTop="7.5dp">
+        android:paddingTop="7.5dp"
+        android:paddingBottom="7.5dp"
+        android:visibility="gone">
 
         <com.shunlian.app.widget.MyEditText
             android:id="@+id/met_text"
@@ -63,8 +74,8 @@
             android:maxHeight="60dp"
             android:minHeight="35dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:paddingTop="6dp"
+            android:paddingRight="10dp"
             android:paddingBottom="6dp"
             android:textColor="@color/new_text"
             android:textColorHint="@color/share_text"
@@ -72,10 +83,10 @@
 
         <RelativeLayout
             android:layout_width="65dp"
-            android:maxHeight="60dp"
-            android:minHeight="35dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_height="wrap_content">
+            android:maxHeight="60dp"
+            android:minHeight="35dp">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_icon"
@@ -96,12 +107,12 @@
                 android:layout_marginTop="2dp"
                 android:background="@drawable/rounded_rectangle_12px"
                 android:gravity="center"
-                android:paddingBottom="0.5dp"
-                android:paddingLeft="1dp"
-                android:paddingRight="1dp"
-                android:paddingTop="0.5dp"
                 android:minWidth="12dp"
                 android:minHeight="12dp"
+                android:paddingLeft="1dp"
+                android:paddingTop="0.5dp"
+                android:paddingRight="1dp"
+                android:paddingBottom="0.5dp"
                 android:text="1"
                 android:textColor="@color/white"
                 android:textSize="8sp" />
@@ -119,14 +130,14 @@
             android:text="发布"
             android:textColor="#BDBDBD"
             android:textSize="15sp"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
     </RelativeLayout>
 
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </RelativeLayout>

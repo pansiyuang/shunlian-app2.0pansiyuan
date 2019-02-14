@@ -19,7 +19,7 @@ public class CommonEntity {
     public List<CalendarEntity> calendar; //获取足迹日历形式信息接口
     public String num;  //可添加的商品数量接口
     public List<RefundDetailEntity.RefundDetail.Edit.Reason> reason_list;  //获取用户可选原因列表
-
+    public int count;  //未读数
     public String likes;  //已点赞的人数
     public List<String> five_member_likes;  //最新点赞头像列表
 
@@ -82,14 +82,23 @@ public class CommonEntity {
     public String prize;
     public String type;
     public String item_id;
-
     public String name;
+
+
 
     //发现未读消息统计
     public int praise_share;
     public int attention;
     public int notice;
     public int download;
+
+    //发现评论
+    public String comment_id;
+    public String reply_parent_comment_id;
+    public List<FindCommentListEntity.ItemComment> reply_result;
+    public int reply_count;
+    public int reply_status;
+    public List<String> list;
 
     @Override
     public String toString() {

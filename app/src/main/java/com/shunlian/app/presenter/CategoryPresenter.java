@@ -22,7 +22,7 @@ import retrofit2.Call;
  */
 
 public class CategoryPresenter extends BasePresenter<ICategoryView> {
-    public static final int PAGE_SIZE = 20;
+    public static final int PAGE_SIZE = 10;
     private GoodsSearchParam mParam;
 
     public CategoryPresenter(Context context, ICategoryView iView) {

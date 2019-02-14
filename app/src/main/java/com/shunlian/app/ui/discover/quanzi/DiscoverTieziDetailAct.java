@@ -20,6 +20,7 @@ import com.shunlian.app.adapter.TieziCommentAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
+import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.presenter.PDiscoverTieziDetail;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
@@ -189,19 +190,29 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     }
 
-    /**
-     * 软键盘处理
-     */
     @Override
-    public void showorhideKeyboard(String hint) {
-        setEdittextFocusable(true, met_text);
-        met_text.setHint(hint);
-        if (!isSoftShowing()) {
-            Common.showKeyboard(met_text);
-        } else {
-            Common.hideKeyboard(met_text);
-        }
+    public void showorhideKeyboard(FindCommentListEntity.ItemComment itemComment) {
+
     }
+
+    @Override
+    public void hideKeyboard() {
+
+    }
+
+//    /**
+//     * 软键盘处理
+//     */
+//    @Override
+//    public void showorhideKeyboard(String hint) {
+//        setEdittextFocusable(true, met_text);
+//        met_text.setHint(hint);
+//        if (!isSoftShowing()) {
+//            Common.showKeyboard(met_text);
+//        } else {
+//            Common.hideKeyboard(met_text);
+//        }
+//    }
 
     @Override
     protected void initListener() {

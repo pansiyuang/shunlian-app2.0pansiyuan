@@ -16,6 +16,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpArticleAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
+import com.shunlian.app.bean.MemberTeacherEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.ui.MessageActivity;
@@ -508,6 +509,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity = personalcenterEntity;
+        if (!isEmpty(personalcenterEntity.invite_code))
+            SharedPrefUtil.saveSharedUserString("invite_code", personalcenterEntity.invite_code);
         if (!isEmpty(personalcenterEntity.game_door)) {
             int picWidth = Common.getScreenWidth(baseActivity) - TransformUtil.dip2px(baseActivity, 20);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(picWidth, picWidth * 100 / 360);
@@ -767,6 +770,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void getUserId(String userId) {
+
+    }
+
+    @Override
+    public void teacherCodeInfo(MemberTeacherEntity memberTeacherEntity) {
 
     }
 

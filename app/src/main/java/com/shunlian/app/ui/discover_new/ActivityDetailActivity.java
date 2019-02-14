@@ -17,8 +17,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ActivityDetailAdapter;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.eventbus_bean.BlogCommentEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
+import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.presenter.ActivityDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.find_send.FindSendPictureTextAct;
@@ -31,6 +34,7 @@ import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
+import com.shunlian.app.widget.BlogCommentSendPopwindow;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
@@ -79,6 +83,8 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private PromptDialog promptDialog, plusDialog;
     private LottieAnimationView mAnimationView;
+    private String currentCommentBlogId;
+    private BlogCommentSendPopwindow mPopWindow;
 
     @Override
     protected int getLayoutId() {
@@ -168,12 +174,12 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 if (Common.isPlus()) {
                     EventBus.getDefault().postSticky(sendConfig);
                     SelectPicVideoAct.startAct(this,
-                            FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
+                            FindSendPictureTextAct.SELECT_PIC_REQUESTCODE, 9);
                 } else {
                     if (baseInfo.is_inner == 1) {
                         EventBus.getDefault().postSticky(sendConfig);
                         SelectPicVideoAct.startAct(this,
-                                FindSendPictureTextAct.SELECT_PIC_REQUESTCODE,9);
+                                FindSendPictureTextAct.SELECT_PIC_REQUESTCODE, 9);
                     } else {
                         initHintDialog();
                     }
@@ -182,6 +188,21 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
                 e.printStackTrace();
             }
         });
+
+        SoftKeyBoardListener.setListener(this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+                if (mPopWindow != null) {
+                    mPopWindow.dismiss();
+                }
+            }
+        });
+
         lay_refresh.setOnRefreshListener(() -> {
             mPresent.initPage();
             mPresent.getActivityDetail(true, currentId);
@@ -339,6 +360,12 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     }
 
     @Override
+    public void showCommentView(String blogId) {
+        currentCommentBlogId = blogId;
+        showPopupComment();
+    }
+
+    @Override
     public void shareGoodsSuccess(String blogId, String goodsId) {
         for (BigImgEntity.Blog blog : blogList) {
             if (blogId.equals(blog.id)) {
@@ -346,6 +373,21 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             }
         }
         mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+    }
+
+    @Override
+    public void replySuccess(BigImgEntity.CommentItem commentItem) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (currentCommentBlogId.equals(blog.id)) {
+                blog.comment_list.list.add(0, commentItem);
+                blog.comment_list.total++;
+                break;
+            }
+        }
+        Common.staticToasts(this, "评论成功", R.mipmap.icon_common_duihao);
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+        currentCommentBlogId = null;
+        mPopWindow.dismiss();
     }
 
     @Override
@@ -399,6 +441,41 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
         }
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(BlogCommentEvent event) {
+        switch (event.sendType) {
+            case BlogCommentEvent.ADD_TYPE:
+                insertComment(event.mComment, true);
+                break;
+            case BlogCommentEvent.DEL_TYPE:
+                insertComment(event.mComment, false);
+                break;
+        }
+    }
+
+    public void insertComment(FindCommentListEntity.ItemComment insertItem, boolean isAdd) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (insertItem.discovery_id.equals(blog.id)) {
+                blog.comment_list.list.clear();
+                if (isAdd) {
+                    for (FindCommentListEntity.ItemComment item : insertItem.comment_list) {
+                        blog.comment_list.list.add(new BigImgEntity.CommentItem(item));
+                    }
+                    blog.comment_list.total = insertItem.comment_count;
+                } else {
+                    for (FindCommentListEntity.ItemComment item : insertItem.reply_result) {
+                        blog.comment_list.list.add(new BigImgEntity.CommentItem(item));
+                    }
+                    blog.comment_list.total = insertItem.reply_count;
+                }
+                break;
+            }
+        }
+        mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+    }
+
+
     public void initHintDialog() {
         if (plusDialog == null) {
             plusDialog = new PromptDialog(this);
@@ -411,6 +488,19 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
             plusDialog.dismiss();
             H5X5Act.startAct(ActivityDetailActivity.this, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5X5Act.MODE_SONIC);
         }, getStringResouce(R.string.errcode_cancel), view -> plusDialog.dismiss()).show();
+    }
+
+    private void showPopupComment() {
+        if (mPopWindow == null) {
+            mPopWindow = new BlogCommentSendPopwindow(this);
+            mPopWindow.setOnPopClickListener((String content) -> {
+                if (isEmpty(currentCommentBlogId)) {
+                    return;
+                }
+                mPresent.sendComment(content, "", currentCommentBlogId, "0");
+            });
+        }
+        mPopWindow.show();
     }
 
     @Override

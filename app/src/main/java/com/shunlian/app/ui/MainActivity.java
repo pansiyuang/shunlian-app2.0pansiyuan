@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.SingleImgAdapterV2;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -31,10 +30,14 @@ import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
+import com.shunlian.app.bean.ShowSignEntity;
 import com.shunlian.app.bean.ShowVoucherSuspension;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
+import com.shunlian.app.eventbus_bean.MeLocationEvent;
+import com.shunlian.app.eventbus_bean.MessageReadSuccessEvent;
+import com.shunlian.app.eventbus_bean.RefreshBlogListEvent;
 import com.shunlian.app.eventbus_bean.SuspensionRefresh;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -58,7 +61,6 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HighLightKeyWordUtil;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -67,6 +69,7 @@ import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.app.widget.DiscoveryGuideView;
+import com.shunlian.app.widget.MeGuideView;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -96,6 +99,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     @BindView(R.id.mtv_message_count)
     public MyTextView mtv_message_count;
     public AdEntity adEntity;
+    public ShowSignEntity adEntitys;
     @BindView(R.id.fl_main)
     MyFrameLayout fl_main;
     @BindView(R.id.ll_tab_main_page)
@@ -163,10 +167,12 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private int[] currentLocation;
     private int currentImgWidth;
     private boolean isShowGuide = false;
+    private boolean isShowGuideMe = false;
     @BindView(R.id.ntv_uuid)
     NewTextView ntv_uuid;
     private String currentDiscoverFlag;
     private PromptDialog promptDialog;
+    public static boolean refreshBlogList = false;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -205,18 +211,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         } else {
             initMessage();
         }
+//        if (Common.isAlreadyLogin()){
+        pMain.isShowSign();
+//        }else {
+//            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
+//        }
     }
 
     public void initMessage() {
-        if (Common.isAlreadyLogin()) {
-            pMain.getDiscoveryUnreadCount();
-            view_message.setVisibility(View.GONE);
-        } else {
-            if (discoverFrag != null)
-//                discoverFrag.initMessage(null);
-                mtv_message_count.setVisibility(View.GONE);
-            view_message.setVisibility(View.VISIBLE);
-        }
+        pMain.getDiscoveryUnreadCount();
     }
 
     /**
@@ -256,6 +259,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 public void initDialogFinish() {
                     if (updateDialogV.updateDialog == null) {
                         pMain.getPopAD();
+//                        if (Common.isAlreadyLogin()){
+                            pMain.isShowSign();
+//                        }else {
+//                            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
+//                        }
                     }
                 }
             };
@@ -272,7 +280,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //            gone(ll_tab_sort);
 //        }
         loadUserInfo();
-        }
+    }
 
 
 
@@ -350,6 +358,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (MyOnClickListener.isFastClick()) {
             return;
         }
+        //春节活动
         if (view.getId() == R.id.ll_tab_main_page) {
             miv_first.setVisibility(View.VISIBLE);
             miv_tab_main.setVisibility(View.GONE);
@@ -367,10 +376,13 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 view.animate().scaleX(1).scaleY(1).setDuration(300).start();
             }
         }
-        if (view.getId() == R.id.ll_tab_discover) {
-            view_message.setVisibility(View.GONE);
-//            mtv_message_count.setVisibility(View.GONE);
+        //春节活动
 
+        if (view.getId() == R.id.ll_tab_discover) {
+            mtv_message_count.setVisibility(View.GONE);
+            if(data!=null) {
+                data.count = 0;
+            }
             try {
                 if (discoverFrag != null && discoverFrag.isVisible()) {
 
@@ -576,6 +588,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //            } else {
 //                discoverFrag.initMessage(null);
 //            }
+            EventBus.getDefault().post(new RefreshBlogListEvent(refreshBlogList));
         }
         switchContent(discoverFrag);
         pageIndex = 2;
@@ -683,6 +696,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        }
         //        双十一活动
 
+        //春节活动
         miv_tab_main.setImageResource(R.mipmap.tab_1_n);
         tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
 
@@ -698,91 +712,67 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         miv_person_center.setImageResource(R.mipmap.tab_5_n);
         tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
 
-        miv_first.setVisibility(View.GONE);
-        miv_tab_main.setVisibility(View.VISIBLE);
-        tv_tab_main.setVisibility(View.VISIBLE);
-
-        switch (pageIndex) {
-            case 0:
-                miv_first.setVisibility(View.VISIBLE);
-                miv_tab_main.setVisibility(View.GONE);
-                tv_tab_main.setVisibility(View.GONE);
-
-//                miv_tab_main.setImageResource(getResources().getDrawable(R.mipmap.tab_1_h));
-//                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
-                break;
-            case 1:
-                miv_tab_sort.setImageResource(R.mipmap.tab_2_h);
-                tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
-                break;
-            case 2:
-                miv_tab_discover.setImageResource(R.mipmap.tab_03);
-                tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
-                break;
-            case 3:
-                miv_shopping_car.setImageResource(R.mipmap.tab_4_h);
-                tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
-                break;
-            case 4:
-                miv_person_center.setImageResource(R.mipmap.tab_5_h);
-                tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
-                break;
-        }
-//        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
-//        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
-
-        miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
-        tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
-
-        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_n));
-        tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
-
-        miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_n));
-        tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
-
-        miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_n));
-        tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
+        //春节活动
 
         miv_first.setVisibility(View.GONE);
         miv_tab_main.setVisibility(View.VISIBLE);
         tv_tab_main.setVisibility(View.VISIBLE);
-        mtv_message_count.setVisibility(View.GONE);
+
+//        mtv_message_count.setVisibility(View.GONE);
 
         RelativeLayout.LayoutParams tvParams = (RelativeLayout.LayoutParams) tv_tab_discover.getLayoutParams();
         tvParams.setMargins(0, TransformUtil.dip2px(this, 6), 0, TransformUtil.dip2px(this, 4));
 
         RelativeLayout.LayoutParams ivParams = (RelativeLayout.LayoutParams) miv_tab_discover.getLayoutParams();
         ivParams.setMargins(0, TransformUtil.dip2px(this, 8), 0, 0);
+        //春节活动
         switch (pageIndex) {
             case 0:
                 miv_first.setVisibility(View.VISIBLE);
                 miv_tab_main.setVisibility(View.GONE);
                 tv_tab_main.setVisibility(View.GONE);
-
-//                miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_h));
-//                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
                 break;
             case 1:
-                miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_h));
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
+                miv_tab_sort.setImageResource(R.mipmap.tab_2_h);
                 tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 2:
-                miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_03));
+                miv_tab_discover.setImageResource(R.mipmap.tab_03);
                 tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
-
                 ivParams.setMargins(0, TransformUtil.dip2px(this, -12), 0, 0);
                 tvParams.setMargins(0, 0, 0, 0);
-                mtv_message_count.setVisibility(View.GONE);
                 break;
             case 3:
-                miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_h));
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
+                miv_shopping_car.setImageResource(R.mipmap.tab_4_h);
                 tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 4:
-                miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_h));
+                if(data!=null&&data.count>0) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
+                miv_person_center.setImageResource(R.mipmap.tab_5_h);
                 tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
         }
+        //春节活动
+
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -936,6 +926,19 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         commondDialog.parseCommond();
     }
 
+    @Override
+    public void setADs(ShowSignEntity data) {
+        adEntitys=data;
+        if ("1".equals(data.is_show) && mainPageFrag != null) {
+            FirstPageFrag.miv_entrys.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImageChang(this, FirstPageFrag.miv_entrys, data.pic);
+//            GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, "http://i.imgur.com/GP1m9.png");//apng图片不支持
+//            GlideUtils.getInstance().loadImageZheng(this, FirstPageFrag.miv_entry, "https://upload-images.jianshu.io/upload_images/2625875-9a044086b7de0a45.gif");
+        } else {
+            FirstPageFrag.miv_entrys.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     public void setContent(GetDataEntity data) {
@@ -1008,13 +1011,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void setDiscoveryUnreadCount(CommonEntity data) {
         this.data = data;
         if (mtv_message_count != null) {
-            mtv_message_count.setVisibility(View.GONE);
-            if (data.total > 99) {
+            if (data.count > 99) {
+                mtv_message_count.setVisibility(View.VISIBLE);
                 mtv_message_count.setText("99+");
-            } else if (data.total <= 0) {
+            } else if (data.count <= 0) {
                 mtv_message_count.setVisibility(View.GONE);
             } else {
-                mtv_message_count.setText(String.valueOf(data.total));
+                mtv_message_count.setVisibility(View.VISIBLE);
+                mtv_message_count.setText(String.valueOf(data.count));
             }
         }
         if (discoverFrag != null) {
@@ -1050,6 +1054,37 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void messageReadSuccessEvent(MessageReadSuccessEvent event) {
+        if(event.isSuccess){
+            initMessage();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshMeData(MeLocationEvent event) {
+        isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
+        currentLocation = event.location;
+        currentImgWidth = event.imgWidth;
+        if (currentLocation != null && currentImgWidth != 0 && !isShowGuideMe) {
+            showGuideViewMe();
+        }
+    }
+
+    public void showGuideViewMe() {
+        currentLocation[0] = currentLocation[0] + currentImgWidth / 2;
+        currentLocation[1] = currentLocation[1] + currentImgWidth / 2;
+        MeGuideView guide_view = new MeGuideView(this);
+        guide_view.setOnClickListener(v -> {
+            guide_view.setVisibility(View.GONE);
+            SharedPrefUtil.saveCacheSharedPrfBoolean("showGuideMe", true);
+        });
+        guide_view.setImageLocation(currentLocation);
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        guide_view.setLayoutParams(layoutParams);
+        decorView.addView(guide_view);
+    }
 
     public void showGuideView() {
         int[] location2 = new int[2];
@@ -1111,6 +1146,15 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             pMain.showVoucherSuspension();
         }
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(DefMessageEvent event) {
+        if (event.loginSuccess) {
+            refreshBlogList = true;
+        }
+    }
+
     /**
      * 处理网络请求
      */
@@ -1119,6 +1163,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             return;
         }
         if (pMain!=null)
-        pMain.loginUserInfo();
+            pMain.loginUserInfo();
     }
 }

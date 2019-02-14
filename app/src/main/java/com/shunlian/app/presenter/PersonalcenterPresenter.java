@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.MemberTeacherEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -75,6 +77,51 @@ public class PersonalcenterPresenter extends BasePresenter<IPersonalView> {
             }
         });
     }
+
+    /**
+     * 我的导师
+     */
+    public void codeTeacherDetail(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<MemberTeacherEntity>>
+                baseEntityCall = getApiService().codeTeacherInfo(map);
+
+        getNetData(false,baseEntityCall,new SimpleNetDataCallback
+                <BaseEntity<MemberTeacherEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<MemberTeacherEntity> entity) {
+                super.onSuccess(entity);
+                iView.teacherCodeInfo(entity.data);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.teacherCodeInfo(null);
+            }
+        });
+    }
+
+
+    /**
+     *点击提醒
+     */
+    public void neverPop(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>>
+                baseEntityCall = getApiService().neverPop(map);
+
+        getNetData(false,baseEntityCall,new SimpleNetDataCallback
+                <BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+            }
+        });
+    }
+
 
     @Override
     protected void initApi() {

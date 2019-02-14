@@ -1,6 +1,9 @@
 package com.shunlian.app.ui.fragment;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -25,7 +28,10 @@ import com.shunlian.app.adapter.FuWuAdapter;
 import com.shunlian.app.adapter.ShangAdapter;
 import com.shunlian.app.adapter.ZiChanAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.MemberTeacherEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
+import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
+import com.shunlian.app.eventbus_bean.MeLocationEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.MessageActivity;
@@ -37,6 +43,7 @@ import com.shunlian.app.ui.balance.BalanceDetailAct;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.member.MemberPageActivity;
+import com.shunlian.app.ui.member.ShoppingGuideActivity;
 import com.shunlian.app.ui.my_profit.DetailOrderRecordAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
@@ -44,6 +51,7 @@ import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.setting.PersonalDataAct;
 import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.CommonDialogUtil;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -95,6 +103,8 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     ScrollTextView ntv_name;
     @BindView(R.id.ntv_yue)
     NewTextView ntv_yue;
+    @BindView(R.id.ntv_credit)
+    NewTextView ntv_credit;
     @BindView(R.id.ntv_title)
     NewTextView ntv_title;
     @BindView(R.id.ntv_left)
@@ -126,11 +136,11 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @BindView(R.id.miv_pluss)
     MyImageView miv_pluss;
     @BindView(R.id.miv_kefu)
-    MyImageView miv_kefu;
+    MyTextView miv_kefu;
     @BindView(R.id.miv_levels)
     MyImageView miv_levels;
     @BindView(R.id.miv_shezhi)
-    MyImageView miv_shezhi;
+    MyTextView miv_shezhi;
     @BindView(R.id.miv_huiyuan)
     MyImageView miv_huiyuan;
     @BindView(R.id.rl_more)
@@ -187,6 +197,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     @BindView(R.id.line_anim)
     LinearLayout line_anim;
 
+    @BindView(R.id.mtv_hint)
+    MyTextView mtv_hint;
+
     public PersonalcenterPresenter personalcenterPresenter;
     private PersonalcenterEntity personalcenterEntity;
     private String invite_code;
@@ -198,6 +211,12 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     private String managerUrl;
     private PromptDialog promptDialog;
     private String currentChatUserId;
+
+    @BindView(R.id.miv_daoshi)
+    MyTextView miv_daoshi;
+    private boolean isShowGuideMe=false;//是否显示过引导 false,没有显示过
+    private CommonDialogUtil commonDialogUtil;
+    private boolean isHidden = false;
     //    private Timer outTimer;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -217,6 +236,15 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+        } else {
+
+        }
+    }
+
+    @Override
     public void onResume() {
         if (!isHidden()) {
             getPersonalcenterData();
@@ -230,18 +258,27 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             }
             messageCountManager.setOnGetMessageListener(this);
         }
+        isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
+        if(!isHidden&&Common.isAlreadyLogin()&&isShowGuideMe&&personalcenterPresenter!=null){
+            personalcenterPresenter.codeTeacherDetail();
+        }
         super.onResume();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        this.isHidden = hidden;
         if (!hidden) {
 //            ImmersionBar.with(this).fitsSystemWindows(true)
 //                    .statusBarColor(R.color.white)
 //                    .statusBarDarkFont(true, 0.2f)
 //                    .init();
             ImmersionBar.with(this).titleBar(rLayout_title, false).init();
+            isShowGuideMe = SharedPrefUtil.getCacheSharedPrfBoolean("showGuideMe", false);
+            if(Common.isAlreadyLogin()&&isShowGuideMe&&personalcenterPresenter!=null){
+                personalcenterPresenter.codeTeacherDetail();
+            }
         }
     }
 
@@ -251,6 +288,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         ImmersionBar.with(this).titleBar(rLayout_title, false).init();
         view_bg.setAlpha(0);
         ntv_names.setAlpha(0);
+        commonDialogUtil = new CommonDialogUtil(baseActivity);
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
         int picWidth = Common.getScreenWidth((Activity) baseActivity) - TransformUtil.dip2px(baseActivity, 26);
         int height = ((picWidth/2) * 80)/ 165;
@@ -267,6 +305,15 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             mrlayout_plus.setVisibility(View.GONE);
             line_anim.setTranslationY(0);
         }
+
+        miv_daoshi.post(() -> {
+            int[] location = new int[2];
+            miv_daoshi.getLocationInWindow(location);
+            int imgWidth = miv_daoshi.getHeight();
+            EventBus.getDefault().post(new MeLocationEvent(location, imgWidth));
+
+        });
+
 
     }
 
@@ -312,6 +359,7 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         mllayout_shouhuo.setOnClickListener(this);
         miv_huiyuan.setOnClickListener(this);
         ntv_left.setOnClickListener(this);
+        miv_daoshi.setOnClickListener(this);
         csv_out.setOnScrollListener(new CompileScrollView.OnScrollListener() {
             @Override
 //            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -333,51 +381,55 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
         csv_out.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
-                    LogUtil.longW(csv_out.getScrollY()+"");
-                    if(csv_out.getScrollY()==0) {
-                        int action = event.getAction();
-                        switch (action) {
-                            case MotionEvent.ACTION_DOWN:
-                                lastY = event.getY();
-                                isDownUp = true;
-                                break;
-                            case MotionEvent.ACTION_UP:
+                try {
+                    if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
+                        LogUtil.longW(csv_out.getScrollY() + "");
+                        if (csv_out.getScrollY() == 0) {
+                            int action = event.getAction();
+                            switch (action) {
+                                case MotionEvent.ACTION_DOWN:
+                                    lastY = event.getY();
+                                    isDownUp = true;
+                                    break;
+                                case MotionEvent.ACTION_UP:
+                                    spring.removeAllListeners();
+                                    isDownUp = false;
+                                    lastY = 0;
+                                    handler.sendEmptyMessage(0);
+                                    break;
+                                case MotionEvent.ACTION_MOVE:
+                                    if (isDownUp) {
+                                        float nowY = event.getY();
+                                        if (nowY - lastY > 0) {
+                                            int deltaY = (int) ((nowY - lastY) * lastY_damping);
+                                            if (line_anim.getTranslationY() < DensityUtil.dip2px(baseContext, 65)) {
+                                                line_anim.setTranslationY(deltaY);
+                                            }
+                                        } else {
+                                            line_anim.setTranslationY(0);
+                                        }
+                                    } else {
+                                        lastY = event.getY();
+                                        isDownUp = true;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                            return false;
+                        } else {
+                            if (line_anim.getTranslationY() != 0 && isDownUp) {
                                 spring.removeAllListeners();
                                 isDownUp = false;
                                 lastY = 0;
                                 handler.sendEmptyMessage(0);
-                                break;
-                            case MotionEvent.ACTION_MOVE:
-                                if (isDownUp) {
-                                    float nowY = event.getY();
-                                    if (nowY - lastY > 0) {
-                                        int deltaY = (int) ((nowY - lastY) * lastY_damping);
-                                        if (line_anim.getTranslationY() < DensityUtil.dip2px(baseContext, 65)) {
-                                              line_anim.setTranslationY(deltaY);
-                                        }
-                                    } else {
-                                        line_anim.setTranslationY(0);
-                                    }
-                                } else {
-                                    lastY = event.getY();
-                                    isDownUp = true;
-                                }
-                                break;
-                            default:
-                                break;
+                            }
+                            return false;
                         }
-                        return false;
-                    }else{
-                        if(line_anim.getTranslationY()!=0&&isDownUp){
-                            spring.removeAllListeners();
-                            isDownUp = false;
-                            lastY = 0;
-                            handler.sendEmptyMessage(0);
-                        }
+                    } else {
                         return false;
                     }
-                }else{
+                } catch (Exception e) {
                     return false;
                 }
             }
@@ -444,8 +496,18 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
                 }, 1000);
             }
         }
+//        personalcenterEntity.note="尊敬的客户，您好：你的账户因违规操作已被暂停部分服务！暂停时间：2018.01.04 18:00至2018.04.04 18:00。" +
+//                "在此期间将暂停小店锁粉和小店收益。如需帮助，请联系平台客服处理！";
+        if (isEmpty(personalcenterEntity.note)) {
+            gone(mtv_hint);
+        } else {
+            visible(mtv_hint);
+            mtv_hint.setText(personalcenterEntity.note);
+        }
 
         SharedPrefUtil.saveSharedUserString("plus_role", personalcenterEntity.plus_role);
+        if (!isEmpty(personalcenterEntity.invite_code))
+            SharedPrefUtil.saveSharedUserString("invite_code", personalcenterEntity.invite_code);
         this.personalcenterEntity = personalcenterEntity;
         String avatar = SharedPrefUtil.getSharedUserString("personal_avatar", "null");
         if (!equals(avatar, personalcenterEntity.avatar) || miv_avar.getDrawable() == null) {
@@ -504,6 +566,20 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             ntv_yue.setVisibility(View.VISIBLE);
         }else {
             ntv_yue.setVisibility(View.GONE);
+        }
+        if (personalcenterEntity.credit!=null&&!isEmpty(personalcenterEntity.credit.title)){
+            ntv_credit.setText(personalcenterEntity.credit.title);
+            ntv_credit.setText(personalcenterEntity.credit.title+"\n"+personalcenterEntity.credit.value);
+            ntv_credit.setVisibility(View.VISIBLE);
+            ntv_credit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (personalcenterEntity.credit.url!=null)
+                    Common.goGoGo(baseActivity,personalcenterEntity.credit.url.type,personalcenterEntity.credit.url.item_id);
+                }
+            });
+        }else {
+            ntv_credit.setVisibility(View.GONE);
         }
         isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY, true);
         changeState();
@@ -731,6 +807,9 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
             case R.id.ntv_name:
                 ntv_name.startScroll();
                 break;
+            case R.id.miv_daoshi:
+                ShoppingGuideActivity.startAct(baseActivity,null);
+                break;
         }
     }
     public SpannableStringBuilder formatNumber(String number) {
@@ -784,6 +863,69 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
 
     }
 
+    @Override
+    public void teacherCodeInfo(MemberTeacherEntity memberTeacherEntity) {
+        if(memberTeacherEntity!=null&&memberTeacherEntity.type!=null){
+            if("0".equals(memberTeacherEntity.type)){
+                return;
+            }
+            if("2".equals(memberTeacherEntity.type)&&memberTeacherEntity.follow_from!=null&&memberTeacherEntity.follow_from.weixin!=null){
+                commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.follow_from.weixin, true, v -> {
+                    Common.staticToastAct(baseActivity,"复制成功");
+                    Common.copyTextNoToast(baseActivity,memberTeacherEntity.follow_from.weixin);
+                    personalcenterPresenter.neverPop();
+                    handlerWenxin.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            handlerWenxin.sendEmptyMessage(0);
+                        }
+                    },50);
+                }, v -> {
+                    commonDialogUtil.dialog_me_teach.dismiss();
+                    personalcenterPresenter.neverPop();
+                });
+            }else if("1".equals(memberTeacherEntity.type)&&memberTeacherEntity.system_weixin!=null&&memberTeacherEntity.system_weixin.weixin!=null){
+                commonDialogUtil.meTeachCommonDialog(memberTeacherEntity.system_weixin.weixin, false, v -> {
+                    Common.staticToastAct(baseActivity,"复制成功");
+                    Common.copyTextNoToast(baseActivity,memberTeacherEntity.system_weixin.weixin);
+                    personalcenterPresenter.neverPop();
+                    handlerWenxin.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            handlerWenxin.sendEmptyMessage(0);
+                        }
+                    },50);
+                }, v -> {
+                    commonDialogUtil.dialog_me_teach.dismiss();
+                    personalcenterPresenter.neverPop();
+                });
+            }
+        }
+    }
+
+    private Handler handlerWenxin = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            getWechatApi();
+        }
+    };
+        /**
+         * 跳转到微信
+         */
+        private void getWechatApi(){
+            try {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                ComponentName cmp = new ComponentName("com.tencent.mm","com.tencent.mm.ui.LauncherUI");
+                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setComponent(cmp);
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                // TODO: handle exception
+                Common.staticToastAct(baseActivity,"检查到您手机没有安装微信，请安装后使用该功能");
+            }
+    }
 
     @Override
     public void OnLoadFail() {

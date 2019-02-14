@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.category;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -25,14 +24,12 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.presenter.CategoryPresenter;
-import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JosnSensorsDataAPI;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
@@ -51,7 +48,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.shunlian.app.ui.discover.other.ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH;
 import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
 
 /**
@@ -117,6 +113,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     private String currentMaxPrice = "";
     private String currentMinPrice = "";
     private List<GoodsSearchParam.Attr> currentAttrData = new ArrayList<>();
+    private List<String> mKeywords = new ArrayList<>();
     private boolean hasChange;
     private int totalPage;
     private int currentPage;
@@ -164,8 +161,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         linearLayoutManager = new LinearLayoutManager(this);
         gridLayoutManager = new GridLayoutManager(this, 2);
 
-        singleAdapter = new SingleCategoryAdapter(this, true, mGoods, mRefStore);
-        doubleAdapter = new DoubleCategoryAdapter(this, true, mGoods, mRefStore);
+        singleAdapter = new SingleCategoryAdapter(this, true, mGoods, mRefStore, mKeywords);
+        doubleAdapter = new DoubleCategoryAdapter(this, true, mGoods, mRefStore, mKeywords);
 
         recycle_category.setNestedScrollingEnabled(false);
         popupWindow = new CategorySortPopWindow(this);
@@ -177,30 +174,41 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         setListMode(currentMode);
 
         singleAdapter.setOnItemClickListener((view, position) -> {
-            int mposition;
-            if (mRefStore == null) {
-                mposition = position;
-            } else {
-                mposition = position - 1;
-            }
-            if (mposition < 0)
-                return;
-            GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
-            if (!isEmpty(goods.id)) {
-                GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+            try{
+                int mposition;
+                if (mRefStore == null && isEmpty(mKeywords)) {
+                    mposition = position;
+                } else {
+                    mposition = position - 1;
+                }
+                if (mposition < 0||mposition>=mGoods.size())
+                    return;
+                GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
+                if (!isEmpty(goods.id)) {
+                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+                }
+            }catch (Exception e){
+
             }
         });
         doubleAdapter.setOnItemClickListener((view, position) -> {
-            int mposition;
-            if (mRefStore == null) {
-                mposition = position;
-            } else {
-                mposition = position - 1;
+            try{
+                int mposition;
+                if (mRefStore == null && isEmpty(mKeywords)) {
+                    mposition = position;
+                } else {
+                    mposition = position - 1;
+                }
+                if (mposition < 0||mposition>=mGoods.size())
+                    return;
+                GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
+                if (!isEmpty(goods.id)) {
+                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+                }
+            }catch (Exception e){
+
             }
-            GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
-            if (!isEmpty(goods.id)) {
-                GoodsDetailAct.startAct(CategoryAct.this, goods.id);
-            }
+
         });
 
         if (Common.isAlreadyLogin()) {
@@ -295,9 +303,17 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         totalPage = allPage;
         if (currentPage == 1) {
             mGoods.clear();
-            mRefStore = goodsEntity.ref_store;
-            singleAdapter.setStoreData(mRefStore);
-            doubleAdapter.setStoreData(mRefStore);
+            mKeywords.clear();
+            if (!isEmpty(goodsEntity.keyword_list)) {
+                mKeywords.addAll(goodsEntity.keyword_list);
+                singleAdapter.setKeywordData(mKeywords);
+                doubleAdapter.setKeywordData(mKeywords);
+            }
+            if (goodsEntity.ref_store != null) {
+                mRefStore = goodsEntity.ref_store;
+                singleAdapter.setStoreData(mRefStore);
+                doubleAdapter.setStoreData(mRefStore);
+            }
 
             if (isEmpty(goodsEntity.goods_list) && goodsEntity.ref_store == null) {
                 showEmptyView(true);
@@ -309,7 +325,6 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             mGoods.addAll(goodsEntity.goods_list);
         }
         if (currentMode == MODE_SINGLE) {
-            singleAdapter.setStoreData(mRefStore);
             if (goodsEntity.goods_list.size() <= CategoryPresenter.PAGE_SIZE) {
                 singleAdapter.notifyDataSetChanged();
             } else {
@@ -317,7 +332,6 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             }
             singleAdapter.setPageLoading(page, allPage);
         } else if (currentMode == MODE_DOUBLE) {
-            doubleAdapter.setStoreData(mRefStore);
             if (goodsEntity.goods_list.size() <= CategoryPresenter.PAGE_SIZE) {
                 doubleAdapter.notifyDataSetChanged();
             } else {
@@ -377,7 +391,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             case R.id.tv_general_sort:
                 popupWindow.initData(currentSortPosition);
                 if (!popupWindow.isShowing()) {
-                    showAsDropDown(popupWindow,view_category_line,0,0);
+                    showAsDropDown(popupWindow, view_category_line, 0, 0);
 
                     miv_general_sort.setRotation(180);
                 }
@@ -604,6 +618,16 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @Override
     public void OnLoadFail() {
 
+    }
+
+    public void requestData(String keyword) {
+        searchParam = new GoodsSearchParam();
+        initFiltrate();
+
+        searchParam.keyword = keyword;
+        tv_keyword.setText(keyword);
+        presenter.initPage();
+        presenter.getSearchGoods(searchParam, true);
     }
 
     public void showAsDropDown(final PopupWindow pw, final View anchor, final int xoff, final int yoff) {

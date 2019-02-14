@@ -9,10 +9,14 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommentDetailEntity {
-    public String article_id;
-    public String count;
-    public String total_page;
-    public String page;
-    public String page_size;
-    public List<FindCommentListEntity.ItemComment> reply_list;
+    public Pager page;
+    public FindCommentListEntity.ItemComment info;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Pager {
+        public String page;
+        public String allPage;
+        public String total;
+        public String pageSize;
+    }
 }

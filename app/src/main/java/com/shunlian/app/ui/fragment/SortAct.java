@@ -12,6 +12,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.SortCategoryAdapter;
 import com.shunlian.app.adapter.SortFragAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SortFragEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -20,6 +21,7 @@ import com.shunlian.app.presenter.SortFragPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.RankingListAct;
+import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
@@ -75,6 +77,7 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
     private GoodsSearchParam mParam;
     private GridLayoutManager manager;
     private int lvTotalHeight;//listview总高度
+    private GetDataEntity.KeyWord keyworld;
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,SortAct.class));
@@ -138,7 +141,11 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
     @OnClick(R.id.mtv_search)
     public void onClickSearch() {
         CharSequence text = mtv_search.getText();
-        SearchGoodsActivity.startAct(this, text.toString(), "sortFrag");
+        if (keyworld!=null&&!isEmpty(keyworld.type)){
+            SearchGoodsActivity.startAct(baseAct, text.toString(), "sortFrag",keyworld.type,keyworld.item_id);
+        }else {
+            SearchGoodsActivity.startAct(baseAct, text.toString(), "sortFrag");
+        }
     }
 
     /**
@@ -243,15 +250,15 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
         });
     }
 
-    /**
-     * 设置搜索关键字
-     *
-     * @param keyworld
-     */
     @Override
-    public void setKeyworld(String keyworld) {
-        mtv_search.setText(keyworld);
+    public void setKeyworld(GetDataEntity.KeyWord keyworld) {
+        if (keyworld != null ) {
+            this.keyworld= keyworld;
+            if (!isEmpty(keyworld.keyword))
+                mtv_search.setText(keyworld.keyword);
+        }
     }
+
 
     @Override
     protected void onDestroy() {

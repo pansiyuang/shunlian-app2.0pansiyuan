@@ -24,6 +24,7 @@ import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPaySuccessView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,6 +45,15 @@ public class PaySuccessAct extends BaseActivity implements IPaySuccessView, Mess
 
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
+
+    @BindView(R.id.ntv_name)
+    NewTextView ntv_name;
+
+    @BindView(R.id.ntv_address)
+    NewTextView ntv_address;
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
@@ -67,11 +77,13 @@ public class PaySuccessAct extends BaseActivity implements IPaySuccessView, Mess
 
     @Override
     protected int getLayoutId() {
-        return R.layout.act_pay_success;
+        return R.layout.act_pay_success_new;
     }
 
     @Override
     protected void initData() {
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
         EventBus.getDefault().register(this);
 
         Intent intent = getIntent();
@@ -79,7 +91,8 @@ public class PaySuccessAct extends BaseActivity implements IPaySuccessView, Mess
         pay_sn = intent.getStringExtra("pay_sn");
         String price = intent.getStringExtra("price");
         isPlus=intent.getBooleanExtra("isSuperiorProduct",false);
-        mtv_price.setText(price);
+        mtv_price.setText("实付￥"+price);
+        mtv_title.setText("支付结果");
 
         GridLayoutManager manager = new GridLayoutManager(this,2);
         rv_goods.setLayoutManager(manager);
@@ -181,10 +194,13 @@ public class PaySuccessAct extends BaseActivity implements IPaySuccessView, Mess
     @Override
     public void setData(ProbablyLikeEntity probablyLikeEntity) {
         plus_order_id=probablyLikeEntity.order_id;
+        ntv_name.setText(probablyLikeEntity.address.realname+" "+probablyLikeEntity.address.mobile);
+        ntv_address.setText(probablyLikeEntity.address.address);
         if (!isEmpty(probablyLikeEntity.may_be_buy_list)){
             ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
                     (this,probablyLikeEntity.may_be_buy_list,isPlus);
             rv_goods.setAdapter(adapter);
+            rv_goods.setNestedScrollingEnabled(false);
             adapter.setOnItemClickListener((v,p)->{
                 ProbablyLikeEntity.MayBuyList mayBuyList = probablyLikeEntity.may_be_buy_list.get(p);
                 Common.goGoGo(this,"goods",mayBuyList.id);

@@ -10,7 +10,7 @@ import android.text.Editable;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.presenter.ExperienceDetailPresenter;
+//import com.shunlian.app.presenter.ExperienceDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
@@ -39,11 +39,11 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
 
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
-
+//
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
-    private ExperienceDetailPresenter presenter;
+//    private ExperienceDetailPresenter presenter;
     private LinearLayoutManager manager;
 
 
@@ -70,12 +70,12 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (manager != null && presenter != null){
-                    int lastPosition = manager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == manager.getItemCount()){
-                        presenter.onRefresh();
-                    }
-                }
+//                if (manager != null && presenter != null){
+//                    int lastPosition = manager.findLastVisibleItemPosition();
+//                    if (lastPosition + 1 == manager.getItemCount()){
+//                        presenter.onRefresh();
+//                    }
+//                }
             }
         });
 
@@ -83,10 +83,10 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
-                if (s.length() > 140){
-                    met_text.setText(s.subSequence(0,140));
-                    met_text.setSelection(140);
-                    Common.staticToast("字数不能超过140");
+                if (s.length() > 300){
+                    met_text.setText(s.subSequence(0,300));
+                    met_text.setSelection(300);
+                    Common.staticToast("字数不能超过300");
                 }
             }
         });
@@ -105,7 +105,7 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
         mtv_toolbar_title.setText("心得详情");
 
         String experience_id = getIntent().getStringExtra("experience_id");
-        presenter = new ExperienceDetailPresenter(this,this,experience_id);
+//        presenter = new ExperienceDetailPresenter(this,this,experience_id);
 
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
@@ -161,7 +161,7 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
             Common.staticToast("评论内容不能为空");
             return;
         }
-        presenter.sendExperience(s);
+//        presenter.sendExperience(s);
         met_text.setText("");
         met_text.setHint(getStringResouce(R.string.add_comments));
         setEdittextFocusable(false,met_text);
@@ -190,9 +190,9 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
         final PromptDialog dialog = new PromptDialog(this);
         dialog.setSureAndCancleListener(getStringResouce(R.string.are_you_sure_del_comment),
                 getStringResouce(R.string.confirm), v -> {
-                    if (presenter != null){
-                        presenter.delComment();
-                    }
+//                    if (presenter != null){
+//                        presenter.delComment();
+//                    }
                     dialog.dismiss();
                 }, getStringResouce(R.string.errcode_cancel), v -> dialog.dismiss()).show();
     }
@@ -211,9 +211,9 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
         super.onDestroy();
-        if (presenter != null){
-            presenter.detachView();
-            presenter = null;
-        }
+//        if (presenter != null){
+//            presenter.detachView();
+//            presenter = null;
+//        }
     }
 }

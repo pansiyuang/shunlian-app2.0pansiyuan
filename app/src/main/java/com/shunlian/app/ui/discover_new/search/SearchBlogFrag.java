@@ -8,22 +8,31 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotBlogAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.BlogCommentEvent;
+import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.IHotBlogView;
+import com.shunlian.app.widget.BlogCommentSendPopwindow;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +61,11 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     private String currentKeyword;
     private PromptDialog promptDialog;
     private LottieAnimationView mAnimationView;
-
+    private String currentCommentBlogId;
+    private BlogCommentSendPopwindow mPopWindow;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private ShareInfoParam mShareInfoParam;
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -110,6 +121,19 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
                 }
             }
         });
+        SoftKeyBoardListener.setListener(getActivity(), new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+                if (mPopWindow != null) {
+                    mPopWindow.dismiss();
+                }
+            }
+        });
     }
 
     @Override
@@ -151,7 +175,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
             blogList.addAll(hotBlogsEntity.list);
         }
         if (hotBlogAdapter == null) {
-            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity(), shareGoodDialogUtil);
+            hotBlogAdapter = new HotBlogAdapter(getActivity(), blogList, getActivity());
             recycler_list.setAdapter(hotBlogAdapter);
             hotBlogAdapter.setAdapterCallBack(this);
         }
@@ -239,7 +263,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        if(mShareInfoParam==null){
+        if (mShareInfoParam == null) {
             mShareInfoParam = new ShareInfoParam();
         }
         if (mShareInfoParam != null) {
@@ -306,9 +330,15 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
         mShareInfoParam = new ShareInfoParam();
         mShareInfoParam.goods_id = goodid;
         mShareInfoParam.blogId = blogId;
-        if(mPresenter!=null) {
+        if (mPresenter != null) {
             mPresenter.getShareInfo(mPresenter.goods, goodid);
         }
+    }
+
+    @Override
+    public void showCommentView(String blogId) {
+        currentCommentBlogId = blogId;
+        showPopupComment();
     }
 
     @Override
@@ -325,5 +355,72 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
             }
         }
         hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+    }
+
+    @Override
+    public void replySuccess(BigImgEntity.CommentItem commentItem) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (currentCommentBlogId.equals(blog.id)) {
+                blog.comment_list.list.add(0, commentItem);
+                blog.comment_list.total++;
+                break;
+            }
+        }
+        Common.staticToasts(getActivity(), "评论成功", R.mipmap.icon_common_duihao);
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+        currentCommentBlogId = null;
+        mPopWindow.dismiss();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(BlogCommentEvent event) {
+        switch (event.sendType) {
+            case BlogCommentEvent.ADD_TYPE:
+                insertComment(event.mComment, true);
+                break;
+            case BlogCommentEvent.DEL_TYPE:
+                insertComment(event.mComment, false);
+                break;
+        }
+    }
+
+    public void insertComment(FindCommentListEntity.ItemComment insertItem, boolean isAdd) {
+        for (BigImgEntity.Blog blog : blogList) {
+            if (insertItem.discovery_id.equals(blog.id)) {
+                blog.comment_list.list.clear();
+                if (isAdd) {
+                    for (FindCommentListEntity.ItemComment item : insertItem.comment_list) {
+                        blog.comment_list.list.add(new BigImgEntity.CommentItem(item));
+                    }
+                    blog.comment_list.total = insertItem.comment_count;
+                } else {
+                    for (FindCommentListEntity.ItemComment item : insertItem.reply_result) {
+                        blog.comment_list.list.add(new BigImgEntity.CommentItem(item));
+                    }
+                    blog.comment_list.total = insertItem.reply_count;
+                }
+                break;
+            }
+        }
+        hotBlogAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+    }
+
+    @Override
+    public void getWordList(List<String> wordList) {
+
+    }
+
+    private void showPopupComment() {
+        if (mPopWindow == null) {
+            mPopWindow = new BlogCommentSendPopwindow(getActivity());
+            mPopWindow.setOnPopClickListener((String content) -> {
+                if (isEmpty(currentCommentBlogId)) {
+                    return;
+                }
+                mPresenter.sendComment(content, "", currentCommentBlogId, "0");
+            });
+        }
+        mPopWindow.show();
     }
 }

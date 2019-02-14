@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:FolderTextView="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -109,8 +108,8 @@
         android:layout_marginRight="27dp"
         android:lineSpacingExtra="10dp"
         android:textColor="@color/value_484848"
-        android:textSize="15sp"
         android:textIsSelectable="true"
+        android:textSize="15sp"
         FolderTextView:foldLine="4"
         FolderTextView:tailTextColor="@color/value_3673FB" />
 
@@ -235,14 +234,28 @@
         android:layout_marginLeft="63dp">
 
         <TextView
+            android:id="@+id/tv_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@mipmap/icon_message_nor"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:paddingRight="50dp"
+            android:text="0"
+            android:textColor="@color/value_343434"
+            android:textSize="10sp" />
+
+        <TextView
             android:id="@+id/tv_download"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_comment_count"
             android:drawableLeft="@mipmap/icon_faxian_xaizai"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:paddingRight="17.5dp"
+            android:paddingRight="25dp"
             android:text="0"
             android:textColor="@color/value_343434"
             android:textSize="10sp" />
@@ -251,9 +264,8 @@
             android:id="@+id/ll_zan"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="17.5dp"
             android:layout_toRightOf="@+id/tv_download"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|left"
             android:orientation="horizontal">
 
             <com.airbnb.lottie.LottieAnimationView
@@ -283,6 +295,60 @@
             android:src="@mipmap/icon_shoucang"
             android:visibility="gone" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_comment_rootView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_comment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="14dp"
+            android:text="全部评论"
+            android:textColor="@color/value_484848"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/ll_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"></LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="63dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_comment_icon"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="200dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="24dp"
+            android:background="@drawable/rounded_corner_solid_f5_24px"
+            android:gravity="center_vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="留下你的精彩评论吧~"
+            android:textColor="@color/text_gray2"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -316,4 +382,5 @@
             android:paddingLeft="16dp"
             android:scrollbars="none"></android.support.v7.widget.RecyclerView>
     </RelativeLayout>
+
 </LinearLayout>

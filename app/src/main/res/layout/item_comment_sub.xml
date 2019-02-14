@@ -1,74 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <View
-        android:id="@+id/view_line"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"/>
-
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/civ_head"
-        android:layout_below="@+id/view_line"
-        android:src="@mipmap/icon_login_logo"
-        android:scaleType="fitXY"
-        android:layout_width="20dp"
-        android:layout_height="20dp" />
-
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
     <LinearLayout
         android:id="@+id/ll_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/civ_head"
+        android:layout_height="24dp"
         android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/civ_head"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/civ_head"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_below="@+id/view_line"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_login_logo" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="龟背上的人"
-            android:textColor="@color/new_text"
+            android:textColor="@color/text_gray2"
             android:textSize="12sp" />
-
-
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="2小时前"
-            android:textColor="@color/share_text"
-            android:textSize="10sp" />
     </LinearLayout>
 
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ll_title"
         android:layout_below="@+id/ll_title"
-        android:layout_marginTop="10dp"
+        android:layout_alignLeft="@+id/ll_title"
+        android:layout_marginLeft="32dp"
         android:text="你说的也不错，我也支持你的观点哦。三观比较正，咱俩加个微信吧，加*******"
-        android:textColor="@color/new_text"
-        android:textSize="12sp" />
+        android:textColor="@color/value_484848"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_content"
+        android:layout_alignLeft="@+id/ll_title"
+        android:layout_marginLeft="32dp">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="2小时前"
+            android:textColor="@color/text_gray2"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll_zan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_zan"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/tv_zan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-13dp"
+                    android:gravity="center"
+                    android:text="点赞"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_reply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="6dp"
+                android:text="回复"
+                android:textColor="@color/text_gray2"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_verify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="6dp"
+                android:text="审核"
+                android:textColor="@color/pink_color"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_more_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mtv_content"
-        android:layout_alignLeft="@+id/mtv_content"
-        android:layout_marginTop="10dp"
-        android:text="共26条回复>"
-        android:textColor="#40A5FF"
-        android:textSize="12sp"
+        android:layout_below="@+id/rl_bottom"
+        android:layout_alignParentRight="true"
+        android:text="共26条回复 >"
+        android:textColor="@color/value_484848"
+        android:textSize="13sp"
         android:visibility="visible" />
 
 </RelativeLayout>

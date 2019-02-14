@@ -189,17 +189,27 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.design.widget.CoordinatorLayout>
+
     <com.shunlian.app.widget.empty.NetAndEmptyInterface
         android:id="@+id/nei_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" 
-        android:layout_below="@id/mllayout_title"/>
+        android:layout_below="@id/mllayout_title"
+        android:visibility="gone" />
+
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_entry"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:visibility="gone"/>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_entrys"
+        android:layout_width="72dp"
+        android:layout_height="24dp"
+        android:scaleType="fitXY"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/lLayout_toast"
@@ -218,7 +228,7 @@
             android:id="@+id/miv_icon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/tv_info"
@@ -230,41 +240,44 @@
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>
+
     <RelativeLayout
-        android:layout_width="104dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
-        android:layout_alignParentRight="true"
-        android:visibility="gone"
         android:id="@+id/show_new_user_view"
-        android:layout_height="112dp">
+        android:layout_width="104dp"
+        android:layout_height="112dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="60dp"
+        android:visibility="gone">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/img_xinren_xiaochuangkou"/>
+            android:src="@mipmap/img_xinren_xiaochuangkou" />
 
         <TextView
             android:id="@+id/tv_new_user_title"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="45dp"
             android:gravity="center"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="9sp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="45dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"/>
+            android:textSize="9sp" />
+
         <com.shunlian.app.utils.timer.HoneRedDownTimerView
             android:id="@+id/tv_new_user_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rounded_corner_solid_white_24px"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:visibility="visible"
-            android:background="@drawable/rounded_corner_solid_white_24px"
-            android:layout_centerHorizontal="true"/>
+            android:visibility="visible" />
     </RelativeLayout>
 
 </com.shunlian.app.widget.MyRelativeLayout>

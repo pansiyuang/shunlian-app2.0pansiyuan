@@ -6,7 +6,8 @@
 
     <include layout="@layout/block_title_whitebg" />
 
-    <include layout="@layout/block_help_bottom" />
+    <include layout="@layout/block_help_bottom"
+        android:visibility="gone"/>
 
     <com.shunlian.app.widget.MyScrollView
         android:layout_width="match_parent"
@@ -44,6 +45,7 @@
 
             <com.shunlian.app.widget.X5WebView
                 android:id="@+id/mwv_h5"
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

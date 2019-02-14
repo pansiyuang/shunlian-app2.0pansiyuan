@@ -20,5 +20,7 @@ public interface IActivityDetailView extends IView {
 
     void shareGoodsSuccess(String blogId,String goodsId);
 
+    void replySuccess(BigImgEntity.CommentItem commentItem);
+
     void refreshFinish();
 }
