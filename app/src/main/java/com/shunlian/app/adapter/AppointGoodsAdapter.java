@@ -79,6 +79,8 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
             mHolder.mllayout_count.setBackgroundDrawable(ShapeUtils.commonShape(context,
                     Color.WHITE,2,1,getColor(R.color.e4_color)));
             mHolder.mtv_edit_count.setText(goods.qty);
+            if (!isEmpty(goods.qty))
+                mHolder.mtv_edit_count.setSelection(goods.qty.length());
         }else {
             gone(mHolder.mllayout_count);
             visible(mHolder.mtv_count);
@@ -152,6 +154,7 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
                             Common.staticToast("宝贝不能再减少了哦");
                         }
                         mtv_edit_count.setText(String.valueOf(i));
+                        mtv_edit_count.setSelection(String.valueOf(i).length());
                         ModifyNumEvent event = new ModifyNumEvent(String.valueOf(i));
                         EventBus.getDefault().post(event);
                      }catch (Exception e){}
@@ -168,6 +171,7 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
                         }
 
                         mtv_edit_count.setText(String.valueOf(i));
+                        mtv_edit_count.setSelection(String.valueOf(i).length());
                         ModifyNumEvent event = new ModifyNumEvent(String.valueOf(i));
                         EventBus.getDefault().post(event);
                      }catch (Exception e){}
@@ -185,6 +189,7 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
                             }
 
                             mtv_edit_count.setText(String.valueOf(i));
+                            mtv_edit_count.setSelection(String.valueOf(i).length());
                             ModifyNumEvent event1 = new ModifyNumEvent(String.valueOf(i));
                             EventBus.getDefault().post(event1);
                         }
