@@ -7,19 +7,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.eventbus_bean.ModifyNumEvent;
-import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.ModifyCountDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -36,7 +34,6 @@ import butterknife.BindView;
 
 public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
-    private boolean isClickFinish = false;
     private String mFrom;
 
     public AppointGoodsAdapter(Context context, boolean isShowFooter,
@@ -88,8 +85,6 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
             mHolder.mllayout_count.setBackgroundDrawable(ShapeUtils.commonShape(context,
                     Color.WHITE,2,1,getColor(R.color.e4_color)));
             mHolder.mtv_edit_count.setText(goods.qty);
-            if (!isEmpty(goods.qty))
-                mHolder.mtv_edit_count.setSelection(goods.qty.length());
         }else {
             gone(mHolder.mllayout_count);
             visible(mHolder.mtv_count);
@@ -122,7 +117,7 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         MyLinearLayout mllayout_count;
 
         @BindView(R.id.mtv_edit_count)
-        EditText mtv_edit_count;
+        MyTextView mtv_edit_count;
 
         @BindView(R.id.mtv_count_reduce)
         MyImageView mtv_count_reduce;
@@ -144,7 +139,7 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
             try {
                 String s = mtv_edit_count.getText().toString();
                 if (isEmpty(s)) s = "1";
-                int i = Integer.parseInt(s);
+                long i = Long.parseLong(s);
                 if (i < min_count){
                     i = min_count;
                 }else if (i > max_count){
@@ -152,7 +147,6 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
                 }
 
                 mtv_edit_count.setText(String.valueOf(i));
-                mtv_edit_count.setSelection(String.valueOf(i).length());
                 ModifyNumEvent event1 = new ModifyNumEvent(String.valueOf(i));
                 EventBus.getDefault().post(event1);
             }catch (Exception e){}
@@ -161,7 +155,6 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         private void updateCount(String count) {
             try {
                 mtv_edit_count.setText(count);
-                mtv_edit_count.setSelection(count.length());
                 ModifyNumEvent event = new ModifyNumEvent(count);
                 EventBus.getDefault().post(event);
             } catch (Exception e) {}
@@ -208,28 +201,19 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
                      }catch (Exception e){}
                 });
                 //编辑数量
-                mtv_edit_count.setOnEditorActionListener((v, actionId, event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        isClickFinish = true;
+                mtv_edit_count.setOnClickListener(v -> {
+                    ModifyCountDialog dialog = new ModifyCountDialog((Activity) context);
+                    String s = mtv_edit_count.getText().toString();
+                    long current_count = min_count;
+                    try{
+                        current_count = Long.parseLong(s);
+                    }catch (Exception e){}
+                    dialog.setMin_MaxCount(min_count,max_count,current_count);
+                    dialog.setOnModifyCountListener(count -> {
+                        mtv_edit_count.setText(count);
                         handleEditCount();
-                    }
-                    return false;
-                });
-                //监听软键盘关闭
-                SoftKeyBoardListener.setListener((Activity) context, new SoftKeyBoardListener
-                        .OnSoftKeyBoardChangeListener() {
-                    @Override
-                    public void keyBoardShow(int height) {}
-                    @Override
-                    public void keyBoardHide(int height) {
-                        if (mtv_edit_count != null) {
-                            if (isClickFinish) {
-                                mtv_edit_count.postDelayed(() -> isClickFinish = false, 500);
-                            } else {
-                                mtv_edit_count.postDelayed(() -> handleEditCount(), 500);
-                            }
-                        }
-                    }
+                    });
+                    dialog.show();
                 });
             }
         }

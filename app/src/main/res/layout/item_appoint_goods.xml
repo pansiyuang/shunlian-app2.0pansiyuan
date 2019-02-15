@@ -102,7 +102,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.3"
-            android:src="@mipmap/img_aftersalesservice_jian"/>
+            android:src="@mipmap/ic_querendingdan_jianhao"/>
 
 
         <View
@@ -110,7 +110,7 @@
             android:layout_height="match_parent"
             android:background="@color/e4_color" />
 
-        <EditText
+        <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_edit_count"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -134,7 +134,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.3"
-            android:src="@mipmap/img_aftersalesservice_jia"/>
+            android:src="@mipmap/ic_querendingdan_jiahao"/>
 
     </com.shunlian.app.widget.MyLinearLayout>
 
