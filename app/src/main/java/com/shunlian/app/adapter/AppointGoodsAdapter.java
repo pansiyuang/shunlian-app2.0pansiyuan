@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -8,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.eventbus_bean.ModifyNumEvent;
+import com.shunlian.app.listener.SoftKeyBoardListener;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -33,7 +36,7 @@ import butterknife.BindView;
 
 public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
-
+    private boolean isClickFinish = false;
     private String mFrom;
 
     public AppointGoodsAdapter(Context context, boolean isShowFooter,
@@ -76,6 +79,12 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         if (ConfirmOrderAct.TYPE_GOODS_DETAIL.equals(mFrom)){
             gone(mHolder.mtv_count);
             visible(mHolder.mllayout_count);
+
+            RelativeLayout.LayoutParams attributeParams =
+                    (RelativeLayout.LayoutParams) mHolder.mtv_attribute.getLayoutParams();
+            attributeParams.addRule(RelativeLayout.LEFT_OF,R.id.mllayout_count);
+            mHolder.mtv_attribute.setLayoutParams(attributeParams);
+
             mHolder.mllayout_count.setBackgroundDrawable(ShapeUtils.commonShape(context,
                     Color.WHITE,2,1,getColor(R.color.e4_color)));
             mHolder.mtv_edit_count.setText(goods.qty);
@@ -131,6 +140,33 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
             TransformUtil.expandViewTouchDelegate(mtv_count_reduce,i,i,i,0);
         }
 
+        private void handleEditCount(){
+            try {
+                String s = mtv_edit_count.getText().toString();
+                if (isEmpty(s)) s = "1";
+                int i = Integer.parseInt(s);
+                if (i < min_count){
+                    i = min_count;
+                }else if (i > max_count){
+                    i = max_count;
+                }
+
+                mtv_edit_count.setText(String.valueOf(i));
+                mtv_edit_count.setSelection(String.valueOf(i).length());
+                ModifyNumEvent event1 = new ModifyNumEvent(String.valueOf(i));
+                EventBus.getDefault().post(event1);
+            }catch (Exception e){}
+        }
+
+        private void updateCount(String count) {
+            try {
+                mtv_edit_count.setText(count);
+                mtv_edit_count.setSelection(count.length());
+                ModifyNumEvent event = new ModifyNumEvent(count);
+                EventBus.getDefault().post(event);
+            } catch (Exception e) {}
+        }
+
         public void setModifyNum(int postion){
             if (ConfirmOrderAct.TYPE_GOODS_DETAIL.equals(mFrom)){
                 try{
@@ -143,60 +179,58 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
                         max_count = Integer.parseInt(stock);
                     }
                 }catch (Exception e){}
-
+                //减少数量
                 mtv_count_reduce.setOnClickListener(v -> {
                      try {
                         String content = mtv_edit_count.getText().toString();
-                        int i = Integer.parseInt(content);
+                        long i = Long.parseLong(content);
                         i -= 1;
                         if (i < min_count){
                             i = min_count;
                             Common.staticToast("宝贝不能再减少了哦");
                         }
-                        mtv_edit_count.setText(String.valueOf(i));
-                        mtv_edit_count.setSelection(String.valueOf(i).length());
-                        ModifyNumEvent event = new ModifyNumEvent(String.valueOf(i));
-                        EventBus.getDefault().post(event);
+
+                        updateCount(String.valueOf(i));
                      }catch (Exception e){}
                 });
-
+                //增加数量
                 mtv_count_add.setOnClickListener(v -> {
                      try {
                         String content = mtv_edit_count.getText().toString();
-                        int i = Integer.parseInt(content);
+                        long i = Long.parseLong(content);
                         i += 1;
                         if (i > max_count){
                             i = max_count;
                             Common.staticToast("您选择的数量超出库存");
                         }
 
-                        mtv_edit_count.setText(String.valueOf(i));
-                        mtv_edit_count.setSelection(String.valueOf(i).length());
-                        ModifyNumEvent event = new ModifyNumEvent(String.valueOf(i));
-                        EventBus.getDefault().post(event);
+                        updateCount(String.valueOf(i));
                      }catch (Exception e){}
                 });
-
+                //编辑数量
                 mtv_edit_count.setOnEditorActionListener((v, actionId, event) -> {
-                    try {
-                        if (actionId == EditorInfo.IME_ACTION_DONE){
-                            String s = mtv_edit_count.getText().toString();
-                            int i = Integer.parseInt(s);
-                            if (i < min_count){
-                                i = min_count;
-                            }else if (i > max_count){
-                                i = max_count;
-                            }
-
-                            mtv_edit_count.setText(String.valueOf(i));
-                            mtv_edit_count.setSelection(String.valueOf(i).length());
-                            ModifyNumEvent event1 = new ModifyNumEvent(String.valueOf(i));
-                            EventBus.getDefault().post(event1);
-                        }
-                     }catch (Exception e){}
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        isClickFinish = true;
+                        handleEditCount();
+                    }
                     return false;
                 });
-
+                //监听软键盘关闭
+                SoftKeyBoardListener.setListener((Activity) context, new SoftKeyBoardListener
+                        .OnSoftKeyBoardChangeListener() {
+                    @Override
+                    public void keyBoardShow(int height) {}
+                    @Override
+                    public void keyBoardHide(int height) {
+                        if (mtv_edit_count != null) {
+                            if (isClickFinish) {
+                                mtv_edit_count.postDelayed(() -> isClickFinish = false, 500);
+                            } else {
+                                mtv_edit_count.postDelayed(() -> handleEditCount(), 500);
+                            }
+                        }
+                    }
+                });
             }
         }
     }
