@@ -69,6 +69,7 @@ public class ModifyCountDialog {
         miv_reduce.setOnClickListener(v -> {
             try {
                 String content = mtv_edit_count.getText().toString();
+                if (TextUtils.isEmpty(content)) content = String.valueOf(min_count);
                 long i = Long.parseLong(content);
                 i -= 1;
                 if (i < min_count){
@@ -82,8 +83,19 @@ public class ModifyCountDialog {
         });
         //增加数量
         miv_add.setOnClickListener(v -> {
-            String content = mtv_edit_count.getText().toString();
-            addCount(content);
+            try {
+                String content = mtv_edit_count.getText().toString();
+                if (TextUtils.isEmpty(content)) content = String.valueOf(min_count);
+                long i = Long.parseLong(content);
+                i += 1;
+                if (i > max_count){
+                    i = max_count;
+                    Common.staticToast("您选择的数量超出库存");
+                }
+
+                mtv_edit_count.setText(String.valueOf(i));
+                mtv_edit_count.setSelection(String.valueOf(i).length());
+            }catch (Exception e){}
         });
 
         mtv_edit_count.addTextChangedListener(new SimpleTextWatcher(){
@@ -128,20 +140,6 @@ public class ModifyCountDialog {
                 mListener.modifyCount(s);
         }
         dismiss();
-    }
-
-    private void addCount(String content) {
-        try {
-            long i = Long.parseLong(content);
-            i += 1;
-            if (i > max_count){
-                i = max_count;
-                Common.staticToast("您选择的数量超出库存");
-            }
-
-            mtv_edit_count.setText(String.valueOf(i));
-            mtv_edit_count.setSelection(String.valueOf(i).length());
-        }catch (Exception e){}
     }
 
     public void setCancelable(boolean flag) {
