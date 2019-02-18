@@ -19,6 +19,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
+import com.shunlian.app.ui.discover_new.comment.CommentRejectedAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.PromptDialog;
@@ -218,8 +219,8 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             gone(mHolder.miv_medal);
             if (itemComment.check_is_show == 1) {
                 mHolder.tv_verify.setClickable(true);
-                mHolder.tv_verify.setText("审核");
-                mHolder.tv_verify.setTextColor(getColor(R.color.pink_color));
+                mHolder.tv_verify.setText("通过");
+                mHolder.tv_verify.setTextColor(getColor(R.color.value_007AFF));
             } else if (itemComment.check_is_show == 2) {
                 mHolder.tv_verify.setClickable(true);
                 mHolder.tv_verify.setText("撤回");
@@ -230,28 +231,29 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                 mHolder.mtv_content.setTextColor(getColor(R.color.color_value_6c));
                 mHolder.mtv_content.setText("该条评论已被删除");
                 mHolder.mtv_content.setLongClickable(false);
-                gone(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
+                gone(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply, mHolder.tv_reject);
             } else if (itemComment.status == 2) {
                 mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
                 mHolder.mtv_content.setText(itemComment.content);
                 mHolder.mtv_content.setLongClickable(false);
                 mHolder.tv_verify.setClickable(false);
-                mHolder.tv_verify.setText("已驳回");
                 mHolder.tv_verify.setTextColor(getColor(R.color.text_gray2));
-                gone(mHolder.ll_zan);
+                mHolder.tv_verify.setText("已驳回");
+                gone(mHolder.ll_zan, mHolder.tv_reject);
                 if (itemComment.is_self == 1) {
                     visible(mHolder.tv_reply);
-                    gone(mHolder.tv_verify);
+                    gone(mHolder.tv_verify, mHolder.tv_reject);
                 } else {
                     visible(mHolder.tv_verify);
-                    gone(mHolder.tv_reply);
+                    gone(mHolder.tv_reply, mHolder.tv_reject);
                 }
             } else {
                 mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
-                visible(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
+                visible(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply, mHolder.tv_reject);
                 mHolder.mtv_content.setText(itemComment.content);
                 mHolder.mtv_content.setLongClickable(true);
                 mHolder.tv_verify.setVisibility(itemComment.check_is_show == 0 ? View.GONE : View.VISIBLE);  //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
+                mHolder.tv_reject.setVisibility(itemComment.check_is_show == 1 ? View.VISIBLE : View.GONE);  //驳回按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
             }
 
             mHolder.mtv_content.setOnLongClickListener(v -> {
@@ -320,16 +322,9 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
 
                 @Override
                 public void onVerify() {
-                    if (mDialog == null) {
-                        mDialog = new CommentBottmDialog(context);
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onVerify(position, finalJ);
                     }
-                    mDialog.setCommentData(replyList);
-                    mDialog.setOnPassListener(() -> {
-                        if (mFabulousListener != null) {
-                            mFabulousListener.onVerify(position, finalJ);
-                        }
-                    });
-                    mDialog.show();
                 }
 
                 @Override
@@ -337,7 +332,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                     mPromptDialog = new PromptDialog((Activity) context);
                     mPromptDialog.setTvSureColor(R.color.white);
                     mPromptDialog.setTvSureBGColor(getColor(R.color.pink_color));
-                    mPromptDialog.setSureAndCancleListener(String.format("撤回通过“%s”发表的评论？",replyList.nickname), "确定", v1 -> {
+                    mPromptDialog.setSureAndCancleListener(String.format("撤回通过“%s”发表的评论？", replyList.nickname), "确定", v1 -> {
                         if (mFabulousListener != null) {
                             mFabulousListener.onRejected(position, finalJ);
                         }
@@ -346,6 +341,12 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                         mPromptDialog.dismiss();
                     });
                     mPromptDialog.show();
+                }
+
+                @Override
+                public void withDraw() {
+                    FindCommentListEntity.ItemComment itemComment = lists.get(position).reply_list.get(finalJ);
+                    CommentRejectedAct.startAct(context, itemComment.id);
                 }
 
                 @Override
@@ -415,6 +416,9 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         @BindView(R.id.tv_verify)
         TextView tv_verify;
 
+        @BindView(R.id.tv_reject)
+        TextView tv_reject;
+
         @BindView(R.id.miv_v)
         MyImageView miv_v;
 
@@ -427,6 +431,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             ll_zan.setOnClickListener(this);
             tv_reply.setOnClickListener(this);
             tv_verify.setOnClickListener(this);
+            tv_reject.setOnClickListener(this);
 
             //返回键扩大点击范围
             int i = TransformUtil.dip2px(context, 30);
@@ -459,21 +464,14 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                 case R.id.tv_verify:
                     FindCommentListEntity.ItemComment comment = lists.get(getAdapterPosition());
                     if (comment.check_is_show == 1) { //审核
-                        if (mDialog == null) {
-                            mDialog = new CommentBottmDialog(context);
+                        if (mFabulousListener != null) {
+                            mFabulousListener.onVerify(getAdapterPosition(), -1);
                         }
-                        mDialog.setCommentData(comment);
-                        mDialog.setOnPassListener(() -> {
-                            if (mFabulousListener != null) {
-                                mFabulousListener.onVerify(getAdapterPosition(), -1);
-                            }
-                        });
-                        mDialog.show();
                     } else {  //撤回
                         mPromptDialog = new PromptDialog((Activity) context);
                         mPromptDialog.setTvSureColor(R.color.white);
                         mPromptDialog.setTvSureBGColor(getColor(R.color.pink_color));
-                        mPromptDialog.setSureAndCancleListener(String.format("撤回通过“%s”发表的评论？",comment.nickname), "确定", v1 -> {
+                        mPromptDialog.setSureAndCancleListener(String.format("撤回通过“%s”发表的评论？", comment.nickname), "确定", v1 -> {
                             if (mFabulousListener != null) {
                                 mFabulousListener.onRejected(getAdapterPosition(), -1);
                             }
@@ -483,6 +481,10 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                         });
                         mPromptDialog.show();
                     }
+                    break;
+                case R.id.tv_reject://驳回
+                    FindCommentListEntity.ItemComment item = lists.get(getAdapterPosition());
+                    CommentRejectedAct.startAct(context, item.id);
                     break;
                 default:
                     if (listener != null) {
