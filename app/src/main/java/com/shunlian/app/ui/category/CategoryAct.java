@@ -174,31 +174,41 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         setListMode(currentMode);
 
         singleAdapter.setOnItemClickListener((view, position) -> {
-            int mposition;
-            if (mRefStore == null && isEmpty(mKeywords)) {
-                mposition = position;
-            } else {
-                mposition = position - 1;
-            }
-            if (mposition < 0)
-                return;
-            GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
-            if (!isEmpty(goods.id)) {
-                GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+            try{
+                int mposition;
+                if (mRefStore == null && isEmpty(mKeywords)) {
+                    mposition = position;
+                } else {
+                    mposition = position - 1;
+                }
+                if (mposition < 0||mposition>=mGoods.size())
+                    return;
+                GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
+                if (!isEmpty(goods.id)) {
+                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+                }
+            }catch (Exception e){
+
             }
         });
         doubleAdapter.setOnItemClickListener((view, position) -> {
-            int mposition;
-            if (mRefStore == null && isEmpty(mKeywords)) {
-                mposition = position;
-            } else {
-                mposition = position - 1;
+            try{
+                int mposition;
+                if (mRefStore == null && isEmpty(mKeywords)) {
+                    mposition = position;
+                } else {
+                    mposition = position - 1;
+                }
+                if (mposition < 0||mposition>=mGoods.size())
+                    return;
+                GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
+                if (!isEmpty(goods.id)) {
+                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+                }
+            }catch (Exception e){
+
             }
 
-            GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
-            if (!isEmpty(goods.id)) {
-                GoodsDetailAct.startAct(CategoryAct.this, goods.id);
-            }
         });
 
         if (Common.isAlreadyLogin()) {

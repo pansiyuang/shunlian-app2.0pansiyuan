@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
-                android:text="我已添加,不再提醒"
+                android:text="我已添加，不再提醒"
                 android:textColor="#B2832D"
                 android:textSize="15sp"
                 android:layout_height="wrap_content" />

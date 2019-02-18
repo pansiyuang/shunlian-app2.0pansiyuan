@@ -309,6 +309,9 @@ public class CommonDialogUtil {
         if(((Activity)context).isFinishing()){
             return;
         }
+        if(dialog_me_teach!=null&&dialog_me_teach.isShowing()){
+            return;
+        }
         CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd)
                 .setView(R.layout.dialog_me_teach);
         dialog_me_teach = nomalBuild.create();
