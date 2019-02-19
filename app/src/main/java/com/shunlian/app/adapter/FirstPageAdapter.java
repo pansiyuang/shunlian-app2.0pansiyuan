@@ -525,7 +525,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                     int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20);
                     int height = picWidth * 158 / 340;
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
-                    params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10),  TransformUtil.dip2px(context, 15));
+                    params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10),  TransformUtil.dip2px(context, 10));
                     if (fiveHolder.miv_photo != null) {
                         fiveHolder.miv_photo.setLayoutParams(params);
                         GlideUtils.getInstance().loadBgImageChang(context, fiveHolder.miv_photo, data.pic);
@@ -578,6 +578,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                             fiveHolder.mtv_price.setVisibility(View.GONE);
                         }
                         fiveHolder.mtv_market_price.setEarnMoney(data.self_buy_earn,14);
+//                        fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
+//                        fiveHolder.mtv_market_price.setText(data.self_buy_earn);
 //                        if (!TextUtils.isEmpty(data.self_buy_earn)) {
 //                            fiveHolder.mtv_market_price.setText(data.self_buy_earn);
 //                            fiveHolder.mtv_market_price.setVisibility(View.VISIBLE);
