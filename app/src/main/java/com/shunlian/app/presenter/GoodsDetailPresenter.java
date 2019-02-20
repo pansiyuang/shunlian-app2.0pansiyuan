@@ -44,6 +44,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     public static final int COMMENT_EMPTY_CODE = 420;//评论数据为空码
     public static final String pageSize = "20";//评价每页数量
     private String type = "ALL";
+    private String mParticiplesName;//分词名
     private String act_id;
     private ShareInfoParam shareInfoParam;
     private String mayBeBuyGoodsId;
@@ -386,13 +387,17 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param goods_id
      * @param type
      * @param page
+     * @param name  分词专用
      * @param id
      */
     public void commentList(int emptyCode, int failureCode, final boolean isShow,
-                            String goods_id, String type, final String page,String id){
+                            String goods_id, String type,String name, final String page,String id){
         Map<String,String> map = new HashMap<>();
         map.put("goods_id",goods_id);
         map.put("type",type);
+        if ("TAG".equals(type)){
+            map.put("tag",name);
+        }
         map.put("page",page);
         map.put("pageSize",pageSize);
         if (!TextUtils.isEmpty(id)) {
@@ -447,11 +452,12 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             //上拉加载
             mCommentAdapter.setOnReloadListener(() -> onRefresh());
             //加载分类数据
-            mCommentAdapter.setCommentTypeListener(requestType -> {
+            mCommentAdapter.setCommentTypeListener((requestType,name) -> {
                 isClickHead = true;
                 type = requestType;
+                mParticiplesName = name;
                 commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,false,
-                        goods_id,type,"1",null);
+                        goods_id,type,name,"1",null);
             });
 
             mCommentAdapter.setCommentPraiseListener((comment_id, position) -> {
@@ -481,7 +487,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             isLoading = true;
             if (currentPage <= allPage){
                 commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,false,
-                        goods_id,type,String.valueOf(currentPage),null);
+                        goods_id,type,mParticiplesName,String.valueOf(currentPage),null);
             }
         }
     }

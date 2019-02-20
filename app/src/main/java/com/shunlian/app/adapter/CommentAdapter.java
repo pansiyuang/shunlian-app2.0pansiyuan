@@ -108,7 +108,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 tagAdapter.notifyDataChanged();
                 if (mCommentTypeListener != null){
                     CommentListEntity.Label label = mLabel.get(posi);
-                    mCommentTypeListener.onCommentType(label.type);
+                    mCommentTypeListener.onCommentType(label.type,label.name);
                 }
                 return true;
 
@@ -491,6 +491,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
     }
 
     public interface ICommentTypeListener{
-        void onCommentType(String type);
+        void onCommentType(String type,String name);
     }
 }
