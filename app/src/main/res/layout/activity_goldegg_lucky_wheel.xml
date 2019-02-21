@@ -15,6 +15,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/iv_bg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -40,9 +41,36 @@
                 wheelSurfView:typenum="-1"></com.shunlian.app.widget.luckWheel.WheelSurfView>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/wheelPan"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:background="@mipmap/img_jifen"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_gold_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="金蛋数量：5682120"
+                    android:textColor="@color/value_954B22"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_score_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="积分：1232556"
+                    android:textColor="@color/value_954B22"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_bg"
                 android:background="#E6B198"
                 android:orientation="vertical"
                 android:paddingLeft="8dp"
@@ -79,6 +107,17 @@
                             android:textColor="@color/value_49"
                             android:textSize="12sp" />
 
+                        <TextView
+                            android:id="@+id/tv_score_record"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginRight="24dp"
+                            android:text="积分记录"
+                            android:textColor="@color/value_AD7D67"
+                            android:textSize="12sp" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -101,7 +140,7 @@
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
+                                    android:layout_weight="2"
                                     android:gravity="center"
                                     android:text="日期"
                                     android:textColor="@color/value_49"
@@ -110,9 +149,18 @@
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
+                                    android:layout_weight="2"
                                     android:gravity="center"
                                     android:text="奖品"
+                                    android:textColor="@color/value_49"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="使用"
                                     android:textColor="@color/value_49"
                                     android:textSize="12sp" />
                             </LinearLayout>

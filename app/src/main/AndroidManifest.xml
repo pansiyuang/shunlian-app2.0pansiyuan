@@ -277,6 +277,7 @@
             android:screenOrientation="portrait"
             android:supportsPictureInPicture="true"
             android:label="首页"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
@@ -1091,7 +1092,8 @@
         <activity
             android:name=".ui.LuckWheelPanActivity"
             android:label="大转盘规则"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.task.TaskCenterAct"
             android:exported="false"
             android:label="任务中心"

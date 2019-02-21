@@ -207,6 +207,7 @@ public class SubCommentItemView extends FrameLayout {
             mtv_content.setLongClickable(false);
             tv_verify.setClickable(false);
             tv_verify.setText("已驳回");
+            tv_verify.setTextColor(getContext().getResources().getColor(R.color.text_gray2));
             ll_zan.setVisibility(GONE);
             tv_reject.setVisibility(GONE);
             if (itemComment.is_self == 1) {

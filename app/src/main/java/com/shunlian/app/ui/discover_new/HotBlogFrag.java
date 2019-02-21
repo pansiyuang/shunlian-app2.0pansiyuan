@@ -1,29 +1,14 @@
 package com.shunlian.app.ui.discover_new;
 
 import android.animation.Animator;
-import android.annotation.SuppressLint;
-import android.app.Service;
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,8 +21,6 @@ import com.shunlian.app.bean.HotBlogsEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.BaseInfoEvent;
 import com.shunlian.app.eventbus_bean.BlogCommentEvent;
-import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.eventbus_bean.DiscoveryLocationEvent;
 import com.shunlian.app.eventbus_bean.MessageReadSuccessEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogEvent;
 import com.shunlian.app.eventbus_bean.RefreshBlogListEvent;
@@ -46,25 +29,19 @@ import com.shunlian.app.presenter.HotBlogPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
-import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IHotBlogView;
-import com.shunlian.app.widget.BlogCommentSendPopwindow;
-import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.BlogCommentSendDialog;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
-import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +74,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
     private ShareInfoParam mShareInfoParam;
     private LottieAnimationView mAnimationView;
     private String currentCommentBlogId;
-    private BlogCommentSendPopwindow mPopWindow;
+    private BlogCommentSendDialog mPopWindow;
 
     @Override
     public void onDestroyView() {
@@ -494,7 +471,7 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
 
     private void showPopupComment() {
         if (mPopWindow == null) {
-            mPopWindow = new BlogCommentSendPopwindow(getActivity());
+            mPopWindow = new BlogCommentSendDialog(getActivity());
             mPopWindow.setOnPopClickListener((String content) -> {
                 if (isEmpty(currentCommentBlogId)) {
                     return;

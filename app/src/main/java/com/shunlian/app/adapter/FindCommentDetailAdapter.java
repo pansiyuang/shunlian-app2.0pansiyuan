@@ -156,6 +156,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                 mHolder.mtv_content.setLongClickable(false);
                 mHolder.tv_verify.setClickable(false);
                 mHolder.tv_verify.setText("已驳回");
+                mHolder.tv_verify.setTextColor(getColor(R.color.text_gray2));
                 gone(mHolder.ll_zan, mHolder.tv_reject);
                 if (lastLikesBean.is_self == 1) {
                     visible(mHolder.tv_reply);

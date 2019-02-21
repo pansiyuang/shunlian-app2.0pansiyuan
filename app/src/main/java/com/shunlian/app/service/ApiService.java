@@ -3106,6 +3106,14 @@ public interface ApiService {
     Call<BaseEntity<CommonEntity>> updateOrderAddress(@Body RequestBody body);
 
     /**
+     * 转转转积分消费记录
+     *
+     * @return
+     */
+    @GET("task/creditLog")
+    Call<BaseEntity<CreditLogEntity>> getScoreRecord(@QueryMap Map<String, String> map);
+
+    /**
      * 新人专享banner
      */
     @GET("newexclusive/showVoucherSuspension")

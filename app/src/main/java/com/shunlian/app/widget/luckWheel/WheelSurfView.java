@@ -10,6 +10,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -42,6 +43,8 @@ public class WheelSurfView extends RelativeLayout {
     private LinearLayout llRoot;
     private TextView tvStart;
     private TextView tvGold;
+    private boolean isAdd;
+    private boolean isEnable = false; //子控件是否可以点击
 
     public void setRotateListener(RotateListener rotateListener) {
         mWheelSurfPanView.setRotateListener(rotateListener);
@@ -84,6 +87,7 @@ public class WheelSurfView extends RelativeLayout {
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         mWheelSurfPanView.setLayoutParams(layoutParams);
+        removeAllViews();
         addView(mWheelSurfPanView);
 
         //添加开始按钮
@@ -132,7 +136,6 @@ public class WheelSurfView extends RelativeLayout {
             mWheelSurfPanView.setmTypeNum(builder.mTypeNum);
 
         initStartContentLayout(builder.mStartContent);
-
         mWheelSurfPanView.show();
     }
 
@@ -140,38 +143,49 @@ public class WheelSurfView extends RelativeLayout {
         if (TextUtils.isEmpty(content)) {
             return;
         }
-        llRoot = new LinearLayout(mContext);
-        llRoot.setGravity(Gravity.CENTER);
-        llRoot.setOrientation(LinearLayout.VERTICAL);
-        tvStart = new TextView(mContext);
-        tvGold = new TextView(mContext);
-        tvStart.setText("抽奖");
-        tvGold.setText(content);
-        tvStart.setTextColor(mContext.getResources().getColor(R.color.white));
-        tvGold.setTextColor(mContext.getResources().getColor(R.color.white));
-        tvGold.setMaxLines(2);
-        tvGold.setTextSize(8);
-        tvStart.setGravity(Gravity.CENTER);
-        tvStart.getPaint().setFakeBoldText(true);
-        tvGold.setGravity(Gravity.CENTER);
-        tvStart.setTextSize(12);
+        if (!isAdd) {
+            llRoot = new LinearLayout(mContext);
+            llRoot.setGravity(Gravity.CENTER);
+            llRoot.setOrientation(LinearLayout.VERTICAL);
+            tvStart = new TextView(mContext);
+            tvGold = new TextView(mContext);
+            tvStart.setText("抽奖");
+            tvGold.setText(content);
+            tvStart.setTextColor(mContext.getResources().getColor(R.color.white));
+            tvGold.setTextColor(mContext.getResources().getColor(R.color.white));
+            tvGold.setMaxLines(2);
+            tvGold.setTextSize(8);
+            tvStart.setGravity(Gravity.CENTER);
+            tvStart.getPaint().setFakeBoldText(true);
+            tvGold.setGravity(Gravity.CENTER);
+            tvStart.setTextSize(12);
 
-        llRoot.addView(tvStart);
-        llRoot.addView(tvGold);
-        RelativeLayout.LayoutParams rootLayout = new RelativeLayout.LayoutParams(TransformUtil.dip2px(mContext, 30), ViewGroup.LayoutParams.WRAP_CONTENT);
-        rootLayout.addRule(RelativeLayout.CENTER_IN_PARENT);
-        llRoot.setLayoutParams(rootLayout);
-        addView(llRoot);
+            llRoot.addView(tvStart);
+            llRoot.addView(tvGold);
+            RelativeLayout.LayoutParams rootLayout = new RelativeLayout.LayoutParams(TransformUtil.dip2px(mContext, 30), ViewGroup.LayoutParams.WRAP_CONTENT);
+            rootLayout.addRule(RelativeLayout.CENTER_IN_PARENT);
+            llRoot.setLayoutParams(rootLayout);
+            addView(llRoot);
+            isAdd = true;
+        } else {
+            tvGold.setText(content);
+        }
+    }
+
+    public void clearHistory(int typeNum) {
+        if (mWheelSurfPanView != null) {
+            mWheelSurfPanView.initDefault(typeNum);
+        }
     }
 
     /**
      * 开始旋转
      *
-     * @param pisition 旋转最终的位置 注意 从1 开始 而且是逆时针递增
+     * @param position 旋转最终的位置 注意 从1 开始 而且是逆时针递增
      */
-    public void startRotate(int pisition) {
+    public void startRotate(int position) {
         if (mWheelSurfPanView != null && !mWheelSurfPanView.isRotating()) {
-            mWheelSurfPanView.startRotate(pisition);
+            mWheelSurfPanView.startRotate(position);
         }
     }
 
@@ -335,5 +349,14 @@ public class WheelSurfView extends RelativeLayout {
             result.add(dstbmp);
         }
         return result;
+    }
+
+    public void setEnable(boolean b) {
+        isEnable = b;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return isEnable;
     }
 }

@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -303,7 +304,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                                  INetDataCallback<BaseEntity<T>> callback, int emptyCode,
                                  int failureCode, boolean isLoading) {
         if (code != Code.CODE_REFRESH_TOKEN_VALIDE && code != Code.API_ERROR_NO_MESSAGE && code != 6201) {
-            Common.staticToast(message);
+//            Common.staticToast(message);
+            Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
         }
         switch (code) {
             // TODO: 2017/10/19
