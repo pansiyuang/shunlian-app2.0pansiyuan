@@ -2,6 +2,8 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,15 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.MemberInfoEntity;
-import com.shunlian.app.bean.NewUserGoodsEntity;
-import com.shunlian.app.ui.new_user.NewUserPageActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.ShapeUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -125,8 +123,19 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
         @BindView(R.id.tv_member_profit)
         MyTextView tv_member_profit;
 
+        @BindView(R.id.mtv_phonenum)
+        MyTextView mtv_phonenum;
+
+        @BindView(R.id.tv_copy)
+        MyTextView tv_copy;
+
         public MemberHolder(View itemView) {
             super(itemView);
+            int i = TransformUtil.dip2px(context, 2);
+            GradientDrawable gradientDrawable = ShapeUtils.commonShape(context,
+                    getColor(R.color.white), i, i / 2,
+                    Color.parseColor("#EAB044"));
+            tv_copy.setBackgroundDrawable(gradientDrawable);
         }
 
         /**
