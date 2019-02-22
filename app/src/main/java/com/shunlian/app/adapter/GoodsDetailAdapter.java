@@ -2,7 +2,6 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -119,7 +118,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private long act_start;//活动开始显示的时间
     private String re = "(w=|h=)(\\d+)";
     private Pattern p = Pattern.compile(re);
-    private Rect mRect;
     private final VideoBannerData videoBannerData;
     private static String selectAttr = "";
 
@@ -456,7 +454,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.mll_Coupon.removeAllViews();
                 if (strLengthMeasure == null) {
                     strLengthMeasure = new StringBuilder();
-                    mRect = new Rect();
                 }
                 strLengthMeasure.delete(0, strLengthMeasure.length());
                 mHolder.mll_Coupon.post(()->{
