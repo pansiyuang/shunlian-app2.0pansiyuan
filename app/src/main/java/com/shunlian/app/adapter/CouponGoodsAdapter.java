@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.VoucherEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -107,7 +106,6 @@ public class CouponGoodsAdapter extends BaseRecyclerAdapter<VoucherEntity.Goods>
 //                        viewHolder.ll_earn.setVisibility(View.GONE);
 //                    }
 //                } else {
-                    viewHolder.ll_earn.setVisibility(View.GONE);
                     viewHolder.miv_product.setVisibility(View.GONE);
 //                }
 
@@ -172,9 +170,6 @@ public class CouponGoodsAdapter extends BaseRecyclerAdapter<VoucherEntity.Goods>
 
         @BindView(R.id.tv_address)
         TextView tv_address;
-
-        @BindView(R.id.ll_earn)
-        LinearLayout ll_earn;
 
         @BindView(R.id.tv_earn_money)
         TextView tv_earn_money;
