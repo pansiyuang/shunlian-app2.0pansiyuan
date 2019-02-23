@@ -113,6 +113,12 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 return true;
 
             });
+
+            if (FlowLayout.maxLine == -1){
+                mHolder.miv_show_more.setImageResource(R.mipmap.icon_sjiantou);
+            }else {
+                mHolder.miv_show_more.setImageResource(R.mipmap.icon_xjiantou);
+            }
         }
     }
     /**
@@ -322,6 +328,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
         mLabel = label;
         if (isClear){
             selectId = 0;
+            FlowLayout.maxLine = 2;
         }
     }
 
@@ -437,6 +444,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
 
         @BindView(R.id.miv_show_more)
         MyImageView miv_show_more;
+
         public HeadHolder(View itemView) {
             super(itemView);
             mHeadView = itemView;
@@ -450,21 +458,19 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                     boolean isOverMaxLine = gv_section.getIsOverMaxLine();
                     if (isOverMaxLine){
                         visible(miv_show_more);
-                        gv_section.setMaxLine(2);
                     }else {
                         gone(miv_show_more);
                     }
                 }
             });
 
-
             miv_show_more.setOnClickListener(v -> {
-                if (gv_section.getMaxLine() == -1){
+                if (gv_section.getMaxLine()==-1){
                     gv_section.setMaxLine(2);
-                    miv_show_more.setImageResource(R.mipmap.icon_saixuan_gd);
+                    miv_show_more.setImageResource(R.mipmap.icon_xjiantou);
                 }else {
                     gv_section.setMaxLine(-1);
-                    miv_show_more.setImageResource(R.mipmap.icon_saixuan_sq);
+                    miv_show_more.setImageResource(R.mipmap.icon_sjiantou);
                 }
             });
         }

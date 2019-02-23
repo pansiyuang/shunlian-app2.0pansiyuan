@@ -93,7 +93,7 @@
                     android:gravity="center"
                     android:text="2018-08-27 已购买6单"
                     android:textColor="@color/text_gray2"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     />
             </LinearLayout>
             <com.shunlian.app.widget.MyTextView
@@ -103,7 +103,7 @@
                 android:textSize="11sp"
                 android:singleLine="true"
                 android:visibility="invisible"
-                android:textColor="#a3a3a3"
+                android:textColor="@color/text_gray2"
                 android:layout_marginTop="2dp"/>
         </com.shunlian.app.widget.MyLinearLayout>
 

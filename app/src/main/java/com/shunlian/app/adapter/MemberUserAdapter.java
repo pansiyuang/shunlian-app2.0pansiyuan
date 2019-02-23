@@ -32,8 +32,12 @@ import butterknife.BindView;
 
 public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.MemberList> {
 
-    public MemberUserAdapter(Context context, List<MemberInfoEntity.MemberList> lists) {
+    private boolean isSettingMobile;
+
+    public MemberUserAdapter(Context context, List<MemberInfoEntity.MemberList> lists,
+                             boolean isSettingMobile) {
         super(context, true, lists);
+        this.isSettingMobile = isSettingMobile;
     }
 
     /**
@@ -101,13 +105,18 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
                 }
             }
 
-            mHolder.mtv_phonenum.setText("手机号："+lists.get(position).mobile);
+            String mobile = lists.get(position).mobile;
+            if (!isEmpty(mobile)){
+                mHolder.mtv_phonenum.setText("手机号："+mobile);
+            }else {
+                mHolder.mtv_phonenum.setText("");
+            }
             String member_manager = SharedPrefUtil.getSharedUserString("member_manager", "1");
-            if ("1".equals(member_manager)){
+            if ("0".equals(member_manager) && isSettingMobile){//9437105286
+                visible(mHolder.tv_copy,mHolder.mtv_phonenum);
+            }else {
                 mHolder.tv_copy.setVisibility(View.INVISIBLE);
                 mHolder.mtv_phonenum.setVisibility(View.INVISIBLE);
-            }else {
-                visible(mHolder.tv_copy,mHolder.mtv_phonenum);
             }
         }
     }

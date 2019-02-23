@@ -443,6 +443,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         CommentListEntity.ListData list = data.list;
         if (currentPage == 1){
             mCommentLists.clear();
+            iView.setCommentRecyViewTop();
         }
         int size = mCommentLists.size();
         mCommentLists.addAll(list.data);
@@ -471,6 +472,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         }else {
             isClear = false;
         }
+        isClickHead = false;
         mCommentAdapter.setLabel(data.label,isClear);
         mCommentAdapter.setPageLoading(currentPage,allPage);
         if (!isEmpty(list.data) && list.data.size() > 10){

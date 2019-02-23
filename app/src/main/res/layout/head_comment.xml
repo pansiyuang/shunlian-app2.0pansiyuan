@@ -20,7 +20,7 @@
         android:id="@+id/miv_show_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/icon_saixuan_gd"
+        android:src="@mipmap/icon_xjiantou"
         android:padding="16dp"
         android:visibility="gone"
         android:layout_marginBottom="10dp"

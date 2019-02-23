@@ -171,7 +171,7 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
         header = new NestedSlHeader(this);
         header.setBackgroundColor(getColorResouce(R.color.white));
         lay_refresh.setRefreshHeaderView(header);
-        memberUserAdapter = new MemberUserAdapter(this,lists);
+        memberUserAdapter = new MemberUserAdapter(this,lists,true);
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
 
@@ -315,8 +315,11 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
             this.lists.clear();
           }
            if(memberLists.size()>0){
+              visible(recy_view);
                this.lists.addAll(memberLists);
                memberUserAdapter.notifyDataSetChanged();
+           }else {
+               gone(recy_view);
            }
     }
 

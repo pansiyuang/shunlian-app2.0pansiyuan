@@ -815,9 +815,16 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
     }
 
+    @Override
+    public void setCommentRecyViewTop() {
+        if (commentFrag != null) {
+            commentFrag.setCommentRecyViewTop();
+        }
+    }
+
     /*
-    显示足迹列表
-    */
+        显示足迹列表
+        */
     public void showFootprintList() {
         if (mFootprintEntity == null) {
             goodsDetailPresenter.footprint();

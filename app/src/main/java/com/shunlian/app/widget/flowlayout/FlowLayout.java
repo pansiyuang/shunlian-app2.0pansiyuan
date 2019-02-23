@@ -23,7 +23,7 @@ public class FlowLayout extends ViewGroup
     protected List<Integer> mLineWidth = new ArrayList<Integer>();
     private int mGravity;
     private List<View> lineViews = new ArrayList<>();
-    private int maxLine = -1;//最大显示几行，默认全部显示
+    public static int maxLine = -1;//最大显示几行，默认全部显示
     //每行高度
     private List<Integer> mEveryOneHeight = new ArrayList<>();
     private boolean isOverMaxLine = false;//是否超出最大行
@@ -226,6 +226,8 @@ public class FlowLayout extends ViewGroup
         }
 
     }
+
+
 
     @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs)
