@@ -16,24 +16,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.MemberUserAdapter;
-import com.shunlian.app.bean.AdUserEntity;
-import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.MemberInfoEntity;
-import com.shunlian.app.bean.NewUserGoodsEntity;
-import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.MemberInfoEvent;
-import com.shunlian.app.eventbus_bean.UserPaySuccessEvent;
 import com.shunlian.app.presenter.MemberPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.discover_new.MyPageActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMemberPageView;
 import com.shunlian.app.widget.MyImageView;
@@ -50,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  *新人专享页面
@@ -107,6 +100,12 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
 
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
+
+    @BindView(R.id.miv_eyes_tip)
+    MyImageView miv_eyes_tip;
+
+    @BindView(R.id.tv_register_date)
+    TextView tv_register_date;
 
     LinearLayoutManager  manager;
     ImmersionBar immersionBar;
@@ -179,6 +178,13 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
         recy_view.setAdapter(memberUserAdapter);
 
         memberPagePresenter.memberListInfo(true);
+        //会员管理 1不显示手机号  0显示手机号
+        String member_manager = SharedPrefUtil.getSharedUserString("member_manager", "1");
+        if ("1".equals(member_manager)){
+            miv_eyes_tip.setImageResource(R.mipmap.icon_bukejian);
+        }else {
+            miv_eyes_tip.setImageResource(R.mipmap.icon_kejian);
+        }
     }
 
     public static void startAct(Context context) {
@@ -186,6 +192,21 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
         context.startActivity(intent);
     }
 
+    @OnClick(R.id.miv_eyes_tip)
+    public void clickEyes(){
+        //会员管理 1不显示手机号  0显示手机号
+        String member_manager = SharedPrefUtil.getSharedUserString("member_manager", "1");
+        if ("1".equals(member_manager)){
+            SharedPrefUtil.saveSharedUserString("member_manager","0");
+            miv_eyes_tip.setImageResource(R.mipmap.icon_kejian);
+        }else {
+            SharedPrefUtil.saveSharedUserString("member_manager","1");
+            miv_eyes_tip.setImageResource(R.mipmap.icon_bukejian);
+        }
+        if (memberUserAdapter != null){
+            memberUserAdapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     protected void initListener() {
@@ -302,6 +323,7 @@ public class MemberPageActivity extends BaseActivity implements IMemberPageView 
     @Override
     public void memberDetail(MemberInfoEntity memberInfoEntity,String personNum) {
          this.memberInfoEntity = memberInfoEntity;
+         tv_register_date.setText(memberInfoEntity.reg_time);
          GlideUtils.getInstance().loadCircleAvar(this, img_user_head, memberInfoEntity.avatar);
          if(!TextUtils.isEmpty(memberInfoEntity.nickname)) {
              tv_member_name.setText(memberInfoEntity.nickname);

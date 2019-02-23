@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.MemberInfoEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.ShapeUtils;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -98,6 +100,15 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
                     mHolder.image_shop.setVisibility(View.GONE);
                 }
             }
+
+            mHolder.mtv_phonenum.setText("手机号："+lists.get(position).mobile);
+            String member_manager = SharedPrefUtil.getSharedUserString("member_manager", "1");
+            if ("1".equals(member_manager)){
+                mHolder.tv_copy.setVisibility(View.INVISIBLE);
+                mHolder.mtv_phonenum.setVisibility(View.INVISIBLE);
+            }else {
+                visible(mHolder.tv_copy,mHolder.mtv_phonenum);
+            }
         }
     }
 
@@ -133,9 +144,14 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
             super(itemView);
             int i = TransformUtil.dip2px(context, 2);
             GradientDrawable gradientDrawable = ShapeUtils.commonShape(context,
-                    getColor(R.color.white), i, i / 2,
+                    getColor(R.color.white), i, i / 4,
                     Color.parseColor("#EAB044"));
             tv_copy.setBackgroundDrawable(gradientDrawable);
+
+            tv_copy.setOnClickListener(v -> {
+                MemberInfoEntity.MemberList memberList = lists.get(getAdapterPosition());
+                Common.copyText(context,memberList.mobile);
+            });
         }
 
         /**

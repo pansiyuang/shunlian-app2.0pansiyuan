@@ -100,9 +100,9 @@
                 android:id="@+id/mtv_phonenum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="手机号：45486651556"
                 android:textSize="11sp"
                 android:singleLine="true"
+                android:visibility="invisible"
                 android:textColor="#a3a3a3"
                 android:layout_marginTop="2dp"/>
         </com.shunlian.app.widget.MyLinearLayout>
@@ -135,7 +135,7 @@
                 android:gravity="center"
                 android:text="复制手机号"
                 android:padding="5dp"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginTop="11dp"
                 android:textColor="#EAB044"
                 android:textSize="11sp"/>
