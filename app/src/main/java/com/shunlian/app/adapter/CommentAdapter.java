@@ -10,12 +10,11 @@ import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -31,7 +30,6 @@ import com.shunlian.app.widget.flowlayout.FlowLayout;
 import com.shunlian.app.widget.flowlayout.TagAdapter;
 import com.shunlian.app.widget.flowlayout.TagFlowLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -110,7 +108,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 tagAdapter.notifyDataChanged();
                 if (mCommentTypeListener != null){
                     CommentListEntity.Label label = mLabel.get(posi);
-                    mCommentTypeListener.onCommentType(label.type);
+                    mCommentTypeListener.onCommentType(label.type,label.name);
                 }
                 return true;
 
@@ -437,9 +435,38 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
         @BindView(R.id.gv_section)
         TagFlowLayout gv_section;
 
+        @BindView(R.id.miv_show_more)
+        MyImageView miv_show_more;
         public HeadHolder(View itemView) {
             super(itemView);
             mHeadView = itemView;
+            gv_section.setMaxLine(2);
+
+            gv_section.getViewTreeObserver().addOnGlobalLayoutListener(
+                    new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    gv_section.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    boolean isOverMaxLine = gv_section.getIsOverMaxLine();
+                    if (isOverMaxLine){
+                        visible(miv_show_more);
+                        gv_section.setMaxLine(2);
+                    }else {
+                        gone(miv_show_more);
+                    }
+                }
+            });
+
+
+            miv_show_more.setOnClickListener(v -> {
+                if (gv_section.getMaxLine() == -1){
+                    gv_section.setMaxLine(2);
+                    miv_show_more.setImageResource(R.mipmap.icon_saixuan_gd);
+                }else {
+                    gv_section.setMaxLine(-1);
+                    miv_show_more.setImageResource(R.mipmap.icon_saixuan_sq);
+                }
+            });
         }
     }
 
@@ -464,6 +491,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
     }
 
     public interface ICommentTypeListener{
-        void onCommentType(String type);
+        void onCommentType(String type,String name);
     }
 }

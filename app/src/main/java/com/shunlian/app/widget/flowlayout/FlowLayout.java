@@ -23,6 +23,10 @@ public class FlowLayout extends ViewGroup
     protected List<Integer> mLineWidth = new ArrayList<Integer>();
     private int mGravity;
     private List<View> lineViews = new ArrayList<>();
+    private int maxLine = -1;//最大显示几行，默认全部显示
+    //每行高度
+    private List<Integer> mEveryOneHeight = new ArrayList<>();
+    private boolean isOverMaxLine = false;//是否超出最大行
 
     public FlowLayout(Context context, AttributeSet attrs, int defStyle)
     {
@@ -42,9 +46,25 @@ public class FlowLayout extends ViewGroup
         this(context, null);
     }
 
+
+    public void setMaxLine(int maxLine){
+        this.maxLine = maxLine;
+        requestLayout();
+    }
+
+    public int getMaxLine(){
+        return maxLine;
+    }
+
+    public boolean getIsOverMaxLine() {
+        return isOverMaxLine;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
+        mEveryOneHeight.clear();
+        isOverMaxLine = false;
         int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
@@ -82,6 +102,11 @@ public class FlowLayout extends ViewGroup
 
             if (lineWidth + childWidth > sizeWidth - getPaddingLeft() - getPaddingRight())
             {
+                if (mEveryOneHeight.size() >= maxLine && maxLine > 0){
+                    isOverMaxLine = true;
+                    break;
+                }
+                mEveryOneHeight.add(lineHeight);
                 width = Math.max(width, lineWidth);
                 lineWidth = childWidth;
                 height += lineHeight;
@@ -98,7 +123,6 @@ public class FlowLayout extends ViewGroup
             }
         }
         setMeasuredDimension(
-                //
                 modeWidth == MeasureSpec.EXACTLY ? sizeWidth : width + getPaddingLeft() + getPaddingRight(),
                 modeHeight == MeasureSpec.EXACTLY ? sizeHeight : height + getPaddingTop() + getPaddingBottom()//
         );

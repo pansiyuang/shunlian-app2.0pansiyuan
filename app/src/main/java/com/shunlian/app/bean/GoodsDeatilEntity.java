@@ -1081,6 +1081,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public boolean isSelect;
         public String every_day_ing;
         public String reduced;
+        public String min_buy_limit;//最少限购数量
         public String limit_min_buy;//团购商品最少购买数
         public String big_label;//团购商品最少购买数
         public int share_num;
@@ -1145,6 +1146,8 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeByte(this.isSelect ? (byte) 1 : (byte) 0);
             dest.writeString(this.every_day_ing);
             dest.writeString(this.reduced);
+            dest.writeString(this.stock);
+            dest.writeString(this.min_buy_limit);
             dest.writeString(this.limit_min_buy);
             dest.writeString(this.big_label);
             dest.writeInt(this.share_num);
@@ -1201,6 +1204,8 @@ public class GoodsDeatilEntity implements Parcelable {
             this.isSelect = in.readByte() != 0;
             this.every_day_ing = in.readString();
             this.reduced = in.readString();
+            this.stock = in.readString();
+            this.min_buy_limit = in.readString();
             this.limit_min_buy = in.readString();
             this.big_label = in.readString();
             this.share_num = in.readInt();

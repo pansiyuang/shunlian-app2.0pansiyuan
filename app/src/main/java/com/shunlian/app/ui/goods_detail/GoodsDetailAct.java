@@ -515,7 +515,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         switchContent(commentFrag);
         commentFrag.setPresenter(goodsDetailPresenter, id);
         goodsDetailPresenter.commentList(GoodsDetailPresenter.COMMENT_EMPTY_CODE,
-                GoodsDetailPresenter.COMMENT_FAILURE_CODE, true, goodsId, "ALL", "1", id);
+                GoodsDetailPresenter.COMMENT_FAILURE_CODE, true, goodsId, "ALL", "","1", id);
         setToolbar();
     }
 
