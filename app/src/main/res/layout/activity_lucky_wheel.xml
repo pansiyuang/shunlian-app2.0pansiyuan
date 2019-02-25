@@ -52,6 +52,7 @@
                 android:background="@drawable/bg_draw_record"
                 android:gravity="center"
                 android:text="中奖记录"
+                android:textColor="@color/value_B78D70"
                 android:textSize="13sp" />
 
             <com.shunlian.app.widget.luckWheel.WheelSurfView
@@ -89,7 +90,7 @@
                     android:includeFontPadding="false"
                     android:paddingLeft="21dp"
                     android:paddingRight="21dp"
-                    android:text="中奖纪录"
+                    android:text="中奖榜单"
                     android:textColor="@color/value_49"
                     android:textSize="12sp" />
 
