@@ -3170,4 +3170,11 @@ public interface ApiService {
      */
     @POST("discovery/comment/check")
     Call<BaseEntity<CommonEntity>> commentCheck(@Body RequestBody body);
+
+    /**
+     * 我的周六中奖记录
+     * @return
+     */
+    @GET("turntable/myPrizes")
+    Call<BaseEntity<SaturdayDrawRecordEntity>> getDrawRecord(@QueryMap Map<String,String> map);
 }

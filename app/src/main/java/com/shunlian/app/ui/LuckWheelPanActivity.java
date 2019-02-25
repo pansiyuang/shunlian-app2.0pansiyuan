@@ -11,32 +11,44 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.SaturdayHotGoodsAdapter;
 import com.shunlian.app.adapter.TurnTableAdapter;
 import com.shunlian.app.bean.LuckDrawEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.TurnTableEntity;
 import com.shunlian.app.bean.TurnTablePopEntity;
 import com.shunlian.app.presenter.TurnTablePresenter;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ITurnTableView;
+import com.shunlian.app.widget.DrawRecordDialog;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRecyclerView;
@@ -49,6 +61,10 @@ import com.tencent.smtt.sdk.WebSettings;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 
@@ -56,7 +72,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/8/31.
  */
 
-public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView, TurnTableDialog.OnShareCallBack {
+public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView, TurnTableDialog.OnShareCallBack, TurnTableAdapter.OnItemGetHeightListener {
 
     @BindView(R.id.wheelPan)
     WheelSurfView wheelPan;
@@ -67,11 +83,23 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     @BindView(R.id.tv_title_right)
     TextView tv_title_right;
 
+    @BindView(R.id.tv_draw_time)
+    TextView tv_draw_time;
+
+    @BindView(R.id.tv_draw_record)
+    TextView tv_draw_record;
+
     @BindView(R.id.recycler_list)
-    MyRecyclerView recycler_list;
+    RecyclerView recycler_list;
+
+    @BindView(R.id.recycler_hot_goods)
+    RecyclerView recycler_hot_goods;
 
     @BindView(R.id.text_switcher)
     TextSwitcher text_switcher;
+
+    @BindView(R.id.ll_rootView)
+    LinearLayout ll_rootView;
 
     private TurnTablePresenter mPresenter;
     private int loadCount = 0;
@@ -81,17 +109,23 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     private List<TurnTableEntity.MyPrize> myPrizeList;
     private int luckPosition = 0;
     private TurnTableAdapter mAdapter;
+    private SaturdayHotGoodsAdapter hotGoodsAdapter;
     private TurnTableDialog turnTableDialog;
     private Dialog dialog_ad;
     private LuckDrawEntity currentLuckDraw;
     private String currentTmtId;
     private String currentRuleUrl;
     private boolean isFirstLoad = true;
+    private boolean hasDraw;
+    private DrawRecordDialog mDialog;
 
     private int index = 0;//textview上下滚动下标
     private Handler handler = new Handler();
     private boolean isFlipping = false; // 是否启用预警信息轮播
     private List<String> mWarningTextList = new ArrayList<>();
+    private List<TurnTableEntity.HotGoods> hotGoodsList = new ArrayList<>();
+    private Timer mTimer;
+    private int currentItemHeight;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, LuckWheelPanActivity.class);
@@ -120,6 +154,8 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         wheelPan.setRotateListener(new RotateListener() {
             @Override
             public void rotateEnd(int position, String des) {
+                wheelPan.setEnable(false);
+                hasDraw = true;
                 if (turnTableDialog == null) {
                     turnTableDialog = new TurnTableDialog(LuckWheelPanActivity.this, currentLuckDraw);
                 } else {
@@ -133,6 +169,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
             @Override
             public void rotating(ValueAnimator valueAnimator) {
+                wheelPan.setEnable(true);
             }
 
             @Override
@@ -153,8 +190,21 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
                 dialog_ad.show();
             }
         });
+        tv_draw_record.setOnClickListener(v -> {
+            showDrawRecordDialog();
+        });
 
         setTextSwitcher();
+
+        GridLayoutManager hotManager = new GridLayoutManager(this, 2);
+        recycler_hot_goods.setLayoutManager(hotManager);
+        hotGoodsAdapter = new SaturdayHotGoodsAdapter(this, hotGoodsList);
+        recycler_hot_goods.setAdapter(hotGoodsAdapter);
+        hotGoodsAdapter.setOnItemClickListener((view, position) -> {
+            TurnTableEntity.HotGoods hotGoods = hotGoodsList.get(position);
+            GoodsDetailAct.startAct(LuckWheelPanActivity.this, hotGoods.id);
+        });
+        recycler_hot_goods.addItemDecoration(new GridSpacingItemDecoration(2, TransformUtil.dip2px(this, 5), false));
     }
 
     @Override
@@ -264,18 +314,19 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
     @Override
     public void getTurnData(TurnTableEntity turnTableEntity) {
-        if (tv_title==null)
+        if (tv_title == null)
             return;
         if (isFirstLoad) {
             currentRuleUrl = turnTableEntity.rule;
             initDialogs(currentRuleUrl);
             tv_title.setText(turnTableEntity.turnTable.title);
+            tv_draw_time.setText(String.format("剩余次数%d", turnTableEntity.how_many));
             trophyList.clear();
             trophyList.addAll(turnTableEntity.turnTable.list);
             addAllTurnTables(trophyList);
 
             if (isEmpty(turnTableEntity.prizeScroll)) {
-                text_switcher.setVisibility(View.GONE);
+                text_switcher.setVisibility(View.INVISIBLE);
                 return;
             } else {
                 text_switcher.setVisibility(View.VISIBLE);
@@ -288,8 +339,8 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             }
             if (mWarningTextList.size() > 1) {
                 handler.postDelayed(() -> {
-                    if (text_switcher!=null)
-                    text_switcher.setText(mWarningTextList.get(0));
+                    if (text_switcher != null)
+                        text_switcher.setText(mWarningTextList.get(0));
                     index = 0;
                 }, 1000);
                 text_switcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom));
@@ -298,10 +349,14 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             }
         }
         myPrizeList.clear();
-        myPrizeList.addAll(turnTableEntity.myPrize);
+        hotGoodsList.clear();
+        myPrizeList.addAll(turnTableEntity.prize_list);
+        hotGoodsList.addAll(turnTableEntity.hot_list);
+        hotGoodsAdapter.notifyDataSetChanged();
         if (mAdapter == null) {
             mAdapter = new TurnTableAdapter(this, myPrizeList);
             recycler_list.setAdapter(mAdapter);
+            mAdapter.setOnItemGetHeightListener(this);
         } else {
             mAdapter.notifyDataSetChanged();
         }
@@ -310,7 +365,9 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
     @Override
     public void getLuckDraw(LuckDrawEntity luckDrawEntity) {
+        currentTmtId = null;//抽奖后把popwindow的中奖Id置空
         currentLuckDraw = luckDrawEntity;
+        tv_draw_time.setText(String.format("剩余次数%d", currentLuckDraw.how_many));
         String luckId;
         if (!isEmpty(luckDrawEntity.id)) {
             luckId = luckDrawEntity.id;
@@ -333,13 +390,11 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         if (0 == turnTablePopEntity.show) {
             return;
         }
-
         currentTmtId = turnTablePopEntity.list.tmt_id;
-
         if (turnTableDialog == null) {
-            turnTableDialog = new TurnTableDialog(LuckWheelPanActivity.this, turnTablePopEntity.show, turnTablePopEntity.list.meg, turnTablePopEntity.list.thumb);
+            turnTableDialog = new TurnTableDialog(LuckWheelPanActivity.this, turnTablePopEntity);
         } else {
-            turnTableDialog.setPopupData(turnTablePopEntity.show, turnTablePopEntity.list.meg, turnTablePopEntity.list.thumb);
+            turnTableDialog.setPopupData(turnTablePopEntity);
         }
         turnTableDialog.setCallBack(this);
         turnTableDialog.show();
@@ -441,10 +496,10 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 100 && Activity.RESULT_OK == resultCode) {
             String addressId = data.getStringExtra("addressId");
-            if (currentLuckDraw != null) {
-                mPresenter.turntableAddAddress(addressId, currentLuckDraw.tmt_id);
-            } else if (!isEmpty(currentTmtId)) {
+            if (!isEmpty(currentTmtId)) {
                 mPresenter.turntableAddAddress(addressId, currentTmtId);
+            } else if (currentLuckDraw != null) {
+                mPresenter.turntableAddAddress(addressId, currentLuckDraw.tmt_id);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -457,13 +512,79 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     }
 
     @Override
+    protected void onRestart() {
+        startScorll();
+        super.onRestart();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         stopFlipping();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
     }
 
     @Override
     public void onShare() {
         mPresenter.turntableShareImg();
+    }
+
+    @Override
+    public void cancelDraw() {
+        if (turnTableDialog != null) {
+            turnTableDialog.showAttentionData();
+            turnTableDialog.show();
+        }
+    }
+
+    public void showDrawRecordDialog() {
+        if (mDialog == null) {
+            mDialog = new DrawRecordDialog(this);
+        }
+        if (hasDraw) {
+            mDialog.initPage();
+        }
+        hasDraw = false;
+        mDialog.show();
+    }
+
+    public void startScorll() {
+        mTimer = new Timer();
+        if (currentItemHeight == 0) {
+            return;
+        }
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(() -> {
+                    if (isSlideToBottom(recycler_list)) {
+                        recycler_list.smoothScrollToPosition(0);
+                        return;
+                    }
+                    recycler_list.smoothScrollBy(0, currentItemHeight * 5, new LinearInterpolator());
+                });
+            }
+        }, 100, 2000);
+    }
+
+    public boolean isSlideToBottom(RecyclerView recyclerView) {
+        if (recyclerView == null) return false;
+        if (recyclerView.computeVerticalScrollExtent() + recyclerView.computeVerticalScrollOffset() >= recyclerView.computeVerticalScrollRange())
+            return true;
+        return false;
+    }
+
+    @Override
+    public void getItemHeight(int height) {
+        currentItemHeight = height;
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, TransformUtil.dip2px(this, 25) + 6 * currentItemHeight);
+        ll_rootView.setLayoutParams(layoutParams);
+        LinearLayout.LayoutParams rl = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 5 * currentItemHeight);
+        recycler_list.setLayoutParams(rl);
+        startScorll();
     }
 }

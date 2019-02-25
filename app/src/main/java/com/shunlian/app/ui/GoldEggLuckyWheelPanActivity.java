@@ -100,7 +100,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     private String currentPrizeId;
     private String currentRuleUrl;
     private int consume;
-
+    private boolean isDraw;
     private int index = 0;//textview上下滚动下标
     private Handler handler = new Handler();
     private boolean isFlipping = false, isFirstAttenion = false; // 是否启用预警信息轮播、积分提醒
@@ -171,6 +171,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
                     return;
                 }
                 if (Long.valueOf(currentTaskDraw.credit) == 0) {
+                    isDraw = false;
                     mPresenter.getPrizeList();
                 }
             }
@@ -182,23 +183,8 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
             @Override
             public void rotateBefore(ImageView goImg) {
-                isAttention = SharedPrefUtil.getCacheSharedPrfBoolean("isAttention", false);
-
-                if (isAttention) {
-                    mPresenter.getTaskDraw();
-                } else {
-                    if (!isEmpty(currentScore)) {
-                        if (totalScoreCount >= consume) { //积分大于等于一次消耗积分数量
-                            goldEggDialog.setShowType(6, consume, totalScoreCount);
-                        } else if (totalScoreCount < consume && totalScoreCount > 0) {//积分小于一次消耗积分数量
-                            goldEggDialog.setShowType(7, consume, totalScoreCount);
-                        } else if (totalScoreCount == 0) {//没有积分只能用金蛋抽奖
-                            goldEggDialog.setShowType(-1, consume, totalScoreCount);
-                        }
-                    } else {
-                        goldEggDialog.setShowType(-1, consume, totalScoreCount);
-                    }
-                }
+                isDraw = true;
+                mPresenter.getPrizeList();
             }
         });
         myPrizeList = new ArrayList<>();
@@ -469,31 +455,58 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
         addAllTurnTables(myPrizeList);
         tv_gold_count.setText(String.format("金蛋数量：%d", totalGoldCount));
 
-        if (currentDrawType != defaultDrawType) { //判断积分抽奖是否被关闭了
-            String luckId;
-            if (currentTaskDraw != null && !isEmpty(currentTaskDraw.id)) {
-                luckId = currentTaskDraw.id;
-                for (int i = 0; i < myPrizeList.size(); i++) {
-                    if (luckId.equals(myPrizeList.get(i).id)) {
-                        if (i == 0) {
-                            luckPosition = 1;
-                        } else {
-                            luckPosition = myPrizeList.size() + 1 - i;
-                        }
-                        wheelPan.clearHistory(myPrizeList.size());
-                        wheelPan.startRotate(luckPosition);
-                        break;
-                    }
+        if (!isDraw) {
+            return;
+        }
+
+        if (currentDrawType != prizeEntity.draw_type) { //清空转圈记录
+            wheelPan.clearHistory(prizeEntity.list.size());
+            currentDrawType = prizeEntity.draw_type;
+            SharedPrefUtil.saveCacheSharedPrfBoolean("isAttention", false);
+        }
+
+        isAttention = SharedPrefUtil.getCacheSharedPrfBoolean("isAttention", false);
+        if (isAttention) {
+            mPresenter.getTaskDraw();
+        } else {
+            if (!isEmpty(currentScore)) {
+                if (totalScoreCount >= consume) { //积分大于等于一次消耗积分数量
+                    goldEggDialog.setShowType(6, consume, totalScoreCount);
+                } else if (totalScoreCount < consume && totalScoreCount > 0) {//积分小于一次消耗积分数量
+                    goldEggDialog.setShowType(7, consume, totalScoreCount);
+                } else if (totalScoreCount == 0) {//没有积分只能用金蛋抽奖
+                    goldEggDialog.setShowType(-1, consume, totalScoreCount);
                 }
+            } else {
+                goldEggDialog.setShowType(-1, consume, totalScoreCount);
             }
         }
-        defaultDrawType = prizeEntity.draw_type;
+
+//        if (currentDrawType != defaultDrawType) { //判断积分抽奖是否被关闭了
+//            String luckId;
+//            if (currentTaskDraw != null && !isEmpty(currentTaskDraw.id)) {
+//                luckId = currentTaskDraw.id;
+//                for (int i = 0; i < myPrizeList.size(); i++) {
+//                    if (luckId.equals(myPrizeList.get(i).id)) {
+//                        if (i == 0) {
+//                            luckPosition = 1;
+//                        } else {
+//                            luckPosition = myPrizeList.size() + 1 - i;
+//                        }
+//                        wheelPan.clearHistory(myPrizeList.size());
+//                        wheelPan.startRotate(luckPosition);
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        defaultDrawType = prizeEntity.draw_type;
     }
 
     @Override
     public void getTaskDraw(TaskDrawEntity taskDrawEntity) {
         currentTaskDraw = taskDrawEntity;
-        currentDrawType = taskDrawEntity.draw_type;
+//        currentDrawType = taskDrawEntity.draw_type;
         String luckId;
         if (!isEmpty(currentTaskDraw.id)) {
             luckId = currentTaskDraw.id;
@@ -528,9 +541,9 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
         totalGoldCount = currentTaskDraw.gold_egg;
         tv_gold_count.setText(String.format("金蛋数量：%d", totalGoldCount));
 
-        if (currentDrawType != defaultDrawType) {
-            mPresenter.getPrizeList();
-        }
+//        if (currentDrawType != defaultDrawType) {
+//            mPresenter.getPrizeList();
+//        }
     }
 
     @Override

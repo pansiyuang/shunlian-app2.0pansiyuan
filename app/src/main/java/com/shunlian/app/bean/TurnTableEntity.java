@@ -14,6 +14,9 @@ public class TurnTableEntity {
     public List<String> prizeScroll;
     public TurnTable turnTable;
     public List<MyPrize> myPrize;
+    public List<MyPrize> prize_list;
+    public List<HotGoods> hot_list;
+    public int how_many;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class TurnTable {
@@ -35,5 +38,16 @@ public class TurnTableEntity {
         public String create_time;
         public String trophy_name;
         public String express_sn;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class HotGoods {
+        public String id;
+        public String title;
+        public String thumb;
+        public String price;
+        public String market_price;
+        public String share_buy_earn;
+        public String self_buy_earn;
     }
 }

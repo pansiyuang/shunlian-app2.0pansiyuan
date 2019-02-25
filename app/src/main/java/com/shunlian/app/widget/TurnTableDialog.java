@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LuckDrawEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.bean.TurnTablePopEntity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.receive_adress.AddressListActivity;
 import com.shunlian.app.utils.GlideUtils;
@@ -51,7 +52,9 @@ public class TurnTableDialog extends Dialog {
 
     private Context mContext;
     private LuckDrawEntity myLuckDraw;
+    private TurnTablePopEntity myPopEntity;
     private OnShareCallBack callBack;
+    private boolean isAttention;
 
     public TurnTableDialog(Context context, LuckDrawEntity luckDrawEntity) {
         this(context, R.style.popAd);
@@ -64,14 +67,14 @@ public class TurnTableDialog extends Dialog {
         setCanceledOnTouchOutside(false);
     }
 
-    public TurnTableDialog(Context context, int showType, String content, String thumb) {
+    public TurnTableDialog(Context context, TurnTablePopEntity turnTablePopEntity) {
         this(context, R.style.popAd);
         this.mContext = context;
-
+        this.myPopEntity = turnTablePopEntity;
         View rootView = LayoutInflater.from(mContext).inflate(R.layout.dialog_turntable, null, false);
         setContentView(rootView);
         ButterKnife.bind(this, rootView);
-        initDialog(showType, content, thumb);
+        initDialog(turnTablePopEntity);
         setCanceledOnTouchOutside(false);
     }
 
@@ -89,25 +92,36 @@ public class TurnTableDialog extends Dialog {
         initListeners();
     }
 
-    public void initDialog(int type, String content, String thumb) {
+    public void initDialog(TurnTablePopEntity turnTablePopEntity) {
         //设置当前dialog宽高
         Window win = getWindow();
         WindowManager.LayoutParams lp = win.getAttributes();
         lp.width = getDeviceWidth(mContext) - TransformUtil.dip2px(mContext, 90);
         win.setAttributes(lp);
-        setShowDialog(type, content, thumb);
+        setShowDialog(turnTablePopEntity);
         initListeners();
     }
 
     public void initListeners() {
         miv_close.setOnClickListener(view -> {
-            if (isShowing()) {
-                dismiss();
+            dismiss();
+            if (myPopEntity != null && myPopEntity.show == 2) {
+                if (callBack != null) {
+                    callBack.cancelDraw();
+                }
+            } else if (myLuckDraw != null && myLuckDraw.trophy_type == 1) {
+                if (callBack != null) {
+                    callBack.cancelDraw();
+                }
             }
         });
         miv_button.setOnClickListener(v -> {
             if ("去购物".equals(miv_button.getTag())) {
                 MainActivity.startAct(mContext, "mainPage");
+            } else if ("炫耀一下".equals(miv_button.getTag())) {
+                if (callBack != null) {
+                    callBack.onShare();
+                }
             }
             dismiss();
         });
@@ -117,16 +131,22 @@ public class TurnTableDialog extends Dialog {
         });
         miv_share.setOnClickListener(v -> {
             if (callBack != null) {
-                callBack.onShare();
+                if (!isAttention) {
+                    callBack.onShare();
+                }
             }
+            dismiss();
         });
     }
 
-    public void setShowDialog(int type, String content, String thumb) {
-        tv_content.setText(content);
+    public void setShowDialog(TurnTablePopEntity turnTablePopEntity) {
+        this.myPopEntity = turnTablePopEntity;
+        tv_content.setText(turnTablePopEntity.text);
         miv_button.setTag(null);
-        miv_button.setImageResource(R.mipmap.img_choujiang_anniu_gouwu);
-        switch (type) {
+        miv_button.setImageResource(R.mipmap.img_choujiang_anniu_xuanyao);
+        miv_close.setVisibility(View.VISIBLE);
+        isAttention = false;
+        switch (turnTablePopEntity.show) {
             case 1:
                 miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_gouwu);
                 miv_type.setVisibility(View.GONE);
@@ -138,7 +158,7 @@ public class TurnTableDialog extends Dialog {
             case 2:
                 miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_jiangpin);
                 miv_type.setVisibility(View.VISIBLE);
-                GlideUtils.getInstance().loadImage(mContext, miv_type, thumb);
+                GlideUtils.getInstance().loadImage(mContext, miv_type, turnTablePopEntity.list.thumb);
                 miv_button.setVisibility(View.GONE);
                 miv_share.setVisibility(View.VISIBLE);
                 miv_address.setVisibility(View.VISIBLE);
@@ -147,10 +167,13 @@ public class TurnTableDialog extends Dialog {
     }
 
     public void setDialogData(LuckDrawEntity luckDrawEntity) {
+        this.myLuckDraw = luckDrawEntity;
         //'奖品类型  1商品  2 优惠券  3金蛋',
         tv_content.setText(luckDrawEntity.meg);
         miv_button.setTag(null);
-        miv_button.setImageResource(R.mipmap.img_choujiang_anniu_youhuiquan);
+        miv_button.setImageResource(R.mipmap.img_choujiang_anniu_xuanyao);
+        miv_close.setVisibility(View.VISIBLE);
+        isAttention = false;
         switch (luckDrawEntity.trophy_type) {
             case 1:
                 miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_jiangpin);
@@ -158,13 +181,15 @@ public class TurnTableDialog extends Dialog {
                 GlideUtils.getInstance().loadImage(mContext, miv_type, luckDrawEntity.thumb);
                 miv_button.setVisibility(View.GONE);
                 miv_share.setVisibility(View.VISIBLE);
+                miv_share.setImageResource(R.mipmap.img_choujiang_anniu_fenxiang);
+                miv_address.setImageResource(R.mipmap.img_choujiang_anniu_dizhi);
                 miv_address.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_youhuiquan);
                 miv_type.setVisibility(View.GONE);
                 miv_button.setVisibility(View.VISIBLE);
-                miv_button.setTag("确定");
+                miv_button.setTag("炫耀一下");
                 miv_share.setVisibility(View.GONE);
                 miv_address.setVisibility(View.GONE);
                 break;
@@ -172,7 +197,7 @@ public class TurnTableDialog extends Dialog {
                 miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_jindan);
                 miv_type.setVisibility(View.GONE);
                 miv_button.setVisibility(View.VISIBLE);
-                miv_button.setTag("确定");
+                miv_button.setTag("炫耀一下");
                 miv_share.setVisibility(View.GONE);
                 miv_address.setVisibility(View.GONE);
                 break;
@@ -181,11 +206,34 @@ public class TurnTableDialog extends Dialog {
 
     public void setLuckDrawEntity(LuckDrawEntity luckDrawEntity) {
         this.myLuckDraw = luckDrawEntity;
+        this.myPopEntity = null;
         setDialogData(luckDrawEntity);
     }
 
-    public void setPopupData(int showType, String content, String thumb) {
-        setShowDialog(showType, content, thumb);
+    public void setPopupData(TurnTablePopEntity turnTablePopEntity) {
+        this.myPopEntity = turnTablePopEntity;
+        this.myLuckDraw = null;
+        setShowDialog(turnTablePopEntity);
+    }
+
+    public void showAttentionData() {
+        isAttention = true;
+        if (myPopEntity != null) {
+            tv_content.setText(myPopEntity.text);
+        } else if (myLuckDraw != null) {
+            tv_content.setText(myLuckDraw.text);
+        }
+        miv_button.setTag(null);
+        miv_button.setImageResource(R.mipmap.img_choujiang_anniu_xuanyao);
+        miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_jiangpin);
+        miv_type.setVisibility(View.VISIBLE);
+        miv_type.setImageResource(R.mipmap.img_xiaoji);
+        miv_button.setVisibility(View.GONE);
+        miv_share.setVisibility(View.VISIBLE);
+        miv_share.setImageResource(R.mipmap.img_guanbi);
+        miv_address.setVisibility(View.VISIBLE);
+        miv_address.setImageResource(R.mipmap.img_choujiang_anniu_dizhi);
+        miv_close.setVisibility(View.GONE);
     }
 
     public void setCallBack(OnShareCallBack shareCallBack) {
@@ -195,5 +243,7 @@ public class TurnTableDialog extends Dialog {
     public interface OnShareCallBack {
 
         void onShare();
+
+        void cancelDraw();
     }
 }
