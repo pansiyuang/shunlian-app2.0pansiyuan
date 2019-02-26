@@ -457,7 +457,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 isClickHead = true;
                 type = requestType;
                 mParticiplesName = name;
-                commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,false,
+                commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,true,
                         goods_id,type,name,"1",null);
             });
 
