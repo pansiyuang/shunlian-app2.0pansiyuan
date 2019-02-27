@@ -46,5 +46,6 @@ public class StoreMsgEntity {
         public String nickname;
         public String avatar;
         public String money;
+        public String url;
     }
 }

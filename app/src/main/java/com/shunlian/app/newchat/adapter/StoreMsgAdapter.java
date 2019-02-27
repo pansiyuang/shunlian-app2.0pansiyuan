@@ -13,7 +13,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -118,6 +117,11 @@ public class StoreMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
 
         public VipViewholder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(v -> {
+                if (listener != null){
+                    listener.onItemClick(v,getAdapterPosition());
+                }
+            });
         }
     }
 
