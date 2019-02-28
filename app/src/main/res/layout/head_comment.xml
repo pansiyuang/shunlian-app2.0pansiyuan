@@ -15,6 +15,17 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         app:max_select="1"/>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_show_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_xjiantou"
+        android:padding="16dp"
+        android:visibility="gone"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        />
     
     <View
         android:layout_width="match_parent"
