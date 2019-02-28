@@ -91,6 +91,7 @@ import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.core.KouBeiAct;
+import com.shunlian.app.ui.core.KouBeiActNew;
 import com.shunlian.app.ui.core.NewGetCouponAct;
 import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.coupon.CouponGoodsAct;
@@ -396,7 +397,8 @@ public class Common {
 //                Common.staticToast("优惠拼单");
 //                break;
             case "praise":
-                KouBeiAct.startAct(context);
+//                KouBeiAct.startAct(context);
+                KouBeiActNew.startAct(context);
                 break;
             case "loveyoupin":
                 AishangAct.startAct(context);

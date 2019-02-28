@@ -956,8 +956,19 @@
             android:exported="false"
             android:label="@string/first_aishangxin"
             android:screenOrientation="portrait" />
+        <!--<activity-->
+            <!--android:name=".ui.core.KouBeiAct"-->
+            <!--android:exported="false"-->
+            <!--android:label="@string/first_koubeire"-->
+            <!--android:screenOrientation="portrait" />-->
         <activity
-            android:name=".ui.core.KouBeiAct"
+            android:name=".ui.core.KouBeiActNew"
+            android:exported="false"
+            android:label="@string/first_koubeire"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.core.KouBeiActNews"
             android:exported="false"
             android:label="@string/first_koubeire"
             android:screenOrientation="portrait" />

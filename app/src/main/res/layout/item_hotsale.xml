@@ -1,0 +1,204 @@
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="218dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:background="@drawable/rounded_corner_solid_white_16px"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.NewTextView
+        android:id="@+id/ntv_ttitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="13dp"
+        android:text="显示器"
+        android:textColor="#FF85190D"
+        android:textSize="15sp" />
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_tleft"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:scaleType="fitXY" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/img_koubei_one" />
+            </com.shunlian.app.widget.MyRelativeLayout>
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_tleft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="亚运卡单"
+                android:textColor="#FF484848"
+                android:textSize="13sp" />
+
+
+            <com.shunlian.app.widget.SaleProgressViews
+                android:id="@+id/progress_view_salel"
+                android:layout_width="83dp"
+                android:layout_height="12dp"
+                android:layout_above="@id/ntv_price"
+                android:layout_toRightOf="@id/miv_photo"
+                app:nearOverText=""
+                app:overText=""
+                android:layout_marginTop="4dp"
+                app:sideColor="#FFE2C679"
+                app:textColorSale="#FFE2C679"/>
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_tlefts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="亚运卡单"
+                android:textColor="#FFAFAFAE"
+                android:textSize="11sp" />
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_tmid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:scaleType="fitXY" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/img_koubei_two" />
+            </com.shunlian.app.widget.MyRelativeLayout>
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_tmid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="亚运卡单"
+                android:textColor="#FF484848"
+                android:textSize="13sp" />
+
+            <com.shunlian.app.widget.SaleProgressViews
+                android:id="@+id/progress_view_salem"
+                android:layout_width="83dp"
+                android:layout_height="12dp"
+                android:layout_above="@id/ntv_price"
+                android:layout_toRightOf="@id/miv_photo"
+                app:nearOverText=""
+                app:overText=""
+                android:layout_marginTop="4dp"
+                app:sideColor="#FFE2C679"
+                app:textColorSale="#FFE2C679"/>
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_tmids"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="亚运卡单"
+                android:textColor="#FFAFAFAE"
+                android:textSize="11sp" />
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_tright"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:scaleType="fitXY" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/img_koubei_three" />
+            </com.shunlian.app.widget.MyRelativeLayout>
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_tright"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="亚运卡单"
+                android:textColor="#FF484848"
+                android:textSize="13sp" />
+
+            <com.shunlian.app.widget.SaleProgressViews
+                android:id="@+id/progress_view_saler"
+                android:layout_width="83dp"
+                android:layout_height="12dp"
+                android:layout_above="@id/ntv_price"
+                android:layout_toRightOf="@id/miv_photo"
+                app:nearOverText=""
+                app:overText=""
+                android:layout_marginTop="4dp"
+                app:sideColor="#FFE2C679"
+                app:textColorSale="#FFE2C679"/>
+
+            <com.shunlian.app.widget.NewTextView
+                android:id="@+id/ntv_trights"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="亚运卡单"
+                android:textColor="#FFAFAFAE"
+                android:textSize="11sp" />
+        </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyLinearLayout>
+</com.shunlian.app.widget.MyLinearLayout>
