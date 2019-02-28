@@ -80,6 +80,7 @@ public class TeamIndexEntity {
         public String   content;//金蛋奖池+20金蛋"
         public String  avatar;//
         public String  nickname2;   //"邀请人的昵称",
+        public String  is_join;//  1当队长     0 关了就好
     }
 
 }

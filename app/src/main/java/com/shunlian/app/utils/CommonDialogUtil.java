@@ -634,6 +634,9 @@ public class CommonDialogUtil {
         if (((Activity) context).isFinishing()) {
             return;
         }
+        if(dialog_team_fill_pass!=null&&dialog_team_fill_pass.isShowing()){
+            return;
+        }
         CommonDialog.Builder nomalBuildShare = new CommonDialog.Builder(context).setWidth(DensityUtil.dip2px(context,300))
                 .setView(R.layout.dialog_team_into);
         dialog_team_fill_pass = nomalBuildShare.create();
@@ -644,7 +647,8 @@ public class CommonDialogUtil {
         TextView tv_user_nick = dialog_team_fill_pass.getView(R.id.tv_user_nick);
         TextView tv_content = dialog_team_fill_pass.getView(R.id.tv_content);
         TextView tv_team_egg = dialog_team_fill_pass.getView(R.id.tv_team_egg);
-
+        TextView tv_submit_open = dialog_team_fill_pass.getView(R.id.tv_submit_open);
+        tv_team_egg.setTextSize(16);
         if(!TextUtils.isEmpty(pop_3.avatar)){
             GlideUtils.getInstance().loadCircleAvarRound(context,img_user_head,pop_3.avatar);
         }else{
@@ -653,7 +657,7 @@ public class CommonDialogUtil {
         tv_user_nick.setText(pop_3.nickname);
         tv_content.setText(HighLightKeyWordUtil.getHighLightKeyWord(context.getResources().getColor(R.color.value_fed599),
                 pop_3.text,pop_3.nickname2));
-
+        tv_submit_open.setText("确定");
         tv_team_egg.setTextColor(context.getResources().getColor(R.color.white));
         tv_team_egg.setText(pop_3.content);
         dialog_team_fill_pass.setOnClickListener(R.id.miv_close, v -> {
@@ -661,11 +665,7 @@ public class CommonDialogUtil {
         });
         dialog_team_fill_pass.setOnClickListener(R.id.tv_submit_open, v -> {
             dialog_team_fill_pass.dismiss();
-        });
-        tv_team_egg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog_team_fill_pass.dismiss();
+            if(pop_3.equals("1")) {
                 iCallBackResult.onTagClick("创建队伍");
             }
         });

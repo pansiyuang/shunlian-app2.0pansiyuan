@@ -10,10 +10,14 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.TransformUtil;
 
 import java.text.DecimalFormat;
 
@@ -59,6 +63,7 @@ public class SaleProgressViews extends View {
     private Bitmap bgBitmap;
     private boolean isNeedAnim;
 
+    private Context context;
     public SaleProgressViews(Context context) {
         this(context, null);
     }
@@ -70,6 +75,7 @@ public class SaleProgressViews extends View {
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
+        this.context = context;
         TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.SaleProgressView);
         sideColor = ta.getColor(R.styleable.SaleProgressView_sideColor,0xffff3c32);
         textColor = ta.getColor(R.styleable.SaleProgressView_textColorSale,0xffff3c32);
@@ -180,6 +186,12 @@ public class SaleProgressViews extends View {
         Bitmap fgBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas fgCanvas = new Canvas(fgBitmap);
         if (fgSrc == null) {
+//            GradientDrawable topDrawable = new GradientDrawable();
+//            topDrawable.setColor(context.getResources().getColor(R.color.pink_color));
+//            int i = TransformUtil.dip2px(context, 5);
+//            float[] topRad = {i, i, i, i, 0, 0, 0, 0};
+//            topDrawable.setCornerRadii(topRad);
+//            fgSrc = toBitmap(topDrawable);
             fgSrc = BitmapFactory.decodeResource(getResources(),R.mipmap.img_huangse);
         }
         fgCanvas.drawRoundRect(
@@ -193,6 +205,20 @@ public class SaleProgressViews extends View {
         srcPaint.setXfermode(null);
     }
 
+    public  Bitmap toBitmap(GradientDrawable drawable) {
+        int width = drawable.getIntrinsicWidth();
+        width = width > 0 ? width : 1;
+        int height = drawable.getIntrinsicHeight();
+        height = height > 0 ? height : 1;
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height,
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
     //绘制文字信息
     private void drawText(Canvas canvas) {
         String scaleText = new DecimalFormat("#%").format(scale);
