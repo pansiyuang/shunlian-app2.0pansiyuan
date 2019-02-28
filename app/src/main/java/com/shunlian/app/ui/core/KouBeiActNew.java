@@ -3,6 +3,7 @@ package com.shunlian.app.ui.core;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -92,6 +93,9 @@ public class KouBeiActNew extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.store_abLayout)
     AppBarLayout store_abLayout;
 
+    @BindView(R.id.nsv_outs)
+    NestedScrollView nsv_outs;
+
     private PKoubei pKoubei;
     private HotsaleAdapter hotsaleAdapter;
     private List<HotsaleEntity.Suspension> midList = new ArrayList<>();
@@ -151,8 +155,9 @@ public class KouBeiActNew extends BaseActivity implements View.OnClickListener, 
             public void onItemClick(View view, int position) {
                 koubeiMenuAdapter.selectedPosition = position;
                 koubeiMenuAdapter.notifyDataSetChanged();
-                if (rv_mid.getScrollState() == 0) {
+                if (rv_mid.getScrollState() == 0&&position>=0) {
                     pKoubei.getHotsaleCate(hotsaleHomeEntity.cate_list.get(position).cate_id);
+                    nsv_outs.scrollTo(0,0);
                 }
             }
         });

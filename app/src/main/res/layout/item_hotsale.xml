@@ -67,6 +67,7 @@
                 android:layout_toRightOf="@id/miv_photo"
                 app:nearOverText=""
                 app:overText=""
+                app:textSizeSale="10sp"
                 android:layout_marginTop="4dp"
                 app:sideColor="#FFE2C679"
                 app:textColorSale="#FFE2C679"/>
@@ -126,6 +127,7 @@
                 android:layout_toRightOf="@id/miv_photo"
                 app:nearOverText=""
                 app:overText=""
+                app:textSizeSale="10sp"
                 android:layout_marginTop="4dp"
                 app:sideColor="#FFE2C679"
                 app:textColorSale="#FFE2C679"/>
@@ -185,6 +187,7 @@
                 android:layout_toRightOf="@id/miv_photo"
                 app:nearOverText=""
                 app:overText=""
+                app:textSizeSale="10sp"
                 android:layout_marginTop="4dp"
                 app:sideColor="#FFE2C679"
                 app:textColorSale="#FFE2C679"/>

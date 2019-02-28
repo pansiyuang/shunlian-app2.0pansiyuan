@@ -95,7 +95,7 @@
 
                     <com.shunlian.app.widget.MyLinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="218dp"
+                        android:layout_height="292dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="18dp"
@@ -119,7 +119,6 @@
                                     android:id="@+id/ntv_ltop"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="包治百病"
                                     android:textColor="#FFF8F8F8"
                                     android:textSize="12sp" />
 
@@ -128,7 +127,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
-                                    android:text="包治百病"
                                     android:textColor="#FFD6A49F"
                                     android:textSize="10sp" />
                             </com.shunlian.app.widget.MyLinearLayout>
@@ -136,17 +134,15 @@
                             <com.shunlian.app.widget.MyImageView
                                 android:id="@+id/miv_ltop"
                                 android:layout_width="match_parent"
-                                android:layout_height="63dp"
+                                android:layout_height="100dp"
                                 android:layout_marginTop="11dp"
-                                android:background="@color/blue"
                                 android:scaleType="fitXY" />
 
                             <com.shunlian.app.widget.MyImageView
                                 android:id="@+id/miv_lmid"
                                 android:layout_width="match_parent"
-                                android:layout_height="63dp"
+                                android:layout_height="100dp"
                                 android:layout_marginTop="11dp"
-                                android:background="@color/blue"
                                 android:scaleType="fitXY" />
                         </com.shunlian.app.widget.MyLinearLayout>
 
@@ -167,7 +163,6 @@
                                     android:id="@+id/ntv_mtop"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="包治百病"
                                     android:textColor="#FFF8F8F8"
                                     android:textSize="12sp" />
 
@@ -176,7 +171,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
-                                    android:text="包治百病"
                                     android:textColor="#FFD6A49F"
                                     android:textSize="10sp" />
                             </com.shunlian.app.widget.MyLinearLayout>
@@ -184,17 +178,15 @@
                             <com.shunlian.app.widget.MyImageView
                                 android:id="@+id/miv_mtop"
                                 android:layout_width="match_parent"
-                                android:layout_height="63dp"
+                                android:layout_height="100dp"
                                 android:layout_marginTop="11dp"
-                                android:background="@color/blue"
                                 android:scaleType="fitXY" />
 
                             <com.shunlian.app.widget.MyImageView
                                 android:id="@+id/miv_mmid"
                                 android:layout_width="match_parent"
-                                android:layout_height="63dp"
+                                android:layout_height="100dp"
                                 android:layout_marginTop="11dp"
-                                android:background="@color/blue"
                                 android:scaleType="fitXY" />
                         </com.shunlian.app.widget.MyLinearLayout>
 
@@ -215,7 +207,6 @@
                                     android:id="@+id/ntv_rtop"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="包治百病"
                                     android:textColor="#FFF8F8F8"
                                     android:textSize="12sp" />
 
@@ -224,7 +215,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
-                                    android:text="包治百病"
                                     android:textColor="#FFD6A49F"
                                     android:textSize="10sp" />
                             </com.shunlian.app.widget.MyLinearLayout>
@@ -232,17 +222,15 @@
                             <com.shunlian.app.widget.MyImageView
                                 android:id="@+id/miv_rtop"
                                 android:layout_width="match_parent"
-                                android:layout_height="63dp"
+                                android:layout_height="100dp"
                                 android:layout_marginTop="11dp"
-                                android:background="@color/blue"
                                 android:scaleType="fitXY" />
 
                             <com.shunlian.app.widget.MyImageView
                                 android:id="@+id/miv_rmid"
                                 android:layout_width="match_parent"
-                                android:layout_height="63dp"
+                                android:layout_height="100dp"
                                 android:layout_marginTop="11dp"
-                                android:background="@color/blue"
                                 android:scaleType="fitXY" />
                         </com.shunlian.app.widget.MyLinearLayout>
                     </com.shunlian.app.widget.MyLinearLayout>
