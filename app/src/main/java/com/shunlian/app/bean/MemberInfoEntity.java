@@ -34,6 +34,7 @@ public class MemberInfoEntity implements Serializable {
     public String   role;//PLUS店主等级，小于等于0非plus，大于0为plus以上等级，1PLUS店主，2主管，>=3经理
 
     public String  invite_code;//邀请码
+    public String  reg_time;//注册时间
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Pager implements Serializable {
         public String page;
@@ -65,5 +66,6 @@ public class MemberInfoEntity implements Serializable {
         public String code;// 邀请码
         public String role;//角色
         public String level;//等级
+        public String mobile;//手机号
     }
 }

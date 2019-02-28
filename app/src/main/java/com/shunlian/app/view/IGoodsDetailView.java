@@ -100,4 +100,9 @@ public interface IGoodsDetailView extends IView {
      * @param share_buy 分享赚
      */
     default void selfBuyAndShareBuyBottomBtn(String self_buy,String share_buy){}
+
+    /**
+     * 评价列表内容置顶
+     */
+    default void setCommentRecyViewTop(){}
 }

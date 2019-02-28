@@ -19,7 +19,7 @@
             android:background="@color/value_F7F7F7"/>
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:gravity="center"
             android:orientation="horizontal">
             <com.shunlian.app.widget.MyImageView

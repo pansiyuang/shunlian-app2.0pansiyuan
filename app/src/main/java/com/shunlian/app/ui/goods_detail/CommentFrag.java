@@ -5,12 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommentAdapter;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.widget.flowlayout.FlowLayout;
 
 import butterknife.BindView;
 
@@ -87,6 +89,19 @@ public class CommentFrag extends BaseFragment {
         }
     }
 
+    public void setCommentRecyViewTop() {
+        if (recy_view != null) {
+            recy_view.getViewTreeObserver().addOnGlobalLayoutListener(
+                    new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    recy_view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    recy_view.scrollToPosition(0);
+                }
+            });
+        }
+    }
+
     @Override
     public void onDestroyView() {
         RecyclerView.Adapter adapter = recy_view.getAdapter();
@@ -94,6 +109,7 @@ public class CommentFrag extends BaseFragment {
             adapter.onDetachedFromRecyclerView(recy_view);
             adapter = null;
         }
+        FlowLayout.maxLine = -1;
         super.onDestroyView();
     }
 }
