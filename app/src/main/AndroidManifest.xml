@@ -1221,7 +1221,13 @@
             android:name=".ui.GoldEggLuckyWheelPanActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.integral_team.TeamIntegralActivity"
+             android:hardwareAccelerated="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.integral_team.TeamHistoryActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.discover_new.comment.CommentRejectedAct"
             android:exported="false"
             android:screenOrientation="portrait"/>

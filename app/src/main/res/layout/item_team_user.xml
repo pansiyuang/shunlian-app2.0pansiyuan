@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mllayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_height="@dimen/xx230">
+
+
+        <ImageView
+            android:id="@+id/image_head"
+            android:layout_width="@dimen/xx130"
+            android:scaleType="centerCrop"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/xx10"
+            android:src="@mipmap/ic_guafenjindan_tianjia"
+            android:layout_height="@dimen/xx130" />
+
+        <TextView
+            android:id="@+id/tv_user_num"
+            android:layout_width="42dp"
+            android:layout_height="14dp"
+            android:textColor="#CD7240"
+            android:textSize="9sp"
+            android:gravity="center"
+            android:text="邀请1人"
+            android:layout_marginTop="@dimen/xx20"
+            android:layout_alignLeft="@+id/image_head"
+            android:layout_marginLeft="@dimen/xx82"
+            android:background="@drawable/bg_shape_team_24px" />
+        <TextView
+            android:id="@+id/tv_user_egg"
+            android:layout_width="wrap_content"
+            android:layout_height="14dp"
+            android:textColor="#CD7240"
+            android:textSize="9sp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:gravity="center"
+            android:text="赚:10"
+            android:layout_marginTop="@dimen/xx70"
+            android:layout_alignLeft="@+id/image_head"
+            android:layout_marginLeft="@dimen/xx96"
+            android:background="@drawable/bg_shape_team_24px" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/image_head"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/xx10"
+            android:gravity="center_vertical|top"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_team_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#CD7240"
+                android:visibility="visible"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/bg_shape_team_8px"
+                android:textSize="9sp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:text="队长"/>
+            <ImageView
+                android:layout_marginTop="1.5dp"
+                android:id="@+id/img_team_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_guafenjindan_jindan"/>
+    <TextView
+        android:id="@+id/tv_team_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="邀请好友"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/white"
+        android:textSize="11sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</com.shunlian.app.widget.MyRelativeLayout>
+
+
+

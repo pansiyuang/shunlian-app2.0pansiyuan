@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="437dp"
+        android:background="@mipmap/bg_guafenjindan_huodongguize">
+
+        <com.shunlian.app.widget.X5WebView
+            android:id="@+id/mwv_rule"
+            android:layout_marginTop="125dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="25dp"
+            android:scrollbars="none"
+            android:layerType="hardware"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"/>
+        <com.shunlian.app.widget.WebViewProgressBar
+            android:id="@+id/mProgressbar"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@+id/rl_title"
+            app:max="100"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="125dp"
+            app:progressColor="@color/pink_color"
+            app:progressHeight="3" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+   <com.shunlian.app.widget.MyImageView
+       android:id="@+id/miv_close"
+       android:layout_width="30dp"
+       android:layout_height="30dp"
+       android:src="@mipmap/img_xinren_guanbi"
+       android:layout_marginTop="30dp"/>
+
+</com.shunlian.app.widget.MyLinearLayout>

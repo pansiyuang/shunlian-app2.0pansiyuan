@@ -152,7 +152,7 @@
                 <com.shunlian.app.widget.MyLinearLayout
                     android:id="@+id/mllayout_mid"
                     android:layout_width="match_parent"
-                    android:layout_height="98dp"
+                    android:layout_height="73dp"
                     android:layout_marginTop="14dp"
                     android:gravity="center"
                     android:paddingLeft="12dp"
@@ -171,7 +171,7 @@
 
                         <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/animation_view"
-                            android:layout_width="56dp"
+                            android:layout_width="35dp"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:adjustViewBounds="true"
@@ -181,12 +181,12 @@
                         <!--金蛋-->
                         <com.shunlian.app.widget.MyImageView
                             android:id="@+id/miv_golden_eggs"
-                            android:layout_width="56dp"
+                            android:layout_width="35dp"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:adjustViewBounds="true"
-                            android:visibility="gone" />
+                            android:visibility="visible" />
                         <!--气泡-->
                         <com.shunlian.app.widget.MyImageView
                             android:id="@+id/miv_airbubble"
@@ -196,6 +196,7 @@
                             android:layout_marginRight="25dp"
                             android:layout_marginTop="4dp"
                             android:alpha="0"
+                            android:visibility="visible"
                             android:src="@mipmap/image_renwu_airbubbles01" />
 
                         <com.shunlian.app.utils.timer.TaskDownTimerView
@@ -224,7 +225,7 @@
                             android:layout_above="@id/ddp_downTime"
                             android:layout_centerHorizontal="true"
                             android:textColor="@color/white"
-                            android:textSize="14sp"
+                            android:textSize="10sp"
                             android:textStyle="bold" />
                     </com.shunlian.app.widget.MyRelativeLayout>
 
@@ -249,10 +250,10 @@
                             android:layout_marginRight="5dp"
                             android:layout_marginTop="5dp"
                             android:background="@drawable/bg_task_num"
-                            android:paddingBottom="3dp"
-                            android:paddingLeft="6dp"
-                            android:paddingRight="6dp"
-                            android:paddingTop="3dp"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="2dp"
                             android:textColor="@color/white"
                             android:textSize="10sp" />
 
@@ -265,12 +266,12 @@
                             android:layout_marginBottom="9dp"
                             android:layout_marginTop="2dp"
                             android:textColor="@color/white"
-                            android:textSize="10sp" />
+                            android:textSize="8sp" />
 
                         <com.shunlian.app.widget.MyImageView
                             android:id="@+id/miv_gets"
                             android:layout_width="wrap_content"
-                            android:layout_height="22dp"
+                            android:layout_height="16dp"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:adjustViewBounds="true"
@@ -284,7 +285,7 @@
                             android:layout_above="@id/ntv_content"
                             android:layout_centerHorizontal="true"
                             android:textColor="@color/white"
-                            android:textSize="14sp"
+                            android:textSize="10sp"
                             android:textStyle="bold" />
                     </com.shunlian.app.widget.MyRelativeLayout>
 
@@ -310,7 +311,7 @@
                             android:layout_marginBottom="9dp"
                             android:layout_marginTop="2dp"
                             android:textColor="@color/white"
-                            android:textSize="10sp" />
+                            android:textSize="8sp" />
 
                         <com.shunlian.app.widget.NewTextView
                             android:id="@+id/ntv_titleOness"
@@ -319,7 +320,41 @@
                             android:layout_above="@id/ntv_contents"
                             android:layout_centerHorizontal="true"
                             android:textColor="@color/white"
-                            android:textSize="14sp"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </com.shunlian.app.widget.MyRelativeLayout>
+
+                    <com.shunlian.app.widget.MyRelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1">
+
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_team"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY" />
+
+                        <com.shunlian.app.widget.NewTextView
+                            android:id="@+id/ntv_team"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="9dp"
+                            android:layout_marginTop="2dp"
+                            android:textColor="@color/white"
+                            android:textSize="8sp" />
+
+                        <com.shunlian.app.widget.NewTextView
+                            android:id="@+id/ntv_team_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/ntv_team"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="@color/white"
+                            android:textSize="10sp"
                             android:textStyle="bold" />
                     </com.shunlian.app.widget.MyRelativeLayout>
                 </com.shunlian.app.widget.MyLinearLayout>
@@ -343,7 +378,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="28dp"
-                    android:layout_marginTop="108dp"
+                    android:layout_marginTop="75dp"
                     android:alpha="0"
                     android:src="@mipmap/image_renwu_airbubbles01" />
 
@@ -352,7 +387,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="108dp"
+                    android:layout_marginTop="75dp"
                     android:alpha="0"
                     android:src="@mipmap/image_renwu_airbubbles02" />
             </com.shunlian.app.widget.MyRelativeLayout>

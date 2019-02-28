@@ -45,7 +45,7 @@ public class TaskDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected int getTextSize() {
-        return 10;
+        return 8;
     }
 
     @Override
