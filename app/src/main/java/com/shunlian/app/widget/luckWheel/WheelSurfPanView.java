@@ -584,4 +584,10 @@ public class WheelSurfPanView extends View {
         textView.setTextSize(1);
         return textView.getTextSize();
     }
+
+    public void stopAnim() {
+        if (animate() != null) {
+            animate().cancel();
+        }
+    }
 }

@@ -189,6 +189,12 @@ public class WheelSurfView extends RelativeLayout {
         }
     }
 
+    public void stopRotate() {
+        if (mWheelSurfPanView != null && mWheelSurfPanView.isRotating()) {
+            mWheelSurfPanView.stopAnim();
+        }
+    }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -54,7 +55,11 @@ import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.luckWheel.RotateListener;
 import com.shunlian.app.widget.luckWheel.WheelSurfView;
 import com.shunlian.mylibrary.ImmersionBar;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +118,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     private String currentScore; //当前积分数量
     private PopupWindow popupWindow;
     private Timer timer;
-    private boolean hasDraw;
+    private boolean hasDraw; //是否有抽奖记录，来刷新积分记录列表
     private int defaultDrawType, currentDrawType;//初始化抽奖类型、当前抽奖类型
     private ScoreRecordDialog mScoreRecordDialog;
     private TimerTask timerTask = new TimerTask() {
@@ -163,7 +168,9 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
         wheelPan.setRotateListener(new RotateListener() {
             @Override
             public void rotateEnd(int position, String des) {
-                wheelPan.setEnable(false);
+                if (wheelPan != null) {
+                    wheelPan.setEnable(false);
+                }
                 goldEggDialog.setShowType(currentTaskDraw);
                 mPresenter.getMyDrawRecordList();
                 hasDraw = true;
@@ -178,7 +185,9 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
             @Override
             public void rotating(ValueAnimator valueAnimator) {
-                wheelPan.setEnable(true);
+                if (wheelPan != null) {
+                    wheelPan.setEnable(true);
+                }
             }
 
             @Override
@@ -255,6 +264,18 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
             mwv_rule.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
             mwv_rule.loadUrl(url);
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
+            mwv_rule.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onReceivedError(WebView webView, int i, String s, String s1) {
+                    super.onReceivedError(webView, i, s, s1);
+                }
+
+                @Override
+                public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+                    super.onReceivedSslError(webView, sslErrorHandler, sslError);
+                    sslErrorHandler.proceed();
+                }
+            });
 //            dialog_ad.setCancelable(false);
         }
     }
@@ -432,6 +453,9 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     public void onStop() {
         super.onStop();
         stopFlipping();
+        if (wheelPan != null) {
+            wheelPan.stopRotate();
+        }
     }
 
     @Override
@@ -455,17 +479,19 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
         addAllTurnTables(myPrizeList);
         tv_gold_count.setText(String.format("金蛋数量：%d", totalGoldCount));
 
-        if (!isDraw) {
+        if (!isDraw) {//假如不是抽奖
             return;
         }
 
+        currentDrawType = SharedPrefUtil.getCacheSharedPrfInt("DrawType", 0);
         if (currentDrawType != prizeEntity.draw_type) { //清空转圈记录
             wheelPan.clearHistory(prizeEntity.list.size());
-            currentDrawType = prizeEntity.draw_type;
             SharedPrefUtil.saveCacheSharedPrfBoolean("isAttention", false);
         }
+        SharedPrefUtil.saveCacheSharedPrfInt("DrawType", prizeEntity.draw_type);
 
         isAttention = SharedPrefUtil.getCacheSharedPrfBoolean("isAttention", false);
+        LogUtil.httpLogW("isAttention:" + isAttention + "  currentDrawType:" + currentDrawType + "  draw_type:" + prizeEntity.draw_type);
         if (isAttention) {
             mPresenter.getTaskDraw();
         } else {

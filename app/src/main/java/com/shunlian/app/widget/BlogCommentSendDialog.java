@@ -95,8 +95,8 @@ public class BlogCommentSendDialog extends Dialog {
         }
         if (context instanceof Activity)
             ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
 
+}
     public void setOnPopClickListener(OnPopClickListener listener) {
         this.mListener = listener;
     }

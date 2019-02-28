@@ -53,7 +53,7 @@
                     android:id="@+id/tv_gold_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="金蛋数量：5682120"
+                    android:text="金蛋数量：0"
                     android:textColor="@color/value_954B22"
                     android:textSize="12sp" />
 
@@ -62,7 +62,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:text="积分：1232556"
                     android:textColor="@color/value_954B22"
                     android:textSize="12sp" />
             </LinearLayout>

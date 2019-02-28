@@ -175,6 +175,26 @@ public class SharedPrefUtil {
     }
 
     /**
+     * 从sp中获取string
+     * @param key
+     * @param def
+     * @return
+     */
+    public static Integer getCacheSharedPrfInt(String key,int def){
+        return getsharedPreferences(shunlian_cache).getInt(key,def);
+}
+
+    /**
+     * 将string保存到sp中
+     * @param key
+     * @param value
+     * @return
+     */
+    public static boolean saveCacheSharedPrfInt(String key,int value){
+        return getsharedPreferences(shunlian_cache).edit().putInt(key,value).commit();
+    }
+
+    /**
      * 清空sp文件内容
      */
     public static void clearCacheSharedPref(){

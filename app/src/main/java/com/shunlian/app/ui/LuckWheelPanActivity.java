@@ -57,7 +57,12 @@ import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.luckWheel.RotateListener;
 import com.shunlian.app.widget.luckWheel.WheelSurfView;
 import com.shunlian.app.wxapi.WXEntryActivity;
+import com.tencent.mm.opensdk.utils.Log;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -254,10 +259,24 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
                     .getPath());
             // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
             mwv_rule.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
+            mwv_rule.setFocusable(true);
+            mwv_rule.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             mwv_rule.loadUrl(url);
             miv_ad.setImageResource(R.mipmap.image_renwu_dazhuanpan);
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
 //            dialog_ad.setCancelable(false);
+            mwv_rule.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onReceivedError(WebView webView, int i, String s, String s1) {
+                    super.onReceivedError(webView, i, s, s1);
+                }
+
+                @Override
+                public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+                    super.onReceivedSslError(webView, sslErrorHandler, sslError);
+                    sslErrorHandler.proceed();
+                }
+            });
         }
     }
 
