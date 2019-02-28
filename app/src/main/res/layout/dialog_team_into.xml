@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="342dp"
+      >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="310dp"
+            android:orientation="vertical"
+            android:layout_marginTop="32dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:background="@drawable/rounded_corner_solid_team_into"
+            android:paddingTop="37dp">
+
+            <TextView
+                android:id="@+id/tv_user_nick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#FED599"
+                android:textSize="15sp"
+                android:text="张三岁"/>
+
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:layout_marginTop="30dp"
+                android:text=""/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:background="@mipmap/bg_guafenjindan_dakaikouling">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#FED599"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:text="金蛋奖池+"/>
+                    <TextView
+                        android:id="@+id/tv_team_egg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#FED599"
+                        android:gravity="center"
+                        android:text="120"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:visibility="gone"
+                        android:textColor="#FED599"
+                        android:gravity="center"
+                        android:text="金蛋"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_submit_open"
+                android:layout_width="160dp"
+                android:layout_height="44dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/rounded_corner_solid_team"
+                android:text="去看看"
+                android:textColor="#A43A24"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"
+                android:gravity="center"
+                />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/img_user_head"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/img_set_defaulthead"/>
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <com.shunlian.app.widget.MyImageView
+       android:id="@+id/miv_close"
+       android:layout_width="30dp"
+       android:layout_height="30dp"
+       android:src="@mipmap/img_xinren_guanbi"
+       android:layout_marginTop="25dp"/>
+
+</com.shunlian.app.widget.MyLinearLayout>

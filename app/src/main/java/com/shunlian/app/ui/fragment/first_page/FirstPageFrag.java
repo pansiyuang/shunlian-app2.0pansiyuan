@@ -30,6 +30,7 @@ import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.integral_team.TeamIntegralActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;

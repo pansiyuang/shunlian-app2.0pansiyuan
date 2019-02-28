@@ -22,5 +22,13 @@ public class CommondEntity implements Serializable{
         public String thumb;
         public String price;
         public String from_user;
+
+        public String is_pop;
+        public String password;
+        public String avatar;
+        public String nickname;
+        public String  text;
+        public String group_name;
+        public String  button;
     }
 }

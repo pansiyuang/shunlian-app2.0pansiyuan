@@ -105,6 +105,7 @@ import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
+import com.shunlian.app.ui.integral_team.TeamIntegralActivity;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.ui.my_profit.DetailOrderRecordAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
@@ -601,6 +602,13 @@ public class Common {
                 break;
             case "taskGoldenEggTurnTable":
                 GoldEggLuckyWheelPanActivity.startAct(context);
+                break;
+            case "carveUpEgg"://组队瓜分金蛋
+                if (!Common.isAlreadyLogin()) {
+                    Common.goGoGo(context, "login");
+                    return;
+                }
+                TeamIntegralActivity.startAct(context, null);
                 break;
             default://首页
                 MainActivity.startAct(context, "");

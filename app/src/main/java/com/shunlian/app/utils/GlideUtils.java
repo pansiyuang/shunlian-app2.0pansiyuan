@@ -332,11 +332,11 @@ public class GlideUtils {
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
-                .placeholder(R.mipmap.img_set_defaulthead)
+                .placeholder(R.mipmap.bg_guafenjindan_morentouxiang)
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
-                .bitmapTransform(new GlideCircleTransform(context,3,context.getResources().getColor(R.color.line_gay)))
+                .bitmapTransform(new GlideCircleTransform(context,3,context.getResources().getColor(R.color.value_fde294)))
                 .into(imageView);
     }
 

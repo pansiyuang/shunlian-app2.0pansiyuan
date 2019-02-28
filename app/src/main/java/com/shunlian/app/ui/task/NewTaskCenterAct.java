@@ -162,6 +162,15 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
     @BindView(R.id.tv_info)
     TextView tv_info;
 
+    @BindView(R.id.miv_team)
+    MyImageView miv_team;
+
+    @BindView(R.id.ntv_team)
+    NewTextView ntv_team;
+
+    @BindView(R.id.ntv_team_title)
+    NewTextView ntv_team_title;
+
     LinearLayoutManager linearLayoutManager;
     NewEggDetailAdapter eggDetailAdapter;
     private boolean isStop, isCrash;
@@ -359,6 +368,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         });
 
         miv_chose.setOnClickListener(this);
+        miv_team.setOnClickListener(this);
     }
 
     /**
@@ -550,6 +560,9 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
         switch (view.getId()) {
             case R.id.miv_chose:
                 Common.goGoGo(this,"taskGoldenEggTurnTable");
+                break;
+            case R.id.miv_team:
+                Common.goGoGo(this,"carveUpEgg");
                 break;
         }
     }
@@ -887,7 +900,7 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
             return;
         int width = (Common.getScreenWidth(baseAct) - TransformUtil.dip2px(baseAct, 34)) / 3;
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mllayout_mid.getLayoutParams();
-        layoutParams.height = (width * 98) / 108;
+        layoutParams.height = (width * 73) / 108;
         ntv_titleOne.setText(list.get(0).title);
         GlideUtils.getInstance().loadImageZheng(baseAct, miv_one, list.get(0).icon_url);
         ntv_titleOnes.setText(list.get(1).title);
@@ -923,6 +936,12 @@ public class NewTaskCenterAct extends BaseActivity implements ITaskCenterView {
             ntv_content.setText(list.get(1).content);
         }
         GlideUtils.getInstance().loadImageZheng(baseAct, miv_chose, list.get(2).icon_url);
+
+        if(list.size()>=4){
+            GlideUtils.getInstance().loadImageZheng(baseAct, miv_team, list.get(3).icon_url);
+            ntv_team_title.setText(list.get(3).title);
+            ntv_team.setText(list.get(3).content);
+        }
     }
 
     /**
