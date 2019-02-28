@@ -72,15 +72,13 @@
                 <com.shunlian.app.widget.NewTextView
                     android:id="@+id/ntv_desc"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="24dp"
                     android:background="@drawable/bg_koubei_title"
-                    android:paddingBottom="6dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textSize="12sp"
                     android:textColor="@color/white"
-                    android:paddingTop="6dp" />
+                    android:gravity="center" />
             </com.shunlian.app.widget.MyLinearLayout>
 
             <android.support.v7.widget.RecyclerView
