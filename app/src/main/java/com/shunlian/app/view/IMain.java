@@ -8,6 +8,7 @@ import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.ShowSignEntity;
 import com.shunlian.app.bean.ShowVoucherSuspension;
+import com.shunlian.app.bean.TeamCodeInfoEntity;
 import com.shunlian.app.bean.UpdateEntity;
 
 /**
@@ -26,4 +27,7 @@ public interface IMain extends IView {
     void getPrize(CommonEntity data);
     void setDiscoveryUnreadCount(CommonEntity data);
     void showVoucherSuspension(ShowVoucherSuspension voucherSuspension);
+    default  void setReadPassword(CommondEntity data){
+
+    };
 }

@@ -1,6 +1,7 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.view.KeyEvent;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.BubbleEntity;
@@ -51,7 +52,6 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
         Map<String, String> map = new HashMap<>();
         map.put("position", "0");
         sortAndMD5(map);
-
         Call<BaseEntity<BubbleEntity>> baseEntityCall = getApiService().getBubble(map);
         getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<BubbleEntity>>() {
             @Override

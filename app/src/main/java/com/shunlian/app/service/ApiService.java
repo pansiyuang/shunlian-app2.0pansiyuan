@@ -3195,4 +3195,24 @@ public interface ApiService {
      */
     @POST("discovery/comment/check")
     Call<BaseEntity<CommonEntity>> commentCheck(@Body RequestBody body);
+
+    /**
+     * 瓜分金蛋主页
+     * @return
+     */
+    @POST("task/teamIndex")
+    Call<BaseEntity<TeamIndexEntity>> teamIndex(@Body RequestBody body);
+    /**
+     * 识别口令
+     * @return
+     */
+    @POST("task/readPassword")
+    Call<BaseEntity<TeamCodeInfoEntity>> readPassword(@Body RequestBody body);
+
+    /**
+     * 参队记录
+     * @return
+     */
+    @GET("task/teamLog")
+    Call<BaseEntity<TeamListEntity>> teamLog(@QueryMap Map<String,String> map);
 }

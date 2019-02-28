@@ -22,8 +22,15 @@ package com.shunlian.app.utils;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.shunlian.app.bean.DiscoverActivityEntity;
+import com.shunlian.app.ui.integral_team.TeamIntegralActivity;
 
 import java.util.Set;
 
@@ -179,5 +186,22 @@ public class SharedPrefUtil {
      */
     public static void clearCacheSharedPref(){
         getsharedPreferences(shunlian_cache).edit().clear().commit();
+    }
+
+    /**
+     * 跳转到微信
+     */
+    public static void getWechatApi(Activity context){
+        try {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            ComponentName cmp = new ComponentName("com.tencent.mm","com.tencent.mm.ui.LauncherUI");
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setComponent(cmp);
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            // TODO: handle exception
+            Common.staticToastAct(context,"检查到您手机没有安装微信，请安装后使用该功能");
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.shunlian.app.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * 时间转换工具
@@ -43,4 +44,17 @@ public class TimeUtil {
         SimpleDateFormat format = new SimpleDateFormat(yearTimeFormat);
         return format.format(new Date(time));
     }
+
+    /*
+     *毫秒转HH:mm:ss"
+     */
+    public static String timeFormHHmmss(long time) {
+        long currentTime =  time - TimeZone.getDefault().getRawOffset();
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");//初始化Formatter的转换格式。
+
+        String hms = formatter.format(currentTime);
+
+        return  hms;
+    }
+
 }

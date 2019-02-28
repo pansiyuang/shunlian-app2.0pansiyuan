@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.my_profit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,13 +12,10 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.presenter.DetailOrderRecordPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IDetailOrderRecordView;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyRelativeLayout;
-import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import butterknife.BindView;
@@ -45,7 +43,11 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
     private boolean isShow = true;
 
     public static void startAct(Context context){
-        context.startActivity(new Intent(context,DetailOrderRecordAct.class));
+        Intent intent = new Intent(context, DetailOrderRecordAct.class);
+        if (context instanceof Activity){
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        context.startActivity(intent);
     }
 
     /**
