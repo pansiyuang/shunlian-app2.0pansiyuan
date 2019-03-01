@@ -37,7 +37,6 @@
                     android:id="@+id/miv_tleft"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/black"
                     android:scaleType="fitXY" />
 
                 <com.shunlian.app.widget.MyImageView
@@ -54,12 +53,11 @@
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="亚运卡单"
                 android:textColor="#FF484848"
                 android:textSize="13sp" />
 
 
-            <com.shunlian.app.widget.SaleProgressViews
+            <com.shunlian.app.widget.SaleProgressView
                 android:id="@+id/progress_view_salel"
                 android:layout_width="83dp"
                 android:layout_height="12dp"
@@ -67,6 +65,8 @@
                 android:layout_toRightOf="@id/miv_photo"
                 app:nearOverText=""
                 app:overText=""
+                app:overColor="#FFE2C679"
+                app:soidColor="@color/white"
                 app:textSizeSale="10sp"
                 android:layout_marginTop="4dp"
                 app:sideColor="#FFE2C679"
@@ -79,7 +79,6 @@
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="亚运卡单"
                 android:textColor="#FFAFAFAE"
                 android:textSize="11sp" />
         </com.shunlian.app.widget.MyLinearLayout>
@@ -98,7 +97,6 @@
                     android:id="@+id/miv_tmid"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/black"
                     android:scaleType="fitXY" />
 
                 <com.shunlian.app.widget.MyImageView
@@ -115,11 +113,10 @@
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="亚运卡单"
                 android:textColor="#FF484848"
                 android:textSize="13sp" />
 
-            <com.shunlian.app.widget.SaleProgressViews
+            <com.shunlian.app.widget.SaleProgressView
                 android:id="@+id/progress_view_salem"
                 android:layout_width="83dp"
                 android:layout_height="12dp"
@@ -127,6 +124,8 @@
                 android:layout_toRightOf="@id/miv_photo"
                 app:nearOverText=""
                 app:overText=""
+                app:overColor="#FFE2C679"
+                app:soidColor="@color/white"
                 app:textSizeSale="10sp"
                 android:layout_marginTop="4dp"
                 app:sideColor="#FFE2C679"
@@ -139,7 +138,6 @@
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="亚运卡单"
                 android:textColor="#FFAFAFAE"
                 android:textSize="11sp" />
         </com.shunlian.app.widget.MyLinearLayout>
@@ -158,7 +156,6 @@
                     android:id="@+id/miv_tright"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/black"
                     android:scaleType="fitXY" />
 
                 <com.shunlian.app.widget.MyImageView
@@ -175,11 +172,10 @@
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="亚运卡单"
                 android:textColor="#FF484848"
                 android:textSize="13sp" />
 
-            <com.shunlian.app.widget.SaleProgressViews
+            <com.shunlian.app.widget.SaleProgressView
                 android:id="@+id/progress_view_saler"
                 android:layout_width="83dp"
                 android:layout_height="12dp"
@@ -187,6 +183,8 @@
                 android:layout_toRightOf="@id/miv_photo"
                 app:nearOverText=""
                 app:overText=""
+                app:overColor="#FFE2C679"
+                app:soidColor="@color/white"
                 app:textSizeSale="10sp"
                 android:layout_marginTop="4dp"
                 app:sideColor="#FFE2C679"
@@ -199,7 +197,6 @@
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="亚运卡单"
                 android:textColor="#FFAFAFAE"
                 android:textSize="11sp" />
         </com.shunlian.app.widget.MyLinearLayout>
