@@ -467,11 +467,21 @@ public class TeamIntegralActivity extends BaseActivity implements TeamIntegralVi
                 }
             }
             recyclerAdapter.notifyDataSetChanged();
+        }else if(teamIndexEntity.team_player.size()==0){
+            for (int i=0;i<teamPlayers.size();i++){
+                    TeamIndexEntity.TeamPlayer teamPlayer = teamPlayers.get(i);
+                    teamPlayer.isUser = false;
+            }
+            recyclerAdapter.notifyDataSetChanged();
         }
+
         if(teamIndexEntity!=null&&teamIndexEntity.egg_history!=null&&teamIndexEntity.egg_history.size()>0){
             eggHistories.clear();
             recycler_list.setVisibility(View.VISIBLE);
             eggHistories.addAll(teamIndexEntity.egg_history);
+            adapter.notifyDataSetChanged();
+        }else if(teamIndexEntity.egg_history.size()==0){
+            eggHistories.clear();
             adapter.notifyDataSetChanged();
         }
         recycler_list.scrollToPosition(0);
