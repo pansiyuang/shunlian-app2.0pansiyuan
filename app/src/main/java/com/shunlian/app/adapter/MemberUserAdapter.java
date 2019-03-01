@@ -158,8 +158,10 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
             tv_copy.setBackgroundDrawable(gradientDrawable);
 
             tv_copy.setOnClickListener(v -> {
-                MemberInfoEntity.MemberList memberList = lists.get(getAdapterPosition());
-                Common.copyText(context,memberList.mobile);
+                if (getAdapterPosition()>=0){
+                    MemberInfoEntity.MemberList memberList = lists.get(getAdapterPosition());
+                    Common.copyText(context,memberList.mobile);
+                }
             });
         }
 
