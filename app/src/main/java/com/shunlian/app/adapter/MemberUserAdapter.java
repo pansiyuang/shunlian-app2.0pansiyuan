@@ -77,7 +77,7 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
             mHolder.tv_member_name.setText(lists.get(position).nickname);
             mHolder.tv_member_time_num.setText(lists.get(position).reg_time+"     "+"已购买 "+lists.get(position).order_count+" 单");
             mHolder.tv_member_number.setText("邀请码："+lists.get(position).code);
-            mHolder.tv_member_profit.setText(getString(R.string.common_yuan)+lists.get(position).income);
+            mHolder.tv_member_profit.setText(getString(R.string.common_yuan)+" "+lists.get(position).income);
             GlideUtils.getInstance().loadCircleAvar(context,mHolder.miv_member_pic,
                     lists.get(position).avatar);
             if(!TextUtils.isEmpty(lists.get(position).role)) {
