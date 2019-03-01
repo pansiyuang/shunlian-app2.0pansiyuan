@@ -10,10 +10,12 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.TransformUtil;
 
 import java.text.DecimalFormat;
 
@@ -31,7 +33,7 @@ public class SaleProgressView extends View {
     //售出比例
     private float scale;
     //边框颜色
-    private int sideColor;
+    private int sideColor,soidColor,overColor;
     //文字颜色
     private int textColor;
     //边框粗细
@@ -58,7 +60,7 @@ public class SaleProgressView extends View {
     private float baseLineY;
     private Bitmap bgBitmap;
     private boolean isNeedAnim;
-
+    private Context context;
     public SaleProgressView(Context context) {
         this(context, null);
     }
@@ -70,8 +72,11 @@ public class SaleProgressView extends View {
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
+        this.context = context;
         TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.SaleProgressView);
         sideColor = ta.getColor(R.styleable.SaleProgressView_sideColor,0xffff3c32);
+        overColor = ta.getColor(R.styleable.SaleProgressView_overColor,0xfffb0036);
+        soidColor = ta.getColor(R.styleable.SaleProgressView_soidColor,0xfffde8eb);
         textColor = ta.getColor(R.styleable.SaleProgressView_textColorSale,0xffff3c32);
         sideWidth = ta.getDimension(R.styleable.SaleProgressView_sideWidth,dp2px(1));
         overText = ta.getString(R.styleable.SaleProgressView_overText);
@@ -155,21 +160,23 @@ public class SaleProgressView extends View {
 
     //绘制背景
     private void drawBg(Canvas canvas) {
-//        if (bgBitmap == null) {
-//            bgBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-//        }
-//        Canvas bgCanvas = new Canvas(bgBitmap);
-//        if (bgSrc == null) {
-//            bgSrc = BitmapFactory.decodeResource(getResources(), R.mipmap.bg);
-//        }
-        srcPaint.setColor(Color.parseColor("#FDE8EB"));
+        srcPaint.setColor(soidColor);
         canvas.drawRoundRect(bgRectF, radius, radius, srcPaint);
+    }
 
-//        srcPaint.setXfermode(mPorterDuffXfermode);
-//        bgCanvas.drawBitmap(bgBitmap, null, bgRectF, srcPaint);
-//
-//        canvas.drawBitmap(bgBitmap, 0, 0, null);
-//        srcPaint.setXfermode(null);
+    public  Bitmap toBitmap(GradientDrawable drawable) {
+        int width = drawable.getIntrinsicWidth();
+        width = width > 0 ? width : 1;
+        int height = drawable.getIntrinsicHeight();
+        height = height > 0 ? height : 1;
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height,
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
     //绘制进度条
@@ -180,7 +187,12 @@ public class SaleProgressView extends View {
         Bitmap fgBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas fgCanvas = new Canvas(fgBitmap);
         if (fgSrc == null) {
-            fgSrc = BitmapFactory.decodeResource(getResources(),R.mipmap.img_xinren_jindutiao);
+            GradientDrawable topDrawable = new GradientDrawable();
+            topDrawable.setColor(overColor);
+            int i = TransformUtil.dip2px(context, 5);
+            float[] topRad = {i, i, i, i, 0, 0, 0, 0};
+            topDrawable.setCornerRadii(topRad);
+            fgSrc = toBitmap(topDrawable);
         }
         fgCanvas.drawRoundRect(
                 new RectF(sideWidth, sideWidth, (width - sideWidth) * scale, height - sideWidth),

@@ -487,7 +487,9 @@
     </declare-styleable>
 
     <declare-styleable name="SaleProgressView">
+        <attr name="overColor" format="reference|color" />
         <attr name="sideColor" format="reference|color" />
+        <attr name="soidColor" format="reference|color"  />
         <attr name="textColorSale" format="reference|color" />
         <attr name="sideWidth" format="dimension" />
         <attr name="overText" format="string" />
