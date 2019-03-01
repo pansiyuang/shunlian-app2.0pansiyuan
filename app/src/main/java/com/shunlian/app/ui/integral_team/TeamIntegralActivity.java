@@ -286,7 +286,7 @@ public class TeamIntegralActivity extends BaseActivity implements TeamIntegralVi
         recy_view.setNestedScrollingEnabled(false);
         recy_view.setAdapter(recyclerAdapter);
         recyclerAdapter.setOnItemClickListener((view, position) -> {
-            if(!TextUtils.isEmpty(teamIndexEntity.password)&&!teamPlayers.get(position).isUser&&STATE_TYEPE!=4) {
+            if(teamIndexEntity!=null&&!TextUtils.isEmpty(teamIndexEntity.password)&&!teamPlayers.get(position).isUser&&STATE_TYEPE!=4) {
                 startWeixinFriend();
             }else if(STATE_TYEPE==1&&!teamPlayers.get(position).isUser){
                 Common.staticToastAct(this,"成为队长获得最高金蛋奖励！");
