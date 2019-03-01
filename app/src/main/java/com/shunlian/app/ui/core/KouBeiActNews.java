@@ -77,6 +77,7 @@ public class KouBeiActNews extends BaseActivity implements View.OnClickListener,
     public void setHotsaleCates(KoubeiSecondEntity koubeiSecondEntity) {
         ntv_title.setText(koubeiSecondEntity.cate_name);
         ntv_desc.setText(koubeiSecondEntity.cate_rate);
+        ntv_desc.setVisibility(View.VISIBLE);
         int divide = -1;
         contents.clear();
         if (!isEmpty(koubeiSecondEntity.commend_list)) {

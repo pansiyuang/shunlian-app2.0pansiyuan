@@ -40,11 +40,16 @@ public class KouBeiHomeAdapter extends BaseRecyclerAdapter<HotsaleHomeEntity.AD>
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ActivityMoreHolder mHolder = (ActivityMoreHolder) holder;
-        HotsaleHomeEntity.AD ad = lists.get(position);
-        GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_photo,ad.thumb,9,true,false);
-        mHolder.ntv_title.setText(ad.title);
-        mHolder.ntv_price.setText(getString(R.string.common_yuan)+ad.price);
-        mHolder.ntv_desc.setText(ad.self_buy_earn);
+        try{
+            HotsaleHomeEntity.AD ad = lists.get(position);
+            GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_photo,ad.thumb,9,true,false);
+            mHolder.ntv_title.setText(ad.title);
+            mHolder.ntv_price.setText(getString(R.string.common_yuan)+ad.price);
+            mHolder.ntv_desc.setText(ad.self_buy_earn);
+        }catch (Exception e){
+
+        }
+
     }
 
     public class ActivityMoreHolder extends BaseRecyclerViewHolder{

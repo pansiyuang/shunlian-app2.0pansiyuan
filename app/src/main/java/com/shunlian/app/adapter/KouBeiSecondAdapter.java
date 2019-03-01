@@ -66,89 +66,92 @@ public class KouBeiSecondAdapter extends BaseRecyclerAdapter<KoubeiSecondEntity.
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ActivityMoreHolder mHolder = (ActivityMoreHolder) holder;
-        KoubeiSecondEntity.Content ad = lists.get(position);
-        if (ad==null)
-            return;
-        GlideUtils.getInstance().loadImageZheng(context, mHolder.miv_photo, ad.thumb);
-        mHolder.ntv_title.setText(ad.title);
-        mHolder.ntv_price.setText(getString(R.string.common_yuan) + ad.price);
-        mHolder.ntv_earn.setText(ad.self_buy_earn);
-        mHolder.ntv_desc.setText(ad.praise);
-        mHolder.mrlayout_comment.setVisibility(View.GONE);
-        mHolder.mrlayout_comments.setVisibility(View.GONE);
-        mHolder.view_line.setVisibility(View.GONE);
-        if (!isEmpty(ad.comments)) {
-            mHolder.view_line.setVisibility(View.VISIBLE);
-            if (ad.comments.get(0) != null) {
-                mHolder.mrlayout_comment.setVisibility(View.VISIBLE);
-                GlideUtils.getInstance().loadCircleAvar(context, mHolder.miv_icon, ad.comments.get(0).avatar);
-                mHolder.ntv_name.setText(ad.comments.get(0).nickname);
-                mHolder.ntv_comment.setText(ad.comments.get(0).content);
-            }
-            if (2 == ad.comments.size() && ad.comments.get(1) != null) {
-                mHolder.mrlayout_comments.setVisibility(View.VISIBLE);
-                GlideUtils.getInstance().loadCircleAvar(context, mHolder.miv_icons, ad.comments.get(1).avatar);
-                mHolder.ntv_names.setText(ad.comments.get(1).nickname);
-                mHolder.ntv_comments.setText(ad.comments.get(1).content);
-            }
-        }
-        mHolder.miv_tag.setVisibility(View.VISIBLE);
-        if (position <= divide) {
-            mHolder.miv_tag.setImageResource(R.mipmap.img_koubei_tuijan);
-        } else {
-            switch (position - divide) {
-                case 1:
-                    mHolder.miv_tag.setImageResource(R.mipmap.img_koubei_one);
-                    break;
-                case 2:
-                    mHolder.miv_tag.setImageResource(R.mipmap.img_koubei_two);
-                    break;
-                case 3:
-                    mHolder.miv_tag.setImageResource(R.mipmap.img_koubei_three);
-                    break;
-                default:
-                    mHolder.miv_tag.setVisibility(View.GONE);
-                    break;
-            }
-        }
-        if ("1".equals(ad.praise_flag)) {
-            mHolder.miv_logo.setImageResource(R.mipmap.icon_yeslaughs);
-        } else {
-            mHolder.miv_logo.setImageResource(R.mipmap.icon_nolaugh);
-        }
-        mHolder.miv_logo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!isClick)
-                zan(position,mHolder.ntv_desc,mHolder.animation_view,mHolder.miv_logo,ad.praise_flag,mHolder.ntv_zan,ad.id);
-            }
-        });
-        mHolder.ntv_desc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!isClick)
-                zan(position,mHolder.ntv_desc,mHolder.animation_view,mHolder.miv_logo,ad.praise_flag,mHolder.ntv_zan,ad.id);
-            }
-        });
         try {
-            if (isEmpty(ad.star_rate)){
+            KoubeiSecondEntity.Content ad = lists.get(position);
+            if (ad==null)
+                return;
+            GlideUtils.getInstance().loadImageZheng(context, mHolder.miv_photo, ad.thumb);
+            mHolder.ntv_title.setText(ad.title);
+            mHolder.ntv_price.setText(getString(R.string.common_yuan) + ad.price);
+            mHolder.ntv_earn.setText(ad.self_buy_earn);
+            mHolder.ntv_desc.setText(ad.praise);
+            mHolder.mrlayout_comment.setVisibility(View.GONE);
+            mHolder.mrlayout_comments.setVisibility(View.GONE);
+            mHolder.view_line.setVisibility(View.GONE);
+            if (!isEmpty(ad.comments)) {
+                mHolder.view_line.setVisibility(View.VISIBLE);
+                if (ad.comments.get(0) != null) {
+                    mHolder.mrlayout_comment.setVisibility(View.VISIBLE);
+                    GlideUtils.getInstance().loadCircleAvar(context, mHolder.miv_icon, ad.comments.get(0).avatar);
+                    mHolder.ntv_name.setText(ad.comments.get(0).nickname);
+                    mHolder.ntv_comment.setText(ad.comments.get(0).content);
+                }
+                if (2 == ad.comments.size() && ad.comments.get(1) != null) {
+                    mHolder.mrlayout_comments.setVisibility(View.VISIBLE);
+                    GlideUtils.getInstance().loadCircleAvar(context, mHolder.miv_icons, ad.comments.get(1).avatar);
+                    mHolder.ntv_names.setText(ad.comments.get(1).nickname);
+                    mHolder.ntv_comments.setText(ad.comments.get(1).content);
+                }
+            }
+            mHolder.miv_tag.setVisibility(View.VISIBLE);
+            if (position <= divide) {
+                mHolder.miv_tag.setImageResource(R.mipmap.img_koubei_tuijan);
+            } else {
+                switch (position - divide) {
+                    case 1:
+                        mHolder.miv_tag.setImageResource(R.mipmap.img_koubei_one);
+                        break;
+                    case 2:
+                        mHolder.miv_tag.setImageResource(R.mipmap.img_koubei_two);
+                        break;
+                    case 3:
+                        mHolder.miv_tag.setImageResource(R.mipmap.img_koubei_three);
+                        break;
+                    default:
+                        mHolder.miv_tag.setVisibility(View.GONE);
+                        break;
+                }
+            }
+            if ("1".equals(ad.praise_flag)) {
+                mHolder.miv_logo.setImageResource(R.mipmap.icon_yeslaughs);
+            } else {
+                mHolder.miv_logo.setImageResource(R.mipmap.icon_nolaugh);
+            }
+            mHolder.miv_logo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!isClick)
+                        zan(position,mHolder.ntv_desc,mHolder.animation_view,mHolder.miv_logo,ad.praise_flag,mHolder.ntv_zan,ad.id);
+                }
+            });
+            mHolder.ntv_desc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!isClick)
+                        zan(position,mHolder.ntv_desc,mHolder.animation_view,mHolder.miv_logo,ad.praise_flag,mHolder.ntv_zan,ad.id);
+                }
+            });
+            try {
+                if (isEmpty(ad.star_rate)){
+                    mHolder.progress_view_sale.setVisibility(View.GONE);
+                }else {
+                    mHolder.progress_view_sale.setVisibility(View.VISIBLE);
+                    mHolder.progress_view_sale.setTotalAndCurrentCount(100,Integer.parseInt(ad.star_rate));
+                }
+            }catch (Exception e){
                 mHolder.progress_view_sale.setVisibility(View.GONE);
-            }else {
-                mHolder.progress_view_sale.setVisibility(View.VISIBLE);
-                mHolder.progress_view_sale.setTotalAndCurrentCount(100,Integer.parseInt(ad.star_rate));
             }
+            mHolder.miv_share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mShareInfoParam.goods_id = ad.id;
+                    mShareInfoParam.share_buy_earn = ad.share_buy_earn;
+                    pKoubei.getShareInfo(pKoubei.goods,ad.id);
+                }
+            });
         }catch (Exception e){
-            mHolder.progress_view_sale.setVisibility(View.GONE);
-        }
-        mHolder.miv_share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mShareInfoParam.goods_id = ad.id;
-                mShareInfoParam.share_buy_earn = ad.share_buy_earn;
-                pKoubei.getShareInfo(pKoubei.goods,ad.id);
-            }
-        });
 
+        }
     }
 
     @Override
