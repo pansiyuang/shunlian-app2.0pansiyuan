@@ -159,7 +159,9 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         wheelPan.setRotateListener(new RotateListener() {
             @Override
             public void rotateEnd(int position, String des) {
-                wheelPan.setEnable(false);
+                if (wheelPan != null) {
+                    wheelPan.setEnable(false);
+                }
                 hasDraw = true;
                 if (turnTableDialog == null) {
                     turnTableDialog = new TurnTableDialog(LuckWheelPanActivity.this, currentLuckDraw);
@@ -174,7 +176,9 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
 
             @Override
             public void rotating(ValueAnimator valueAnimator) {
-                wheelPan.setEnable(true);
+                if (wheelPan != null) {
+                    wheelPan.setEnable(true);
+                }
             }
 
             @Override
@@ -543,6 +547,9 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
+        }
+        if (wheelPan != null) {
+            wheelPan.stopRotate();
         }
     }
 

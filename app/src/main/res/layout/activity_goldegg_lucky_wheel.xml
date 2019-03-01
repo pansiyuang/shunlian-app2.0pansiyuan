@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="44dp"
+                android:layout_marginTop="50dp"
                 android:background="@mipmap/img_dazhaunpan_dongxiao" />
 
             <com.shunlian.app.widget.luckWheel.WheelSurfView
@@ -128,7 +128,8 @@
                             android:layout_marginBottom="11dp"
                             android:background="@drawable/rounded_corner_stroke_d8c397_20px"
                             android:orientation="vertical"
-                            android:paddingTop="12dp">
+                            android:paddingTop="12dp"
+                            android:paddingRight="13dp">
 
                             <LinearLayout
                                 android:id="@+id/ll_top"
@@ -140,6 +141,8 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2"
+                                    android:drawableBottom="@drawable/bg_line_7a7a7a"
+                                    android:drawablePadding="5dp"
                                     android:gravity="center"
                                     android:text="日期"
                                     android:textColor="@color/value_49"
@@ -149,6 +152,8 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2"
+                                    android:drawableBottom="@drawable/bg_line_7a7a7a"
+                                    android:drawablePadding="5dp"
                                     android:gravity="center"
                                     android:text="奖品"
                                     android:textColor="@color/value_49"
@@ -158,6 +163,8 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
+                                    android:drawableBottom="@drawable/bg_line_7a7a7a"
+                                    android:drawablePadding="5dp"
                                     android:gravity="center"
                                     android:text="使用"
                                     android:textColor="@color/value_49"
