@@ -67,6 +67,8 @@ public class KouBeiSecondAdapter extends BaseRecyclerAdapter<KoubeiSecondEntity.
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ActivityMoreHolder mHolder = (ActivityMoreHolder) holder;
         KoubeiSecondEntity.Content ad = lists.get(position);
+        if (ad==null)
+            return;
         GlideUtils.getInstance().loadImageZheng(context, mHolder.miv_photo, ad.thumb);
         mHolder.ntv_title.setText(ad.title);
         mHolder.ntv_price.setText(getString(R.string.common_yuan) + ad.price);
@@ -258,7 +260,7 @@ public class KouBeiSecondAdapter extends BaseRecyclerAdapter<KoubeiSecondEntity.
         MyRelativeLayout mrlayout_bottom;
 
         @BindView(R.id.progress_view_sale)
-        SaleProgressViews progress_view_sale;
+        SaleProgressView progress_view_sale;
 
         @BindView(R.id.ntv_zan)
         NewTextView ntv_zan;

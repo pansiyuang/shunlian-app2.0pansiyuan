@@ -13,6 +13,7 @@ import com.shunlian.app.bean.HotsaleEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.NewTextView;
+import com.shunlian.app.widget.SaleProgressView;
 import com.shunlian.app.widget.SaleProgressViews;
 
 import java.util.List;
@@ -98,13 +99,13 @@ public class HotsaleAdapter extends BaseRecyclerAdapter<HotsaleEntity.Suspension
     public class ActivityMoreHolder extends BaseRecyclerViewHolder {
 
         @BindView(R.id.progress_view_saler)
-        SaleProgressViews progress_view_saler;
+        SaleProgressView progress_view_saler;
 
         @BindView(R.id.progress_view_salem)
-        SaleProgressViews progress_view_salem;
+        SaleProgressView progress_view_salem;
 
         @BindView(R.id.progress_view_salel)
-        SaleProgressViews progress_view_salel;
+        SaleProgressView progress_view_salel;
 
         @BindView(R.id.ntv_ttitle)
         NewTextView ntv_ttitle;

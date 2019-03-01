@@ -61,7 +61,7 @@
             android:textColor="@color/pink_color"
             android:textSize="14sp" />
 
-        <com.shunlian.app.widget.SaleProgressViews
+        <com.shunlian.app.widget.SaleProgressView
             android:id="@+id/progress_view_sale"
             android:layout_width="124dp"
             android:layout_height="12dp"
@@ -70,6 +70,8 @@
             android:layout_toRightOf="@id/miv_photo"
             app:nearOverText=""
             app:overText=""
+            app:overColor="#FFE2C679"
+            app:soidColor="@color/white"
             app:textSizeSale="10sp"
             app:sideColor="#FFE2C679"
             app:textColorSale="#FFE2C679"/>
