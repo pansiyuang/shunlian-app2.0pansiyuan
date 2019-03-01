@@ -336,7 +336,7 @@ public class GlideUtils {
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
-                .bitmapTransform(new GlideCircleTransform(context,3,context.getResources().getColor(R.color.value_fde294)))
+                .bitmapTransform(new GlideCircleTransform(context,2,context.getResources().getColor(R.color.value_fde294)))
                 .into(imageView);
     }
 
