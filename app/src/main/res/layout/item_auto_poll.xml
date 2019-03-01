@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mllayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:background="@color/transparent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rounded_corner_solid_team_24px"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/image_head"
+            android:layout_width="25dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_set_defaulthead"
+            android:layout_height="25dp" />
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:textColor="@color/white"
+        android:textSize="11sp" />
+    </RelativeLayout>
+
+</com.shunlian.app.widget.MyRelativeLayout>
+
+
+

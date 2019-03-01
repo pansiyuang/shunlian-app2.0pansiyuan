@@ -1,5 +1,6 @@
 package com.shunlian.app.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,11 +12,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,18 +31,36 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreShareBabyAdapter;
+import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.DiscoverActivityEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.bean.TeamIndexEntity;
 import com.shunlian.app.listener.ICallBackResult;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.ui.h5.H5X5Act;
+import com.shunlian.app.ui.integral_team.TeamIntegralActivity;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.WebViewProgressBar;
+import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.dialog.CommonDialog;
 import com.shunlian.app.wxapi.WXEntryActivity;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.sdk.CookieManager;
+import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.zh.chartlibrary.common.DensityUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import static android.os.Build.VERSION_CODES.M;
 
@@ -54,6 +77,13 @@ public class CommonDialogUtil {
     public CommonDialog dialog_user_info;
     public CommonDialog dialog_user_old;
     public CommonDialog dialog_me_teach;
+
+    public CommonDialog dialog_weixin_copy;
+    public CommonDialog dialog_h5_team;
+    public CommonDialog dialog_team_paste;
+    public CommonDialog dialog_team_fill;
+    public CommonDialog dialog_team_into;
+    public CommonDialog dialog_team_fill_pass;
     public CommonDialogUtil(Context context){
         this.context = context;
     }
@@ -342,6 +372,301 @@ public class CommonDialogUtil {
             @Override
             public void onClick(View v) {
                 dialog_me_teach.dismiss();
+            }
+        });
+    }
+    //组队满员进入
+    public void teamFillCommonDialog( TeamIndexEntity.PopData2 pop_2) {
+        if (((Activity) context).isFinishing()) {
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context, 340))
+                .setView(R.layout.dialog_team_fill);
+        dialog_team_fill = nomalBuild.create();
+        dialog_team_fill.setCancelable(false);
+        dialog_team_fill.show();
+
+        ImageView miv_close = dialog_team_fill.findViewById(R.id.miv_close);
+        miv_close.setOnClickListener(v -> dialog_team_fill.dismiss());
+
+        ImageView img_team_code = dialog_team_fill.findViewById(R.id.img_team_code);
+        TextView tv_team_text1 = dialog_team_fill.findViewById(R.id.tv_team_text1);
+        TextView tv_team_text2 = dialog_team_fill.findViewById(R.id.tv_team_text2);
+        TextView tv_team_egg = dialog_team_fill.findViewById(R.id.tv_team_egg);
+
+        tv_team_text1.setText(pop_2.text);
+        tv_team_text2.setText(pop_2.text2);
+        tv_team_egg.setText(HighLightKeyWordUtil.getHighBigBoldKeyWord(25,pop_2.content_egg,pop_2.content));
+        if(!TextUtils.isEmpty(pop_2.qcode_pic)){
+            GlideUtils.getInstance().loadImage(context,img_team_code,pop_2.qcode_pic);
+        }
+    }
+
+    //组队邀请进入提示
+    public void teamPasteCommonDialog(CommondEntity.TypeData type_data, View.OnClickListener sureListener) {
+        if (((Activity) context).isFinishing()) {
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context, 280))
+                .setView(R.layout.dialog_team_paste);
+        dialog_team_paste = nomalBuild.create();
+        dialog_team_paste.setCancelable(false);
+        dialog_team_paste.show();
+        ImageView img_team_head = dialog_team_paste.findViewById(R.id.img_team_head);
+        ImageView miv_close = dialog_team_paste.findViewById(R.id.miv_close);
+        TextView tv_team_nick = dialog_team_paste.findViewById(R.id.tv_team_nick);
+        TextView tv_team_code = dialog_team_paste.findViewById(R.id.tv_team_code);
+        TextView tv_submit_open = dialog_team_paste.findViewById(R.id.tv_submit_open);
+        miv_close.setOnClickListener(v -> dialog_team_paste.dismiss());
+        tv_submit_open.setOnClickListener(sureListener);
+        tv_team_nick.setText(HighLightKeyWordUtil.getHighLightKeyWord(context.getResources().getColor(R.color.value_d8d7d7),
+                type_data.nickname+"给你分享了","给你分享了"));
+
+        tv_team_code.setText(HighLightKeyWordUtil.getHighLightKeyWord(context.getResources().getColor(R.color.value_fed147),
+                type_data.text,type_data.group_name));
+
+        tv_submit_open.setText(type_data.button);
+        if(!TextUtils.isEmpty(type_data.avatar)) {
+            GlideUtils.getInstance().loadCircleImage(context, img_team_head, type_data.avatar);
+        }else{
+            img_team_head.setImageResource(R.mipmap.img_set_defaulthead);
+        }
+    }
+
+    private boolean isContinue = false;
+    //组队规则H5
+    public void teamH5CommonDialog(String h5_url) {
+        if(((Activity)context).isFinishing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuild = new CommonDialog.Builder(context, R.style.popAd).setWidth(DensityUtil.dip2px(context,300))
+                .setView(R.layout.dialog_rule_h5_team);
+        dialog_h5_team = nomalBuild.create();
+        dialog_h5_team.setCancelable(false);
+        dialog_h5_team.show();
+        ImageView miv_close = dialog_h5_team.findViewById(R.id.miv_close);
+        miv_close.setOnClickListener(v -> dialog_h5_team.dismiss());
+        X5WebView mwv_rule = dialog_h5_team.findViewById(R.id.mwv_rule);
+        WebViewProgressBar mProgressbar = dialog_h5_team.findViewById(R.id.mProgressbar);
+        WebSettings webSetting = mwv_rule.getSettings();
+        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
+        webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
+        webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
+        webSetting.setAppCacheEnabled(true);
+        webSetting.setAllowFileAccess(true);
+        //开启DOM缓存，关闭的话H5自身的一些操作是无效的
+        webSetting.setDomStorageEnabled(true);
+        webSetting.setAllowContentAccess(true);
+        webSetting.setDatabaseEnabled(true);
+        webSetting.setSavePassword(false);
+        webSetting.setSaveFormData(false);
+        webSetting.setUseWideViewPort(true);
+        webSetting.setLoadWithOverviewMode(true);
+//        SensorsDataAPI.sharedInstance().showUpX5WebView(mwv_h5,true);
+        //x5新增
+        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSetting.setSupportZoom(false);
+        webSetting.setBuiltInZoomControls(false);
+        webSetting.setSupportMultipleWindows(false);
+        webSetting.setGeolocationEnabled(true);
+        webSetting.setDatabasePath(context.getDir("databases", 0).getPath());
+        webSetting.setGeolocationDatabasePath(context.getDir("geolocation", 0)
+                .getPath());
+        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+        mwv_rule.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        mwv_rule.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                //显示进度条
+                if (mProgressbar != null && View.VISIBLE == mProgressbar.getVisibility() && isContinue == false) {
+                    mProgressbar.setVisibility(View.VISIBLE);
+                    //大于80的进度的时候,放慢速度加载,否则交给自己加载
+                    if (newProgress >= 80) {
+                        //拦截webView自己的处理方式
+                        if (isContinue) {
+                            return;
+                        }
+                        mProgressbar.setCurProgress(100, 3000, () -> {
+                                if (mProgressbar != null) {
+                                    //最后加载设置100进度
+                                    mProgressbar.setNormalProgress(100);
+                                    AnimationSet animation = getDismissAnim(context);
+                                    animation.setAnimationListener(new Animation.AnimationListener() {
+                                        @Override
+                                        public void onAnimationStart(Animation animation) {
+                                        }
+                                        @Override
+                                        public void onAnimationEnd(Animation animation) {
+                                            mProgressbar.setVisibility(View.INVISIBLE);
+                                        }
+
+                                        @Override
+                                        public void onAnimationRepeat(Animation animation) {
+                                        }
+                                    });
+                                    mProgressbar.startAnimation(animation);
+                                }
+                        });
+                        isContinue = true;
+                    } else {
+                        mProgressbar.setNormalProgress(newProgress);
+                    }
+                }
+                super.onProgressChanged(view, newProgress);
+            }
+        });
+        mwv_rule.loadUrl(h5_url);
+        mwv_rule.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(WebView webView, int i, String s, String s1) {
+                super.onReceivedError(webView, i, s, s1);
+                Log.d("TAG", "onReceivedError: "); //如果是证书问题，会打印出此条log到console
+            }
+
+            @Override
+            public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+                super.onReceivedSslError(webView, sslErrorHandler, sslError);
+                sslErrorHandler.proceed();
+                Log.d("TAG", "onReceivedSslError: "); //如果是证书问题，会打印出此条log到console
+            }
+        });
+    }
+    /**
+     * 获取消失的动画
+     *
+     * @param context
+     * @return
+     */
+    private AnimationSet getDismissAnim(Context context) {
+        AnimationSet dismiss = new AnimationSet(context, null);
+        AlphaAnimation alpha = new AlphaAnimation(1.0f, 0.0f);
+        alpha.setDuration(1000);
+        dismiss.addAnimation(alpha);
+        return dismiss;
+    }
+    //弹出分享框
+    public void shareTeamWeixinCommonDialog(ICallBackResult<String> iCallBackResult) {
+        if (((Activity) context).isFinishing()) {
+            return;
+        }
+        CommonDialog.Builder nomalBuildShare = new CommonDialog.Builder(context).fromBottom().fullWidth()
+                .setView(R.layout.dialog_share);
+        CommonDialog dialog_share = nomalBuildShare.create();
+        dialog_share.setCancelable(false);
+        dialog_share.show();
+        dialog_share.getView(R.id.mllayout_weixinpenyou).setVisibility(View.GONE);
+        dialog_share.getView(R.id.mllayout_tuwenerweima).setVisibility(View.GONE);
+        dialog_share.getView(R.id.mllayout_shangping).setVisibility(View.GONE);
+        dialog_share.getView(R.id.line_share_title).setVisibility(View.VISIBLE);
+        ((TextView)dialog_share.getView(R.id.tv_share)).setText("分享到");
+        ((TextView)dialog_share.getView(R.id.tv_text_haoyou)).setText("微信好友");
+        dialog_share.getWindow().getDecorView().setOnTouchListener((v, event) -> {
+            dialog_share.dismiss();
+            return false;
+        });
+        dialog_share.setOnClickListener(R.id.ntv_cancel, v -> dialog_share.dismiss());
+
+        dialog_share.setOnClickListener(R.id.mllayout_weixinhaoyou, v -> {
+            dialog_share.dismiss();
+            iCallBackResult.onTagClick("微信");
+        });
+    }
+
+    //复制内容提示弹框
+    public void shareCopyCommonDialog(String textPassword) {
+        if (((Activity) context).isFinishing()) {
+            return;
+        }
+        CommonDialog.Builder nomalBuildShare = new CommonDialog.Builder(context)
+                .setView(R.layout.dialog_team_weixin_copy);
+        dialog_weixin_copy = nomalBuildShare.create();
+        dialog_weixin_copy.setCancelable(false);
+        dialog_weixin_copy.show();
+       TextView tv_text_password = dialog_weixin_copy.getView(R.id.tv_text_password);
+
+       tv_text_password.setText(textPassword);
+        dialog_weixin_copy.setOnClickListener(R.id.tv_cancel, v -> dialog_weixin_copy.dismiss());
+
+        dialog_weixin_copy.setOnClickListener(R.id.tv_sure, v -> {
+            dialog_weixin_copy.dismiss();
+            Common.copyTextNoToast(context,textPassword);
+            SharedPrefUtil.getWechatApi((Activity) context);
+        });
+    }
+
+    //组队进入没有满员
+    public void teamIntoCommonDialog( TeamIndexEntity.PopData1 pop_1) {
+        if (((Activity) context).isFinishing()) {
+            return;
+        }
+        CommonDialog.Builder nomalBuildShare = new CommonDialog.Builder(context).setWidth(DensityUtil.dip2px(context,300))
+                .setView(R.layout.dialog_team_into);
+        dialog_team_into = nomalBuildShare.create();
+        dialog_team_into.setCancelable(false);
+        dialog_team_into.show();
+
+        ImageView img_user_head = dialog_team_into.getView(R.id.img_user_head);
+        TextView tv_user_nick = dialog_team_into.getView(R.id.tv_user_nick);
+        TextView tv_content = dialog_team_into.getView(R.id.tv_content);
+        TextView tv_team_egg = dialog_team_into.getView(R.id.tv_team_egg);
+
+        if(!TextUtils.isEmpty(pop_1.avatar)){
+            GlideUtils.getInstance().loadCircleAvarRound(context,img_user_head,pop_1.avatar);
+        }else{
+            img_user_head.setImageResource(R.mipmap.bg_guafenjindan_morentouxiang);
+        }
+        tv_user_nick.setText(pop_1.nickname);
+        tv_content.setText(HighLightKeyWordUtil.getHighLightKeyWord(context.getResources().getColor(R.color.value_fed599),
+                pop_1.text,pop_1.nickname2));
+        tv_team_egg.setText(HighLightKeyWordUtil.getHighBigBoldKeyWord(25,pop_1.content_egg,pop_1.content));
+        dialog_team_into.setOnClickListener(R.id.miv_close, v -> {
+            dialog_team_into.dismiss();
+        });
+        dialog_team_into.setOnClickListener(R.id.tv_submit_open, v -> {
+            dialog_team_into.dismiss();
+        });
+
+    }
+
+
+    //满6个人进入满员
+    public void teamIntoFillCommonDialog( TeamIndexEntity.PopData3 pop_3,ICallBackResult<String> iCallBackResult) {
+        if (((Activity) context).isFinishing()) {
+            return;
+        }
+        if(dialog_team_fill_pass!=null&&dialog_team_fill_pass.isShowing()){
+            return;
+        }
+        CommonDialog.Builder nomalBuildShare = new CommonDialog.Builder(context).setWidth(DensityUtil.dip2px(context,300))
+                .setView(R.layout.dialog_team_into);
+        dialog_team_fill_pass = nomalBuildShare.create();
+        dialog_team_fill_pass.setCancelable(false);
+        dialog_team_fill_pass.show();
+
+        ImageView img_user_head = dialog_team_fill_pass.getView(R.id.img_user_head);
+        TextView tv_user_nick = dialog_team_fill_pass.getView(R.id.tv_user_nick);
+        TextView tv_content = dialog_team_fill_pass.getView(R.id.tv_content);
+        TextView tv_team_egg = dialog_team_fill_pass.getView(R.id.tv_team_egg);
+        TextView tv_submit_open = dialog_team_fill_pass.getView(R.id.tv_submit_open);
+        tv_team_egg.setTextSize(16);
+        if(!TextUtils.isEmpty(pop_3.avatar)){
+            GlideUtils.getInstance().loadCircleAvarRound(context,img_user_head,pop_3.avatar);
+        }else{
+            img_user_head.setImageResource(R.mipmap.bg_guafenjindan_morentouxiang);
+        }
+        tv_user_nick.setText(pop_3.nickname);
+        tv_content.setText(HighLightKeyWordUtil.getHighLightKeyWord(context.getResources().getColor(R.color.value_fed599),
+                pop_3.text,pop_3.nickname2));
+        tv_submit_open.setText("确定");
+        tv_team_egg.setTextColor(context.getResources().getColor(R.color.white));
+        tv_team_egg.setText(pop_3.content);
+        dialog_team_fill_pass.setOnClickListener(R.id.miv_close, v -> {
+            dialog_team_fill_pass.dismiss();
+        });
+        dialog_team_fill_pass.setOnClickListener(R.id.tv_submit_open, v -> {
+            dialog_team_fill_pass.dismiss();
+            if(pop_3.equals("1")) {
+                iCallBackResult.onTagClick("创建队伍");
             }
         });
     }

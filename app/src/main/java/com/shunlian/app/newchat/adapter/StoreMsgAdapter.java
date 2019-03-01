@@ -13,7 +13,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -116,8 +115,16 @@ public class StoreMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
         @BindView(R.id.tv_anonymous_price)
         TextView tv_anonymous_price;
 
+        @BindView(R.id.rlayout_content)
+        RelativeLayout rlayout_content;
+
         public VipViewholder(View itemView) {
             super(itemView);
+            rlayout_content.setOnClickListener(v -> {
+                if (listener != null){
+                    listener.onItemClick(v,getAdapterPosition());
+                }
+            });
         }
     }
 

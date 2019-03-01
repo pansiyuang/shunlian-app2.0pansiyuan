@@ -92,6 +92,36 @@ public class GlideUtils {
 //                .into(new GlideDrawableImageViewTarget(imageView, 1));
     }
 
+    public void loadImageZheng(Context context, ImageView imageView, String imgUrl,int cornerDp,boolean topHalf,boolean bottomHalf) {
+        if (imageView == null||context==null) return;
+        CornerTransform transformation = new CornerTransform(context, TransformUtil.dip2px(context, cornerDp));
+        //只是绘制左上角和右上角圆角
+        transformation.setExceptCorner(topHalf, topHalf, bottomHalf, bottomHalf);
+        Glide.with(context)
+                .load(imgUrl)
+//                    .error(R.mipmap.error)
+                .placeholder(R.mipmap.img_default_common)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
+                //source:缓存源资源   result：缓存转换后的资源
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .bitmapTransform(transformation)
+                .into(imageView);
+//                .into(new GlideDrawableImageViewTarget(imageView, 1));
+//        Glide.with(context)
+//                .load(imgUrl)
+////                .error(R.mipmap.error)
+////                .placeholder(R.mipmap.error)
+//                .crossFade()
+//                .placeholder(R.mipmap.img_default_common)
+//                .priority(Priority.NORMAL) //下载的优先级
+//                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+//                .bitmapTransform(new CenterCrop(context),
+//                        new GlideRoundTransform(context, 9))
+//                .into(imageView);
+    }
+
     public void loadImageChang(Context context, ImageView imageView, String imgUrl) {
         if (imageView == null||context==null) return;
         Glide.with(context)
@@ -302,11 +332,11 @@ public class GlideUtils {
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
-                .placeholder(R.mipmap.img_set_defaulthead)
+                .placeholder(R.mipmap.bg_guafenjindan_morentouxiang)
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
-                .bitmapTransform(new GlideCircleTransform(context,3,context.getResources().getColor(R.color.line_gay)))
+                .bitmapTransform(new GlideCircleTransform(context,3,context.getResources().getColor(R.color.value_fde294)))
                 .into(imageView);
     }
 

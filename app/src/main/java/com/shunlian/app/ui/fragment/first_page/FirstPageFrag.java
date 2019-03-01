@@ -29,9 +29,8 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.ui.confirm_order.PaySuccessAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.ui.integral_team.TeamIntegralActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -458,10 +457,11 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_scan)
     public void scan() {
+        ZXingDemoAct.startAct(baseActivity, false, 0);
 //        H5X5Act.startAct(baseContext,"http://soft.imtt.qq.com/browser/tes/feedback.html",H5X5Act.MODE_SONIC);
 //        H5X5Act.startAct(baseContext,"https://plus.mengtianvip.com/plus",H5X5Act.MODE_SONIC);
-        ZXingDemoAct.startAct(baseActivity, false, 0);
 //        PaySuccessAct.startAct(baseActivity, "", "78", "1901234941107803Q587", false);
+//        H5X5Act.startAct(baseContext,"http://mt-front.v2.shunliandongli.com",H5X5Act.MODE_SONIC);
     }
 
     @OnClick(R.id.mllayout_search)

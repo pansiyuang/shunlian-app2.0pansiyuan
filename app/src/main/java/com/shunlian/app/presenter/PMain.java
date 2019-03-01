@@ -13,6 +13,7 @@ import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.PunishEntity;
 import com.shunlian.app.bean.ShowSignEntity;
 import com.shunlian.app.bean.ShowVoucherSuspension;
+import com.shunlian.app.bean.TeamCodeInfoEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -100,7 +101,11 @@ public class PMain extends BasePresenter<IMain> {
                 super.onSuccess(entity);
                 CommondEntity data = entity.data;
                 if (data != null) {
-                    iView.setCommond(data);
+                    if(data.type.equals("carveUpEgg")){
+                            iView.setReadPassword(data);
+                    }else {
+                            iView.setCommond(data);
+                    }
                 }
             }
         });

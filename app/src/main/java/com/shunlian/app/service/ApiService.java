@@ -2207,6 +2207,30 @@ public interface ApiService {
     Call<BaseEntity<CoreHotEntity>> coreHot(@QueryMap Map<String, String> map);
 
     /**
+     * 口碑热销首页接口
+     *
+     * @return
+     */
+    @GET("hotsale/home")
+    Call<BaseEntity<HotsaleHomeEntity>> hotsaleHome(@QueryMap Map<String, String> map);
+
+    /**
+     * 口碑热销点击2级分类接口
+     *
+     * @return
+     */
+    @GET("hotsale/cate2List")
+    Call<BaseEntity<HotsaleEntity>> hotsaleCate(@QueryMap Map<String, String> map);
+
+    /**
+     * 口碑热销分类接口
+     *
+     * @return
+     */
+    @GET("hotsale/cate")
+    Call<BaseEntity<KoubeiSecondEntity>> hotsaleCates(@QueryMap Map<String, String> map);
+
+    /**
      * 品牌特卖列表
      *
      * @return
@@ -2314,6 +2338,15 @@ public interface ApiService {
      */
     @POST("share/parseSecretWord")
     Call<BaseEntity<CommondEntity>> parseSecretWord(@Body RequestBody body);
+
+    /**
+     * 解析分享密码
+     *
+     * @param body
+     * @return
+     */
+    @POST("hotsale/praise")
+    Call<BaseEntity<CommonEntity>> hotsalePraise(@Body RequestBody body);
 
     /**
      * plus入口
@@ -3170,6 +3203,26 @@ public interface ApiService {
      */
     @POST("discovery/comment/check")
     Call<BaseEntity<CommonEntity>> commentCheck(@Body RequestBody body);
+
+    /**
+     * 瓜分金蛋主页
+     * @return
+     */
+    @POST("task/teamIndex")
+    Call<BaseEntity<TeamIndexEntity>> teamIndex(@Body RequestBody body);
+    /**
+     * 识别口令
+     * @return
+     */
+    @POST("task/readPassword")
+    Call<BaseEntity<TeamCodeInfoEntity>> readPassword(@Body RequestBody body);
+
+    /**
+     * 参队记录
+     * @return
+     */
+    @GET("task/teamLog")
+    Call<BaseEntity<TeamListEntity>> teamLog(@QueryMap Map<String,String> map);
 
     /**
      * 我的周六中奖记录

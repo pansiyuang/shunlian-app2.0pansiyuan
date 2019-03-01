@@ -92,6 +92,8 @@ public class CommonEntity {
     public int notice;
     public int download;
 
+    public String praise;
+
     //发现评论
     public String comment_id;
     public String reply_parent_comment_id;

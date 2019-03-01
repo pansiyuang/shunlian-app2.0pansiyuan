@@ -2,33 +2,24 @@ package com.shunlian.app.ui.member;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.MemberUserAdapter;
 import com.shunlian.app.bean.MemberInfoEntity;
-import com.shunlian.app.bean.NewUserGoodsEntity;
 import com.shunlian.app.presenter.MemberPagePresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMemberPageView;
 import com.shunlian.app.widget.EditTextImage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.mylibrary.ImmersionBar;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +70,7 @@ public class SearchMemberActivity extends BaseActivity  implements IMemberPageVi
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         memberPagePresenter = new MemberPagePresenter(this,this);
-        memberUserAdapter = new MemberUserAdapter(this,lists);
+        memberUserAdapter = new MemberUserAdapter(this,lists,false);
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
         nei_empty.setImageResource(R.mipmap.img_bangzhu_sousuo).setText("暂无搜索结果").setButtonText(null);

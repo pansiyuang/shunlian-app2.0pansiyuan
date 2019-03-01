@@ -91,6 +91,7 @@ import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.core.KouBeiAct;
+import com.shunlian.app.ui.core.KouBeiActNew;
 import com.shunlian.app.ui.core.NewGetCouponAct;
 import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.coupon.CouponGoodsAct;
@@ -104,7 +105,9 @@ import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.h5.H5X5Act;
 import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
+import com.shunlian.app.ui.integral_team.TeamIntegralActivity;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
+import com.shunlian.app.ui.my_profit.DetailOrderRecordAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.new3_login.LoginEntryAct;
 import com.shunlian.app.ui.new_user.NewInvitationActivity;
@@ -282,6 +285,8 @@ public class Common {
                 return "MyCollectionAct";
             case "newuserhistorylist":
                 return "NewInvitationActivity";
+            case "incomeList"://收益详情(详细订单记录)
+                return "DetailOrderRecordAct";
             default:
                 return "";
         }
@@ -296,6 +301,9 @@ public class Common {
             return;
         }
         switch (type) {
+            case "incomeList"://收益详情(详细订单记录)
+                DetailOrderRecordAct.startAct(context);
+                break;
             case "newuserhistorylist"://新人专享邀请记录
                 NewInvitationActivity.startAct(context);
                 break;
@@ -390,7 +398,8 @@ public class Common {
 //                Common.staticToast("优惠拼单");
 //                break;
             case "praise":
-                KouBeiAct.startAct(context);
+//                KouBeiAct.startAct(context);
+                KouBeiActNew.startAct(context);
                 break;
             case "loveyoupin":
                 AishangAct.startAct(context);
@@ -554,7 +563,7 @@ public class Common {
                     if (context instanceof Activity) {
                         ChatManager.getInstance(context).init().switch2jumpChat(params[10], params[11], chatMember);
                     } else {
-                        Common.staticToast("聊天初始化失败");
+                        Common.staticToast(context,"聊天初始化失败");
                     }
                 }
                 break;
@@ -593,6 +602,13 @@ public class Common {
                 break;
             case "taskGoldenEggTurnTable":
                 GoldEggLuckyWheelPanActivity.startAct(context);
+                break;
+            case "carveUpEgg"://组队瓜分金蛋
+                if (!Common.isAlreadyLogin()) {
+                    Common.goGoGo(context, "login");
+                    return;
+                }
+                TeamIntegralActivity.startAct(context, null);
                 break;
             default://首页
                 MainActivity.startAct(context, "");
@@ -901,15 +917,24 @@ public class Common {
         }
     }
 
+    /**
+     * 部分手机以为上下文的原因显示不出提示，建议使用两个参数的方法
+     * @see #staticToast(Context,String)
+     * @param content 显示内容
+     */
+    @Deprecated
     public static void staticToast(String content) {
+        staticToast(App.getContext(),content);
+    }
+
+    public static void staticToast(Context context,String content) {
         if (TextUtils.isEmpty(content))
             return;
         if (toast == null) {
             View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
-            mtv_toast = (MyTextView) v.findViewById(R.id.mtv_toast);
+            mtv_toast = v.findViewById(R.id.mtv_toast);
             mtv_toast.setText(content);
-            toast = new Toast(App.getContext());
-//            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
+            toast = new Toast(context);
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(v);
             toast.setGravity(Gravity.CENTER, 0, 0);
@@ -1484,7 +1509,7 @@ public class Common {
     public static void copyText(Context context, String content) {
         ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cmb.setText(content); //将内容放入粘贴管理器,在别的地方长按选择"粘贴"即可
-        Common.staticToast("复制成功");
+        Common.staticToast(context,"复制成功");
     }
 
     public static void copyTextNoToast(Context context, String content) {
@@ -1547,11 +1572,11 @@ public class Common {
                     wxEntryPresenter.notifyShare(type, id);
                 }
             } catch (Exception e) {
-                staticToast("打开微信失败，请重试");
+                staticToast(context,"打开微信失败，请重试");
                 e.printStackTrace();
             }
         } else {
-            staticToast("请安装微信后重试!");
+            staticToast(context,"请安装微信后重试!");
         }
     }
 

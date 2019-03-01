@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -304,15 +303,14 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                                  INetDataCallback<BaseEntity<T>> callback, int emptyCode,
                                  int failureCode, boolean isLoading) {
         if (code != Code.CODE_REFRESH_TOKEN_VALIDE && code != Code.API_ERROR_NO_MESSAGE && code != 6201) {
-//            Common.staticToast(message);
-            Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+            Common.staticToast(context,message);
         }
         switch (code) {
             // TODO: 2017/10/19
             case Code.CODE_NO_LOGIN://未登录
                 String token = SharedPrefUtil.getSharedUserString("token", "");
                 if (TextUtils.isEmpty(token)) {
-                    Common.staticToast(message);
+                    Common.staticToast(context,message);
                     goLogin();
                 } else {
                     requestCount++;
@@ -325,7 +323,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 }
                 break;
             case Code.CODE_REFRESH_TOKEN_VALIDE://刷新token过期,让用户登录
-                Common.staticToast(Common.getResources().getString(R.string.plase_again_login));
+                Common.staticToast(context,Common.getResources().getString(R.string.plase_again_login));
                 goLogin();
                 break;
         }

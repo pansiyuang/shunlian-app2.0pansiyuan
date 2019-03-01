@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="454dp"
+        android:background="@mipmap/bg_guafenjindan_fenxiangtanchuang">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="165dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:id="@+id/tv_team_text1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="#FD5814"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:text="队员人数满6人啦！"/>
+            <TextView
+                android:id="@+id/tv_team_text2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#FD5814"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="恭喜！金蛋奖池额外增加888金蛋"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#FB3846"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:text="金蛋奖池+"/>
+                <TextView
+                    android:id="@+id/tv_team_egg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#FB3846"
+                    android:gravity="center"
+                    android:text="120"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#FB3846"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:text="金蛋"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#343131"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="- 扫码参加 -"/>
+            <ImageView
+                android:id="@+id/img_team_code"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:scaleType="fitXY"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/img_default_common"/>
+        </LinearLayout>
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="5dp"
+        android:text="快去截屏分享吧"/>
+   <com.shunlian.app.widget.MyImageView
+       android:id="@+id/miv_close"
+       android:layout_width="30dp"
+       android:layout_height="30dp"
+       android:src="@mipmap/img_xinren_guanbi"
+       android:layout_marginTop="8dp"/>
+
+</com.shunlian.app.widget.MyLinearLayout>

@@ -14,6 +14,7 @@ import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.presenter.VipMsgPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5X5Act;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IVipMsgView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -188,6 +189,14 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
             msgAdapter = new StoreMsgAdapter(this, storeMsgList, isGetVip);
             msgAdapter.setOnDelMessageListener(this);
             recycler_list.setAdapter(msgAdapter);
+            msgAdapter.setOnItemClickListener((view, position) -> {
+                try{
+                    StoreMsgEntity.StoreMsg storeMsg = storeMsgList.get(position);
+                    if ("15".equals(storeMsg.jump) && storeMsg.body != null){
+                        Common.urlToPage(this,storeMsg.body.url);
+                    }
+                }catch (Exception e){}
+            });
         }
         msgAdapter.notifyDataSetChanged();
 

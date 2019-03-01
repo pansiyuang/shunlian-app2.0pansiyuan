@@ -957,8 +957,19 @@
             android:exported="false"
             android:label="@string/first_aishangxin"
             android:screenOrientation="portrait" />
+        <!--<activity-->
+            <!--android:name=".ui.core.KouBeiAct"-->
+            <!--android:exported="false"-->
+            <!--android:label="@string/first_koubeire"-->
+            <!--android:screenOrientation="portrait" />-->
         <activity
-            android:name=".ui.core.KouBeiAct"
+            android:name=".ui.core.KouBeiActNew"
+            android:exported="false"
+            android:label="@string/first_koubeire"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.core.KouBeiActNews"
             android:exported="false"
             android:label="@string/first_koubeire"
             android:screenOrientation="portrait" />
@@ -1223,7 +1234,13 @@
             android:name=".ui.GoldEggLuckyWheelPanActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.integral_team.TeamIntegralActivity"
+             android:hardwareAccelerated="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.integral_team.TeamHistoryActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.discover_new.comment.CommentRejectedAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
