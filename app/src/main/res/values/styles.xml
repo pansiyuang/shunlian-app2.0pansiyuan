@@ -340,9 +340,17 @@
 
     <style name="mypopwindow_anim_style">
         <item name="android:windowEnterAnimation">@anim/popshow_anim</item>
-        <!-- 指定显示的动画xml -->
+        <!-- 指定显示的动画xml  从下往上显示-->
 
         <item name="android:windowExitAnimation">@anim/pophiden_anim</item>
-        <!-- 指定消失的动画xml -->
+        <!-- 指定消失的动画xml 从下往上消失-->
+    </style>
+
+    <style name="popwindow_anim_style">
+        <item name="android:windowEnterAnimation">@anim/pop_show</item>
+        <!-- 指定显示的动画xml 从上往下显示-->
+
+        <!--<item name="android:windowExitAnimation">@anim/pop_hide</item>-->
+        <!-- 指定消失的动画xml 从下往上显示-->
     </style>
 </resources>

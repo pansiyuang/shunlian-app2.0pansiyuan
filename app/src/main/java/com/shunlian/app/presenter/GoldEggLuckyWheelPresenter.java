@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.CreditLogEntity;
 import com.shunlian.app.bean.DrawRecordEntity;
 import com.shunlian.app.bean.GoldEggPrizeEntity;
 import com.shunlian.app.bean.MyDrawRecordEntity;

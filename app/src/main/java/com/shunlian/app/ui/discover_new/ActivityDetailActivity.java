@@ -34,7 +34,7 @@ import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IActivityDetailView;
-import com.shunlian.app.widget.BlogCommentSendPopwindow;
+import com.shunlian.app.widget.BlogCommentSendDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
@@ -84,7 +84,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
     private PromptDialog promptDialog, plusDialog;
     private LottieAnimationView mAnimationView;
     private String currentCommentBlogId;
-    private BlogCommentSendPopwindow mPopWindow;
+    private BlogCommentSendDialog mPopWindow;
 
     @Override
     protected int getLayoutId() {
@@ -492,7 +492,7 @@ public class ActivityDetailActivity extends BaseActivity implements IActivityDet
 
     private void showPopupComment() {
         if (mPopWindow == null) {
-            mPopWindow = new BlogCommentSendPopwindow(this);
+            mPopWindow = new BlogCommentSendDialog(this);
             mPopWindow.setOnPopClickListener((String content) -> {
                 if (isEmpty(currentCommentBlogId)) {
                     return;

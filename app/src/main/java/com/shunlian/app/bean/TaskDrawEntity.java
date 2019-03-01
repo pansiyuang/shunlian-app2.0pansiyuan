@@ -15,6 +15,9 @@ public class TaskDrawEntity {
     public String draw_id;
     public int draw_count;
     public Voucher voucher;
+    public String credit;
+    public long gold_egg;
+    public int draw_type;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Voucher {

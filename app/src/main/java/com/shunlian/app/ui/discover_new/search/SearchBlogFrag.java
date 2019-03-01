@@ -26,7 +26,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.ShareGoodDialogUtil;
 import com.shunlian.app.view.IHotBlogView;
-import com.shunlian.app.widget.BlogCommentSendPopwindow;
+import com.shunlian.app.widget.BlogCommentSendDialog;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
@@ -62,7 +62,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
     private PromptDialog promptDialog;
     private LottieAnimationView mAnimationView;
     private String currentCommentBlogId;
-    private BlogCommentSendPopwindow mPopWindow;
+    private BlogCommentSendDialog mPopWindow;
     private ShareGoodDialogUtil shareGoodDialogUtil;
     private ShareInfoParam mShareInfoParam;
 
@@ -413,7 +413,7 @@ public class SearchBlogFrag extends BaseLazyFragment implements IHotBlogView, Ho
 
     private void showPopupComment() {
         if (mPopWindow == null) {
-            mPopWindow = new BlogCommentSendPopwindow(getActivity());
+            mPopWindow = new BlogCommentSendDialog(getActivity());
             mPopWindow.setOnPopClickListener((String content) -> {
                 if (isEmpty(currentCommentBlogId)) {
                     return;

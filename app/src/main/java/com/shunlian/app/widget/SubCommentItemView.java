@@ -31,6 +31,7 @@ public class SubCommentItemView extends FrameLayout {
     private MyTextView mtv_more_count;
     private TextView tv_reply;
     private TextView tv_verify;
+    private TextView tv_reject;
     private LinearLayout ll_zan;
     private TextView tv_zan;
     private LottieAnimationView mAnimationView;
@@ -59,6 +60,7 @@ public class SubCommentItemView extends FrameLayout {
         mtv_content = (MyTextView) view.findViewById(R.id.mtv_content);
         tv_reply = view.findViewById(R.id.tv_reply);
         tv_verify = view.findViewById(R.id.tv_verify);
+        tv_reject = view.findViewById(R.id.tv_reject);
         tv_zan = view.findViewById(R.id.tv_zan);
         mtv_more_count = (MyTextView) view.findViewById(R.id.mtv_more_count);
         mAnimationView = view.findViewById(R.id.animation_zan);
@@ -91,6 +93,11 @@ public class SubCommentItemView extends FrameLayout {
                 if (mCallBack != null) {
                     mCallBack.onRejected();
                 }
+            }
+        });
+        tv_reject.setOnClickListener(v -> {
+            if (mCallBack != null) {
+                mCallBack.withDraw();
             }
         });
         mtv_more_count.setOnClickListener(v -> {
@@ -178,8 +185,8 @@ public class SubCommentItemView extends FrameLayout {
             tv_verify.setVisibility(View.GONE);
         } else if (itemComment.check_is_show == 1) {
             tv_verify.setVisibility(View.VISIBLE);
-            tv_verify.setText("审核");
-            tv_verify.setTextColor(getContext().getResources().getColor(R.color.pink_color));
+            tv_verify.setText("通过");
+            tv_verify.setTextColor(getContext().getResources().getColor(R.color.value_007AFF));
         } else if (itemComment.check_is_show == 2) {
             tv_verify.setVisibility(View.VISIBLE);
             tv_verify.setText("撤回");
@@ -193,28 +200,35 @@ public class SubCommentItemView extends FrameLayout {
             ll_zan.setVisibility(GONE);
             tv_verify.setVisibility(GONE);
             tv_reply.setVisibility(GONE);
+            ll_zan.setVisibility(GONE);
         } else if (itemComment.status == 2) {
             mtv_content.setTextColor(getContext().getResources().getColor(R.color.value_484848));
             mtv_content.setText(itemComment.content);
             mtv_content.setLongClickable(false);
+            tv_verify.setClickable(false);
             tv_verify.setText("已驳回");
             tv_verify.setTextColor(getContext().getResources().getColor(R.color.text_gray2));
             ll_zan.setVisibility(GONE);
-
+            tv_reject.setVisibility(GONE);
             if (itemComment.is_self == 1) {
-                tv_reply.setVisibility(VISIBLE);
+                tv_reject.setVisibility(VISIBLE);
                 tv_verify.setVisibility(GONE);
+                tv_reject.setVisibility(GONE);
             } else {
-                tv_reply.setVisibility(GONE);
                 tv_verify.setVisibility(VISIBLE);
+                tv_reply.setVisibility(GONE);
+                tv_reject.setVisibility(GONE);
             }
         } else {
             mtv_content.setTextColor(getContext().getResources().getColor(R.color.value_484848));
+            ll_zan.setVisibility(VISIBLE);
+            tv_verify.setVisibility(VISIBLE);
+            tv_reply.setVisibility(VISIBLE);
+            ll_zan.setVisibility(VISIBLE);
             mtv_content.setText(itemComment.content);
             mtv_content.setLongClickable(true);
             tv_verify.setVisibility(itemComment.check_is_show == 0 ? View.GONE : View.VISIBLE);  //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
-            ll_zan.setVisibility(VISIBLE);
-            tv_reply.setVisibility(VISIBLE);
+            tv_reject.setVisibility(itemComment.check_is_show == 1 ? View.VISIBLE : View.GONE);  //驳回按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
         }
     }
 
@@ -231,6 +245,8 @@ public class SubCommentItemView extends FrameLayout {
         void onVerify();
 
         void onRejected();
+
+        void withDraw();
 
         void onContentLongClick();
     }

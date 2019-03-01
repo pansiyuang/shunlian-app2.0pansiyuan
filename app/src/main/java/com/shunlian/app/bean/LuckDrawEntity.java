@@ -15,4 +15,6 @@ public class LuckDrawEntity {
     public String thumb;
     public int trophy_type;
     public int give_num;
+    public int how_many;
+    public String text;
 }

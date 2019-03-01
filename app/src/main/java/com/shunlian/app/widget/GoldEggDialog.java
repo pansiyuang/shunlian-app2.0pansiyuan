@@ -79,8 +79,9 @@ public class GoldEggDialog extends Dialog {
     private TaskDrawEntity mTaskDraw;
     private NoAddressOrderEntity mOrderEntity;
     private Unbinder bind;
-    private int showType = -1; //奖品类型：-1=金蛋抽奖，0=未中奖，1=实物，2=优惠券，3=金蛋 ，4=未填写收获地址，5=金蛋数量不足
+    private int showType = -1; //奖品类型：-1=金蛋抽奖，0=未中奖，1=实物，2=优惠券，3=金蛋 ，4=未填写收获地址，5=金蛋数量不足，6=积分抽奖，7=积分不足提醒
     private int goldCount;
+    private long currentScore;
     private boolean isAttention = false;
     private OnDialogBtnClickListener onDialogBtnClickListener;
 
@@ -130,6 +131,20 @@ public class GoldEggDialog extends Dialog {
                 case 5://金蛋数量不足
                     onDialogBtnClickListener.jumpTaskCenter();
                     break;
+                case 6://积分抽奖
+                    onDialogBtnClickListener.onDraw();
+                    if (currentScore <= goldCount) {
+                        isAttention = false;
+                        miv_select.setImageResource(R.mipmap.icon_nor);
+                    }
+                    SharedPrefUtil.saveCacheSharedPrfBoolean("isAttention", isAttention);
+                    break;
+                case 7://积分不足提醒
+                    onDialogBtnClickListener.onDraw();
+                    SharedPrefUtil.saveCacheSharedPrfBoolean("isAttention", false);
+                    miv_select.setImageResource(R.mipmap.icon_nor);
+                    isAttention = false;
+                    break;
             }
         });
         miv_close.setOnClickListener(v -> dismiss());
@@ -146,9 +161,10 @@ public class GoldEggDialog extends Dialog {
         TransformUtil.expandViewTouchDelegate(miv_select, i, i, i, i);
     }
 
-    public void setShowType(int type, int consume) {
+    public void setShowType(int type, int consume, long totalScore) {
         this.showType = type;
         this.goldCount = consume;
+        this.currentScore = totalScore;
         initPrizeView(showType);
     }
 
@@ -172,8 +188,11 @@ public class GoldEggDialog extends Dialog {
         try {
             switch (type) {
                 case -1:
+                    isAttention = false;
+                    miv_select.setImageResource(R.mipmap.icon_nor);
                     tv_notice.setTextSize(24);
                     tv_notice.setText("确定消耗" + goldCount + "个金蛋？");
+                    tv_notice.setVisibility(View.VISIBLE);
                     ll_voucher.setVisibility(View.GONE);
                     ll_icon.setVisibility(View.VISIBLE);
                     miv_icon.setVisibility(View.VISIBLE);
@@ -186,6 +205,7 @@ public class GoldEggDialog extends Dialog {
                 case 0:
                     tv_notice.setTextSize(24);
                     tv_notice.setText("哎呀，太可惜了！");
+                    tv_notice.setVisibility(View.VISIBLE);
                     ll_voucher.setVisibility(View.GONE);
                     ll_icon.setVisibility(View.VISIBLE);
                     miv_icon.setVisibility(View.GONE);
@@ -200,6 +220,7 @@ public class GoldEggDialog extends Dialog {
                 case 1:
                     tv_notice.setTextSize(24);
                     tv_notice.setText("中奖啦！");
+                    tv_notice.setVisibility(View.VISIBLE);
                     ll_voucher.setVisibility(View.GONE);
                     ll_icon.setVisibility(View.VISIBLE);
                     ll_notice.setVisibility(View.GONE);
@@ -210,7 +231,7 @@ public class GoldEggDialog extends Dialog {
                         setLinearLayoutParam(150, 150, miv_draw_icon);
                         tv_content.setVisibility(View.VISIBLE);
                         tv_content.setText(mTaskDraw.desc);
-                    }else{
+                    } else {
                         tv_content.setVisibility(View.GONE);
                     }
                     btn_bottom.setText("填写收货地址");
@@ -220,6 +241,7 @@ public class GoldEggDialog extends Dialog {
                     ll_voucher.setVisibility(View.VISIBLE);
                     ll_icon.setVisibility(View.GONE);
                     tv_notice.setText("中奖啦！");
+                    tv_notice.setVisibility(View.VISIBLE);
                     ll_notice.setVisibility(View.GONE);
                     if (mTaskDraw != null && mTaskDraw.voucher != null) {
                         TaskDrawEntity.Voucher voucher = mTaskDraw.voucher;
@@ -232,7 +254,7 @@ public class GoldEggDialog extends Dialog {
                         tv_voucher_desc.setText(voucher.desc);
                         tv_content.setVisibility(View.VISIBLE);
                         tv_content.setText(mTaskDraw.desc);
-                    }else{
+                    } else {
                         tv_content.setVisibility(View.GONE);
                     }
                     btn_bottom.setText(getContext().getResources().getText(R.string.go_to_visit));
@@ -241,6 +263,7 @@ public class GoldEggDialog extends Dialog {
                     tv_notice.setTextSize(24);
                     ll_icon.setVisibility(View.VISIBLE);
                     tv_notice.setText("中奖啦！");
+                    tv_notice.setVisibility(View.VISIBLE);
                     ll_voucher.setVisibility(View.GONE);
                     ll_icon.setVisibility(View.VISIBLE);
                     miv_icon.setVisibility(View.VISIBLE);
@@ -257,6 +280,7 @@ public class GoldEggDialog extends Dialog {
                     tv_notice.setTextSize(20);
                     ll_icon.setVisibility(View.VISIBLE);
                     tv_notice.setText("你还有奖品未填写收货地址");
+                    tv_notice.setVisibility(View.VISIBLE);
                     ll_voucher.setVisibility(View.GONE);
                     ll_icon.setVisibility(View.VISIBLE);
                     miv_icon.setVisibility(View.GONE);
@@ -274,6 +298,7 @@ public class GoldEggDialog extends Dialog {
                     tv_notice.setTextSize(20);
                     ll_icon.setVisibility(View.VISIBLE);
                     tv_notice.setText("抱歉，您的金蛋数量不足,快去做任务领金蛋吧");
+                    tv_notice.setVisibility(View.VISIBLE);
                     ll_voucher.setVisibility(View.GONE);
                     ll_icon.setVisibility(View.VISIBLE);
                     miv_icon.setVisibility(View.GONE);
@@ -284,9 +309,36 @@ public class GoldEggDialog extends Dialog {
                     setLinearLayoutParam(190, 133, miv_draw_icon);
                     miv_draw_icon.setImageResource(R.mipmap.image_shuliangbuzu);
                     break;
+                case 6:
+                    tv_notice.setTextSize(24);
+                    tv_notice.setText("立即使用" + goldCount + "积分抽奖");
+                    tv_notice.setVisibility(View.VISIBLE);
+                    ll_voucher.setVisibility(View.GONE);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    miv_icon.setVisibility(View.VISIBLE);
+                    miv_draw_icon.setVisibility(View.GONE);
+                    miv_icon.setImageResource(R.mipmap.img_jifen_tanchuang);
+                    ll_notice.setVisibility(View.VISIBLE);
+                    tv_content.setVisibility(View.GONE);
+                    btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
+                    break;
+                case 7:
+                    tv_notice.setTextSize(24);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    tv_notice.setVisibility(View.GONE);
+                    ll_voucher.setVisibility(View.GONE);
+                    ll_icon.setVisibility(View.VISIBLE);
+                    miv_icon.setVisibility(View.VISIBLE);
+                    miv_draw_icon.setVisibility(View.GONE);
+                    miv_icon.setImageResource(R.mipmap.image_huodejindan);
+                    ll_notice.setVisibility(View.GONE);
+                    tv_content.setVisibility(View.VISIBLE);
+                    tv_content.setText("您目前的积分少于" + goldCount + "，仅可兑换1次抽奖机会，是否兑换？");
+                    btn_bottom.setText(getContext().getResources().getText(R.string.SelectRecommendAct_sure));
+                    break;
             }
             show();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }

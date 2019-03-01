@@ -114,6 +114,7 @@ public class WheelSurfPanView extends View {
 
     public void setmType(int mType) {
         this.mType = mType;
+        invalidate();
     }
 
     public void setmMinTimes(int mMinTimes) {
@@ -293,6 +294,11 @@ public class WheelSurfPanView extends View {
         mCirclePaint.setAntiAlias(true);
     }
 
+    public void initDefault(int typeNum) {//还原记录
+        lastPosition = 0;
+        currAngle = 0;
+        mAngle = (float) (360.0 / typeNum);
+    }
 
     //目前的角度
     private float currAngle = 0;
@@ -305,6 +311,7 @@ public class WheelSurfPanView extends View {
      */
     public void startRotate(final int pos) {
         //最低圈数是mMinTimes圈
+        LogUtil.httpLogW("lastPosition：" + lastPosition + " currAngle:" + currAngle + "   mAngle:" + mAngle);
         int newAngle = (int) (360 * mMinTimes + (pos - 1) * mAngle + currAngle - (lastPosition == 0 ? 0 : ((lastPosition - 1) * mAngle)));
         //计算目前的角度划过的扇形份数
         ObjectAnimator anim = ObjectAnimator.ofFloat(WheelSurfPanView.this, "rotation", currAngle, newAngle);
@@ -576,5 +583,11 @@ public class WheelSurfPanView extends View {
         TextView textView = new TextView(mContext);
         textView.setTextSize(1);
         return textView.getTextSize();
+    }
+
+    public void stopAnim() {
+        if (animate() != null) {
+            animate().cancel();
+        }
     }
 }

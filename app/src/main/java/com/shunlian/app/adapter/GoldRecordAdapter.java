@@ -33,6 +33,7 @@ public class GoldRecordAdapter extends BaseRecyclerAdapter<MyDrawRecordEntity.Dr
             MyDrawRecordEntity.DrawRecord drawRecord = lists.get(position);
             drawRecordViewHolder.tv_date.setText(drawRecord.create_time);
             drawRecordViewHolder.tv_name.setText(drawRecord.name);
+            drawRecordViewHolder.tv_use_type.setText(drawRecord.use_rold);
         }
     }
 
@@ -43,6 +44,9 @@ public class GoldRecordAdapter extends BaseRecyclerAdapter<MyDrawRecordEntity.Dr
 
         @BindView(R.id.tv_name)
         TextView tv_name;
+
+        @BindView(R.id.tv_use_type)
+        TextView tv_use_type;
 
         public DrawRecordViewHolder(View itemView) {
             super(itemView);

@@ -6,19 +6,23 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
@@ -27,6 +31,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.GoldRecordAdapter;
+import com.shunlian.app.bean.CreditLogEntity;
 import com.shunlian.app.bean.GoldEggPrizeEntity;
 import com.shunlian.app.bean.MyDrawRecordEntity;
 import com.shunlian.app.bean.NoAddressOrderEntity;
@@ -37,6 +42,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoldEggLuckyWheelView;
@@ -44,14 +50,21 @@ import com.shunlian.app.widget.GoldEggDialog;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRecyclerView;
+import com.shunlian.app.widget.ScoreRecordDialog;
 import com.shunlian.app.widget.X5WebView;
 import com.shunlian.app.widget.luckWheel.RotateListener;
 import com.shunlian.app.widget.luckWheel.WheelSurfView;
 import com.shunlian.mylibrary.ImmersionBar;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -71,6 +84,15 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     @BindView(R.id.text_switcher)
     TextSwitcher text_switcher;
 
+    @BindView(R.id.tv_gold_count)
+    TextView tv_gold_count;
+
+    @BindView(R.id.tv_score_count)
+    TextView tv_score_count;
+
+    @BindView(R.id.tv_score_record)
+    TextView tv_score_record;
+
     private GoldEggLuckyWheelPresenter mPresenter;
     private int loadCount = 0;
     private HttpDialog httpDialog;
@@ -82,17 +104,33 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     private TaskDrawEntity currentTaskDraw;
     private String currentPrizeId;
     private String currentRuleUrl;
-    private int goldEggCount;
-    private boolean isFirstLoad = true;
-
+    private int consume;
+    private boolean isDraw;
     private int index = 0;//textview上下滚动下标
     private Handler handler = new Handler();
-    private boolean isFlipping = false; // 是否启用预警信息轮播
+    private boolean isFlipping = false, isFirstAttenion = false; // 是否启用预警信息轮播、积分提醒
     private List<String> mWarningTextList = new ArrayList<>();
     private List<MyDrawRecordEntity.DrawRecord> mReocrdList = new ArrayList<>();
     private int statusBarHeight;
     private GoldEggDialog goldEggDialog;
     private boolean isAttention;
+    private long totalGoldCount, totalScoreCount;
+    private String currentScore; //当前积分数量
+    private PopupWindow popupWindow;
+    private Timer timer;
+    private boolean hasDraw; //是否有抽奖记录，来刷新积分记录列表
+    private int defaultDrawType, currentDrawType;//初始化抽奖类型、当前抽奖类型
+    private ScoreRecordDialog mScoreRecordDialog;
+    private TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+            runOnUiThread(() -> {
+                if (popupWindow != null) {
+                    popupWindow.dismiss();
+                }
+            });
+        }
+    };
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, GoldEggLuckyWheelPanActivity.class);
@@ -130,22 +168,32 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
         wheelPan.setRotateListener(new RotateListener() {
             @Override
             public void rotateEnd(int position, String des) {
+                if (wheelPan != null) {
+                    wheelPan.setEnable(false);
+                }
                 goldEggDialog.setShowType(currentTaskDraw);
                 mPresenter.getMyDrawRecordList();
+                hasDraw = true;
+                if (isEmpty(currentScore)) {
+                    return;
+                }
+                if (Long.valueOf(currentTaskDraw.credit) == 0) {
+                    isDraw = false;
+                    mPresenter.getPrizeList();
+                }
             }
 
             @Override
             public void rotating(ValueAnimator valueAnimator) {
+                if (wheelPan != null) {
+                    wheelPan.setEnable(true);
+                }
             }
 
             @Override
             public void rotateBefore(ImageView goImg) {
-                isAttention = SharedPrefUtil.getCacheSharedPrfBoolean("isAttention", false);
-                if (isAttention) {
-                    mPresenter.getTaskDraw();
-                } else {
-                    goldEggDialog.setShowType(-1, goldEggCount);
-                }
+                isDraw = true;
+                mPresenter.getPrizeList();
             }
         });
         myPrizeList = new ArrayList<>();
@@ -161,8 +209,12 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
             }
         });
 
+        tv_score_record.setOnClickListener(v -> {
+            showScoreRecordDialog();
+        });
         setTextSwitcher();
     }
+
 
     @Override
     public void showFailureView(int request_code) {
@@ -212,6 +264,18 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
             mwv_rule.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
             mwv_rule.loadUrl(url);
             miv_close.setOnClickListener(view -> dialog_ad.dismiss());
+            mwv_rule.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onReceivedError(WebView webView, int i, String s, String s1) {
+                    super.onReceivedError(webView, i, s, s1);
+                }
+
+                @Override
+                public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+                    super.onReceivedSslError(webView, sslErrorHandler, sslError);
+                    sslErrorHandler.proceed();
+                }
+            });
 //            dialog_ad.setCancelable(false);
         }
     }
@@ -295,10 +359,10 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         mListBitmap.add(BitmapFactory.decodeResource(getResources(), R.mipmap.img_jindan));
-                        if (loadCount >= myPrizeList.size()) {
-                            setWheelPanData(myPrizeList);
+                        if (loadCount >= prizes.size()) {
+                            setWheelPanData(prizes);
                         } else {
-                            loadImage(myPrizeList);
+                            loadImage(prizes);
                         }
                     }
                 });
@@ -316,7 +380,14 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
         //主动旋转一下图片
         mListBitmap = WheelSurfView.rotateBitmaps(mListBitmap);
 
+        String content;
+        if (totalScoreCount == 0) {
+            content = consume + "金蛋一次";
+        } else {
+            content = consume + "积分一次";
+        }
         //获取第三个视图
+        LogUtil.httpLogW("prizeList:" + prizeList.size());
         WheelSurfView.Builder build = new WheelSurfView.Builder()
                 .setmColors(colors)
                 .setmDeses(des)
@@ -325,7 +396,7 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
                 .setmTextColor(Color.parseColor("#80561D"))
                 .setmTextSize(TransformUtil.dip2px(this, 9))
                 .setmTypeNum(prizeList.size())
-                .setStartContent(goldEggCount + "金蛋一次")
+                .setStartContent(content)
                 .build();
         wheelPan.setConfig(build);
         httpDialog.dismiss();
@@ -382,26 +453,86 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     public void onStop() {
         super.onStop();
         stopFlipping();
+        if (wheelPan != null) {
+            wheelPan.stopRotate();
+        }
     }
 
     @Override
     public void getPrizeData(GoldEggPrizeEntity prizeEntity) {
-        if (isFirstLoad) {
-            currentRuleUrl = prizeEntity.rule_url;
-            goldEggCount = prizeEntity.consume;
-            initDialogs(currentRuleUrl);
-            myPrizeList.clear();
-            myPrizeList.addAll(prizeEntity.list);
-            addAllTurnTables(myPrizeList);
+        currentRuleUrl = prizeEntity.rule_url;
+        consume = prizeEntity.consume;
+        totalGoldCount = prizeEntity.gold_egg;
+        currentScore = prizeEntity.credit;
+        if (!isEmpty(currentScore)) {
+            totalScoreCount = Long.valueOf(currentScore);
+            tv_score_count.setText(String.format("积分：%d", totalScoreCount));
+            visible(tv_score_count);
+            showPopwindow();
+        } else {
+            totalScoreCount = 0;
+            gone(tv_score_count);
         }
+        initDialogs(currentRuleUrl);
         myPrizeList.clear();
         myPrizeList.addAll(prizeEntity.list);
-        isFirstLoad = false;
+        addAllTurnTables(myPrizeList);
+        tv_gold_count.setText(String.format("金蛋数量：%d", totalGoldCount));
+
+        if (!isDraw) {//假如不是抽奖
+            return;
+        }
+
+        currentDrawType = SharedPrefUtil.getCacheSharedPrfInt("DrawType", 0);
+        if (currentDrawType != prizeEntity.draw_type) { //清空转圈记录
+            wheelPan.clearHistory(prizeEntity.list.size());
+            SharedPrefUtil.saveCacheSharedPrfBoolean("isAttention", false);
+        }
+        SharedPrefUtil.saveCacheSharedPrfInt("DrawType", prizeEntity.draw_type);
+
+        isAttention = SharedPrefUtil.getCacheSharedPrfBoolean("isAttention", false);
+        LogUtil.httpLogW("isAttention:" + isAttention + "  currentDrawType:" + currentDrawType + "  draw_type:" + prizeEntity.draw_type);
+        if (isAttention) {
+            mPresenter.getTaskDraw();
+        } else {
+            if (!isEmpty(currentScore)) {
+                if (totalScoreCount >= consume) { //积分大于等于一次消耗积分数量
+                    goldEggDialog.setShowType(6, consume, totalScoreCount);
+                } else if (totalScoreCount < consume && totalScoreCount > 0) {//积分小于一次消耗积分数量
+                    goldEggDialog.setShowType(7, consume, totalScoreCount);
+                } else if (totalScoreCount == 0) {//没有积分只能用金蛋抽奖
+                    goldEggDialog.setShowType(-1, consume, totalScoreCount);
+                }
+            } else {
+                goldEggDialog.setShowType(-1, consume, totalScoreCount);
+            }
+        }
+
+//        if (currentDrawType != defaultDrawType) { //判断积分抽奖是否被关闭了
+//            String luckId;
+//            if (currentTaskDraw != null && !isEmpty(currentTaskDraw.id)) {
+//                luckId = currentTaskDraw.id;
+//                for (int i = 0; i < myPrizeList.size(); i++) {
+//                    if (luckId.equals(myPrizeList.get(i).id)) {
+//                        if (i == 0) {
+//                            luckPosition = 1;
+//                        } else {
+//                            luckPosition = myPrizeList.size() + 1 - i;
+//                        }
+//                        wheelPan.clearHistory(myPrizeList.size());
+//                        wheelPan.startRotate(luckPosition);
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        defaultDrawType = prizeEntity.draw_type;
     }
 
     @Override
     public void getTaskDraw(TaskDrawEntity taskDrawEntity) {
         currentTaskDraw = taskDrawEntity;
+//        currentDrawType = taskDrawEntity.draw_type;
         String luckId;
         if (!isEmpty(currentTaskDraw.id)) {
             luckId = currentTaskDraw.id;
@@ -417,11 +548,33 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
                 }
             }
         }
+
+        currentScore = currentTaskDraw.credit;
+        if (!isEmpty(currentScore)) {
+            totalScoreCount = Long.valueOf(currentScore);
+            tv_score_count.setText(String.format("积分：%d", totalScoreCount));
+            visible(tv_score_count);
+
+            if (totalScoreCount < consume && totalScoreCount > 0) {
+                SharedPrefUtil.saveCacheSharedPrfBoolean("isAttention", false);
+            } else if (totalScoreCount == 0 && !isFirstAttenion) {
+                SharedPrefUtil.saveCacheSharedPrfBoolean("isAttention", false);
+                isFirstAttenion = true;
+            }
+        } else {
+            gone(tv_score_count);
+        }
+        totalGoldCount = currentTaskDraw.gold_egg;
+        tv_gold_count.setText(String.format("金蛋数量：%d", totalGoldCount));
+
+//        if (currentDrawType != defaultDrawType) {
+//            mPresenter.getPrizeList();
+//        }
     }
 
     @Override
     public void getDrawRecordList(List<String> recordList) {
-        try{
+        try {
             if (isEmpty(recordList)) {
                 text_switcher.setVisibility(View.GONE);
                 return;
@@ -444,8 +597,8 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
                 text_switcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_top));
                 startFlipping();
             }
-        }catch (Exception e){
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -474,7 +627,12 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
 
     @Override
     public void taskDrawFail() {
-        goldEggDialog.setShowType(5, 0);
+        goldEggDialog.setShowType(5, 0, totalScoreCount);
+    }
+
+    @Override
+    public void refreshFinish() {
+
     }
 
     @Override
@@ -495,5 +653,41 @@ public class GoldEggLuckyWheelPanActivity extends BaseActivity implements IGoldE
     @Override
     public void jumpTaskCenter() {
         Common.goGoGo(this, "taskSystems");
+    }
+
+    public void showPopwindow() {
+        boolean isShow = SharedPrefUtil.getCacheSharedPrfBoolean("isShowScorePopWindow", false);
+        if (isShow) {
+            return;
+        }
+        if (popupWindow == null) {
+            View view = LayoutInflater.from(this).inflate(R.layout.layout_score_draw, null);
+            int width = DeviceInfoUtil.getDeviceWidth(this) - TransformUtil.dip2px(this, 18);
+            popupWindow = new PopupWindow(view, width, TransformUtil.dip2px(this, 46), true);
+
+            popupWindow.setTouchable(true);
+            popupWindow.setFocusable(true);
+            // 设置点击窗口外边窗口消失
+            popupWindow.setOutsideTouchable(true);
+            popupWindow.setBackgroundDrawable(new BitmapDrawable());
+            popupWindow.setAnimationStyle(R.style.popwindow_anim_style);
+        }
+        popupWindow.showAtLocation(rl_title, Gravity.TOP, 0, 0);
+        SharedPrefUtil.saveCacheSharedPrfBoolean("isShowScorePopWindow", true);
+        if (timer == null) {
+            timer = new Timer();
+        }
+        timer.schedule(timerTask, 5000);
+    }
+
+    public void showScoreRecordDialog() {
+        if (mScoreRecordDialog == null) {
+            mScoreRecordDialog = new ScoreRecordDialog(this);
+        }
+        if (hasDraw) {
+            mScoreRecordDialog.initPage();
+        }
+        hasDraw = false;
+        mScoreRecordDialog.show();
     }
 }

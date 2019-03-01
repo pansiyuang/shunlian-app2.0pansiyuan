@@ -13,5 +13,7 @@ public class MyDrawRecordEntity {
         public String name;
         public String nickname;
         public String create_time;
+        public String task_id;
+        public String use_rold;
     }
 }

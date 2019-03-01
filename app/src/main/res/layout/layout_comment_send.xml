@@ -23,6 +23,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@+id/miv_emoji"
+            android:focusable="false"
             android:background="@drawable/rounded_corner_solid_ec_32px"
             android:gravity="center_vertical"
             android:hint="留下你的精彩评论吧~"

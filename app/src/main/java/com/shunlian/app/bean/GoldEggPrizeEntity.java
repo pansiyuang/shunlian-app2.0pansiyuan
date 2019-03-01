@@ -10,6 +10,9 @@ public class GoldEggPrizeEntity {
     public List<Prize> list;
     public String rule_url;
     public int consume;
+    public String credit;
+    public long gold_egg;
+    public int draw_type;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Prize {

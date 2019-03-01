@@ -20,6 +20,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.presenter.FindCommentDetailPresenter;
+import com.shunlian.app.ui.discover_new.comment.CommentRejectedAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.PromptDialog;
@@ -136,8 +137,8 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
 
             if (lastLikesBean.check_is_show == 1) {
                 mHolder.tv_verify.setClickable(true);
-                mHolder.tv_verify.setText("审核");
-                mHolder.tv_verify.setTextColor(getColor(R.color.pink_color));
+                mHolder.tv_verify.setText("通过");
+                mHolder.tv_verify.setTextColor(getColor(R.color.value_007AFF));
             } else if (lastLikesBean.check_is_show == 2) {
                 mHolder.tv_verify.setClickable(true);
                 mHolder.tv_verify.setText("撤回");
@@ -148,26 +149,29 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                 mHolder.mtv_content.setTextColor(getColor(R.color.color_value_6c));
                 mHolder.mtv_content.setText("该条评论已被删除");
                 mHolder.mtv_content.setLongClickable(false);
-                gone(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
+                gone(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply, mHolder.tv_reject);
             } else if (lastLikesBean.status == 2) {
                 mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
                 mHolder.mtv_content.setText(lastLikesBean.content);
                 mHolder.mtv_content.setLongClickable(false);
-                mHolder.tv_verify.setText("已驳回");
                 mHolder.tv_verify.setClickable(false);
-                mHolder.tv_verify.setTextColor(getColor(R.color.value_484848));
-                gone(mHolder.ll_zan);
+                mHolder.tv_verify.setText("已驳回");
+                mHolder.tv_verify.setTextColor(getColor(R.color.text_gray2));
+                gone(mHolder.ll_zan, mHolder.tv_reject);
                 if (lastLikesBean.is_self == 1) {
                     visible(mHolder.tv_reply);
-                    gone(mHolder.tv_verify);
+                    gone(mHolder.tv_verify, mHolder.tv_reject);
                 } else {
                     visible(mHolder.tv_verify);
-                    gone(mHolder.tv_reply);
+                    gone(mHolder.tv_reply, mHolder.tv_reject);
                 }
             } else {
                 mHolder.mtv_content.setTextColor(getColor(R.color.value_484848));
-                visible(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply);
+                visible(mHolder.ll_zan, mHolder.tv_verify, mHolder.tv_reply, mHolder.tv_reject);
+                mHolder.mtv_content.setText(lastLikesBean.content);
+                mHolder.mtv_content.setLongClickable(true);
                 mHolder.tv_verify.setVisibility(lastLikesBean.check_is_show == 0 ? View.GONE : View.VISIBLE);  //审核按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
+                mHolder.tv_reject.setVisibility(lastLikesBean.check_is_show == 1 ? View.VISIBLE : View.GONE);  //驳回按钮是否显示，0不显示任何按钮，1显示审核按钮，2显示撤回按钮
             }
 
             if (isEmpty(lastLikesBean.reply_list)) {
@@ -227,16 +231,9 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
 
                 @Override
                 public void onVerify() {
-                    if (mDialog == null) {
-                        mDialog = new CommentBottmDialog(context);
+                    if (mFabulousListener != null) {
+                        mFabulousListener.onVerify(false, finalJ);
                     }
-                    mDialog.setCommentData(replyList);
-                    mDialog.setOnPassListener(() -> {
-                        if (mFabulousListener != null) {
-                            mFabulousListener.onVerify(false, finalJ);
-                        }
-                    });
-                    mDialog.show();
                 }
 
                 @Override
@@ -253,6 +250,12 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                         promptDialog.dismiss();
                     });
                     promptDialog.show();
+                }
+
+                @Override
+                public void withDraw() {
+                    FindCommentListEntity.ItemComment itemComment = lists.get(0).reply_list.get(finalJ);
+                    CommentRejectedAct.startAct(context, itemComment.id);
                 }
 
                 @Override
@@ -308,6 +311,9 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
         @BindView(R.id.tv_verify)
         TextView tv_verify;
 
+        @BindView(R.id.tv_reject)
+        TextView tv_reject;
+
         @BindView(R.id.miv_v)
         MyImageView miv_v;
 
@@ -317,17 +323,18 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             ll_zan.setOnClickListener(this);
             tv_reply.setOnClickListener(this);
             tv_verify.setOnClickListener(this);
+            tv_reject.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_reply:
-                    FindCommentListEntity.ItemComment itemComment = lists.get(0);
+                    FindCommentListEntity.ItemComment lastLikesBean = lists.get(0);
                     if (mFabulousListener == null) {
                         return;
                     }
-                    if (itemComment.is_self == 1) {
+                    if (lastLikesBean.is_self == 1) {
                         mFabulousListener.onDel(true, -1);
                     } else {
                         mFabulousListener.onReply(true, -1);
@@ -336,21 +343,14 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                 case R.id.tv_verify:
                     FindCommentListEntity.ItemComment comment = lists.get(getAdapterPosition());
                     if (comment.check_is_show == 1) { //审核
-                        if (mDialog == null) {
-                            mDialog = new CommentBottmDialog(context);
+                        if (mFabulousListener != null) {
+                            mFabulousListener.onVerify(true, -1);
                         }
-                        mDialog.setCommentData(comment);
-                        mDialog.setOnPassListener(() -> {
-                            if (mFabulousListener != null) {
-                                mFabulousListener.onVerify(true, -1);
-                            }
-                        });
-                        mDialog.show();
                     } else {  //撤回
                         promptDialog = new PromptDialog((Activity) context);
                         promptDialog.setTvSureColor(R.color.white);
                         promptDialog.setTvSureBGColor(getColor(R.color.pink_color));
-                        promptDialog.setSureAndCancleListener(String.format("撤回通过“%s”发表的评论？",comment.nickname), "确定", v1 -> {
+                        promptDialog.setSureAndCancleListener(String.format("撤回通过“%s”发表的评论？", comment.nickname), "确定", v1 -> {
                             if (mFabulousListener != null) {
                                 mFabulousListener.onRejected(true, -1);
                             }
@@ -360,6 +360,10 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                         });
                         promptDialog.show();
                     }
+                    break;
+                case R.id.tv_reject:
+                    FindCommentListEntity.ItemComment item = lists.get(getAdapterPosition());
+                    CommentRejectedAct.startAct(context, item.id);
                     break;
                 case R.id.ll_zan:
                     if (FindCommentDetailPresenter.isPlaying) {
@@ -378,7 +382,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
         }
     }
 
-    public void showCommentToolDialog(FindCommentListEntity.ItemComment itemComment, boolean isParent, int childPosition) {
+    public void showCommentToolDialog(FindCommentListEntity.ItemComment lastLikesBean, boolean isParent, int childPosition) {
         if (mToolDialog == null) {
             mToolDialog = new CommentToolBottomDialog(context);
             mToolDialog.setOnToolListener(new CommentToolBottomDialog.OnToolListener() {
@@ -411,7 +415,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                 }
             });
         }
-        mToolDialog.setCommentData(itemComment);
+        mToolDialog.setCommentData(lastLikesBean);
         mToolDialog.show();
     }
 

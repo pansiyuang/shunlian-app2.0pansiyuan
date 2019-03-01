@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TurnTablePopEntity {
     public int show;
+    public String text;
     public Popup list;
 
     @JsonIgnoreProperties(ignoreUnknown = true)

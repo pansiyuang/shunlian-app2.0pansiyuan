@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tv_goods_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_icon"
+        android:layout_marginTop="12dp"
+        android:maxLines="2"
+        android:textColor="@color/new_text"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/tv_goods_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_goods_name"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/new_text"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_goods_earn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_goods_name"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/tv_goods_price"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/pink_color"
+        android:textSize="15sp" />
+</RelativeLayout>

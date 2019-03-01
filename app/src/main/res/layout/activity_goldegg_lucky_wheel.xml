@@ -15,6 +15,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/iv_bg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -26,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="44dp"
+                android:layout_marginTop="50dp"
                 android:background="@mipmap/img_dazhaunpan_dongxiao" />
 
             <com.shunlian.app.widget.luckWheel.WheelSurfView
@@ -40,9 +41,35 @@
                 wheelSurfView:typenum="-1"></com.shunlian.app.widget.luckWheel.WheelSurfView>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/wheelPan"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:background="@mipmap/img_jifen"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_gold_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="金蛋数量：0"
+                    android:textColor="@color/value_954B22"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_score_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:textColor="@color/value_954B22"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_bg"
                 android:background="#E6B198"
                 android:orientation="vertical"
                 android:paddingLeft="8dp"
@@ -79,6 +106,17 @@
                             android:textColor="@color/value_49"
                             android:textSize="12sp" />
 
+                        <TextView
+                            android:id="@+id/tv_score_record"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginRight="24dp"
+                            android:text="积分记录"
+                            android:textColor="@color/value_AD7D67"
+                            android:textSize="12sp" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -90,7 +128,8 @@
                             android:layout_marginBottom="11dp"
                             android:background="@drawable/rounded_corner_stroke_d8c397_20px"
                             android:orientation="vertical"
-                            android:paddingTop="12dp">
+                            android:paddingTop="12dp"
+                            android:paddingRight="13dp">
 
                             <LinearLayout
                                 android:id="@+id/ll_top"
@@ -101,7 +140,9 @@
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
+                                    android:layout_weight="2"
+                                    android:drawableBottom="@drawable/bg_line_7a7a7a"
+                                    android:drawablePadding="5dp"
                                     android:gravity="center"
                                     android:text="日期"
                                     android:textColor="@color/value_49"
@@ -110,9 +151,22 @@
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
+                                    android:layout_weight="2"
+                                    android:drawableBottom="@drawable/bg_line_7a7a7a"
+                                    android:drawablePadding="5dp"
                                     android:gravity="center"
                                     android:text="奖品"
+                                    android:textColor="@color/value_49"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableBottom="@drawable/bg_line_7a7a7a"
+                                    android:drawablePadding="5dp"
+                                    android:gravity="center"
+                                    android:text="使用"
                                     android:textColor="@color/value_49"
                                     android:textSize="12sp" />
                             </LinearLayout>
