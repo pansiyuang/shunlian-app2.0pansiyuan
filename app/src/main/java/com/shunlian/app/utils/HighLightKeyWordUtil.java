@@ -19,12 +19,16 @@ public class HighLightKeyWordUtil {
      */
     public static SpannableString getHighLightKeyWord(int color, String text, String keyword) {
         SpannableString s = new SpannableString(text);
-        Pattern p = Pattern.compile(keyword);
-        Matcher m = p.matcher(s);
-        while (m.find()) {
-            int start = m.start();
-            int end = m.end();
-            s.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        try {
+            Pattern p = Pattern.compile(keyword);
+            Matcher m = p.matcher(s);
+            while (m.find()) {
+                int start = m.start();
+                int end = m.end();
+                s.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }catch (Exception e){
+            return s;
         }
         return s;
     }
@@ -37,15 +41,19 @@ public class HighLightKeyWordUtil {
      */
     public static SpannableString getHighLightKeyWord(int color, String text, String[] keyword) {
         SpannableString s = new SpannableString(text);
-        for (int i = 0; i < keyword.length; i++) {
-            Pattern p = Pattern.compile(keyword[i]);
-            Matcher m = p.matcher(s);
-            while (m.find()) {
-                int start = m.start();
-                int end = m.end();
-                s.setSpan(new ForegroundColorSpan(color), start, end,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        try{
+            for (int i = 0; i < keyword.length; i++) {
+                Pattern p = Pattern.compile(keyword[i]);
+                Matcher m = p.matcher(s);
+                while (m.find()) {
+                    int start = m.start();
+                    int end = m.end();
+                    s.setSpan(new ForegroundColorSpan(color), start, end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
             }
+        }catch (Exception e){
+            return s;
         }
         return s;
     }
