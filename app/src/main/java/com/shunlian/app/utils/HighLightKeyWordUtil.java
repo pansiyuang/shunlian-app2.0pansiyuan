@@ -55,13 +55,17 @@ public class HighLightKeyWordUtil {
      */
     public static SpannableString getHighBigBoldKeyWord(int size,String bigText, String text) {
         SpannableString s = new SpannableString(text);
-        Pattern pBold = Pattern.compile(bigText);
-        Matcher m = pBold.matcher(s);
-        while (m.find()) {
-            int start = m.start();
-            int end = m.end();
-            s.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), text.contains("+")&&start>0?start-1:start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            s.setSpan(new AbsoluteSizeSpan(size, true), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        try{
+            Pattern pBold = Pattern.compile(bigText);
+            Matcher m = pBold.matcher(s);
+            while (m.find()) {
+                int start = m.start();
+                int end = m.end();
+                s.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), text.contains("+")&&start>0?start-1:start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                s.setSpan(new AbsoluteSizeSpan(size, true), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }catch (Exception e){
+            return s;
         }
         return s;
     }

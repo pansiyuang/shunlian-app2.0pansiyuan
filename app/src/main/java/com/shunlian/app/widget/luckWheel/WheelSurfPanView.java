@@ -330,16 +330,20 @@ public class WheelSurfPanView extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                isRotating = false;
-                //当旋转结束的时候回调给调用者当前所选择的内容
-                if (rotateListener != null) {
-                    if (mType == 1) {
-                        //去空格和前后空格后输出
-                        String des = mDeses[(mTypeNum - pos + 1) % mTypeNum].trim().replaceAll(" ", "");
-                        rotateListener.rotateEnd(pos, des);
-                    } else {
-                        rotateListener.rotateEnd(pos, "");
+                try {
+                    isRotating = false;
+                    //当旋转结束的时候回调给调用者当前所选择的内容
+                    if (rotateListener != null) {
+                        if (mType == 1) {
+                            //去空格和前后空格后输出
+                            String des = mDeses[(mTypeNum - pos + 1) % mTypeNum].trim().replaceAll(" ", "");
+                            rotateListener.rotateEnd(pos, des);
+                        } else {
+                            rotateListener.rotateEnd(pos, "");
+                        }
                     }
+                }catch (Exception e){
+
                 }
             }
         });

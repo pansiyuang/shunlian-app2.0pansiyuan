@@ -11,11 +11,11 @@
     <ScrollView
         android:id="@+id/myScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -165,13 +165,13 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_hot_goods"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/tv_goods"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="25dp"
                 android:overScrollMode="never"
-                android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+                android:scrollbars="none"/>
         </RelativeLayout>
     </ScrollView>
 </LinearLayout>

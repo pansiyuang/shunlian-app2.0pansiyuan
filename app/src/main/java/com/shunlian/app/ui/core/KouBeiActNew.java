@@ -149,96 +149,102 @@ public class KouBeiActNew extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setHomeData(HotsaleHomeEntity hotsaleHomeEntity) {
-        KoubeiMenuAdapter koubeiMenuAdapter = new KoubeiMenuAdapter(baseAct, false, hotsaleHomeEntity.cate_list);
-        koubeiMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                koubeiMenuAdapter.selectedPosition = position;
-                koubeiMenuAdapter.notifyDataSetChanged();
-                if (rv_mid.getScrollState() == 0&&position>=0) {
-                    pKoubei.getHotsaleCate(hotsaleHomeEntity.cate_list.get(position).cate_id);
-                    nsv_outs.scrollTo(0,0);
+        try {
+            KoubeiMenuAdapter koubeiMenuAdapter = new KoubeiMenuAdapter(baseAct, false, hotsaleHomeEntity.cate_list);
+            koubeiMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    koubeiMenuAdapter.selectedPosition = position;
+                    koubeiMenuAdapter.notifyDataSetChanged();
+                    if (rv_mid.getScrollState() == 0 && position >= 0) {
+                        pKoubei.getHotsaleCate(hotsaleHomeEntity.cate_list.get(position).cate_id);
+                        nsv_outs.scrollTo(0, 0);
+                    }
+                }
+            });
+            rv_categoryMenu.setNestedScrollingEnabled(false);
+            rv_categoryMenu.addItemDecoration(new MHorItemDecoration(baseAct, 20, 16, 16));
+            rv_categoryMenu.setAdapter(koubeiMenuAdapter);
+            rv_categoryMenu.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.HORIZONTAL, false));
+            initRvMid(hotsaleHomeEntity.cate_list.get(0).list);
+
+            if (!isEmpty(hotsaleHomeEntity.hot_list)) {
+                if (hotsaleHomeEntity.hot_list.get(0) != null) {
+                    HotsaleHomeEntity.Suspension left = hotsaleHomeEntity.hot_list.get(0);
+                    GlideUtils.getInstance().loadImageZheng(baseAct, miv_ltop, left.list.get(0).thumb);
+                    GlideUtils.getInstance().loadImageZheng(baseAct, miv_lmid, left.list.get(1).thumb);
+                    ntv_ltop.setText(left.cate_name);
+                    ntv_lmid.setText(left.comments);
+                    miv_ltop.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            KouBeiActNews.startAct(baseAct, left.cate_id);
+                        }
+                    });
+                    miv_lmid.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            KouBeiActNews.startAct(baseAct, left.cate_id);
+                        }
+                    });
+                }
+                if (hotsaleHomeEntity.hot_list.get(1) != null) {
+                    HotsaleHomeEntity.Suspension mid = hotsaleHomeEntity.hot_list.get(1);
+                    if (!isEmpty(mid.list) && mid.list.size() >= 2) {
+                        GlideUtils.getInstance().loadImageZheng(baseAct, miv_mtop, mid.list.get(0).thumb);
+                        GlideUtils.getInstance().loadImageZheng(baseAct, miv_mmid, mid.list.get(1).thumb);
+                    }
+                    ntv_mtop.setText(mid.cate_name);
+                    ntv_mmid.setText(mid.comments);
+                    miv_mtop.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            KouBeiActNews.startAct(baseAct, mid.cate_id);
+                        }
+                    });
+                    miv_mmid.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            KouBeiActNews.startAct(baseAct, mid.cate_id);
+                        }
+                    });
+                }
+
+                if (hotsaleHomeEntity.hot_list.get(2) != null) {
+                    HotsaleHomeEntity.Suspension right = hotsaleHomeEntity.hot_list.get(2);
+                    GlideUtils.getInstance().loadImageZheng(baseAct, miv_rtop, right.list.get(0).thumb);
+                    GlideUtils.getInstance().loadImageZheng(baseAct, miv_rmid, right.list.get(1).thumb);
+                    ntv_rtop.setText(right.cate_name);
+                    ntv_rmid.setText(right.comments);
+                    miv_rtop.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            KouBeiActNews.startAct(baseAct, right.cate_id);
+                        }
+                    });
+                    miv_rmid.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            KouBeiActNews.startAct(baseAct, right.cate_id);
+                        }
+                    });
                 }
             }
-        });
-        rv_categoryMenu.setNestedScrollingEnabled(false);
-        rv_categoryMenu.addItemDecoration(new MHorItemDecoration(baseAct, 20, 16, 16));
-        rv_categoryMenu.setAdapter(koubeiMenuAdapter);
-        rv_categoryMenu.setLayoutManager(new LinearLayoutManager(baseAct, LinearLayoutManager.HORIZONTAL, false));
-        initRvMid(hotsaleHomeEntity.cate_list.get(0).list);
+            KouBeiHomeAdapter kouBeiHomeAdapter = new KouBeiHomeAdapter(baseAct, false, hotsaleHomeEntity.like_list);
+            rv_category.setLayoutManager(new GridLayoutManager(baseAct, 2));
+            rv_category.setNestedScrollingEnabled(false);
+            rv_category.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(baseAct, 9), false));
+            rv_category.setAdapter(kouBeiHomeAdapter);
+            kouBeiHomeAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    JosnSensorsDataAPI.koubeiGoodClick("口碑热销", hotsaleHomeEntity.like_list.get(position).id, hotsaleHomeEntity.like_list.get(position).title, position);
+                    GoodsDetailAct.startAct(baseAct, hotsaleHomeEntity.like_list.get(position).id);
+                }
+            });
+        } catch (Exception e) {
 
-        if (!isEmpty(hotsaleHomeEntity.hot_list)) {
-            if (hotsaleHomeEntity.hot_list.get(0) != null) {
-                HotsaleHomeEntity.Suspension left = hotsaleHomeEntity.hot_list.get(0);
-                GlideUtils.getInstance().loadImageZheng(baseAct, miv_ltop, left.list.get(0).thumb);
-                GlideUtils.getInstance().loadImageZheng(baseAct, miv_lmid, left.list.get(1).thumb);
-                ntv_ltop.setText(left.cate_name);
-                ntv_lmid.setText(left.comments);
-                miv_ltop.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        KouBeiActNews.startAct(baseAct, left.cate_id);
-                    }
-                });
-                miv_lmid.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        KouBeiActNews.startAct(baseAct, left.cate_id);
-                    }
-                });
-            }
-            if (hotsaleHomeEntity.hot_list.get(1) != null) {
-                HotsaleHomeEntity.Suspension mid = hotsaleHomeEntity.hot_list.get(1);
-                GlideUtils.getInstance().loadImageZheng(baseAct, miv_mtop, mid.list.get(0).thumb);
-                GlideUtils.getInstance().loadImageZheng(baseAct, miv_mmid, mid.list.get(1).thumb);
-                ntv_mtop.setText(mid.cate_name);
-                ntv_mmid.setText(mid.comments);
-                miv_mtop.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        KouBeiActNews.startAct(baseAct, mid.cate_id);
-                    }
-                });
-                miv_mmid.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        KouBeiActNews.startAct(baseAct, mid.cate_id);
-                    }
-                });
-            }
-
-            if (hotsaleHomeEntity.hot_list.get(2) != null) {
-                HotsaleHomeEntity.Suspension right = hotsaleHomeEntity.hot_list.get(2);
-                GlideUtils.getInstance().loadImageZheng(baseAct, miv_rtop, right.list.get(0).thumb);
-                GlideUtils.getInstance().loadImageZheng(baseAct, miv_rmid, right.list.get(1).thumb);
-                ntv_rtop.setText(right.cate_name);
-                ntv_rmid.setText(right.comments);
-                miv_rtop.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        KouBeiActNews.startAct(baseAct, right.cate_id);
-                    }
-                });
-                miv_rmid.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        KouBeiActNews.startAct(baseAct, right.cate_id);
-                    }
-                });
-            }
         }
-        KouBeiHomeAdapter kouBeiHomeAdapter = new KouBeiHomeAdapter(baseAct, false, hotsaleHomeEntity.like_list);
-        rv_category.setLayoutManager(new GridLayoutManager(baseAct, 2));
-        rv_category.setNestedScrollingEnabled(false);
-        rv_category.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(baseAct, 9), false));
-        rv_category.setAdapter(kouBeiHomeAdapter);
-        kouBeiHomeAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                JosnSensorsDataAPI.koubeiGoodClick("口碑热销", hotsaleHomeEntity.like_list.get(position).id, hotsaleHomeEntity.like_list.get(position).title, position);
-                GoodsDetailAct.startAct(baseAct, hotsaleHomeEntity.like_list.get(position).id);
-            }
-        });
     }
 
     @Override

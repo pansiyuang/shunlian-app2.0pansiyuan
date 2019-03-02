@@ -159,19 +159,24 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         wheelPan.setRotateListener(new RotateListener() {
             @Override
             public void rotateEnd(int position, String des) {
-                if (wheelPan != null) {
-                    wheelPan.setEnable(false);
-                }
-                hasDraw = true;
-                if (turnTableDialog == null) {
-                    turnTableDialog = new TurnTableDialog(LuckWheelPanActivity.this, currentLuckDraw);
-                } else {
-                    turnTableDialog.setLuckDrawEntity(currentLuckDraw);
-                }
-                turnTableDialog.setCallBack(LuckWheelPanActivity.this);
-                turnTableDialog.show();
+                try{
+                    if (wheelPan != null) {
+                        wheelPan.setEnable(false);
+                    }
+                    hasDraw = true;
+                    if (turnTableDialog == null) {
+                        turnTableDialog = new TurnTableDialog(LuckWheelPanActivity.this, currentLuckDraw);
+                    } else {
+                        turnTableDialog.setLuckDrawEntity(currentLuckDraw);
+                    }
+                    turnTableDialog.setCallBack(LuckWheelPanActivity.this);
+                    turnTableDialog.show();
 
-                mPresenter.getTurnTableData();
+                    mPresenter.getTurnTableData();
+                }catch (Exception e){
+
+                }
+
             }
 
             @Override
@@ -209,6 +214,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
         recycler_hot_goods.setLayoutManager(hotManager);
         hotGoodsAdapter = new SaturdayHotGoodsAdapter(this, hotGoodsList);
         recycler_hot_goods.setAdapter(hotGoodsAdapter);
+        recycler_hot_goods.setNestedScrollingEnabled(false);
         hotGoodsAdapter.setOnItemClickListener((view, position) -> {
             TurnTableEntity.HotGoods hotGoods = hotGoodsList.get(position);
             GoodsDetailAct.startAct(LuckWheelPanActivity.this, hotGoods.id);
@@ -586,11 +592,13 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
             @Override
             public void run() {
                 runOnUiThread(() -> {
-                    if (isSlideToBottom(recycler_list)) {
-                        recycler_list.smoothScrollToPosition(0);
-                        return;
+                    if (recycler_list!=null){
+                        if (isSlideToBottom(recycler_list)) {
+                            recycler_list.smoothScrollToPosition(0);
+                            return;
+                        }
+                        recycler_list.smoothScrollBy(0, currentItemHeight * 5, new LinearInterpolator());
                     }
-                    recycler_list.smoothScrollBy(0, currentItemHeight * 5, new LinearInterpolator());
                 });
             }
         }, 100, 2000);
