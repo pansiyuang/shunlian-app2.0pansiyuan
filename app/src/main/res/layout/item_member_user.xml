@@ -103,7 +103,7 @@
                 android:textSize="11sp"
                 android:singleLine="true"
                 android:visibility="invisible"
-                android:textColor="@color/text_gray2"
+                android:textColor="#007AFF"
                 android:layout_marginTop="2dp"/>
         </com.shunlian.app.widget.MyLinearLayout>
 
@@ -135,7 +135,7 @@
                 android:gravity="center"
                 android:text="复制手机号"
                 android:padding="5dp"
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:layout_marginTop="11dp"
                 android:textColor="#EAB044"
                 android:textSize="11sp"/>
