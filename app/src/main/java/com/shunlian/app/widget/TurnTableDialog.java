@@ -141,7 +141,7 @@ public class TurnTableDialog extends Dialog {
 
     public void setShowDialog(TurnTablePopEntity turnTablePopEntity) {
         this.myPopEntity = turnTablePopEntity;
-        tv_content.setText(turnTablePopEntity.text);
+        tv_content.setText(turnTablePopEntity.list.meg);
         miv_button.setTag(null);
         miv_button.setImageResource(R.mipmap.img_choujiang_anniu_xuanyao);
         miv_close.setVisibility(View.VISIBLE);
@@ -150,6 +150,7 @@ public class TurnTableDialog extends Dialog {
             case 1:
                 miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_gouwu);
                 miv_type.setVisibility(View.GONE);
+                miv_button.setImageResource(R.mipmap.img_choujiang_anniu_gouwu);
                 miv_button.setVisibility(View.VISIBLE);
                 miv_button.setTag("去购物");
                 miv_share.setVisibility(View.GONE);
@@ -188,8 +189,9 @@ public class TurnTableDialog extends Dialog {
             case 2:
                 miv_bg.setImageResource(R.mipmap.img_choujiang_tanchuang_youhuiquan);
                 miv_type.setVisibility(View.GONE);
+                miv_button.setImageResource(R.mipmap.img_choujiang_anniu_gouwu);
                 miv_button.setVisibility(View.VISIBLE);
-                miv_button.setTag("炫耀一下");
+                miv_button.setTag("去购物");
                 miv_share.setVisibility(View.GONE);
                 miv_address.setVisibility(View.GONE);
                 break;

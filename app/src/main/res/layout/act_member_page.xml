@@ -271,6 +271,7 @@
                         android:layout_height="45dp"
                         android:layout_weight="1"
                         android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
                         android:background="@drawable/rounded_corner_stroke_gray_62px"
                         android:gravity="center_vertical">
 
@@ -291,6 +292,7 @@
                         android:layout_height="match_parent"
                         android:src="@mipmap/icon_bukejian"
                         android:paddingRight="24dp"
+                        android:visibility="gone"
                         android:paddingLeft="15dp"/>
 
                 </LinearLayout>
