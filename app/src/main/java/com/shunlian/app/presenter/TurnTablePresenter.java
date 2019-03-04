@@ -73,7 +73,7 @@ public class TurnTablePresenter extends BasePresenter<ITurnTableView> {
 
             @Override
             public void onErrorCode(int code, String message) {
-                Common.staticToast(message);
+                Common.staticToast(context, message);
                 super.onErrorCode(code, message);
             }
         });
