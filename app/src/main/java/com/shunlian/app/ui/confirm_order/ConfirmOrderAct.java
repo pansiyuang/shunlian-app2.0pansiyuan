@@ -467,13 +467,13 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 String price_num = price.substring(1,price.length());
                 if (isUserGoldenEggs && Float.parseFloat(price_num) < 1){
                     //提示用户至少支付的钱数
-                    Common.staticToast(EGGS_TIP);
+                    Common.staticToast(this,EGGS_TIP);
                     return;
                 }
 
                 if (TYPE_NEW_USER_PAGE.equals(from) && "1".equals(device_order)){
                     //代表新人享受过该福利，不能再次享受
-                    Common.staticToast("您已享受过此福利");
+                    Common.staticToast(this,"您已享受过此福利");
                     return;
                 }
 

@@ -44,7 +44,7 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
 
     public static void startAct(Context context){
         Intent intent = new Intent(context, DetailOrderRecordAct.class);
-        if (context instanceof Activity){
+        if (!(context instanceof Activity)){
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         context.startActivity(intent);

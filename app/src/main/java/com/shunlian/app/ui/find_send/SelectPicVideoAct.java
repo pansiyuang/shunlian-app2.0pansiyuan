@@ -180,7 +180,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
     @OnClick(R.id.tv_complete)
     public void complete() {
         if (!isEmpty(mSelectResultList)) {
-            if (maxCount == 9){
+            if (FindSendPictureTextAct.isFirst){
                 EventBus.getDefault().postSticky(mSelectResultList);
                 FindSendPictureTextAct.startAct(this,mSendConfig);
             }else {
@@ -190,7 +190,7 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
             }
             finish();
         } else {
-            Common.staticToast("请选择图片或者视频");
+            Common.staticToast(this,"请选择图片或者视频");
         }
     }
 
@@ -649,7 +649,14 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
                 project, MediaStore.Video.Thumbnails.VIDEO_ID
                         + "=" + video_id, null, null);
         if (thumbCursor != null && thumbCursor.moveToNext()) {
-            return thumbCursor.getString(thumbCursor.getColumnIndex(project[0]));
+            String thumb = thumbCursor.getString(thumbCursor.getColumnIndex(project[0]));
+            if (thumbCursor != null){
+                thumbCursor.close();
+            }
+            return thumb;
+        }
+        if (thumbCursor != null){
+            thumbCursor.close();
         }
         /****************end*********************/
         return "";
