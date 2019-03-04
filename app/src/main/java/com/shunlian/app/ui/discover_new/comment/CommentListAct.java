@@ -225,7 +225,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @OnClick(R.id.edt_content)
     public void onClick() {
-        setEdittextFocusable(true, edt_content);
+        Common.showKeyboard(edt_content);
     }
 
     @Override
