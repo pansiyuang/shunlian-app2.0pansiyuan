@@ -117,7 +117,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     protected boolean pageIsLoading = false;//分页是否在加载
     protected String page_size = "20";//分页是否在加载
     protected int allPage;//总页数
-    private HttpDialog httpDialog;
+    private List<HttpDialog> mDialogList;
 
     public BasePresenter(Context context, IV iView) {
         this.context = context;
@@ -125,7 +125,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         objectMapper = new ObjectMapper();
         requestCount = 0;
         resources = context.getResources();
-        httpDialog = new HttpDialog(context);
+        mDialogList = new ArrayList<>();
     }
 
     /**
@@ -240,14 +240,18 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         }*/
 
         if (isLoading) {
-            if (httpDialog != null && !httpDialog.isShowing())
+            HttpDialog httpDialog = new HttpDialog(context);
+            if (mDialogList != null){
+                mDialogList.add(httpDialog);
                 httpDialog.show();
+            }
         }
         tCall.enqueue(new Callback<BaseEntity<T>>() {
             @Override
             public void onResponse(Call<BaseEntity<T>> call, Response<BaseEntity<T>> response) {
-                if (httpDialog != null && isLoading) {
-                    httpDialog.dismiss();
+                if (!isEmpty(mDialogList) && isLoading) {
+                    mDialogList.get(0).dismiss();
+                    mDialogList.remove(0);
                 }
                 if (context instanceof Activity) {
                     if (((Activity) context).isFinishing()) return;
@@ -285,8 +289,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
             public void onFailure(Call<BaseEntity<T>> call, Throwable t) {
                 if (t != null)
                     t.printStackTrace();
-                if (httpDialog != null && isLoading) {
-                    httpDialog.dismiss();
+                if (!isEmpty(mDialogList) && isLoading) {
+                    mDialogList.get(0).dismiss();
+                    mDialogList.remove(0);
                 }
                 if (context instanceof Activity) {
                     if (((Activity) context).isFinishing()) return;
