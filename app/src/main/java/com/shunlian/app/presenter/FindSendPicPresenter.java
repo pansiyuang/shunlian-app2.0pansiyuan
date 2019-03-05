@@ -239,7 +239,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
         sortAndMD5(map);
 
         uploadPicCall = getAddCookieApiService().uploadPic(parts, map);
-        getNetData(false, uploadPicCall, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
+        getNetData(true, uploadPicCall, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
                 super.onSuccess(entity);
@@ -322,7 +322,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 iView.publishSuccess(draft);
-                Common.staticToast(entity.message);
+                Common.staticToast(context,entity.message);
             }
         });
     }
@@ -369,7 +369,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
             }
             @Override
             public void onError(Throwable e) {
-                Common.staticToast("上传图片失败");
+                Common.staticToast(context,"上传图片失败");
             }
         }).launch();
     }
