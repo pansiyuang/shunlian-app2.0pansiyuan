@@ -144,6 +144,7 @@ public class StoreIndexEntity {
             public String type;
             public String keyword;
             public String sales;
+            public String inventory;
             public List<String> label;
             public String store_id;
             public String item_id;
