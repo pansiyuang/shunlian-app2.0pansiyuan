@@ -111,13 +111,21 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
             }else {
                 mHolder.mtv_phonenum.setText("");
             }
-            String member_manager = SharedPrefUtil.getSharedUserString("member_manager", "1");
-            if ("0".equals(member_manager) && isSettingMobile){//9437105286
-                visible(mHolder.tv_copy,mHolder.mtv_phonenum);
-            }else {
-                mHolder.tv_copy.setVisibility(View.INVISIBLE);
+
+            if(!isEmpty(mobile)&&lists.get(position).isShow){
+                mHolder.mtv_phonenum.setVisibility(View.VISIBLE);
+                mHolder.tv_copy.setVisibility(View.VISIBLE);
+            }else{
                 mHolder.mtv_phonenum.setVisibility(View.INVISIBLE);
+                mHolder.tv_copy.setVisibility(View.INVISIBLE);
             }
+//            String member_manager = SharedPrefUtil.getSharedUserString("member_manager", "1");
+//            if ("0".equals(member_manager) && isSettingMobile){//9437105286
+//                visible(mHolder.tv_copy,mHolder.mtv_phonenum);
+//            }else {
+//                mHolder.tv_copy.setVisibility(View.INVISIBLE);
+//                mHolder.mtv_phonenum.setVisibility(View.INVISIBLE);
+//            }
         }
     }
 
@@ -163,6 +171,34 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
                     Common.copyText(context,memberList.mobile);
                 }
             });
+//            mtv_phonenum.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    if (getAdapterPosition()>=0) {
+//                        MemberInfoEntity.MemberList memberList = lists.get(getAdapterPosition());
+//                        Common.copyText(context, memberList.mobile);
+//                    }
+//                    return false;
+//                }
+//            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getAdapterPosition()>=0) {
+                        MemberInfoEntity.MemberList memberList = lists.get(getAdapterPosition());
+                        if (mtv_phonenum.getVisibility() == View.VISIBLE) {
+                            mtv_phonenum.setVisibility(View.INVISIBLE);
+                            tv_copy.setVisibility(View.INVISIBLE);
+                            memberList.isShow = false;
+                        } else {
+                            mtv_phonenum.setVisibility(View.VISIBLE);
+                            tv_copy.setVisibility(View.VISIBLE);
+                            memberList.isShow = true;
+                        }
+                    }
+                }
+            });
+
         }
 
         /**

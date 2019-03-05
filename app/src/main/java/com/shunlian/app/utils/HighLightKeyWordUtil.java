@@ -2,6 +2,7 @@ package com.shunlian.app.utils;
 
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
@@ -18,6 +19,9 @@ public class HighLightKeyWordUtil {
      * @return
      */
     public static SpannableString getHighLightKeyWord(int color, String text, String keyword) {
+        if(TextUtils.isEmpty(keyword)){
+            return new SpannableString(text);
+        }
         SpannableString s = new SpannableString(text);
         try {
 //            Pattern p = Pattern.compile(keyword);
@@ -58,11 +62,13 @@ public class HighLightKeyWordUtil {
 //                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //                }
 
-                int index = text.indexOf(keyword[i]);
-                while(index!=-1) {
+                if(!TextUtils.isEmpty(keyword[i])) {
+                    int index = text.indexOf(keyword[i]);
+                    while (index != -1) {
 //                System.out.print("index:"+":"+text.substring(index,index+keyword.length()));
-                    s.setSpan(new ForegroundColorSpan(color), index, index+keyword[i].length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    index = text.indexOf(keyword[i],index+1);
+                        s.setSpan(new ForegroundColorSpan(color), index, index + keyword[i].length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        index = text.indexOf(keyword[i], index + 1);
+                    }
                 }
             }
         }catch (Exception e){
@@ -75,6 +81,9 @@ public class HighLightKeyWordUtil {
      * @return
      */
     public static SpannableString getHighBigBoldKeyWord(int size,String bigText, String text) {
+        if(TextUtils.isEmpty(bigText)){
+            return new SpannableString(text);
+        }
         SpannableString s = new SpannableString(text);
         try{
 //            Pattern pBold = Pattern.compile(bigText);

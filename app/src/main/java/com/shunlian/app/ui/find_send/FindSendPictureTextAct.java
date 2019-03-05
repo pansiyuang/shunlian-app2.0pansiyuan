@@ -93,7 +93,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
     private List<GoodsDeatilEntity.Goods> mGoodsLists;
     private SelectGoodsAdapter mGoodsAdapter;
     private FindSendPicPresenter presenter;
-    private static boolean isFirst = true;
+    public static boolean isFirst = true;
     /********打开选择图片activity的请求码**********/
     public static final int SELECT_PIC_REQUESTCODE = 800;
     /*********添加地址************/
@@ -146,7 +146,7 @@ public class FindSendPictureTextAct extends BaseActivity implements ISelectPicVi
                     if (s.length() > MAX_TEXT_COUNT) {
                         edit.setText(s.subSequence(0, MAX_TEXT_COUNT));
                         edit.setSelection(MAX_TEXT_COUNT);
-                        Common.staticToast("字数不能超过" + MAX_TEXT_COUNT);
+                        Common.staticToast(FindSendPictureTextAct.this, "字数不能超过" + MAX_TEXT_COUNT);
                     }
                     mtv_count.setText(String.format(text_format,edit.getText().length(),MAX_TEXT_COUNT));
                 }

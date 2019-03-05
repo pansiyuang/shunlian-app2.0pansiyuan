@@ -166,7 +166,8 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
 
                         oneHolder.mtv_earnl.setEarnMoney(data.ldata.self_buy_earn,14);
                         oneHolder.mtv_descl.setText(data.ldata.title);
-                        oneHolder.mtv_numberl.setText("已售：" + data.ldata.sales);
+//                        oneHolder.mtv_numberl.setText("已售：" + data.ldata.sales);
+                        oneHolder.mtv_numberl.setText(data.ldata.inventory);
                         String pricel = getString(R.string.common_yuan) + data.ldata.price;
                         oneHolder.mtv_pricel.setText(Common.changeTextSize(pricel, getString(R.string.common_yuan), 10));
                         GlideUtils.getInstance().loadImage(context, oneHolder.miv_onel, data.ldata.whole_thumb);
@@ -181,7 +182,8 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
 
                             oneHolder.mllayout_oner.setVisibility(View.VISIBLE);
                             oneHolder.mtv_descr.setText(data.rdata.title);
-                            oneHolder.mtv_numberr.setText("已售：" + data.rdata.sales);
+//                            oneHolder.mtv_numberr.setText("已售：" + data.rdata.sales);
+                            oneHolder.mtv_numberr.setText(data.rdata.inventory);
                             String pricer = getString(R.string.common_yuan) + data.rdata.price;
                             oneHolder.mtv_pricer.setText(Common.changeTextSize(pricer, getString(R.string.common_yuan), 10));
                             oneHolder.mtv_earnr.setEarnMoney(data.rdata.self_buy_earn,14);
@@ -214,7 +216,8 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                             twoHolder.mtv_two.setText(data.title);
                         }
                         twoHolder.mtv_desc.setText(data.ldata.title);
-                        twoHolder.mtv_number.setText("已售" + data.ldata.sales);
+//                        twoHolder.mtv_number.setText("已售" + data.ldata.sales);
+                        twoHolder.mtv_number.setText(data.ldata.inventory);
                         twoHolder.mtv_price.setText(data.ldata.price);
                         twoHolder.mtv_earn.setEarnMoney(data.ldata.self_buy_earn, 15);
                         LinearLayoutManager firstManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);

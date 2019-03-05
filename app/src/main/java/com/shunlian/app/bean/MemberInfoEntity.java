@@ -67,5 +67,6 @@ public class MemberInfoEntity implements Serializable {
         public String role;//角色
         public String level;//等级
         public String mobile;//手机号
+        public boolean isShow = false;
     }
 }
