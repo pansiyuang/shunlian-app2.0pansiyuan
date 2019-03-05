@@ -327,9 +327,14 @@ public class SelectPicVideoAct extends BaseActivity implements View.OnClickListe
     private void resultLocalUrl(String currentPhotoPath) {
         listClear();
         mSelectResultList.add(currentPhotoPath);
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_RESULT, mSelectResultList);
-        setResult(Activity.RESULT_OK, intent);
+        if (FindSendPictureTextAct.isFirst){
+            EventBus.getDefault().postSticky(mSelectResultList);
+            FindSendPictureTextAct.startAct(this,mSendConfig);
+        }else {
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_RESULT, mSelectResultList);
+            setResult(Activity.RESULT_OK, intent);
+        }
         finish();
     }
 

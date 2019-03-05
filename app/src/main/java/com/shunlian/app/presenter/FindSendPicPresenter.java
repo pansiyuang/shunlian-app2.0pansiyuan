@@ -268,7 +268,7 @@ public class FindSendPicPresenter extends BasePresenter<ISelectPicVideoView> {
 
         uploadVideoCall = getAddCookieApiService().uploadVideo(part);
 
-        getNetData(false, uploadVideoCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        getNetData(true, uploadVideoCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
