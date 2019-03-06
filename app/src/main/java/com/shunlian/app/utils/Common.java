@@ -90,7 +90,6 @@ import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
-import com.shunlian.app.ui.core.KouBeiAct;
 import com.shunlian.app.ui.core.KouBeiActNew;
 import com.shunlian.app.ui.core.NewGetCouponAct;
 import com.shunlian.app.ui.core.PingpaiAct;
@@ -931,7 +930,7 @@ public class Common {
         if (TextUtils.isEmpty(content))
             return;
         if (toast == null) {
-            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
+            View v = LayoutInflater.from(context).inflate(R.layout.toast, null);
             mtv_toast = v.findViewById(R.id.mtv_toast);
             mtv_toast.setText(content);
             toast = new Toast(context);

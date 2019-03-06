@@ -189,12 +189,14 @@ public class MediaRecorderBase {
         //设置最大录制的大小 单位，字节
 //        mediaRecorder.setMaxFileSize(1024 * 1024);
         //音频一秒钟包含多少数据位
-        CamcorderProfile mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
-        mediaRecorder.setAudioEncodingBitRate(44100);
-        if (mProfile.videoBitRate > 20 * 1024 * 1024)
-            mediaRecorder.setVideoEncodingBitRate(20 * 1024 * 1024);
-        else
-            mediaRecorder.setVideoEncodingBitRate(mProfile.videoBitRate);
+        CamcorderProfile mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_CIF);
+        mediaRecorder.setAudioEncodingBitRate(mProfile.audioBitRate);
+        //if (mProfile.videoBitRate > 5 * 1024 * 1024)
+            //mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
+       // else //if (mProfile.videoBitRate < 900 * 1024)
+            mediaRecorder.setVideoEncodingBitRate(2 * 1024 * 1024);
+       // else
+        //    mediaRecorder.setVideoEncodingBitRate(mProfile.videoBitRate);
         mediaRecorder.setVideoFrameRate(mProfile.videoFrameRate);
 
         //设置选择角度，顺时针方向，因为默认是逆向90度的，这样图像就是正常显示了,这里设置的是观看保存后的视频的角度
