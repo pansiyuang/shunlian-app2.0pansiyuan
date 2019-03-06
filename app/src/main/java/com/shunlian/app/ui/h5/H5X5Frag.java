@@ -75,6 +75,9 @@ import static android.app.Activity.RESULT_OK;
  * Created by Administrator on 2017/12/26.
  */
 
+/**
+ * 用到时需要同步对比H5X5Act
+ */
 public abstract class H5X5Frag extends BaseFragment implements X5WebView.ScrollListener {
     public static final int MODE_DEFAULT = 0;//默认模式，没有缓存
     public static final int MODE_SONIC = 1;//有缓存
@@ -529,8 +532,8 @@ public abstract class H5X5Frag extends BaseFragment implements X5WebView.ScrollL
         //add
         String token = SharedPrefUtil.getSharedUserString("token", "");
         String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
-        String member_id = SharedPrefUtil.getCacheSharedPrf("member_id", "");
-        String code = SharedPrefUtil.getCacheSharedPrf("member_id", "");
+        String member_id = SharedPrefUtil.getSharedUserString("member_id", "");
+        String code = SharedPrefUtil.getSharedUserString("invite_code", "");
 
         CookieSyncManager.createInstance(activity);
 //        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(activity);
