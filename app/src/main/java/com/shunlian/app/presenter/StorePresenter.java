@@ -402,6 +402,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
                             adata.title = ebodys.get(f).data.get(g).title;
                             adata.thumb = ebodys.get(f).data.get(g).thumb;
                             adata.sales = ebodys.get(f).data.get(g).sales;
+                            adata.inventory = ebodys.get(f).data.get(g).inventory;
                             adata.price = ebodys.get(f).data.get(g).price;
                             adata.type = ebodys.get(f).data.get(g).type;
                             adata.store_id = ebodys.get(f).data.get(g).store_id;
@@ -460,6 +461,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
                             ldata.title = abodys.get(b).data.get(c).title;
                             ldata.thumb = abodys.get(b).data.get(c).thumb;
                             ldata.sales = abodys.get(b).data.get(c).sales;
+                            ldata.inventory = abodys.get(b).data.get(c).inventory;
                             ldata.price = abodys.get(b).data.get(c).price;
                             ldata.type = abodys.get(b).data.get(c).type;
                             ldata.store_id = abodys.get(b).data.get(c).store_id;
@@ -473,6 +475,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
                                 rdata.title = abodys.get(b).data.get(c + 1).title;
                                 rdata.thumb = abodys.get(b).data.get(c + 1).thumb;
                                 rdata.sales = abodys.get(b).data.get(c + 1).sales;
+                                rdata.inventory = abodys.get(b).data.get(c + 1).inventory;
                                 rdata.price = abodys.get(b).data.get(c + 1).price;
                                 rdata.type = abodys.get(b).data.get(c + 1).type;
                                 rdata.store_id = abodys.get(b).data.get(c + 1).store_id;

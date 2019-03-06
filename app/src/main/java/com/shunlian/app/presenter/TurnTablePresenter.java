@@ -71,11 +71,11 @@ public class TurnTablePresenter extends BasePresenter<ITurnTableView> {
                 iView.getLuckDraw(luckDrawEntity);
             }
 
-            @Override
-            public void onErrorCode(int code, String message) {
-                Common.staticToast(context, message);
-                super.onErrorCode(code, message);
-            }
+//            @Override
+//            public void onErrorCode(int code, String message) {
+//                Common.staticToast(context, message);
+//                super.onErrorCode(code, message);
+//            }
         });
     }
 

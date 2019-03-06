@@ -190,10 +190,13 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
                             mtv_phonenum.setVisibility(View.INVISIBLE);
                             tv_copy.setVisibility(View.INVISIBLE);
                             memberList.isShow = false;
+                            notifyDataSetChanged();
                         } else {
                             mtv_phonenum.setVisibility(View.VISIBLE);
                             tv_copy.setVisibility(View.VISIBLE);
+                            setAllUserMemberPhone();
                             memberList.isShow = true;
+                            notifyDataSetChanged();
                         }
                     }
                 }
@@ -213,4 +216,15 @@ public class MemberUserAdapter extends BaseRecyclerAdapter<MemberInfoEntity.Memb
         }
     }
 
+
+    /**
+     * 设置所有的手机号隐藏状态
+     */
+    private void setAllUserMemberPhone(){
+        if(lists!=null&&lists.size()>0){
+            for (int i=0;i<lists.size();i++){
+                lists.get(i).isShow = false;
+            }
+        }
+    }
 }
