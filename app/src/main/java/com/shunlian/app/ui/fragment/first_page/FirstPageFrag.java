@@ -44,6 +44,7 @@ import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.slide_tab.PagerSlidingTabStrip;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -72,6 +73,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     //    @BindView(R.id.mAppbar)
     public static MyImageView miv_entry;
     public static MyImageView miv_entrys;
+    public static NewTextView ntv_top;
+    public static NewTextView ntv_bottom;
+    public static MyLinearLayout mllayout_arrow;
+    public static MyImageView miv_arrow;
     public static AppBarLayout mAppbar;
     public static boolean isHide = false;
     public static boolean isHides = false;
@@ -257,12 +262,47 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View rootView = inflater.inflate(R.layout.frag_first_page, container, false);
         mAppbar = (AppBarLayout) rootView.findViewById(R.id.mAppbar);
+
+//        int i0 = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL;
+//        int i1 = AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED;
+        View appBarChildAt = mAppbar.getChildAt(0);
+        AppBarLayout.LayoutParams appBarParams = (AppBarLayout.LayoutParams) appBarChildAt.getLayoutParams();
+//        if (position == 0) {
+//            appBarParams.setScrollFlags( i0 | i1);// 重置折叠效果
+//        } else {
+            appBarParams.setScrollFlags(0);//这个加了之后不可滑动
+//        }
+        appBarChildAt.setLayoutParams(appBarParams);
+
         miv_entry = (MyImageView) rootView.findViewById(R.id.miv_entry);
         miv_entrys = (MyImageView) rootView.findViewById(R.id.miv_entrys);
+        ntv_top = (NewTextView) rootView.findViewById(R.id.ntv_top);
+        ntv_bottom = (NewTextView) rootView.findViewById(R.id.ntv_bottom);
+        mllayout_arrow = (MyLinearLayout) rootView.findViewById(R.id.mllayout_arrow);
+        mllayout_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        miv_arrow = (MyImageView) rootView.findViewById(R.id.miv_arrow);
+        miv_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isEmpty(fragments) && fragments.get(mainActivity.position) != null) {
+                    CateGoryFrag cateGoryFrag = (CateGoryFrag) fragments.get(mainActivity.position);
+                    if (cateGoryFrag.rv_view != null) {
+                        cateGoryFrag.rv_view.scrollToPosition(0);
+//                                cateGoryFrag.rv_view.smoothScrollToPosition(0);
+//                                FirstPageFrag.mAppbar.setExpanded(true);
+                    }
+                }
+            }
+        });
         show_new_user_view = rootView.findViewById(R.id.show_new_user_view);
         int value = TransformUtil.dip2px(baseActivity, 80);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
-        layoutParams.setMargins(0, 0, 0, value);
+        layoutParams.setMargins(0, 0, 0, value*5/4);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         miv_entry.setLayoutParams(layoutParams);
@@ -364,46 +404,48 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         miv_entry.setOnClickListener(this);
         miv_entrys.setOnClickListener(this);
         show_new_user_view.setOnClickListener(this);
-        mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (-verticalOffset >= mAppbar.getMeasuredHeight()) {
-                    isExpand = false;
-                    if (!Constant.IS_FIRST_SHARE)
-                        ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
-                                .statusBarColor(R.color.pink_color)
-                                .statusBarDarkFont(false, 0)
-                                .init();
-                    mllayout_title.setBackgroundColor(getColorResouce(R.color.pink_color));
-                    miv_scan.setImageResource(R.mipmap.icon_home_saoyisao_w);
-                    miv_news.setImageResource(R.mipmap.icon_home_message_w);
-                    tv_msg_count.setTextColor(getColorResouce(R.color.pink_color));
-                    tv_msg_count.setBackgroundResource(R.drawable.rounded_corner_white_100);
-                    mtv_scan.setTextColor(getColorResouce(R.color.white));
-                    mtv_news.setTextColor(getColorResouce(R.color.white));
-                } else {
-                    isExpand = true;
-                    ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
-                            .statusBarColor(R.color.white)
-                            .statusBarDarkFont(true, 0.2f)
-                            .init();
-                    mllayout_title.setBackgroundColor(getColorResouce(R.color.white));
-                    miv_scan.setImageResource(R.mipmap.icon_home_saoyisao);
-                    miv_news.setImageResource(R.mipmap.icon_home_message);
-                    tv_msg_count.setTextColor(getColorResouce(R.color.white));
-                    tv_msg_count.setBackgroundResource(R.drawable.rounded_corner_pink_100);
-                    mtv_scan.setTextColor(getColorResouce(R.color.new_text));
-                    mtv_news.setTextColor(getColorResouce(R.color.new_text));
-                }
-            }
-        });
+//        mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                if (-verticalOffset >= mAppbar.getMeasuredHeight()) {
+//                    isExpand = false;
+//                    if (!Constant.IS_FIRST_SHARE)
+//                        ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
+//                                .statusBarColor(R.color.pink_color)
+//                                .statusBarDarkFont(false, 0)
+//                                .init();
+//                    mllayout_title.setBackgroundColor(getColorResouce(R.color.pink_color));
+//                    miv_scan.setImageResource(R.mipmap.icon_home_saoyisao_w);
+//                    miv_news.setImageResource(R.mipmap.icon_home_message_w);
+//                    tv_msg_count.setTextColor(getColorResouce(R.color.pink_color));
+//                    tv_msg_count.setBackgroundResource(R.drawable.rounded_corner_white_100);
+//                    mtv_scan.setTextColor(getColorResouce(R.color.white));
+//                    mtv_news.setTextColor(getColorResouce(R.color.white));
+//                } else {
+//                    isExpand = true;
+//                    ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
+//                            .statusBarColor(R.color.white)
+//                            .statusBarDarkFont(true, 0.2f)
+//                            .init();
+//                    mllayout_title.setBackgroundColor(getColorResouce(R.color.white));
+//                    miv_scan.setImageResource(R.mipmap.icon_home_saoyisao);
+//                    miv_news.setImageResource(R.mipmap.icon_home_message);
+//                    tv_msg_count.setTextColor(getColorResouce(R.color.white));
+//                    tv_msg_count.setBackgroundResource(R.drawable.rounded_corner_pink_100);
+//                    mtv_scan.setTextColor(getColorResouce(R.color.new_text));
+//                    mtv_news.setTextColor(getColorResouce(R.color.new_text));
+//                }
+//            }
+//        });
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int arg0) {
-                mAppbar.setExpanded(true);
+//                mAppbar.setExpanded(true);
                 if (mainActivity != null) {
                     mainActivity.position = arg0;
                 }
+                miv_arrow.setVisibility(View.GONE);
+                mllayout_arrow.setVisibility(View.GONE);
                 if (0 == arg0) {
                     misHide = false;
                     beginToast();
@@ -477,7 +519,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mll_message:
-                mAppbar.setExpanded(false);
+//                mAppbar.setExpanded(false);
                 MessageActivity.startAct(getActivity());
 //                H5X5Act.startAct(getActivity(),"http://front.v2.shunliandongli.com/demo?sl_debug=open", H5X5Act.MODE_SONIC);
                 break;
@@ -511,7 +553,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 if (isHide) {
                     int value = TransformUtil.dip2px(baseActivity, 80);
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(value, value);
-                    layoutParams.setMargins(0, 0, 0, value);
+                    layoutParams.setMargins(0, 0, 0, value*5/4);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     miv_entry.setLayoutParams(layoutParams);

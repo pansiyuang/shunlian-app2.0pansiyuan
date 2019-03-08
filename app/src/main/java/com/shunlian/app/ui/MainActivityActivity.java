@@ -429,7 +429,7 @@ public class MainActivityActivity extends BaseActivity implements MessageCountMa
                             if (cateGoryFrag.rv_view != null) {
                                 cateGoryFrag.rv_view.scrollToPosition(0);
 //                                cateGoryFrag.rv_view.smoothScrollToPosition(0);
-                                FirstPageFrag.mAppbar.setExpanded(true);
+//                                FirstPageFrag.mAppbar.setExpanded(true);
                             }
                         } else {
                             mainPageClick();
