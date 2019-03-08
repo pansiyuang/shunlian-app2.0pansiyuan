@@ -116,7 +116,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                                 shareInfoParam.shareLink = shareLink;
                                 shareInfoParam.desc = shareDesc;
                                 shareInfoParam.img = shareImg;
-                                WXEntryActivity.startAct(MyLittleStoreActivity.this, "shareFriend", shareInfoParam);
+                                WXEntryActivity.startAct(MyLittleStoreActivity.this, "shareFriend", shareInfoParam,0);
                                 break;
                             case 1:
                                 Common.copyText(MyLittleStoreActivity.this, shareLink, shareDesc, true);

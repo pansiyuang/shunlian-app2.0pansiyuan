@@ -275,7 +275,7 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
                     public void onItemClick(PopMenu popMenu, int position) {
                         switch (position) {
                             case 0:
-                                WXEntryActivity.startAct(PingpaiAct.this, "shareFriend", mShareInfoParam);
+                                WXEntryActivity.startAct(PingpaiAct.this, "shareFriend", mShareInfoParam,0);
                                 break;
                             case 1:
                                 Common.copyText(PingpaiAct.this, mShareInfoParam.shareLink, mShareInfoParam.desc, true);

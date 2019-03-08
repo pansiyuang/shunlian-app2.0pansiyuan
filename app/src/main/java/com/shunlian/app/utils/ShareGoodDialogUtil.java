@@ -93,10 +93,10 @@ public class ShareGoodDialogUtil {
             nomalBuildl.dismiss();
             if(isGood) {
                 WXEntryActivity.startAct(context,
-                        "shareFriend", mShareInfoParam);
+                        "shareFriend", mShareInfoParam,0);
             }else{
                 WXEntryActivity.startAct(context,
-                        "shareFriend", mShareInfoParam);
+                        "shareFriend", mShareInfoParam,1);
             }
             if(mShareInfoParam.cate1!=null&&mShareInfoParam.shop_id!=null){
                 JosnSensorsDataAPI.shareGoodClick(mShareInfoParam.goods_id,mShareInfoParam.title,mShareInfoParam.cate1,mShareInfoParam.cate2,

@@ -260,9 +260,9 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 
     public void share(ShareInfoParam shareInfoParam, String type) {
         if ("session".equals(type)) {
-            WXEntryActivity.startAct(this, "shareFriend", shareInfoParam);
+            WXEntryActivity.startAct(this, "shareFriend", shareInfoParam,0);
         } else {
-            WXEntryActivity.startAct(this, "shareCircle", shareInfoParam);
+            WXEntryActivity.startAct(this, "shareCircle", shareInfoParam,0);
         }
     }
 
