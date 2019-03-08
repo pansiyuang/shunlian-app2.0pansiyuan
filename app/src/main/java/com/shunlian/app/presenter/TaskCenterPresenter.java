@@ -480,7 +480,7 @@ public class TaskCenterPresenter extends BasePresenter<ITaskCenterView> {
         }else {
             ShareInfoParam shareInfoParam = new ShareInfoParam();
             shareInfoParam.photo = share_pic_url;
-            WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+            WXEntryActivity.startAct(context, "shareFriend", shareInfoParam,0);
             Constant.SHARE_TYPE = "income";
         }
     }

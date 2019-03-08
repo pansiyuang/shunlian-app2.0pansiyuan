@@ -433,7 +433,7 @@ public class LuckWheelPanActivity extends BaseActivity implements ITurnTableView
     public void getShareImg(String shareImg) {
         ShareInfoParam shareInfoParam = new ShareInfoParam();
         shareInfoParam.photo = shareImg;
-        WXEntryActivity.startAct(this, "shareFriend", shareInfoParam);
+        WXEntryActivity.startAct(this, "shareFriend", shareInfoParam,0);
     }
 
     public void addAllTurnTables(List<TurnTableEntity.Trophy> trophyList) {

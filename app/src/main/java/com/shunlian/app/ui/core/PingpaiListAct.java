@@ -233,7 +233,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                         switch (position) {
                             case 0:
                                 WXEntryActivity.startAct(PingpaiListAct.this,
-                                        "shareFriend", mShareInfoParam);
+                                        "shareFriend", mShareInfoParam,0);
                                 break;
                             case 1:
                                 Common.copyText(PingpaiListAct.this,mShareInfoParam.shareLink,mShareInfoParam.desc,true);

@@ -59,10 +59,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     private String shareLink;
     private WXEntryPresenter wxEntryPresenter;
 
+    private int WX_SHARE_SOURCE = 0;//0:商品 1：店铺
 
-    public static void startAct(Context context, String flag, ShareInfoParam shareInfoParam) {
+    public static void startAct(Context context, String flag, ShareInfoParam shareInfoParam,int wx_share_source) {
         Intent intent = new Intent(context, WXEntryActivity.class);
         intent.putExtra("flag", flag);
+        intent.putExtra("wx_share_source", flag);
         intent.putExtra("shareInfoParam", shareInfoParam);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -104,6 +106,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         Intent intent = getIntent();
         if (intent.getExtras() != null)
             flag = intent.getExtras().getString("flag");
+        WX_SHARE_SOURCE = intent.getExtras().getInt("wx_share_source");
         ShareInfoParam shareInfoParam = (ShareInfoParam) intent.getSerializableExtra("shareInfoParam");
         if (!isEmpty(flag)) SharedPrefUtil.saveCacheSharedPrf("wx_flag", flag);
         if (!isEmpty(flag) && shareInfoParam != null) {
@@ -117,7 +120,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     //分享添加默认数据
     private void defShare(ShareInfoParam shareInfoParam) {
-        if (!isEmpty(shareInfoParam.shop_name)) {
+        if (WX_SHARE_SOURCE==1&&!isEmpty(shareInfoParam.shop_name)) {
             currTitle = shareInfoParam.shop_name;
             shareInfoParam.img = shareInfoParam.shop_logo;
             currentDesc = "想要生活有乐趣！打开顺联动力购物去～";

@@ -187,7 +187,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 //                        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
                 ShareInfoParam shareInfoParam = new ShareInfoParam();
                 shareInfoParam.photo = path;
-                WXEntryActivity.startAct(context, isFriend?"shareFriend":"shareCircle", shareInfoParam);
+                WXEntryActivity.startAct(context, isFriend?"shareFriend":"shareCircle", shareInfoParam,0);
                 return true;
             } else {
                 return false;
@@ -504,7 +504,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                             case 0:
                                 mllayout_content.setVisibility(VISIBLE);
                                 WXEntryActivity.startAct(getContext(),
-                                        "shareFriend", mShareInfoParam);
+                                        "shareFriend", mShareInfoParam,0);
                                 hide();
                                 break;
                             case 1:
@@ -724,7 +724,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 WXEntryActivity.startAct(getContext(),
-                        "shareFriend", mShareInfoParam);
+                        "shareFriend", mShareInfoParam,0);
                 nomalBuildl.dismiss();
                 if (!TextUtils.isEmpty(blodId) && mCallBack != null) {
                     mCallBack.shareSuccess(blodId, goodsId);
@@ -849,7 +849,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                             case 0:
                                 mllayout_content.setVisibility(VISIBLE);
                                 WXEntryActivity.startAct(getContext(),
-                                        "shareFriend", mShareInfoParam);
+                                        "shareFriend", mShareInfoParam,0);
                                 hide();
                                 break;
                             case 1:
@@ -889,7 +889,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 Constant.SHARE_ID = id;
                                 mllayout_content.setVisibility(VISIBLE);
                                 WXEntryActivity.startAct(getContext(),
-                                        "shareFriend", mShareInfoParam);
+                                        "shareFriend", mShareInfoParam,0);
                                 hide();
                                 break;
                             case 1:
@@ -958,7 +958,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                             case 0:
                                 mllayout_content.setVisibility(VISIBLE);
                                 WXEntryActivity.startAct(getContext(),
-                                        "shareFriend", mShareInfoParam);
+                                        "shareFriend", mShareInfoParam,0);
                                 hide();
                                 break;
                             case 1:

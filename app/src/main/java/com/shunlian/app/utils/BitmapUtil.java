@@ -394,7 +394,7 @@ public class BitmapUtil {
                 if(isShare) {
                     ShareInfoParam shareInfoParam = new ShareInfoParam();
                     shareInfoParam.photo = file.getAbsolutePath();
-                    WXEntryActivity.startAct(context, isFriend ? "shareFriend" : "shareCircle", shareInfoParam);
+                    WXEntryActivity.startAct(context, isFriend ? "shareFriend" : "shareCircle", shareInfoParam,0);
                 }
                 return true;
             } else {
