@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -19,6 +20,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -32,6 +34,7 @@ import butterknife.BindView;
 
 
 public class CateGoryFrag extends BaseFragment implements IFirstPage {
+    private int first = 0;
     public PFirstPage pFirstPage;
     public String cate_id, sort_type, cate_name;
     public List<GetDataEntity.MData> mDatass = new ArrayList<>();
@@ -48,6 +51,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     private GridLayoutManager gridLayoutManager;
     private boolean isFirst = false, isRefresh = false/*, isShow = true*/;
     private View rootView;
+    private boolean isUp = true, isStop = false,isShow=false;
 
 
     public static BaseFragment getInstance(String channel_id, String chinnel_name) {
@@ -92,6 +96,29 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
             }
         });
 
+        rv_view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (isShow){
+                    switch (motionEvent.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            isUp = false;
+                            LogUtil.augusLogW("ppppd--ACTION_DOWN");
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            isUp = false;
+                            LogUtil.augusLogW("ppppd--ACTION_MOVE22");
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            isUp = true;
+                            LogUtil.augusLogW("ppppd--ACTION_UP3333");
+                            break;
+                    }
+                    judge();
+                }
+                return false;
+            }
+        });
 
         rv_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -117,10 +144,10 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
                         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                         if (dy > 0) {
-                            layoutParams.setMargins(0, 0, -value / 2, value);
+                            layoutParams.setMargins(0, 0, -value / 2, value*5/4);
                             FirstPageFrag.isHide = true;
                         } else {
-                            layoutParams.setMargins(0, 0, 0, value);
+                            layoutParams.setMargins(0, 0, 0, value*5/4);
                             FirstPageFrag.isHide = false;
                         }
                         FirstPageFrag.miv_entry.setLayoutParams(layoutParams);
@@ -141,10 +168,22 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 
                     }
                 }
-                if (!FirstPageFrag.isExpand && 0 >= getScollYDistance())
-                    FirstPageFrag.mAppbar.setExpanded(true);
+//                if (!FirstPageFrag.isExpand && 0 >= getScollYDistance()){
+//                    FirstPageFrag.mAppbar.setExpanded(true);
+//                }
+
                 if (gridLayoutManager != null) {
                     int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
+                    if (lastPosition>first+5){
+                        isShow=true;
+                        FirstPageFrag.ntv_top.setText(lastPosition-first + "");
+                        isStop = (1 >= (dy > 0 ? dy : -dy)||rv_view.getScrollState()==0);
+                        judge();
+                    }else {
+                        isShow=false;
+                        FirstPageFrag.mllayout_arrow.setVisibility(View.GONE);
+                        FirstPageFrag.miv_arrow.setVisibility(View.GONE);
+                    }
                     if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
                         if (pFirstPage != null) {
                             pFirstPage.refreshBaby(cate_id, sort_type);
@@ -153,6 +192,16 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
                 }
             }
         });
+    }
+
+    public void judge() {
+        if (isStop && isUp||!isFirst) {
+            FirstPageFrag.mllayout_arrow.setVisibility(View.GONE);
+            FirstPageFrag.miv_arrow.setVisibility(View.VISIBLE);
+        } else {
+            FirstPageFrag.mllayout_arrow.setVisibility(View.VISIBLE);
+            FirstPageFrag.miv_arrow.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -232,6 +281,16 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
             pFirstPage.resetBaby(cate_id, sort_type);
         }
 
+        if (isFirst) {
+            FirstPageFrag.ntv_bottom.setText(getDataEntity.floor_total);
+//            FirstPageFrag.ntv_bottom.setText("100");
+            try {
+                first=Integer.parseInt(getDataEntity.first_floor);
+//                first=Integer.parseInt("8");
+            }catch (Exception e){
+                first=0;
+            }
+        }
 //        }else {
 ////            mtv_empty.setVisibility(View.VISIBLE);
 ////            rv_view.setVisibility(View.GONE);

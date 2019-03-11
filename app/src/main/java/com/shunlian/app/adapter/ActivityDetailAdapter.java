@@ -617,6 +617,11 @@ public class ActivityDetailAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog
 
     }
 
+    @Override
+    public void withdrawBlog(String blogId) {
+
+    }
+
 
     public class DetailTopViewHolder extends BaseRecyclerAdapter.BaseRecyclerViewHolder {
 

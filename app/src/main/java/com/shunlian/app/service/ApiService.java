@@ -2883,6 +2883,18 @@ public interface ApiService {
     Call<BaseEntity<HotBlogsEntity>> getblogs(@QueryMap Map<String, String> map);
 
     /**
+     * 审核发现文章
+     */
+    @POST("discovery/blogfront/audit")
+    Call<BaseEntity<CommonEntity>> verifyBlog(@Body RequestBody body);
+
+    /**
+     * 审核发现文章
+     */
+    @POST("discovery/blogfront/retract")
+    Call<BaseEntity<CommonEntity>> retractBlog(@Body RequestBody body);
+
+    /**
      * 我的粉丝列表
      */
     @GET("discovery/discoveryuser/fansList")

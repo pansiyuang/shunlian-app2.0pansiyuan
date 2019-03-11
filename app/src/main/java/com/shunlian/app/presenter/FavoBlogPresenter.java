@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -70,6 +71,23 @@ public class FavoBlogPresenter extends BasePresenter<IFavBlogView> {
             }
         });
     }
+
+    public void withDrawBlog(String blogId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", blogId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().retractBlog(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(context, entity.message);
+                iView.blogWithDraw(blogId);
+            }
+        });
+    }
+
 
     public void removeBlog(String blogId) {
         Map<String, String> map = new HashMap<>();

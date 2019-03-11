@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover_new.comment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,11 +43,17 @@ public class CommentRejectedAct extends BaseActivity implements ICommentRejected
     EditText met_rejected_content;
     private CommentRejectedPresenter mPresenter;
     private String comment_id;
+    private String currentFromType;
 
+    public static void startAct(Context context, String comment_id) {
+        context.startActivity(new Intent(context, CommentRejectedAct.class)
+                .putExtra("comment_id", comment_id));
+    }
 
-    public static void startAct(Context context,String comment_id){
-        context.startActivity(new Intent(context,CommentRejectedAct.class)
-                .putExtra("comment_id",comment_id));
+    public static void startAct(Activity activity, String from, int requestCode) {
+        Intent intent = new Intent(activity, CommentRejectedAct.class);
+        intent.putExtra("fromType", from);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     /**
@@ -62,19 +69,19 @@ public class CommentRejectedAct extends BaseActivity implements ICommentRejected
     @Override
     protected void initListener() {
         super.initListener();
-        met_rejected_content.addTextChangedListener(new SimpleTextWatcher(){
+        met_rejected_content.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-                if (s.length() > 0){
+                if (s.length() > 0) {
                     met_rejected_content.setGravity(Gravity.TOP | Gravity.LEFT);
                     met_rejected_content.setSelection(s.length());
-                }else {
+                } else {
                     met_rejected_content.setGravity(Gravity.CENTER);
                 }
 
-                if (s.length() > 300){
-                    met_rejected_content.setText(s.subSequence(0,300));
+                if (s.length() > 300) {
+                    met_rejected_content.setText(s.subSequence(0, 300));
                     met_rejected_content.setSelection(s.length());
                 }
             }
@@ -83,9 +90,16 @@ public class CommentRejectedAct extends BaseActivity implements ICommentRejected
 
         mtv_toolbar_right.setOnClickListener(v -> {
             String remark = met_rejected_content.getText().toString();
-            if (!isEmpty(remark)){
-                mPresenter.commentCheck(comment_id,remark);
-            }else {
+            if (!isEmpty(remark)) {
+                if (!isEmpty(currentFromType) && "blogVerify".equals(currentFromType)) {
+                    Intent intent = new Intent();
+                    intent.putExtra("reason", remark);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    mPresenter.commentCheck(comment_id, remark);
+                }
+            } else {
                 Common.staticToast("请输入驳回原因");
             }
         });
@@ -101,8 +115,8 @@ public class CommentRejectedAct extends BaseActivity implements ICommentRejected
         setStatusBarFontDark();
 
         comment_id = getIntent().getStringExtra("comment_id");
-
-        mPresenter = new CommentRejectedPresenter(this,this);
+        currentFromType = getIntent().getStringExtra("fromType");
+        mPresenter = new CommentRejectedPresenter(this, this);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);

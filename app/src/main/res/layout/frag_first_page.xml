@@ -202,14 +202,57 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:scaleType="fitXY"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_entrys"
         android:layout_width="72dp"
         android:layout_height="24dp"
         android:scaleType="fitXY"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="40dp"
+        android:id="@+id/miv_arrow"
+        android:layout_marginRight="16dp"
+        android:src="@mipmap/img_zhiding"/>
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_arrow"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bg_first_button"
+        android:gravity="center"
+        android:layout_marginBottom="40dp"
+        android:layout_marginRight="16dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <com.shunlian.app.widget.NewTextView
+            android:id="@+id/ntv_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/new_text" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="4dp"
+            android:background="#FF6B6B6B" />
+
+        <com.shunlian.app.widget.NewTextView
+            android:id="@+id/ntv_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/new_text" />
+    </com.shunlian.app.widget.MyLinearLayout>
 
     <LinearLayout
         android:id="@+id/lLayout_toast"

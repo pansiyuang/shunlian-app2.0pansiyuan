@@ -111,5 +111,6 @@ public class HotBlogsEntity {
         public int add_v;
         public String expert_icon;
         public String v_icon;
+        public int is_check_member;
     }
 }

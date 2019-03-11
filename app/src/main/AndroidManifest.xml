@@ -1241,6 +1241,9 @@
         <activity
             android:name=".ui.integral_team.TeamHistoryActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover_new.VerifyBlogActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.discover_new.comment.CommentRejectedAct"
             android:exported="false"
             android:screenOrientation="portrait"/>

@@ -51,6 +51,9 @@ public class BigImgEntity implements Parcelable {
         public String v_icon;
         public String expert_icon;
         public CommentEntity comment_list;
+        public boolean isSelect;
+        public int status;
+        public int retract_status;
 
         public Blog() {
         }
@@ -90,6 +93,9 @@ public class BigImgEntity implements Parcelable {
             dest.writeString(this.v_icon);
             dest.writeString(this.expert_icon);
             dest.writeParcelable(this.comment_list, flags);
+            dest.writeByte(this.isSelect ? (byte) 1 : (byte) 0);
+            dest.writeInt(this.status);
+            dest.writeInt(this.retract_status);
         }
 
         protected Blog(Parcel in) {
@@ -121,6 +127,9 @@ public class BigImgEntity implements Parcelable {
             this.v_icon = in.readString();
             this.expert_icon = in.readString();
             this.comment_list = in.readParcelable(CommentEntity.class.getClassLoader());
+            this.isSelect = in.readByte() != 0;
+            this.status = in.readInt();
+            this.retract_status = in.readInt();
         }
 
         public static final Creator<Blog> CREATOR = new Creator<Blog>() {

@@ -95,6 +95,17 @@
         </LinearLayout>
 
         <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_verify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"
+            android:layout_toLeftOf="@+id/miv_search"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/icon_shenhe" />
+
+        <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_search"
             android:layout_width="18dp"
             android:layout_height="18dp"
@@ -108,6 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/value_ECECEC" />
+
     <com.shunlian.app.widget.LazyViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
