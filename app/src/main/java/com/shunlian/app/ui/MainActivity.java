@@ -1012,13 +1012,21 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         this.data = data;
         if (mtv_message_count != null) {
             if (data.count > 99) {
-                mtv_message_count.setVisibility(View.VISIBLE);
                 mtv_message_count.setText("99+");
+                if(pageIndex!=2) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
             } else if (data.count <= 0) {
                 mtv_message_count.setVisibility(View.GONE);
             } else {
-                mtv_message_count.setVisibility(View.VISIBLE);
                 mtv_message_count.setText(String.valueOf(data.count));
+                if(pageIndex!=2) {
+                    mtv_message_count.setVisibility(View.VISIBLE);
+                }else{
+                    mtv_message_count.setVisibility(View.GONE);
+                }
             }
         }
         if (discoverFrag != null) {
