@@ -73,6 +73,8 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     private HttpDialog httpDialog;
     private String currentBlogId;
     private String myImageUrl;
+    private boolean isHotPage;
+    private boolean isAssessor;//是否是内部审核员
 
     private DownLoadQRCodeImageUtil downLoadQRCodeImageUtil;
     private Handler mHandler = new Handler() {
@@ -125,17 +127,24 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity) {
         super(context, true, lists);
         this.mActivity = activity;
+        isHotPage = false;
     }
 
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, List<HotBlogsEntity.Ad> ads) {
         super(context, true, lists);
         this.adList = ads;
+        isHotPage = true;
     }
 
     public HotBlogAdapter(Context context, List<BigImgEntity.Blog> lists, Activity activity, List<HotBlogsEntity.RecomandFocus> list) {
         super(context, true, lists);
         this.mActivity = activity;
         this.recomandFocusList = list;
+        isHotPage = false;
+    }
+
+    public void setAssessor(boolean b) {
+        isAssessor = b;
     }
 
     public void setShowAttention(boolean isShow) {
@@ -625,6 +634,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 if (favoListener != null) {
                     favoListener.OnFavo(favo, blogId);
                 }
+                break;
             }
         }
         notifyDataSetChanged();
@@ -639,6 +649,19 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
                 if (delBlogListener != null) {
                     delBlogListener.onDel(blogId);
                 }
+                break;
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void withdrawBlog(String blogId) {
+        for (int i = 0; i < lists.size(); i++) {
+            BigImgEntity.Blog blog = lists.get(i);
+            if (blogId.equals(blog.id)) {
+                lists.remove(i);
+                break;
             }
         }
         notifyDataSetChanged();
@@ -780,6 +803,7 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
         void getShareInfo(String blogId, String goodid);
 
         void showCommentView(String blogId);
+
     }
 
     public interface OnDelBlogListener {
@@ -795,7 +819,11 @@ public class HotBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> imple
             blogBottomDialog = new BlogBottomDialog(context);
             blogBottomDialog.setOnDialogCallBack(this);
         }
-        blogBottomDialog.setBlog(blog);
+        if (isHotPage) {
+            blogBottomDialog.setBlog(isAssessor, blog);
+        } else {
+            blogBottomDialog.setBlog(blog);
+        }
         blogBottomDialog.show();
     }
 

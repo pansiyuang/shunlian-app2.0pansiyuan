@@ -9,4 +9,6 @@ public interface IFavBlogView extends IView {
     void  favoBlog(int type,String blogId);
 
     void  removeBlog(String blogId);
+
+    void  blogWithDraw(String blogId);
 }

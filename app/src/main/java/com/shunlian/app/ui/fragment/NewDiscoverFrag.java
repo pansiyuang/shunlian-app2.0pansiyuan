@@ -16,6 +16,7 @@ import com.shunlian.app.ui.discover_new.ActivityFrag;
 import com.shunlian.app.ui.discover_new.AttentionFrag;
 import com.shunlian.app.ui.discover_new.HotBlogFrag;
 import com.shunlian.app.ui.discover_new.MyPageActivity;
+import com.shunlian.app.ui.discover_new.VerifyBlogActivity;
 import com.shunlian.app.ui.discover_new.search.DiscoverSearchActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -74,6 +75,9 @@ public class NewDiscoverFrag extends BaseFragment {
 
     @BindView(R.id.view_activity)
     View view_activity;
+
+    @BindView(R.id.miv_verify)
+    MyImageView miv_verify;
 
     private List<BaseFragment> goodsFrags;
     private AttentionFrag attentionFrag;
@@ -188,6 +192,9 @@ public class NewDiscoverFrag extends BaseFragment {
 
             }
         });
+        miv_verify.setOnClickListener(v -> {
+            VerifyBlogActivity.startAct(getActivity());
+        });
     }
 
     public void initFrags() {
@@ -213,6 +220,8 @@ public class NewDiscoverFrag extends BaseFragment {
         currentBaseInfo = event.baseInfo;
         avatar = currentBaseInfo.avatar;
         GlideUtils.getInstance().loadCircleAvar(baseContext, miv_icon, avatar);
+
+        miv_verify.setVisibility(currentBaseInfo.is_check_member == 1 ? View.VISIBLE : View.GONE);
     }
 
     public void showTab(int position) {

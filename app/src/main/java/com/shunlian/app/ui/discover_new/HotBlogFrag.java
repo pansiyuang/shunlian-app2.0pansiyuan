@@ -179,6 +179,11 @@ public class HotBlogFrag extends BaseLazyFragment implements IHotBlogView, HotBl
         }
         if (currentPage == 1 && hotBlogsEntity.base_info != null & hotBlogsEntity.base_info.avatar != null) {
             hotBlogAdapter.setMyIcon(hotBlogsEntity.base_info.avatar);
+            if (hotBlogsEntity.base_info.is_check_member == 0) {
+                hotBlogAdapter.setAssessor(false);
+            } else {
+                hotBlogAdapter.setAssessor(true);
+            }
         }
         hotBlogAdapter.setPageLoading(currentPage, totalPage);
         hotBlogAdapter.notifyDataSetChanged();

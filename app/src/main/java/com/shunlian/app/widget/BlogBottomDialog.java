@@ -46,6 +46,7 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
     private BigImgEntity.Blog currentBlog;
     private FavoBlogPresenter mPresenter;
     private OnDialogCallBack mCallBack;
+    private boolean isAssessor;
 
     public BlogBottomDialog(Context context) {
         this(context, R.style.popAd);
@@ -77,6 +78,11 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
         setCanceledOnTouchOutside(true);
     }
 
+    public void setBlog(boolean b, BigImgEntity.Blog blog) {
+        isAssessor = b;
+        setBlog(blog);
+    }
+
     public void setBlog(BigImgEntity.Blog blog) {
         if (blog == null) {
             return;
@@ -86,6 +92,9 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
         if (blog.is_self == 1) {
             stringList.add("删除");
         } else {
+            if (isAssessor && blog.retract_status == 1) {
+                stringList.add("审核撤回");
+            }
             switch (blog.is_favo) {
                 case 0:
                     stringList.add("添加收藏");
@@ -112,16 +121,24 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
         mPresenter.removeBlog(blogId);
     }
 
+    public void toWithDrawBlog(String blogId) {
+        if (mPresenter == null) {
+            mPresenter = new FavoBlogPresenter(getContext(), this);
+        }
+        mPresenter.withDrawBlog(blogId);
+    }
+
     public void toFavoBlog(int isFavo, String blogId) {
         if (Common.isAlreadyLogin()) {
             if (mPresenter == null) {
                 mPresenter = new FavoBlogPresenter(getContext(), this);
             }
             mPresenter.FavoBlog(isFavo, blogId);
-        }else{
+        } else {
             Common.goGoGo(getContext(), "login");
         }
     }
+
 
     public void destory() {
         if (isShowing()) {
@@ -153,6 +170,10 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
                 MyPageActivity.startAct(getContext(), currentBlog.member_id);
                 dismiss();
                 break;
+            case "审核撤回":
+                toWithDrawBlog(currentBlog.id);
+                dismiss();
+                break;
         }
     }
 
@@ -169,6 +190,13 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
 
     @Override
     public void removeBlog(String blogId) {
+        if (mCallBack != null) {
+            mCallBack.onDel(blogId);
+        }
+    }
+
+    @Override
+    public void blogWithDraw(String blogId) {
         if (mCallBack != null) {
             mCallBack.onDel(blogId);
         }
@@ -202,6 +230,12 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
                 SingleViewHolder viewHolder = (SingleViewHolder) holder;
                 String string = lists.get(position);
                 viewHolder.tv_item.setText(string);
+
+                if (string.equals("审核撤回")) {
+                    viewHolder.tv_item.setTextColor(getColor(R.color.value_007AFF));
+                } else {
+                    viewHolder.tv_item.setTextColor(getColor(R.color.value_484848));
+                }
             }
         }
 
@@ -224,5 +258,7 @@ public class BlogBottomDialog extends Dialog implements BaseRecyclerAdapter.OnIt
         void addFavo(int favo, String blogId);
 
         void onDel(String blogId);
+
+        void withdrawBlog(String blogId);
     }
 }
