@@ -90,7 +90,6 @@ import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
-import com.shunlian.app.ui.core.KouBeiAct;
 import com.shunlian.app.ui.core.KouBeiActNew;
 import com.shunlian.app.ui.core.NewGetCouponAct;
 import com.shunlian.app.ui.core.PingpaiAct;
@@ -325,14 +324,14 @@ public class Common {
                     ShareInfoParam shareInfoParam = new ShareInfoParam();
                     if ("1".equals(params[0])) {
                         shareInfoParam.photo = params[2];
-                        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+                        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam,0);
                     } else if ("2".equals(params[0])) {
 //                        shareInfoParam.shareLink = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=95684227_hao_pg&wd=Rxjava%20%2Bre&oq=android%25E5%25AF%25B9url%25E8%25A7%25A3%25E7%25A0%2581&rsv_pq=dc1f4fe400029324&rsv_t=3a61SdbfGVa6%2BW9Dsq4tVpuDsLQVpB7q0%2BGONNSdL6LBQ35u0c1y7BXBoGsrkj2Hu1dcTf0U&rqlang=cn&rsv_enter=1&rsv_n=2&rsv_sug3=1&rsv_sug2=0&inputT=909&rsv_sug4=909";
                         shareInfoParam.shareLink = params[1];
                         shareInfoParam.title = params[3];
                         shareInfoParam.desc = params[4];
                         shareInfoParam.img = params[2];
-                        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam);
+                        WXEntryActivity.startAct(context, "shareFriend", shareInfoParam,0);
                     }
                 }
                 break;
@@ -931,7 +930,7 @@ public class Common {
         if (TextUtils.isEmpty(content))
             return;
         if (toast == null) {
-            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast, null);
+            View v = LayoutInflater.from(context).inflate(R.layout.toast, null);
             mtv_toast = v.findViewById(R.id.mtv_toast);
             mtv_toast.setText(content);
             toast = new Toast(context);

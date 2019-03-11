@@ -14,6 +14,8 @@ public class GetDataEntity {
     @JsonProperty(value = "data")//关键字重名
     public List<MData> datas;
     public String default_keyword;
+    public String first_floor;
+    public String floor_total;
     public KeyWord input_keyword;
 
 
