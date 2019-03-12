@@ -78,7 +78,9 @@ public class MegerPresenter extends BasePresenter<IMegerView> {
     public void addCart(String goods_id, String sku_id, String qty, String promId) {
         Map<String, String> map = new HashMap<>();
         map.put("goods_id", goods_id);
-        map.put("sku_id", sku_id);
+        if (!isEmpty(sku_id)) {
+            map.put("sku_id", sku_id);
+        }
         map.put("qty", qty);
         map.put("prom_id", promId);
         sortAndMD5(map);
@@ -89,7 +91,7 @@ public class MegerPresenter extends BasePresenter<IMegerView> {
             public void onSuccess(BaseEntity<CateEntity> entity) {
                 super.onSuccess(entity);
                 CateEntity cateEntity = entity.data;
-//                iView.addCart(entity.data);
+                iView.addCart(cateEntity);
             }
         });
     }

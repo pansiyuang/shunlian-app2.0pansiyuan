@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.MergeGoodsAdapter;
+import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.MergeOrderEntity;
 import com.shunlian.app.presenter.MegerPresenter;
@@ -93,9 +94,9 @@ public class MergeOrderActivity extends BaseActivity implements IMegerView, View
     private ParamDialog paramDialog;
     private GoodsDeatilEntity.Goods currentGoods;
 
-    public static void startAct(Context context, String needId) {
+    public static void startAct(Context context, String promId) {
         Intent intent = new Intent(context, MergeOrderActivity.class);
-        intent.putExtra("prom_id", needId);
+        intent.putExtra("prom_id", promId);
         context.startActivity(intent);
     }
 
@@ -224,6 +225,12 @@ public class MergeOrderActivity extends BaseActivity implements IMegerView, View
     }
 
     @Override
+    public void addCart(CateEntity cateEntity) {
+        tv_meger_min.setText(cateEntity.hint);
+        tv_meger_total.setText(getStringResouce(R.string.common_yuan) + cateEntity.sub_amount);
+    }
+
+    @Override
     public void onFinish() {
 
     }
@@ -261,17 +268,23 @@ public class MergeOrderActivity extends BaseActivity implements IMegerView, View
                 break;
         }
         currentMode = mode;
+        megerPresenter.initPage();
+        megerPresenter.getMegerGoods(true, currentPromId, String.valueOf(currentMode));
     }
 
     @Override
     public void OnItemBuy(GoodsDeatilEntity.Goods goods) {
-        megerPresenter.getGoodsSku(goods.goods_id, goods.prom_id);
+        megerPresenter.getGoodsSku(goods.id, goods.prom_id);
         currentGoods = goods;
     }
 
     @Override
     public void onAddCar(GoodsDeatilEntity.Sku sku, int count) {
-        megerPresenter.addCart(currentGoods.goods_id, sku.id, String.valueOf(count), currentPromId);
+        if (sku == null) {
+            megerPresenter.addCart(currentGoods.id, "", String.valueOf(count), currentPromId);
+        } else {
+            megerPresenter.addCart(currentGoods.id, sku.id, String.valueOf(count), currentPromId);
+        }
     }
 
     @Override
@@ -281,12 +294,8 @@ public class MergeOrderActivity extends BaseActivity implements IMegerView, View
 
     @Override
     public void showGoodsSku(GoodsDeatilEntity.Goods goods) {
-        if (paramDialog == null) {
-            paramDialog = new ParamDialog(this, goods);
-            paramDialog.setOnGoodsBuyCallBack(this, true);
-        } else {
-            paramDialog.setParamGoods(goods);
-        }
+        paramDialog = new ParamDialog(this, goods);
+        paramDialog.setOnGoodsBuyCallBack(this, true);
         paramDialog.show();
     }
 }

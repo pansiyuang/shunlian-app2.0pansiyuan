@@ -101,6 +101,8 @@ public class VerifyBlogActivity extends BaseActivity implements IVerifyBlogView,
 
         mPresenter = new VerifyBlogPresenter(this, this);
         mPresenter.getHotBlogList(true);
+
+        neiEmpty.setImageResource(R.mipmap.img_empty_common).setText("未发现审核内容").setButtonText(null);
     }
 
     @Override
@@ -200,9 +202,11 @@ public class VerifyBlogActivity extends BaseActivity implements IVerifyBlogView,
             if (isEmpty(hotBlogsEntity.list)) {
                 neiEmpty.setVisibility(View.VISIBLE);
                 recyclerList.setVisibility(View.GONE);
+                tvSelect.setVisibility(View.GONE);
             } else {
                 neiEmpty.setVisibility(View.GONE);
                 recyclerList.setVisibility(View.VISIBLE);
+                tvSelect.setVisibility(View.VISIBLE);
             }
         }
         if (!isEmpty(hotBlogsEntity.list)) {

@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.MergeOrderEntity;
 
 /**
@@ -11,4 +12,6 @@ public interface IMegerView extends IView {
     void getMegerOrder(MergeOrderEntity mergeOrderEntity);
 
     void refreshFinish();
+
+    void addCart(CateEntity cateEntity);
 }
