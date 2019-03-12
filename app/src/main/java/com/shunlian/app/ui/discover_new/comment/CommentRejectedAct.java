@@ -117,6 +117,11 @@ public class CommentRejectedAct extends BaseActivity implements ICommentRejected
         comment_id = getIntent().getStringExtra("comment_id");
         currentFromType = getIntent().getStringExtra("fromType");
         mPresenter = new CommentRejectedPresenter(this, this);
+        if ("blogVerify".equals(currentFromType)) {
+            mPresenter.getRejectedList(true);
+        } else {
+            mPresenter.getRejectedList(false);
+        }
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);

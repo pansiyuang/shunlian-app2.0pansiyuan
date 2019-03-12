@@ -54,7 +54,7 @@ public class RecommmendAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goo
         String price = getString(R.string.common_yuan) + goods.price;
         viewHolder.tv_meger_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 5));
 
-        viewHolder.tv_meger_sell.setText("已售：" + goods.sales);
+//        viewHolder.tv_meger_sell.setText("已售：" + goods.sales);
         viewHolder.miv_meger_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,9 +78,9 @@ public class RecommmendAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goo
 
         @BindView(R.id.tv_meger_price)
         TextView tv_meger_price;
-
-        @BindView(R.id.tv_meger_sell)
-        TextView tv_meger_sell;
+//
+//        @BindView(R.id.tv_meger_sell)
+//        TextView tv_meger_sell;
 
         @BindView(R.id.miv_meger_buy)
         MyImageView miv_meger_buy;

@@ -26,9 +26,8 @@ import com.shunlian.app.bean.RecommendEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
-import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
+import com.shunlian.app.ui.confirm_order.MergeOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -413,8 +412,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     @Override
-    public void OnMegerOrder(String needId) {
-        MegerOrderActivity.startAct(baseContext, needId);
+    public void OnMegerOrder(String promId) {
+        MergeOrderActivity.startAct(baseContext, promId);
     }
 
     @Override

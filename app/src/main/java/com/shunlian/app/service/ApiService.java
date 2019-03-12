@@ -586,6 +586,15 @@ public interface ApiService {
     Call<BaseEntity<CateEntity>> megerGoodsCates(@Body RequestBody body);
 
     /**
+     * 新版凑单界面
+     *
+     * @param map
+     * @return
+     */
+    @GET("goods/addOnItem")
+    Call<BaseEntity<MergeOrderEntity>> megerGoodsList(@QueryMap Map<String, String> map);
+
+    /**
      * 凑单
      *
      * @param body

@@ -16,7 +16,7 @@ import java.util.Map;
 import retrofit2.Call;
 
 public class VerifyBlogPresenter extends BasePresenter<IVerifyBlogView> {
-    public static final int PAGE_SIZE = 10;
+    public static final int PAGE_SIZE = 20;
 
     public VerifyBlogPresenter(Context context, IVerifyBlogView iView) {
         super(context, iView);
@@ -145,7 +145,7 @@ public class VerifyBlogPresenter extends BasePresenter<IVerifyBlogView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.blogWithDraw(position);
+                iView.blogWithDraw(position,entity.data.count);
             }
         });
     }

@@ -206,7 +206,7 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
     /**
      * 添加标签到容器中
      */
-    private void addLabelView(String[] parame) {
+    public void addLabelView(String[] parame) {
         removeAllViews();
         if (getIsShowDay()) {//天
             this.addView(mDayTextView);

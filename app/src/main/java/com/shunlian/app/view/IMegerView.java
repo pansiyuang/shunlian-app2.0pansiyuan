@@ -1,10 +1,6 @@
 package com.shunlian.app.view;
 
-import com.shunlian.app.bean.CateEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
-
-import java.util.List;
-
+import com.shunlian.app.bean.MergeOrderEntity;
 
 /**
  * Created by Administrator on 2017/12/8.
@@ -12,9 +8,7 @@ import java.util.List;
 
 public interface IMegerView extends IView {
 
-    void getCateEntity(CateEntity cateEntity);
+    void getMegerOrder(MergeOrderEntity mergeOrderEntity);
 
-    void getGoodsInfo(GoodsDeatilEntity.GoodsInfo goodsInfo);
-
-    void addCart(CateEntity cateEntity);
+    void refreshFinish();
 }

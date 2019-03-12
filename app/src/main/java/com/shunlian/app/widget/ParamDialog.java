@@ -89,7 +89,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private List<GoodsDeatilEntity.Values> mCurrentValues;
     private OnSelectCallBack selectCallBack;
     private OnGoodsBuyCallBack goodsBuyCallBack;
-//    private int recycleHeight;
+    //    private int recycleHeight;
     private int totalStock;
     private String hasOption = "0";//是否有参数
     private int limit_min_buy = 1;//团购最小购买数
@@ -252,7 +252,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
             if ("0".equals(hasOption)) {
-                dia_tv_earn.setEarnMoney(goodsDeatilEntity.self_buy_earn,17);
+                dia_tv_earn.setEarnMoney(goodsDeatilEntity.self_buy_earn, 17);
             }
         }
         if (mGoods != null) {
@@ -261,7 +261,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, mGoods.thumb);
             if ("0".equals(hasOption)) {
-                dia_tv_earn.setEarnMoney(mGoods.self_buy_earn,17);
+                dia_tv_earn.setEarnMoney(mGoods.self_buy_earn, 17);
             }
         }
 
@@ -271,7 +271,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, productDetailEntity.thumb);
             if ("0".equals(hasOption)) {
-                dia_tv_earn.setEarnMoney(productDetailEntity.self_buy_earn,17);
+                dia_tv_earn.setEarnMoney(productDetailEntity.self_buy_earn, 17);
             }
         }
 
@@ -500,11 +500,16 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         }
     }
 
-    public void setOnGoodsBuyCallBack(OnGoodsBuyCallBack buyCallBack) {
+    public void setOnGoodsBuyCallBack(OnGoodsBuyCallBack buyCallBack, boolean isOnlyAddCar) {
         this.goodsBuyCallBack = buyCallBack;
 
         ll_complete.setVisibility(View.VISIBLE);
+        btn_buy.setVisibility(isOnlyAddCar ? View.GONE : View.VISIBLE);
         btn_complete.setVisibility(View.GONE);
+    }
+
+    public void setOnGoodsBuyCallBack(OnGoodsBuyCallBack buyCallBack) {
+        setOnGoodsBuyCallBack(buyCallBack, false);
     }
 
     public interface OnGoodsBuyCallBack {
@@ -571,7 +576,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                             if (checkLinkmap(false) != null) {
                                 GoodsDeatilEntity.Sku s = checkLinkmap(false);
                                 if (!TextUtils.isEmpty(s.self_buy_earn)) {
-                                    dia_tv_earn.setEarnMoney(s.self_buy_earn,17);
+                                    dia_tv_earn.setEarnMoney(s.self_buy_earn, 17);
                                 }
                                 GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, s.thumb);
                                 dia_tv_price.setText("¥" + s.price);

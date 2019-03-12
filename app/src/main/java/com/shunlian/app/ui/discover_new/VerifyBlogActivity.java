@@ -131,12 +131,16 @@ public class VerifyBlogActivity extends BaseActivity implements IVerifyBlogView,
             }
             setSelectStatus(isSelectAll);
             selectAllBlog(isSelectAll);
+            checkSelectItemCount();
         });
         tvSelect.setOnClickListener(v -> {
+            selectAllBlog(false);
             if (isEdit) {
                 isEdit = false;
+                tv_title.setText(String.format("共%s条内容需审核", blogList.size()));
             } else {
                 isEdit = true;
+                tv_title.setText(String.format("已选择%s条内容", 0));
             }
             setSelectMode(isEdit);
             mAdapter.setEdit(isEdit);
@@ -208,8 +212,11 @@ public class VerifyBlogActivity extends BaseActivity implements IVerifyBlogView,
             blogList.addAll(hotBlogsEntity.list);
         }
 
-        if (isSelectAll) {
-            selectAllBlog(isSelectAll);
+        if (isEdit) {
+            if (isSelectAll) {
+                selectAllBlog(isSelectAll);
+                tv_title.setText(String.format("已选择%s条内容", blogList.size()));
+            }
         } else {
             tv_title.setText(String.format("共%s条内容需审核", count));
         }
@@ -295,9 +302,10 @@ public class VerifyBlogActivity extends BaseActivity implements IVerifyBlogView,
      * 撤回单条文章
      */
     @Override
-    public void blogWithDraw(int position) {
+    public void blogWithDraw(int position, int count) {
         blogList.get(position).status = 0;
         mAdapter.notifyItemRangeChanged(0, blogList.size(), blogList);
+        tv_title.setText(String.format("共%s条内容需审核", count));
     }
 
     @Override
@@ -335,6 +343,16 @@ public class VerifyBlogActivity extends BaseActivity implements IVerifyBlogView,
             }
         }
         return true;
+    }
+
+    public void checkSelectItemCount() {
+        int selectCount = 0;
+        for (int i = 0; i < blogList.size(); i++) {
+            if (blogList.get(i).isSelect) {
+                selectCount++;
+            }
+        }
+        tv_title.setText(String.format("已选择%s条内容", selectCount));
     }
 
 
@@ -387,6 +405,7 @@ public class VerifyBlogActivity extends BaseActivity implements IVerifyBlogView,
             isSelectAll = false;
         }
         setSelectStatus(isSelectAll);
+        checkSelectItemCount();
     }
 
     @Override

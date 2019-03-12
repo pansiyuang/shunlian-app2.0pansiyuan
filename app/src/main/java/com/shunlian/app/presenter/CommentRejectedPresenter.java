@@ -61,74 +61,79 @@ public class CommentRejectedPresenter extends BasePresenter<ICommentRejectedView
      */
     @Override
     protected void initApi() {
-        Map<String,String> map = new HashMap<>();
+    }
+
+    public void getRejectedList(boolean isBlog) {
+        Map<String, String> map = new HashMap<>();
+        if (isBlog) {
+            map.put("type", "blog");
+        }
         sortAndMD5(map);
         Call<BaseEntity<CommentRejectedEntity>>
                 baseEntityCall = getApiService().checkSetList(map);
 
-        getNetData(true,baseEntityCall,
-                new SimpleNetDataCallback<BaseEntity<CommentRejectedEntity>>(){
+        getNetData(true, baseEntityCall,
+                new SimpleNetDataCallback<BaseEntity<CommentRejectedEntity>>() {
 
                     @Override
-            public void onSuccess(BaseEntity<CommentRejectedEntity> entity) {
-                super.onSuccess(entity);
-                CommentRejectedEntity data = entity.data;
-                if (data != null && !isEmpty(data.list)){
-                    mList = data.list;
-                }
-                SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter
-                        <CommentRejectedEntity.RejectedList>(context,
-                        R.layout.text_line_simpe,mList) {
+                    public void onSuccess(BaseEntity<CommentRejectedEntity> entity) {
+                        super.onSuccess(entity);
+                        CommentRejectedEntity data = entity.data;
+                        if (data != null && !isEmpty(data.list)) {
+                            mList = data.list;
+                        }
+                        SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter
+                                <CommentRejectedEntity.RejectedList>(context,
+                                R.layout.text_line_simpe, mList) {
 
-                    @Override
-                    public void convert(SimpleViewHolder holder,
-                                        CommentRejectedEntity.RejectedList rejectedList,
-                                        int position) {
-                        holder.getView(R.id.ll_root).setBackgroundColor(Color.WHITE);
+                            @Override
+                            public void convert(SimpleViewHolder holder,
+                                                CommentRejectedEntity.RejectedList rejectedList,
+                                                int position) {
+                                holder.getView(R.id.ll_root).setBackgroundColor(Color.WHITE);
 
-                        MyTextView mtv_simple = holder.getView(R.id.mtv_content);
-                        mtv_simple.setTextSize(15);
-                        mtv_simple.setTextColor(getColorResouce(R.color.value_343434));
-                        int left = TransformUtil.dip2px(context, 16);
-                        int top = TransformUtil.dip2px(context, 15);
-                        mtv_simple.setPadding(left,top,0,top);
-                        mtv_simple.setText(rejectedList.value);
-                        mtv_simple.setSingleLine();
-                        mtv_simple.setEllipsize(TextUtils.TruncateAt.END);
+                                MyTextView mtv_simple = holder.getView(R.id.mtv_content);
+                                mtv_simple.setTextSize(15);
+                                mtv_simple.setTextColor(getColorResouce(R.color.value_343434));
+                                int left = TransformUtil.dip2px(context, 16);
+                                int top = TransformUtil.dip2px(context, 15);
+                                mtv_simple.setPadding(left, top, 0, top);
+                                mtv_simple.setText(rejectedList.value);
+                                mtv_simple.setSingleLine();
+                                mtv_simple.setEllipsize(TextUtils.TruncateAt.END);
 
-                        View view = holder.getView(R.id.line);
-                        LinearLayout.LayoutParams layoutParams =
-                                (LinearLayout.LayoutParams) view.getLayoutParams();
-                        layoutParams.leftMargin = TransformUtil.dip2px(context,12);
-                        view.setLayoutParams(layoutParams);
+                                View view = holder.getView(R.id.line);
+                                LinearLayout.LayoutParams layoutParams =
+                                        (LinearLayout.LayoutParams) view.getLayoutParams();
+                                layoutParams.leftMargin = TransformUtil.dip2px(context, 12);
+                                view.setLayoutParams(layoutParams);
 
-                        holder.addOnClickListener(R.id.ll_root);
+                                holder.addOnClickListener(R.id.ll_root);
+                            }
+                        };
+
+                        iView.setAdapter(adapter);
+
+                        adapter.setOnItemClickListener((view, position) -> {
+                            CommentRejectedEntity.RejectedList rejectedList = mList.get(position);
+                            iView.selectRejectedContent(rejectedList);
+                        });
                     }
-                };
-
-                iView.setAdapter(adapter);
-
-                adapter.setOnItemClickListener((view, position) -> {
-                    CommentRejectedEntity.RejectedList rejectedList = mList.get(position);
-                    iView.selectRejectedContent(rejectedList);
                 });
-            }
-        });
     }
 
 
-
-    public void commentCheck(String comment_id,String remark){
-        Map<String,String> map = new HashMap<>();
-        map.put("comment_id",comment_id);
-        map.put("check_status","2");
-        map.put("remark",remark);
+    public void commentCheck(String comment_id, String remark) {
+        Map<String, String> map = new HashMap<>();
+        map.put("comment_id", comment_id);
+        map.put("check_status", "2");
+        map.put("remark", remark);
 
         sortAndMD5(map);
 
         Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().commentCheck(getRequestBody(map));
 
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);

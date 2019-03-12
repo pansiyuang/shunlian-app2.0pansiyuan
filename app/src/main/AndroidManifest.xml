@@ -394,7 +394,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.confirm_order.MegerOrderActivity"
+            android:name=".ui.confirm_order.MergeOrderActivity"
             android:exported="false"
             android:label="凑单"
             android:screenOrientation="portrait" />

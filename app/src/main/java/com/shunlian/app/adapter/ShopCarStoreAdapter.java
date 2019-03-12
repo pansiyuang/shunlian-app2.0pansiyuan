@@ -222,7 +222,7 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         }
         childViewHolder.tv_meger_order.setOnClickListener(v -> {
             if (mListener != null) {
-                mListener.OnMegerOrder(promotion.need_more);
+                mListener.OnMegerOrder(promotion.prom_id);
             }
         });
         goodsAdapter.setOnGoodsChangeListener(new EnableGoodsAdapter.OnGoodsChangeListener() {
@@ -339,6 +339,6 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
 
         void OnStoreCheck(String storeId, String isSelect);
 
-        void OnMegerOrder(String needId);
+        void OnMegerOrder(String promId);
     }
 }

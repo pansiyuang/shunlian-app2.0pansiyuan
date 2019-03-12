@@ -13,7 +13,7 @@ public interface IVerifyBlogView extends IView {
 
     void blogVerifyFail(int count);
 
-    void blogWithDraw(int position);
+    void blogWithDraw(int position,int count);
 
     void focusUser(int type,int position);
 

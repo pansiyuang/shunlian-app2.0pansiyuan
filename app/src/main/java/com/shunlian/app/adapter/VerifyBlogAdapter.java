@@ -43,7 +43,7 @@ public class VerifyBlogAdapter extends BaseRecyclerAdapter<BigImgEntity.Blog> {
 
     public void setEdit(boolean edit) {
         isEdit = edit;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, lists.size(), lists);
     }
 
     @Override
