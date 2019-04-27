@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.fragment.first_page;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
@@ -17,21 +18,26 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.basementview.BasementMainActivity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.BubbleEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShowVoucherSuspension;
+import com.shunlian.app.demo.DemoNewFeedBackAct;
+import com.shunlian.app.demo.DemoPingpaiAct;
+import com.shunlian.app.demo.demo1.DemoImage;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PFirstPage;
+import com.shunlian.app.shunlianyoupin.ShunlianyoupinAct;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.ui.core.PingpaiAct;
+import com.shunlian.app.ui.core.PingpaiListAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.integral_team.TeamIntegralActivity;
-import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
@@ -47,6 +53,10 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.slide_tab.PagerSlidingTabStrip;
+import com.shunlian.app.yjfk.ComplaintActivity;
+import com.shunlian.app.yjfk.ExpandableListViewDemoActivity;
+import com.shunlian.app.yjfk.OnTouchActivity;
+import com.shunlian.app.yjfk.OpinionActivity;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -60,6 +70,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import com.shunlian.app.demo.DemoGoodsDetailAct;
 
 /**
  * Created by Administrator on 2017/11/16.
@@ -103,8 +114,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     PagerSlidingTabStrip tabs;
     @BindView(R.id.pager)
     ViewPager pager;
-    @BindView(R.id.mllayout_title)
-    MyLinearLayout mllayout_title;
+//    @BindView(R.id.mllayout_title)
+    public static MyLinearLayout mllayout_title;
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
     @BindView(R.id.data_coorLayout)
@@ -201,8 +212,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         outTimer = new Timer();
         try {
             outTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
+                    @Override
+                    public void run() {
                     if (mposition < datas.size()) {
                         runnableB = new Runnable() {
                             @Override
@@ -273,8 +284,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             appBarParams.setScrollFlags(0);//这个加了之后不可滑动
 //        }
         appBarChildAt.setLayoutParams(appBarParams);
-
         miv_entry = (MyImageView) rootView.findViewById(R.id.miv_entry);
+        mllayout_title = (MyLinearLayout) rootView.findViewById(R.id.mllayout_title);
         miv_entrys = (MyImageView) rootView.findViewById(R.id.miv_entrys);
         ntv_top = (NewTextView) rootView.findViewById(R.id.ntv_top);
         ntv_bottom = (NewTextView) rootView.findViewById(R.id.ntv_bottom);
@@ -499,7 +510,12 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_scan)
     public void scan() {
-        ZXingDemoAct.startAct(baseActivity, false, 0);
+
+        BasementMainActivity.startAct(getActivity());
+
+//        QrCodeAct.startAct(baseActivity,"");
+//        MyTest.startAct(baseActivity);
+//        ZXingDemoAct.startAct(baseActivity, false, 0);
 //        H5X5Act.startAct(baseContext,"http://soft.imtt.qq.com/browser/tes/feedback.html",H5X5Act.MODE_SONIC);
 //        H5X5Act.startAct(baseContext,"https://plus.mengtianvip.com/plus",H5X5Act.MODE_SONIC);
 //        PaySuccessAct.startAct(baseActivity, "", "78", "1901234941107803Q587", false);
@@ -564,7 +580,6 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 }
                 break;
         }
-
     }
 
     public void setMenu(GetMenuEntity getMenuEntiy) {
@@ -584,6 +599,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         }
         fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {
+//            if(i==1){
+//                CateGoryFrag instance = (CateGoryFrag)CateGoryFrag.getInstance(getMenuEntiy.datas.get(1).id, getMenuEntiy.datas.get(1).channel_name);
+//                instance.setmllayout_title((MyLinearLayout) mllayout_title);
+//            }
             fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id, getMenuEntiy.datas.get(i).channel_name));
             if (i >= getMenuEntiy.datas.size() - 1 && isAdded()) {
                 firstId = getMenuEntiy.datas.get(0).id;

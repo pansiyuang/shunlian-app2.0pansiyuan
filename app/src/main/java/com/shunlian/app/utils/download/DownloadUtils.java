@@ -115,7 +115,6 @@ public class DownloadUtils {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 new Thread(() ->   writeFileFromIS(new File(filePath), response.body().byteStream(), response.body().contentLength(), listener)).start();
-              ;
                 Log.d("下载：","下载完成");
             }
             @Override

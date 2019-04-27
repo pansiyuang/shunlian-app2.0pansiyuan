@@ -102,7 +102,7 @@ public class DayDayPresenter extends BasePresenter<DayDayView> {
                 babyPage++;
                 babyAllPage = Integer.parseInt(data.datas.goods.allPage);
                 babyDatas.addAll(data.datas.goods.list);
-                iView.getApiData(data, babyAllPage,babyPage,babyDatas);
+                iView.getApiData(data, babyAllPage,Integer.parseInt(data.datas.goods.page),babyDatas);
             }
 
             @Override

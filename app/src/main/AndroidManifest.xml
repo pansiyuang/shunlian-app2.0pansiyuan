@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.shunlian.app">
 
-
     <!-- 本项目中使用权限 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -14,10 +13,11 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <uses-feature android:name="android.hardware.autofocus" />
     <uses-feature android:name="android.hardware.camera" />
 
-    <uses-permission android:name ="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -25,13 +25,12 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTENT_FILTER_VERIFICATION_AGENT" />
 
-    <!--jpush-->
+    <!-- jpush -->
     <permission
         android:name="com.shunlian.app.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.shunlian.app.permission.JPUSH_MESSAGE" />
-
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
@@ -41,60 +40,69 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <!--jpush-->
+    <!-- jpush -->
 
-    <!--银联支付-->
+
+    <!-- 银联支付 -->
     <uses-permission android:name="org.simalliance.openmobileapi.SMARTCARD" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-feature android:name="android.hardware.nfc.hce"/>
-    <!--银联支付-->
 
-    <!--bugly-->
+    <uses-feature android:name="android.hardware.nfc.hce" />
+    <!-- 银联支付 -->
+
+
+    <!-- bugly -->
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <!--<meta-data
+    <!--
+        <meta-data
         android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
-        android:value="GlideModule" />-->
+        android:value="GlideModule" />
+    -->
 
-    <!--TBS（x5内核）-->
+
+    <!-- TBS（x5内核） -->
     <uses-permission android:name="android.permission.READ_SETTINGS" />
 
-    <!--TBS（x5内核）-->
-
+    <!-- TBS（x5内核） -->
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
+        android:largeHeap="true"
         android:resizeableActivity="true"
         android:supportsPictureInPicture="true"
-        android:largeHeap="true"
-        android:hardwareAccelerated="true"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--银联支付-->
-        <uses-library android:name="org.simalliance.openmobileapi" android:required="false"/>
+        <!-- 银联支付 -->
+        <uses-library
+            android:name="org.simalliance.openmobileapi"
+            android:required="false" />
+
         <activity
             android:name="com.unionpay.uppay.PayActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
             android:excludeFromRecents="true"
             android:label="支付宝支付"
-            android:windowSoftInputMode="adjustResize"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.unionpay.UPPayWapActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        <!--银联支付-->
+        <!-- 银联支付 -->
 
-        <!--配置glide缓存-->
+
+        <!-- 配置glide缓存 -->
         <meta-data
             android:name="com.shunlian.app.utils.GlideCacheUtil"
             android:value="GlideModule" />
 
-        <!--jpush-->
-        <!-- Required SDK 核心功能-->
+        <!-- jpush -->
+        <!-- Required SDK 核心功能 -->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
         <service
             android:name="cn.jpush.android.service.PushService"
@@ -108,7 +116,7 @@
             </intent-filter>
         </service>
 
-        <!-- since 3.0.9 Required SDK 核心功能-->
+        <!-- since 3.0.9 Required SDK 核心功能 -->
         <provider
             android:name="cn.jpush.android.service.DataProvider"
             android:authorities="com.shunlian.app.DataProvider"
@@ -121,22 +129,24 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
+
                 <category android:name="com.shunlian.app" />
             </intent-filter>
         </service>
 
-        <!-- since 3.1.0 Required SDK 核心功能-->
+        <!-- since 3.1.0 Required SDK 核心功能 -->
         <provider
             android:name="cn.jpush.android.service.DownloadProvider"
             android:authorities="com.shunlian.app.DownloadProvider"
             android:exported="true" />
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+
                 <category android:name="com.shunlian.app" />
             </intent-filter>
             <intent-filter>
@@ -152,7 +162,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -170,69 +180,74 @@
         <service
             android:name=".utils.DownloadService"
             android:exported="false" />
-        <!-- SDK核心功能-->
-        <!--<activity-->
-        <!--android:name="cn.jpush.android.ui.PopWinActivity"-->
-        <!--android:configChanges="orientation|keyboardHidden"-->
-        <!--android:exported="false"-->
-        <!--android:theme="@style/MyDialogStyle">-->
-        <!--<intent-filter>-->
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="com.shunlian.app" />-->
-        <!--</intent-filter>-->
-        <!--</activity>-->
+        <!-- SDK核心功能 -->
+        <!-- <activity -->
+        <!-- android:name="cn.jpush.android.ui.PopWinActivity" -->
+        <!-- android:configChanges="orientation|keyboardHidden" -->
+        <!-- android:exported="false" -->
+        <!-- android:theme="@style/MyDialogStyle"> -->
+        <!-- <intent-filter> -->
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- <category android:name="com.shunlian.app" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
 
-        <!-- Required SDK核心功能-->
+
+        <!-- Required SDK核心功能 -->
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
 
         <!-- Required since 3.0.7 -->
         <!-- 新的tag/alias接口结果返回需要开发者配置一个自定的广播 -->
         <!-- 该广播需要继承JPush提供的JPushMessageReceiver类, 并如下新增一个 Intent-Filter -->
-        <!--<receiver-->
-        <!--android:name="自定义 Receiver"-->
-        <!--android:enabled="true" >-->
-        <!--<intent-filter>-->
-        <!--<action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />-->
-        <!--<category android:name="com.shunlian.app" />-->
-        <!--</intent-filter>-->
-        <!--</receiver>-->
+        <!-- <receiver -->
+        <!-- android:name="自定义 Receiver" -->
+        <!-- android:enabled="true" > -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" /> -->
+        <!-- <category android:name="com.shunlian.app" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
 
-        <!-- User defined. 用户自定义的广播接收器-->
+
+        <!-- User defined. 用户自定义的广播接收器 -->
         <receiver
             android:name=".receiver.MyReceiver"
             android:enabled="true">
             <intent-filter>
-                <!--Required 用户注册SDK的intent-->
+
+                <!-- Required 用户注册SDK的intent -->
                 <action android:name="cn.jpush.android.intent.REGISTRATION" />
-                <!--Required 用户接收SDK消息的intent-->
+                <!-- Required 用户接收SDK消息的intent -->
                 <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
-                <!--Required 用户接收SDK通知栏信息的intent-->
+                <!-- Required 用户接收SDK通知栏信息的intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
-                <!--Required 用户打开自定义通知栏的intent-->
+                <!-- Required 用户打开自定义通知栏的intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
                 <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
+
                 <category android:name="com.shunlian.app" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="com.shunlian.app.glidemodule.OkHttpGlideModule"
-            android:value="GlideModule"/>
+            android:value="GlideModule" />
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />
         <!-- Required. For publish channel feature -->
-        <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。-->
+        <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。 -->
         <!-- 例如: -->
         <!-- 发到 Google Play 的APK可以设置为 google-play; -->
         <!-- 发到其他市场的 APK 可以设置为 xxx-market。 -->
-        <!--<meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>-->
+        <!-- <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/> -->
         <!-- Required. AppKey copied from Portal -->
         <!-- 公司 -->
         <!-- 3cbe47ad444ddec83ea45d31 -->
@@ -241,9 +256,9 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="3cbe47ad444ddec83ea45d31" />
-        <!--jpush-->
+        <!-- jpush -->
         <!-- 多渠道打包时改成360，因为360市场要上传原apk -->
-        <!--ShunLianPower-->
+        <!-- ShunLianPower -->
         <meta-data
             android:name="BUGLY_APP_CHANNEL"
             android:value="360" />
@@ -259,74 +274,80 @@
             android:theme="@style/Theme.Start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="shunliandongli" android:host="start" />
+
+                <data
+                    android:host="start"
+                    android:scheme="shunliandongli" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="首页"
             android:launchMode="singleTask"
             android:resizeableActivity="true"
             android:screenOrientation="portrait"
             android:supportsPictureInPicture="true"
-            android:label="首页"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|adjustPan">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data
                     android:host="heatmap"
                     android:scheme="saca893e57" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".widget.NewLookBigImgAct"
             android:exported="false"
             android:label="查看图片"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name="test.MyTest"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.more_credit.PhoneRecordAct"
             android:exported="false"
             android:label="@string/phone_chongzhijilu"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.core.NewGetCouponAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.more_credit.PhonePaySuccessAct"
             android:exported="false"
             android:label="@string/prepaid_phone_dingdanzhifu"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.more_credit.PhoneOrderDetailAct"
             android:exported="false"
             android:label="@string/order_xiangqing"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-        <!--android:name=".ui.start.GuideAct"-->
-        <!--android:exported="false"-->
-        <!--android:screenOrientation="portrait"-->
-        <!--android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />-->
+        <!-- <activity -->
+        <!-- android:name=".ui.start.GuideAct" -->
+        <!-- android:exported="false" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/android:Theme.NoTitleBar.Fullscreen" /> -->
         <activity
             android:name=".ui.start.GuideAct"
             android:exported="false"
@@ -340,15 +361,18 @@
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
-            android:launchMode="singleTop"
             android:label="微信回调"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/wx" >
-            <!-- <intent-filter>
+            android:theme="@style/wx">
+
+            <!--
+             <intent-filter>
                  <action android:name="android.intent.action.VIEW" />
                  <category android:name="android.intent.category.DEFAULT" />
                  <data android:scheme="wxbffd8c8c412e4c73" />
-             </intent-filter>-->
+             </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".ui.store.StoreAct"
@@ -356,11 +380,16 @@
             android:label="店铺主页"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.PosterAct"
+            android:exported="false"
+            android:label="店铺主页"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.goods_detail.GoodsDetailAct"
             android:exported="false"
+            android:label="商品详情"
             android:resizeableActivity="true"
             android:screenOrientation="portrait"
-            android:label="商品详情"
             android:supportsPictureInPicture="true" />
         <activity
             android:name=".ui.store.StoreIntroduceAct"
@@ -392,7 +421,6 @@
             android:exported="false"
             android:label="@string/address_manage"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.confirm_order.MergeOrderActivity"
             android:exported="false"
@@ -426,7 +454,7 @@
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:label="AuthActivity"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
         <activity
             android:name=".ui.my_comment.MyCommentAct"
             android:exported="false"
@@ -442,7 +470,6 @@
             android:exported="false"
             android:label="评价晒单"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.my_comment.CommentDetailAct"
             android:exported="false"
@@ -453,15 +480,12 @@
             android:exported="false"
             android:label="@string/my_order"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".ui.confirm_order.SearchOrderActivity"
             android:exported="false"
-            android:launchMode="singleTask"
             android:label="@string/search_all_order"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.my_comment.LookBigImgAct"
             android:exported="false"
@@ -505,29 +529,31 @@
         <activity
             android:name=".ui.order.ExchangeDetailAct"
             android:exported="false"
-            android:launchMode="singleTask"
             android:label="换货详情/退款"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".ui.h5.H5Act"-->
-            <!--android:exported="false"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:windowSoftInputMode="stateAlwaysHidden" />-->
+        <!-- <activity -->
+        <!-- android:name=".ui.h5.H5Act" -->
+        <!-- android:exported="false" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:windowSoftInputMode="stateAlwaysHidden" /> -->
         <activity
             android:name=".ui.h5.H5X5Act"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="H5页面"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <!--优化x5内核首次启动卡顿黑屏现象-->
-        <service android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+        <!-- 优化x5内核首次启动卡顿黑屏现象 -->
+        <service
+            android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
             android:label="dexopt"
-            android:process=":dexopt"/>
+            android:process=":dexopt" />
+
         <activity
             android:name=".ui.h5.H5SpecialAct"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="H5页面"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".photopick.PhotoPickerActivity"
@@ -596,7 +622,6 @@
             android:exported="false"
             android:label="@string/platform_intervention_request"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.goods_detail.SearchGoodsActivity"
             android:exported="false"
@@ -675,8 +700,8 @@
         <activity
             android:name=".ui.discover.jingxuan.ArticleH5Act"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="文章H5"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.discover.jingxuan.TagDetailActivity"
@@ -691,73 +716,62 @@
         <activity
             android:name=".ui.discover_new.comment.CommentListAct"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="@string/comments"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity
             android:name=".ui.discover_new.comment.CommentDetailAct"
             android:exported="false"
             android:label="@string/comments"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity
             android:name=".ui.discover.guanzhu.FindSelectShopAct"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="查找关注的商铺"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity
             android:name=".ui.discover.quanzi.DiscoverTieziAct"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="发现帖子"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity
             android:name=".ui.discover.quanzi.DiscoverTieziDetailAct"
             android:exported="false"
             android:label="动态详情"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.discover.quanzi.DiscoverPublishPhotoAct"
             android:exported="false"
             android:label="@string/discover_fabiaodongtai"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.help.SearchQuestionAct"
             android:exported="false"
             android:label="问题搜索"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.help.HelpClassAct"
             android:exported="false"
             android:label="帮助分类"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".newchat.ui.ChatActivity"
             android:exported="false"
             android:label="聊天"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".newchat.ui.MessageActivity"
             android:exported="false"
             android:label="消息列表"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".newchat.ui.StoreMsgActivity"
             android:exported="false"
             android:label="会员和订单消息"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".newchat.ui.FoundMsgActivity"
             android:exported="false"
@@ -768,14 +782,12 @@
             android:exported="false"
             android:label="@string/search_customer"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.discover.other.ExperienceDetailAct"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="心得详情"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity
             android:name=".ui.message.SystemMsgAct"
             android:exported="false"
@@ -789,8 +801,8 @@
         <activity
             android:name=".newchat.ui.CustomerListActivity"
             android:exported="false"
-            android:launchMode="singleTask"
             android:label="@string/customer_list"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".newchat.ui.SwitchOtherActivity"
@@ -818,10 +830,10 @@
             android:exported="false"
             android:label="@string/my_profit"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".ui.my_profit.ProfitExtractAct"-->
-            <!--android:exported="false"-->
-            <!--android:screenOrientation="portrait" />-->
+        <!-- <activity -->
+        <!-- android:name=".ui.my_profit.ProfitExtractAct" -->
+        <!-- android:exported="false" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".ui.my_profit.DetailOrderRecordAct"
             android:exported="false"
@@ -957,17 +969,16 @@
             android:exported="false"
             android:label="@string/first_aishangxin"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".ui.core.KouBeiAct"-->
-            <!--android:exported="false"-->
-            <!--android:label="@string/first_koubeire"-->
-            <!--android:screenOrientation="portrait" />-->
+        <!-- <activity -->
+        <!-- android:name=".ui.core.KouBeiAct" -->
+        <!-- android:exported="false" -->
+        <!-- android:label="@string/first_koubeire" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".ui.core.KouBeiActNew"
             android:exported="false"
             android:label="@string/first_koubeire"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.core.KouBeiActNews"
             android:exported="false"
@@ -1033,10 +1044,10 @@
             android:exported="false"
             android:label=" 确认订单"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".ui.plus.MyPlusAct"-->
-            <!--android:exported="false"-->
-            <!--android:screenOrientation="portrait" />-->
+        <!-- <activity -->
+        <!-- android:name=".ui.plus.MyPlusAct" -->
+        <!-- android:exported="false" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".ui.plus.SuperProductsAct"
             android:exported="false"
@@ -1057,14 +1068,15 @@
             android:exported="false"
             android:label="@string/logistics_info"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.fragment.SortAct"
+        <activity
+            android:name=".ui.fragment.SortAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.change_user.ModifyAct"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="账号修改"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".newchat.ui.CouponMsgAct"
@@ -1074,73 +1086,85 @@
         <activity
             android:name=".newchat.util.ChatDialog"
             android:exported="false"
-            android:theme="@style/chatDialog"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.more_credit.MoreCreditAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/chatDialog" />
+        <activity
+            android:name=".ui.more_credit.MoreCreditAct"
             android:exported="false"
             android:label="@string/prepaid_phone_records"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.new3_login.LoginEntryAct"
             android:exported="false"
+            android:label="登录"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:label="登录"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".ui.coupon.UserCouponListAct"
+        <activity
+            android:name=".ui.coupon.UserCouponListAct"
             android:exported="false"
             android:label="使用优惠券"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.coupon.CouponGoodsAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.coupon.CouponGoodsAct"
             android:exported="false"
             android:label="优惠商品"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.discover.VideoPlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="优惠商品"
-            android:exported="false" />
+            android:exported="false"
+            android:label="优惠商品" />
         <activity
             android:name=".ui.LuckWheelPanActivity"
-            android:label="大转盘规则"
             android:exported="false"
+            android:label="大转盘规则"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.task.TaskCenterAct"
+        <activity
+            android:name=".ui.task.TaskCenterAct"
             android:exported="false"
             android:label="任务中心"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".wxapi.WXPayEntryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:theme="@style/wx"
             android:label="微信支付回调"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.new3_login.New3LoginAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/wx" />
+        <activity
+            android:name=".ui.new3_login.New3LoginAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.find_send.FindSendPictureTextAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.find_send.FindSendPictureTextAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.find_send.SelectPicVideoAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.find_send.SelectPicVideoAct"
             android:exported="false"
             android:label="选择视频和图片"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.find_send.NearAddressAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.find_send.NearAddressAct"
             android:exported="false"
             android:label="搜索附近位置"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.find_send.AddTopicAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.find_send.AddTopicAct"
             android:exported="false"
             android:label="添加查找话题"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.find_send.SelectGoodsAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.find_send.SelectGoodsAct"
             android:exported="false"
             android:label="查找商品"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.find_send.BrowseImageVideoAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.find_send.BrowseImageVideoAct"
             android:exported="false"
             android:label="图片"
-            android:screenOrientation="portrait"/>
             android:screenOrientation="portrait" />
+        android:screenOrientation="portrait" />
         <activity
             android:name=".ui.discover_new.HotExpertRankActivity"
             android:exported="true"
@@ -1185,10 +1209,11 @@
             android:exported="true"
             android:label="商品视频"
             android:screenOrientation="portrait" />
-        <activity android:name=".utils.player.SmallMediaPlayer"
+        <activity
+            android:name=".utils.player.SmallMediaPlayer"
             android:exported="true"
             android:label="视频"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.new_user.NewUserPageActivity"
             android:exported="true"
@@ -1219,24 +1244,23 @@
             android:exported="true"
             android:label="邀请记录"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.task.NewTaskCenterAct"
+        <activity
+            android:name=".ui.task.NewTaskCenterAct"
             android:exported="true"
             android:label="任务中心"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".widget.BlogGoodsShareDialog"
             android:exported="false"
-            android:theme="@style/chatDialog"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/chatDialog" />
         <activity
             android:name=".ui.GoldEggLuckyWheelPanActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.integral_team.TeamIntegralActivity"
-             android:hardwareAccelerated="false"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.integral_team.TeamHistoryActivity"
@@ -1244,9 +1268,42 @@
         <activity
             android:name=".ui.discover_new.VerifyBlogActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.discover_new.comment.CommentRejectedAct"
+        <activity
+            android:name=".ui.discover_new.comment.CommentRejectedAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".demo.DemoAct"></activity>
+        <activity android:name=".demo.DemoGoodsDetailAct"></activity>
+        <activity android:name=".demo.DemoPingpaiAct"></activity>
+        <activity android:name=".demo.demo1.DemoImage"></activity>
+        <activity android:name=".demo.DemoNewFeedBackAct"></activity>
+        <activity android:name=".shunlianyoupin.ShunlianyoupinAct"></activity>
+        <activity
+            android:name=".demo.demo1.Main2123Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".yjfk.OpinionActivity">
+
+        </activity>
+        <activity android:name=".yjfk.Opinion1Activity">
+
+        </activity>
+        <activity android:name=".yjfk.OpinionSuccess">
+
+        </activity>
+        <activity android:name=".yjfk.ComplaintActivity">
+
+        </activity>
+        <activity android:name=".yjfk.ComplaninRecordActivity">
+
+        </activity>
+        <activity android:name=".yjfk.ExpandableListViewDemoActivity">
+
+        </activity>
+        <activity android:name=".yjfk.OnTouchActivity" />
+        <activity android:name=".basementview.BasementMainActivity">
+
+        </activity>
     </application>
 
 </manifest>

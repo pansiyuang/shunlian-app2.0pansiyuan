@@ -171,6 +171,7 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
         gone(rv_list);
     }
 
+
     @Override
     public void setNewData(CoreNewEntity coreNewEntity) {
 

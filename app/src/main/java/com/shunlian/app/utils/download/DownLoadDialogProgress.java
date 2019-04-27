@@ -56,7 +56,7 @@ public class DownLoadDialogProgress {
                 nomalBuildl.dismiss();
             }
         },time);
-    };
+    }
     public void dissMissDialog(){
         if(nomalBuildl!=null&&nomalBuildl.isShowing()){
             nomalBuildl.dismiss();

@@ -121,7 +121,6 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
 
         manager = new GridLayoutManager(baseActivity, 3);
         recycler_sort.setLayoutManager(manager);
-
         listView.post(() -> lvTotalHeight = listView.getMeasuredHeight());
     }
 

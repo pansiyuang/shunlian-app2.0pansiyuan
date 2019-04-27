@@ -153,4 +153,5 @@ public class MyTextView extends TextView {
         }
         setLayoutParams(layoutParams);
     }
+
 }

@@ -23,9 +23,12 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFirstPage;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader1;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
+import com.shunlian.app.yjfk.ComplaintActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,8 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     private boolean isFirst = false, isRefresh = false/*, isShow = true*/;
     private View rootView;
     private boolean isUp = true, isStop = false,isShow=false;
+    public   NestedSlHeader1 header;
+//    public MyLinearLayout mllayout_title;
 
 
     public static BaseFragment getInstance(String channel_id, String chinnel_name) {
@@ -63,6 +68,9 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         fragment.setArguments(args);
         return fragment;
     }
+//    public void setmllayout_title(MyLinearLayout mllayout_title){
+//        this.mllayout_title=mllayout_title;
+//    }
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -92,7 +100,12 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
             @Override
             public void onRefresh() {
 //                isShow = false;
-                refresh();
+                if (header.isgoSecond){
+                    ComplaintActivity.startAct(getContext());
+                    refresh();
+                }else {
+                    refresh();
+                }
             }
         });
 
@@ -190,6 +203,14 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
                         }
                     }
                 }
+//                if (dy > 80) {
+//                    FirstPageFrag.mllayout_title.setAlpha(1);
+//                } else if (dy > 0) {
+//                    float alpha = ((float) dy) / 80;
+//                    FirstPageFrag.mllayout_title.setAlpha(alpha);
+//                } else {
+//                    FirstPageFrag.mllayout_title.setAlpha(0);
+//                }
             }
         });
     }
@@ -207,7 +228,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     @Override
     protected void initData() {
         //新增下拉刷新
-        NestedSlHeader header = new NestedSlHeader(getContext());
+         header = new NestedSlHeader1(getContext());
         lay_refresh.setRefreshHeaderView(header);
         //end
         if (getArguments() != null)

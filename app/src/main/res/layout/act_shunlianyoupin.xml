@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--<com.shunlian.app.widget.MyRelativeLayout-->
+        <!--android:id="@+id/rl_title"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="44dp"-->
+        <!--android:background="@color/white">-->
+
+        <!--<com.shunlian.app.widget.MyImageView-->
+            <!--android:id="@+id/mout_youpin"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:padding="15dp"-->
+            <!--android:src="@mipmap/icon_common_back_black" />-->
+
+        <!--<com.shunlian.app.widget.MyTextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:text="顺动优品"-->
+            <!--android:textSize="18sp"/>-->
+
+        <!--<com.shunlian.app.widget.MyImageView-->
+            <!--android:id="@+id/miv_logo"-->
+            <!--android:layout_width="21dp"-->
+            <!--android:layout_height="21dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="16dp"-->
+            <!--android:src="@mipmap/icon_login_logo"-->
+            <!--/>-->
+
+
+    <!--</com.shunlian.app.widget.MyRelativeLayout>-->
+
+
+    <com.shunlian.app.widget.MyFrameLayout
+        android:id="@+id/fl_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mbottom_bar_youpin" >
+
+    </com.shunlian.app.widget.MyFrameLayout>
+    <include
+        android:id="@+id/mbottom_bar_youpin"
+        layout="@layout/act_shunlianyoupin_mennu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
+    <!--<ImageView-->
+        <!--android:id="@+id/iv_main"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@mipmap/ic_liandongyoupin_huidaodingbu"/>-->
+
+</RelativeLayout>

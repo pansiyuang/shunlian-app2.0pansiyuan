@@ -353,4 +353,8 @@
         <!--<item name="android:windowExitAnimation">@anim/pop_hide</item>-->
         <!-- 指定消失的动画xml 从下往上显示-->
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

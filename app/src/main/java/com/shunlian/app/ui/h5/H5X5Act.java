@@ -485,10 +485,39 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                try{
+                    CookieSyncManager.createInstance(H5X5Act.this);
+                    CookieManager cookieManager = CookieManager.getInstance();
+                    String cookie = cookieManager.getCookie(url);//从H5获取cookie
+                    LogUtil.augusLogW("onPageFinished cookie :" + cookie);
+                    CookieSyncManager.getInstance().sync();
+
+                    //将cookie存到数据库
+//                if(!TextUtils.isEmpty(cookie)){
+//                    String[] cookies = cookie.split(";");
+//                    for(int i=0;i<cookies.length;i++){
+//                        String item = cookies[i];
+//                        int index = item.indexOf("=");
+//                        LogUtil.augusLogW("11111onPageFinished cookie :"+item.substring(0, index)+":"+item.substring(index+1));
+//                    }
+//                }
+                    if(!TextUtils.isEmpty(cookie)){
+                        String[] cookies = cookie.split(";");
+                        for(int i=0;i<cookies.length;i++){
+                            String item = cookies[i];
+                            if (item.contains("token=")){
+                                int index = item.indexOf("token=");
+                                LogUtil.augusLogW("mytoken---:"+item.substring(index+6));
+                                SharedPrefUtil.saveSharedUserString("token", item.substring(index+6));
+                            }
+                        }
+                    }
+                }catch (Exception e){
+                    SharedPrefUtil.saveSharedUserString("token", "");
+                }
                 super.onPageFinished(view, url);
-//                addCookie(url);
                 LogUtil.augusLogW("=onPageFinished=======" + url);
-                if (!isFinishing()) {
+                if (!H5X5Act.this.isFinishing()) {
                     if (!isEmpty(view.getTitle())) {
                         title = view.getTitle();
                         setTitle();
@@ -655,9 +684,11 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
 
         });
         addCookie(h5Url);
-        mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString() + " " + SharedPrefUtil
-//        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
-                .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
+//        mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString() + " " + SharedPrefUtil
+////        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
+//                .getCacheSharedPrf("User-Agent", "MengTian Android 1.1.1/0.0.0"));
+        mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString()
+                + " ShunLian Android " + Build.VERSION.RELEASE + "/" + SharedPrefUtil.getCacheSharedPrf("localVersion", "1.0.0"));
     }
 
     @Override
@@ -688,10 +719,11 @@ public class H5X5Act extends BaseActivity implements X5WebView.ScrollListener {
             return;
         //add
         String token = SharedPrefUtil.getSharedUserString("token", "");
-        String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
+
+        String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "MengTian Android 4.0.0/1.0.0");
         String member_id = SharedPrefUtil.getSharedUserString("member_id", "");
         String code = SharedPrefUtil.getSharedUserString("invite_code", "");
-
+        LogUtil.augusLogW("addtoken---:"+token);
         CookieSyncManager.createInstance(this);
 //        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();

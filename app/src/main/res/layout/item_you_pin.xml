@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginBottom="16dp"
+    android:id="@+id/mllayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mll_root2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_list"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_list1"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#333333"/>
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_list2"
+                android:textSize="14sp"
+                android:textColor="#999999"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_list3"
+                android:textSize="15sp"
+                android:textColor="#FF1D58"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+    </com.shunlian.app.widget.MyLinearLayout>
+
+</com.shunlian.app.widget.MyLinearLayout>

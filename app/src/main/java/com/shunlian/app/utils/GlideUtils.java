@@ -159,7 +159,7 @@ public class GlideUtils {
      * @param isFade    是否需要动画
      */
 
-    public void loadImage(Context context, ImageView imageView, String imgUrl, boolean isFade) {
+    public void                                                                                                                                                                                                                                                                                                                                                                                                                         loadImage(Context context, ImageView imageView, String imgUrl, boolean isFade) {
         if (imageView == null||context==null) return;
         if (isFade) {
             Glide.with(context)

@@ -806,7 +806,7 @@
         android:id="@+id/view_bg"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/pink_color" />
+        android:background="@color/pink_color"/>
 
 
     <com.shunlian.app.widget.MyRelativeLayout

@@ -285,7 +285,6 @@ public class SwipeMenuLayout extends ViewGroup {
                     }
                     mLastP.set(ev.getRawX(), ev.getRawY());
                     mFirstP.set(ev.getRawX(), ev.getRawY());//2016 11 03 add,判断手指起始落点，如果距离属于滑动了，就屏蔽一切点击事件。
-
                     //如果down，view和cacheview不一样，则立马让它还原。且把它置为null
                     if (mViewCache != null) {
                         if (mViewCache != this) {

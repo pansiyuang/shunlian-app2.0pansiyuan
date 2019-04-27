@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.MyRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
+
+    <!--<view-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@mipmap/base_i">-->
+        <!---->
+    <!--</view>-->
     <com.shunlian.app.widget.refresh.turkey.FirstSetpView
         android:id="@+id/first_step_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
+    <!--<View-->
+        <!--android:id="@+id/view_bg"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@mipmap/base_ic" />-->
 
     <com.shunlian.app.widget.refresh.turkey.SecondStepView
         android:id="@+id/second_step_view"

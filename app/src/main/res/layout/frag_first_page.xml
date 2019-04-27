@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.MyRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mrlayout_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--<View-->
+        <!--android:id="@+id/view_bg"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:background="@color/white" />-->
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/white"
         android:gravity="center_vertical"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyLinearLayout
@@ -230,7 +236,7 @@
         android:gravity="center"
         android:layout_marginBottom="40dp"
         android:layout_marginRight="16dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical">
 
         <com.shunlian.app.widget.NewTextView

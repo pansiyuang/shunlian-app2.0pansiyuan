@@ -12,6 +12,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
+import com.shunlian.app.yjfk.OpinionActivity;
 
 import butterknife.BindView;
 
@@ -87,7 +88,7 @@ public class BeforeFeedBackAct extends BaseActivity implements View.OnClickListe
                 intent.putExtra("goodsid", goodsid);
                 intent.putExtra("type", "1");
                 startActivity(intent);*/
-                Common.goGoGo(this, "help");
+                OpinionActivity.startAct(this);
                 break;
             case R.id.rLayout_mores:
                 Intent intents = new Intent(this, NewFeedBackAct.class);

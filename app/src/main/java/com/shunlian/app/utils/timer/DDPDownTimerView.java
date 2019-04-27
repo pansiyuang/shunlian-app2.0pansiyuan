@@ -60,7 +60,7 @@ public class DDPDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected int[] getLabelWidthHeight() {
-        int[] wh = {15,15};
+        int[] wh = {20,20};
         return wh;
     }
 
@@ -88,7 +88,7 @@ public class DDPDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected int[] getTimeUnitPadding() {
-        int[] padding = {2,0,2,2};
+        int[] padding = {0,0,0,0};
         return padding;
     }
 

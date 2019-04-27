@@ -173,6 +173,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private String currentDiscoverFlag;
     private PromptDialog promptDialog;
     public static boolean refreshBlogList = false;
+    private int mCurrenTabId;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -771,6 +772,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
         }
+
         //春节活动
 
     }
@@ -855,6 +857,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     protected void onSaveInstanceState(Bundle outState) {
         //防止app崩溃后造成fragment重叠
         //super.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

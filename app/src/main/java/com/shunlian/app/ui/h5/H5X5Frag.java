@@ -498,7 +498,7 @@ public abstract class H5X5Frag extends BaseFragment implements X5WebView.ScrollL
         addCookie(h5Url);
         mwv_h5.getSettings().setUserAgentString(webSetting.getUserAgentString() + " " + SharedPrefUtil
 //        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
-                .getCacheSharedPrf("User-Agent", "ShunLian Android 1.1.1/0.0.0"));
+                .getCacheSharedPrf("User-Agent", "MengTian Android 1.1.1/0.0.0"));
     }
 
     @Override
@@ -531,7 +531,7 @@ public abstract class H5X5Frag extends BaseFragment implements X5WebView.ScrollL
             return;
         //add
         String token = SharedPrefUtil.getSharedUserString("token", "");
-        String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 4.0.0/1.0.0");
+        String ua = SharedPrefUtil.getCacheSharedPrf("User-Agent", "MengTian Android 4.0.0/1.0.0");
         String member_id = SharedPrefUtil.getSharedUserString("member_id", "");
         String code = SharedPrefUtil.getSharedUserString("invite_code", "");
 

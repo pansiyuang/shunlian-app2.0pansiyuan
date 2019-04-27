@@ -31,8 +31,14 @@ import com.shunlian.app.newchat.entity.ServiceEntity;
 import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.newchat.entity.SystemMessageEntity;
+import com.shunlian.app.shunlianyoupin.YouPingListEntity;
+import com.shunlian.app.shunlianyoupin.YouPingbannerEntity;
 import com.shunlian.app.ui.new3_login.New3LoginEntity;
 import com.shunlian.app.ui.new3_login.New3LoginInfoTipEntity;
+import com.shunlian.app.yjfk.ComplaintTypesEntity;
+import com.shunlian.app.yjfk.ComplanintListEntity;
+import com.shunlian.app.yjfk.Opinionfeedback1Entity;
+import com.shunlian.app.yjfk.OpinionfeedbackEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -109,6 +115,9 @@ public interface ApiService {
 
     @GET("user/getQrCard")
     Call<BaseEntity<GetQrCardEntity>> userGetQrCard(@QueryMap Map<String, String> map);
+
+    @GET("chat/broadcast/shareQrcard")
+    Call<BaseEntity<PosterEntity>> shareQrcard(@QueryMap Map<String, String> map);
 
     @GET("member/checkin/respond")
     Call<BaseEntity<CheckInRespondEntity>> checkinRespond(@QueryMap Map<String, String> map);
@@ -3251,4 +3260,43 @@ public interface ApiService {
      */
     @GET("turntable/myPrizes")
     Call<BaseEntity<SaturdayDrawRecordEntity>> getDrawRecord(@QueryMap Map<String,String> map);
+    /**
+     * 优品首页banner列表
+     * @return
+     */
+    @GET
+    Call<BaseEntity<YouPingbannerEntity>> getYouPinBanner(@Url String url,@QueryMap Map<String, String> map);
+    /**
+     * 优品首页banner列表
+     * @return
+     */
+    @GET
+    Call<BaseEntity<YouPingListEntity>> getYoulist(@Url String url,@QueryMap Map<String, String> map);
+    /**
+     *我要反馈-公告和广告
+     * @return
+     */
+    @POST("personalcenter/feedbackAnnouncement")
+    Call<BaseEntity<OpinionfeedbackEntity>> getOpinionfeedback(@QueryMap Map<String,String> map);
+    /**
+     *投诉类型列表
+     * @return
+     */
+    @GET("personalcenter/complaintTypes")
+    Call<BaseEntity<ComplaintTypesEntity>> getcomplaintTypes(@QueryMap Map<String,String> map);
+    /**
+     *投诉-提交
+     * @return
+     */
+    @POST("personalcenter/submitComplaint")
+    Call<BaseEntity<Opinionfeedback1Entity>> getsubmitComplaint(@Body RequestBody body);
+    /**
+     *投诉-记录
+     * @return
+     */
+    @GET("personalcenter/complaintList")
+    Call<BaseEntity<ComplanintListEntity>> getcomplaintList(@QueryMap Map<String,String> map);
+
+
+
 }

@@ -150,7 +150,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     }
 
     @Override
-    public void getApiData(final ActivityListEntity activityListEntity, int allPage, final int page, final List<ActivityListEntity.MData.Good.MList> list) {
+    public void getApiData(final ActivityListEntity activityListEntity, int allPage, int page, final List<ActivityListEntity.MData.Good.MList> list) {
         if (rv_menu==null)
             return;
         if (dayDayMenuAdapter == null) {

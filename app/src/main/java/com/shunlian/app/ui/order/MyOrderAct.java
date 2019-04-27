@@ -121,7 +121,6 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
         EventBus.getDefault().register(this);
         pageItem = getIntent().getIntExtra("item",0);
         int width = TransformUtil.dip2px(this, 10);

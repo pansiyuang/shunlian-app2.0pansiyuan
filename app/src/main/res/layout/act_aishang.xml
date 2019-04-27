@@ -27,12 +27,12 @@
                 android:background="@color/white"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="bottom"
-                    app:layout_collapseMode="pin" />
+                <!--<android.support.v7.widget.Toolbar-->
+                    <!--android:id="@+id/toolbar"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_gravity="bottom"-->
+                    <!--app:layout_collapseMode="pin" />-->
 
                 <com.shunlian.app.widget.MyLinearLayout
                     android:layout_width="match_parent"

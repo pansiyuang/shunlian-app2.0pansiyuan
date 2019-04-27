@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/benjin_5"
+        android:padding="9dp"
+        android:text="1111"
+        android:id="@+id/mtv_type1"
+        android:textColor="#767676"
+        android:textSize="14sp" />
+
+
+</com.shunlian.app.widget.MyLinearLayout>

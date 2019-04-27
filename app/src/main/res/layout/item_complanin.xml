@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:layout_marginTop="16dp"
+    android:background="#FFFFFF">
+
+
+    <TextView
+        android:id="@+id/mtv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="111"
+        android:textColor="#484848"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/mtv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:text="1111"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/mtv3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv1"
+        android:layout_marginLeft="16dp"
+        android:text="1111"
+        android:textColor="#484848"
+        android:textSize="11sp" />
+</com.shunlian.app.widget.MyRelativeLayout>

@@ -412,7 +412,6 @@
     <string name="platform_intervention_request">申请平台介入</string>
 
 
-
     <!--选择图片-->
 
     <string name="all_image">所有图片</string>
@@ -889,4 +888,5 @@
     <string name="ready_to_unFocus">确定取消关注%s吗？</string>
     <string name="give_up">放弃</string>
     <string name="unfollow">取消关注</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

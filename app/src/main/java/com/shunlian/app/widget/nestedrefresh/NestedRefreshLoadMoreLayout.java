@@ -318,7 +318,6 @@ public class NestedRefreshLoadMoreLayout extends ViewGroup implements NestedScro
             measureChildWithMargins(headerView, widthMeasureSpec, 0, heightMeasureSpec, 0);
             MarginLayoutParams lp = ((MarginLayoutParams) headerView.getLayoutParams());
             mHeaderHeight = headerView.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
-
             mRefreshTriggerOffset = ((DragListener) mHeaderView).getDragTriggerOffset(this, mHeaderView, mHeaderHeight);
             mRefreshMaxDragOffset = ((DragListener) mHeaderView).getDragMaxOffset(this, mHeaderView, mHeaderHeight);
             mRefreshHeaderHeight = ((DragListener) mHeaderView).getRefreshOrLoadMoreHeight(this, mHeaderView, mHeaderHeight);
@@ -330,7 +329,7 @@ public class NestedRefreshLoadMoreLayout extends ViewGroup implements NestedScro
                 mRefreshTriggerOffset = mRefreshHeaderHeight;
             }
             if (mRefreshMaxDragOffset < mHeaderHeight) {
-                mRefreshMaxDragOffset = mHeaderHeight * 2;
+                mRefreshMaxDragOffset = mHeaderHeight * 3;
             }
         }
         // target

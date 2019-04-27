@@ -111,7 +111,7 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
 
     //设置https请求头
     public void setHeader() {
-        SharedPrefUtil.saveCacheSharedPrf("User-Agent", "ShunLian Android " + Build.VERSION.RELEASE + "/" + SharedPrefUtil.getCacheSharedPrf("localVersion", "1.0.0"));
+        SharedPrefUtil.saveCacheSharedPrf("User-Agent", "MengTian Android " + Build.VERSION.RELEASE + "/" + SharedPrefUtil.getCacheSharedPrf("localVersion", "1.0.0"));
         SharedPrefUtil.saveCacheSharedPrf("X-Device-ID", UUID.nameUUIDFromBytes(Build.SERIAL.getBytes()).toString().toUpperCase());
         SharedPrefUtil.saveCacheSharedPrf("resolution", DeviceInfoUtil.getDeviceRatio(this));
         SharedPrefUtil.saveCacheSharedPrf("deviceWidth", String.valueOf(DeviceInfoUtil.getDeviceWidth(this)));
@@ -123,7 +123,7 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
 
     public Map<String, String> setWebviewHeader() {
         Map<String, String> extraHeaders = new HashMap<String, String>();
-        extraHeaders.put("User-Agent", SharedPrefUtil.getCacheSharedPrf("User-Agent", "ShunLian Android 5.1.1/1.0.0"));
+        extraHeaders.put("User-Agent", SharedPrefUtil.getCacheSharedPrf("User-Agent", "MengTian Android 5.1.1/1.0.0"));
         extraHeaders.put("X-Device-ID", SharedPrefUtil.getCacheSharedPrf("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D"));
         extraHeaders.put("resolution", SharedPrefUtil.getCacheSharedPrf("resolution", "720x1184"));
         extraHeaders.put("DeviceIp", SharedPrefUtil.getCacheSharedPrf("DeviceIp", "192.168.1.1"));

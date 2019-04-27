@@ -95,7 +95,7 @@ public final class Constant {
 
     public static String SHARE_TYPE = "";//分享类型
     public static String SHARE_ID = "";//分享id
-    public static boolean ISBALANCE=false;
+    public static boolean ISBALANCE=false;//区分收益提现，和其他
 
     public static final String PLUS_ADD = H5_HOST+"plus";
     public static final int BUBBLE_DUR =8;

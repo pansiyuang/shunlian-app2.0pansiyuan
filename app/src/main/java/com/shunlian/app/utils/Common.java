@@ -80,6 +80,7 @@ import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.shunlianyoupin.ShunlianyoupinAct;
 import com.shunlian.app.ui.GoldEggLuckyWheelPanActivity;
 import com.shunlian.app.ui.LuckWheelPanActivity;
 import com.shunlian.app.ui.MainActivity;
@@ -300,6 +301,17 @@ public class Common {
             return;
         }
         switch (type) {
+            case "mengtian_url":
+                H5X5Act.startAct(context, params[0], H5X5Act.MODE_SONIC);
+                break;
+            case "mengtian_home":
+            case "mengtian_logout":
+                int version=Integer.parseInt(SharedPrefUtil.getSharedUserString("loginVerion","0"));
+                version++;
+                clearLoginInfo();
+                SharedPrefUtil.saveSharedUserString("loginVerion",""+version);
+                ShunlianyoupinAct.startAct(context);
+                break;
             case "incomeList"://收益详情(详细订单记录)
                 DetailOrderRecordAct.startAct(context);
                 break;
@@ -1667,6 +1679,7 @@ public class Common {
                 String id3 = "";
                 String id4 = "";
                 try {
+//                    slmall://goods/item.json?id=138471&&id1=89
                     if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
                         id = java.net.URLDecoder.decode(Common.getURLParameterValue(url, "id"));
                     if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))

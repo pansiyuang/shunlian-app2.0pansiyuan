@@ -2,16 +2,17 @@ package com.shunlian.app.widget.nestedrefresh;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.nestedrefresh.base.BaseHeader;
 import com.shunlian.app.widget.refresh.turkey.FirstSetpView;
 import com.shunlian.app.widget.refresh.turkey.SecondStepView;
+import com.shunlian.app.yjfk.ComplaintActivity;
 
 
 /**
@@ -24,6 +25,7 @@ public class NestedSlHeader extends BaseHeader {
     private static final int PULL_TO_REFRESH = 1;
     private static final int RELEASE_TO_REFRESH = 2;
     private static final int REFRESHING = 3;
+    private static final int REFRESH_THE_SECOND_FLOOR = 4;
 
     private AnimationDrawable secondAnimation;
     private int headerViewHeight;
@@ -32,10 +34,13 @@ public class NestedSlHeader extends BaseHeader {
     //    private  TextView tv_pull_to_refresh;
     private MyImageView miv_release;
     private View headerView;
+    public boolean isgoSecond=false;
     private boolean isDone = false, isRelease = false;
-
+//    private int i;
+    private Context context1;
     public NestedSlHeader(Context context) {
         super(context);
+        context1=context;
         headerView = LayoutInflater.from(context).inflate(R.layout.sl_refresh_view, this, true);
         miv_release = (MyImageView) headerView.findViewById(R.id.miv_release);
         firstSetpView = (FirstSetpView) headerView.findViewById(R.id.first_step_view);
@@ -74,12 +79,17 @@ public class NestedSlHeader extends BaseHeader {
 //        progressBar.setVisibility(VISIBLE);
 //        tvRefresh.setText("REFRESHING");
     }
-
     @Override
     public void onDrag(int y, int offset) {
+        Log.d("onDrag: ", String.valueOf(y));
+        Log.d("onDrag: ", String.valueOf(offset));
         if (y > 0 && !isRelease) {
-            if (y > offset) {
-                changeHeaderByState(RELEASE_TO_REFRESH);
+//            if (y > offset) {
+//                if (y > (2.5*offset)) {
+//                    changeHeaderByState(REFRESH_THE_SECOND_FLOOR);
+//                }else {
+                    changeHeaderByState(RELEASE_TO_REFRESH);
+
             } else {
                 firstSetpView.setCurrentProgress(Math.abs(y) / (1.0f * getHeight()));
                 firstSetpView.postInvalidate();
@@ -116,7 +126,7 @@ public class NestedSlHeader extends BaseHeader {
 //        }
 
 
-    }
+
 
     @Override
     public void onRelease() {
@@ -149,6 +159,7 @@ public class NestedSlHeader extends BaseHeader {
     private void changeHeaderByState(int state) {
         switch (state) {
             case DONE:
+                Log.e("changeHeaderByState: ", "DONE,DONE,DONE,DONE");
                 headerView.setPadding(0, -headerViewHeight, 0, 0);
 //                firstSetpView.setVisibility(VISIBLE);
                 secondAnimation.stop();
@@ -156,6 +167,7 @@ public class NestedSlHeader extends BaseHeader {
 //                miv_release.setVisibility(INVISIBLE);
                 break;
             case RELEASE_TO_REFRESH:
+                Log.e("changeHeaderByState: ", "RELEASE_TO_REFRESH,RELEASE_TO_REFRESH,RELEASE_TO_REFRESH,RELEASE_TO_REFRESH");
                 firstSetpView.setVisibility(INVISIBLE);
                 secondStepView.setVisibility(INVISIBLE);
                 miv_release.setVisibility(VISIBLE);
@@ -163,22 +175,32 @@ public class NestedSlHeader extends BaseHeader {
 
                 break;
             case PULL_TO_REFRESH:
+                Log.e("changeHeaderByState: ", "PULL_TO_REFRESH,PULL_TO_REFRESH,PULL_TO_REFRESH,PULL_TO_REFRESH");
                 firstSetpView.setVisibility(VISIBLE);
                 secondAnimation.stop();
                 secondStepView.setVisibility(INVISIBLE);
                 miv_release.setVisibility(INVISIBLE);
-
                 break;
             case REFRESHING:
+                Log.e("changeHeaderByState: ", "REFRESHING,REFRESHING,REFRESHING,REFRESHING");
                 firstSetpView.setVisibility(INVISIBLE);
                 secondStepView.setVisibility(VISIBLE);
                 miv_release.setVisibility(INVISIBLE);
                 secondAnimation.stop();
                 secondAnimation.start();
-
                 break;
+//            case REFRESH_THE_SECOND_FLOOR:
+//                Log.e("changeHeaderByState: ", "REFRESH_THE_SECOND_FLOOR,REFRESH_THE_SECOND_FLOOR");
+//                isgoSecond=true;
+//                firstSetpView.setVisibility(INVISIBLE);
+//                secondStepView.setVisibility(INVISIBLE);
+//                miv_release.setVisibility(VISIBLE);
+
+//                ComplaintActivity.startAct(getContext());
+//                }
             default:
                 break;
         }
+//        i=0;
     }
 }

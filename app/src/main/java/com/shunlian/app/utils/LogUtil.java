@@ -73,4 +73,7 @@ public class LogUtil {
             Log.w("http", msg);// 打印剩余日志
         }
     }
+
+    public static void v(String cookies, String s) {
+    }
 }

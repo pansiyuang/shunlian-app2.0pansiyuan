@@ -217,7 +217,6 @@ public class NewPersonalCenterFrag extends BaseFragment implements IPersonalView
     private boolean isShowGuideMe=false;//是否显示过引导 false,没有显示过
     private CommonDialogUtil commonDialogUtil;
     private boolean isHidden = false;
-    //    private Timer outTimer;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.frag_mine_new, container, false);
