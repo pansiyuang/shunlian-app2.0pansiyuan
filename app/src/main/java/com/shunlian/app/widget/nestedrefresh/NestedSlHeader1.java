@@ -8,11 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.ui.core.AishangAct;
+import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
+import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.nestedrefresh.base.BaseHeader;
 import com.shunlian.app.widget.refresh.turkey.FirstSetpView;
 import com.shunlian.app.widget.refresh.turkey.SecondStepView;
-import com.shunlian.app.yjfk.ComplaintActivity;
 
 
 /**
@@ -25,8 +28,9 @@ public class NestedSlHeader1 extends BaseHeader {
     private static final int PULL_TO_REFRESH = 1;
     private static final int RELEASE_TO_REFRESH = 2;
     private static final int REFRESHING = 3;
-    private static final int REFRESH_THE_SECOND_FLOOR = 4;
-
+    private static final int GO_SECOND = 4;
+    public boolean isgoSecond = false;
+    private NewTextView ntv_go_second;
     private AnimationDrawable secondAnimation;
     private int headerViewHeight;
     private SecondStepView secondStepView;
@@ -34,17 +38,20 @@ public class NestedSlHeader1 extends BaseHeader {
     //    private  TextView tv_pull_to_refresh;
     private MyImageView miv_release;
     private View headerView;
-    public boolean isgoSecond=false;
     private boolean isDone = false, isRelease = false;
-//    private int i;
+    //    private int i;
     private Context context1;
-    public NestedSlHeader1(Context context) {
+    private CateGoryFrag cateGoryFrag;
+
+    public NestedSlHeader1(Context context, CateGoryFrag cateGoryFrag) {
         super(context);
-        context1=context;
+        this.cateGoryFrag = cateGoryFrag;
+        context1 = context;
         headerView = LayoutInflater.from(context).inflate(R.layout.sl_refresh_view, this, true);
         miv_release = (MyImageView) headerView.findViewById(R.id.miv_release);
         firstSetpView = (FirstSetpView) headerView.findViewById(R.id.first_step_view);
         secondStepView = (SecondStepView) headerView.findViewById(R.id.second_step_view);
+        ntv_go_second = headerView.findViewById(R.id.ntv_go_second);
         secondStepView.setBackgroundResource(R.drawable.turkey_animation);
         secondAnimation = (AnimationDrawable) secondStepView.getBackground();
         measureView(headerView);
@@ -72,22 +79,32 @@ public class NestedSlHeader1 extends BaseHeader {
 
     @Override
     public void onRefresh() {
-        changeHeaderByState(REFRESHING);
+        if (isgoSecond) {
+            cateGoryFrag.lay_refresh.setRefreshing(false);
+            AishangAct.startAct(getContext());
+        } else {
+            changeHeaderByState(REFRESHING);
+            cateGoryFrag.refresh();
+        }
+
 //        ivSuccess.setVisibility(GONE);
 //        ivArrow.clearAnimation();
 //        ivArrow.setVisibility(GONE);
 //        progressBar.setVisibility(VISIBLE);
 //        tvRefresh.setText("REFRESHING");
     }
+
     @Override
     public void onDrag(int y, int offset) {
+
         Log.d("onDrag: ", String.valueOf(y));
         Log.d("onDrag: ", String.valueOf(offset));
         if (y > 0 && !isRelease) {
+            isgoSecond = false;
             if (y > offset) {
-                if (y > (2.5*offset)) {
-                    changeHeaderByState(REFRESH_THE_SECOND_FLOOR);
-                }else {
+                if (y > (2.5 * offset)) {
+                    changeHeaderByState(GO_SECOND);
+                } else {
                     changeHeaderByState(RELEASE_TO_REFRESH);
                 }
             } else {
@@ -95,6 +112,8 @@ public class NestedSlHeader1 extends BaseHeader {
                 firstSetpView.postInvalidate();
                 changeHeaderByState(PULL_TO_REFRESH);
             }
+//            if (FirstPageFrag.secondFloor!=null&&"1".equals(FirstPageFrag.secondFloor.status))
+          cateGoryFrag.lay_refresh.setBackgroundResource(R.mipmap.bg);
         }
 //        if (y > 0) {
 ////            ivArrow.setVisibility(VISIBLE);
@@ -157,6 +176,7 @@ public class NestedSlHeader1 extends BaseHeader {
 
 
     private void changeHeaderByState(int state) {
+        ntv_go_second.setVisibility(GONE);
         switch (state) {
             case DONE:
                 Log.e("changeHeaderByState: ", "DONE,DONE,DONE,DONE");
@@ -189,16 +209,17 @@ public class NestedSlHeader1 extends BaseHeader {
                 secondAnimation.stop();
                 secondAnimation.start();
                 break;
-            case REFRESH_THE_SECOND_FLOOR:
+            case GO_SECOND:
                 Log.e("changeHeaderByState: ", "REFRESH_THE_SECOND_FLOOR,REFRESH_THE_SECOND_FLOOR");
-                isgoSecond=true;
                 firstSetpView.setVisibility(INVISIBLE);
                 secondStepView.setVisibility(INVISIBLE);
-                miv_release.setVisibility(VISIBLE);
-                ComplaintActivity.startAct(getContext());
+                miv_release.setVisibility(INVISIBLE);
+                secondAnimation.stop();
+                ntv_go_second.setVisibility(VISIBLE);
+                isgoSecond = true;
             default:
-              break;
-                }
+                break;
         }
-//        i=0;
     }
+//        i=0;
+}

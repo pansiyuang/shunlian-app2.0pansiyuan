@@ -51,8 +51,12 @@ public class NestedRingHeader extends BaseHeader {
     public void onDrag(int y, int offset) {
         if (y > 0&&!isRelease) {
             if (y >offset) {
+                if(y>2.5*offset){
+                    ring_refresh_status.setText("上二楼");
+                }else{
                 ring_refresh_status.setText("松开刷新");
                 progress_bar.setIsShowIcon(false);
+                }
             } else {
                 int progress = (int) ((Math.abs(y) / (1.0f * offset)) * 100);
                 ring_refresh_status.setText("下拉刷新");

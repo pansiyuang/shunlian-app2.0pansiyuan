@@ -36,4 +36,13 @@
          android:src="@mipmap/turkey_release"
          android:visibility="invisible"
          android:layout_centerInParent="true"/>
+    <com.shunlian.app.widget.NewTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="去二楼"
+        android:textSize="18sp"
+        android:textColor="@color/pink_color"
+        android:layout_centerInParent="true"
+        android:id="@+id/ntv_go_second"
+        android:visibility="gone" />
 </com.shunlian.app.widget.MyRelativeLayout>

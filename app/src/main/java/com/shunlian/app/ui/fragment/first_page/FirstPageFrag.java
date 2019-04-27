@@ -94,6 +94,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     public static boolean isNewUserHide = false;
     public static MyTextView mtv_search;
     public static GetDataEntity.KeyWord keyWord;
+    public static  GetDataEntity.SecondFloor secondFloor;
     //新用户的倒计时
     public static RelativeLayout show_new_user_view;
     private static Handler handler;

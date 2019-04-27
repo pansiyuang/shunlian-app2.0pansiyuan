@@ -108,4 +108,13 @@ public class GetDataEntity {
         public String item_id;
         public String channe_id;
     }
+
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SecondFloor {
+        public String status;
+        public String bg_img;
+        public String type;
+
+    }
 }

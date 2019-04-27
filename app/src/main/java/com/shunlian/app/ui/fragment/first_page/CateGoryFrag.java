@@ -46,7 +46,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     @BindView(R.id.rv_view)
     public RecyclerView rv_view;
     @BindView(R.id.lay_refresh)
-    NestedRefreshLoadMoreLayout lay_refresh;
+    public NestedRefreshLoadMoreLayout lay_refresh;
     //    @BindView(R.id.mtv_empty)
 //    MyTextView mtv_empty;
     private String channel_id, chinnel_name;
@@ -96,18 +96,18 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     @Override
     protected void initListener() {
         super.initListener();
-        lay_refresh.setOnRefreshListener(new onRefreshListener() {
-            @Override
-            public void onRefresh() {
-//                isShow = false;
-                if (header.isgoSecond){
-                    ComplaintActivity.startAct(getContext());
-                    refresh();
-                }else {
-                    refresh();
-                }
-            }
-        });
+//        lay_refresh.setOnRefreshListener(new onRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+////                isShow = false;
+//                if (header.isgoSecond){
+//                    ComplaintActivity.startAct(getContext());
+//
+//                }else {
+//                    refresh();
+//                }
+//            }
+//        });
 
         rv_view.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -228,7 +228,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     @Override
     protected void initData() {
         //新增下拉刷新
-         header = new NestedSlHeader1(getContext());
+         header = new NestedSlHeader1(getContext(),this);
         lay_refresh.setRefreshHeaderView(header);
         //end
         if (getArguments() != null)
